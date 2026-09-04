@@ -14,13 +14,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat staging/fortinet-2026-09-04-16-41.part*.b64 | tr -d '\n' | base64 -d > docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
-          test "$(wc -c < docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html)" -eq 113537
+          cat staging/fortinet-2026-09-04-16-41.part*.raw > docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
+          test "$(wc -c < docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html)" -eq 217192
           test "$(grep -o 'class="lesson"' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html | wc -l)" -eq 12
           test "$(grep -o 'class="q" id="q' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html | wc -l)" -eq 50
           test "$(grep -o '>Check Answer</button>' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html | wc -l)" -eq 50
-          ! grep -q 'getElementById.*lessons.*innerHTML' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
-          ! grep -q 'getElementById.*questions.*innerHTML' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
+          test "$(grep -o '<div class="evidence"><p>[^<]' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html | wc -l)" -eq 12
+          test "$(grep -o '<h3>Production troubleshooting scenario</h3><p>[^<]' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html | wc -l)" -eq 12
+          ! grep -q 'innerHTML=L' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
+          ! grep -q 'innerHTML=Q' docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html
       - name: Update index latest card
         shell: python
         run: |
@@ -28,15 +30,14 @@ jobs:
           p=Path('docs/index.html')
           s=p.read_text()
           if '2026-09-04-16-41' not in s:
-              card='''<section class="card latest" style="border:3px solid #68da9b"><span class="badge">CORRECTED LATEST VALIDATED RUN</span><h2>2026-09-04 16:41 America/Los_Angeles</h2><p><b>Replaces invalid 2026-09-04-07-57 render.</b> Core lesson and quiz content is now static HTML; JavaScript is enhancement-only.</p><p><b>12/12 mandatory targets · 12/12 feature primaries · 12 separate scenario sources · 12 Mermaid teaching diagrams · 50 static MCQ cards · 50 Check Answer controls.</b></p><p><a class="btn" href="Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html">Open corrected latest report</a></p><p><b>Full URL:</b> https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html</p><p><b>Fresh rotation:</b> FGSP session synchronization; provisioning-template metadata; Report Guidance; FortiLink split-interface; DARRP; FortiNAC RADIUS proxy; FortiNAC-F Local RADIUS; FortiAuthenticator EAP-TLS/RadSec; FortiPAM live recording; FortiSIEM discovery/monitor scheduling; FortiSASE posture-tagged private access; Secure SD-WAN BGP route tags.</p><p><b>Static-render validation:</b> PASS · 12 static lessons · 50 static questions · core content remains visible without JavaScript. <b>Mermaid validation:</b> 12 diagrams, source-traceable, text fallback present. <b>30-day uniqueness:</b> PASS against prior valid history; failed 07:57 artifact treated as invalid/replaced.</p></section>'''
+              card='''<section class="card latest" style="border:3px solid #68da9b"><span class="badge">CORRECTED LATEST VALIDATED RUN</span><h2>2026-09-04 16:41 America/Los_Angeles</h2><p><b>Replaces invalid 2026-09-04-07-57 render.</b> All 12 lessons and all 50 question cards are static HTML; JavaScript is enhancement-only.</p><p><b>12/12 mandatory targets · 12/12 feature primaries · 12 separate scenario sources · 12 Mermaid teaching diagrams · 50 static MCQs · 50 Check Answer controls.</b></p><p><a class="btn" href="Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html">Open corrected latest report</a></p><p><b>Full URL:</b> https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html</p><p><b>Fresh rotation:</b> FGSP; provisioning-template metadata; Report Guidance; FortiLink split-interface; DARRP; FortiNAC RADIUS proxy; FortiNAC-F Local RADIUS; FortiAuthenticator EAP-TLS/RadSec; FortiPAM live recording; FortiSIEM discovery/monitor scheduling; FortiSASE posture-tagged private access; Secure SD-WAN BGP route tags.</p><p><b>Static-render validation:</b> PASS · 12 static lessons · 12 non-empty Evidence sections · 12 non-empty Production scenarios · 50 static questions. <b>Mermaid:</b> 12 diagrams with source traceability and text fallback. <b>30-day uniqueness:</b> PASS against prior valid history; failed 07:57 artifact is invalid/replaced.</p></section>'''
               marker='<main>'
-              if marker in s: s=s.replace(marker,marker+card,1)
-              else: s=card+s
+              s=s.replace(marker,marker+card,1) if marker in s else card+s
               p.write_text(s)
       - name: Remove staging and commit corrected report
         shell: bash
         run: |
-          rm -f staging/fortinet-2026-09-04-16-41.part*.b64 staging/fortinet-2026-09-04-16-41.READY
+          rm -f staging/fortinet-2026-09-04-16-41.part*.raw staging/fortinet-2026-09-04-16-41.READY
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add docs/Fortinet_Daily_Study_Quiz_2026-09-04-16-41.html docs/index.html staging || true
