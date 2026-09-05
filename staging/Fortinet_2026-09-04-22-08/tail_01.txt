@@ -1,0 +1,54 @@
+>Key takeaway:</b> DARRP selects channels from an allowed candidate set using measured RF conditions and configured thresholds/weights. It is not trying to make every AP use a unique channel; reuse is normal when cells are sufficiently isolated.</div>
+</section><section class="lesson" id="lesson-6">
+<div class="tag">FortiNAC · focused stand-alone chapter</div><h2>FortiNAC — RADIUS Proxy: two-leg AAA, EAP relay, MAC handling, and accounting</h2>
+<div class="src"><b>Primary feature source:</b> RADIUS<br><b>Release:</b> FortiNAC 9.4.x<br><a href="https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius">https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius</a></div>
+<div class="src support"><b>Scenario support source:</b> Technical Tip: RADIUS Proxy<br><a href="https://community.fortinet.com/fortinac-28/technical-tip-radius-proxy-99601">https://community.fortinet.com/fortinac-28/technical-tip-radius-proxy-99601</a></div>
+<h3>Essence</h3><p>RADIUS Proxy makes FortiNAC the RADIUS server from the switch&#x27;s perspective and a RADIUS client toward the upstream authenticator. That creates two independent AAA legs with separate secrets, reachability, and failure states.</p>
+<h3>How it actually works</h3><p>The NAS sends Access-Request to FortiNAC. FortiNAC applies its proxy configuration and relays EAP/RADIUS to the upstream server. The upstream server returns Challenge/Accept/Reject. FortiNAC can then combine that result with NAC context before replying to the NAS. Accounting can also be proxied.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">sequenceDiagram
+participant N as NAS
+participant F as FortiNAC
+participant R as Upstream RADIUS
+N-&gt;&gt;F: Access-Request/EAP
+F-&gt;&gt;R: Proxy request
+R--&gt;&gt;F: Challenge/Accept/Reject
+F--&gt;&gt;N: Response
+N-&gt;&gt;F: Accounting
+F-&gt;&gt;R: Proxy accounting</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>NAS-to-FortiNAC and FortiNAC-to-upstream shared secrets are independent.</li><li>Proxy mode keeps EAP termination on the external RADIUS authority.</li><li>MAC authentication ownership can differ from 802.1X EAP depending on the chosen design.</li><li>An upstream Access-Accept does not prove the switch applied the intended VLAN/ACL or that FortiNAC selected the intended access treatment.</li><li>Capturing both sides of the proxy is the fastest way to determine whether a failure is before or after FortiNAC forwarding.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code># NAS-facing capture
+tcpdump -i any -vvnnXS &#x27;port 1812 and host &lt;NETWORK_DEVICE&gt;&#x27;
+# Upstream-facing capture
+tcpdump -i any -vvnnXS &#x27;port 1812 and host &lt;UPSTREAM_RADIUS&gt;&#x27;</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>Request arrives from NAS but nothing leaves toward NPS</td><td>The first RADIUS leg is working; proxy selection/second-leg transport has failed.</td><td>The user&#x27;s NPS password is wrong.</td></tr><tr><td>NPS returns Access-Accept</td><td>Upstream authentication/authorization accepted the request.</td><td>FortiNAC and the switch applied the intended network access.</td></tr><tr><td>NAS receives correct attributes but endpoint stays restricted</td><td>AAA messaging reached the NAS.</td><td>The switch session/VLAN/CoA state is correct.</td></tr><tr><td>Accounting is absent while authentication works</td><td>Authentication path is healthy; accounting needs separate validation.</td><td>All proxy configuration is correct.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>A switch sends Access-Request and FortiNAC logs it, but NPS sees no request. The client credential has not yet reached NPS, so it is not the first suspect. Check FortiNAC proxy selection, second-leg routing/firewall, and the upstream client secret. If NPS returns Access-Accept but the endpoint remains isolated, move to FortiNAC access policy and actual switch enforcement.</p>
+<h3>Design guidance</h3><p>Document ownership for each AAA method: who terminates EAP, who handles MAB, where accounting goes, and who decides final network access. That prevents teams from troubleshooting the wrong RADIUS server.</p>
+<div class="take"><b>Key takeaway:</b> RADIUS Proxy makes FortiNAC the RADIUS server from the switch&#x27;s perspective and a RADIUS client toward the upstream authenticator. That creates two independent AAA legs with separate secrets, reachability, and failure states.</div>
+</section><section class="lesson" id="lesson-7">
+<div class="tag">FortiNAC-F · focused stand-alone chapter</div><h2>FortiNAC-F — Local RADIUS virtual server, EAP termination, RadSec, and selector-based enforcement</h2>
+<div class="src"><b>Primary feature source:</b> Configure Local RADIUS Server settings<br><b>Release:</b> FortiNAC-F 7.6.0<br><a href="https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/366458/configure-local-radius-server-settings">https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/366458/configure-local-radius-server-settings</a></div>
+<div class="src support"><b>Scenario support source:</b> New Device Model Configuration changes introduced after disabling Legacy Mode<br><a href="https://community.fortinet.com/fortinac-f-57/technical-tip-new-device-model-configuration-changes-introduced-after-disabling-legacy-mode-229564">https://community.fortinet.com/fortinac-f-57/technical-tip-new-device-model-configuration-changes-introduced-after-disabling-legacy-mode-229564</a></div>
+<h3>Essence</h3><p>In Local RADIUS mode, FortiNAC-F terminates supported EAP methods itself. That means the Local RADIUS service, EAP server certificate, trusted CAs, client/RadSec trust, identity lookup, authorization, and selector-based network access all become local dependencies.</p>
+<h3>How it actually works</h3><p>The NAS sends RADIUS to the FortiNAC-F Local virtual server. If RadSec is used, the outer TLS transport is established first. FortiNAC-F then processes the inner EAP exchange, validates identity/certificates, returns RADIUS authorization, maps the host to a logical network, and applies the effective VLAN/access value through selector/device configuration.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">flowchart LR
+N[NAS] --&gt; R[Local RADIUS]
+R --&gt; T[RadSec TLS if used]
+T --&gt; E[EAP termination]
+E --&gt; I[Identity/cert trust]
+I --&gt; A[Authorization]
+A --&gt; S[Selector / logical network]
+S --&gt; N</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>Local and Proxy virtual servers have different ownership of EAP processing.</li><li>Local RADIUS exposes configured enablement and runtime Running/Stopped state.</li><li>Local RADIUS requires a suitable EAP server certificate.</li><li>RadSec outer TLS and EAP-TLS inner authentication are separate trust relationships.</li><li>Local RADIUS does not provide accounting itself; accounting can be proxied externally.</li><li>Newer non-legacy device models rely more heavily on selectors and centralized logical-network mappings.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code>Network &gt; RADIUS
+  Configure Local virtual server
+  Enable service and verify Running status
+  Configure TLS / EAP server certificate / trusted CAs
+  Configure NAS secret or RadSec trust
+  Configure authorization / logical network / selector mappings</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>RADIUS packets reach FortiNAC-F but Local service is Stopped</td><td>Network reachability is working; the service itself is unavailable.</td><td>The endpoint certificate is wrong.</td></tr><tr><td>RadSec TLS succeeds</td><td>The outer protected transport is established.</td><td>The inner EAP-TLS certificate is valid.</td></tr><tr><td>Access-Accept leaves FortiNAC-F</td><td>Local authentication/authorization produced an accept decision.</td><td>The correct selector/VLAN was applied by the switch.</td></tr><tr><td>Wrong VLAN after Access-Accept</td><td>Authentication is working; the fault is downstream in mapping/enforcement.</td><td>The EAP server certificate failed.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>A switch reaches FortiNAC-F, but Local RADIUS is Stopped. Fix the service before debugging certificates. In another case, EAP-TLS succeeds after a legacy-model migration, but the endpoint lands in the wrong VLAN. Because Access-Accept is already proven, inspect logical-network selector mapping and switch enforcement rather than reopening EAP.</p>
+<h3>Design guidance</h3><p>Choose Local RADIUS when FortiNAC-F should own certificate/EAP lifecycle. Keep certificate expiration, CA rollover, RadSec trust, and selector migration in the same operational runbook because each can independently break access.</p>
+<div class="take"><b>Key takeaway:</b> In Local RADIUS mode, FortiNAC-F terminates supported EAP methods itself. That means the Local RADIUS service, EAP server certificate, trusted CAs, client/RadSec trust, identity lookup, authorization, and selector-based network access all become local dependencies.</div>
+</section><section class="lesson" id="lesson-8">
+<div class="tag">FortiAuthenticator · focused stand-alone chapter</div><h2>FortiAuthenticator — EAP-TLS and RadSec certificate roles, trust chains, and fragmentation</h2>
+<div class="src"><b>Primary feature source:</b> General — RADIUS service<br><b>Release:</b> FortiAuthenticator 8.0.1<br><a href=
