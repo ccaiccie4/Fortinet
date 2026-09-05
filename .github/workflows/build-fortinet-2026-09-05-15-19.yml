@@ -1,0 +1,48 @@
+name: Build Fortinet 2026-09-05 15-19 test report
+on:
+  push:
+    paths:
+      - 'staging/generate_fortinet_2026_09_05_15_19.py'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate canonical static HTML
+        run: python staging/generate_fortinet_2026_09_05_15_19.py
+      - name: Recheck static and external-diagram gates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, xml.etree.ElementTree as ET
+          p=Path('docs/Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html')
+          s=p.read_text(encoding='utf-8')
+          checks={
+            'lessons':s.count('class="lesson"'),
+            'questions':s.count('class="question"'),
+            'buttons':s.count('class="check"'),
+            'feedback':s.count('class="feedback"'),
+            'data_uri':s.count('data:image'),
+            'inline_svg':len(re.findall(r'<svg',s,re.I)),
+          }
+          print(checks)
+          assert checks=={'lessons':12,'questions':50,'buttons':50,'feedback':50,'data_uri':0,'inline_svg':0}
+          svgs=re.findall(r'<img[^>]+src="(images/05-09-26-15-19-[^"]+\.svg)"',s)
+          draws=re.findall(r'href="(images/05-09-26-15-19-[^"]+\.drawio)"',s)
+          assert len(set(svgs))==12, len(set(svgs))
+          assert len(set(draws))==12, len(set(draws))
+          for rel in set(svgs): ET.parse(Path('docs')/rel)
+          for rel in set(draws): ET.parse(Path('docs')/rel)
+          PY
+      - name: Commit report
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html
+          git diff --cached --quiet || git commit -m 'Publish Fortinet test study report 2026-09-05 15:19'
+          git push
