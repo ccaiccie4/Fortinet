@@ -1,0 +1,36 @@
+name: Build Fortinet 2026-09-05 report
+on:
+  push:
+    paths:
+      - 'staging/generate_fortinet_2026_09_05.py'
+      - '.github/workflows/build-fortinet-2026-09-05.yml'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate canonical static HTML
+        run: python staging/generate_fortinet_2026_09_05.py
+      - name: Recheck static gates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/Fortinet_Daily_Study_Quiz_2026-09-05-08-00.html')
+          s=p.read_text()
+          checks={'lessons':s.count('class="lesson"'),'questions':s.count('class="q" id="q'),'buttons':s.count('class="check"'),'mermaid':s.count('class="mermaid"'),'evidence':s.count('<h3>Evidence interpretation</h3>'),'scenarios':s.count('<h3>Production scenario</h3>')}
+          print(checks)
+          assert checks=={'lessons':12,'questions':50,'buttons':50,'mermaid':12,'evidence':12,'scenarios':12}
+          assert 'id="questions"></div>' not in s
+          PY
+      - name: Commit report
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/Fortinet_Daily_Study_Quiz_2026-09-05-08-00.html
+          git diff --cached --quiet || git commit -m 'Publish Fortinet daily study report 2026-09-05 08:00'
+          git push
