@@ -35,3 +35,4 @@ idx.write_text(x)
 assert 'Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html' in idx.read_text()
 print({'report_bytes':len(data),'lessons':12,'questions':50,'drawio':12,'svg':12,'sha256':EXPECTED})
 # verified split-chunk reconstruction trigger
+# final trigger after 3a/3b/3c committed
