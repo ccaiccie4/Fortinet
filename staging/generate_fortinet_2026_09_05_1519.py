@@ -4,7 +4,7 @@ ROOT=Path(__file__).resolve().parents[1]
 ST=ROOT/'staging'; DOCS=ROOT/'docs'; IMG=DOCS/'images'
 OUT=DOCS/'Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html'
 EXPECTED='c946a8cf19d25d20c42cfdb379b2a30247a0a14693872ad5d30cc4d58c4d84f4'
-b64=''.join((ST/f'report15_19.b64z.{i}').read_text().strip() for i in range(1,6))
+b64=(ST/'report15_19.b64z.1').read_text().strip()+(ST/'report15_19.b64z.2').read_text().strip()+(ST/'report15_19.b64z.3a').read_text().strip()+(ST/'report15_19.b64z.3b').read_text().strip()+(ST/'report15_19.b64z.3c').read_text().strip()+(ST/'report15_19.b64z.4').read_text().strip()+(ST/'report15_19.b64z.5').read_text().strip()
 data=zlib.decompress(base64.b64decode(b64))
 assert hashlib.sha256(data).hexdigest()==EXPECTED
 s=data.decode('utf-8')
@@ -34,5 +34,4 @@ x=x[:pos]+new+x[pos:]
 idx.write_text(x)
 assert 'Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html' in idx.read_text()
 print({'report_bytes':len(data),'lessons':12,'questions':50,'drawio':12,'svg':12,'sha256':EXPECTED})
-# trigger workflow after all staging chunks are committed
-# trigger run 3 with complete chunk set
+# verified split-chunk reconstruction trigger
