@@ -1,0 +1,55 @@
+"https://docs.fortinet.com/document/fortiauthenticator/8.0.1/administration-guide/656833/general">https://docs.fortinet.com/document/fortiauthenticator/8.0.1/administration-guide/656833/general</a></div>
+<div class="src support"><b>Scenario support source:</b> EAP-TLS Authentication Fails with error &#x27;Authentication failed for EAP method type 13&#x27;<br><a href="https://community.fortinet.com/fortiauthenticator-8/technical-tip-eap-tls-authentication-fails-with-error-authentication-failed-for-eap-method-type-13-229496">https://community.fortinet.com/fortiauthenticator-8/technical-tip-eap-tls-authentication-fails-with-error-authentication-failed-for-eap-method-type-13-229496</a></div>
+<h3>Essence</h3><p>EAP-TLS authenticates the endpoint inside RADIUS; RadSec protects the RADIUS transport itself. Those are separate TLS layers with separate certificate roles. A method type 13 error identifies EAP-TLS failure but not whether the root cause is certificate chain, EKU, revocation, time, or fragmentation.</p>
+<h3>How it actually works</h3><p>The endpoint exchanges EAP with the NAS, which carries EAP inside RADIUS to FortiAuthenticator. FortiAuthenticator presents the configured EAP Server Certificate and validates the client certificate chain. If RadSec is enabled, the RADIUS messages also travel inside an outer TLS connection using a separate RadSec Server Certificate and client certificate trust.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">sequenceDiagram
+participant C as Client
+participant N as NAS
+participant F as FortiAuthenticator
+C-&gt;&gt;N: EAP-TLS
+N-&gt;&gt;F: RADIUS + EAP
+F--&gt;&gt;N: Server cert fragments
+N--&gt;&gt;C: EAP fragments
+C--&gt;&gt;N: Client cert
+N-&gt;&gt;F: RADIUS + EAP
+F--&gt;&gt;N: Accept/Reject</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>The referenced release documents Max Fragment Size for EAP-TLS with a default of 1024.</li><li>EAP Server Certificate and RadSec Server Certificate are different settings.</li><li>Wildcard certificates are not supported as the EAP server certificate in the referenced guide.</li><li>Default RadSec port is 2083.</li><li>RadSec clients must present a certificate signed by a configured Local or Trusted CA.</li><li>Large certificate chains can expose EAP/RADIUS fragmentation or path-MTU problems even when smaller RADIUS exchanges work.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code>Authentication &gt; RADIUS Service &gt; General
+  Max Fragment Size for EAP-TLS: 1024 default
+  EAP Server Certificate
+  Local CAs / Trusted CAs
+  RadSec Server Certificate
+Authentication &gt; RADIUS Service &gt; Services
+  RadSec port: 2083 default</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>RadSec TLS is established</td><td>Outer RADIUS transport trust is working.</td><td>The endpoint EAP-TLS certificate is accepted.</td></tr><tr><td>Method type 13 error</td><td>The request failed during EAP-TLS processing.</td><td>The exact certificate/fragmentation cause is known.</td></tr><tr><td>Handshake stalls while certificate chain is being exchanged</td><td>The failure is in TLS exchange/validation or transport of that payload.</td><td>A missing intermediate CA is the only possible cause.</td></tr><tr><td>Access-Accept is returned</td><td>FortiAuthenticator accepted the RADIUS request.</td><td>The NAS applied the intended access policy.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>After a CA rollover, EAP-TLS fails but password-based RADIUS methods still work. The leaf certificate is valid, yet the intermediate CA is missing from the trust chain. In another site, only clients with a larger certificate chain fail across a constrained path; the failure appears during certificate exchange, so EAP fragmentation and MTU become more credible than identity policy.</p>
+<h3>Design guidance</h3><p>Operate EAP PKI and RadSec PKI as related but distinct services. Track server certificate expiration, intermediate/root CA changes, revocation dependencies, and client certificate requirements separately for outer and inner TLS.</p>
+<div class="take"><b>Key takeaway:</b> EAP-TLS authenticates the endpoint inside RADIUS; RadSec protects the RADIUS transport itself. Those are separate TLS layers with separate certificate roles. A method type 13 error identifies EAP-TLS failure but not whether the root cause is certificate chain, EKU, revocation, time, or fragmentation.</div>
+</section><section class="lesson" id="lesson-9">
+<div class="tag">FortiPAM · focused stand-alone chapter</div><h2>FortiPAM — Over-the-shoulder monitoring, live-recording pipeline, resource sizing, and finalization</h2>
+<div class="src"><b>Primary feature source:</b> Over-the-shoulder monitoring (Live recording)<br><b>Release:</b> FortiPAM 1.9.0<br><a href="https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/170626/over-the-shoulder-monitoring-live-recording">https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/170626/over-the-shoulder-monitoring-live-recording</a></div>
+<div class="src support"><b>Scenario support source:</b> Active Session Video Monitoring Not Showing in Real Time<br><a href="https://community.fortinet.com/fortipam-52/technical-tip-active-session-video-monitoring-not-showing-in-real-time-228817">https://community.fortinet.com/fortipam-52/technical-tip-active-session-video-monitoring-not-showing-in-real-time-228817</a></div>
+<h3>Essence</h3><p>FortiPAM live monitoring has expected pipeline delay because the session must be captured, transmitted, processed, and rendered. The useful distinction is fixed normal delay versus delay that grows over time. Finalized replay is a later stage and can fail even when live monitoring worked.</p>
+<h3>How it actually works</h3><p>The privileged session is launched with recording enabled. Activity is captured by the supported agent/session path, sent to FortiPAM, processed for the Active Sessions monitor, and later finalized for replay. Global Live Recording and per-session recording eligibility are both required.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">flowchart LR
+U[Privileged session] --&gt; C[Capture]
+C --&gt; T[Transport]
+T --&gt; P[Processing]
+P --&gt; L[Live monitor]
+P --&gt; F[Finalize]
+F --&gt; R[Replay]</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>The referenced guide lists Privileged Access Agent 7.2.3+ for the documented live-recording workflow.</li><li>Session Recording must be enabled for the session/secret and Live Recording must be enabled globally.</li><li>Fortinet recommends roughly 8 logical processors and 16 GB memory for smooth concurrent recording/transmission in the referenced guide.</li><li>The red video icon identifies a session ready for live monitoring.</li><li>Support guidance describes roughly 8–13 seconds delay in FortiClient mode and 6–10 seconds in agentless mode as expected, while sustained delay above about 30 seconds warrants further investigation.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code>System &gt; Settings &gt; Advanced &gt; Live Recording = enabled
+Secret/session &gt; Session Recording = enabled
+Monitoring &gt; Active Sessions &gt; Monitor
+
+diagnose debug enable
+diagnose debug console timestamp enable
+diagnose wad debug enable category http</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>Red recording icon appears</td><td>The session is eligible for live monitoring.</td><td>Latency is normal or replay will finalize.</td></tr><tr><td>Stable ~9-second delay in FortiClient mode</td><td>The live pipeline is operating within the documented expected range.</td><td>Capacity remains sufficient under higher concurrency.</td></tr><tr><td>Delay grows to 45 seconds under load</td><td>Backlog is accumulating somewhere in capture/transport/processing.</td><td>The target system or approval flow is the problem.</td></tr><tr><td>Live monitor worked but replay is missing</td><td>The live capture/stream path worked.</td><td>Post-session finalization completed.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>A nine-second stable delay is not a failure if it stays within the documented range. A delay that grows from ten to forty-five seconds as sessions increase is different; it suggests resource or pipeline backlog. If live monitoring works but a replay is missing after abrupt termination, troubleshoot finalization rather than the live stream.</p>
+<h3>Design guidance</h3><p>Size the platform for concurrent recorded sessions, not total secrets. Track both live latency and post-session replay success because they validate different stages of the recording pipeline.</p>
+<div class="take"><b>Key takeaway:</b> FortiPAM live monitoring has expected pipeline delay because the session must be captured, transmitted, processed, and rendered. The useful distinction is fixed normal delay versus delay that grows over time. Finalized replay is a later stage and can fail even when live monitoring worked.</div>
+</section><section class="lesson" id="lesson-10">
+<div class="tag">FortiSIEM · focused stand-alone chapter</div><h2>FortiSIEM — Device discovery, CMDB creation, credential scope, and performance-monitor scheduling</h2>
+<div class="src"><b>Primary feature source:</b> Discovering Devices<br><b>Release:</b> FortiSIEM 7.4.2<br><a href="https://docs.fortinet.com/document/fortisiem/7.4.2/user-guide/157952/discovering-devices">https://docs.fortinet.com/do
