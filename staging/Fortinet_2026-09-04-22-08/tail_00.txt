@@ -1,0 +1,54 @@
+ed Analytics days, not only raw disk size or events per second. For important reports, document each chart&#x27;s log type, fields, and retention requirement so changes in FortiGate logging or ingestion volume can be evaluated before they shorten reportable history.</p>
+<div class="take"><b>Key takeaway:</b> Report Guidance explains which log types and fields a report element expects and whether the required Analytics data is available. This is important because a report queries Analytics data, while older raw logs may still exist in Archive storage.</div>
+</section><section class="lesson" id="lesson-4">
+<div class="tag">FortiSwitch · focused stand-alone chapter</div><h2>FortiSwitch — FortiLink split-interface topology and transition to MCLAG</h2>
+<div class="src"><b>Primary feature source:</b> FortiLink split interface<br><b>Release:</b> FortiSwitchOS 7.6.1 / FortiOS 7.6.x<br><a href="https://docs.fortinet.com/document/fortiswitch/7.6.1/fortilink-guide/801204">https://docs.fortinet.com/document/fortiswitch/7.6.1/fortilink-guide/801204</a></div>
+<div class="src support"><b>Scenario support source:</b> Supported 802.3ad FortiLink topologies and split interface<br><a href="https://community.fortinet.com/fortiswitch-36/technical-tip-supported-802-3ad-fortilink-topologies-and-split-interface-215416">https://community.fortinet.com/fortiswitch-36/technical-tip-supported-802-3ad-fortilink-topologies-and-split-interface-215416</a></div>
+<h3>Essence</h3><p>FortiLink split-interface mode intentionally keeps one FortiLink member active and another standby in supported non-MCLAG topologies. The standby state is a loop-avoidance mechanism, not necessarily a failed LACP member. MCLAG changes the design by coordinating two switches as one multichassis aggregation endpoint.</p>
+<h3>How it actually works</h3><p>FortiGate owns the FortiLink aggregate. In split-interface mode, one uplink forwards and the other remains standby while the switches are interconnected. In MCLAG mode, the two switches build an ICL and synchronize multichassis state so both FortiLink uplinks can forward after split-interface is disabled.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">flowchart TD
+F[FortiGate FortiLink] --&gt; A[Active link]
+F --&gt; B[Standby in split mode]
+A --&gt; S1[Switch 1]
+B --&gt; S2[Switch 2]
+S1 &lt;--&gt;|ISL or ICL| S2</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>Physical carrier and LLDP adjacency do not determine whether an uplink should be forwarding.</li><li>`fortilink-split-interface enable` is correct for the classic redundant non-MCLAG topology.</li><li>MCLAG requires a healthy peer/ICL relationship before the design transitions to both FortiLink links active.</li><li>Disabling split-interface merely to make a suspended link active can create loops or split-brain risk in the wrong topology.</li><li>FortiGate-managed FortiSwitch deployments should avoid direct switch CLI drift that conflicts with controller intent.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code>config system interface
+    edit &quot;fortilink&quot;
+        set fortilink enable
+        set lacp-mode active
+        set fortilink-split-interface enable
+    next
+end
+# After verified MCLAG/ICL formation:
+set fortilink-split-interface disable</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>Both links have carrier/LLDP, one LACP member is suspended</td><td>Physical connectivity exists; the suspended member may be intentionally standby.</td><td>Both links should be forwarding in this topology.</td></tr><tr><td>MCLAG peer and ICL are healthy</td><td>The multichassis control relationship is operational.</td><td>FortiLink split-interface has already been disabled.</td></tr><tr><td>One link remains standby after MCLAG is established</td><td>The MCLAG design may still be constrained by FortiLink split mode or LACP state.</td><td>The optic is necessarily bad.</td></tr><tr><td>Both links forward before multichassis control is ready</td><td>The topology may have lost an intended loop-avoidance safeguard.</td><td>The design is automatically correct because bandwidth increased.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>A branch uses two non-MCLAG switches with an inter-switch link. One FortiLink LACP member is suspended despite healthy optics. That is expected split-interface behavior. In a data-center MCLAG pair, the same suspended state is unexpected once the ICL and peer state are healthy; there the engineer should verify that split-interface was disabled after MCLAG formation.</p>
+<h3>Design guidance</h3><p>Choose topology first, then configure split-interface behavior. Do not use `disable` as a generic performance switch. For MCLAG, validate peer compatibility, ICL resilience, STP behavior, and controller ownership before enabling both forwarding paths.</p>
+<div class="take"><b>Key takeaway:</b> FortiLink split-interface mode intentionally keeps one FortiLink member active and another standby in supported non-MCLAG topologies. The standby state is a loop-avoidance mechanism, not necessarily a failed LACP member. MCLAG changes the design by coordinating two switches as one multichassis aggregation endpoint.</div>
+</section><section class="lesson" id="lesson-5">
+<div class="tag">FortiAP · focused stand-alone chapter</div><h2>FortiAP — DARRP channel scoring, RF measurements, thresholds, and optimization timing</h2>
+<div class="src"><b>Primary feature source:</b> Configuring Distributed Radio Resource Provisioning<br><b>Release:</b> FortiAP / FortiWiFi 8.0.0<br><a href="https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/299720">https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/299720</a></div>
+<div class="src support"><b>Scenario support source:</b> DARRP channel assignment on FortiAP WiFi<br><a href="https://community.fortinet.com/fortiap-5/troubleshooting-tip-darrp-channel-assignment-on-fortiap-wifi-181283">https://community.fortinet.com/fortiap-5/troubleshooting-tip-darrp-channel-assignment-on-fortiap-wifi-181283</a></div>
+<h3>Essence</h3><p>DARRP selects channels from an allowed candidate set using measured RF conditions and configured thresholds/weights. It is not trying to make every AP use a unique channel; reuse is normal when cells are sufficiently isolated.</p>
+<h3>How it actually works</h3><p>FortiAPs collect channel load, noise, neighboring AP RSSI, spectral energy, and related measurements. DARRP first removes channels that are disallowed or exceed rejection thresholds, then scores the remaining candidates. A scheduled optimization applies the chosen channel, which can cause clients to reassociate.</p>
+<div class="figure"><b>Mermaid teaching diagram — synthesized from the feature model</b><pre class="mermaid">flowchart TD
+M[RF measurements] --&gt; A{Allowed + under thresholds?}
+A -- no --&gt; X[Reject channel]
+A -- yes --&gt; W[Apply weights]
+W --&gt; S[Score candidates]
+S --&gt; C[Choose channel]
+C --&gt; O[Scheduled change]</pre><p><b>What to notice:</b> the diagram shows the exact product-specific handoffs discussed in this chapter.</p></div>
+<h3>Important implementation details</h3><ul><li>Referenced defaults include a 3600-second selection period and 300-second monitor period.</li><li>Documented weights include managed AP 50, rogue AP 0, noise floor 40, channel load 20, and spectral RSSI 40.</li><li>Referenced thresholds include noise floor around -85 dBm, channel load 60%, and spectral RSSI around -65 dBm.</li><li>`darrp-optimize` defaults to 86400 seconds in the referenced guide, with a low-traffic recurring window around 01:00–01:30.</li><li>A channel not present in the radio profile candidate list cannot be selected regardless of its measured quality.</li></ul>
+<h3>Configuration / diagnostics</h3><pre class="code"><code>config wireless-controller setting
+    set darrp-optimize 86400
+    set darrp-optimize-schedules &quot;default-darrp-optimize&quot;
+end
+
+diagnose wireless-controller wlac -c darrp
+# FortiAP:
+cw_diag -c darrp</code></pre>
+<h3>Evidence interpretation</h3><table class='ev'><tr><th>Observation</th><th>What it proves</th><th>What it does not prove</th></tr><tr><td>A quiet channel is absent from the candidate list</td><td>The selection problem is policy/candidate eligibility, not weighting.</td><td>Changing weights will make the channel selectable.</td></tr><tr><td>Two same-channel APs hear each other weakly and retries are low</td><td>Channel reuse may be appropriate because mutual interference is limited.</td><td>Co-channel interference is impossible under all client loads.</td></tr><tr><td>Channel load exceeds the configured threshold</td><td>The candidate can be rejected before final weighted scoring.</td><td>Every client necessarily has poor SNR.</td></tr><tr><td>Clients briefly reconnect immediately after optimization</td><td>The radio channel changed as part of DARRP operation.</td><td>The selected channel is inferior.</td></tr></table>
+<h3>Production troubleshooting scenario</h3><p>Two APs share a 5-GHz channel but are physically separated enough that mutual RSSI is weak and utilization is low. There is no reason to force a unique channel merely to make the plan look cleaner. At another site, a quiet DFS channel never appears because the radio profile excludes it; adjusting DARRP weights cannot solve an eligibility problem.</p>
+<h3>Design guidance</h3><p>Tune DARRP only when measured client/RF outcomes justify it. Start with the candidate list, measurement quality, and thresholds before changing weights. Schedule optimization where a client reassociation event is operationally acceptable.</p>
+<div class="take"><b
