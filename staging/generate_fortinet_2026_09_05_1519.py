@@ -34,3 +34,4 @@ x=x[:pos]+new+x[pos:]
 idx.write_text(x)
 assert 'Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html' in idx.read_text()
 print({'report_bytes':len(data),'lessons':12,'questions':50,'drawio':12,'svg':12,'sha256':EXPECTED})
+# trigger workflow after all staging chunks are committed
