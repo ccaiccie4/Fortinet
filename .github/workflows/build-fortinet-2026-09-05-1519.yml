@@ -1,0 +1,39 @@
+name: Build Fortinet 2026-09-05 15:19 test report
+on:
+  push:
+    paths:
+      - 'staging/generate_fortinet_2026_09_05_1519.py'
+      - '.github/workflows/build-fortinet-2026-09-05-1519.yml'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reconstruct validate and update index
+        run: python staging/generate_fortinet_2026_09_05_1519.py
+      - name: Recheck generated files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('docs/Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html').read_text()
+          assert s.count('class="lesson"')==12
+          assert s.count('class="question"')==50
+          assert s.count('class="check"')==50
+          assert s.count('class="feedback"')==50
+          assert 'data:image' not in s and '<svg' not in s.lower()
+          i=Path('docs/index.html').read_text()
+          assert 'Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html' in i
+          print('static gates PASS')
+          PY
+      - name: Commit report and index
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/Fortinet_Daily_Study_Quiz_2026-09-05-15-19.html docs/index.html
+          git diff --cached --quiet || git commit -m 'Publish Fortinet test report 2026-09-05 15:19'
+          git push
