@@ -1,0 +1,61 @@
+name: Assemble Fortinet 22-08 focused report
+on:
+  push:
+    paths:
+      - 'staging/Fortinet_2026-09-04-22-08/READY'
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assemble exact static HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT='docs/Fortinet_Daily_Study_Quiz_2026-09-04-22-08.html'
+          ST='staging/Fortinet_2026-09-04-22-08'
+          cat "$ST/part_00.txt" \
+              "$ST/tail_00.txt" "$ST/tail_01.txt" "$ST/tail_02.txt" \
+              "$ST/tail_03.txt" "$ST/tail_04.txt" "$ST/tail_05.txt" \
+              "$ST/tail_06.txt" "$ST/tail_07.txt" "$ST/tail_08.txt" \
+              "$ST/tail_09.txt" "$ST/tail_10.txt" "$ST/tail_11.txt" \
+              "$ST/tail_12.txt" > "$OUT"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/Fortinet_Daily_Study_Quiz_2026-09-04-22-08.html')
+          s=p.read_text()
+          checks={
+            'lessons':s.count('class="lesson"'),
+            'questions':s.count('class="q" id="q'),
+            'buttons':s.count('>Check Answer</button>'),
+            'mermaid':s.count('class="mermaid"'),
+            'evidence':s.count('<h3>Evidence interpretation</h3>'),
+            'tac_generic':s.count('TAC-style troubleshooting workflow'),
+            'failure_generic':s.count('Failure-boundary library'),
+          }
+          print('bytes',p.stat().st_size,checks)
+          assert checks['lessons']==12, checks
+          assert checks['questions']==50, checks
+          assert checks['buttons']==50, checks
+          assert checks['mermaid']==12, checks
+          assert checks['evidence']==12, checks
+          assert checks['tac_generic']==0, checks
+          assert checks['failure_generic']==0, checks
+          assert 'id="lessons"></div>' not in s
+          assert 'id="questions"></div>' not in s
+          assert 'Fortinet Daily Study Quiz — 2026-09-04-22-08' in s
+          PY
+      - name: Commit assembled report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/Fortinet_Daily_Study_Quiz_2026-09-04-22-08.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Publish Fortinet focused study quiz 2026-09-04-22-08'
+          git push
