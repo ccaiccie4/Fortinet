@@ -1,0 +1,51 @@
+name: Inspect Fortinet 2026-09-07 staged bundle
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-fortinet-2026-09-07-bundle.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and inspect staged bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fortinet-bundle
+          cat staging/fortinet-2026-09-07.bundle.b64.1 staging/fortinet-2026-09-07.bundle.b64.2 staging/fortinet-2026-09-07.bundle.b64.3 | tr -d '\r\n' | base64 -d > /tmp/fortinet-bundle/bundle.zip
+          echo "ZIP_BYTES=$(stat -c%s /tmp/fortinet-bundle/bundle.zip)"
+          unzip -t /tmp/fortinet-bundle/bundle.zip
+          mkdir -p /tmp/fortinet-bundle/out
+          unzip -q /tmp/fortinet-bundle/bundle.zip -d /tmp/fortinet-bundle/out
+          echo '--- BUNDLE FILES ---'
+          find /tmp/fortinet-bundle/out -type f -printf '%P\t%s bytes\n' | sort
+          echo '--- HTML CANDIDATES ---'
+          find /tmp/fortinet-bundle/out -type f -name '*.html' -printf '%P\n'
+          echo '--- COUNTS ---'
+          echo "DRAWIO=$(find /tmp/fortinet-bundle/out -type f -name '*.drawio' | wc -l)"
+          echo "SVG=$(find /tmp/fortinet-bundle/out -type f -name '*.svg' | wc -l)"
+          echo "JSON=$(find /tmp/fortinet-bundle/out -type f -name '*.json' | wc -l)"
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('/tmp/fortinet-bundle/out')
+          for p in root.rglob('*.html'):
+              s=p.read_text(errors='replace')
+              print('HTML',p.name,'bytes',len(s))
+              for label,pat in [
+                ('lesson_class',r'class=["\'][^"\']*lesson[^"\']*["\']'),
+                ('question_class',r'class=["\'][^"\']*question[^"\']*["\']'),
+                ('check_answer',r'Check Answer'),
+                ('feedback',r'feedback'),
+                ('img_svg',r'<img[^>]+src=["\'][^"\']+\.svg["\']'),
+                ('data_svg',r'data:image/svg'),
+                ('inline_svg',r'<svg\b')]:
+                  print(label,len(re.findall(pat,s,re.I)))
+              print('generic upstream prerequisite', 'upstream prerequisite is healthy' in s.lower())
+              print('generic ownership model', 'explicit ownership model' in s.lower())
+              print('generic validation runbook', 'validation runbook' in s.lower())
+          PY
