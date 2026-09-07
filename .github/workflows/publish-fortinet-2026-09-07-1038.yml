@@ -1,7 +1,7 @@
 name: Publish Fortinet 2026-09-07 10:38
 on:
   push:
-    branches: [pub1038-work]
+    branches: [main]
     paths:
       - '.github/workflows/publish-fortinet-2026-09-07-1038.yml'
       - 'staging/fortinet-2026-09-07-10-38.correct.*'
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: pub1038-work
+          ref: main
           fetch-depth: 0
       - name: Reconstruct and validate bundle
         shell: bash
@@ -63,8 +63,6 @@ jobs:
         run: |
           set -euo pipefail
           ROOT=/tmp/out/Fortinet_Daily_Study_Quiz_2026-09-07-10-38
-          git fetch origin main
-          git checkout main
           cp "$ROOT/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html" docs/
           mkdir -p docs/images
           cp "$ROOT"/images/* docs/images/
@@ -72,7 +70,6 @@ jobs:
           from pathlib import Path
           p=Path('docs/index.html')
           s=p.read_text()
-          marker='<section class="card latest"><span class="badge">LATEST TEST RUN — DRAW.IO/SVG</span>'
           if 'Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html' not in s:
               card='''<section class="card latest"><span class="badge">LATEST — 2026-09-07 10:38</span><h2>2026-09-07 10:38 America/Los_Angeles</h2><p>Documentation-driven Fortinet engineering run: 12 mandatory products, 12 editable draw.io diagrams, 12 standalone SVGs, and 50 graded MCQs.</p><div class="grid"><div><b>12/12</b><br>lessons</div><div><b>12/12</b><br>draw.io</div><div><b>12/12</b><br>SVG</div><div><b>50/50</b><br>MCQs</div></div><p><a class="btn" href="Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">Open latest report</a></p><p><b>Pages URL:</b> <a href="https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html</a></p></section>'''
               pos=s.find('<section class="card latest">')
