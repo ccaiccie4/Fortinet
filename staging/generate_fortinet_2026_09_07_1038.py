@@ -4,7 +4,7 @@ ROOT=Path(__file__).resolve().parents[1]
 ST=ROOT/'staging'; DOCS=ROOT/'docs'; IMG=DOCS/'images'
 parts=[
  'fortinet-2026-09-07-10-38.correct.01',
- 'fortinet-2026-09-07-10-38.correct.02a','fortinet-2026-09-07-10-38.correct.02b','fortinet-2026-09-07-10-38.correct.02c','fortinet-2026-09-07-10-38.correct.02d2',
+ 'fortinet-2026-09-07-10-38.correct.02a','fortinet-2026-09-07-10-38.correct.02b','fortinet-2026-09-07-10-38.correct.02c','fortinet-2026-09-07-10-38.correct.02dA','fortinet-2026-09-07-10-38.correct.02dB',
  'fortinet-2026-09-07-10-38.b64.03','fortinet-2026-09-07-10-38.b64.04','fortinet-2026-09-07-10-38.b64.05','fortinet-2026-09-07-10-38.b64.06',
  'fortinet-2026-09-07-10-38.correct.07','fortinet-2026-09-07-10-38.b64.08','fortinet-2026-09-07-10-38.b64.09']
 s=''.join((ST/p).read_text().strip() for p in parts)
@@ -37,4 +37,3 @@ if run not in old:
     old=old.replace('<p>Daily feature-first Fortinet engineering study sessions.</p>','<p>Daily feature-first Fortinet engineering study sessions.</p>'+card,1)
     idx.write_text(old,encoding='utf-8')
 print('PASS',report.name,len(svgs),len(dios),hashlib.sha256(data).hexdigest())
-# Triggered after all exact staging parts were present.
