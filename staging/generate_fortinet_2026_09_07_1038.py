@@ -37,3 +37,4 @@ if run not in old:
     old=old.replace('<p>Daily feature-first Fortinet engineering study sessions.</p>','<p>Daily feature-first Fortinet engineering study sessions.</p>'+card,1)
     idx.write_text(old,encoding='utf-8')
 print('PASS',report.name,len(svgs),len(dios),hashlib.sha256(data).hexdigest())
+# Triggered after all exact staging parts were present.
