@@ -1,0 +1,27 @@
+name: Build Fortinet 2026-09-07 10:38
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-fortinet-2026-09-07-1038.yml'
+      - 'staging/generate_fortinet_2026_09_07_1038.py'
+      - 'staging/fortinet-2026-09-07-10-38*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Reconstruct and validate
+        run: python staging/generate_fortinet_2026_09_07_1038.py
+      - name: Commit report, diagrams, and index
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/
+          git diff --cached --quiet || git commit -m 'Publish Fortinet study report 2026-09-07 10:38'
+          git push
