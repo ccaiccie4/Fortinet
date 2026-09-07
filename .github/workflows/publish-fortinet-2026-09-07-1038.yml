@@ -1,0 +1,84 @@
+name: Publish Fortinet 2026-09-07 10:38
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-fortinet-2026-09-07-1038.yml'
+      - 'staging/fortinet-2026-09-07-10-38.correct.*'
+      - 'staging/fortinet-2026-09-07-10-38.b64.03'
+      - 'staging/fortinet-2026-09-07-10-38.b64.04'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Reconstruct and validate bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat \
+            staging/fortinet-2026-09-07-10-38.correct.01 \
+            staging/fortinet-2026-09-07-10-38.correct.02 \
+            staging/fortinet-2026-09-07-10-38.b64.03 \
+            staging/fortinet-2026-09-07-10-38.b64.04 \
+            staging/fortinet-2026-09-07-10-38.correct.05 \
+            staging/fortinet-2026-09-07-10-38.correct.06 \
+            staging/fortinet-2026-09-07-10-38.correct.07 \
+            staging/fortinet-2026-09-07-10-38.correct.08 \
+            staging/fortinet-2026-09-07-10-38.correct.09 \
+            | base64 -d > /tmp/fortinet-1038.zip
+          echo '8eb4c4c4c3b24f35af8e5879c11d13e1d3f42687c00cf81418953b5504838ba7  /tmp/fortinet-1038.zip' | sha256sum -c -
+          rm -rf /tmp/out && mkdir -p /tmp/out
+          unzip -q /tmp/fortinet-1038.zip -d /tmp/out
+          ROOT=/tmp/out/Fortinet_Daily_Study_Quiz_2026-09-07-10-38
+          test -f "$ROOT/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html"
+          test "$(find "$ROOT/images" -name '*.svg' | wc -l)" -eq 12
+          test "$(find "$ROOT/images" -name '*.drawio' | wc -l)" -eq 12
+          python - <<'PY'
+          from pathlib import Path
+          import re, xml.etree.ElementTree as ET
+          root=Path('/tmp/out/Fortinet_Daily_Study_Quiz_2026-09-07-10-38')
+          h=(root/'Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html').read_text()
+          assert h.count('class="lesson"') == 12
+          assert h.count('class="question"') == 50
+          assert h.count('Check Answer</button>') == 50
+          assert h.count('class="feedback" id=') == 50
+          assert '<svg' not in h.lower()
+          assert 'data:image/svg' not in h.lower()
+          for p in (root/'images').glob('*.svg'): ET.parse(p)
+          for p in (root/'images').glob('*.drawio'):
+              t=ET.parse(p)
+              assert len(t.findall('.//mxCell')) >= 8
+          refs=re.findall(r'(?:src|href)="(images/[^"]+\.(?:svg|drawio))"',h)
+          assert refs and all((root/r).exists() for r in refs)
+          print('validated',len(refs),'diagram references')
+          PY
+      - name: Publish to main docs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=/tmp/out/Fortinet_Daily_Study_Quiz_2026-09-07-10-38
+          cp "$ROOT/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html" docs/
+          mkdir -p docs/images
+          cp "$ROOT"/images/* docs/images/
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/index.html')
+          s=p.read_text()
+          if 'Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html' not in s:
+              card='''<section class="card latest"><span class="badge">LATEST — 2026-09-07 10:38</span><h2>2026-09-07 10:38 America/Los_Angeles</h2><p>Documentation-driven Fortinet engineering run: 12 mandatory products, 12 editable draw.io diagrams, 12 standalone SVGs, and 50 graded MCQs.</p><div class="grid"><div><b>12/12</b><br>lessons</div><div><b>12/12</b><br>draw.io</div><div><b>12/12</b><br>SVG</div><div><b>50/50</b><br>MCQs</div></div><p><a class="btn" href="Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">Open latest report</a></p><p><b>Pages URL:</b> <a href="https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html</a></p></section>'''
+              pos=s.find('<section class="card latest">')
+              if pos<0: pos=s.find('<section class="card">')
+              s=s[:pos]+card+s[pos:]
+              p.write_text(s)
+          PY
+          git config user.name 'ccaiccie4'
+          git config user.email 'mikewissa2@gmail.com'
+          git add docs/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html docs/images docs/index.html
+          git commit -m 'Publish Fortinet study report 2026-09-07 10:38'
+          git push origin HEAD:main
