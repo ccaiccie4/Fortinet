@@ -4,9 +4,6 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/publish-fortinet-2026-09-07-1038.yml'
-      - 'staging/fortinet-2026-09-07-10-38.correct.*'
-      - 'staging/fortinet-2026-09-07-10-38.b64.03'
-      - 'staging/fortinet-2026-09-07-10-38.b64.04'
 permissions:
   contents: write
 jobs:
@@ -17,19 +14,25 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Reconstruct and validate bundle
+      - name: Reconstruct and validate
         shell: bash
         run: |
           set -euo pipefail
           cat \
             staging/fortinet-2026-09-07-10-38.correct.01 \
-            staging/fortinet-2026-09-07-10-38.correct.02 \
+            staging/fortinet-2026-09-07-10-38.correct.02a \
+            staging/fortinet-2026-09-07-10-38.correct.02b \
+            staging/fortinet-2026-09-07-10-38.correct.02c \
+            staging/fortinet-2026-09-07-10-38.correct.02d \
             staging/fortinet-2026-09-07-10-38.b64.03 \
             staging/fortinet-2026-09-07-10-38.b64.04 \
             staging/fortinet-2026-09-07-10-38.correct.05 \
             staging/fortinet-2026-09-07-10-38.correct.06 \
             staging/fortinet-2026-09-07-10-38.correct.07 \
-            staging/fortinet-2026-09-07-10-38.correct.08 \
+            staging/fortinet-2026-09-07-10-38.correct.08a \
+            staging/fortinet-2026-09-07-10-38.correct.08b \
+            staging/fortinet-2026-09-07-10-38.correct.08c \
+            staging/fortinet-2026-09-07-10-38.correct.08d \
             staging/fortinet-2026-09-07-10-38.correct.09 \
             | base64 -d > /tmp/fortinet-1038.zip
           echo '8eb4c4c4c3b24f35af8e5879c11d13e1d3f42687c00cf81418953b5504838ba7  /tmp/fortinet-1038.zip' | sha256sum -c -
@@ -52,13 +55,11 @@ jobs:
           assert 'data:image/svg' not in h.lower()
           for p in (root/'images').glob('*.svg'): ET.parse(p)
           for p in (root/'images').glob('*.drawio'):
-              t=ET.parse(p)
-              assert len(t.findall('.//mxCell')) >= 8
+              t=ET.parse(p); assert len(t.findall('.//mxCell')) >= 8
           refs=re.findall(r'(?:src|href)="(images/[^"]+\.(?:svg|drawio))"',h)
           assert refs and all((root/r).exists() for r in refs)
-          print('validated',len(refs),'diagram references')
           PY
-      - name: Publish to main docs
+      - name: Publish docs
         shell: bash
         run: |
           set -euo pipefail
@@ -68,12 +69,12 @@ jobs:
           cp "$ROOT"/images/* docs/images/
           python - <<'PY'
           from pathlib import Path
-          p=Path('docs/index.html')
-          s=p.read_text()
-          if 'Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html' not in s:
-              card='''<section class="card latest"><span class="badge">LATEST — 2026-09-07 10:38</span><h2>2026-09-07 10:38 America/Los_Angeles</h2><p>Documentation-driven Fortinet engineering run: 12 mandatory products, 12 editable draw.io diagrams, 12 standalone SVGs, and 50 graded MCQs.</p><div class="grid"><div><b>12/12</b><br>lessons</div><div><b>12/12</b><br>draw.io</div><div><b>12/12</b><br>SVG</div><div><b>50/50</b><br>MCQs</div></div><p><a class="btn" href="Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">Open latest report</a></p><p><b>Pages URL:</b> <a href="https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html">https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html</a></p></section>'''
+          p=Path('docs/index.html'); s=p.read_text()
+          report='Fortinet_Daily_Study_Quiz_2026-09-07-10-38.html'
+          if report not in s:
+              card='<section class="card latest"><span class="badge">LATEST — 2026-09-07 10:38</span><h2>2026-09-07 10:38 America/Los_Angeles</h2><p>12 Fortinet engineering lessons, 12 editable draw.io diagrams, 12 standalone SVGs, and 50 graded MCQs.</p><p><a class="btn" href="'+report+'">Open latest report</a></p><p><a href="https://ccaiccie4.github.io/Fortinet/'+report+'">GitHub Pages report</a></p></section>'
               pos=s.find('<section class="card latest">')
-              if pos<0: pos=s.find('<section class="card">')
+              if pos < 0: pos=s.find('<section class="card">')
               s=s[:pos]+card+s[pos:]
               p.write_text(s)
           PY
