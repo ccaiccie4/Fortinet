@@ -1,6 +1,6 @@
 {
   "run_date": "2026-10-12",
-  "stage": "PRE-SELECTION EXCLUSION INVENTORY",
+  "stage": "SELECTED BEFORE LESSON GENERATION",
   "date_window": "2026-09-12 through 2026-10-11",
   "repository": "ccaiccie4/Fortinet",
   "source_inventory_files": [
@@ -1520,5 +1520,163 @@
       "source_inventory": "2026-10-11"
     }
   ],
-  "selected": []
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "BGP route-target extended-community filtering at route reflector",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/454380/matching-bgp-extended-community-route-targets-in-route-maps",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fgt-rt-extcommunity-rr-filter",
+      "workflow_transaction_fingerprint": "VRF route export → RT extcommunity → extcommunity-list → route-map → reflected update",
+      "failure_class": "cross-tenant reflection or dropped intended VRF routes",
+      "evidence_pattern": "BGP update extended communities; route-map hit; reflected route and VRF RIB",
+      "remediation_path": "correct RT match action and route-map direction",
+      "question_fingerprint": "2026-10-12-1-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-1-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Local certificate template validity and managed-device renewal",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/997919",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fmg-local-ca-certificate-renewal",
+      "workflow_transaction_fingerprint": "ADOM CA/template → device CSR → signed cert → expiry notice → renewal",
+      "failure_class": "managed device certificate expiry despite healthy policy installs",
+      "evidence_pattern": "template type/validity; notification; device certificate serial/expiry; post-renew handshake",
+      "remediation_path": "renew Local template cert and validate device binding",
+      "question_fingerprint": "2026-10-12-2-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-2-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiMQ ADOM-scoped indicator blocking without FortiManager",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "faz-fortimq-adom-indicator-feed",
+      "workflow_transaction_fingerprint": "Log/Incident indicator → block_indicator playbook → FortiMQ → FortiGate cloud feed → security policy",
+      "failure_class": "block indicator accepted but traffic not denied",
+      "evidence_pattern": "connector status; playbook; cloud feed; FortiGate external feed; policy match",
+      "remediation_path": "restore account/connector/feed sync and bind policy",
+      "question_fingerprint": "2026-10-12-3-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-3-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "DNS-over-TLS resolver with optional CA verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fsw-dot-ca-trust",
+      "workflow_transaction_fingerprint": "switch management DNS request → TCP 853 TLS → optional CA validation → DNS answer/cache",
+      "failure_class": "DNS DoT connection failure or unverified resolver",
+      "evidence_pattern": "system dns protocol/server-ca-cert; TCP853; TLS certificate; DNS response/cache",
+      "remediation_path": "correct resolver reachability and CA chain",
+      "question_fingerprint": "2026-10-12-4-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-4-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Agile Multiband Operation MBO cellular-preference and GAS elements",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/630853",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fap-mbo-gas-cellular-preference",
+      "workflow_transaction_fingerprint": "VAP mbo/gas config → beacon/probe response MBO IE → client steering decision",
+      "failure_class": "MBO absent from beacon or cellular preference misunderstood",
+      "evidence_pattern": "effective VAP config; beacon MBO IE; GAS comeback; client association",
+      "remediation_path": "enable MBO on VAP and validate client capability",
+      "question_fingerprint": "2026-10-12-5-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-5-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "RADIUS Fortinet-Group-Name dynamic user-group synchronization",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fnac-radius-fortinet-group-sync",
+      "workflow_transaction_fingerprint": "proxied Access-Accept group AVP → prefixed user group → membership reconciliation → access policy",
+      "failure_class": "user authenticates but group-based access is stale",
+      "evidence_pattern": "RADIUS AVP; proxy profile; RADIUS/<profile>/<group>; user membership; policy",
+      "remediation_path": "correct AVP/profile mapping and replay auth",
+      "question_fingerprint": "2026-10-12-6-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-6-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "RADIUS Proxy MAB Requests local-versus-external selection",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/366458/configure-local-radius-server-settings",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-where-to-configure-common-features-in-fortinac-radius-proxy-authentication-mode-229094",
+      "feature_mechanism_fingerprint": "fnacf-proxy-mab-local-selection",
+      "workflow_transaction_fingerprint": "NAS MAB → virtual server → proxy-MAB flag → local processor or external RADIUS → Access-Accept",
+      "failure_class": "phone MAB forwarded to external RADIUS and rejected",
+      "evidence_pattern": "NAS request; proxy MAB flag; local/proxy virtual server; RADIUS trace; returned VLAN",
+      "remediation_path": "disable proxy MAB for local processing or configure external MAB policy",
+      "question_fingerprint": "2026-10-12-7-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-7-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "HA heartbeat-interface separation from management plane",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/122076/high-availability",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-authentication-non-functional-after-ha-failover-228727",
+      "feature_mechanism_fingerprint": "fac-ha-dedicated-heartbeat",
+      "workflow_transaction_fingerprint": "HA management path + dedicated heartbeat interface → missed threshold → role election → RADIUS service",
+      "failure_class": "false failover due heartbeat isolation or post-join RADIUS issue",
+      "evidence_pattern": "management reachability; heartbeat interval/lost threshold; role; RADIUS test",
+      "remediation_path": "restore heartbeat path and validate post-join failover behavior",
+      "question_fingerprint": "2026-10-12-8-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-8-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Just-in-time Windows group elevation using WinRM checkout scripts",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fpam-jit-winrm-elevation",
+      "workflow_transaction_fingerprint": "secret checkout → admin credential → WinRM PowerShell add group → logon token refresh → checkin remove group",
+      "failure_class": "checkout succeeds but elevation script fails or privilege persists",
+      "evidence_pattern": "script status; WinRM; target group membership; user token; check-in status",
+      "remediation_path": "repair WinRM/script rights and verify de-elevation and sign-out",
+      "question_fingerprint": "2026-10-12-9-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-9-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Incident auto-clear: original-rule silence versus recovery subpattern",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/903877/creating-rules",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fsiem-incident-clear-condition",
+      "workflow_transaction_fingerprint": "active incident → clear timer → no retrigger OR recovery subpattern → incident cleared",
+      "failure_class": "incidents stay active or clear prematurely",
+      "evidence_pattern": "rule type; clear condition; timer; original trigger; recovery event; incident state",
+      "remediation_path": "correct clear predicate/time and test real recovery",
+      "question_fingerprint": "2026-10-12-10-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-10-mechanism-specific-topology"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Agentless ZTNA custom-domain CNAME and TLS certificate binding",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/550845",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "fsase-agentless-custom-domain-cert",
+      "workflow_transaction_fingerprint": "owned FQDN CNAME → SASE private app → TLS certificate → SSO bookmark → SPA hub → origin",
+      "failure_class": "TLS name mismatch or legacy SASE hostname inaccessible",
+      "evidence_pattern": "public CNAME; imported cert/key; private app state; SSO; SPA; origin response",
+      "remediation_path": "correct CNAME/certificate/app binding and policy",
+      "question_fingerprint": "2026-10-12-11-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-11-mechanism-specific-topology"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Per-packet distribution over IPsec aggregate as SD-WAN member",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/625774/per-packet-distribution-and-tunnel-aggregation",
+      "scenario_community_url": "",
+      "feature_mechanism_fingerprint": "sdwan-ipsec-aggregate-l3-distribution",
+      "workflow_transaction_fingerprint": "dual phase1 aggregate-member → ipsec-aggregate L3 → SD-WAN member → distributed ESP packets",
+      "failure_class": "only one underlay carries traffic or aggregate member down",
+      "evidence_pattern": "ipsec-aggregate list; tunnel list; aggregate interface; SD-WAN member; packet counters",
+      "remediation_path": "repair member SA/aggregate mode/SD-WAN membership",
+      "question_fingerprint": "2026-10-12-12-four-distinct-technical-scenarios",
+      "diagram_topology_layout_fingerprint": "2026-10-12-12-mechanism-specific-topology"
+    }
+  ],
+  "selection_notes": "Distinct mechanisms checked against 30-day inventory and published report samples; scenarios only secondary sources."
 }
