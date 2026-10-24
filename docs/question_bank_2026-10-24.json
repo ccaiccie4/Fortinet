@@ -5,7 +5,7 @@
       "product": "FortiGate",
       "stem": "A new TCP service fails only during a SYN burst. Which meter should be checked first?",
       "options": [
-        "Destination-keyed tcp_syn_flood packets-per-second meter",
+        "Destination tcp_syn_flood packets-per-second meter",
         "Source-keyed tcp_port_scan packets-per-second meter",
         "Concurrent tcp_src_session connection count",
         "Established-session firewall-policy hit counter"
@@ -22,7 +22,7 @@
       "product": "FortiGate",
       "stem": "A DoS sensor is set to rate 0 with broadcast-like traffic unaffected elsewhere. What does zero mean for enabled anomalies?",
       "options": [
-        "Drop all packets belonging to enabled anomaly categories",
+        "Drop all traffic matching the enabled anomaly type",
         "Disable all anomaly checks on the ingress interface",
         "Use the model's recommended threshold automatically",
         "Inherit the security policy's session-rate limit"
@@ -56,7 +56,7 @@
       "product": "FortiGate",
       "stem": "An operator changes continuous to periodical anomaly mode. What changes?",
       "options": [
-        "Allowed packet quantity resets across successive periods",
+        "Permit the configured packet quota each new period",
         "All packets bypass the configured anomaly threshold",
         "Concurrent-session limits become SYN-only rate meters",
         "Traffic begins matching only explicit proxy policies"
@@ -158,7 +158,7 @@
       "product": "FortiAnalyzer",
       "stem": "Two events are seven minutes apart; FOLLOWED_BY threshold duration is five. Expected result?",
       "options": [
-        "The pair does not satisfy the configured temporal window",
+        "The events fall outside the five-minute time window",
         "The pair matches because source IPs are identical",
         "The second event automatically extends the first window",
         "A notification profile overrides the duration setting"
@@ -175,7 +175,7 @@
       "product": "FortiAnalyzer",
       "stem": "A handler finds many false positives behind a shared NAT. Which design is strongest?",
       "options": [
-        "Correlate on a stable per-user identity where available",
+        "Join on a consistent user identity rather than NAT IP",
         "Join all records solely on the translated source IP",
         "Disable the data selector for all managed devices",
         "Use only the destination TCP port as subject"
@@ -226,7 +226,7 @@
       "product": "FortiSwitch",
       "stem": "A port override is configured, but the engineer edits only global storm settings. Why no change?",
       "options": [
-        "The port-specific override controls the effective threshold",
+        "Port-level override wins over the global rate setting",
         "The port is using a global routing VRF instead",
         "Storm control requires every port to be a trunk",
         "The switch ignores all traffic after learning MACs"
@@ -260,7 +260,7 @@
       "product": "FortiSwitch",
       "stem": "A 1000-pps limit works on one switch model but not another under microbursts. What else matters?",
       "options": [
-        "Hardware-dependent burst-size-level implementation and limits",
+        "Burst-size level and model-specific ASIC limits",
         "FortiAnalyzer report-dataset cache expiration time",
         "FortiGate user-group membership refresh interval",
         "FortiManager policy-package revision numbering"
@@ -277,7 +277,7 @@
       "product": "FortiAP/Wireless",
       "stem": "A FortiAP discovers its controller but loops between SULKING and DTLS_SETUP. Most relevant next check?",
       "options": [
-        "AP trust-store certificate and firmware compatibility",
+        "AP CA trust store and compatible firmware version",
         "SSID airtime fairness and channel-width selection",
         "Client DHCP lease and default gateway renewal",
         "Captive portal RADIUS group assignment precedence"
@@ -311,7 +311,7 @@
       "product": "FortiAP/Wireless",
       "stem": "Which setting allows a controller to create entries for newly discovered APs?",
       "options": [
-        "set ap-discover enable on the controller-facing interface",
+        "Enable ap-discover on the FortiGate management interface",
         "set storm-control-mode override on the switch port",
         "set dtls-policy clear-text on the client SSID",
         "set auto-firmware-upgrade disable on FortiGuard"
@@ -328,7 +328,7 @@
       "product": "FortiAP/Wireless",
       "stem": "A 231K lacks Fortinet_CA1.cer on affected firmware. Supported remediation?",
       "options": [
-        "Use Fortinet-supported fix image or corrected GA firmware",
+        "Install supported fix firmware or newer GA release",
         "Disable all controller certificate checks permanently",
         "Enable blanket AP auto-authorization for every serial",
         "Change the client SSID to open authentication"
@@ -362,7 +362,7 @@
       "product": "FortiNAC",
       "stem": "A host moved ports but the recorded switch port remains old. Which observation is decisive?",
       "options": [
-        "Fresh switch FDB versus FortiNAC last successful L2 poll",
+        "Compare current FDB with the last successful L2 poll",
         "Only the RADIUS server's certificate expiration date",
         "Only the host's DNS resolver search suffix",
         "Only the switch's global STP root priority"
@@ -379,7 +379,7 @@
       "product": "FortiNAC",
       "stem": "Contact polling works, but L2 table retrieval fails. What should be validated?",
       "options": [
-        "Device plugin credentials and CLI/REST parsing behavior",
+        "Check plugin credentials and switch-output parsing",
         "The guest sponsor's account expiration timestamp",
         "The endpoint's browser safe-search preference",
         "The FortiGate's IPsec phase-two selectors"
@@ -396,7 +396,7 @@
       "product": "FortiNAC",
       "stem": "A trap-triggered poll succeeded at 10:15 with a 15-minute interval. What is the next scheduled time?",
       "options": [
-        "Around 10:30, based on the updated success timestamp",
+        "10:30, from the last successful poll at 10:15",
         "At 10:16, regardless of the device's interval",
         "At midnight, when all network devices poll together",
         "Only after a RADIUS accounting stop arrives"
@@ -413,7 +413,7 @@
       "product": "FortiNAC-F",
       "stem": "A passive HA node is pingable but ignores RADIUS. Which boundary explains this?",
       "options": [
-        "Only the In Control node runs active RADIUS listeners",
+        "RADIUS runs only on the HA node currently in control",
         "The passive node lacks an Ethernet MAC address",
         "Every RADIUS packet requires a shared GUI VIP",
         "The switch must disable all server retries first"
@@ -447,7 +447,7 @@
       "product": "FortiNAC-F",
       "stem": "After recovery, the former primary stays passive. What does the HA guide require?",
       "options": [
-        "Deliberate control restoration rather than automatic preemption",
+        "Manually restore primary control after recovery",
         "Automatic primary takeover after every heartbeat",
         "A forced factory reset on the current active node",
         "Changing every endpoint's MAC address first"
@@ -464,7 +464,7 @@
       "product": "FortiNAC-F",
       "stem": "Which verification proves successful HA service takeover most directly?",
       "options": [
-        "A new endpoint RADIUS exchange completes on the active node",
+        "Complete a RADIUS authentication through the new active",
         "Both appliances answer ping on their management addresses",
         "The passive node shows a valid license in the GUI",
         "The HA link interface reports physical carrier"
@@ -481,7 +481,7 @@
       "product": "FortiAuthenticator",
       "stem": "GUI access disappears immediately after changing the HTTPS certificate. What is the primary fault domain?",
       "options": [
-        "Management web-server certificate binding and Apache startup",
+        "HTTPS certificate binding and Apache service startup",
         "RADIUS accounting session record expiration",
         "FortiNAC dynamic VLAN assignment policy",
         "Wireless AP controller discovery and authorization"
@@ -498,7 +498,7 @@
       "product": "FortiAuthenticator",
       "stem": "An HTTPS certificate warning appears but the login page loads. What is proven?",
       "options": [
-        "The web service answered despite client trust concerns",
+        "HTTPS answered but browser trust remains unresolved",
         "The server certificate is trusted by every client",
         "The RADIUS EAP certificate must be valid",
         "The FortiAuthenticator HA pair is synchronized"
@@ -532,7 +532,7 @@
       "product": "FortiAuthenticator",
       "stem": "Before replacing the GUI certificate, which checks prevent avoidable lockout?",
       "options": [
-        "SAN, private key, chain, backup and console access",
+        "Check SAN, key, chain, backup, and console access",
         "Only the RADIUS NAS-IP and shared secret",
         "Only the wireless SSID channel and band",
         "Only the FortiSIEM CMDB polling interval"
@@ -549,7 +549,7 @@
       "product": "FortiPAM",
       "stem": "A target account cannot change its own password. Which changer identity is appropriate?",
       "options": [
-        "An associated secret with sufficient change privilege",
+        "Use a privileged associated secret to change password",
         "The same account in Self mode without privileges",
         "An unauthenticated browser session on the target",
         "The FortiPAM dashboard viewer's account"
@@ -566,7 +566,7 @@
       "product": "FortiPAM",
       "stem": "A scheduled rotation reports success but the next launcher fails. Which test is strongest?",
       "options": [
-        "Verify the new credential against the actual target",
+        "Authenticate to target using newly stored credential",
         "Check only that the scheduler fired on time",
         "Confirm the secret folder has a friendly name",
         "Check only the administrator's GUI idle timeout"
@@ -583,7 +583,7 @@
       "product": "FortiPAM",
       "stem": "An SSH password changer hangs on one host after login. Most relevant suspect?",
       "options": [
-        "Changer expect sequence or prompt/newline mismatch",
+        "SSH prompt/expect or newline parsing mismatch",
         "The FortiSASE DNS category block action",
         "The FortiGate SD-WAN probe server selection",
         "The FortiSwitch storm-control broadcast threshold"
@@ -600,7 +600,7 @@
       "product": "FortiPAM",
       "stem": "Change Password Using is Self, Verify Password Using is Associated Secret. What follows?",
       "options": [
-        "Change and verification use independently selected identities",
+        "Different identities may change and verify the password",
         "Both operations must use the same identity",
         "Verification is disabled whenever change uses Self",
         "The associated secret automatically becomes a user approver"
@@ -634,7 +634,7 @@
       "product": "FortiSIEM",
       "stem": "A device appears in CMDB but its Monitor Status is Critical. What should be examined?",
       "options": [
-        "Monitor Performance errors and last polling timestamps",
+        "Monitor Performance errors and last poll timestamps",
         "Only the successful initial discovery timestamp",
         "Only the dashboard widget's color selection",
         "Only the source's firewall-policy UUID"
@@ -668,7 +668,7 @@
       "product": "FortiSIEM",
       "stem": "A one-minute poll runs every three minutes on a remote Collector. What design change best addresses lag?",
       "options": [
-        "Redistribute collectors or adjust intervals with rule review",
+        "Rebalance collectors or tune polling intervals and rules",
         "Increase the event parser's regular-expression complexity",
         "Change all CMDB object names to shorter strings",
         "Disable the target's NTP time synchronization"
@@ -702,7 +702,7 @@
       "product": "FortiSASE",
       "stem": "Safe-search enforcement fails while DNS category blocking works. What should be checked?",
       "options": [
-        "SSL deep inspection and Force Certificate Inspection override",
+        "Deep-inspection policy and certificate-only override",
         "The FortiSwitch unknown-unicast storm threshold",
         "The FortiPAM associated secret's password age",
         "The FortiNAC L2 polling device group interval"
@@ -719,7 +719,7 @@
       "product": "FortiSASE",
       "stem": "A DNS request is allowed, but a later HTTPS connection is blocked. Which explanation fits?",
       "options": [
-        "DNS and web/application controls evaluate different stages",
+        "DNS permits resolution; later application policy can block",
         "DNS allow automatically exempts the full HTTP URL",
         "The DNS filter rewrites all destination firewall rules",
         "FortiGuard category decisions apply only to IPv6"
@@ -736,7 +736,7 @@
       "product": "FortiSASE",
       "stem": "A DNS response succeeds during a FortiGuard rating outage. What conclusion is unsafe?",
       "options": [
-        "The domain was positively rated safe by FortiGuard",
+        "FortiGuard explicitly rated the domain as safe",
         "The endpoint received some DNS answer",
         "The configured profile may permit rating errors",
         "The DNS request reached a resolver path"
@@ -770,7 +770,7 @@
       "product": "Secure SD-WAN",
       "stem": "The sd-wan zone exists and SLA probes pass, but users cannot browse. What is still required?",
       "options": [
-        "Matching firewall policy, eligible route and usable NAT",
+        "Matching policy, eligible route, and NAT are still needed",
         "Only a successful ping to the FortiGate loopback",
         "Only the presence of the zone object name",
         "Only an enabled FortiAnalyzer report schedule"
@@ -787,7 +787,7 @@
       "product": "Secure SD-WAN",
       "stem": "An upgraded production FortiGate lacks the factory-default dual-WAN objects. What is the right inference?",
       "options": [
-        "Factory baseline creation is not guaranteed on in-place upgrade",
+        "Factory defaults do not necessarily apply on upgrade",
         "The SD-WAN subsystem is necessarily corrupted",
         "All WAN interfaces must be switched to PPPoE",
         "Every firewall policy must be deleted and recreated"
@@ -804,7 +804,7 @@
       "product": "Secure SD-WAN",
       "stem": "A FortiManager template replaces factory WAN objects after ZTP. What evidence identifies ownership?",
       "options": [
-        "Compare post-reset baseline with installed managed configuration",
+        "Diff factory reset and FortiManager-installed settings",
         "Look only at the default DNS probe IPs",
         "Look only at FortiSwitch LLDP neighbor entries",
         "Look only at the FortiAP wireless channel plan"
@@ -821,7 +821,7 @@
       "product": "FortiGate",
       "stem": "A DoS policy drops SYNs, yet the firewall-policy counter stays flat. What does this imply?",
       "options": [
-        "Packets can be rejected before forwarding-policy evaluation",
+        "DoS may reject packets before forward-policy matching",
         "The firewall policy has no enabled security profiles",
         "The TCP server must have a bad TLS certificate",
         "The route lookup must always be successful"
@@ -838,7 +838,7 @@
       "product": "FortiAnalyzer",
       "stem": "A correlation handler fires but the incident has the wrong subject. Which field deserves review?",
       "options": [
-        "Correlation criteria mapping the identity across both rules",
+        "Check the join fields shared between correlation rules",
         "The PDF report's page margin configuration",
         "The switch's port-level storm-control burst setting",
         "The FortiGate WAN interface's DHCP lease timer"
