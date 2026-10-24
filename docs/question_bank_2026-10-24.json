@@ -139,69 +139,69 @@
     },
     {
       "product": "FortiAnalyzer",
-      "stem": "A basic handler is saved but now needs FOLLOWED_BY semantics. What change is required?",
+      "stem": "A Fabric HA member's secondary shows Authorization Unknown while the primary is connected. What does that usually mean?",
       "options": [
-        "Create a correlation handler with the intended sequence",
-        "Add a notification profile to the existing basic handler",
-        "Increase the report dataset's retention interval",
-        "Enable archive-only processing on the existing handler"
+        "The passive node does not register independently",
+        "The secondary has lost all replicated log records",
+        "The supervisor requires two separate member licenses",
+        "The Analytics database must be rebuilt immediately"
       ],
       "feedback": [
-        "Event Handler Type cannot be changed after saving; recreate as correlation.",
-        "Notifications are downstream actions and cannot change rule logic.",
-        "Report retention does not create temporal correlation operators.",
-        "Event handlers evaluate Analytics logs, not Archive-only records."
+        "The Fabric member primary owns the supervisor connection; passive Unknown can be normal.",
+        "Unknown authorization alone does not prove loss of synchronized logs.",
+        "The guide models one logical HA member, not two separate Fabric identities.",
+        "Rebuilding Analytics does not address intentional passive registration behavior."
       ],
       "correct": 0
     },
     {
       "product": "FortiAnalyzer",
-      "stem": "Two events are seven minutes apart; FOLLOWED_BY threshold duration is five. Expected result?",
+      "stem": "After member HA failover, which connection should the promoted node establish?",
       "options": [
-        "The events fall outside the five-minute time window",
-        "The pair matches because source IPs are identical",
-        "The second event automatically extends the first window",
-        "A notification profile overrides the duration setting"
+        "Fabric supervisor connection as the new primary",
+        "A second independent Fabric supervisor identity",
+        "An Archive-only event handler subscription",
+        "A replacement FortiGate management FGFM tunnel"
       ],
       "feedback": [
-        "Correlation requires the sequence to fit within Threshold Duration.",
-        "Matching identities do not waive the configured time boundary.",
-        "A late event does not retroactively extend the window.",
-        "Notification delivery is separate from correlation eligibility."
+        "The promoted primary establishes the Fabric supervisor relationship.",
+        "The logical member should remain one identity across role changes.",
+        "Event handlers are unrelated to HA Fabric registration.",
+        "FGFM is FortiManager management, not Fabric HA."
       ],
       "correct": 0
     },
     {
       "product": "FortiAnalyzer",
-      "stem": "A handler finds many false positives behind a shared NAT. Which design is strongest?",
+      "stem": "Which FortiAnalyzer role is explicitly unsupported for HA in the Fabric deployment guide?",
       "options": [
-        "Join on stable user ID, not the shared NAT address",
-        "Join all records solely on the translated source IP",
-        "Disable the data selector for all managed devices",
-        "Use only the destination TCP port as subject"
+        "The Fabric supervisor itself",
+        "An Active-Passive Fabric member",
+        "An Active-Active Fabric member",
+        "A synchronized secondary member node"
       ],
       "feedback": [
-        "A stable user identity reduces accidental joins among NAT-shared clients.",
-        "A NAT address can represent many unrelated actors.",
-        "Removing scoping increases unrelated events and noise.",
-        "Destination ports are rarely unique subjects for user sequences."
+        "Fortinet states HA is not supported on the Fabric supervisor.",
+        "A Fabric member can be an Active-Passive HA cluster.",
+        "The member guide also discusses Active-Active mode.",
+        "The secondary is part of supported member HA."
       ],
       "correct": 0
     },
     {
       "product": "FortiAnalyzer",
-      "stem": "An Archive search shows both records but the correlation handler never fires. First pipeline question?",
+      "stem": "A passive node is reachable but never appears as a separate active Fabric member. Best validation?",
       "options": [
-        "Are the records present in Analytics logs for this ADOM?",
-        "Was the report exported as a PDF document?",
-        "Does the FortiGate have a valid static default route?",
-        "Is the dashboard widget using the correct color palette?"
+        "Check HA sync and the primary Fabric connection",
+        "Enable separate registration on both HA peers",
+        "Delete the logical HA member from supervisor",
+        "Disable heartbeat before comparing topology"
       ],
       "feedback": [
-        "Event handlers consume Analytics logs in the appropriate ADOM.",
-        "PDF export is not a prerequisite for event-handler evaluation.",
-        "FortiGate routing may matter to ingestion but does not prove Analytics availability.",
-        "Widget appearance has no role in correlation input."
+        "Role and sync status plus the primary connection are the expected evidence.",
+        "Dual registration is not the documented member HA behavior.",
+        "Deleting a working logical member risks losing visibility.",
+        "Disabling heartbeat is not a safe diagnostic requirement."
       ],
       "correct": 0
     },
@@ -547,205 +547,205 @@
     },
     {
       "product": "FortiPAM",
-      "stem": "A target account cannot change its own password. Which changer identity is appropriate?",
+      "stem": "A recurring privileged job is Enabled but does not run during maintenance. What explains this?",
       "options": [
-        "Use an associated secret with change rights",
-        "The same account in Self mode without privileges",
-        "An unauthenticated browser session on the target",
-        "The FortiPAM dashboard viewer's account"
+        "FortiPAM suppresses jobs while in maintenance mode",
+        "SSH procedures always require a browser session",
+        "The associated secret automatically disables every job",
+        "A successful launcher session cancels the schedule"
       ],
       "feedback": [
-        "Associated Secret lets a separate privileged credential perform changes.",
-        "Self mode cannot bypass target account permissions.",
-        "An unauthenticated browser is not a supported privileged changer identity.",
-        "Viewing rights do not confer target password-change authority."
+        "The current guide explicitly states jobs do not execute in maintenance mode.",
+        "SSH jobs run as automation, not necessarily interactive browsers.",
+        "Associated secrets provide credentials rather than globally disabling jobs.",
+        "Launcher use is separate from scheduled job execution."
       ],
       "correct": 0
     },
     {
       "product": "FortiPAM",
-      "stem": "A scheduled rotation reports success but the next launcher fails. Which test is strongest?",
+      "stem": "Which job type is intended for a target operated through HTTP requests?",
       "options": [
-        "Test new credentials against the target",
-        "Check only that the scheduler fired on time",
-        "Confirm the secret folder has a friendly name",
-        "Check only the administrator's GUI idle timeout"
+        "Web API calls with request-response steps",
+        "SSH Procedure using remote CLI prompts",
+        "PowerShell through an RDP-oriented target",
+        "SSH Script for Unix shell commands"
       ],
       "feedback": [
-        "A target login verifies vault-to-target agreement after rotation.",
-        "Job execution alone does not prove target acceptance.",
-        "Folder naming is unrelated to credential synchronization.",
-        "GUI idle timeout does not test the rotated password."
+        "Web API calls execute request-based automation against compatible targets.",
+        "SSH Procedure expects an SSH command channel, not HTTP.",
+        "PowerShell is a different execution mechanism.",
+        "Unix SSH scripts do not issue web requests by themselves."
       ],
       "correct": 0
     },
     {
       "product": "FortiPAM",
-      "stem": "An SSH password changer hangs on one host after login. Most relevant suspect?",
+      "stem": "A job shows Pending Approval despite a valid target credential. What should be checked first?",
       "options": [
-        "SSH prompt/expect or newline parsing mismatch",
-        "The FortiSASE DNS category block action",
-        "The FortiGate SD-WAN probe server selection",
-        "The FortiSwitch storm-control broadcast threshold"
+        "The job's approval gate and requester permissions",
+        "The target server's TCP receive-window scaling",
+        "The secret folder's display sorting order",
+        "The dashboard's configured refresh interval"
       ],
       "feedback": [
-        "SSH changers depend on command/response matching and newline behavior.",
-        "DNS policy is a different traffic-security mechanism.",
-        "SD-WAN probes do not interpret remote shell prompts.",
-        "Switch broadcast metering does not parse SSH command output."
+        "Authorization can prevent execution before a target connection is attempted.",
+        "TCP tuning does not resolve an approval state.",
+        "Folder sorting does not grant job approval.",
+        "Dashboard refresh cannot approve privileged execution."
       ],
       "correct": 0
     },
     {
       "product": "FortiPAM",
-      "stem": "Change Password Using is Self, Verify Password Using is Associated Secret. What follows?",
+      "stem": "A job executed but returned a script error. Which evidence distinguishes transport from task failure?",
       "options": [
-        "Different identities may change and verify the password",
-        "Both operations must use the same identity",
-        "Verification is disabled whenever change uses Self",
-        "The associated secret automatically becomes a user approver"
+        "Results and Log tabs with target command output",
+        "Only the job's configured recurrence schedule",
+        "Only the secret's creation date and owner",
+        "Only the appliance's GUI certificate subject"
       ],
       "feedback": [
-        "FortiPAM separately selects identities for changing and verifying.",
-        "The two identity selectors are independent.",
-        "A verifier can still run when Self performs the change.",
-        "Password verification and approval workflows are distinct."
+        "Results and logs reveal execution outcome beyond scheduling.",
+        "A schedule proves intent, not target-side success.",
+        "Secret metadata alone does not show script behavior.",
+        "GUI certificate identity does not explain script exit status."
       ],
       "correct": 0
     },
     {
       "product": "FortiSIEM",
-      "stem": "Two appliances sharing a VIP merge into one CMDB record. Which documented corrective concept applies?",
+      "stem": "An application responds to ping but its login workflow is broken. Which monitor tests the real symptom?",
       "options": [
-        "Mark the VIP in discovery settings and rediscover",
-        "Increase syslog severity to debug on both devices",
-        "Disable every parser that receives device events",
-        "Move all devices into the same organization"
+        "HTTP synthetic transaction with application assertions",
+        "ICMP echo checks at a shorter interval",
+        "SNMP interface utilization threshold alerts",
+        "Syslog collector disk free-space monitoring"
       ],
       "feedback": [
-        "The discovery VIP list prevents a shared address from implying identity.",
-        "Syslog verbosity does not fix CMDB identity merging.",
-        "Parsers act on events, not discovery identity resolution.",
-        "Organization collapse can create additional tenancy errors."
+        "An HTTP/Selenium STM validates application behavior beyond host reachability.",
+        "More ping tests still do not execute the login workflow.",
+        "Interface utilization cannot prove the application UI works.",
+        "Collector disk health is not a user transaction test."
       ],
       "correct": 0
     },
     {
       "product": "FortiSIEM",
-      "stem": "A device appears in CMDB but its Monitor Status is Critical. What should be examined?",
+      "stem": "Where is a FortiSIEM synthetic transaction definition created and assigned?",
       "options": [
-        "Review Monitor Performance errors and poll lag",
-        "Only the successful initial discovery timestamp",
-        "Only the dashboard widget's color selection",
-        "Only the source's firewall-policy UUID"
+        "Admin Setup STM, then apply it to a host",
+        "CMDB IP Merge, then disable the VIP list",
+        "Event Pipeline Parser, then change log regex",
+        "Admin Credentials, then force device rediscovery"
       ],
       "feedback": [
-        "Monitor Status reflects ongoing job health and lag.",
-        "Discovery success does not prove later monitoring.",
-        "Widget styling is unrelated to polling.",
-        "Firewall UUID alone does not identify collector scheduling."
+        "The guide describes STM definition, host application and Monitor Status.",
+        "VIP identity controls discovery, not synthetic transactions.",
+        "Parser regex processes logs, not browser checks.",
+        "Rediscovery does not create an STM definition."
       ],
       "correct": 0
     },
     {
       "product": "FortiSIEM",
-      "stem": "Discovery exceeds device licensing and some records become Unmanaged. What does that imply?",
+      "stem": "A Selenium STM fails after a UI redesign, while users can complete the workflow. What should change?",
       "options": [
-        "Those devices are not monitored as managed sources",
-        "All excess devices continue full metric collection",
-        "Every device is automatically assigned more licenses",
-        "Only the dashboard display is affected by the limit"
+        "Update selectors while retaining the intended assertion",
+        "Disable all performance monitors on that host",
+        "Increase the device discovery license count",
+        "Delete the application's DNS A record"
       ],
       "feedback": [
-        "Fortinet documents that Unmanaged devices are not monitored or logged as managed.",
-        "Unmanaged state is a functional capacity boundary.",
-        "Discovery does not automatically expand entitlement.",
-        "Licensing affects monitoring, not just presentation."
+        "A changed DOM selector can break the test without a service outage.",
+        "Other performance monitors are not the root cause.",
+        "Licensing changes do not repair a browser script.",
+        "Deleting DNS would create a real outage."
       ],
       "correct": 0
     },
     {
       "product": "FortiSIEM",
-      "stem": "A one-minute poll runs every three minutes on a remote Collector. What design change best addresses lag?",
+      "stem": "Which result proves a synthetic monitor actually validates a business action?",
       "options": [
-        "Rebalance collectors or tune polling intervals and rules",
-        "Increase the event parser's regular-expression complexity",
-        "Change all CMDB object names to shorter strings",
-        "Disable the target's NTP time synchronization"
+        "Expected content or workflow assertion succeeds",
+        "The target replies to ICMP echo requests",
+        "The host appears in the CMDB device list",
+        "The Collector has no active parser warnings"
       ],
       "feedback": [
-        "Collector load and WAN latency can cause polling lag; interval changes affect rules.",
-        "Parser complexity does not repair a metric scheduling backlog.",
-        "Names are not the primary cause of delayed polling.",
-        "NTP removal worsens temporal evidence and does not improve collection."
+        "A transaction assertion tests the user-visible outcome.",
+        "Ping only proves network-level reachability.",
+        "CMDB presence is inventory, not workflow validation.",
+        "Parser warnings do not define STM success."
       ],
       "correct": 0
     },
     {
       "product": "FortiSASE",
-      "stem": "A DNS category rating service is unreachable and the profile allows rating errors. What can happen?",
+      "stem": "Which IPS profile logs detected signatures without blocking matched traffic?",
       "options": [
-        "Requests proceed with a logged rating-error condition",
-        "All DNS responses are forcibly redirected to the block portal",
-        "FortiSASE silently disables every firewall policy",
-        "The endpoint automatically switches to a private IPsec tunnel"
+        "Monitor profile permits traffic while recording events",
+        "Critical profile always permits high-severity exploits",
+        "Recommended profile disables every default signature",
+        "Custom profile never evaluates FortiGuard signatures"
       ],
       "feedback": [
-        "Allow-on-rating-error is an explicit fail-open DNS behavior.",
-        "Redirect is a configured category action, not mandatory on rating errors.",
-        "A rating error does not remove unrelated firewall policies.",
-        "DNS rating failure does not create a VPN."
+        "Monitor mode allows matching traffic and records detections.",
+        "Critical blocks medium/high/critical signatures.",
+        "Recommended follows FortiGuard default signature actions.",
+        "Custom profiles can still use FortiGuard signatures."
       ],
       "correct": 0
     },
     {
       "product": "FortiSASE",
-      "stem": "Safe-search enforcement fails while DNS category blocking works. What should be checked?",
+      "stem": "A narrow custom IPS Allow rule matches before the Critical profile. Which action wins?",
       "options": [
-        "Check deep inspection and certificate override",
-        "The FortiSwitch unknown-unicast storm threshold",
-        "The FortiPAM associated secret's password age",
-        "The FortiNAC L2 polling device group interval"
+        "The matching custom rule is evaluated first",
+        "Critical profile always overrides custom exceptions",
+        "The packet is dropped by DNS Filter automatically",
+        "The IPS engine skips all custom signature entries"
       ],
       "feedback": [
-        "Fortinet notes safe-search enforcement needs deep inspection.",
-        "Switch L2 meters do not enforce web search restrictions.",
-        "PAM credential rotation does not control DNS safe search.",
-        "NAC polling does not define SASE TLS inspection."
+        "Fortinet documents custom IPS rules preceding the selected profile.",
+        "Critical does not automatically override an earlier matching custom rule.",
+        "DNS filtering is a separate policy stage.",
+        "Custom entries are evaluated before built-in profile behavior."
       ],
       "correct": 0
     },
     {
       "product": "FortiSASE",
-      "stem": "A DNS request is allowed, but a later HTTPS connection is blocked. Which explanation fits?",
+      "stem": "Which IPS setting preserves a matching packet copy for investigation?",
       "options": [
-        "DNS and HTTPS policies apply at different stages",
-        "DNS allow automatically exempts the full HTTP URL",
-        "The DNS filter rewrites all destination firewall rules",
-        "FortiGuard category decisions apply only to IPv6"
+        "Enable packet logging on the custom IPS entry",
+        "Choose Monitor and disable all security logs",
+        "Turn off TLS inspection on every policy",
+        "Remove the signature from the extended database"
       ],
       "feedback": [
-        "DNS filtering permits name resolution without guaranteeing later application access.",
-        "DNS allow is not a full-path web-policy exemption.",
-        "DNS verdicts do not rewrite the firewall rule base.",
-        "DNS filtering is not inherently IPv6-only."
+        "Packet logging saves matching packet copies for later analysis.",
+        "Monitor alone logs an event, not necessarily packet contents.",
+        "Disabling inspection reduces payload visibility.",
+        "Removing signatures eliminates the evidence source."
       ],
       "correct": 0
     },
     {
       "product": "FortiSASE",
-      "stem": "A DNS response succeeds during a FortiGuard rating outage. What conclusion is unsafe?",
+      "stem": "A legitimate request is blocked by a medium-severity signature under Critical. Best targeted response?",
       "options": [
-        "FortiGuard explicitly rated the domain as safe",
-        "The endpoint received some DNS answer",
-        "The configured profile may permit rating errors",
-        "The DNS request reached a resolver path"
+        "Validate then narrowly Monitor the specific signature",
+        "Disable the entire IPS profile for all users",
+        "Allow all signatures with medium or higher severity",
+        "Remove every other security profile from the policy"
       ],
       "feedback": [
-        "Fail-open can allow unresolved ratings; success does not prove safe classification.",
-        "A successful response does indicate some answer was returned.",
-        "The profile may indeed allow rating errors.",
-        "A response implies a DNS resolution path existed."
+        "A scoped custom exception can address a verified false positive.",
+        "Disabling IPS broadly sacrifices unrelated protection.",
+        "Broad severity exceptions are unsafe and unnecessary.",
+        "Other security profiles are not the root cause."
       ],
       "correct": 0
     },
@@ -836,18 +836,18 @@
     },
     {
       "product": "FortiAnalyzer",
-      "stem": "A correlation handler fires but the incident has the wrong subject. Which field deserves review?",
+      "stem": "During member failover, what identity should remain stable in the Fabric supervisor?",
       "options": [
-        "Review shared join fields in the two rules",
-        "The PDF report's page margin configuration",
-        "The switch's port-level storm-control burst setting",
-        "The FortiGate WAN interface's DHCP lease timer"
+        "Logical HA member name and cluster virtual IP",
+        "Physical hostname of whichever peer was first",
+        "A newly created ADOM for each secondary node",
+        "A separate supervisor object for each heartbeat"
       ],
       "feedback": [
-        "The cross-rule join fields determine which records share a subject.",
-        "Report formatting does not define event correlation subjects.",
-        "Switch traffic limits do not map log identities.",
-        "WAN DHCP timing is not a correlation-field mapping."
+        "The supervisor presents the HA group identity and cluster VIP.",
+        "Physical peer roles can change during failover.",
+        "ADOM creation is not required for HA role transitions.",
+        "Heartbeat packets are not independently registered Fabric members."
       ],
       "correct": 0
     }
