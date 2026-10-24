@@ -1,0 +1,522 @@
+{
+  "date": "2026-10-24",
+  "source_policy": "Feature/administration/configuration guides are primary; Community links are secondary scenarios only. Distinct from 402-record exclusion inventory.",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "slug": "01_fgt_dos",
+      "title": "DoS anomaly policy: SYN-rate accounting before forward-policy admission",
+      "primary": "https://docs.fortinet.com/document/fortigate/7.6.7/administration-guide/771644/dos-policy",
+      "scenario": "https://community.fortinet.com/fortigate-3/technical-tip-identifying-packet-drops-caused-by-dos-policy-182542",
+      "fingerprint": "fgt-dos-interface-ingress-tcp-syn-flood-anomaly-pps-block-mode",
+      "nodes": [
+        "Client SYN/retransmit",
+        "Ingress interface",
+        "DoS policy match",
+        "tcp_syn_flood pps meter",
+        "Block / pass decision",
+        "Route + firewall policy",
+        "Anomaly logs + counters"
+      ],
+      "sections": [
+        [
+          "Why this feature exists",
+          "A forwarding firewall policy permits sessions that satisfy identity, source, destination, service and security requirements, but a volumetric burst can exhaust resources before an expensive security inspection begins. FortiOS DoS policies provide an earlier ingress anomaly decision. A DoS policy is bound to an arriving interface and address/service selectors, and its enabled anomaly sensors evaluate behavior such as SYN rate to a destination. It is not a replacement for the ordinary firewall policy: traffic that survives the anomaly check still needs a valid route and an accepting firewall policy."
+        ],
+        [
+          "Packet and state mechanics",
+          "The tcp_syn_flood anomaly counts SYN packets for new TCP connections, including retransmissions, toward one destination IP address. Its threshold is a packet rate, not a count of established TCP sessions. tcp_port_scan instead keys a SYN rate by source; tcp_src_session and tcp_dst_session count concurrent connections, so swapping these sensors changes the protected resource and the failure signature. On supported NP7 and NP6XLite hardware, SYN-cookie handling can be offloaded when DoS offload is configured; do not assume that every model implements identical hardware behavior."
+        ],
+        [
+          "Configuration example and boundary",
+          "A source-supported CLI pattern is: config firewall DoS-policy; edit 1; set interface \"port1\"; set srcaddr \"all\"; set dstaddr \"all\"; set service \"ALL\"; config anomaly; edit \"tcp_syn_flood\"; set status enable; set log enable; set action block; set threshold 2000; next; end; next; end. Treat 2000 packets/s as Fortinet's reference threshold, not a universal safe production setting. Use measured legitimate peaks, upstream attack rates and destination capacity to tune. The global `config ips global / set anomaly-mode continuous|periodical` changes rate-based blocking behavior."
+        ],
+        [
+          "Evidence and its limits",
+          "Start with Security Events > Anomaly and correlate ingress interface, anomaly name, policy ID, source, destination, measured count and action. `diagnose ips anomaly list` exposes active anomaly meters; `diagnose ips anomaly config` reveals installed DoS sensors and thresholds. A conventional firewall deny log does not prove that a DoS rule fired, and a clean firewall policy hit count does not rule out pre-policy drops. Packet capture before ingress plus anomaly log after classification provides a stronger causal chain. Verify counters before and after a controlled, approved test rather than assuming that an isolated log line represents sustained attack."
+        ],
+        [
+          "Scenario and correction",
+          "Suppose a site-to-site IKE negotiation fails during an internet-facing flood. The tunnel peer can be reachable, routing correct and firewall policies valid, yet a too-low udp_flood DoS threshold drops UDP/500 before IKE processes it. That is a different anomaly than tcp_syn_flood but demonstrates the same early-check boundary. Inspect anomaly logs keyed to the gateway IP and protocol, then scope or tune the relevant sensor without disabling protections indiscriminately. A SYN service problem should be investigated with the destination-oriented SYN meter, not by changing the application inspection profile."
+        ],
+        [
+          "Operational implications",
+          "Rate counters reset according to their sensor window and can vary around thresholds; continuous mode keeps blocking while the rate remains excessive, whereas periodical mode permits the configured quantity in successive periods. NAT, VIP translation and hardware offload affect what evidence appears at each observation point, so record the actual ingress and destination addresses. During HA failover compare the installed DoS configuration and hardware capability on the new active unit. During firmware upgrades review anomaly defaults and NP-specific acceleration support. Always document whether the metric is pps, session count, or per-source/per-destination before setting a threshold."
+        ]
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "slug": "02_fmg_license",
+      "title": "Managed device/VDOM license accounting and unexpected setup-wizard reentry",
+      "primary": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/514531/license-information-widget",
+      "scenario": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-fortimanager-displays-initial-setup-wizard-for-already-deployed-appliance-230531",
+      "fingerprint": "fmg-vm-device-vdom-license-capacity-gui-wizard-overage",
+      "nodes": [
+        "Managed FortiGates",
+        "VDOM inventory",
+        "License counter",
+        "VM entitlement limit",
+        "GUI wizard / dashboard",
+        "Add license or reduce count",
+        "CLI capacity verification"
+      ],
+      "sections": [
+        [
+          "Purpose and object model",
+          "FortiManager centralizes device and policy management, but its VM entitlement constrains how many managed device/VDOM units can be held. The License Information widget separates VM license state, ADOM entitlements and the Management Device/VDOMs tally. Do not confuse the number of FortiGate chassis, ADOMs and VDOMs: an enabled VDOM model can consume management capacity differently from a single-root deployment. HA secondaries and hidden unauthorized records can have different counting rules. Capacity is a control-plane admission constraint, not a FortiGate data-plane forwarding issue."
+        ],
+        [
+          "Management transaction",
+          "A device is discovered or added to Device Manager, its serial number and VDOM inventory become managed records, and the licensed count is evaluated against the VM entitlement. A new VDOM may change consumption without adding a new physical firewall. The GUI is a view of that persistent management inventory, so a suddenly appearing first-run setup wizard is not necessarily a factory reset or loss of configuration. A recent Fortinet Community case documents a deployed VM presenting the wizard after managed devices/VDOMs exceeded licensed capacity. The appliance remained populated and CLI-accessible."
+        ],
+        [
+          "Supported configuration and inspection",
+          "Use System Settings > Dashboard > License Information to compare the Management Device/VDOMs used count against the licensed limit. The FortiManager CLI `get system status` reports platform and licensing context; `diagnose debug vminfo` exposes VM license validity and maximum device capacity; `diagnose dvm device list` reports managed device/VDOM totals. These are read-only observations. If a valid additional license is available, the Administration Guide supports activation through FortiCloud or upload of a VM license file, with a service restart for license verification. Do not remove arbitrary device objects as a first reaction."
+        ],
+        [
+          "Evidence chain and false positives",
+          "A device inventory of 252 counted units with a 250-device entitlement is stronger evidence of a license overage than the wizard alone. Confirm that the VM license is valid, that the license widget agrees with CLI counts, and that the configuration database still contains the expected devices. A normal FortiGate FGFM connection proves the firewall can communicate but does not prove there is spare licensed capacity. A GUI prompt by itself also cannot distinguish capacity exhaustion from a fresh installation, browser caching, or a licensing service problem. Compare time of added VDOMs with first appearance of the wizard."
+        ],
+        [
+          "Scenario response",
+          "When administrators log in and see initial setup on a long-running FortiManager, preserve a configuration backup and inspect capacity before making any setup changes. The Community scenario describes declining changes in the wizard to regain access, then increasing the entitlement or removing excess managed records deliberately. Audit which VDOMs are actually in use, whether model devices count, and which management teams own them. After remediation, re-open License Information and confirm normal GUI navigation. Do not reset the appliance: that would convert a license issue into an avoidable management outage."
+        ],
+        [
+          "Upgrade and scale implications",
+          "VM entitlements, FortiFlex/BYOL methods, ADOM licensing and managed-device counts are related but distinct. Plan capacity before importing a large fleet or enabling multi-VDOM on previously single-VDOM FortiGates. During HA failover ensure the surviving manager has valid entitlement and replicated device inventory. Check the release-specific counting rules rather than assuming an old platform's exceptions persist. Keep license activation paths and air-gap requirements documented, and alert on approach to the management limit. A management-capacity incident should be triaged separately from policy-install errors or device connectivity faults."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "slug": "03_faz_correlation",
+      "title": "Correlation event handlers: temporal joins, negative conditions and Analytics-log eligibility",
+      "primary": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/199291/creating-a-custom-correlation-handler",
+      "scenario": null,
+      "fingerprint": "faz-correlation-handler-followed-by-not-followed-by-subject-join-window",
+      "nodes": [
+        "Analytics logs",
+        "ADOM data selector",
+        "Rule A filtered group",
+        "Temporal operator + join key",
+        "Rule B / absence test",
+        "Event / incident",
+        "Notification profile"
+      ],
+      "sections": [
+        [
+          "Why correlation differs from basic matching",
+          "A basic FortiAnalyzer event handler emits an event when any configured rule matches; the rules have OR semantics. A correlation handler instead evaluates multiple filtered log groups with operators such as AND, AND_NOT, OR, FOLLOWED_BY and NOT_FOLLOWED_BY. This matters when the security question is not whether an authentication failure occurred but whether failures were followed by a success from the same subject within a bounded period. The event handler is scoped to the active ADOM, and its data selector determines which devices, subnets and filters are eligible."
+        ],
+        [
+          "Processing and temporal semantics",
+          "A correlation rule first chooses device and log type, refines candidate records by fields, and defines an occurrence threshold. Correlation criteria then pair fields between rules, for example a common source IP or user identity. A temporal operator evaluates sequence within Threshold Duration; FOLLOWED_BY requires a later matching event, while NOT_FOLLOWED_BY tests absence of the expected follow-up over the configured window. An unbounded assumption about time creates false negatives: if the second event arrives outside the window, the handler should not correlate it. A join on destination rather than user can merge unrelated actors."
+        ],
+        [
+          "How to configure",
+          "Navigate to Incidents & Events > Event Handlers > Event Handlers, choose Create New, and select Correlation as Event Handler Type. Define a named data selector and the duration in minutes; add rules to the Correlation Sequence, arrange their order, choose the operator, and set field-level Correlation Criteria. Then configure output severity, event type/message, indicators, tags and a notification profile. Fortinet notes that Event Handler Type cannot be changed after save; a basic handler must be recreated as correlation rather than edited in place. Optionally enable Automatically Create Incident or an automation stitch."
+        ],
+        [
+          "What to observe",
+          "Test with known Analytics logs that contain both rule A and rule B, including their timestamps and join-field values. Confirm the handler is enabled in the correct ADOM and the data selector includes the device and log type. An event generated by the handler proves the sequence and criteria matched, not that the underlying activity was malicious. Conversely, an Archive-only log will not be evaluated by event handlers: a successful archive search does not prove the Analytics pipeline supplied the correlation engine. In Analyzer–Collector deployments, the Analyzer evaluates handlers, so examine the correct processing tier."
+        ],
+        [
+          "Failure scenario",
+          "Consider an incident that never fires despite a failed-login burst followed by a privileged login. The raw records exist, but the failed log has `user=alice` and the success log has `user=ALICE@realm`; a strict join on user fails. Another possibility is a 5-minute threshold with a 7-minute gap. Inspect both records and normalize the intended correlation identity only where source semantics justify it; do not loosen to an indiscriminate IP join when many users share a NAT. If the log exists only in Archive, first repair Analytics ingestion rather than increasing the threshold."
+        ],
+        [
+          "Operational consequences",
+          "Correlating on broad fields raises event volume and incident duplication; overly narrow criteria miss distributed behavior. Notification profiles and automation stitches are downstream effects, not evidence that the correlation condition itself was correct. When Automatically Create Incident is enabled, later events with the same subject can attach to the open incident; a new incident may be created after closure. Document the intended subject key, ordering and maximum lag, then replay representative logs after an upgrade or ADOM migration. The lesson is a sequence engine, not a generic log-search or report-building feature."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "slug": "04_fsw_storm",
+      "title": "Port storm control: pps thresholds, traffic classes and burst-level exceptions",
+      "primary": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/13233/storm-control",
+      "scenario": null,
+      "fingerprint": "fsw-storm-control-broadcast-unknown-unicast-multicast-pps-port-override",
+      "nodes": [
+        "Ingress frames",
+        "Port classifier",
+        "Broadcast bucket",
+        "Unknown unicast bucket",
+        "Unknown multicast bucket",
+        "PPS/burst limiter",
+        "Forward or drop"
+      ],
+      "sections": [
+        [
+          "What storm control protects",
+          "A Layer 2 loop or malfunctioning endpoint can produce broadcast, unknown-unicast or unknown-multicast floods that consume uplink bandwidth and switch forwarding resources. FortiSwitch storm control meters these categories and drops excess frames when an enabled threshold is crossed. It is different from STP: STP changes topology to remove bridging loops, while storm control rate-limits specified frame classes even when the topology remains active. Known unicast is not the same class as unknown unicast, so enabling a storm-control sensor is not a blanket bandwidth cap for every packet."
+        ],
+        [
+          "Metering and inheritance",
+          "The FortiSwitchOS guide describes a packet-per-second rate and separate enable flags for broadcast, unknown unicast and unknown multicast. By default storm control is disabled. Global configuration can apply across the unit; a port can override the global mode with its own `storm-control-mode override` settings. The burst-size-level influences how many packets are tolerated in short bursts, with model-dependent limits. A rate of zero is not 'unlimited': Fortinet documents that it drops all packets of enabled categories. Misreading zero as disabled can immediately disrupt ARP, DHCP or discovery."
+        ],
+        [
+          "Configuration example",
+          "On standalone FortiSwitchOS, a source-supported system pattern is `config switch storm-control; set broadcast enable; set unknown-unicast enable; set unknown-mcast enable; set rate 1000; set burst-size-level 2; end`. For a single noisy access port, use `config switch physical-port; edit port5; set storm-control-mode override; config storm-control; ...; end; next; end` with only the desired categories enabled. In FortiLink-managed designs, use FortiGate switch-controller storm-control policies and assign the policy to a managed switch port. Do not paste standalone commands into FortiGate: the management objects and CLI paths differ."
+        ],
+        [
+          "Validation evidence",
+          "Check global and per-port storm-control configuration, the switch port's override state and available storm-control counters. Compare a controlled broadcast generator's measured pps with the configured rate while watching drops on the affected port. Interface error counters alone cannot prove storm-control action; they can rise for unrelated physical faults. A stable STP topology also does not rule out a flood from a host or a badly behaved multicast application. Test an adjacent known-unicast flow separately to distinguish class-specific suppression from general congestion or link failure."
+        ],
+        [
+          "Failure example",
+          "A branch office reports intermittent DHCP lease acquisition on a single access switch. Port5 has broadcast storm control set to zero after a template migration, so client DHCP Discover broadcasts never reach the relay even though the physical port is up and STP is forwarding. Inspect the port's inherited or overridden policy before changing DHCP server settings. Restore a justified pps threshold, confirm Discover/Offer exchanges and verify that ordinary broadcast spikes remain controlled. If the storm comes from a bridging loop, fix the loop as well; a higher rate merely masks the underlying fault."
+        ],
+        [
+          "Design and release caveats",
+          "Choose thresholds using actual traffic baselines for phone VLANs, wireless uplinks and multicast-intensive segments. A value suitable for an ordinary access port may be too low for a trunk carrying many endpoints. The guide notes model-specific burst limitations, including exceptions for FS-124E variants, so validate hardware support before standardizing an override. During FortiLink changes, compare controller policy to effective switch state. Storm control protects the switch from excess frames, but can itself be a failure source when rate units, class selection or policy inheritance are misunderstood."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "slug": "05_fap_join",
+      "title": "FortiAP controller discovery, authorization and DTLS trust-chain failure isolation",
+      "primary": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/540137/discovering-authorizing-and-deauthorizing-fortiap-units",
+      "scenario": "https://community.fortinet.com/fortiap-5/technical-tip-fortiap-231k-remaining-offline-when-managed-by-a-fortigate-230498",
+      "fingerprint": "fap-discovery-authorize-control-dtls-ca1-231k-fsm-join",
+      "nodes": [
+        "AP DHCP / option 138",
+        "Controller discovery",
+        "FortiGate ap-discover",
+        "Authorization / WTP profile",
+        "DTLS control handshake",
+        "CA certificate verification",
+        "Joined AP / SSIDs"
+      ],
+      "sections": [
+        [
+          "The joining stages",
+          "A FortiAP needs controller reachability, controller discovery, authorization and a working encrypted CAPWAP control session before it can become a managed online AP. Factory-default discovery may use static controller IP, DHCP option 138, DNS, broadcast or multicast; Auto tries methods in sequence. Discovering an access controller does not mean the FortiGate has authorized the AP, and authorization does not prove the DTLS handshake has completed. The FortiAP control channel uses DTLS independently of whether client data is tunneled in clear text or encrypted."
+        ],
+        [
+          "Controller-side objects",
+          "On the FortiGate interface facing APs, `config system interface; edit \"lan\"; set ap-discover enable; next; end` permits incoming AP discovery to create a Managed FortiAP entry. The default is to await administrative authorization. `auto-auth-extension-device` can automatically authorize newly discovered devices but broadens trust and should be used only where intended. The controller records a WTP object keyed by serial number; authorization can be expressed with `config wireless-controller wtp; edit \"<serial>\"; set admin enable; next; end`. A model-appropriate WTP profile then defines radio, SSID and operational behavior."
+        ],
+        [
+          "Control-plane and certificate mechanics",
+          "After discovery and authorization, the AP and controller negotiate CAPWAP control security. A missing trust anchor on the AP can make the state machine cycle through DTLS_SETUP even though UDP reachability and discovery are good. Fortinet's October 12 FortiAP-231K article documents certain E-series FortiGate management attempts where the AP lacked Fortinet_CA1.cer. The AP could find its controller, but failed certificate verification and remained offline. This is a trust-store/firmware compatibility problem, not an SSID security or radio channel problem."
+        ],
+        [
+          "Evidence chain",
+          "On the AP, `wcfg | grep fsm-state` shows the current finite-state-machine stage, and `cw_diag -c cert Fortinet_CA1.cer` checks for the CA certificate referenced in the Community case. On the controller, inspect Managed FortiAPs for discovery, authorization, assigned profile and join time; a join time of N/A suggests that joining did not complete. A packet capture of CAPWAP discovery traffic proves path reachability but cannot prove DTLS certificate acceptance. Collect firmware versions and platform models before attributing the problem to a missing CA."
+        ],
+        [
+          "Operational remediation",
+          "For the documented FortiAP-231K issue, Fortinet describes a TAC-provided fix image followed by a supported GA upgrade, or upgrading to FortiAP firmware 7.6.6/8.0.1 or later. Do not manually install an arbitrary certificate or bypass controller identity validation. Check the supported AP/controller compatibility matrix, stage an upgrade with rollback and monitor the AP's state transition to Online. If discovery fails entirely, troubleshoot addressing, DHCP option 138, routing and `ap-discover` first. If it is merely waiting for authorization, approve the WTP object rather than chasing DTLS."
+        ],
+        [
+          "Scale and HA",
+          "In large estates, distinguish bulk controller-reachability faults from a specific model/firmware certificate gap. Compare a working AP of the same model against a failing unit, including firmware, CA store, serial authorization and WTP profile. After FortiGate HA failover, controller identity and AP rejoin behavior should be verified without assuming client data-plane continuity. Keep explicit admission controls for new APs, avoid enabling blanket auto-authorization to fix a certificate problem, and record both AP and controller release when opening a TAC case."
+        ]
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "slug": "06_fnac_poll",
+      "title": "Legacy FortiNAC L2/L3 polling: MAC location versus ARP identity reconciliation",
+      "primary": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/659283/fortinac",
+      "scenario": "https://community.fortinet.com/fortinac-f-57/technical-tip-troubleshooting-poll-failures-97350",
+      "fingerprint": "fnac-legacy-l2-fdb-l3-arp-poll-timestamp-reconciliation",
+      "nodes": [
+        "Switch MAC/FDB",
+        "L2 poll",
+        "MAC + port location",
+        "Router ARP table",
+        "L3 poll",
+        "IP-to-MAC join",
+        "Host record / access state"
+      ],
+      "sections": [
+        [
+          "What the polling system learns",
+          "Legacy FortiNAC maintains host location and addressing by combining several evidence channels. Link-up and MAC-learn traps can trigger immediate checks, while scheduled polling reads device tables even when traps are missed. Layer 2 polling reads a switch forwarding/MAC table and associates a MAC address with switch and port. Layer 3 polling reads a routed device's ARP table and maps IP addresses to MACs. Neither source alone gives a complete identity: a MAC table does not establish current IP, and an ARP entry does not identify the physical access port."
+        ],
+        [
+          "Scheduling and freshness",
+          "Polling is tracked per modeled network device, including enablement, interval, last attempt and last successful poll. A successful on-demand poll can update the success timestamp and defer the next scheduled poll, preventing unnecessary repeat reads. Wired and wireless devices have different defaults because wireless disconnection may be detected primarily through polling. L3 devices must be added to the appropriate L3 polling group; simply discovering a router does not guarantee its ARP data is used. Host online state can lag actual attachment when polling intervals are long or traps are absent."
+        ],
+        [
+          "Source-supported setup",
+          "Model the network devices in Inventory with working management addresses and credentials. Enable the relevant L2 and L3 polling roles and confirm switch/port and routed-interface coverage. For FortiLink-managed switches, FortiNAC may obtain forwarding information through the FortiGate REST integration rather than directly querying the switch, so the data path differs. Use the model's Poll Now/L2 poll/L3 poll operations and validate credentials before relying on scheduled results. Do not assume that SNMP reachability alone is sufficient if a device plugin actually uses SSH or REST for table retrieval."
+        ],
+        [
+          "Evidence and diagnosis",
+          "A successful L2 poll with a MAC-to-port entry proves observed forwarding location at poll time; it does not prove the endpoint is still active. A successful L3 poll with an IP-to-MAC mapping proves the router's neighbor cache contained the pair; it does not prove the endpoint is authorized. Compare poll timestamps, host record, network device reachability and the switch's live MAC table. Fortinet's troubleshooting article recommends validating credentials and checking debug output when contact polling succeeds but L2/L3 data retrieval fails. Device banners containing shell delimiter characters can confuse CLI parsers."
+        ],
+        [
+          "Failure scenario",
+          "An endpoint moves from port7 to port18, but FortiNAC continues showing port7. The switch is reachable, and the user's IP remains unchanged. The key failure may be stale L2 forwarding data, not a RADIUS policy. Trigger a fresh L2 poll on the access switch and compare its learned MAC location with the host record; separately check the L3 ARP mapping. If the poll fails, validate credentials and inspect device-specific plugin logs. If it succeeds but data is stale, review the switch FDB aging and whether a MAC-learn trap was sent."
+        ],
+        [
+          "Architecture and limits",
+          "Treat polling as periodic observation rather than a continuous truth stream. Large networks should stagger intervals and use traps to reduce convergence latency without overloading controllers or switch management CPUs. Routed interfaces, wireless controller abstractions and port-channel membership can complicate physical location. During switch firmware upgrades, CLI output or REST schemas can change and break parsers even when credentials are valid. Keep the distinction between contact status, successful poll, usable parsed table and current host authorization explicit in troubleshooting records."
+        ]
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "slug": "07_fnacf_ha",
+      "title": "FortiNAC-F active/passive HA: control ownership versus interface allowaccess",
+      "primary": "https://docs.fortinet.com/document/fortinac-f/7.6.0/high-availability-fortinac-os/883867/overview",
+      "scenario": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-ha-node-not-in-control-does-not-respond-to-radius-or-persistent-agent-traffic-230415",
+      "fingerprint": "fnacf-ha-in-control-service-listener-allowaccess-passive-node",
+      "nodes": [
+        "Switch RADIUS client",
+        "Primary CA in control",
+        "RADIUS + agent listeners",
+        "HA control manager",
+        "Secondary not in control",
+        "Host ACL allowaccess",
+        "Failover / service ownership"
+      ],
+      "sections": [
+        [
+          "HA design and service ownership",
+          "FortiNAC-F high availability is an active/passive service design. A primary server normally controls the system; the secondary mirrors critical information and waits to take over after failure. The HA management process coordinates service health, database replication and control ownership. This is not an active/active RADIUS farm: only the server in control runs the operational listeners required for authentication and Persistent Agent traffic. A passive node can have a reachable management IP and an interface access-control list permitting a protocol without hosting the service."
+        ],
+        [
+          "Failover transaction",
+          "The HA manager monitors required services and peer communication. If a required primary service cannot be restarted or peer contact fails, control may move to the secondary after detection and activation. During takeover there is a period when FortiNAC services are not running, so network-device RADIUS retry behavior must tolerate the interruption. The Fortinet HA guide notes that the primary does not automatically resume control; restoration requires deliberate action. In L2 designs a shared VIP may aid GUI access, while L3 designs use separate routed addresses and do not use the shared VIP."
+        ],
+        [
+          "Control versus allowaccess",
+          "The FortiNAC-OS `allowaccess` setting is a host ACL on an interface. It controls whether incoming packets are permitted to reach local services; it does not start RADIUS, Persistent Agent or other daemons. The October 6 Fortinet Community scenario shows a node in `Running - Not In Control` state ignoring RADIUS and Persistent Agent requests even when allowaccess includes the relevant protocols. Attempting to manually enable the passive service is not a supported redundancy fix: the HA role removes or suppresses listeners on the secondary. Diagnose ownership before editing interface ACLs."
+        ],
+        [
+          "What to verify",
+          "Check the HA state and identify which appliance is In Control. Confirm the active node's RADIUS listener and Persistent Agent connectivity, then compare the passive node's management reachability and service state. A successful ping or an open management GUI proves host/network availability, not application ownership. The switch's RADIUS dead-server counter and request retries identify a target that is not responding; they do not prove that its firewall blocked packets. Correlate HA control transitions, database replication alarms and network-device timeout logs during a controlled failover exercise."
+        ],
+        [
+          "Practical correction",
+          "If switches point only to the passive node, change RADIUS client configuration to the documented active service endpoint or a properly supported redundancy scheme. Do not confuse a GUI VIP with a universal RADIUS service VIP; Fortinet recommends physical primary/secondary IPs for network devices and agents in relevant HA configurations. Verify that the switch has appropriate primary and secondary server settings and retry timers. When restoring the original primary, follow the documented recovery procedure instead of expecting automatic preemption. After failover, test actual endpoint authentication and agent reporting, not just ICMP reachability."
+        ],
+        [
+          "Deployment caveats",
+          "The HA guide describes L2 and L3 layouts with distinct address and routing requirements. It recommends low-latency replication connectivity and warns about split-control risk if peers lose contact; FortiNAC Manager can help arbitrate in some designs. Database replication health matters because a node that assumes control with stale host state may make incorrect policy decisions. Include service ownership, listener status, replication alarms and authentication tests in upgrade acceptance. This mechanism is distinct from RADIUS attribute precedence or selector migration: it is about who is allowed to serve at all."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "slug": "08_fac_https",
+      "title": "HTTPS administration certificate binding and web-server recovery boundaries",
+      "primary": "https://docs.fortinet.com/document/fortiauthenticator/6.6.6/administration-guide/578768/system-access",
+      "scenario": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-how-to-access-gui-in-fortiauthenticator-after-https-certificate-change-230577",
+      "fingerprint": "fac-gui-https-cert-binding-apache-startup-regen-cert",
+      "nodes": [
+        "Admin browser TLS",
+        "HTTPS listener",
+        "Configured HTTPS certificate",
+        "Certificate/key validity",
+        "Apache startup",
+        "GUI session",
+        "CLI recovery path"
+      ],
+      "sections": [
+        [
+          "Role of the HTTPS certificate",
+          "FortiAuthenticator has several certificate-related roles: it can issue certificates as a CA, authenticate users and services, and present a server certificate to administrators opening its GUI. The HTTPS Certificate selected under Administration > System Access controls the certificate used by the management web server. It is not automatically interchangeable with a CA certificate or a RADIUS EAP server certificate. The management listener needs a usable certificate/private-key association and a running web service before browser TLS can complete."
+        ],
+        [
+          "Management flow",
+          "An administrator connects to the FortiAuthenticator management IP over HTTPS, negotiates TLS with the configured server certificate, then authenticates to the GUI application. A certificate chain that is not trusted by the browser normally produces a warning, but an unusable server certificate or service-startup failure can prevent the GUI from answering at all. The System Access page also controls GUI idle timeout, HTTP header length and HSTS expiration. HSTS may affect browser behavior after a certificate change, but a dead Apache process must be distinguished from a client-side trust warning."
+        ],
+        [
+          "Configuration and precautions",
+          "In the Administration Guide, navigate to Administration > System Access and select the HTTPS Certificate from the available certificates. Before replacing it, verify subject/SAN matches the management FQDN, private key presence, validity period and the full issuing chain. Retain CLI or console access, a configuration backup and a maintenance window. Use a staged test where possible. Do not change the certificate used by an unrelated RADIUS or SAML service merely to resolve a GUI TLS problem; those roles have different relying parties and may have separate trust stores."
+        ],
+        [
+          "Observable evidence",
+          "From a client, compare TCP/443 reachability, TLS handshake behavior and HTTP response. A certificate warning with a rendered login page indicates a different failure stage than a refused connection or timeout. From the appliance, inspect web-server debug logs; the Community article points to the debug/Web Server > Apache area when the service cannot start after an HTTPS certificate change. Check certificate selection history and the last administrative change. CLI access remaining available proves the operating system is reachable but does not prove the web server is healthy."
+        ],
+        [
+          "Scenario-specific recovery",
+          "An October 15 Fortinet Community article describes GUI loss after assigning a newly created self-signed certificate or changing the HTTPS certificate in System Access. The article documents `execute regen-cert force` followed by `execute reboot` as a recovery procedure. Treat this as an appliance-impacting action requiring approval and a backup, not a universal first diagnostic command. First verify that the incident matches the documented web-server failure and that the target firmware supports the recovery. After restoration, install a properly issued server certificate and test the full management URL."
+        ],
+        [
+          "HA and operational caveats",
+          "In an HA pair, certificate configuration and management identity should be checked on both nodes; a failover may reveal a missing certificate or key on the secondary. Browser cache/HSTS can obscure a fixed server-side issue, so test from a clean client after service recovery. For upgrades, record certificate type, private-key availability, service status and the expected management FQDN. Distinguish certificate validation errors, HTTP daemon startup failures and authentication failures as separate evidence classes. A working SSH session is an important recovery boundary, not proof that web management is configured correctly."
+        ]
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "slug": "09_fpam_rotate",
+      "title": "Password changer execution: self versus associated secret and post-change verification",
+      "primary": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/219595",
+      "scenario": null,
+      "fingerprint": "fpam-password-changer-associated-secret-self-change-verify-schedule",
+      "nodes": [
+        "Secret template",
+        "Password changer type",
+        "Self / associated credential",
+        "Target password update",
+        "Verifier login",
+        "Secret vault update",
+        "Scheduled next rotation"
+      ],
+      "sections": [
+        [
+          "What password rotation actually changes",
+          "FortiPAM can periodically change the credential stored in a secret, but safe rotation is a transaction between the vault, the target account and a verification step. A password changer is linked to a secret template; its type determines how it interacts with the target, such as SSH, LDAP, Samba or Web API. Merely changing the vault value without updating the target would lock out the next launcher. Likewise, updating the target but failing to persist or verify the new secret creates a dangerous split between the privileged account and the password users expect."
+        ],
+        [
+          "Execution identity and modes",
+          "FortiPAM's password changer distinguishes Change Password Using Self from Associated Secret. Self means the target account's current credential performs the change; Associated Secret means a different privileged account is used. The Verify Password Using setting independently chooses Self or Associated Secret for the post-change check. These choices matter when a managed account cannot change its own password or when verification requires administrative lookup. SSH changers can have explicit command/expect procedures, while Web-API changers execute request sequences. Treat command prompts, newline mode and privilege requirements as protocol details."
+        ],
+        [
+          "Configuration steps",
+          "Under Secret Settings > Password Changers, create a changer, select its type and configure change and verify identities. For SSH, define the changers and verifiers appropriate to the target platform; for Web-API, define the request/response steps. Attach the changer to the relevant secret template, then enable Automatic Password Changing on the secret or governing policy. The FortiPAM Administration Guide supports daily, weekly and monthly recurrence with start time and repeat interval. It also supports automatic verification on an interval; the two schedules are related but not identical."
+        ],
+        [
+          "Evidence that matters",
+          "Inspect the Password Changer Status, the secret's scheduled next run, the changer execution outcome and the target account's actual ability to authenticate with the new password. A completed scheduler event proves the job ran, not that the target accepted the change. A vault audit record showing a new stored value is insufficient without verifier success. Conversely, a failed verifier may indicate wrong associated credentials, an incompatible SSH prompt, network reachability or a stale target API token. Record which identity performed the change and which identity performed verification."
+        ],
+        [
+          "Troubleshooting example",
+          "A Unix service account rotates successfully on one server but fails on another. Both use the same secret template, yet the second host's shell prompt includes an unexpected character and the SSH changer waits indefinitely for a match. Another host may require an associated privileged secret because the account lacks self-change permission. Reproduce with a test secret, inspect the changer step that failed and correct the target-specific procedure or associated credential. Do not repeatedly force rotation in production before verifying that the vault and target still agree on the current password."
+        ],
+        [
+          "Scale and recovery",
+          "Coordinate password changes with scheduled jobs, application pools and break-glass accounts that depend on the credential. Stagger rotation to avoid synchronized outages, and define rollback or recovery ownership if a target update succeeds but verification or vault persistence fails. Secret policies may lock inherited settings, so a user may not be able to override the schedule locally. During FortiPAM upgrades, validate custom SSH/Web-API changers against prompt and response changes. This mechanism differs from checkout exclusivity and approval workflows: it controls credential freshness and the integrity of the vault-to-target transaction."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "slug": "10_fsiem_discovery",
+      "title": "Credentialed discovery, CMDB identity merging and performance-monitor assignment",
+      "primary": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/582301/getting-started",
+      "scenario": null,
+      "fingerprint": "fsiem-discovery-credential-cmdb-overlap-ip-collector-monitor-assignment",
+      "nodes": [
+        "Credential test",
+        "Collector / Supervisor discovery",
+        "IP and identity correlation",
+        "CMDB device record",
+        "License managed/pending",
+        "Metric + log monitors",
+        "Poll lag / errors"
+      ],
+      "sections": [
+        [
+          "Why discovery is more than inventory",
+          "FortiSIEM discovery identifies infrastructure components and their supported monitoring capabilities. Credentials allow the platform to inspect operating system, interfaces, hardware, processes, services and other details; the result becomes a CMDB record. Discovery also determines which metrics and logs can be collected, then schedules monitoring tasks. A device appearing in CMDB is therefore only the first stage. It may be unmanaged because of licensing, have an incorrect organization assignment, or lack working credentials for ongoing performance polling."
+        ],
+        [
+          "Distributed workflow",
+          "In deployments with Collectors, a Test Connectivity or Discovery task assigned to a Collector is performed there, and monitoring jobs are typically assigned to that Collector. Without a Collector, the Supervisor performs discovery and assigns performance monitoring to Workers. The discovery pipeline resolves identity and network segments before populating CMDB and creating monitor definitions. This is a separate path from passive syslog ingestion: a device can send logs while its credentialed performance monitors fail, or be discovered correctly while no syslog source is configured."
+        ],
+        [
+          "CMDB identity and licensing",
+          "Fortinet documents that overlapping IP addresses can cause discovered devices to be merged. The rule `PH_RULE_DEVICE_MERGED_OVERLAP_IP` helps detect such collisions. Where an IP is a legitimate VIP, add it to the discovery VIP list rather than treating it as a unique physical device. Device licensing also matters: when discovered devices exceed licensed limits, some can become Unmanaged, and FortiSIEM will not monitor them or receive their logs as managed devices. A Managed/Pending state after discovery is different from an actively polled, healthy device."
+        ],
+        [
+          "Configuration and evidence",
+          "In Admin > Setup > Credentials, test connectivity from the correct discovery node. Run discovery for the intended IP range and organization; inspect the Discovery errors tab and CMDB object identity. Then review Admin > Setup > Pull Events and Monitor Performance to see which jobs were created and whether polling succeeds. The CMDB Monitor Status column exposes lag or errors. A successful credentials test proves the chosen protocol can authenticate at test time; it does not prove the parser, identity merge or every scheduled monitor will work under sustained load."
+        ],
+        [
+          "Failure example",
+          "Two appliances share a floating VIP, and after discovery FortiSIEM appears to have lost one device. The platform merged the records because it interpreted the overlapping address as identity evidence. Compare interface IP lists, physical identifiers and the overlap incident, then add the VIP to the documented exclusion list and rediscover. In a different failure, polling runs three minutes late on a one-minute interval because a Collector is overloaded. That is a scheduling/resource problem, not a credentials issue. Use Monitor Status and errors to distinguish the two."
+        ],
+        [
+          "Scale and upgrade implications",
+          "Polling across high-latency WAN links can be unreliable for protocols such as SNMP and WMI. Distribute Collectors near monitored devices and adjust intervals with care: increasing a polling interval can invalidate a correlation rule requiring several samples within a short time window. After credential rotation, update FortiSIEM's stored credentials and rediscover affected devices. Recheck organization boundaries and license capacity after bulk discovery. This lesson concerns inventory identity and monitoring assignment, not event parser ordering or rule tags."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "slug": "11_fsase_dns",
+      "title": "FortiSASE DNS Filter: category verdicts, fail-open behavior and inspection dependencies",
+      "primary": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/130214",
+      "scenario": "https://community.fortinet.com/fortisase-58/technical-tip-force-certificate-inspection-explanation-in-fortisase-firewall-policy-161028",
+      "fingerprint": "fsase-dns-filter-fortiguard-category-error-allow-safe-search-inspection",
+      "nodes": [
+        "Endpoint DNS query",
+        "SASE policy match",
+        "DNS filter profile",
+        "FortiGuard category lookup",
+        "Allow/monitor/redirect",
+        "DNS log / error handling",
+        "Resolver response"
+      ],
+      "sections": [
+        [
+          "The decision point",
+          "FortiSASE DNS Filter evaluates domain requests against a DNS security profile, potentially stopping access before a browser opens an HTTP or HTTPS connection. Its category-based decisions are Allow, Monitor or Redirect Block Portal; a domain can be allowed by the DNS layer yet still blocked by a later web or application control policy. DNS Filter is not interchangeable with URL filtering because the DNS question normally carries a hostname rather than a full HTTP path. Apply it to the relevant FortiSASE traffic policy and understand how the endpoint's resolver traffic reaches the SASE service."
+        ],
+        [
+          "Category and error semantics",
+          "The FortiSASE Feature Administration Guide lets administrators enable FortiGuard category filtering and choose actions per category. It also has Allow DNS requests when a rating error occurs. That is an explicit fail-open choice: if FortiGuard DNS rating servers are unreachable, requests may proceed and an error is logged. A successful DNS response under rating failure therefore does not prove that a domain was rated safe. Conversely, Redirect Block Portal indicates a DNS-filter verdict rather than an upstream authoritative DNS outage."
+        ],
+        [
+          "Configuration workflow",
+          "Go to Security > Traffic > Security profiles, enable DNS Filter and select Customize. Enable FortiGuard Category Based Filter, choose category actions and adjust threat-level handling as needed. Decide whether to allow requests on rating errors according to risk tolerance and business continuity requirements. The guide also exposes safe-search enforcement for major search/video services and notes that SSL deep inspection is required for that feature. Bind the security profile to the intended traffic policy and test both approved and blocked categories from an affected endpoint."
+        ],
+        [
+          "Inspection interactions",
+          "A Fortinet Community article explains that Force Certificate Inspection on a FortiSASE firewall policy prevents SSL deep inspection even when a profile group requests it. Features requiring deep inspection, including safe-search enforcement and some DNS-filter scenarios, can then behave differently from the administrator's expectation. Do not infer that every DNS classification needs HTTP decryption; distinguish the DNS query verdict from enforcement features that rewrite or inspect HTTPS traffic. Verify which inspection mode the matching firewall policy actually applies, not only the profile group's desired setting."
+        ],
+        [
+          "Evidence and diagnosis",
+          "Check the endpoint's DNS query and response, the matching FortiSASE traffic policy, DNS logs with category/verdict and any FortiGuard rating-error entries. An NXDOMAIN or timeout from the resolver is not necessarily a DNS Filter block; compare the configured redirect/block behavior. A successful browser connection can result from cached DNS, an alternate resolver or fail-open rating handling. Repeat tests with a fresh hostname and observe the actual SASE path. If safe search fails while category filtering works, examine deep-inspection prerequisites and the Force Certificate Inspection override."
+        ],
+        [
+          "Operational tradeoffs",
+          "Allow-on-rating-error favors availability over strict domain classification during FortiGuard outages; disabling it can protect policy intent but interrupt legitimate name resolution. Category decisions may change as FortiGuard ratings evolve, so retain log evidence and exception ownership. DNS filtering also interacts with split DNS and private resources: make sure internal domains use the intended private resolver path rather than being misclassified as public traffic. After client or policy upgrades, verify endpoint steering, DNS logs and the expected policy match. This feature is distinct from FortiSASE URL exceptions, file filtering and CASB tenant controls."
+        ]
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "slug": "12_sdwan_factory",
+      "title": "Factory-default dual-WAN SD-WAN objects in FortiOS 7.6.5 and their migration implications",
+      "primary": "https://docs.fortinet.com/document/fortigate/7.6.5/administration-guide/530895",
+      "scenario": null,
+      "fingerprint": "sdwan-factory-default-two-wan-dhcp-zone-default-ping-firewall-policy",
+      "nodes": [
+        "Factory reset / supported model",
+        "wan1 DHCP",
+        "wan2 DHCP",
+        "sd-wan zone",
+        "Default_Ping SLA",
+        "LAN→zone NAT policy",
+        "Routing + session steering"
+      ],
+      "sections": [
+        [
+          "What changed in the factory baseline",
+          "Starting with FortiOS 7.6.5, supported FortiGate models with two WAN ports can ship with SD-WAN already configured in the factory baseline. Both WAN interfaces use DHCP, an `sd-wan` zone is created, both ports become zone members, and a default LAN-to-SD-WAN firewall policy enables NAT. The built-in `Default_Ping` health check probes 1.1.1.1 and 9.9.9.9. This is a device initialization behavior, not an SD-WAN policy that automatically appears on every upgraded production firewall or every model."
+        ],
+        [
+          "Object graph and flow",
+          "A LAN packet first needs an accepting firewall policy whose destination interface references the SD-WAN zone. Routing and SD-WAN service selection then determine the eligible WAN member and next hop. The DHCP client on each WAN learns addressing and gateway information; the health check evaluates external probe reachability. These objects are linked but distinct: a healthy probe cannot make a missing default route appear, and a default route alone does not grant a firewall policy. Deleting a zone while policies reference it can invalidate intended forwarding behavior."
+        ],
+        [
+          "Source-supported inspection",
+          "On a supported factory-default unit, `show system sdwan` should reveal `set status enable`, zone `sd-wan`, members on wan1/wan2 and health-check `Default_Ping` with the two server IPs. `show system interface wan1` and `show system interface wan2` should show DHCP mode. `show firewall policy` should include a LAN-to-`sd-wan` accept policy with NAT. Record these as observed state rather than pasting a generic replacement configuration: existing deployments can have different interface names, VDOM assignments, static addresses and security policies."
+        ],
+        [
+          "Failure scenario",
+          "An engineer upgrades a FortiGate to 7.6.6, resets it and expects both WAN links to load-balance automatically, but the expected zone is absent. First verify the exact model is in Fortinet's affected-model list, the software build, reset procedure and whether provisioning/ZTP or FortiManager immediately replaced the baseline. A DHCP WAN with no lease can make the configured member unusable despite the zone existing. A policy pointing to physical wan1 rather than the zone can bypass intended zone-based policy. Do not infer that the factory feature is broken from the absence of traffic alone."
+        ],
+        [
+          "Evidence boundaries",
+          "Use `show system sdwan`, interface DHCP state, the routing table, SLA member status and policy match diagnostics. Seeing the zone proves only that the object exists. Seeing `Default_Ping` probes succeed proves probe reachability, not that a specific application was steered or NATed correctly. Check the actual route to the destination and the selected member for a new session. A pre-existing session can retain its earlier path, so create a fresh controlled flow when validating a changed SD-WAN rule or WAN lease. Compare intended baseline with installed configuration after management automation."
+        ],
+        [
+          "Upgrade and operational implications",
+          "Fortinet's New Features guide lists affected model families and emphasizes that the baseline applies to supported models. A factory reset, configuration restore and in-place upgrade are different workflows; do not assume the same objects are created in all three. For branch rollouts, define whether the team preserves the factory zone or replaces it with standardized named zones and probes. Validate upstream DHCP, route eligibility, NAT and security policies before accepting a site. This lesson teaches initial object creation and ownership, not SLA prioritization, quota management or packet duplication."
+        ]
+      ]
+    }
+  ]
+}
