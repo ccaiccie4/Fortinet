@@ -114,58 +114,58 @@
     },
     {
       "product": "FortiAnalyzer",
-      "slug": "03_faz_correlation",
-      "title": "Correlation event handlers: temporal joins, negative conditions and Analytics-log eligibility",
-      "primary": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/199291/creating-a-custom-correlation-handler",
+      "slug": "03_faz_fabric_ha",
+      "title": "FortiAnalyzer Fabric member HA: primary-only supervisor registration and failover visibility",
+      "primary": "https://docs.fortinet.com/document/fortianalyzer/7.6.3/fortianalyzer-fabric-deployment-guide/692559/high-availability-for-fortianalyzer-fabric-members",
       "scenario": null,
-      "fingerprint": "faz-correlation-handler-followed-by-not-followed-by-subject-join-window",
+      "fingerprint": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover",
       "nodes": [
-        "Analytics logs",
-        "ADOM data selector",
-        "Rule A filtered group",
-        "Temporal operator + join key",
-        "Rule B / absence test",
-        "Event / incident",
-        "Notification profile"
+        "Fabric supervisor",
+        "Member HA primary",
+        "Fabric registration",
+        "Config synchronization",
+        "Member HA secondary",
+        "HA role failover",
+        "New primary re-registers"
       ],
       "sections": [
         [
-          "Why correlation differs from basic matching",
-          "A basic FortiAnalyzer event handler emits an event when any configured rule matches; the rules have OR semantics. A correlation handler instead evaluates multiple filtered log groups with operators such as AND, AND_NOT, OR, FOLLOWED_BY and NOT_FOLLOWED_BY. This matters when the security question is not whether an authentication failure occurred but whether failures were followed by a success from the same subject within a bounded period. The event handler is scoped to the active ADOM, and its data selector determines which devices, subnets and filters are eligible."
+          "Purpose and distinct control planes",
+          "FortiAnalyzer Fabric aggregates visibility across FortiAnalyzer members, while FortiAnalyzer high availability protects an individual member appliance or cluster. When a Fabric member is an HA cluster, the supervisor does not treat every HA node as an independently active Fabric member. The primary presents the logical member identity, and the secondary receives synchronized Fabric Management configuration. This distinction matters because a secondary can show an Unknown authorization state on the supervisor while operating correctly as a passive HA node. It is not the same mechanism as an event handler or Analytics log pipeline."
         ],
         [
-          "Processing and temporal semantics",
-          "A correlation rule first chooses device and log type, refines candidate records by fields, and defines an occurrence threshold. Correlation criteria then pair fields between rules, for example a common source IP or user identity. A temporal operator evaluates sequence within Threshold Duration; FOLLOWED_BY requires a later matching event, while NOT_FOLLOWED_BY tests absence of the expected follow-up over the configured window. An unbounded assumption about time creates false negatives: if the second event arrives outside the window, the handler should not correlate it. A join on destination rather than user can merge unrelated actors."
+          "Fabric registration transaction",
+          "The member's primary establishes the supervisor connection and advertises its logical HA identity. The HA group name and cluster virtual IP represent the member in supervisor views. Configuration is synchronized from the primary to the secondary, but the secondary intentionally does not establish its own supervisor connection before failover. On an HA role transition, the promoted secondary becomes the new primary and establishes the Fabric supervisor connection. The supervisor can then continue presenting Log View, FortiView and Reports for the logical member. This is a role-owned registration workflow, not dual independent registration."
         ],
         [
-          "How to configure",
-          "Navigate to Incidents & Events > Event Handlers > Event Handlers, choose Create New, and select Correlation as Event Handler Type. Define a named data selector and the duration in minutes; add rules to the Correlation Sequence, arrange their order, choose the operator, and set field-level Correlation Criteria. Then configure output severity, event type/message, indicators, tags and a notification profile. Fortinet notes that Event Handler Type cannot be changed after save; a basic handler must be recreated as correlation rather than edited in place. Optionally enable Automatically Create Incident or an automation stitch."
+          "Configuration path and prerequisites",
+          "Fortinet's Fabric Deployment Guide supports Active-Passive or Active-Active HA modes for a Fabric member; HA is not supported on the Fabric supervisor itself. Configure member HA in System Settings > HA, ensuring each peer has matching Group Name, Group ID and Password, peer IP/serial details and a suitable heartbeat interface. The FortiAnalyzer Administration Guide requires initial synchronization before a secondary is fully functional. Then go to System Settings > Fabric Management > FortiAnalyzer Fabric on the member and supervisor to confirm the logical member is visible. Do not manually authorize the standby as a separate Fabric member."
         ],
         [
-          "What to observe",
-          "Test with known Analytics logs that contain both rule A and rule B, including their timestamps and join-field values. Confirm the handler is enabled in the correct ADOM and the data selector includes the device and log type. An event generated by the handler proves the sequence and criteria matched, not that the underlying activity was malicious. Conversely, an Archive-only log will not be evaluated by event handlers: a successful archive search does not prove the Analytics pipeline supplied the correlation engine. In Analyzer–Collector deployments, the Analyzer evaluates handlers, so examine the correct processing tier."
+          "Verification and limits",
+          "Inspect the HA Cluster Status pane for role and sync state, then the supervisor Fabric topology for the primary member connection. The supervisor's secondary Authorization = Unknown can be expected prior to failover, so it is not by itself proof of broken replication. Check that the primary has a live supervisor connection and that the secondary has synchronized configuration. A supervisor log search showing member data proves access to stored records, not that the passive node currently owns the Fabric connection. During a planned failover, observe the new primary reconnect and confirm supervisor member identity stays consistent."
         ],
         [
-          "Failure scenario",
-          "Consider an incident that never fires despite a failed-login burst followed by a privileged login. The raw records exist, but the failed log has `user=alice` and the success log has `user=ALICE@realm`; a strict join on user fails. Another possibility is a 5-minute threshold with a 7-minute gap. Inspect both records and normalize the intended correlation identity only where source semantics justify it; do not loosen to an indiscriminate IP join when many users share a NAT. If the log exists only in Archive, first repair Analytics ingestion rather than increasing the threshold."
+          "Operational scenario",
+          "An operations team sees Unknown beside the secondary node in the Fabric topology and attempts to reauthorize it directly. The result is confusion and possibly duplicate logical inventory. The correct first question is whether that node is passive and synchronized. If the primary is online and Fabric queries work, the Unknown state matches documented HA behavior. If a failover occurs and the new primary never reconnects, inspect the HA promotion, supervisor reachability and Fabric registration separately. A failed role transition and a failed supervisor registration are distinct stages with different evidence."
         ],
         [
-          "Operational consequences",
-          "Correlating on broad fields raises event volume and incident duplication; overly narrow criteria miss distributed behavior. Notification profiles and automation stitches are downstream effects, not evidence that the correlation condition itself was correct. When Automatically Create Incident is enabled, later events with the same subject can attach to the open incident; a new incident may be created after closure. Document the intended subject key, ordering and maximum lag, then replay representative logs after an upgrade or ADOM migration. The lesson is a sequence engine, not a generic log-search or report-building feature."
+          "Scale and recovery caveats",
+          "HA heartbeat timing, cluster synchronization and Fabric supervisor connectivity each have independent health signals. Fortinet's HA guide documents default heartbeat interval and failover threshold behavior; a delayed failover can leave a temporary gap even when the final state is healthy. Active-Active HA for the member does not mean both nodes simultaneously appear as separately authorized Fabric members. Before upgrades, check synchronized peer configuration and compatible releases, then validate Fabric topology and report access after promotion. Record the logical member's HA group and VIP to avoid confusing a role change with a new device."
         ]
       ],
-      "lesson_subject": "Correlation event handlers: temporal joins, negative conditions and Analytics-log eligibility",
-      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/199291/creating-a-custom-correlation-handler",
+      "lesson_subject": "FortiAnalyzer Fabric member HA: primary-only supervisor registration and failover visibility",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.3/fortianalyzer-fabric-deployment-guide/692559/high-availability-for-fortianalyzer-fabric-members",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "faz-correlation-handler-followed-by-not-followed-by-subject-join-window",
-      "workflow_transaction_fingerprint": "Analytics-log__ADOM-selector__temporal-join__event-or-incident",
-      "failure_class": "temporal-join-miss",
-      "evidence_pattern": "Analytics-timestamps-and-join-fields",
-      "remediation_path": "correct-join-and-duration-or-Analytics-ingestion",
-      "question_fingerprint": "03_faz_correlation-4-feature-specific-scenarios-plus-one",
-      "diagram_topology_layout_fingerprint": "correlation-fork-merge-3-seven-nodes-seven-to-eight-edges",
-      "diagram_svg": "docs/images/03_faz_correlation.svg",
-      "diagram_drawio": "docs/images/03_faz_correlation.drawio"
+      "feature_mechanism_fingerprint": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover",
+      "workflow_transaction_fingerprint": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover-flow",
+      "failure_class": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover-failure",
+      "evidence_pattern": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover-observables",
+      "remediation_path": "faz-fabric-member-ha-primary-supervisor-connection-secondary-unknown-failover-correction",
+      "question_fingerprint": "03_faz_fabric_ha-four-to-five-distinct-scenarios",
+      "diagram_topology_layout_fingerprint": "03_faz_fabric_ha-unique-seven-node-topology",
+      "diagram_svg": "docs/images/03_faz_fabric_ha.svg",
+      "diagram_drawio": "docs/images/03_faz_fabric_ha.drawio"
     },
     {
       "product": "FortiSwitch",
@@ -444,168 +444,168 @@
     },
     {
       "product": "FortiPAM",
-      "slug": "09_fpam_rotate",
-      "title": "Password changer execution: self versus associated secret and post-change verification",
-      "primary": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/219595",
+      "slug": "09_fpam_jobs",
+      "title": "FortiPAM scheduled jobs: secret-scoped SSH, Web API and PowerShell execution",
+      "primary": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/294125/creating-a-job",
       "scenario": null,
-      "fingerprint": "fpam-password-changer-associated-secret-self-change-verify-schedule",
+      "fingerprint": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression",
       "nodes": [
-        "Secret template",
-        "Password changer type",
-        "Self / associated credential",
-        "Target password update",
-        "Verifier login",
-        "Secret vault update",
-        "Scheduled next rotation"
+        "Job requester",
+        "Secret and associated secret",
+        "Script/procedure type",
+        "One-shot/recursive schedule",
+        "Approval gate",
+        "Target execution",
+        "Result and job log"
       ],
       "sections": [
         [
-          "What password rotation actually changes",
-          "FortiPAM can periodically change the credential stored in a secret, but safe rotation is a transaction between the vault, the target account and a verification step. A password changer is linked to a secret template; its type determines how it interacts with the target, such as SSH, LDAP, Samba or Web API. Merely changing the vault value without updating the target would lock out the next launcher. Likewise, updating the target but failing to persist or verify the new secret creates a dangerous split between the privileged account and the password users expect."
+          "Job execution as a separate privileged workflow",
+          "FortiPAM jobs automate a predefined task against a target represented by a secret. Unlike a secret launcher, which establishes an interactive session for a user, a job runs a script or procedure at a chosen time or on a recurring schedule. The job has a requester, a secret, an activation state, a type and an approval status. Fortinet documents SSH Script, SSH Procedure, Web API calls and PowerShell as supported job types in the current Administration Guide. The selected type determines protocol, script interpretation and the target platform expectations."
         ],
         [
-          "Execution identity and modes",
-          "FortiPAM's password changer distinguishes Change Password Using Self from Associated Secret. Self means the target account's current credential performs the change; Associated Secret means a different privileged account is used. The Verify Password Using setting independently chooses Self or Associated Secret for the post-change check. These choices matter when a managed account cannot change its own password or when verification requires administrative lookup. SSH changers can have explicit command/expect procedures, while Web-API changers execute request sequences. Treat command prompts, newline mode and privilege requirements as protocol details."
+          "Object relationships and identity",
+          "A job is associated with a secret so FortiPAM can reach the target using the permitted credential context. An optional Associated Secret supplies separate credentials when the task requires privileged operations that the primary secret cannot perform. That does not mean a job automatically inherits unrestricted access: job approval can be required independently of launcher approval. The requester, secret permissions and approval flow form an authorization boundary before the execution engine attempts the target connection. An enabled job can still be pending approval, so enabled state is not proof that a script was allowed to run."
         ],
         [
-          "Configuration steps",
-          "Under Secret Settings > Password Changers, create a changer, select its type and configure change and verify identities. For SSH, define the changers and verifiers appropriate to the target platform; for Web-API, define the request/response steps. Attach the changer to the relevant secret template, then enable Automatic Password Changing on the secret or governing policy. The FortiPAM Administration Guide supports daily, weekly and monthly recurrence with start time and repeat interval. It also supports automatic verification on an interval; the two schedules are related but not identical."
+          "Creating a controlled job",
+          "Navigate to Secrets > Jobs > Create. Select the requester and target secret, enable the job and choose a type. For SSH Script use a Unix-like script; SSH Procedure is appropriate for command-oriented SSH targets, while Web API calls and PowerShell have different execution semantics. Configure newline mode CR, CRLF or LF where supported, because a remote CLI may require a particular line ending. For recurring execution, enable Recursive and set start time, daily/weekly/monthly recurrence and repeat interval. Test a harmless read-only task before granting change privileges or broadening the schedule."
         ],
         [
-          "Evidence that matters",
-          "Inspect the Password Changer Status, the secret's scheduled next run, the changer execution outcome and the target account's actual ability to authenticate with the new password. A completed scheduler event proves the job ran, not that the target accepted the change. A vault audit record showing a new stored value is insufficient without verifier success. Conversely, a failed verifier may indicate wrong associated credentials, an incompatible SSH prompt, network reachability or a stale target API token. Record which identity performed the change and which identity performed verification."
+          "What a successful job proves",
+          "The job's Results tab contains execution output, and its Log tab records job-related activity. A schedule entry proves a job was configured, not that it executed. An execution result may show that a script reached the target but returned a nonzero status; review both transport success and task output. If an approval request is pending, inspect the approval status rather than debugging SSH connectivity first. The current guide states jobs are not executed while FortiPAM is in maintenance mode. This can explain a missed scheduled run even when credentials and network connectivity are valid."
         ],
         [
-          "Troubleshooting example",
-          "A Unix service account rotates successfully on one server but fails on another. Both use the same secret template, yet the second host's shell prompt includes an unexpected character and the SSH changer waits indefinitely for a match. Another host may require an associated privileged secret because the account lacks self-change permission. Reproduce with a test secret, inspect the changer step that failed and correct the target-specific procedure or associated credential. Do not repeatedly force rotation in production before verifying that the vault and target still agree on the current password."
+          "Failure scenario",
+          "A maintenance job that checks a privileged server runs on Monday but not Tuesday. The job remains Enabled and the target can be reached interactively. First compare the recurrence calendar and start time, then inspect whether FortiPAM entered maintenance mode during the Tuesday window. If a request requires approval, check whether approval was granted before the scheduled execution. If the job ran but the script failed, inspect the Results and Log tabs, the selected job type, target prompt and newline mode. Recreating the secret is not the first remedy for a scheduling or approval failure."
         ],
         [
-          "Scale and recovery",
-          "Coordinate password changes with scheduled jobs, application pools and break-glass accounts that depend on the credential. Stagger rotation to avoid synchronized outages, and define rollback or recovery ownership if a target update succeeds but verification or vault persistence fails. Secret policies may lock inherited settings, so a user may not be able to override the schedule locally. During FortiPAM upgrades, validate custom SSH/Web-API changers against prompt and response changes. This mechanism differs from checkout exclusivity and approval workflows: it controls credential freshness and the integrity of the vault-to-target transaction."
+          "Operational safeguards",
+          "Automated jobs can make high-impact changes without a live operator, so use least-privilege secrets, explicit approval for destructive tasks and a narrowly scoped schedule. Prefer idempotent scripts and record the expected output before deployment. Stagger recurring jobs to avoid a burst of privileged sessions or concurrent changes. During upgrades, validate script compatibility, PowerShell or API behavior and maintenance-mode policy. Retain execution logs as evidence, but do not equate an approval record with successful target-side change. This feature is distinct from password-changer state machines, checkout duration and interactive session recording."
         ]
       ],
-      "lesson_subject": "Password changer execution: self versus associated secret and post-change verification",
-      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/219595",
+      "lesson_subject": "FortiPAM scheduled jobs: secret-scoped SSH, Web API and PowerShell execution",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/294125/creating-a-job",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "fpam-password-changer-associated-secret-self-change-verify-schedule",
-      "workflow_transaction_fingerprint": "changer-identity__target-password-change__verifier-auth__vault-consistency",
-      "failure_class": "target-vault-password-desync",
-      "evidence_pattern": "changer-status-and-target-login",
-      "remediation_path": "repair-changer-or-associated-secret",
-      "question_fingerprint": "09_fpam_rotate-4-feature-specific-scenarios",
-      "diagram_topology_layout_fingerprint": "changer-verifier-cycle-9-seven-nodes-seven-to-eight-edges",
-      "diagram_svg": "docs/images/09_fpam_rotate.svg",
-      "diagram_drawio": "docs/images/09_fpam_rotate.drawio"
+      "feature_mechanism_fingerprint": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression",
+      "workflow_transaction_fingerprint": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression-flow",
+      "failure_class": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression-failure",
+      "evidence_pattern": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression-observables",
+      "remediation_path": "fpam-secret-scoped-scheduled-job-script-type-approval-maintenance-suppression-correction",
+      "question_fingerprint": "09_fpam_jobs-four-to-five-distinct-scenarios",
+      "diagram_topology_layout_fingerprint": "09_fpam_jobs-unique-seven-node-topology",
+      "diagram_svg": "docs/images/09_fpam_jobs.svg",
+      "diagram_drawio": "docs/images/09_fpam_jobs.drawio"
     },
     {
       "product": "FortiSIEM",
-      "slug": "10_fsiem_discovery",
-      "title": "Credentialed discovery, CMDB identity merging and performance-monitor assignment",
-      "primary": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/582301/getting-started",
+      "slug": "10_fsiem_stm",
+      "title": "FortiSIEM synthetic transaction monitoring: HTTP/Selenium application health beyond host ping",
+      "primary": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/637449",
       "scenario": null,
-      "fingerprint": "fsiem-discovery-credential-cmdb-overlap-ip-collector-monitor-assignment",
+      "fingerprint": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status",
       "nodes": [
-        "Credential test",
-        "Collector / Supervisor discovery",
-        "IP and identity correlation",
-        "CMDB device record",
-        "License managed/pending",
-        "Metric + log monitors",
-        "Poll lag / errors"
+        "STM definition",
+        "HTTP/Selenium script",
+        "Target application host",
+        "Scheduled transaction",
+        "Timeout/success criteria",
+        "STM Monitor Status",
+        "Availability incident"
       ],
       "sections": [
         [
-          "Why discovery is more than inventory",
-          "FortiSIEM discovery identifies infrastructure components and their supported monitoring capabilities. Credentials allow the platform to inspect operating system, interfaces, hardware, processes, services and other details; the result becomes a CMDB record. Discovery also determines which metrics and logs can be collected, then schedules monitoring tasks. A device appearing in CMDB is therefore only the first stage. It may be unmanaged because of licensing, have an incorrect organization assignment, or lack working credentials for ongoing performance polling."
+          "Why synthetic transactions are needed",
+          "A server can answer ICMP, respond to TCP SYN and show normal CPU metrics while its login page or business workflow is broken. FortiSIEM Synthetic Transaction Monitors (STM) test application-level behavior rather than inferring health solely from device reachability. The Administration/User Guide describes defining a monitor for an application or web service, optionally using a Selenium script when the protocol is HTTP. The transaction should represent a meaningful user-visible action, such as loading a page and checking an expected response, rather than simply opening a port."
         ],
         [
-          "Distributed workflow",
-          "In deployments with Collectors, a Test Connectivity or Discovery task assigned to a Collector is performed there, and monitoring jobs are typically assigned to that Collector. Without a Collector, the Supervisor performs discovery and assigns performance monitoring to Workers. The discovery pipeline resolves identity and network segments before populating CMDB and creating monitor definitions. This is a separate path from passive syslog ingestion: a device can send logs while its credentialed performance monitors fail, or be discovered correctly while no syslog source is configured."
+          "Definition and execution flow",
+          "An STM definition contains the protocol-specific check and timeout values. It is then applied to a host or service target, where the monitoring engine executes it on the configured schedule. A result becomes an observable health signal and can participate in availability monitoring. A timeout is not equivalent to a refused connection: DNS resolution, TLS handshake, application response and Selenium element matching can fail at different stages. Record the precise stage and expected success condition. A successful HTTP 200 may still be a login redirect or error page if the script does not validate content."
         ],
         [
-          "CMDB identity and licensing",
-          "Fortinet documents that overlapping IP addresses can cause discovered devices to be merged. The rule `PH_RULE_DEVICE_MERGED_OVERLAP_IP` helps detect such collisions. Where an IP is a legitimate VIP, add it to the discovery VIP list rather than treating it as a unique physical device. Device licensing also matters: when discovered devices exceed licensed limits, some can become Unmanaged, and FortiSIEM will not monitor them or receive their logs as managed devices. A Managed/Pending state after discovery is different from an actively polled, healthy device."
+          "Source-supported configuration",
+          "Go to Admin > Setup > STM. Create a monitoring definition, select the protocol and enter the required fields; for HTTP, provide the Selenium script when browser-level actions are needed. Configure timeouts appropriate to the application and network path. Apply the definition to the intended host, then use Monitor Status to confirm it runs. Begin with a stable, read-only endpoint and expand to a representative workflow after basic success is demonstrated. Avoid scripts that modify production data or require permanent administrator credentials. The STM lifecycle is distinct from credentialed infrastructure discovery."
         ],
         [
-          "Configuration and evidence",
-          "In Admin > Setup > Credentials, test connectivity from the correct discovery node. Run discovery for the intended IP range and organization; inspect the Discovery errors tab and CMDB object identity. Then review Admin > Setup > Pull Events and Monitor Performance to see which jobs were created and whether polling succeeds. The CMDB Monitor Status column exposes lag or errors. A successful credentials test proves the chosen protocol can authenticate at test time; it does not prove the parser, identity merge or every scheduled monitor will work under sustained load."
+          "Evidence and troubleshooting",
+          "Check the STM Monitor Status, recent execution result, timeout stage and target application logs. Compare the synthetic check from the assigned monitoring location with a direct browser test from the same network path. A failed synthetic transaction may be caused by a changed DOM element, expired test credential, proxy interception or actual application outage. An ordinary ping success does not refute an STM failure, and an STM success does not prove every application function is healthy. Use separate checks for DNS, TLS, authentication and a critical application action when necessary."
         ],
         [
-          "Failure example",
-          "Two appliances share a floating VIP, and after discovery FortiSIEM appears to have lost one device. The platform merged the records because it interpreted the overlapping address as identity evidence. Compare interface IP lists, physical identifiers and the overlap incident, then add the VIP to the documented exclusion list and rediscover. In a different failure, polling runs three minutes late on a one-minute interval because a Collector is overloaded. That is a scheduling/resource problem, not a credentials issue. Use Monitor Status and errors to distinguish the two."
+          "Scenario example",
+          "After a web application upgrade, CPU and network monitors remain green, but users cannot submit a form. A Selenium-based STM fails because the submit control no longer appears. Determine whether the UI changed intentionally or the application failed to render the control. If the application is healthy but the selector changed, update the script and validate the intended business outcome. If the control is absent for real users, preserve the failure as a service incident. Do not silence the monitor merely because the host's ICMP check is passing."
         ],
         [
-          "Scale and upgrade implications",
-          "Polling across high-latency WAN links can be unreliable for protocols such as SNMP and WMI. Distribute Collectors near monitored devices and adjust intervals with care: increasing a polling interval can invalidate a correlation rule requiring several samples within a short time window. After credential rotation, update FortiSIEM's stored credentials and rediscover affected devices. Recheck organization boundaries and license capacity after bulk discovery. This lesson concerns inventory identity and monitoring assignment, not event parser ordering or rule tags."
+          "Scale and operational caveats",
+          "Synthetic browser transactions consume more resources than lightweight ping or SNMP polling. Set realistic schedules, timeouts and concurrency, especially when checking many SaaS or internal applications. Use dedicated low-privilege test accounts and handle secrets carefully; login checks can trigger rate limits or account lockout if run too frequently. Maintenance schedules may suppress incidents for known outages, but the monitoring evidence should remain interpretable. During upgrades, retest Selenium compatibility and script selectors. This lesson is about application transaction validity, not CMDB identity merging or generic event parser order."
         ]
       ],
-      "lesson_subject": "Credentialed discovery, CMDB identity merging and performance-monitor assignment",
-      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/582301/getting-started",
+      "lesson_subject": "FortiSIEM synthetic transaction monitoring: HTTP/Selenium application health beyond host ping",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/637449",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "fsiem-discovery-credential-cmdb-overlap-ip-collector-monitor-assignment",
-      "workflow_transaction_fingerprint": "credential-discovery__CMDB-identity-merge__license-state__collector-monitor",
-      "failure_class": "VIP-CMDB-identity-collision-or-poll-lag",
-      "evidence_pattern": "CMDB-overlap-rule-and-Monitor-Status",
-      "remediation_path": "VIP-exclusion-rediscovery-or-collector-balance",
-      "question_fingerprint": "10_fsiem_discovery-4-feature-specific-scenarios",
-      "diagram_topology_layout_fingerprint": "collector-cmdb-dual-lane-10-seven-nodes-seven-to-eight-edges",
-      "diagram_svg": "docs/images/10_fsiem_discovery.svg",
-      "diagram_drawio": "docs/images/10_fsiem_discovery.drawio"
+      "feature_mechanism_fingerprint": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status",
+      "workflow_transaction_fingerprint": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status-flow",
+      "failure_class": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status-failure",
+      "evidence_pattern": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status-observables",
+      "remediation_path": "fsiem-stm-http-selenium-definition-host-timeout-monitor-status-correction",
+      "question_fingerprint": "10_fsiem_stm-four-to-five-distinct-scenarios",
+      "diagram_topology_layout_fingerprint": "10_fsiem_stm-unique-seven-node-topology",
+      "diagram_svg": "docs/images/10_fsiem_stm.svg",
+      "diagram_drawio": "docs/images/10_fsiem_stm.drawio"
     },
     {
       "product": "FortiSASE",
-      "slug": "11_fsase_dns",
-      "title": "FortiSASE DNS Filter: category verdicts, fail-open behavior and inspection dependencies",
-      "primary": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/130214",
-      "scenario": "https://community.fortinet.com/fortisase-58/technical-tip-force-certificate-inspection-explanation-in-fortisase-firewall-policy-161028",
-      "fingerprint": "fsase-dns-filter-fortiguard-category-error-allow-safe-search-inspection",
+      "slug": "11_fsase_ips",
+      "title": "FortiSASE intrusion prevention: profile modes, custom signature precedence and packet logging",
+      "primary": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/157425",
+      "scenario": null,
+      "fingerprint": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging",
       "nodes": [
-        "Endpoint DNS query",
-        "SASE policy match",
-        "DNS filter profile",
-        "FortiGuard category lookup",
-        "Allow/monitor/redirect",
-        "DNS log / error handling",
-        "Resolver response"
+        "Inspected session",
+        "IPS security profile",
+        "Custom rule first",
+        "FortiGuard signature match",
+        "Allow/monitor/block/default",
+        "Packet logging",
+        "Threat event and policy"
       ],
       "sections": [
         [
-          "The decision point",
-          "FortiSASE DNS Filter evaluates domain requests against a DNS security profile, potentially stopping access before a browser opens an HTTP or HTTPS connection. Its category-based decisions are Allow, Monitor or Redirect Block Portal; a domain can be allowed by the DNS layer yet still blocked by a later web or application control policy. DNS Filter is not interchangeable with URL filtering because the DNS question normally carries a hostname rather than a full HTTP path. Apply it to the relevant FortiSASE traffic policy and understand how the endpoint's resolver traffic reaches the SASE service."
+          "IPS as a traffic inspection stage",
+          "FortiSASE intrusion prevention uses FortiGuard signatures to detect known exploit sequences and vulnerability probes in traffic that traverses its security enforcement path. An IPS match is not simply a destination reputation decision: the engine inspects protocol content and command patterns. FortiSASE offers Recommended, Critical, Monitor and Custom IPS profiles. Recommended follows signature defaults, Critical blocks medium/high/critical matches, and Monitor permits matching traffic while logging. These modes are materially different, so a logged exploit signature does not automatically mean the packet was blocked."
         ],
         [
-          "Category and error semantics",
-          "The FortiSASE Feature Administration Guide lets administrators enable FortiGuard category filtering and choose actions per category. It also has Allow DNS requests when a rating error occurs. That is an explicit fail-open choice: if FortiGuard DNS rating servers are unreachable, requests may proceed and an error is logged. A successful DNS response under rating failure therefore does not prove that a domain was rated safe. Conversely, Redirect Block Portal indicates a DNS-filter verdict rather than an upstream authoritative DNS outage."
+          "Rule precedence and actions",
+          "Fortinet documents that custom IPS rules are evaluated before the selected built-in profile. A custom filter can select signatures by target, severity, protocol, operating system or application, or it can reference a specific signature. Each custom entry can Allow, Monitor, Block or Default to the FortiGuard signature's action. This ordering matters when an administrator creates a narrow false-positive exception: the custom Allow or Monitor entry can change the outcome for a selected signature before the broader Recommended or Critical profile is applied. Rule order and filter scope must be reviewed together."
         ],
         [
           "Configuration workflow",
-          "Go to Security > Traffic > Security profiles, enable DNS Filter and select Customize. Enable FortiGuard Category Based Filter, choose category actions and adjust threat-level handling as needed. Decide whether to allow requests on rating errors according to risk tolerance and business continuity requirements. The guide also exposes safe-search enforcement for major search/video services and notes that SSL deep inspection is required for that feature. Bind the security profile to the intended traffic policy and test both approved and blocked categories from an affected endpoint."
+          "Go to Security > Traffic > Security profiles and open the Intrusion Prevention widget. Choose a built-in profile or Custom. For a custom profile, add IPS signatures and filters with Type, Action, Status and optional Packet logging. To create a custom signature, use Profile resources > Custom IPS signatures and supply the supported signature syntax. Apply the profile through the relevant traffic policy or profile group. Fortinet recommends enabling at least one related security feature, such as antivirus, file filter, DLP, web filter or DNS filter, because IPS functionality is not guaranteed when all other security features are disabled."
         ],
         [
-          "Inspection interactions",
-          "A Fortinet Community article explains that Force Certificate Inspection on a FortiSASE firewall policy prevents SSL deep inspection even when a profile group requests it. Features requiring deep inspection, including safe-search enforcement and some DNS-filter scenarios, can then behave differently from the administrator's expectation. Do not infer that every DNS classification needs HTTP decryption; distinguish the DNS query verdict from enforcement features that rewrite or inspect HTTPS traffic. Verify which inspection mode the matching firewall policy actually applies, not only the profile group's desired setting."
+          "Evidence chain",
+          "For a test exploit signature, verify that the traffic actually traverses the intended FortiSASE policy, that IPS is enabled, and that the expected signature or filter matched. The IPS log should identify signature, action, source/destination and relevant policy context. Packet logging, when enabled, saves matching packet copies for later analysis, but a packet capture is sensitive data and requires retention controls. A Monitor action with a log proves detection, not prevention. A Block action in the log supports enforcement, but end-to-end application failure may still have another cause."
         ],
         [
-          "Evidence and diagnosis",
-          "Check the endpoint's DNS query and response, the matching FortiSASE traffic policy, DNS logs with category/verdict and any FortiGuard rating-error entries. An NXDOMAIN or timeout from the resolver is not necessarily a DNS Filter block; compare the configured redirect/block behavior. A successful browser connection can result from cached DNS, an alternate resolver or fail-open rating handling. Repeat tests with a fresh hostname and observe the actual SASE path. If safe search fails while category filtering works, examine deep-inspection prerequisites and the Force Certificate Inspection override."
+          "Failure scenario",
+          "A business application stops working after an IPS profile changes from Monitor to Critical. Logs show a medium-severity signature matching a legitimate application request. Confirm the request and signature, then create a narrowly scoped custom rule to Monitor or Allow that specific signature only if the traffic is validated as benign. Do not disable the entire IPS profile or downgrade all high-severity protections. Because custom rules take precedence, a broad Allow filter can unintentionally bypass protection for many signatures. Test a known malicious pattern in a controlled lab to confirm the remaining profile still blocks as designed."
         ],
         [
-          "Operational tradeoffs",
-          "Allow-on-rating-error favors availability over strict domain classification during FortiGuard outages; disabling it can protect policy intent but interrupt legitimate name resolution. Category decisions may change as FortiGuard ratings evolve, so retain log evidence and exception ownership. DNS filtering also interacts with split DNS and private resources: make sure internal domains use the intended private resolver path rather than being misclassified as public traffic. After client or policy upgrades, verify endpoint steering, DNS logs and the expected policy match. This feature is distinct from FortiSASE URL exceptions, file filtering and CASB tenant controls."
+          "Operational and upgrade implications",
+          "Signature databases evolve, so a profile's effective coverage can change even when the named policy stays the same. Monitor new deployments before enforcing broadly, review false positives and maintain ownership of custom exceptions. Inspect SSL/TLS inspection and traffic steering prerequisites for the actual payload visibility; encrypted traffic may limit signatures that depend on application content. During FortiSASE policy synchronization, confirm the profile group and custom signatures arrived at the enforcement point. This mechanism is distinct from DNS category filtering, file filtering, CASB and DLP: it evaluates exploit signatures and their configured actions."
         ]
       ],
-      "lesson_subject": "FortiSASE DNS Filter: category verdicts, fail-open behavior and inspection dependencies",
-      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/130214",
-      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-force-certificate-inspection-explanation-in-fortisase-firewall-policy-161028",
-      "feature_mechanism_fingerprint": "fsase-dns-filter-fortiguard-category-error-allow-safe-search-inspection",
-      "workflow_transaction_fingerprint": "DNS-query__FortiGuard-rating__profile-verdict__resolver-response",
-      "failure_class": "DNS-rating-fail-open-or-inspection-mismatch",
-      "evidence_pattern": "DNS-verdict-rating-error-log",
-      "remediation_path": "rating-error-and-deep-inspection-policy",
-      "question_fingerprint": "11_fsase_dns-4-feature-specific-scenarios",
-      "diagram_topology_layout_fingerprint": "dns-policy-diamond-11-seven-nodes-seven-to-eight-edges",
-      "diagram_svg": "docs/images/11_fsase_dns.svg",
-      "diagram_drawio": "docs/images/11_fsase_dns.drawio"
+      "lesson_subject": "FortiSASE intrusion prevention: profile modes, custom signature precedence and packet logging",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/157425",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging",
+      "workflow_transaction_fingerprint": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging-flow",
+      "failure_class": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging-failure",
+      "evidence_pattern": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging-observables",
+      "remediation_path": "fsase-ips-custom-signature-precedence-recommended-critical-monitor-packet-logging-correction",
+      "question_fingerprint": "11_fsase_ips-four-to-five-distinct-scenarios",
+      "diagram_topology_layout_fingerprint": "11_fsase_ips-unique-seven-node-topology",
+      "diagram_svg": "docs/images/11_fsase_ips.svg",
+      "diagram_drawio": "docs/images/11_fsase_ips.drawio"
     },
     {
       "product": "Secure SD-WAN",
