@@ -1,0 +1,855 @@
+{
+  "date": "2026-10-24",
+  "questions": [
+    {
+      "product": "FortiGate",
+      "stem": "A new TCP service fails only during a SYN burst. Which meter should be checked first?",
+      "options": [
+        "Destination-keyed tcp_syn_flood packets-per-second meter",
+        "Source-keyed tcp_port_scan packets-per-second meter",
+        "Concurrent tcp_src_session connection count",
+        "Established-session firewall-policy hit counter"
+      ],
+      "feedback": [
+        "tcp_syn_flood measures SYN arrivals including retransmissions to one destination.",
+        "tcp_port_scan keys SYN rate by source and tests scanning behavior.",
+        "tcp_src_session counts concurrent connections, not a SYN packet burst.",
+        "Forward-policy counters may miss traffic discarded by the earlier DoS check."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiGate",
+      "stem": "A DoS sensor is set to rate 0 with broadcast-like traffic unaffected elsewhere. What does zero mean for enabled anomalies?",
+      "options": [
+        "Drop all packets belonging to enabled anomaly categories",
+        "Disable all anomaly checks on the ingress interface",
+        "Use the model's recommended threshold automatically",
+        "Inherit the security policy's session-rate limit"
+      ],
+      "feedback": [
+        "Fortinet documents zero as a drop-all threshold for the enabled categories.",
+        "Disabling requires sensor status changes, not rate zero.",
+        "Recommended thresholds are explicit values, not the meaning of zero.",
+        "DoS meters do not inherit forwarding-policy session limits."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiGate",
+      "stem": "IKE UDP/500 is dropped before the tunnel daemon sees it. Which evidence most directly tests an early DoS decision?",
+      "options": [
+        "Anomaly log with udp_flood and gateway destination",
+        "Firewall-policy accept log for an unrelated TCP flow",
+        "IPsec phase-two selector match and proxy ID",
+        "Client browser TLS certificate validation trace"
+      ],
+      "feedback": [
+        "A udp_flood anomaly event with matching peer IP proves pre-policy suppression.",
+        "Unrelated TCP success cannot exclude UDP-specific anomaly blocking.",
+        "Phase-two selectors do not explain packet loss before IKE processing.",
+        "Browser TLS diagnostics are unrelated to IKE UDP admission."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiGate",
+      "stem": "An operator changes continuous to periodical anomaly mode. What changes?",
+      "options": [
+        "Allowed packet quantity resets across successive periods",
+        "All packets bypass the configured anomaly threshold",
+        "Concurrent-session limits become SYN-only rate meters",
+        "Traffic begins matching only explicit proxy policies"
+      ],
+      "feedback": [
+        "Periodical mode permits the threshold quantity in successive periods.",
+        "Anomaly evaluation remains enabled and still drops excess traffic.",
+        "The mode does not convert sensor types or their accounting keys.",
+        "DoS ingress checks are independent of explicit proxy matching."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiManager",
+      "stem": "A deployed VM suddenly displays the first-run wizard after 252 VDOMs are counted against 250 licenses. Best diagnosis?",
+      "options": [
+        "Management device/VDOM entitlement capacity exceeded",
+        "FortiGate forwarding policies were automatically deleted",
+        "ADOM workspace locks have expired unexpectedly",
+        "FortiAnalyzer archive retention reached its quota"
+      ],
+      "feedback": [
+        "The counted units exceed entitlement and match the documented wizard symptom.",
+        "A management GUI wizard does not imply data-plane policy deletion.",
+        "Workspace locks control concurrent edits, not VM entitlement consumption.",
+        "FortiAnalyzer log storage quotas do not cause this FortiManager symptom."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiManager",
+      "stem": "Which command best corroborates the licensed versus managed device/VDOM count?",
+      "options": [
+        "diagnose dvm device list plus diagnose debug vminfo",
+        "diagnose debug application ike -1 plus route lookup",
+        "execute log filter plus diagnose log test",
+        "get router info bgp summary plus ping"
+      ],
+      "feedback": [
+        "The DVM inventory and VM license diagnostics expose counted devices and maximum capacity.",
+        "IKE and route checks concern tunnel or forwarding behavior.",
+        "Log filters do not enumerate licensed management objects.",
+        "BGP neighbors do not determine FortiManager VM license usage."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiManager",
+      "stem": "A new VDOM is added to a managed FortiGate without adding hardware. What should capacity planning consider?",
+      "options": [
+        "VDOM inventory may increase management license consumption",
+        "Only the physical chassis can consume management licenses",
+        "New VDOMs consume only FortiAnalyzer archive disk",
+        "VDOM additions automatically extend FortiManager entitlement"
+      ],
+      "feedback": [
+        "The management widget counts devices/VDOMs under the applicable license rules.",
+        "Chassis count alone can understate VDOM-enabled management consumption.",
+        "Log retention is separate from management device/VDOM licensing.",
+        "Adding configuration objects does not automatically buy capacity."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiManager",
+      "stem": "A valid FortiManager VM license file is uploaded. Which subsequent behavior is documented?",
+      "options": [
+        "The system restarts to verify the uploaded license",
+        "Every managed FortiGate immediately reloads its firewall policy",
+        "All ADOMs are merged into the root ADOM",
+        "Device inventory is discarded before the next login"
+      ],
+      "feedback": [
+        "License-file activation includes a FortiManager restart for verification.",
+        "VM licensing is not a bulk policy-install transaction.",
+        "License verification does not merge ADOM boundaries.",
+        "The procedure is not a device-database factory reset."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAnalyzer",
+      "stem": "A basic handler is saved but now needs FOLLOWED_BY semantics. What change is required?",
+      "options": [
+        "Create a correlation handler with the intended sequence",
+        "Add a notification profile to the existing basic handler",
+        "Increase the report dataset's retention interval",
+        "Enable archive-only processing on the existing handler"
+      ],
+      "feedback": [
+        "Event Handler Type cannot be changed after saving; recreate as correlation.",
+        "Notifications are downstream actions and cannot change rule logic.",
+        "Report retention does not create temporal correlation operators.",
+        "Event handlers evaluate Analytics logs, not Archive-only records."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAnalyzer",
+      "stem": "Two events are seven minutes apart; FOLLOWED_BY threshold duration is five. Expected result?",
+      "options": [
+        "The pair does not satisfy the configured temporal window",
+        "The pair matches because source IPs are identical",
+        "The second event automatically extends the first window",
+        "A notification profile overrides the duration setting"
+      ],
+      "feedback": [
+        "Correlation requires the sequence to fit within Threshold Duration.",
+        "Matching identities do not waive the configured time boundary.",
+        "A late event does not retroactively extend the window.",
+        "Notification delivery is separate from correlation eligibility."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAnalyzer",
+      "stem": "A handler finds many false positives behind a shared NAT. Which design is strongest?",
+      "options": [
+        "Correlate on a stable per-user identity where available",
+        "Join all records solely on the translated source IP",
+        "Disable the data selector for all managed devices",
+        "Use only the destination TCP port as subject"
+      ],
+      "feedback": [
+        "A stable user identity reduces accidental joins among NAT-shared clients.",
+        "A NAT address can represent many unrelated actors.",
+        "Removing scoping increases unrelated events and noise.",
+        "Destination ports are rarely unique subjects for user sequences."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAnalyzer",
+      "stem": "An Archive search shows both records but the correlation handler never fires. First pipeline question?",
+      "options": [
+        "Are the records present in Analytics logs for this ADOM?",
+        "Was the report exported as a PDF document?",
+        "Does the FortiGate have a valid static default route?",
+        "Is the dashboard widget using the correct color palette?"
+      ],
+      "feedback": [
+        "Event handlers consume Analytics logs in the appropriate ADOM.",
+        "PDF export is not a prerequisite for event-handler evaluation.",
+        "FortiGate routing may matter to ingestion but does not prove Analytics availability.",
+        "Widget appearance has no role in correlation input."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSwitch",
+      "stem": "An access port uses storm-control rate 0 for broadcast. What is the likely DHCP effect?",
+      "options": [
+        "DHCP Discover broadcasts are suppressed at ingress",
+        "DHCP relay always chooses the backup gateway",
+        "DHCP offers are converted to unknown unicast",
+        "The switch automatically disables STP on that port"
+      ],
+      "feedback": [
+        "Zero drops all enabled broadcast-category frames, including Discover.",
+        "Relay selection is unrelated to a local storm-control threshold.",
+        "Storm control does not rewrite DHCP packet classification.",
+        "Storm control and STP are separate control mechanisms."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSwitch",
+      "stem": "A port override is configured, but the engineer edits only global storm settings. Why no change?",
+      "options": [
+        "The port-specific override controls the effective threshold",
+        "The port is using a global routing VRF instead",
+        "Storm control requires every port to be a trunk",
+        "The switch ignores all traffic after learning MACs"
+      ],
+      "feedback": [
+        "Port storm-control-mode override supersedes global behavior.",
+        "VRFs do not explain port-level storm policy precedence.",
+        "Access ports can use storm control; trunking is not required.",
+        "Known MAC learning does not disable broadcast and unknown meters."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSwitch",
+      "stem": "Which traffic class is distinct from the unknown-unicast storm meter?",
+      "options": [
+        "Unicast frames with a known forwarding-table destination",
+        "Unknown unicast frames with no learned destination",
+        "Broadcast frames to the Ethernet all-ones address",
+        "Unknown multicast frames without group-specific forwarding"
+      ],
+      "feedback": [
+        "Known unicast is outside the specified unknown-unicast category.",
+        "Unknown unicast is precisely what that meter is designed to count.",
+        "Broadcast has its own independently enabled sensor.",
+        "Unknown multicast has its own separately configured sensor."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSwitch",
+      "stem": "A 1000-pps limit works on one switch model but not another under microbursts. What else matters?",
+      "options": [
+        "Hardware-dependent burst-size-level implementation and limits",
+        "FortiAnalyzer report-dataset cache expiration time",
+        "FortiGate user-group membership refresh interval",
+        "FortiManager policy-package revision numbering"
+      ],
+      "feedback": [
+        "Burst tolerance depends on model and burst-size-level behavior.",
+        "Report caching does not change physical switch storm-control bursts.",
+        "User groups are unrelated to L2 traffic-class meters.",
+        "Policy revisions do not define ASIC burst bucket size."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "stem": "A FortiAP discovers its controller but loops between SULKING and DTLS_SETUP. Most relevant next check?",
+      "options": [
+        "AP trust-store certificate and firmware compatibility",
+        "SSID airtime fairness and channel-width selection",
+        "Client DHCP lease and default gateway renewal",
+        "Captive portal RADIUS group assignment precedence"
+      ],
+      "feedback": [
+        "The documented 231K issue involves missing CA1 trust during DTLS setup.",
+        "RF settings matter after AP management joins, not this handshake.",
+        "Client DHCP cannot explain the AP control-channel trust failure.",
+        "Portal authorization is downstream of AP controller admission."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "stem": "What does a CAPWAP discovery response prove about AP admission?",
+      "options": [
+        "The controller is reachable, not that DTLS joined",
+        "The AP's certificate chain has been fully accepted",
+        "All SSIDs are broadcasting with valid encryption",
+        "The controller has authorized every discovered serial"
+      ],
+      "feedback": [
+        "Discovery proves initial reachability but not later join stages.",
+        "DTLS certificate validation occurs after discovery.",
+        "Client SSID service requires successful AP joining and profile application.",
+        "Discovery normally precedes manual or configured automatic authorization."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "stem": "Which setting allows a controller to create entries for newly discovered APs?",
+      "options": [
+        "set ap-discover enable on the controller-facing interface",
+        "set storm-control-mode override on the switch port",
+        "set dtls-policy clear-text on the client SSID",
+        "set auto-firmware-upgrade disable on FortiGuard"
+      ],
+      "feedback": [
+        "ap-discover controls controller acceptance of discovery messages.",
+        "Storm control concerns switch frame rates, not AP table creation.",
+        "Data-channel DTLS policy does not enable controller discovery.",
+        "Firmware auto-upgrade does not determine AP discovery registration."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "stem": "A 231K lacks Fortinet_CA1.cer on affected firmware. Supported remediation?",
+      "options": [
+        "Use Fortinet-supported fix image or corrected GA firmware",
+        "Disable all controller certificate checks permanently",
+        "Enable blanket AP auto-authorization for every serial",
+        "Change the client SSID to open authentication"
+      ],
+      "feedback": [
+        "Fortinet documents a TAC fix image or supported later firmware.",
+        "Bypassing certificate trust is not the documented safe fix.",
+        "Authorization cannot supply a missing AP trust anchor.",
+        "SSID security does not repair CAPWAP control DTLS."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC",
+      "stem": "A switch L2 poll succeeds but no IP address appears for a host. What data source is missing?",
+      "options": [
+        "L3 ARP polling to join IP and MAC identities",
+        "Another copy of the same switch MAC table",
+        "FortiAnalyzer report dataset for the switch",
+        "FortiAP radio profile with a longer beacon interval"
+      ],
+      "feedback": [
+        "L2 provides MAC and port; L3 ARP supplies IP-to-MAC mapping.",
+        "Repeating L2 does not add routed neighbor information.",
+        "Reporting data is not the FortiNAC host IP source.",
+        "Wireless beacon timing does not populate wired ARP identity."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC",
+      "stem": "A host moved ports but the recorded switch port remains old. Which observation is decisive?",
+      "options": [
+        "Fresh switch FDB versus FortiNAC last successful L2 poll",
+        "Only the RADIUS server's certificate expiration date",
+        "Only the host's DNS resolver search suffix",
+        "Only the switch's global STP root priority"
+      ],
+      "feedback": [
+        "The live forwarding table and poll timestamp reveal location staleness.",
+        "RADIUS certificate validity does not prove host-port mapping freshness.",
+        "DNS suffixes do not identify physical switch attachment.",
+        "STP root priority does not show a specific MAC's port."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC",
+      "stem": "Contact polling works, but L2 table retrieval fails. What should be validated?",
+      "options": [
+        "Device plugin credentials and CLI/REST parsing behavior",
+        "The guest sponsor's account expiration timestamp",
+        "The endpoint's browser safe-search preference",
+        "The FortiGate's IPsec phase-two selectors"
+      ],
+      "feedback": [
+        "Polling can fail at authentication or output parsing after contact succeeds.",
+        "Guest sponsorship does not read a switch forwarding table.",
+        "Browser preferences cannot affect switch management output.",
+        "IPsec selectors are unrelated unless the management path itself uses that tunnel."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC",
+      "stem": "A trap-triggered poll succeeded at 10:15 with a 15-minute interval. What is the next scheduled time?",
+      "options": [
+        "Around 10:30, based on the updated success timestamp",
+        "At 10:16, regardless of the device's interval",
+        "At midnight, when all network devices poll together",
+        "Only after a RADIUS accounting stop arrives"
+      ],
+      "feedback": [
+        "Per-device scheduling uses the last successful read plus its interval.",
+        "Polling is not universally scheduled one minute after every trap.",
+        "Device polls are not necessarily synchronized to midnight.",
+        "RADIUS accounting is a different evidence channel."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC-F",
+      "stem": "A passive HA node is pingable but ignores RADIUS. Which boundary explains this?",
+      "options": [
+        "Only the In Control node runs active RADIUS listeners",
+        "The passive node lacks an Ethernet MAC address",
+        "Every RADIUS packet requires a shared GUI VIP",
+        "The switch must disable all server retries first"
+      ],
+      "feedback": [
+        "The HA role governs service ownership independently of reachability.",
+        "A reachable passive node has networking but may lack service listeners.",
+        "A GUI VIP is not a universal RADIUS service requirement.",
+        "Retry configuration affects failover experience, not listener ownership."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC-F",
+      "stem": "allowaccess lists RADIUS on the passive interface. Why may requests still time out?",
+      "options": [
+        "The ACL permits traffic but does not start a daemon",
+        "allowaccess automatically forces the passive node active",
+        "RADIUS requires the node's web UI to be disabled",
+        "The secondary always shares the primary's process ID"
+      ],
+      "feedback": [
+        "allowaccess is a host ACL; HA control determines whether the service listens.",
+        "ACL changes cannot transfer HA control ownership.",
+        "Web UI availability is not a prerequisite for RADIUS listening.",
+        "Passive and active processes are not a shared PID namespace."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC-F",
+      "stem": "After recovery, the former primary stays passive. What does the HA guide require?",
+      "options": [
+        "Deliberate control restoration rather than automatic preemption",
+        "Automatic primary takeover after every heartbeat",
+        "A forced factory reset on the current active node",
+        "Changing every endpoint's MAC address first"
+      ],
+      "feedback": [
+        "The guide says the primary does not automatically resume control.",
+        "Heartbeat restoration alone does not mandate preemption.",
+        "A factory reset is unnecessary and destructive.",
+        "Endpoint MAC changes are unrelated to HA ownership."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiNAC-F",
+      "stem": "Which verification proves successful HA service takeover most directly?",
+      "options": [
+        "A new endpoint RADIUS exchange completes on the active node",
+        "Both appliances answer ping on their management addresses",
+        "The passive node shows a valid license in the GUI",
+        "The HA link interface reports physical carrier"
+      ],
+      "feedback": [
+        "End-to-end authentication proves the new owner is serving.",
+        "Ping tests network reachability but not RADIUS service.",
+        "Licensing is necessary context but not a live transaction.",
+        "Carrier alone does not prove process readiness."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAuthenticator",
+      "stem": "GUI access disappears immediately after changing the HTTPS certificate. What is the primary fault domain?",
+      "options": [
+        "Management web-server certificate binding and Apache startup",
+        "RADIUS accounting session record expiration",
+        "FortiNAC dynamic VLAN assignment policy",
+        "Wireless AP controller discovery and authorization"
+      ],
+      "feedback": [
+        "The selected GUI certificate can prevent the HTTPS service from starting.",
+        "Accounting data is unrelated to Apache management TLS startup.",
+        "NAC policy controls endpoints, not FortiAuthenticator web listener.",
+        "AP controller admission is a different control plane."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAuthenticator",
+      "stem": "An HTTPS certificate warning appears but the login page loads. What is proven?",
+      "options": [
+        "The web service answered despite client trust concerns",
+        "The server certificate is trusted by every client",
+        "The RADIUS EAP certificate must be valid",
+        "The FortiAuthenticator HA pair is synchronized"
+      ],
+      "feedback": [
+        "A rendered page proves HTTP service and some TLS negotiation succeeded.",
+        "A warning explicitly indicates unresolved client trust.",
+        "HTTPS and RADIUS EAP may use different certificates.",
+        "GUI availability alone does not prove HA replication."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAuthenticator",
+      "stem": "Which documented recovery is specific to an unusable HTTPS certificate case?",
+      "options": [
+        "execute regen-cert force followed by controlled reboot",
+        "diagnose ips anomaly list followed by policy edit",
+        "set fgfm-allow-vm enable followed by device add",
+        "set storm-control-mode override followed by port bounce"
+      ],
+      "feedback": [
+        "The Fortinet Community article documents regeneration and reboot for this issue.",
+        "IPS anomaly diagnostics apply to FortiGate DoS policies.",
+        "FGFM VM admission is a FortiManager control.",
+        "Storm control changes switch ingress behavior."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAuthenticator",
+      "stem": "Before replacing the GUI certificate, which checks prevent avoidable lockout?",
+      "options": [
+        "SAN, private key, chain, backup and console access",
+        "Only the RADIUS NAS-IP and shared secret",
+        "Only the wireless SSID channel and band",
+        "Only the FortiSIEM CMDB polling interval"
+      ],
+      "feedback": [
+        "Server identity, key availability and recovery access are essential.",
+        "RADIUS client parameters do not validate HTTPS server identity.",
+        "Radio settings are unrelated to the GUI certificate.",
+        "CMDB monitoring does not determine web-server TLS startup."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiPAM",
+      "stem": "A target account cannot change its own password. Which changer identity is appropriate?",
+      "options": [
+        "An associated secret with sufficient change privilege",
+        "The same account in Self mode without privileges",
+        "An unauthenticated browser session on the target",
+        "The FortiPAM dashboard viewer's account"
+      ],
+      "feedback": [
+        "Associated Secret lets a separate privileged credential perform changes.",
+        "Self mode cannot bypass target account permissions.",
+        "An unauthenticated browser is not a supported privileged changer identity.",
+        "Viewing rights do not confer target password-change authority."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiPAM",
+      "stem": "A scheduled rotation reports success but the next launcher fails. Which test is strongest?",
+      "options": [
+        "Verify the new credential against the actual target",
+        "Check only that the scheduler fired on time",
+        "Confirm the secret folder has a friendly name",
+        "Check only the administrator's GUI idle timeout"
+      ],
+      "feedback": [
+        "A target login verifies vault-to-target agreement after rotation.",
+        "Job execution alone does not prove target acceptance.",
+        "Folder naming is unrelated to credential synchronization.",
+        "GUI idle timeout does not test the rotated password."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiPAM",
+      "stem": "An SSH password changer hangs on one host after login. Most relevant suspect?",
+      "options": [
+        "Changer expect sequence or prompt/newline mismatch",
+        "The FortiSASE DNS category block action",
+        "The FortiGate SD-WAN probe server selection",
+        "The FortiSwitch storm-control broadcast threshold"
+      ],
+      "feedback": [
+        "SSH changers depend on command/response matching and newline behavior.",
+        "DNS policy is a different traffic-security mechanism.",
+        "SD-WAN probes do not interpret remote shell prompts.",
+        "Switch broadcast metering does not parse SSH command output."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiPAM",
+      "stem": "Change Password Using is Self, Verify Password Using is Associated Secret. What follows?",
+      "options": [
+        "Change and verification use independently selected identities",
+        "Both operations must use the same identity",
+        "Verification is disabled whenever change uses Self",
+        "The associated secret automatically becomes a user approver"
+      ],
+      "feedback": [
+        "FortiPAM separately selects identities for changing and verifying.",
+        "The two identity selectors are independent.",
+        "A verifier can still run when Self performs the change.",
+        "Password verification and approval workflows are distinct."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSIEM",
+      "stem": "Two appliances sharing a VIP merge into one CMDB record. Which documented corrective concept applies?",
+      "options": [
+        "Mark the VIP in discovery settings and rediscover",
+        "Increase syslog severity to debug on both devices",
+        "Disable every parser that receives device events",
+        "Move all devices into the same organization"
+      ],
+      "feedback": [
+        "The discovery VIP list prevents a shared address from implying identity.",
+        "Syslog verbosity does not fix CMDB identity merging.",
+        "Parsers act on events, not discovery identity resolution.",
+        "Organization collapse can create additional tenancy errors."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSIEM",
+      "stem": "A device appears in CMDB but its Monitor Status is Critical. What should be examined?",
+      "options": [
+        "Monitor Performance errors and last polling timestamps",
+        "Only the successful initial discovery timestamp",
+        "Only the dashboard widget's color selection",
+        "Only the source's firewall-policy UUID"
+      ],
+      "feedback": [
+        "Monitor Status reflects ongoing job health and lag.",
+        "Discovery success does not prove later monitoring.",
+        "Widget styling is unrelated to polling.",
+        "Firewall UUID alone does not identify collector scheduling."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSIEM",
+      "stem": "Discovery exceeds device licensing and some records become Unmanaged. What does that imply?",
+      "options": [
+        "Those devices are not monitored as managed sources",
+        "All excess devices continue full metric collection",
+        "Every device is automatically assigned more licenses",
+        "Only the dashboard display is affected by the limit"
+      ],
+      "feedback": [
+        "Fortinet documents that Unmanaged devices are not monitored or logged as managed.",
+        "Unmanaged state is a functional capacity boundary.",
+        "Discovery does not automatically expand entitlement.",
+        "Licensing affects monitoring, not just presentation."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSIEM",
+      "stem": "A one-minute poll runs every three minutes on a remote Collector. What design change best addresses lag?",
+      "options": [
+        "Redistribute collectors or adjust intervals with rule review",
+        "Increase the event parser's regular-expression complexity",
+        "Change all CMDB object names to shorter strings",
+        "Disable the target's NTP time synchronization"
+      ],
+      "feedback": [
+        "Collector load and WAN latency can cause polling lag; interval changes affect rules.",
+        "Parser complexity does not repair a metric scheduling backlog.",
+        "Names are not the primary cause of delayed polling.",
+        "NTP removal worsens temporal evidence and does not improve collection."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSASE",
+      "stem": "A DNS category rating service is unreachable and the profile allows rating errors. What can happen?",
+      "options": [
+        "Requests proceed with a logged rating-error condition",
+        "All DNS responses are forcibly redirected to the block portal",
+        "FortiSASE silently disables every firewall policy",
+        "The endpoint automatically switches to a private IPsec tunnel"
+      ],
+      "feedback": [
+        "Allow-on-rating-error is an explicit fail-open DNS behavior.",
+        "Redirect is a configured category action, not mandatory on rating errors.",
+        "A rating error does not remove unrelated firewall policies.",
+        "DNS rating failure does not create a VPN."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSASE",
+      "stem": "Safe-search enforcement fails while DNS category blocking works. What should be checked?",
+      "options": [
+        "SSL deep inspection and Force Certificate Inspection override",
+        "The FortiSwitch unknown-unicast storm threshold",
+        "The FortiPAM associated secret's password age",
+        "The FortiNAC L2 polling device group interval"
+      ],
+      "feedback": [
+        "Fortinet notes safe-search enforcement needs deep inspection.",
+        "Switch L2 meters do not enforce web search restrictions.",
+        "PAM credential rotation does not control DNS safe search.",
+        "NAC polling does not define SASE TLS inspection."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSASE",
+      "stem": "A DNS request is allowed, but a later HTTPS connection is blocked. Which explanation fits?",
+      "options": [
+        "DNS and web/application controls evaluate different stages",
+        "DNS allow automatically exempts the full HTTP URL",
+        "The DNS filter rewrites all destination firewall rules",
+        "FortiGuard category decisions apply only to IPv6"
+      ],
+      "feedback": [
+        "DNS filtering permits name resolution without guaranteeing later application access.",
+        "DNS allow is not a full-path web-policy exemption.",
+        "DNS verdicts do not rewrite the firewall rule base.",
+        "DNS filtering is not inherently IPv6-only."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiSASE",
+      "stem": "A DNS response succeeds during a FortiGuard rating outage. What conclusion is unsafe?",
+      "options": [
+        "The domain was positively rated safe by FortiGuard",
+        "The endpoint received some DNS answer",
+        "The configured profile may permit rating errors",
+        "The DNS request reached a resolver path"
+      ],
+      "feedback": [
+        "Fail-open can allow unresolved ratings; success does not prove safe classification.",
+        "A successful response does indicate some answer was returned.",
+        "The profile may indeed allow rating errors.",
+        "A response implies a DNS resolution path existed."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "Secure SD-WAN",
+      "stem": "After factory reset on a supported 7.6.5 dual-WAN model, which default objects are expected?",
+      "options": [
+        "wan1/wan2 DHCP, sd-wan zone and Default_Ping",
+        "Two static WAN IPs and a mandatory MPLS tunnel",
+        "A prebuilt BGP overlay with two route reflectors",
+        "An automatic packet-duplication service rule"
+      ],
+      "feedback": [
+        "The documented baseline creates DHCP WAN members, zone and SLA.",
+        "Static addressing and MPLS are not the default baseline.",
+        "BGP overlays require explicit design and configuration.",
+        "Packet duplication is a separate SD-WAN capability."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "Secure SD-WAN",
+      "stem": "The sd-wan zone exists and SLA probes pass, but users cannot browse. What is still required?",
+      "options": [
+        "Matching firewall policy, eligible route and usable NAT",
+        "Only a successful ping to the FortiGate loopback",
+        "Only the presence of the zone object name",
+        "Only an enabled FortiAnalyzer report schedule"
+      ],
+      "feedback": [
+        "Zone/SLA success does not replace route and policy admission.",
+        "Loopback ping does not test LAN-to-WAN forwarding.",
+        "A zone object without policy/routing is insufficient.",
+        "Reporting schedules do not permit user sessions."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "Secure SD-WAN",
+      "stem": "An upgraded production FortiGate lacks the factory-default dual-WAN objects. What is the right inference?",
+      "options": [
+        "Factory baseline creation is not guaranteed on in-place upgrade",
+        "The SD-WAN subsystem is necessarily corrupted",
+        "All WAN interfaces must be switched to PPPoE",
+        "Every firewall policy must be deleted and recreated"
+      ],
+      "feedback": [
+        "The feature is a supported-model factory-default behavior, not universal upgrade migration.",
+        "Absence after upgrade is not proof of corruption.",
+        "PPPoE is not a requirement for default DHCP WANs.",
+        "Wholesale policy deletion is unjustified."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "Secure SD-WAN",
+      "stem": "A FortiManager template replaces factory WAN objects after ZTP. What evidence identifies ownership?",
+      "options": [
+        "Compare post-reset baseline with installed managed configuration",
+        "Look only at the default DNS probe IPs",
+        "Look only at FortiSwitch LLDP neighbor entries",
+        "Look only at the FortiAP wireless channel plan"
+      ],
+      "feedback": [
+        "A before/after config diff shows provisioning overwrites.",
+        "Probe addresses alone do not identify who modified objects.",
+        "LLDP neighbors do not prove SD-WAN configuration provenance.",
+        "Wireless radio channels are unrelated to WAN object ownership."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiGate",
+      "stem": "A DoS policy drops SYNs, yet the firewall-policy counter stays flat. What does this imply?",
+      "options": [
+        "Packets can be rejected before forwarding-policy evaluation",
+        "The firewall policy has no enabled security profiles",
+        "The TCP server must have a bad TLS certificate",
+        "The route lookup must always be successful"
+      ],
+      "feedback": [
+        "DoS evaluation precedes forwarding policy; no hit is expected for blocked packets.",
+        "Profile status cannot explain the early drop by itself.",
+        "TLS certificates are irrelevant before the TCP handshake.",
+        "An early DoS drop may occur without completing route evaluation."
+      ],
+      "correct": 0
+    },
+    {
+      "product": "FortiAnalyzer",
+      "stem": "A correlation handler fires but the incident has the wrong subject. Which field deserves review?",
+      "options": [
+        "Correlation criteria mapping the identity across both rules",
+        "The PDF report's page margin configuration",
+        "The switch's port-level storm-control burst setting",
+        "The FortiGate WAN interface's DHCP lease timer"
+      ],
+      "feedback": [
+        "The cross-rule join fields determine which records share a subject.",
+        "Report formatting does not define event correlation subjects.",
+        "Switch traffic limits do not map log identities.",
+        "WAN DHCP timing is not a correlation-field mapping."
+      ],
+      "correct": 0
+    }
+  ]
+}
