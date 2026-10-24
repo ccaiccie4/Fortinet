@@ -43,7 +43,19 @@
           "Operational implications",
           "Rate counters reset according to their sensor window and can vary around thresholds; continuous mode keeps blocking while the rate remains excessive, whereas periodical mode permits the configured quantity in successive periods. NAT, VIP translation and hardware offload affect what evidence appears at each observation point, so record the actual ingress and destination addresses. During HA failover compare the installed DoS configuration and hardware capability on the new active unit. During firmware upgrades review anomaly defaults and NP-specific acceleration support. Always document whether the metric is pps, session count, or per-source/per-destination before setting a threshold."
         ]
-      ]
+      ],
+      "lesson_subject": "DoS anomaly policy: SYN-rate accounting before forward-policy admission",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.7/administration-guide/771644/dos-policy",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-identifying-packet-drops-caused-by-dos-policy-182542",
+      "feature_mechanism_fingerprint": "fgt-dos-interface-ingress-tcp-syn-flood-anomaly-pps-block-mode",
+      "workflow_transaction_fingerprint": "ingress-SYN__interface-DoS-policy__destination-pps-meter__pre-forward-block",
+      "failure_class": "premature-syn-drop",
+      "evidence_pattern": "anomaly-log-and-pps-meter",
+      "remediation_path": "tune-specific-ingress-anomaly",
+      "question_fingerprint": "01_fgt_dos-4-feature-specific-scenarios-plus-one",
+      "diagram_topology_layout_fingerprint": "left-right-branch-back-1-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/01_fgt_dos.svg",
+      "diagram_drawio": "docs/images/01_fgt_dos.drawio"
     },
     {
       "product": "FortiManager",
@@ -86,7 +98,19 @@
           "Upgrade and scale implications",
           "VM entitlements, FortiFlex/BYOL methods, ADOM licensing and managed-device counts are related but distinct. Plan capacity before importing a large fleet or enabling multi-VDOM on previously single-VDOM FortiGates. During HA failover ensure the surviving manager has valid entitlement and replicated device inventory. Check the release-specific counting rules rather than assuming an old platform's exceptions persist. Keep license activation paths and air-gap requirements documented, and alert on approach to the management limit. A management-capacity incident should be triaged separately from policy-install errors or device connectivity faults."
         ]
-      ]
+      ],
+      "lesson_subject": "Managed device/VDOM license accounting and unexpected setup-wizard reentry",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/514531/license-information-widget",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-fortimanager-displays-initial-setup-wizard-for-already-deployed-appliance-230531",
+      "feature_mechanism_fingerprint": "fmg-vm-device-vdom-license-capacity-gui-wizard-overage",
+      "workflow_transaction_fingerprint": "device-add__VDOM-count__VM-entitlement__wizard-or-normal-GUI",
+      "failure_class": "managed-unit-over-license",
+      "evidence_pattern": "vminfo-plus-DVM-count",
+      "remediation_path": "increase-entitlement-or-reduce-managed-count",
+      "question_fingerprint": "02_fmg_license-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "lower-upper-zigzag-2-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/02_fmg_license.svg",
+      "diagram_drawio": "docs/images/02_fmg_license.drawio"
     },
     {
       "product": "FortiAnalyzer",
@@ -129,7 +153,19 @@
           "Operational consequences",
           "Correlating on broad fields raises event volume and incident duplication; overly narrow criteria miss distributed behavior. Notification profiles and automation stitches are downstream effects, not evidence that the correlation condition itself was correct. When Automatically Create Incident is enabled, later events with the same subject can attach to the open incident; a new incident may be created after closure. Document the intended subject key, ordering and maximum lag, then replay representative logs after an upgrade or ADOM migration. The lesson is a sequence engine, not a generic log-search or report-building feature."
         ]
-      ]
+      ],
+      "lesson_subject": "Correlation event handlers: temporal joins, negative conditions and Analytics-log eligibility",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/199291/creating-a-custom-correlation-handler",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "faz-correlation-handler-followed-by-not-followed-by-subject-join-window",
+      "workflow_transaction_fingerprint": "Analytics-log__ADOM-selector__temporal-join__event-or-incident",
+      "failure_class": "temporal-join-miss",
+      "evidence_pattern": "Analytics-timestamps-and-join-fields",
+      "remediation_path": "correct-join-and-duration-or-Analytics-ingestion",
+      "question_fingerprint": "03_faz_correlation-4-feature-specific-scenarios-plus-one",
+      "diagram_topology_layout_fingerprint": "correlation-fork-merge-3-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/03_faz_correlation.svg",
+      "diagram_drawio": "docs/images/03_faz_correlation.drawio"
     },
     {
       "product": "FortiSwitch",
@@ -172,7 +208,19 @@
           "Design and release caveats",
           "Choose thresholds using actual traffic baselines for phone VLANs, wireless uplinks and multicast-intensive segments. A value suitable for an ordinary access port may be too low for a trunk carrying many endpoints. The guide notes model-specific burst limitations, including exceptions for FS-124E variants, so validate hardware support before standardizing an override. During FortiLink changes, compare controller policy to effective switch state. Storm control protects the switch from excess frames, but can itself be a failure source when rate units, class selection or policy inheritance are misunderstood."
         ]
-      ]
+      ],
+      "lesson_subject": "Port storm control: pps thresholds, traffic classes and burst-level exceptions",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/13233/storm-control",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fsw-storm-control-broadcast-unknown-unicast-multicast-pps-port-override",
+      "workflow_transaction_fingerprint": "ingress-frame__L2-classification__pps-burst-meter__drop-or-forward",
+      "failure_class": "broadcast-or-unknown-frame-suppression",
+      "evidence_pattern": "port-override-and-drop-meter",
+      "remediation_path": "correct-port-override-and-burst-rate",
+      "question_fingerprint": "04_fsw_storm-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "reverse-lane-traffic-class-4-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/04_fsw_storm.svg",
+      "diagram_drawio": "docs/images/04_fsw_storm.drawio"
     },
     {
       "product": "FortiAP/Wireless",
@@ -215,7 +263,19 @@
           "Scale and HA",
           "In large estates, distinguish bulk controller-reachability faults from a specific model/firmware certificate gap. Compare a working AP of the same model against a failing unit, including firmware, CA store, serial authorization and WTP profile. After FortiGate HA failover, controller identity and AP rejoin behavior should be verified without assuming client data-plane continuity. Keep explicit admission controls for new APs, avoid enabling blanket auto-authorization to fix a certificate problem, and record both AP and controller release when opening a TAC case."
         ]
-      ]
+      ],
+      "lesson_subject": "FortiAP controller discovery, authorization and DTLS trust-chain failure isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/540137/discovering-authorizing-and-deauthorizing-fortiap-units",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/technical-tip-fortiap-231k-remaining-offline-when-managed-by-a-fortigate-230498",
+      "feature_mechanism_fingerprint": "fap-discovery-authorize-control-dtls-ca1-231k-fsm-join",
+      "workflow_transaction_fingerprint": "AC-discovery__serial-authorization__control-DTLS-CA-verify__joined-AP",
+      "failure_class": "CA1-control-DTLS-join-loop",
+      "evidence_pattern": "wcfg-fsm-and-CA1-cert-check",
+      "remediation_path": "supported-231K-firmware-trust-store-fix",
+      "question_fingerprint": "05_fap_join-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "controller-loopback-5-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/05_fap_join.svg",
+      "diagram_drawio": "docs/images/05_fap_join.drawio"
     },
     {
       "product": "FortiNAC",
@@ -258,7 +318,19 @@
           "Architecture and limits",
           "Treat polling as periodic observation rather than a continuous truth stream. Large networks should stagger intervals and use traps to reduce convergence latency without overloading controllers or switch management CPUs. Routed interfaces, wireless controller abstractions and port-channel membership can complicate physical location. During switch firmware upgrades, CLI output or REST schemas can change and break parsers even when credentials are valid. Keep the distinction between contact status, successful poll, usable parsed table and current host authorization explicit in troubleshooting records."
         ]
-      ]
+      ],
+      "lesson_subject": "Legacy FortiNAC L2/L3 polling: MAC location versus ARP identity reconciliation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/659283/fortinac",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-troubleshooting-poll-failures-97350",
+      "feature_mechanism_fingerprint": "fnac-legacy-l2-fdb-l3-arp-poll-timestamp-reconciliation",
+      "workflow_transaction_fingerprint": "L2-FDB-poll__MAC-port-map__L3-ARP-poll__host-IP-location",
+      "failure_class": "stale-FDB-or-ARP-host-identity",
+      "evidence_pattern": "L2-L3-poll-timestamps",
+      "remediation_path": "restore-credentials-plugin-and-poll",
+      "question_fingerprint": "06_fnac_poll-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "FDB-ARP-converge-6-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/06_fnac_poll.svg",
+      "diagram_drawio": "docs/images/06_fnac_poll.drawio"
     },
     {
       "product": "FortiNAC-F",
@@ -301,7 +373,19 @@
           "Deployment caveats",
           "The HA guide describes L2 and L3 layouts with distinct address and routing requirements. It recommends low-latency replication connectivity and warns about split-control risk if peers lose contact; FortiNAC Manager can help arbitrate in some designs. Database replication health matters because a node that assumes control with stale host state may make incorrect policy decisions. Include service ownership, listener status, replication alarms and authentication tests in upgrade acceptance. This mechanism is distinct from RADIUS attribute precedence or selector migration: it is about who is allowed to serve at all."
         ]
-      ]
+      ],
+      "lesson_subject": "FortiNAC-F active/passive HA: control ownership versus interface allowaccess",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/high-availability-fortinac-os/883867/overview",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-ha-node-not-in-control-does-not-respond-to-radius-or-persistent-agent-traffic-230415",
+      "feature_mechanism_fingerprint": "fnacf-ha-in-control-service-listener-allowaccess-passive-node",
+      "workflow_transaction_fingerprint": "HA-control-manager__In-Control-election__listener-ownership__RADIUS-response",
+      "failure_class": "passive-HA-service-not-listening",
+      "evidence_pattern": "HA-control-state-and-RADIUS-listener",
+      "remediation_path": "target-In-Control-service-and-HA-recovery",
+      "question_fingerprint": "07_fnacf_ha-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "active-passive-crosslink-7-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/07_fnacf_ha.svg",
+      "diagram_drawio": "docs/images/07_fnacf_ha.drawio"
     },
     {
       "product": "FortiAuthenticator",
@@ -344,7 +428,19 @@
           "HA and operational caveats",
           "In an HA pair, certificate configuration and management identity should be checked on both nodes; a failover may reveal a missing certificate or key on the secondary. Browser cache/HSTS can obscure a fixed server-side issue, so test from a clean client after service recovery. For upgrades, record certificate type, private-key availability, service status and the expected management FQDN. Distinguish certificate validation errors, HTTP daemon startup failures and authentication failures as separate evidence classes. A working SSH session is an important recovery boundary, not proof that web management is configured correctly."
         ]
-      ]
+      ],
+      "lesson_subject": "HTTPS administration certificate binding and web-server recovery boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.6/administration-guide/578768/system-access",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-how-to-access-gui-in-fortiauthenticator-after-https-certificate-change-230577",
+      "feature_mechanism_fingerprint": "fac-gui-https-cert-binding-apache-startup-regen-cert",
+      "workflow_transaction_fingerprint": "HTTPS-cert-selection__Apache-startup__TLS-handshake__GUI-login",
+      "failure_class": "Apache-unusable-HTTPS-certificate",
+      "evidence_pattern": "Apache-log-and-HTTPS-handshake",
+      "remediation_path": "validated-regenerate-cert-and-reboot",
+      "question_fingerprint": "08_fac_https-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "certificate-failure-return-8-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/08_fac_https.svg",
+      "diagram_drawio": "docs/images/08_fac_https.drawio"
     },
     {
       "product": "FortiPAM",
@@ -387,7 +483,19 @@
           "Scale and recovery",
           "Coordinate password changes with scheduled jobs, application pools and break-glass accounts that depend on the credential. Stagger rotation to avoid synchronized outages, and define rollback or recovery ownership if a target update succeeds but verification or vault persistence fails. Secret policies may lock inherited settings, so a user may not be able to override the schedule locally. During FortiPAM upgrades, validate custom SSH/Web-API changers against prompt and response changes. This mechanism differs from checkout exclusivity and approval workflows: it controls credential freshness and the integrity of the vault-to-target transaction."
         ]
-      ]
+      ],
+      "lesson_subject": "Password changer execution: self versus associated secret and post-change verification",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/219595",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fpam-password-changer-associated-secret-self-change-verify-schedule",
+      "workflow_transaction_fingerprint": "changer-identity__target-password-change__verifier-auth__vault-consistency",
+      "failure_class": "target-vault-password-desync",
+      "evidence_pattern": "changer-status-and-target-login",
+      "remediation_path": "repair-changer-or-associated-secret",
+      "question_fingerprint": "09_fpam_rotate-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "changer-verifier-cycle-9-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/09_fpam_rotate.svg",
+      "diagram_drawio": "docs/images/09_fpam_rotate.drawio"
     },
     {
       "product": "FortiSIEM",
@@ -430,7 +538,19 @@
           "Scale and upgrade implications",
           "Polling across high-latency WAN links can be unreliable for protocols such as SNMP and WMI. Distribute Collectors near monitored devices and adjust intervals with care: increasing a polling interval can invalidate a correlation rule requiring several samples within a short time window. After credential rotation, update FortiSIEM's stored credentials and rediscover affected devices. Recheck organization boundaries and license capacity after bulk discovery. This lesson concerns inventory identity and monitoring assignment, not event parser ordering or rule tags."
         ]
-      ]
+      ],
+      "lesson_subject": "Credentialed discovery, CMDB identity merging and performance-monitor assignment",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/582301/getting-started",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fsiem-discovery-credential-cmdb-overlap-ip-collector-monitor-assignment",
+      "workflow_transaction_fingerprint": "credential-discovery__CMDB-identity-merge__license-state__collector-monitor",
+      "failure_class": "VIP-CMDB-identity-collision-or-poll-lag",
+      "evidence_pattern": "CMDB-overlap-rule-and-Monitor-Status",
+      "remediation_path": "VIP-exclusion-rediscovery-or-collector-balance",
+      "question_fingerprint": "10_fsiem_discovery-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "collector-cmdb-dual-lane-10-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/10_fsiem_discovery.svg",
+      "diagram_drawio": "docs/images/10_fsiem_discovery.drawio"
     },
     {
       "product": "FortiSASE",
@@ -473,7 +593,19 @@
           "Operational tradeoffs",
           "Allow-on-rating-error favors availability over strict domain classification during FortiGuard outages; disabling it can protect policy intent but interrupt legitimate name resolution. Category decisions may change as FortiGuard ratings evolve, so retain log evidence and exception ownership. DNS filtering also interacts with split DNS and private resources: make sure internal domains use the intended private resolver path rather than being misclassified as public traffic. After client or policy upgrades, verify endpoint steering, DNS logs and the expected policy match. This feature is distinct from FortiSASE URL exceptions, file filtering and CASB tenant controls."
         ]
-      ]
+      ],
+      "lesson_subject": "FortiSASE DNS Filter: category verdicts, fail-open behavior and inspection dependencies",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/130214",
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-force-certificate-inspection-explanation-in-fortisase-firewall-policy-161028",
+      "feature_mechanism_fingerprint": "fsase-dns-filter-fortiguard-category-error-allow-safe-search-inspection",
+      "workflow_transaction_fingerprint": "DNS-query__FortiGuard-rating__profile-verdict__resolver-response",
+      "failure_class": "DNS-rating-fail-open-or-inspection-mismatch",
+      "evidence_pattern": "DNS-verdict-rating-error-log",
+      "remediation_path": "rating-error-and-deep-inspection-policy",
+      "question_fingerprint": "11_fsase_dns-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "dns-policy-diamond-11-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/11_fsase_dns.svg",
+      "diagram_drawio": "docs/images/11_fsase_dns.drawio"
     },
     {
       "product": "Secure SD-WAN",
@@ -516,7 +648,19 @@
           "Upgrade and operational implications",
           "Fortinet's New Features guide lists affected model families and emphasizes that the baseline applies to supported models. A factory reset, configuration restore and in-place upgrade are different workflows; do not assume the same objects are created in all three. For branch rollouts, define whether the team preserves the factory zone or replaces it with standardized named zones and probes. Validate upstream DHCP, route eligibility, NAT and security policies before accepting a site. This lesson teaches initial object creation and ownership, not SLA prioritization, quota management or packet duplication."
         ]
-      ]
+      ],
+      "lesson_subject": "Factory-default dual-WAN SD-WAN objects in FortiOS 7.6.5 and their migration implications",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.5/administration-guide/530895",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "sdwan-factory-default-two-wan-dhcp-zone-default-ping-firewall-policy",
+      "workflow_transaction_fingerprint": "factory-reset__DHCP-WAN-members__zone-SLA-policy__route-and-session",
+      "failure_class": "factory-baseline-missing-or-overwritten",
+      "evidence_pattern": "show-system-sdwan-plus-route-and-policy",
+      "remediation_path": "confirm-supported-model-and-config-ownership",
+      "question_fingerprint": "12_sdwan_factory-4-feature-specific-scenarios",
+      "diagram_topology_layout_fingerprint": "factory-zone-membership-12-seven-nodes-seven-to-eight-edges",
+      "diagram_svg": "docs/images/12_sdwan_factory.svg",
+      "diagram_drawio": "docs/images/12_sdwan_factory.drawio"
     }
   ]
 }
