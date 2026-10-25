@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-25",
+  "source_policy": "Official Fortinet admin/config guides are primary; Community is scenario-only. No unverified CLI parameters asserted.",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "title": "Hybrid post-quantum IKEv2 key exchanges: IKE_INTERMEDIATE and CHILD_SA rekey boundaries",
+      "slug": "01_fgt_pqc",
+      "primary": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/229631/post-quantum-cryptography-for-ipsec-key-exchange",
+      "scenario": null,
+      "fingerprint": "fgt-ikev2-hybrid-addke-ike-intermediate-followup-ke",
+      "nodes": [
+        "IKE_SA_INIT classical DH",
+        "IKE_INTERMEDIATE additional KEM",
+        "IKE_AUTH authenticated SA",
+        "CHILD_SA traffic keys",
+        "IKE_FOLLOWUP_KE rekey",
+        "Peer proposal/debug"
+      ],
+      "sections": [
+        [
+          "Purpose and cryptographic boundary",
+          "Traditional IKEv2 exchanges an ephemeral Diffie–Hellman contribution to establish key material, but long-lived confidentiality requirements motivate a second key-exchange family. FortiOS 8.0 documents hybrid post-quantum key exchange, which supplements classical DH with one or more KEM contributions. The design is hybrid rather than a wholesale replacement: the IKEv2 control exchange must negotiate compatible additional KE groups on both peers. Encryption of ESP packets is still determined by the negotiated IPsec SA proposal; enabling a post-quantum KEM does not by itself replace the ESP cipher or prove that the peer completed the additional exchange."
+        ],
+        [
+          "Transaction sequence and objects",
+          "The IKE_SA_INIT exchange establishes the initial negotiation context. RFC 9242 IKE_INTERMEDIATE carries extra key exchanges before authentication, while RFC 9370 defines multiple key exchanges. FortiOS also documents IKE_FOLLOWUP_KE for additional exchanges during IKE SA rekey or when creating additional CHILD_SAs. Phase-1 and phase-2 interface objects have separate addke1 through addke7 settings; they are not interchangeable. Up to three key-exchange groups can be proposed per additional round. A tunnel may show an established classical IKE SA while a new CHILD_SA fails because phase-2 additional KE proposals differ."
+        ],
+        [
+          "Source-supported configuration",
+          "On both compatible FortiGate peers, open VPN > VPN Tunnels, edit the tunnel, and configure Post Quantum Cryptography Additional Key Exchanges. In the phase-1 interface CLI, Fortinet documents `config vpn ipsec phase1-interface`, `edit <name>`, `set addke1 <group1> <group2> <group3>`, and `set childless-ike enable`; phase-2 interface entries also expose `set addke1` through `set addke7`. Group IDs and combinations must be checked against the exact release and peer capability; the example values 35 36 37 are not a blanket interoperability recommendation. Keep a rollback plan and verify both peers before introducing PQC on a production critical tunnel."
+        ],
+        [
+          "Evidence and its limits",
+          "Check the negotiated IKEv2 exchange sequence, not only the green tunnel icon. Capture UDP/500 or UDP/4500 on the correct WAN and inspect whether IKE_INTERMEDIATE appears and whether the peer rejects an additional KE proposal. `diagnose vpn ike gateway list` and `diagnose vpn tunnel list` help distinguish IKE SA establishment from CHILD_SA traffic selectors and counters; exact debug fields vary by FortiOS build. A live ESP counter proves packets use a negotiated SA, but it does not independently attest to which post-quantum group contributed to the SA key material."
+        ],
+        [
+          "Operational failure and correction",
+          "Suppose a newly upgraded hub enables addke1 while a spoke still advertises only classical IKEv2. The initial proposal exchange may proceed but authentication or subsequent CHILD_SA setup cannot complete the configured extra exchange. Compare phase-1 and phase-2 addke groups, firmware compatibility, and IKE logs on both sides; restore mutually supported transforms or stage upgrades before enforcing additional rounds. Avoid treating a generic DPD timeout as evidence of a KEM failure: a timeout may simply indicate routing, NAT, or reachability loss."
+        ],
+        [
+          "Design, HA and upgrade caveats",
+          "Each additional exchange increases control-plane messages and handshake work; measure establishment and rekey time across high-latency overlays. During FGCP failover, validate that peer state and rekey behavior converge rather than assuming a tunnel name guarantees identical security negotiation. For hybrid designs, inventory algorithm support by FortiOS release and by non-Fortinet peer where applicable, but keep this lesson's commands Fortinet-specific. The security claim is strengthened key-establishment material, not automatic protection against weak authentication, leaked preshared keys, or permissive phase-2 selectors."
+        ]
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "title": "Scheduled FortiSwitch packet capture: management delegation and capture evidence lifecycle",
+      "slug": "02_fmg_capture",
+      "primary": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/749365/configuring-fortiswitch-packet-captures",
+      "scenario": null,
+      "fingerprint": "fmg-managed-fsw-packet-capture-filter-schedule-pcap",
+      "nodes": [
+        "FortiManager operator",
+        "Managed FortiGate selector",
+        "Managed FortiSwitch",
+        "Capture filter + schedule",
+        "PCAP result",
+        "Traffic-path interpretation"
+      ],
+      "sections": [
+        [
+          "Purpose and ownership",
+          "FortiManager can orchestrate a FortiSwitch packet capture without requiring the investigator to sign in independently to every managed switch. This is an operational diagnostic feature, not a forwarding policy or a passive traffic mirror. FortiSwitch devices in FortiSwitch Manager are associated with a FortiGate that manages them; choosing the wrong FortiGate or switch in the tree can produce a technically valid capture on the wrong device. Central management access and authorization therefore determine where the capture is requested, while the switch datapath determines which packets are observable."
+        ],
+        [
+          "Control and data flow",
+          "The engineer selects FortiSwitch Manager > Managed FortiSwitches, chooses the managed FortiGate scope, then a FortiSwitch. Packet Capture opens a list of filters. Create New defines the capture filter; Schedule Run optionally sets start and end times. Start Capture requests execution; a scheduled capture begins at the configured time. The result appears in Captures and can be viewed in FortiManager or downloaded as PCAP. The capture filter limits which frames are recorded, not which frames are forwarded. Captures are point-in-time observations, not continuous flow telemetry."
+        ],
+        [
+          "Configuration and validation",
+          "Create a narrow filter matching a test client's IP/MAC, VLAN, and expected protocol when the UI supports those fields. For an 802.1X failure, target EAPOL on the access port or the RADIUS exchange on the appropriate uplink; the two packets are not necessarily visible at the same interface. Use the documented Start Capture control for immediate work or Schedule Run for a reproducible maintenance window. After the run, download the PCAP and inspect timestamps, source/destination, VLAN tags and sequence. Preserve the unmodified original PCAP when escalating a case."
+        ],
+        [
+          "What the evidence proves",
+          "A capture showing a DHCP Discover arriving on the client-facing switch port proves the endpoint transmitted at that observation point. It does not prove the FortiGate received the packet, nor that the DHCP server replied. A RADIUS Access-Accept captured upstream does not prove the switch installed the returned VLAN on the client port. Conversely, an empty PCAP can mean an incorrect filter, capture window, port, switch selection, or actual absence of packets. Correlate capture timestamps with FortiSwitch port counters and FortiGate policy/session evidence."
+        ],
+        [
+          "Failure scenario",
+          "A roaming phone intermittently fails to obtain a DHCP address, but FortiManager captures show no DHCP traffic. Before blaming the DHCP server, verify the capture's FortiGate scope, FortiSwitch serial, port mapping, VLAN filter and schedule window. Repeat with a short approved test and a broad-enough filter, then narrow the scope once ingress is confirmed. If Discover is visible and Offer absent, move the capture boundary toward the uplink and FortiGate rather than repeatedly restarting the endpoint."
+        ],
+        [
+          "Scale and safety",
+          "Scheduled captures consume local capture resources and can contain sensitive application data. Keep packet counts and durations bounded; avoid full-packet capture on high-rate uplinks unless necessary. Device and FortiManager versions may differ in supported capture controls, so check the exact guide. During failover or switch replacement, revalidate the managed FortiGate/switch mapping. The key distinction is management-plane orchestration versus switch-local observation: a successful capture job proves execution, not end-to-end service delivery."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "title": "Log-file rolling versus retention: why archive age can exceed configured days",
+      "slug": "03_faz_rolling",
+      "primary": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/871759/log-storage",
+      "scenario": null,
+      "fingerprint": "faz-archive-roll-file-delete-eligibility-last-log-time",
+      "nodes": [
+        "FortiGate log stream",
+        "Active log file",
+        "Roll size/time trigger",
+        "Compressed archive file",
+        "Retention eligibility",
+        "Oldest-file deletion"
+      ],
+      "sections": [
+        [
+          "Purpose and data model",
+          "FortiAnalyzer receives a stream of logs and writes them into files. It also maintains analytics/SQL representations for searchable use. Log storage policies govern space and retention, but deletion is not a per-record operation for archived files. The log-file roll boundary determines which records are grouped into a unit eligible for deletion. This mechanism differs from simply choosing Analytics versus Archive storage: it explains why retention displays can look inconsistent even when the configured policy is applied."
+        ],
+        [
+          "Rolling mechanics",
+          "Fortinet documents a default log-file size roll threshold of 200 MB and optional scheduled daily or weekly rolling. When either configured trigger is met, FortiAnalyzer compresses the current file and creates a new one for incoming records of that type. Rolling daily is recommended to keep a file from spanning multiple days. An archive file may contain logs with timestamps from several dates; the retention process cannot surgically delete the oldest day inside that compressed file. This matters in low-volume ADOMs where size-based rolling may occur infrequently."
+        ],
+        [
+          "Deletion and quota interactions",
+          "Under days-based retention, a file becomes eligible only when all of its logs fall outside the retained-day window. Under storage-size pressure, FortiAnalyzer deletes the file with the oldest last-received log. The oldest timestamp displayed in an archive may therefore exceed the configured number of days, and gaps may exist between the oldest surviving file and recent logs. These are different observations from the actual volume of retained evidence. Global automatic-delete settings and per-ADOM storage policies are both active and must be inspected together."
+        ],
+        [
+          "Configuration and observables",
+          "In System Settings > ADOMs, select the ADOM and View Storage Info to compare Analytics and Archive quotas, historical graphs and device breakdowns. Review log rolling and upload configuration for size and scheduled time. `diagnose fortilogd lograte-adom <name>` and `diagnose fortilogd logvol-adom <name>` provide per-ADOM ingestion rates/volumes. A log-rate counter proves data arrival at the logging subsystem, not that a particular historical file remains searchable. Export an evidence sample before altering retention during an investigation."
+        ],
+        [
+          "Operational scenario",
+          "An auditor sees '100/90 days' in an archive display and assumes the 90-day policy failed. A low-volume log file contains entries from days 100 through 88, so deleting it would also remove data still inside the retention window. Confirm file roll timestamps and last-received dates before changing the policy. If the objective is a predictable day boundary, configure scheduled daily rolling and ensure disk capacity supports the resulting file count. Do not equate archive age with continuous completeness of logs for every intervening day."
+        ],
+        [
+          "HA, capacity and verification",
+          "In a high-volume deployment, smaller roll intervals can increase file-management overhead; in a low-volume deployment, large files can delay day-based deletion. Test retention with a noncritical ADOM and document actual oldest/newest timestamps, file boundaries and deletion triggers. During upgrades, preserve the archive and validate rolling settings and quota graphs afterward. The root-cause chain is incoming log -> file roll -> file-level retention decision; changing report SQL or an event handler does not correct this storage-boundary behavior."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "title": "Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs",
+      "slug": "04_fsw_acl",
+      "primary": "https://docs.fortinet.com/document/fortiswitch/7.6.4/fortiswitchos-administration-guide/738913/acl",
+      "scenario": "https://community.fortinet.com/fortimanager-27/technical-tip-how-to-configure-fortiswitch-port-level-access-control-lists-in-fortimanager-230466",
+      "fingerprint": "fsw-acl-pipeline-stage-density-key-compaction-hardware",
+      "nodes": [
+        "Ingress packet",
+        "Ingress ACL classifier",
+        "Prelookup stage",
+        "L2/L3 forwarding lookup",
+        "Egress ACL action",
+        "ACL counters/TCAM"
+      ],
+      "sections": [
+        [
+          "Purpose and pipeline",
+          "FortiSwitchOS ACLs can act at ingress, prelookup, and egress stages of the switching pipeline. The stage matters: an ingress drop occurs before the forwarding lookup, while an egress action acts after a forwarding decision. The ACL is a hardware classifier/action mechanism, not a FortiGate firewall policy. A port ACL applied through FortiLink may be centrally configured but must still fit the switch model's hardware resources and classifier capabilities. Mirroring can be configured at ingress or egress for selected traffic."
+        ],
+        [
+          "Objects and hardware limits",
+          "An ACL policy defines match fields and actions; an ingress ACL group can aggregate policies before assignment to a managed switch port. Some models have limited Layer-4 ranges or action combinations, and the FS-6xxF family supports specific additional DSCP/CoS classifiers and remark actions from 7.6.2. In 7.6.1 the CLI gained source/destination MAC mask and L3 interface match enhancements. An ACL entry visible in configuration does not prove that every action was programmed into hardware; model-specific feature matrices and resource limits matter."
+        ],
+        [
+          "Counters and policing",
+          "FortiSwitchOS supports green/yellow/red color counters for ingress policers and green/yellow for egress, with interpretation tied to committed/excess burst thresholds. The GUI Switch > Monitor > ACL Counters and `get switch acl counters all` show relevant matches; `get switch acl usage` helps establish available resources. A rising ingress drop counter is stronger evidence of a specific policy decision than a generic interface discard counter. A nonzero match counter alone does not show that the intended traffic was blocked; inspect the programmed action."
+        ],
+        [
+          "Density-mode operational tradeoff",
+          "The guide documents `config switch acl settings` followed by `set density-mode enable` to optimize hardware resource use when ACLs are relatively static. In density mode, allocated hardware resources are not automatically removed when configuration changes. Reclamation can require a switch restart or `execute acl key-compaction`, which affects ACL service. That makes density mode a capacity-versus-change-frequency decision, not a free scale improvement. Schedule compaction with change control and verify production traffic after the operation."
+        ],
+        [
+          "Scenario and diagnosis",
+          "A managed access port should deny a particular subnet, but traffic still passes after a FortiManager install. First verify that the ingress policy is in the correct ACL group and that the group is attached to the intended port. Check switch ACL usage, counters and hardware compatibility. A FortiManager job marked successful proves configuration delivery, not switch dataplane enforcement. If a feature-generated internal ACL conflicts with the user ACL, Fortinet warns that precedence and resulting behavior can be model dependent."
+        ],
+        [
+          "Design and upgrade caveats",
+          "Separate policies by stage and avoid assuming a match field supported on one model is available on all deployed switches. When migrating from pre-6.0 syntax, account for the stage-aware ACL CLI structure. For 7.6.2+ FS-6xxF, test DSCP remark and queue actions explicitly. During firmware upgrade, recheck the feature matrix and hardware utilization. In the lab, send a known test flow, record before/after ACL counters, then verify both the observed forwarding result and any mirrored copies."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "title": "MPSK profile key-to-VLAN binding and WPA2/WPA3 transition compatibility",
+      "slug": "05_fap_mpsk",
+      "primary": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/356880/mpsk-profiles",
+      "scenario": null,
+      "fingerprint": "fap-mpsk-per-key-dynamic-vlan-wpa3-transition",
+      "nodes": [
+        "Client association",
+        "SSID VAP",
+        "MPSK profile",
+        "Group + per-client key",
+        "Dynamic VLAN mapping",
+        "DHCP + firewall policy"
+      ],
+      "sections": [
+        [
+          "Purpose and security model",
+          "A single shared WLAN password creates a large revocation blast radius: rotating it affects every device. FortiAP MPSK profiles allow many preshared keys under one SSID, organized into groups, with key-based dynamic VLAN selection and optional schedules. This is still a personal-key authentication design, not EAP-TLS identity assurance. It is useful for segmented device populations where full 802.1X supplicants are impractical. Fortinet supports WPA2-Personal, WPA3-SAE and WPA3-SAE Transition modes for MPSK profiles."
+        ],
+        [
+          "Object relationship",
+          "Enable Advanced Wireless Features, then create an MPSK profile under WiFi & Switch Controller > Connectivity Profiles > MPSK Profiles. Add a group and create or import keys. Bind one MPSK profile to a VAP/SSID; Fortinet documents that only one MPSK profile can be assigned to a VAP at a time. Enabling MPSK removes the previous single passphrase and automatically enables dynamic VLAN. Therefore, a change that appears to concern only passwords can alter the client-to-VLAN authorization path."
+        ],
+        [
+          "Authentication and VLAN transaction",
+          "A client associates to the SSID and proves knowledge of a configured PSK or SAE password. The WLAN controller matches the key entry, applies the associated MPSK group settings and selects the VLAN when configured. The client must then complete DHCP and reach a permitted FortiGate firewall policy; successful Wi-Fi association is not proof of Layer-3 reachability. In WPA3-SAE Transition mode, keys may individually use WPA2-Personal or WPA3-SAE. A legacy-only device may fail if the assigned key type does not match its security capabilities."
+        ],
+        [
+          "Source-supported setup",
+          "From System > Feature Visibility enable Advanced Wireless Features. Create an MPSK profile, select the security type, add a group, and create a key with name, passphrase/SAE password and optional MAC association. Configure VLAN and schedule values supported by the GUI, then assign the profile to the SSID. The corresponding CLI object is `config wireless-controller mpsk-profile`; the VAP references the profile. Do not paste an unverified full CLI stanza across firmware branches: the GUI and profile fields differ by release and radio platform."
+        ],
+        [
+          "Evidence and failure isolation",
+          "Inspect the client's negotiated security mode, SSID, MPSK group/key match, assigned VLAN, and DHCP lease. A correct WPA handshake with no DHCP address points toward VLAN tagging, DHCP relay or firewall configuration rather than the password itself. A key listed in the MPSK profile does not prove that it is enabled by schedule or assigned to the intended VAP. Compare two test clients using different keys on the same SSID and validate that their VLANs and policies differ as designed."
+        ],
+        [
+          "Operational implications",
+          "Key exports contain sensitive secrets and should be handled like credentials. Keep group ownership and expiry processes documented; revoke individual keys rather than rotating the entire SSID where possible. If migrating from a single PSK, test representative WPA2 and WPA3 clients, DHCP and segmentation before cutover because dynamic VLAN is enabled as part of MPSK. At scale, balance per-device key management against the operational benefits of certificate-based 802.1X. The mechanism-to-outcome chain is key match -> VLAN selection -> routed access, not merely successful association."
+        ]
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "title": "Portal Request Processing Rules: HTTP regex matching, publishing and duplicate-rule failure",
+      "slug": "06_fnac_rpr",
+      "primary": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/778577/request-processing-rules",
+      "scenario": "https://community.fortinet.com/fortinac-f-57/technical-tip-how-to-identify-and-remove-duplicate-request-processing-rules-in-fortinac-230584",
+      "fingerprint": "fnac-portal-rpr-uri-useragent-regex-publish-httpd",
+      "nodes": [
+        "Captive portal HTTP request",
+        "URI/User-Agent matcher",
+        "Allow/Block/Forward/File action",
+        "Publish generated rules",
+        "Portal HTTP service restart",
+        "Browser/CNA outcome"
+      ],
+      "sections": [
+        [
+          "Purpose and traffic boundary",
+          "FortiNAC's captive portal receives browser and captive-network-assistant HTTP requests with different purposes. Request Processing Rules control how those requests are handled: allow, block, forward to another URL, or return a file. The decision is based on a request field, such as Request URI or HTTP User Agent, evaluated against a regular expression. This is a web-server request-routing layer; it does not itself assign an endpoint VLAN or replace the network access policy that placed the endpoint in registration."
+        ],
+        [
+          "Rule objects and publishing",
+          "Navigate to Portal > Request Processing Rules. Create or edit a rule, select the field, regex matcher, action and target when Forward or File is used. For File, `!` means load a file at the same path as the request URI. FortiNAC automatically orders rules when it writes the web-server configuration. Crucially, editing a rule in the GUI does not immediately change the active web-server behavior. Publish writes the generated conditional chain and restarts the portal HTTP process; startup and upgrades also publish automatically."
+        ],
+        [
+          "Generated configuration and diagnostics",
+          "Fortinet identifies the generated portal web-server configuration as `/etc/httpd/conf.d/000_web_servces.conf` on the application server. Use the supported GUI Publish action rather than hand-editing the generated file, because later publish or restart can overwrite manual changes. Validate regex special characters: `.` matches any character, `*` repeats the previous expression, and `\\` escapes special syntax. A broad matcher can intercept login assets or CNA probes unexpectedly. Inspect the browser's request URI, response code, redirect target and HTTP User Agent."
+        ],
+        [
+          "Recent failure scenario",
+          "Fortinet Community's October 15 case describes duplicate Request Processing Rules: 102 records existed where 51 were expected, with some exact duplicates and others differing slightly. The article locates records in `bsc.WebServiceDefinition` and demonstrates grouping by serviceType, serviceMatcher, serviceAction and serviceTarget to identify duplicates. This is a specialized support diagnostic, not a recommended routine database edit. Prefer supported GUI cleanup and TAC-reviewed procedures before touching database records, and back up the appliance first."
+        ],
+        [
+          "What proves the fix",
+          "A GUI list that looks correct is insufficient because the active web server may still be running the previously published rule chain. Record the initial HTTP response and publish timestamp, publish the corrected rule set, then repeat the same request with the same URI and User Agent. Verify that the expected redirect/file/block action now occurs and that unrelated portal assets still load. If HTTP 500 persists, check portal service logs and generated rule syntax rather than assuming the network VLAN or RADIUS server is at fault."
+        ],
+        [
+          "HA, upgrade and safety",
+          "Publish restarts the portal HTTP process briefly, so schedule it when captive-portal traffic is not at a peak. In HA deployments, validate the active service owner and post-failover portal behavior. Export/backup rule configuration before bulk changes. A user reaching the portal but failing to register may involve the next workflow stage; a user who never reaches the portal requires earlier DHCP, DNS, VLAN and redirection checks. The critical boundary is configuration stored -> rules published -> HTTP service applies match -> browser outcome."
+        ]
+      ]
+    }
+  ]
+}
