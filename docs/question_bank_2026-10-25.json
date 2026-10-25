@@ -577,6 +577,630 @@
         }
       ],
       "answer": 3
+    },
+    {
+      "id": 25,
+      "lesson": 7,
+      "stem": "A FortiNAC-F operator attempts a Winbind domain join against FreeIPA and gets a join error. Which design fact matters?",
+      "choices": [
+        {
+          "text": "Winbind performs an AD-style Samba join for MSCHAPv2.",
+          "feedback": "The Samba AD join requirement explains the FreeIPA incompatibility."
+        },
+        {
+          "text": "Winbind authenticates any LDAP directory through STARTTLS.",
+          "feedback": "The guide says Winbind cannot encrypt with LDAPS/STARTTLS."
+        },
+        {
+          "text": "Winbind requires a FortiSASE security PoP for each domain.",
+          "feedback": "SASE PoPs do not participate in FortiNAC domain joining."
+        },
+        {
+          "text": "Winbind is used only for EAP-TLS certificate chain checks.",
+          "feedback": "EAP-TLS does not require the Winbind MSCHAPv2 path."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 26,
+      "lesson": 7,
+      "stem": "An endpoint uses EAP-TLS and Winbind shows Not Joined. What should the engineer conclude?",
+      "choices": [
+        {
+          "text": "The certificate path can work independently of Winbind.",
+          "feedback": "Fortinet documents Winbind as specific to MSCHAPv2."
+        },
+        {
+          "text": "All EAP-TLS authentications must be rejected by Winbind.",
+          "feedback": "EAP-TLS is not the Winbind authentication path."
+        },
+        {
+          "text": "The FortiGate must disable TLS certificate inspection globally.",
+          "feedback": "FortiGate TLS inspection is unrelated to this EAP method."
+        },
+        {
+          "text": "The endpoint requires a shared MSCHAPv2 machine password.",
+          "feedback": "Certificate authentication does not require MSCHAPv2 secrets."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 27,
+      "lesson": 7,
+      "stem": "Winbind shows stale domain details but Not Joined and a 1970 machine-password date. Which evidence should dominate?",
+      "choices": [
+        {
+          "text": "The RADIUS client MAC address and access-switch model.",
+          "feedback": "Client MAC and switch model cannot establish Winbind join state."
+        },
+        {
+          "text": "Current join status and machine-account lifecycle indicators.",
+          "feedback": "The guide warns stale details and epoch dates indicate lost join."
+        },
+        {
+          "text": "The previously displayed domain-controller hostname alone.",
+          "feedback": "A cached controller name is not proof of active domain trust."
+        },
+        {
+          "text": "The user's browser captive-portal redirect target URL.",
+          "feedback": "Portal redirects are outside the MSCHAPv2 directory trust boundary."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 28,
+      "lesson": 7,
+      "stem": "A second AD domain was added to Winbind, but MSCHAPv2 works only for the first. What should be checked?",
+      "choices": [
+        {
+          "text": "FortiAnalyzer log rolling threshold and archive quota.",
+          "feedback": "Archive retention does not validate an AD domain join."
+        },
+        {
+          "text": "FortiSwitch ingress ACL density mode and TCAM usage.",
+          "feedback": "Switch ACL resources do not determine Winbind trust."
+        },
+        {
+          "text": "DNS A/SRV records and the second Winbind instance's join.",
+          "feedback": "Additional domains require DNS and separate working Winbind configuration."
+        },
+        {
+          "text": "FortiPAM secret launcher TOTP duration and hash.",
+          "feedback": "PAM TOTP does not determine directory discovery."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 29,
+      "lesson": 8,
+      "stem": "A public OAuth client sends an authorization code but token exchange fails after a page reload. Which state is essential?",
+      "choices": [
+        {
+          "text": "The original PKCE verifier matching the submitted challenge.",
+          "feedback": "The verifier binds code redemption to the initiating client."
+        },
+        {
+          "text": "The FortiSwitch ACL ingress policy assigned to the client.",
+          "feedback": "Switch ACL assignment is unrelated to OAuth code redemption."
+        },
+        {
+          "text": "The FortiAnalyzer active archive file's roll timestamp.",
+          "feedback": "Archive timestamps do not affect token verifier matching."
+        },
+        {
+          "text": "The SD-WAN health check's FortiGuard predefined name.",
+          "feedback": "SD-WAN presets do not validate OAuth token requests."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 30,
+      "lesson": 8,
+      "stem": "A developer adds a client_secret to fix FortiAuthenticator PKCE authorization errors. Why is this ineffective?",
+      "choices": [
+        {
+          "text": "The public PKCE flow ignores client_secret for this request.",
+          "feedback": "FortiAuthenticator documents client_secret ignored for PKCE authorization."
+        },
+        {
+          "text": "PKCE requires a privileged FortiGate firewall policy first.",
+          "feedback": "FortiGate policy is not the missing PKCE proof."
+        },
+        {
+          "text": "OAuth requires an LDAP machine-account Winbind domain join.",
+          "feedback": "Winbind MSCHAPv2 is not required for OAuth PKCE."
+        },
+        {
+          "text": "The secret is validated only after a FortiPAM session starts.",
+          "feedback": "PAM session state does not validate OAuth public clients."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 31,
+      "lesson": 8,
+      "stem": "An authorization request is rejected before user login. Which PKCE fields are explicitly required?",
+      "choices": [
+        {
+          "text": "A FortiSASE change-summary string and event-log filter.",
+          "feedback": "Audit comments are not PKCE request parameters."
+        },
+        {
+          "text": "A code_challenge and code_challenge_method in authorization.",
+          "feedback": "The documented endpoint requires both challenge and method."
+        },
+        {
+          "text": "An ESP cipher proposal and phase-2 addke group list.",
+          "feedback": "IKEv2 proposal data is not an OAuth request field."
+        },
+        {
+          "text": "A FortiAnalyzer report dataset and archive roll time.",
+          "feedback": "Report datasets are unrelated to OAuth request validation."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 32,
+      "lesson": 8,
+      "stem": "A callback receives a code at an unexpected HTTP redirect URI. What configuration control is most relevant?",
+      "choices": [
+        {
+          "text": "FortiNAC portal Request Processing Rules publication status.",
+          "feedback": "FortiNAC portal rules are not FortiAuthenticator RP policy."
+        },
+        {
+          "text": "FortiAP MPSK dynamic VLAN and WPA3 transition mode.",
+          "feedback": "MPSK segmentation is separate from OAuth redirects."
+        },
+        {
+          "text": "FortiAuthenticator allowed redirect URIs and HTTPS preference.",
+          "feedback": "The RP explicitly registers redirect URIs; HTTPS is recommended."
+        },
+        {
+          "text": "FortiSIEM ClickHouse worker region membership and shard.",
+          "feedback": "SIEM region routing does not validate OAuth callback URIs."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 33,
+      "lesson": 9,
+      "stem": "An SSH target requests TOTP, but WebSSH cannot complete authentication after a method change. What should be verified?",
+      "choices": [
+        {
+          "text": "Whether the target still offers keyboard-interactive authentication.",
+          "feedback": "WebSSH TOTP is documented to require keyboard-interactive."
+        },
+        {
+          "text": "Whether the FortiGuard SLA preset license has expired.",
+          "feedback": "WAN probe licensing does not determine SSH auth methods."
+        },
+        {
+          "text": "Whether the FortiSwitch ACL is configured for density mode.",
+          "feedback": "ACL density mode does not govern SSH OTP delivery."
+        },
+        {
+          "text": "Whether FortiAnalyzer uses weekly instead of daily rolling.",
+          "feedback": "Archive rolling does not affect PAM launcher authentication."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 34,
+      "lesson": 9,
+      "stem": "A FortiPAM secret inherits an eight-digit TOTP template, but its target expects six digits. What fixes the mismatch?",
+      "choices": [
+        {
+          "text": "Override the secret's TOTP length and verify interval/hash.",
+          "feedback": "Per-secret override can align length, duration and hash."
+        },
+        {
+          "text": "Change FortiAuthenticator OAuth token expiry to six hours.",
+          "feedback": "OAuth expiry does not change a target TOTP code length."
+        },
+        {
+          "text": "Disable the FortiNAC portal request-rule publish operation.",
+          "feedback": "Portal publishing does not generate privileged SSH OTPs."
+        },
+        {
+          "text": "Increase the FortiSIEM Event Upload Worker shard count.",
+          "feedback": "SIEM storage scaling does not alter TOTP calculations."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 35,
+      "lesson": 9,
+      "stem": "A non-proxy FortiPAM web launcher never auto-enters the target OTP. What is the documented behavior?",
+      "choices": [
+        {
+          "text": "It silently disables the target's second factor requirement.",
+          "feedback": "A launcher cannot simply disable target-enforced MFA."
+        },
+        {
+          "text": "Some non-proxy/web launches require manual TOTP entry.",
+          "feedback": "The guide identifies manual code entry for unsupported launchers."
+        },
+        {
+          "text": "It always falls back to an IKE_INTERMEDIATE exchange.",
+          "feedback": "IKEv2 exchanges are unrelated to browser OTP filling."
+        },
+        {
+          "text": "It automatically enrolls a new FortiToken for every session.",
+          "feedback": "FortiToken enrollment is not automatically performed per session."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 36,
+      "lesson": 9,
+      "stem": "A correct FortiPAM TOTP seed intermittently fails every few attempts. Which measurement is most informative?",
+      "choices": [
+        {
+          "text": "The switch port's VLAN and ACL match counter values.",
+          "feedback": "Switch ACL counters do not explain generated code mismatch."
+        },
+        {
+          "text": "The FortiSASE administrator audit summary retention age.",
+          "feedback": "Audit retention does not determine OTP code validity."
+        },
+        {
+          "text": "Target/PAM clock skew versus TOTP step duration and hash.",
+          "feedback": "TOTP depends on synchronized time and matching code parameters."
+        },
+        {
+          "text": "The FortiAnalyzer per-ADOM log volume and archive age.",
+          "feedback": "Archive metrics cannot validate OTP time windows."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 37,
+      "lesson": 10,
+      "stem": "FortiSIEM collectors upload successfully but a tenant's events land in the wrong ClickHouse shard. What should be inspected?",
+      "choices": [
+        {
+          "text": "Collector worker destinations and region-to-shard assignments.",
+          "feedback": "Storage regions route events through designated workers to shards."
+        },
+        {
+          "text": "FortiPAM secret template TOTP shared-key encoding.",
+          "feedback": "PAM TOTP cannot affect SIEM event placement."
+        },
+        {
+          "text": "FortiAP MPSK group assignment and SAE password type.",
+          "feedback": "WLAN PSK assignment does not select ClickHouse shards."
+        },
+        {
+          "text": "FortiGate IPsec phase-2 traffic selectors and proposals.",
+          "feedback": "IPsec selectors are not FortiSIEM worker placement policy."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 38,
+      "lesson": 10,
+      "stem": "A load balancer sends all collectors to workers across two FortiSIEM storage regions. What is the design flaw?",
+      "choices": [
+        {
+          "text": "Collector traffic should reach workers in its intended region.",
+          "feedback": "The documented region architecture requires correct worker targeting."
+        },
+        {
+          "text": "Regions require every collector to use all available workers.",
+          "feedback": "Region isolation requires destination-aware routing, not all workers."
+        },
+        {
+          "text": "ClickHouse data nodes must overlap between every region.",
+          "feedback": "The guide requires non-overlapping shards and workers."
+        },
+        {
+          "text": "Event forwarding must bypass all load balancers in 7.5.",
+          "feedback": "Load balancers are supported when region routing is configured."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 39,
+      "lesson": 10,
+      "stem": "A ClickHouse node reports DUPLICATE_DATA_PART. Which response respects the diagnostic boundary?",
+      "choices": [
+        {
+          "text": "Disable FortiSASE administrator change comments temporarily.",
+          "feedback": "Audit comments do not affect ClickHouse storage integrity."
+        },
+        {
+          "text": "Inspect database service/logs before any supported repair.",
+          "feedback": "Storage-engine errors need service/log evidence and safe recovery."
+        },
+        {
+          "text": "Change the FortiNAC RADIUS VLAN to trigger new events.",
+          "feedback": "NAC VLAN changes cannot repair ClickHouse data parts."
+        },
+        {
+          "text": "Reassign every collector to a different region immediately.",
+          "feedback": "Worker reassignment does not repair a duplicate database part."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 40,
+      "lesson": 10,
+      "stem": "An event is visible at a FortiSIEM Event Upload Worker but absent from searches. What is still unproven?",
+      "choices": [
+        {
+          "text": "Whether the worker received any packet from the sender.",
+          "feedback": "The worker observation already supports packet arrival."
+        },
+        {
+          "text": "Whether the source emitted a log during the time window.",
+          "feedback": "A received event supports source emission for that record."
+        },
+        {
+          "text": "Whether the expected shard committed and indexed the event.",
+          "feedback": "Worker receipt is upstream of shard persistence and query visibility."
+        },
+        {
+          "text": "Whether the collector established a transport connection.",
+          "feedback": "The worker observation already supports transport receipt."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 41,
+      "lesson": 11,
+      "stem": "A FortiSASE administrator edits a traffic policy but the change is not saved until a dialog is completed. What feature may be active?",
+      "choices": [
+        {
+          "text": "Mandatory configuration-audit change-summary comments.",
+          "feedback": "FortiSASE can gate changes on submitting a comment."
+        },
+        {
+          "text": "FortiAnalyzer archive log rolling at a scheduled time.",
+          "feedback": "Archive rolling does not block SASE policy saves."
+        },
+        {
+          "text": "FortiSwitch density-mode ACL key compaction control.",
+          "feedback": "Switch ACL compaction is unrelated to portal audit prompts."
+        },
+        {
+          "text": "FortiAuthenticator OAuth public-client PKCE enforcement.",
+          "feedback": "OAuth PKCE is unrelated to administrator edit comments."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 42,
+      "lesson": 11,
+      "stem": "A reviewer requests a FortiSASE change comment from 45 days ago. What is the documented limitation?",
+      "choices": [
+        {
+          "text": "Existing change summaries are retained for 30 days.",
+          "feedback": "Fortinet documents a 30-day retention for change summaries."
+        },
+        {
+          "text": "All change summaries are immutable for seven years.",
+          "feedback": "The guide does not promise seven-year summary retention."
+        },
+        {
+          "text": "Only FortiManager can export SASE audit information.",
+          "feedback": "The guide does not require FortiManager to review events."
+        },
+        {
+          "text": "The audit setting records no administrator identity.",
+          "feedback": "Administrator identity is part of the change summary log."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 43,
+      "lesson": 11,
+      "stem": "A policy appears effective, but its new Administrator Event is not immediately visible. What should the engineer account for?",
+      "choices": [
+        {
+          "text": "FortiNAC portal web-server publish restart duration.",
+          "feedback": "NAC web publishing does not determine SASE audit timing."
+        },
+        {
+          "text": "Possible delay before FortiSASE audit logs appear.",
+          "feedback": "The guide warns new Administrator Events can appear later."
+        },
+        {
+          "text": "FortiGate IKEv2 post-quantum rekey timing and groups.",
+          "feedback": "IKE rekey is unrelated to audit-event ingestion latency."
+        },
+        {
+          "text": "FortiSwitch ACL hardware resource compaction windows.",
+          "feedback": "Switch TCAM operations do not govern SASE event visibility."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 44,
+      "lesson": 11,
+      "stem": "A FortiSASE change has a detailed audit comment. What remains unproven by that comment?",
+      "choices": [
+        {
+          "text": "That the log identifies the modified object and operator.",
+          "feedback": "The audit entry is designed to identify actor and object."
+        },
+        {
+          "text": "That the configuration-audit gate was invoked successfully.",
+          "feedback": "The existence of the summary supports gate execution."
+        },
+        {
+          "text": "That the new policy was enforced correctly for endpoints.",
+          "feedback": "An audit note does not attest to actual endpoint enforcement."
+        },
+        {
+          "text": "That an administrator supplied a summary before submission.",
+          "feedback": "The comment is evidence of a submitted summary."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 45,
+      "lesson": 12,
+      "stem": "A FortiGate has no FortiGuard SLA preset catalog after a license lapse. Which prerequisite is relevant?",
+      "choices": [
+        {
+          "text": "A valid SD-WAN Underlay and Application Monitoring license.",
+          "feedback": "The database download/update requires this license."
+        },
+        {
+          "text": "An enabled FortiPAM TOTP template with a shared key.",
+          "feedback": "PAM target OTP has no role in SLA catalog access."
+        },
+        {
+          "text": "A FortiSIEM ClickHouse worker in each storage region.",
+          "feedback": "SIEM worker placement is unrelated to FortiGuard licensing."
+        },
+        {
+          "text": "A FortiNAC portal HTTP rule that forwards probe requests.",
+          "feedback": "NAC portal rules do not authorize SLA database updates."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 46,
+      "lesson": 12,
+      "stem": "A FortiGuard SLA preset probe passes, but SaaS login fails. What does this observation mean?",
+      "choices": [
+        {
+          "text": "Probe success does not validate DNS/TLS/application login.",
+          "feedback": "Probe health is narrower than full application transaction success."
+        },
+        {
+          "text": "The SaaS authentication system must be working normally.",
+          "feedback": "Probe success does not test user authentication end-to-end."
+        },
+        {
+          "text": "The FortiGate automatically disables all other WAN members.",
+          "feedback": "A passing probe does not disable unrelated WAN members."
+        },
+        {
+          "text": "The SD-WAN rule has necessarily chosen that WAN member.",
+          "feedback": "Rule matching and session selection must be verified separately."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 47,
+      "lesson": 12,
+      "stem": "An SD-WAN health-check CLI entry references a FortiGuard preset. Which parameters identify the feature?",
+      "choices": [
+        {
+          "text": "`set density-mode enable` and `execute acl key-compaction`.",
+          "feedback": "These settings govern FortiSwitch ACL resource handling."
+        },
+        {
+          "text": "`set fortiguard enable` and `set fortiguard-name` values.",
+          "feedback": "These health-check fields select the FortiGuard SLA catalog entry."
+        },
+        {
+          "text": "`set addke1` and `set childless-ike` on phase one.",
+          "feedback": "These settings control IPsec hybrid key exchanges."
+        },
+        {
+          "text": "`set totp-length` and `set totp-duration` in a secret.",
+          "feedback": "These settings govern privileged target OTP generation."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 48,
+      "lesson": 12,
+      "stem": "Two branches use the same FortiGuard SLA preset but steer differently. What should be compared?",
+      "choices": [
+        {
+          "text": "Only the administrator who created each SD-WAN zone.",
+          "feedback": "Creator identity does not determine WAN forwarding decisions."
+        },
+        {
+          "text": "Only the FortiAnalyzer archive quota on each appliance.",
+          "feedback": "Archive quota is not an SD-WAN steering input."
+        },
+        {
+          "text": "Probe results, member eligibility, thresholds and rule matches.",
+          "feedback": "Member measurements and rule selection explain path differences."
+        },
+        {
+          "text": "Only the display names of the configured SLA checks.",
+          "feedback": "Identical names do not imply identical measured path quality."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 49,
+      "lesson": 0,
+      "stem": "During an incident, a FortiNAC portal redirect works while FortiSASE policy edits require comments. Which conclusion avoids conflating the two controls?",
+      "choices": [
+        {
+          "text": "The portal handles HTTP requests; SASE gates administrator changes.",
+          "feedback": "These are distinct HTTP request and administrator-audit boundaries."
+        },
+        {
+          "text": "Both mechanisms directly assign RADIUS VLANs to endpoints.",
+          "feedback": "Neither mechanism inherently assigns both systems' RADIUS VLANs."
+        },
+        {
+          "text": "Both mechanisms negotiate post-quantum IKE key exchanges.",
+          "feedback": "Neither is an IKEv2 cryptographic negotiation feature."
+        },
+        {
+          "text": "Both mechanisms prove all downstream application sessions succeed.",
+          "feedback": "Both can succeed while downstream services still fail."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 50,
+      "lesson": 0,
+      "stem": "A dashboard is empty after a change, and operators propose resetting the database. Which evidence-first comparison best separates FortiAnalyzer from FortiSIEM?",
+      "choices": [
+        {
+          "text": "Check FAZ rolled files versus SIEM worker-to-shard persistence.",
+          "feedback": "FAZ file retention and SIEM region placement have distinct evidence."
+        },
+        {
+          "text": "Use the same archive quota number for both products.",
+          "feedback": "Different storage engines cannot be diagnosed from one quota."
+        },
+        {
+          "text": "Disable MPSK on all access points before examining logs.",
+          "feedback": "WLAN keys are unrelated to both storage ingestion paths."
+        },
+        {
+          "text": "Change FortiGate PQC groups to refresh the dashboard data.",
+          "feedback": "IKE KEM settings do not repair event storage visibility."
+        }
+      ],
+      "answer": 1
     }
   ]
 }
