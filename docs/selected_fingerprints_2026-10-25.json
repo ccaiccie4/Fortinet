@@ -1,0 +1,245 @@
+{
+  "date": "2026-10-25",
+  "fields": [
+    "product",
+    "lesson_subject",
+    "primary_url",
+    "scenario_community_url",
+    "feature_mechanism_fingerprint",
+    "workflow_transaction_fingerprint",
+    "failure_class",
+    "evidence_pattern",
+    "remediation_path",
+    "question_fingerprint",
+    "diagram_topology_layout_fingerprint"
+  ],
+  "records": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Hybrid post-quantum IKEv2 key exchanges: IKE_INTERMEDIATE and CHILD_SA rekey boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/229631/post-quantum-cryptography-for-ipsec-key-exchange",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fgt-ikev2-hybrid-addke-ike-intermediate-followup-ke",
+      "workflow_transaction_fingerprint": "IKE_SA_INIT classical DH > IKE_INTERMEDIATE additional KEM > IKE_AUTH authenticated SA > CHILD_SA traffic keys > IKE_FOLLOWUP_KE rekey > Peer proposal/debug",
+      "failure_class": "Operational failure and correction — fgt-ikev2-hybrid-addke-ike-intermediate-followup-ke",
+      "evidence_pattern": "Check the negotiated IKEv2 exchange sequence, not only the green tunnel icon. Capture UDP/500 or UDP/4500 on the correct WAN and inspect whether IKE_INTERMEDIATE appears and whether the peer rejects an additional KE proposal. `diagnose vpn ike gateway list` and `diagnose vpn tunn",
+      "remediation_path": ". Compare phase-1 and phase-2 addke groups, firmware compatibility, and IKE logs on both sides; restore mutually supported transforms or stage upgrades before enforcing additional rounds. Avoid treating a generic DPD timeout as evidence of a KEM failure: a timeout may simply indicate routing, NAT, or reachability loss.",
+      "question_fingerprint": [
+        "a-hub-negotiates-ike-sa-init-but-a-new-tunnel-stalls-before-ike-auth-after-enabling-pqc-which-compar",
+        "ikev2-is-established-but-a-new-child-sa-fails-following-phase-2-pqc-changes-where-should-diagnosis-s",
+        "a-tunnel-s-esp-counters-increase-after-a-pqc-rollout-what-is-still-unproven-",
+        "an-engineer-wants-to-enable-pqc-on-seven-spoke-tunnels-in-one-change-which-staged-test-best-reduces-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_01_fgt_pqc: IKE_SA_INIT classical DH => IKE_INTERMEDIATE additional KEM => IKE_AUTH authenticated SA => CHILD_SA traffic keys => IKE_FOLLOWUP_KE rekey => Peer proposal/debug; layout-style-0",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Scheduled FortiSwitch packet capture: management delegation and capture evidence lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/749365/configuring-fortiswitch-packet-captures",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fmg-managed-fsw-packet-capture-filter-schedule-pcap",
+      "workflow_transaction_fingerprint": "FortiManager operator > Managed FortiGate selector > Managed FortiSwitch > Capture filter + schedule > PCAP result > Traffic-path interpretation",
+      "failure_class": "Failure scenario — fmg-managed-fsw-packet-capture-filter-schedule-pcap",
+      "evidence_pattern": "A capture showing a DHCP Discover arriving on the client-facing switch port proves the endpoint transmitted at that observation point. It does not prove the FortiGate received the packet, nor that the DHCP server replied. A RADIUS Access-Accept captured upstream does not prove th",
+      "remediation_path": "tiSwitch serial, port mapping, VLAN filter and schedule window. Repeat with a short approved test and a broad-enough filter, then narrow the scope once ingress is confirmed. If Discover is visible and Offer absent, move the capture boundary toward the uplink and FortiGate rather than repeatedly restarting the endpoint.",
+      "question_fingerprint": [
+        "fortimanager-shows-no-dhcp-discover-in-a-scheduled-fortiswitch-pcap-what-should-be-checked-first-",
+        "a-fortimanager-capture-contains-radius-access-accept-for-a-wired-endpoint-what-cannot-yet-be-conclud",
+        "an-intermittent-outage-occurs-only-at-03-00-which-fortimanager-capability-most-directly-preserves-ev",
+        "a-fortimanager-pcap-shows-dhcp-discover-but-no-offer-what-is-the-next-sound-isolation-step-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_02_fmg_capture: FortiManager operator => Managed FortiGate selector => Managed FortiSwitch => Capture filter + schedule => PCAP result => Traffic-path interpretation; layout-style-1",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Log-file rolling versus retention: why archive age can exceed configured days",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/871759/log-storage",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "faz-archive-roll-file-delete-eligibility-last-log-time",
+      "workflow_transaction_fingerprint": "FortiGate log stream > Active log file > Roll size/time trigger > Compressed archive file > Retention eligibility > Oldest-file deletion",
+      "failure_class": "Operational scenario — faz-archive-roll-file-delete-eligibility-last-log-time",
+      "evidence_pattern": "In System Settings > ADOMs, select the ADOM and View Storage Info to compare Analytics and Archive quotas, historical graphs and device breakdowns. Review log rolling and upload configuration for size and scheduled time. `diagnose fortilogd lograte-adom <name>` and `diagnose fort",
+      "remediation_path": "window. Confirm file roll timestamps and last-received dates before changing the policy. If the objective is a predictable day boundary, configure scheduled daily rolling and ensure disk capacity supports the resulting file count. Do not equate archive age with continuous completeness of logs for every intervening day.",
+      "question_fingerprint": [
+        "fortianalyzer-reports-archive-data-older-than-its-90-day-setting-which-mechanism-explains-this-",
+        "an-adom-s-log-rate-is-normal-but-a-historical-report-lacks-one-day-what-does-rate-evidence-prove-",
+        "a-low-volume-adom-has-compressed-files-spanning-several-days-which-change-targets-deletion-granulari",
+        "storage-size-pressure-removes-logs-from-days-60-89-while-day-90-survives-why-might-that-occur-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_03_faz_rolling: FortiGate log stream => Active log file => Roll size/time trigger => Compressed archive file => Retention eligibility => Oldest-file deletion; layout-style-2",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.4/fortiswitchos-administration-guide/738913/acl",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-how-to-configure-fortiswitch-port-level-access-control-lists-in-fortimanager-230466",
+      "feature_mechanism_fingerprint": "fsw-acl-pipeline-stage-density-key-compaction-hardware",
+      "workflow_transaction_fingerprint": "Ingress packet > Ingress ACL classifier > Prelookup stage > L2/L3 forwarding lookup > Egress ACL action > ACL counters/TCAM",
+      "failure_class": "Scenario and diagnosis — fsw-acl-pipeline-stage-density-key-compaction-hardware",
+      "evidence_pattern": "A managed access port should deny a particular subnet, but traffic still passes after a FortiManager install. First verify that the ingress policy is in the correct ACL group and that the group is attached to the intended port. Check switch ACL usage, counters and hardware compat",
+      "remediation_path": "intended port. Check switch ACL usage, counters and hardware compatibility. A FortiManager job marked successful proves configuration delivery, not switch dataplane enforcement. If a feature-generated internal ACL conflicts with the user ACL, Fortinet warns that precedence and resulting behavior can be model dependent.",
+      "question_fingerprint": [
+        "a-fortiswitch-ingress-acl-appears-in-configuration-but-packets-still-pass-what-evidence-matters-next",
+        "an-acl-match-counter-rises-but-traffic-is-not-blocked-which-explanation-fits-the-evidence-",
+        "a-switch-in-acl-density-mode-loses-free-entries-after-deleting-rules-what-is-the-documented-remedy-b",
+        "a-managed-fortiswitch-supports-ingress-acls-but-a-configured-action-fails-on-one-model-what-is-most-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_04_fsw_acl: Ingress packet => Ingress ACL classifier => Prelookup stage => L2/L3 forwarding lookup => Egress ACL action => ACL counters/TCAM; layout-style-3",
+      "community_scenario_status": "verified matching scenario"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "MPSK profile key-to-VLAN binding and WPA2/WPA3 transition compatibility",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/356880/mpsk-profiles",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fap-mpsk-per-key-dynamic-vlan-wpa3-transition",
+      "workflow_transaction_fingerprint": "Client association > SSID VAP > MPSK profile > Group + per-client key > Dynamic VLAN mapping > DHCP + firewall policy",
+      "failure_class": "Evidence and failure isolation — fap-mpsk-per-key-dynamic-vlan-wpa3-transition",
+      "evidence_pattern": "Inspect the client's negotiated security mode, SSID, MPSK group/key match, assigned VLAN, and DHCP lease. A correct WPA handshake with no DHCP address points toward VLAN tagging, DHCP relay or firewall configuration rather than the password itself. A key listed in the MPSK profil",
+      "remediation_path": "LAN tagging, DHCP relay or firewall configuration rather than the password itself. A key listed in the MPSK profile does not prove that it is enabled by schedule or assigned to the intended VAP. Compare two test clients using different keys on the same SSID and validate that their VLANs and policies differ as designed.",
+      "question_fingerprint": [
+        "two-mpsk-clients-associate-to-one-ssid-but-land-in-different-vlans-what-determines-that-split-",
+        "after-enabling-mpsk-a-legacy-client-loses-dhcp-although-association-succeeds-which-path-is-most-rele",
+        "an-ssid-is-configured-for-wpa3-sae-only-keys-but-an-older-wpa2-client-fails-which-mismatch-should-be",
+        "a-team-assigns-two-mpsk-profiles-to-one-vap-and-expects-both-to-apply-what-is-the-documented-limit-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_05_fap_mpsk: Client association => SSID VAP => MPSK profile => Group + per-client key => Dynamic VLAN mapping => DHCP + firewall policy; layout-style-4",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Portal Request Processing Rules: HTTP regex matching, publishing and duplicate-rule failure",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/778577/request-processing-rules",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-how-to-identify-and-remove-duplicate-request-processing-rules-in-fortinac-230584",
+      "feature_mechanism_fingerprint": "fnac-portal-rpr-uri-useragent-regex-publish-httpd",
+      "workflow_transaction_fingerprint": "Captive portal HTTP request > URI/User-Agent matcher > Allow/Block/Forward/File action > Publish generated rules > Portal HTTP service restart > Browser/CNA outcome",
+      "failure_class": "Recent failure scenario — fnac-portal-rpr-uri-useragent-regex-publish-httpd",
+      "evidence_pattern": "Fortinet identifies the generated portal web-server configuration as `/etc/httpd/conf.d/000_web_servces.conf` on the application server. Use the supported GUI Publish action rather than hand-editing the generated file, because later publish or restart can overwrite manual changes",
+      "remediation_path": "and demonstrates grouping by serviceType, serviceMatcher, serviceAction and serviceTarget to identify duplicates. This is a specialized support diagnostic, not a recommended routine database edit. Prefer supported GUI cleanup and TAC-reviewed procedures before touching database records, and back up the appliance first.",
+      "question_fingerprint": [
+        "a-fortinac-portal-rule-was-edited-but-browsers-still-follow-the-old-redirect-what-was-likely-omitted",
+        "a-fortinac-request-matcher-uses-example-com-as-regex-what-subtle-problem-can-arise-",
+        "a-portal-shows-102-request-processing-rules-instead-of-51-what-first-action-is-justified-",
+        "a-captive-portal-s-http-request-is-redirected-correctly-but-endpoint-registration-fails-what-is-the-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_06_fnac_rpr: Captive portal HTTP request => URI/User-Agent matcher => Allow/Block/Forward/File action => Publish generated rules => Portal HTTP service restart => Browser/CNA outcome; layout-style-5",
+      "community_scenario_status": "verified matching scenario"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Winbind MSCHAPv2 AD domain join versus non-AD LDAP/Kerberos directories",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/670285/winbind",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "feature_mechanism_fingerprint": "fnacf-winbind-samba-ad-join-mschapv2-ntlm-auth",
+      "workflow_transaction_fingerprint": "802.1X PEAP MSCHAPv2 > FortiNAC RADIUS > Winbind ntlm_auth > AD domain join/DNS SRV > Domain controller > Access-Accept or Reject",
+      "failure_class": "October scenario and correction — fnacf-winbind-samba-ad-join-mschapv2-ntlm-auth",
+      "evidence_pattern": "First confirm the endpoint selected MSCHAPv2 rather than EAP-TLS or PAP. Then check Winbind service state, domain-join status, controller DNS/SRV resolution, machine account freshness and Winbind/systemd logs. FortiNAC can display stale Domain Information even after a join is los",
+      "remediation_path": "edentials or enable insecure settings. Choose an authentication scheme that fits the directory's supported protocol, such as a separately configured LDAP/PAP or certificate-based path, or use an actual AD-compatible domain for MSCHAPv2. Validate the full RADIUS-to-network authorization result after changing the design.",
+      "question_fingerprint": [
+        "a-fortinac-f-operator-attempts-a-winbind-domain-join-against-freeipa-and-gets-a-join-error-which-des",
+        "an-endpoint-uses-eap-tls-and-winbind-shows-not-joined-what-should-the-engineer-conclude-",
+        "winbind-shows-stale-domain-details-but-not-joined-and-a-1970-machine-password-date-which-evidence-sh",
+        "a-second-ad-domain-was-added-to-winbind-but-mschapv2-works-only-for-the-first-what-should-be-checked"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_07_fnacf_winbind: 802.1X PEAP MSCHAPv2 => FortiNAC RADIUS => Winbind ntlm_auth => AD domain join/DNS SRV => Domain controller => Access-Accept or Reject; layout-style-0",
+      "community_scenario_status": "verified matching scenario"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "OAuth public-client authorization-code PKCE: challenge/verifier binding and redirect controls",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/796040/relying-party",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fac-oauth-public-client-pkce-code-challenge-verifier",
+      "workflow_transaction_fingerprint": "Public OAuth client > Authorization + code_challenge > FortiAuthenticator login > Redirect URI + auth code > Token request + code_verifier > Access token/claims",
+      "failure_class": "Operational scenario — fac-oauth-public-client-pkce-code-challenge-verifier",
+      "evidence_pattern": "Inspect the browser's authorization redirect, the registered redirect URI, the challenge method and whether a fresh code_verifier is retained by the client across the redirect. At token exchange, a rejected verifier indicates a client transaction-state problem, not necessarily in",
+      "remediation_path": "and callback, so the token request no longer matches the original challenge. Reproduce with a new authorization request and verify challenge/verifier derivation, exact redirect URI and code lifetime. Do not disable PKCE or switch to password-based grants to conceal the bug; the failure is an intended security boundary.",
+      "question_fingerprint": [
+        "a-public-oauth-client-sends-an-authorization-code-but-token-exchange-fails-after-a-page-reload-which",
+        "a-developer-adds-a-client-secret-to-fix-fortiauthenticator-pkce-authorization-errors-why-is-this-ine",
+        "an-authorization-request-is-rejected-before-user-login-which-pkce-fields-are-explicitly-required-",
+        "a-callback-receives-a-code-at-an-unexpected-http-redirect-uri-what-configuration-control-is-most-rel"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_08_fac_pkce: Public OAuth client => Authorization + code_challenge => FortiAuthenticator login => Redirect URI + auth code => Token request + code_verifier => Access token/claims; layout-style-1",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Target TOTP secret auto-delivery: template overrides and SSH keyboard-interactive limits",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.8.2/administration-guide/549807",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fpam-target-totp-secret-template-override-keyboard-interactive",
+      "workflow_transaction_fingerprint": "Secret template TOTP policy > Secret shared key/FortiToken > Launcher proxy session > Target SSH keyboard-interactive > Time-based code delivery > Target auth/session audit",
+      "failure_class": "Operational scenario — fpam-target-totp-secret-template-override-keyboard-interactive",
+      "evidence_pattern": "If password authentication succeeds but the target rejects the OTP, inspect the target's authentication method, TOTP time synchronization, hash/length/duration settings and whether the secret inherited template values or overrides them. An SSH session reaching a keyboard-interact",
+      "remediation_path": " holds the correct password and TOTP seed. Check the target SSH server's enabled methods and FortiPAM launcher support rather than rotating the seed first. In a separate case, a 30-second clock skew can cause otherwise correct codes to fail; compare NTP and code-window settings before declaring a credential compromise.",
+      "question_fingerprint": [
+        "an-ssh-target-requests-totp-but-webssh-cannot-complete-authentication-after-a-method-change-what-sho",
+        "a-fortipam-secret-inherits-an-eight-digit-totp-template-but-its-target-expects-six-digits-what-fixes",
+        "a-non-proxy-fortipam-web-launcher-never-auto-enters-the-target-otp-what-is-the-documented-behavior-",
+        "a-correct-fortipam-totp-seed-intermittently-fails-every-few-attempts-which-measurement-is-most-infor"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_09_fpam_totp: Secret template TOTP policy => Secret shared key/FortiToken => Launcher proxy session => Target SSH keyboard-interactive => Time-based code delivery => Target auth/session audit; layout-style-2",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "ClickHouse storage regions: event-worker routing and non-overlapping shard placement",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/release-notes/399872/whats-new-in-7-5-0",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/technical-tip-clickhouse-duplicate-data-part-error-230431",
+      "feature_mechanism_fingerprint": "fsiem-clickhouse-storage-region-event-worker-shard-isolation",
+      "workflow_transaction_fingerprint": "Collector/device event source > Region-specific Event Upload Worker > Region A ClickHouse shard(s) > Region B Event Upload Worker > Region B ClickHouse shard(s) > Query scope/region verification",
+      "failure_class": "Recent contextual failure — fsiem-clickhouse-storage-region-event-worker-shard-isolation",
+      "evidence_pattern": "Check sender connection success, collector upload destinations, worker region membership, ClickHouse shard health and query visibility for representative event IDs. An event received by a worker does not prove it was committed to the expected shard. A query that returns zero reco",
+      "remediation_path": "agnostic value is to separate data-node health from worker-region placement. Check ClickHouse service and logs if data parts are unhealthy; avoid executing destructive detach or removal commands without a backup and Fortinet-supported recovery guidance. Region routing changes will not repair corrupted ClickHouse parts.",
+      "question_fingerprint": [
+        "fortisiem-collectors-upload-successfully-but-a-tenant-s-events-land-in-the-wrong-clickhouse-shard-wh",
+        "a-load-balancer-sends-all-collectors-to-workers-across-two-fortisiem-storage-regions-what-is-the-des",
+        "a-clickhouse-node-reports-duplicate-data-part-which-response-respects-the-diagnostic-boundary-",
+        "an-event-is-visible-at-a-fortisiem-event-upload-worker-but-absent-from-searches-what-is-still-unprov"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_10_fsiem_regions: Collector/device event source => Region-specific Event Upload Worker => Region A ClickHouse shard(s) => Region B Event Upload Worker => Region B ClickHouse shard(s) => Query scope/region verification; layout-style-3",
+      "community_scenario_status": "contextual, not region-specific"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Mandatory administrator change comments: audit transaction and 30-day summary retention",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/519208/administration",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fsase-admin-change-comment-submit-audit-30day-retention",
+      "workflow_transaction_fingerprint": "Administrator edits policy > Configuration audit comment gate > Object change commit > Administrator Events log > Change summary 30-day retention > Auditor review",
+      "failure_class": "Operational scenario — fsase-admin-change-comment-submit-audit-30day-retention",
+      "evidence_pattern": "A visible comment pane proves the gate was invoked, but not that the change committed. Confirm the object appears in the effective policy and that the corresponding Administrator Event is recorded. A saved policy without an immediately visible log may reflect ingestion latency; r",
+      "remediation_path": "ndow or blocked by a browser extension. Verify whether the summary was submitted before investigating propagation or endpoint posture. In a different case, a compliance reviewer requests a 60-day-old summary; the documented 30-day retention means the record may no longer exist in the portal, even if the policy remains.",
+      "question_fingerprint": [
+        "a-fortisase-administrator-edits-a-traffic-policy-but-the-change-is-not-saved-until-a-dialog-is-compl",
+        "a-reviewer-requests-a-fortisase-change-comment-from-45-days-ago-what-is-the-documented-limitation-",
+        "a-policy-appears-effective-but-its-new-administrator-event-is-not-immediately-visible-what-should-th",
+        "a-fortisase-change-has-a-detailed-audit-comment-what-remains-unproven-by-that-comment-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_11_fsase_audit: Administrator edits policy => Configuration audit comment gate => Object change commit => Administrator Events log => Change summary 30-day retention => Auditor review; layout-style-4",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiGuard SLA database targets: licensed probe presets versus measured path quality",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/latest/administration-guide/875001/fortiguard-sla-database-for-sd-wan-performance-sla",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "sdwan-fortiguard-sla-preset-server-threshold-license",
+      "workflow_transaction_fingerprint": "FortiGuard SLA preset catalog > License/download entitlement > SD-WAN health-check object > Member probe to SaaS target > Measured latency/jitter/loss > SD-WAN rule path decision",
+      "failure_class": "undefined — sdwan-fortiguard-sla-preset-server-threshold-license",
+      "evidence_pattern": "Compare the installed FortiGuard database availability, health-check configuration, member probe statistics, SLA pass/fail state and session distribution. A healthy preset probe is not proof the business application selected the expected WAN: inspect the matching SD-WAN rule and ",
+      "question_fingerprint": [
+        "a-fortigate-has-no-fortiguard-sla-preset-catalog-after-a-license-lapse-which-prerequisite-is-relevan",
+        "a-fortiguard-sla-preset-probe-passes-but-saas-login-fails-what-does-this-observation-mean-",
+        "an-sd-wan-health-check-cli-entry-references-a-fortiguard-preset-which-parameters-identify-the-featur",
+        "two-branches-use-the-same-fortiguard-sla-preset-but-steer-differently-what-should-be-compared-"
+      ],
+      "diagram_topology_layout_fingerprint": "2026-10-25_12_sdwan_fgsla: FortiGuard SLA preset catalog => License/download entitlement => SD-WAN health-check object => Member probe to SaaS target => Measured latency/jitter/loss => SD-WAN rule path decision; layout-style-5",
+      "community_scenario_status": "no independently verified matching recent scenario"
+    }
+  ]
+}
