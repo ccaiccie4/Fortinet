@@ -253,6 +253,258 @@
           "Publish restarts the portal HTTP process briefly, so schedule it when captive-portal traffic is not at a peak. In HA deployments, validate the active service owner and post-failover portal behavior. Export/backup rule configuration before bulk changes. A user reaching the portal but failing to register may involve the next workflow stage; a user who never reaches the portal requires earlier DHCP, DNS, VLAN and redirection checks. The critical boundary is configuration stored -> rules published -> HTTP service applies match -> browser outcome."
         ]
       ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "title": "Winbind MSCHAPv2 AD domain join versus non-AD LDAP/Kerberos directories",
+      "slug": "07_fnacf_winbind",
+      "primary": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/670285/winbind",
+      "scenario": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "fingerprint": "fnacf-winbind-samba-ad-join-mschapv2-ntlm-auth",
+      "nodes": [
+        "802.1X PEAP MSCHAPv2",
+        "FortiNAC RADIUS",
+        "Winbind ntlm_auth",
+        "AD domain join/DNS SRV",
+        "Domain controller",
+        "Access-Accept or Reject"
+      ],
+      "sections": [
+        [
+          "Purpose and authentication boundary",
+          "FortiNAC-F uses Winbind when local RADIUS must validate MSCHAPv2 credentials against a Microsoft Active Directory domain. Winbind is not a general-purpose LDAP connector. The Fortinet guide explicitly says Winbind is needed for MSCHAPv2, while EAP-TTLS/PAP and EAP-TLS use different mechanisms and do not require this configuration. This distinction is critical when a team attempts to authenticate against a non-AD LDAP/Kerberos directory: the presence of LDAP records and a valid user password does not make a Samba domain join possible."
+        ],
+        [
+          "Transaction sequence",
+          "An 802.1X supplicant negotiates an EAP method with the RADIUS server. With PEAP/MSCHAPv2 or TTLS/MSCHAPv2, FortiNAC's authentication path delegates MSCHAPv2 validation to Winbind/ntlm_auth. The Winbind instance must already be joined to the AD domain and have usable domain-controller discovery. The FortiNAC DNS configuration must resolve the controller's A record and LDAP/Kerberos SRV records for additional domains. If the machine account or domain join is invalid, correct client credentials alone cannot make the MSCHAPv2 validation succeed."
+        ],
+        [
+          "Source-supported configuration",
+          "Go to Network > RADIUS > Winbind. Define the instance with an FQDN, domain controller names or `*` for discovery, NetBIOS and Kerberos realm settings as applicable. Join the AD domain using an authorized account or uploaded keytab. Fortinet says join before enabling the service; inspect Enabled/Running state separately from Joined/Not Joined domain state. Multiple instances are supported, but each additional domain requires working DNS records. The guide notes Winbind cannot encrypt its connections using LDAPS or STARTTLS; review the authentication transport and segmentation design."
+        ],
+        [
+          "Evidence hierarchy",
+          "First confirm the endpoint selected MSCHAPv2 rather than EAP-TLS or PAP. Then check Winbind service state, domain-join status, controller DNS/SRV resolution, machine account freshness and Winbind/systemd logs. FortiNAC can display stale Domain Information even after a join is lost; the current Winbind Domain status is more reliable. A date around 1969/1970 for last machine-account password change is an indicator documented for lost join state. A RADIUS Access-Reject alone does not distinguish a bad password from a failed Winbind trust."
+        ],
+        [
+          "October scenario and correction",
+          "An October 2 Fortinet Community troubleshooting article documents attempts to Join Domain against FreeIPA. The join fails because the operation performs a Samba Active Directory domain join that FreeIPA does not accept in this deployment. Do not retry with random bind credentials or enable insecure settings. Choose an authentication scheme that fits the directory's supported protocol, such as a separately configured LDAP/PAP or certificate-based path, or use an actual AD-compatible domain for MSCHAPv2. Validate the full RADIUS-to-network authorization result after changing the design."
+        ],
+        [
+          "Operational implications",
+          "Domain-controller failover depends on DNS, routing and available controllers; test each after planned maintenance. Protect the join credential or keytab and document machine-account lifecycle. During upgrade, recheck Winbind service status, domain trust and the exact EAP methods enabled. A successful AD join is a prerequisite, not proof that the client certificate trust, inner EAP negotiation, or RADIUS VLAN attributes are correct. Diagnose from client method to RADIUS to Winbind to directory before changing endpoint access policy."
+        ]
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "title": "OAuth public-client authorization-code PKCE: challenge/verifier binding and redirect controls",
+      "slug": "08_fac_pkce",
+      "primary": "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/796040/relying-party",
+      "scenario": null,
+      "fingerprint": "fac-oauth-public-client-pkce-code-challenge-verifier",
+      "nodes": [
+        "Public OAuth client",
+        "Authorization + code_challenge",
+        "FortiAuthenticator login",
+        "Redirect URI + auth code",
+        "Token request + code_verifier",
+        "Access token/claims"
+      ],
+      "sections": [
+        [
+          "Purpose and client threat model",
+          "A browser or mobile OAuth client cannot reliably keep a static client secret confidential. FortiAuthenticator 6.6 supports Authorization code with PKCE for Public relying parties, so possession of an intercepted authorization code is insufficient to redeem it without the verifier. The authorization server binds a code_challenge supplied at authorization time to a code_verifier presented at token exchange. This mitigates authorization-code interception; it does not replace TLS, redirect-URI validation, user authentication, or correct token audience/scope policy."
+        ],
+        [
+          "Objects and authorization sequence",
+          "In Authentication > OAuth Service > Relying Party, define a Public client and select Authorization code with PKCE. The client generates a high-entropy code_verifier and sends a derived code_challenge plus code_challenge_method to the authorization endpoint. The user authenticates on FortiAuthenticator's portal; the authorization code returns only to an allowed redirect URI. The client then presents the original verifier to the token endpoint. A different verifier must fail even if the code and client ID are valid. A Confidential client follows a different secret-based grant policy."
+        ],
+        [
+          "Source-supported configuration",
+          "Create the relying party, select Public, and choose Authorization code with PKCE. Register exact redirect URIs, preferably HTTPS, then configure scopes, claims and access/refresh token expiry. Fortinet documents that the client_secret is ignored for PKCE authorization requests and that `code_challenge_method` and `code_challenge` are required at `/oauth/authorize/`. Do not attempt to repair a missing PKCE parameter by supplying a client secret: the server is deliberately using proof-of-possession of the verifier instead. Scope access tokens narrowly to the relying application's needs."
+        ],
+        [
+          "Evidence and troubleshooting",
+          "Inspect the browser's authorization redirect, the registered redirect URI, the challenge method and whether a fresh code_verifier is retained by the client across the redirect. At token exchange, a rejected verifier indicates a client transaction-state problem, not necessarily invalid user credentials. Conversely, a successful login page does not prove a token was issued. Check FortiAuthenticator authentication/OAuth logs and the application's token response separately. Avoid logging raw codes, verifiers, refresh tokens or client secrets; record only sanitized correlation identifiers."
+        ],
+        [
+          "Operational scenario",
+          "A single-page application authenticates users successfully but returns to its callback with an authorization code that cannot be exchanged. A developer changed the verifier in local storage between the initial redirect and callback, so the token request no longer matches the original challenge. Reproduce with a new authorization request and verify challenge/verifier derivation, exact redirect URI and code lifetime. Do not disable PKCE or switch to password-based grants to conceal the bug; the failure is an intended security boundary."
+        ],
+        [
+          "Upgrade and scale implications",
+          "Refresh-token expiry and access-token expiry are independent; the guide notes refresh tokens can be configured never to expire with zero, which increases operational risk. For HA, keep relying-party settings and authentication service reachability consistent across nodes, then test the complete redirect flow during failover. Audit allowed scopes and claims whenever an application is onboarded. PKCE proves that the token redeemer knows the original verifier, not that a browser is malware-free or that the resource server enforces the issued token correctly."
+        ]
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "title": "Target TOTP secret auto-delivery: template overrides and SSH keyboard-interactive limits",
+      "slug": "09_fpam_totp",
+      "primary": "https://docs.fortinet.com/document/fortipam/1.8.2/administration-guide/549807",
+      "scenario": null,
+      "fingerprint": "fpam-target-totp-secret-template-override-keyboard-interactive",
+      "nodes": [
+        "Secret template TOTP policy",
+        "Secret shared key/FortiToken",
+        "Launcher proxy session",
+        "Target SSH keyboard-interactive",
+        "Time-based code delivery",
+        "Target auth/session audit"
+      ],
+      "sections": [
+        [
+          "Purpose and separation of factors",
+          "FortiPAM can store a target credential and the TOTP material needed when the target server requires a second factor. This is target authentication, distinct from a human administrator's MFA to log in to FortiPAM itself. The target's expected TOTP algorithm, code length and time interval must match FortiPAM's generation settings. Storing the TOTP seed alongside a privileged secret creates a strong reason to restrict secret access, audit launches and avoid displaying the shared key to operators."
+        ],
+        [
+          "Configuration objects",
+          "The secret template can define default TOTP settings, while an individual secret may inherit them or override them. In Secrets > Secrets, select the template and secret, enable TOTP and choose a third-party shared key or FortiToken activation. Fortinet's secret CLI example uses `config secret database`, `edit 1`, `config totp-setting`, `set status enable`, `set use-template-setting disable`, `set totp-length 6`, `set totp-duration 30`, `set hash-type hmac-sha1`, and `set shared-key <secret>`. Do not copy real seed material into tickets or reports."
+        ],
+        [
+          "Transaction and launcher boundary",
+          "At launch, FortiPAM opens the configured proxy/launcher session and supplies the target username/password as permitted. When the target requests an OTP, FortiPAM can generate a code from the stored seed and deliver it through supported authentication paths. Fortinet's 1.8.x documentation distinguishes SSH automatic delivery from limitations on other launchers; WebSSH with TOTP requires keyboard-interactive authentication. Non-proxy and web-launch flows may require manually copying the code. Do not assume that enabling TOTP means every RDP, browser and SSH launcher supports identical automation."
+        ],
+        [
+          "Evidence and feature limits",
+          "If password authentication succeeds but the target rejects the OTP, inspect the target's authentication method, TOTP time synchronization, hash/length/duration settings and whether the secret inherited template values or overrides them. An SSH session reaching a keyboard-interactive prompt is evidence that the target requested that method; it is not proof FortiPAM delivered the correct code. Fortinet also warns that password changer does not support public key plus TOTP authentication and that certain LDAP-backed password/FortiToken combinations should not use the changer."
+        ],
+        [
+          "Operational scenario",
+          "A WebSSH secret worked before a target SSH hardening change, but now fails after the target switches from keyboard-interactive to a different authentication method. FortiPAM still holds the correct password and TOTP seed. Check the target SSH server's enabled methods and FortiPAM launcher support rather than rotating the seed first. In a separate case, a 30-second clock skew can cause otherwise correct codes to fail; compare NTP and code-window settings before declaring a credential compromise."
+        ],
+        [
+          "Upgrade and security implications",
+          "FortiPAM versions differ in RDP TOTP support and prerequisites, so consult the exact firmware's example and limitations. Some RDP auto-delivery designs require a FortiAuthenticator agent and TLS security level; do not generalize across releases. Use a test secret and a disposable target account to validate each launcher. Keep TOTP seeds out of exports, enforce role-based access and capture launch audit evidence. The security boundary is operator authorization -> secret policy -> launcher method -> target's second-factor challenge."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "title": "ClickHouse storage regions: event-worker routing and non-overlapping shard placement",
+      "slug": "10_fsiem_regions",
+      "primary": "https://docs.fortinet.com/document/fortisiem/7.5.0/release-notes/399872/whats-new-in-7-5-0",
+      "scenario": "https://community.fortinet.com/fortisiem-34/technical-tip-clickhouse-duplicate-data-part-error-230431",
+      "fingerprint": "fsiem-clickhouse-storage-region-event-worker-shard-isolation",
+      "nodes": [
+        "Collector/device event source",
+        "Region-specific Event Upload Worker",
+        "Region A ClickHouse shard(s)",
+        "Region B Event Upload Worker",
+        "Region B ClickHouse shard(s)",
+        "Query scope/region verification"
+      ],
+      "sections": [
+        [
+          "Purpose and architectural change",
+          "FortiSIEM 7.5 introduces ClickHouse Storage Regions, allowing event data from selected collectors or external devices to be placed in designated ClickHouse data nodes instead of distributing every worker's events to every data node. This is a data-placement and scale-isolation mechanism, not an incident rule, parser or monitoring policy. Regions contain one or more Event Upload Workers and one or more ClickHouse shards. The documented requirement is that worker and shard memberships do not overlap between regions."
+        ],
+        [
+          "Ingestion and placement flow",
+          "Before 7.5, an Event Upload Worker could distribute received events across the ClickHouse data-node set. With storage regions, a collector is configured to forward events to an Event Upload Worker belonging to the intended region; that worker sends the events to the region's designated shards. A load balancer must also direct collector uploads only to workers in the correct region. Misrouted collectors can produce the wrong placement even when every worker and ClickHouse process is healthy."
+        ],
+        [
+          "Source-supported deployment",
+          "First inventory collectors, expected event volume and region-to-shard ownership. Create storage regions with disjoint workers and shards, then configure each collector or external sender with the correct worker addresses. Fortinet's 7.5 release notes explicitly mention configuring worker IPs on the collector when no load balancer is present, and region-aware load-balancer forwarding when one is used. Use the version-specific storage-region configuration procedure for the actual GUI fields; do not reuse pre-7.5 worker distribution assumptions."
+        ],
+        [
+          "Evidence hierarchy",
+          "Check sender connection success, collector upload destinations, worker region membership, ClickHouse shard health and query visibility for representative event IDs. An event received by a worker does not prove it was committed to the expected shard. A query that returns zero records might indicate wrong region, ingestion delay, parser issues or a time-range mismatch. Trace one unique event from source timestamp through collector upload and worker routing to stored record. Confirm storage health independently of rule incident generation."
+        ],
+        [
+          "Recent contextual failure",
+          "An October 7 Community article describes ClickHouse DUPLICATE_DATA_PART errors that can stop database service. This is a storage-engine operational failure, not direct evidence of region misrouting. Its diagnostic value is to separate data-node health from worker-region placement. Check ClickHouse service and logs if data parts are unhealthy; avoid executing destructive detach or removal commands without a backup and Fortinet-supported recovery guidance. Region routing changes will not repair corrupted ClickHouse parts."
+        ],
+        [
+          "HA and upgrade caveats",
+          "Non-overlapping shards create explicit placement boundaries, so a region failure can affect only its assigned sources but may also remove redundancy if poorly sized. Test worker failover within the same region, verify load-balancer membership, and plan storage growth. The 7.5 release notes include significant upgrade prerequisites; validate hardware memory, ClickHouse indexing and feature compatibility before adopting regions. The mechanism is collector destination -> region worker -> region shard; dashboards and rules are downstream consumers, not proof of placement."
+        ]
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "title": "Mandatory administrator change comments: audit transaction and 30-day summary retention",
+      "slug": "11_fsase_audit",
+      "primary": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/519208/administration",
+      "scenario": null,
+      "fingerprint": "fsase-admin-change-comment-submit-audit-30day-retention",
+      "nodes": [
+        "Administrator edits policy",
+        "Configuration audit comment gate",
+        "Object change commit",
+        "Administrator Events log",
+        "Change summary 30-day retention",
+        "Auditor review"
+      ],
+      "sections": [
+        [
+          "Purpose and governance boundary",
+          "FortiSASE can require an administrator to enter a change summary before submitting configuration modifications. The control applies broadly to changes to objects, endpoint profiles, analytics and reporting settings, and security traffic policies. It is an audit and accountability gate, not an approval workflow with separate reviewers. A successfully recorded comment describes an operator's stated intent; it does not prove the change was correct, tested, or authorized by a change board."
+        ],
+        [
+          "Transaction mechanics",
+          "Under System > Administration, enable Require comments for configuration audit log. When an administrator creates or edits a traffic policy, FortiSASE presents a configuration audit log change-summary pane before the operation completes. The submitted summary is associated with the modified object and administrator identity. The audit record can then be viewed under Operations > Logs > Events > Administrator Events. New log entries can appear after a delay, so an immediate empty search is not definitive evidence of missing audit capture."
+        ],
+        [
+          "Source-supported workflow",
+          "Enable the setting, create a harmless test object or policy in a controlled tenant, and submit a concise summary with a change ticket reference and expected effect. Then open Administrator Events, locate the administrator event and inspect Details. Record object identity, administrator, time and summary. Fortinet documents that existing change summaries are retained for 30 days; do not treat this feature alone as a long-term immutable compliance archive. Export logs to the organization's approved retention system where supported and required."
+        ],
+        [
+          "Evidence and its limits",
+          "A visible comment pane proves the gate was invoked, but not that the change committed. Confirm the object appears in the effective policy and that the corresponding Administrator Event is recorded. A saved policy without an immediately visible log may reflect ingestion latency; repeat after an appropriate delay and confirm time-zone filters. An Administrator Event does not by itself prove that a remote endpoint received an updated policy, that a security PoP enforced it, or that the change preserved service availability."
+        ],
+        [
+          "Operational scenario",
+          "An administrator reports that a FortiSASE policy edit is stuck after clicking OK. The tenant recently enabled mandatory audit comments. The pending change-summary dialog is hidden behind another window or blocked by a browser extension. Verify whether the summary was submitted before investigating propagation or endpoint posture. In a different case, a compliance reviewer requests a 60-day-old summary; the documented 30-day retention means the record may no longer exist in the portal, even if the policy remains."
+        ],
+        [
+          "HA, scale and review",
+          "Standardize concise, meaningful comments and avoid embedding passwords, tokens or customer personal data in audit summaries. During organizational handovers, review the 30-day retention and external evidence export before relying on the portal as the sole audit store. Validate role permissions and identity federation separately from this feature. The mechanism-to-implication chain is admin edit -> required comment -> configuration commit -> delayed event log -> finite summary retention, not a generic claim that every administrative action has been approved."
+        ]
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "title": "FortiGuard SLA database targets: licensed probe presets versus measured path quality",
+      "slug": "12_sdwan_fgsla",
+      "primary": "https://docs.fortinet.com/document/fortigate/latest/administration-guide/875001/fortiguard-sla-database-for-sd-wan-performance-sla",
+      "scenario": null,
+      "fingerprint": "sdwan-fortiguard-sla-preset-server-threshold-license",
+      "nodes": [
+        "FortiGuard SLA preset catalog",
+        "License/download entitlement",
+        "SD-WAN health-check object",
+        "Member probe to SaaS target",
+        "Measured latency/jitter/loss",
+        "SD-WAN rule path decision"
+      ],
+      "sections": [
+        [
+          "Purpose and control-plane boundary",
+          "FortiGuard's SLA database supplies preconfigured probe destinations and recommended performance thresholds for popular SaaS and internet services. It reduces manual server/threshold selection but does not replace actual health measurements. The FortiGate still sends health-check probes from eligible SD-WAN members, evaluates latency, jitter and loss, and applies the relevant SLA requirements to rule decisions. A database preset is a configuration input, not evidence that a SaaS application is reachable or performing acceptably."
+        ],
+        [
+          "Objects and licensing",
+          "In Network > SD-WAN > Performance SLA, Create New exposes the FortiGuard database when the service is available. The CLI health-check object supports `set fortiguard enable` and `set fortiguard-name <predefined-target>`. Fortinet documents that downloading or updating the database requires a valid SD-WAN Underlay and Application Monitoring license. If the database is missing, check entitlement and update reachability before editing unrelated routing policies. A manually configured health check and a FortiGuard preset should be compared by actual probe server and thresholds, not just their names."
+        ],
+        [
+          "Measurement and forwarding sequence",
+          "The health-check selects a target and probes each configured member, producing performance measurements. An SD-WAN rule then considers member eligibility and the required SLA targets when steering new sessions. A probe can succeed while an application still fails due to DNS, TLS, authentication or a different CDN path. Likewise, an application can work while a specific probe destination is unreachable. Separate underlay route reachability, probe target accessibility, measured thresholds and session-path selection in troubleshooting."
+        ],
+        [
+          "Source-supported setup",
+          "Create or edit a health check, select the FortiGuard SLA preset for the desired application class, and verify the populated target and thresholds. In CLI, Fortinet documents `config system sdwan`, `config health-check`, `edit <health-check-name>`, `set fortiguard enable`, `set fortiguard-name <name>`, then close the contexts. Bind the intended SLA to a service rule and explicitly select the member participants. Do not assume a preset's recommended thresholds are universal: baseline real branch latency and business tolerance first."
+        ],
+        [
+          "Evidence and troubleshooting",
+          "Compare the installed FortiGuard database availability, health-check configuration, member probe statistics, SLA pass/fail state and session distribution. A healthy preset probe is not proof the business application selected the expected WAN: inspect the matching SD-WAN rule and session route. A failed preset probe does not automatically mean the WAN is physically down. If a site sees different results from another site, compare DNS resolution, member source addresses, upstream filtering and which CDN/service endpoint is actually probed."
+        ],
+        [
+          "Operational implications",
+          "Preset targets can evolve as FortiGuard content is updated; validate behavior after license renewals, database updates and FortiOS upgrades. For HA pairs, ensure both units have appropriate entitlement and synchronized configuration and retest probes after failover. In high-scale branches, limit unnecessary overlapping probes and monitor resource use. The failure-isolation sequence is license/catalog -> health-check target -> probe metric -> rule threshold -> session forwarding -> real application outcome. Changing the FortiGuard preset alone cannot fix a broken DNS or application authentication flow."
+        ]
+      ]
     }
   ]
 }
