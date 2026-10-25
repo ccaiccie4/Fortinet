@@ -32,12 +32,12 @@
       "stem": "IKEv2 is established, but a new CHILD_SA fails following phase-2 PQC changes. Where should diagnosis start?",
       "choices": [
         {
-          "text": "Review both phase-2 addke proposals and FOLLOWUP_KE behavior.",
-          "feedback": "CHILD_SA rekey/additional KE can differ from the established IKE SA."
-        },
-        {
           "text": "Review the FortiGate's global web proxy certificate settings.",
           "feedback": "Proxy certificates do not determine CHILD_SA additional KE compatibility."
+        },
+        {
+          "text": "Review both phase-2 addke proposals and FOLLOWUP_KE behavior.",
+          "feedback": "CHILD_SA rekey/additional KE can differ from the established IKE SA."
         },
         {
           "text": "Review the switch's 802.1X port authorization counters.",
@@ -60,12 +60,12 @@
           "feedback": "ESP counts alone do not prove every destination policy."
         },
         {
-          "text": "Whether the negotiated SA used the intended additional KEM.",
-          "feedback": "Data-plane counters cannot attest to the negotiated addke group."
-        },
-        {
           "text": "Whether the peer can route return traffic through the tunnel.",
           "feedback": "ESP counts alone do not show return-path reachability."
+        },
+        {
+          "text": "Whether the negotiated SA used the intended additional KEM.",
+          "feedback": "Data-plane counters cannot attest to the negotiated addke group."
         },
         {
           "text": "Whether the WAN MTU can carry ordinary encrypted packets.",
@@ -88,12 +88,12 @@
           "feedback": "A simultaneous rollout hides which peer proposal first fails."
         },
         {
-          "text": "Test a compatible pair, verify exchanges, then stage spokes.",
-          "feedback": "A pilot verifies compatibility and rekey behavior before scale."
-        },
-        {
           "text": "Enable only ESP encryption changes and skip peer checks.",
           "feedback": "ESP cipher changes do not verify IKE additional exchanges."
+        },
+        {
+          "text": "Test a compatible pair, verify exchanges, then stage spokes.",
+          "feedback": "A pilot verifies compatibility and rekey behavior before scale."
         }
       ],
       "answer": 3
@@ -128,12 +128,12 @@
       "stem": "A FortiManager capture contains RADIUS Access-Accept for a wired endpoint. What cannot yet be concluded?",
       "choices": [
         {
-          "text": "The access switch installed the authorized VLAN on its port.",
-          "feedback": "An Access-Accept does not prove hardware VLAN assignment."
-        },
-        {
           "text": "The RADIUS server returned an affirmative authentication decision.",
           "feedback": "The packet directly shows the RADIUS response decision."
+        },
+        {
+          "text": "The access switch installed the authorized VLAN on its port.",
+          "feedback": "An Access-Accept does not prove hardware VLAN assignment."
         },
         {
           "text": "The management workflow captured a packet at that interface.",
@@ -156,12 +156,12 @@
           "feedback": "Policy diffs cannot show which frames arrived at 03:00."
         },
         {
-          "text": "A scheduled switch packet capture covering the outage.",
-          "feedback": "Scheduled PCAPs observe transient traffic during the failure window."
-        },
-        {
           "text": "An ADOM object deletion report after the outage.",
           "feedback": "Object deletion history does not capture the transient packet path."
+        },
+        {
+          "text": "A scheduled switch packet capture covering the outage.",
+          "feedback": "Scheduled PCAPs observe transient traffic during the failure window."
         },
         {
           "text": "A full FortiAnalyzer backup performed during business hours.",
@@ -184,12 +184,12 @@
           "feedback": "SIEM event storage does not affect DHCP server replies."
         },
         {
-          "text": "Capture at the uplink or FortiGate DHCP boundary.",
-          "feedback": "Moving the capture boundary localizes where the reply disappears."
-        },
-        {
           "text": "Immediately disable the FortiGate's DoS anomaly policy.",
           "feedback": "DoS policy is unproven and may not govern this VLAN."
+        },
+        {
+          "text": "Capture at the uplink or FortiGate DHCP boundary.",
+          "feedback": "Moving the capture boundary localizes where the reply disappears."
         }
       ],
       "answer": 3
@@ -224,12 +224,12 @@
       "stem": "An ADOM's log rate is normal but a historical report lacks one day. What does rate evidence prove?",
       "choices": [
         {
-          "text": "Current log ingestion exists, not continuous historical retention.",
-          "feedback": "The command observes current ADOM ingestion, not file retention."
-        },
-        {
           "text": "All historical archive files remain present and searchable.",
           "feedback": "Current rate cannot attest to old archive completeness."
+        },
+        {
+          "text": "Current log ingestion exists, not continuous historical retention.",
+          "feedback": "The command observes current ADOM ingestion, not file retention."
         },
         {
           "text": "All log files have been rolled precisely every 24 hours.",
@@ -252,12 +252,12 @@
           "feedback": "Larger files generally span more days at low volume."
         },
         {
-          "text": "Configure scheduled daily rolling for bounded file spans.",
-          "feedback": "Daily rolling keeps files near day boundaries for retention."
-        },
-        {
           "text": "Disable analytics indexing while keeping archive unchanged.",
           "feedback": "Indexing does not change file-level archive roll boundaries."
+        },
+        {
+          "text": "Configure scheduled daily rolling for bounded file spans.",
+          "feedback": "Daily rolling keeps files near day boundaries for retention."
         },
         {
           "text": "Move the ADOM to a different FortiManager workspace.",
@@ -280,12 +280,12 @@
           "feedback": "Retention does not automatically replay missing log history."
         },
         {
-          "text": "Whole-file deletion follows the oldest last-received log.",
-          "feedback": "Deleting whole files can leave non-contiguous date coverage."
-        },
-        {
           "text": "Every record is deleted in strict chronological timestamp order.",
           "feedback": "The deletion unit is a file, not an individual record."
+        },
+        {
+          "text": "Whole-file deletion follows the oldest last-received log.",
+          "feedback": "Deleting whole files can leave non-contiguous date coverage."
         }
       ],
       "answer": 3
@@ -320,12 +320,12 @@
       "stem": "An ACL match counter rises but traffic is not blocked. Which explanation fits the evidence?",
       "choices": [
         {
-          "text": "The matching ACL action may count or remark, not drop.",
-          "feedback": "A match can trigger non-drop actions such as counting or remarking."
-        },
-        {
           "text": "The ACL must be acting as a FortiGate firewall policy.",
           "feedback": "A switch ACL is not a FortiGate forwarding policy."
+        },
+        {
+          "text": "The matching ACL action may count or remark, not drop.",
+          "feedback": "A match can trigger non-drop actions such as counting or remarking."
         },
         {
           "text": "The switch's MCLAG heartbeat necessarily went down.",
@@ -348,12 +348,12 @@
           "feedback": "ADOM revisions do not release switch density-mode allocation."
         },
         {
-          "text": "Plan ACL key-compaction or switch restart with disruption awareness.",
-          "feedback": "Density-mode hardware resources may need compaction or restart."
-        },
-        {
           "text": "Run FortiNAC portal Publish to reload all access rules.",
           "feedback": "FortiNAC web rules do not reclaim switch ACL hardware."
+        },
+        {
+          "text": "Plan ACL key-compaction or switch restart with disruption awareness.",
+          "feedback": "Density-mode hardware resources may need compaction or restart."
         },
         {
           "text": "Disable the FortiGate's IPsec childless IKE negotiation.",
@@ -376,12 +376,12 @@
           "feedback": "DHCP relay does not govern switch ACL ASIC capability."
         },
         {
-          "text": "The model-specific ACL feature matrix restricts that action.",
-          "feedback": "The guide explicitly documents model-specific classifier/action limits."
-        },
-        {
           "text": "All switches support identical actions after FortiManager install.",
           "feedback": "ACL action support differs by switch family and release."
+        },
+        {
+          "text": "The model-specific ACL feature matrix restricts that action.",
+          "feedback": "The guide explicitly documents model-specific classifier/action limits."
         }
       ],
       "answer": 3
@@ -416,12 +416,12 @@
       "stem": "After enabling MPSK, a legacy client loses DHCP although association succeeds. Which path is most relevant?",
       "choices": [
         {
-          "text": "The key-selected VLAN's tagging, DHCP and policy path.",
-          "feedback": "MPSK enables dynamic VLAN; L3 reachability must be revalidated."
-        },
-        {
           "text": "The FortiGate's IKEv2 additional KE group proposal.",
           "feedback": "IKE KEM negotiation is unrelated to WLAN DHCP."
+        },
+        {
+          "text": "The key-selected VLAN's tagging, DHCP and policy path.",
+          "feedback": "MPSK enables dynamic VLAN; L3 reachability must be revalidated."
         },
         {
           "text": "The FortiSIEM region's ClickHouse shard placement.",
@@ -444,12 +444,12 @@
           "feedback": "Capture duration does not change client cipher capability."
         },
         {
-          "text": "The MPSK security mode versus the client's WPA capability.",
-          "feedback": "SAE-only key types may exclude WPA2-only supplicants."
-        },
-        {
           "text": "FortiAnalyzer's compressed log file roll trigger.",
           "feedback": "Archive roll triggers do not control WLAN authentication."
+        },
+        {
+          "text": "The MPSK security mode versus the client's WPA capability.",
+          "feedback": "SAE-only key types may exclude WPA2-only supplicants."
         },
         {
           "text": "FortiSASE's required administrator change-summary field.",
@@ -472,12 +472,12 @@
           "feedback": "A reboot does not change the VAP association model."
         },
         {
-          "text": "Only one MPSK profile can be bound to a VAP.",
-          "feedback": "The guide explicitly restricts VAPs to one MPSK profile."
-        },
-        {
           "text": "Two profiles combine only when DHCP snooping is enabled.",
           "feedback": "DHCP snooping does not merge MPSK profiles."
+        },
+        {
+          "text": "Only one MPSK profile can be bound to a VAP.",
+          "feedback": "The guide explicitly restricts VAPs to one MPSK profile."
         }
       ],
       "answer": 3
@@ -512,12 +512,12 @@
       "stem": "A FortiNAC request matcher uses `example.com` as regex. What subtle problem can arise?",
       "choices": [
         {
-          "text": "The dot can match any character without escaping.",
-          "feedback": "Unescaped dot matches any single character in regex."
-        },
-        {
           "text": "It automatically matches only exact hostname bytes.",
           "feedback": "Regex dot is not an exact literal by default."
+        },
+        {
+          "text": "The dot can match any character without escaping.",
+          "feedback": "Unescaped dot matches any single character in regex."
         },
         {
           "text": "It can only match an HTTP User Agent, never a URI.",
@@ -540,12 +540,12 @@
           "feedback": "Disabling logs removes evidence without finding duplicates."
         },
         {
-          "text": "Identify duplicate matcher/action/target groups before changes.",
-          "feedback": "Grouping rule fields exposes duplicates for controlled remediation."
-        },
-        {
           "text": "Delete half the records using an unreviewed SQL command.",
           "feedback": "Unreviewed database deletion risks portal configuration integrity."
+        },
+        {
+          "text": "Identify duplicate matcher/action/target groups before changes.",
+          "feedback": "Grouping rule fields exposes duplicates for controlled remediation."
         },
         {
           "text": "Replace all registration VLANs to clear stale browser cache.",
@@ -568,12 +568,12 @@
           "feedback": "The browser redirect is earlier than compliance completion."
         },
         {
-          "text": "HTTP request routing works; inspect downstream registration stages.",
-          "feedback": "The request-rule layer can succeed while registration later fails."
-        },
-        {
           "text": "The portal HTTP rules also proved RADIUS VLAN authorization.",
           "feedback": "A redirect does not prove access policy or registration success."
+        },
+        {
+          "text": "HTTP request routing works; inspect downstream registration stages.",
+          "feedback": "The request-rule layer can succeed while registration later fails."
         }
       ],
       "answer": 3
@@ -608,12 +608,12 @@
       "stem": "An endpoint uses EAP-TLS and Winbind shows Not Joined. What should the engineer conclude?",
       "choices": [
         {
-          "text": "The certificate path can work independently of Winbind.",
-          "feedback": "Fortinet documents Winbind as specific to MSCHAPv2."
-        },
-        {
           "text": "All EAP-TLS authentications must be rejected by Winbind.",
           "feedback": "EAP-TLS is not the Winbind authentication path."
+        },
+        {
+          "text": "The certificate path can work independently of Winbind.",
+          "feedback": "Fortinet documents Winbind as specific to MSCHAPv2."
         },
         {
           "text": "The FortiGate must disable TLS certificate inspection globally.",
@@ -636,12 +636,12 @@
           "feedback": "Client MAC and switch model cannot establish Winbind join state."
         },
         {
-          "text": "Current join status and machine-account lifecycle indicators.",
-          "feedback": "The guide warns stale details and epoch dates indicate lost join."
-        },
-        {
           "text": "The previously displayed domain-controller hostname alone.",
           "feedback": "A cached controller name is not proof of active domain trust."
+        },
+        {
+          "text": "Current join status and machine-account lifecycle indicators.",
+          "feedback": "The guide warns stale details and epoch dates indicate lost join."
         },
         {
           "text": "The user's browser captive-portal redirect target URL.",
@@ -664,12 +664,12 @@
           "feedback": "Switch ACL resources do not determine Winbind trust."
         },
         {
-          "text": "DNS A/SRV records and the second Winbind instance's join.",
-          "feedback": "Additional domains require DNS and separate working Winbind configuration."
-        },
-        {
           "text": "FortiPAM secret launcher TOTP duration and hash.",
           "feedback": "PAM TOTP does not determine directory discovery."
+        },
+        {
+          "text": "DNS A/SRV records and the second Winbind instance's join.",
+          "feedback": "Additional domains require DNS and separate working Winbind configuration."
         }
       ],
       "answer": 3
@@ -704,12 +704,12 @@
       "stem": "A developer adds a client_secret to fix FortiAuthenticator PKCE authorization errors. Why is this ineffective?",
       "choices": [
         {
-          "text": "The public PKCE flow ignores client_secret for this request.",
-          "feedback": "FortiAuthenticator documents client_secret ignored for PKCE authorization."
-        },
-        {
           "text": "PKCE requires a privileged FortiGate firewall policy first.",
           "feedback": "FortiGate policy is not the missing PKCE proof."
+        },
+        {
+          "text": "The public PKCE flow ignores client_secret for this request.",
+          "feedback": "FortiAuthenticator documents client_secret ignored for PKCE authorization."
         },
         {
           "text": "OAuth requires an LDAP machine-account Winbind domain join.",
@@ -732,12 +732,12 @@
           "feedback": "Audit comments are not PKCE request parameters."
         },
         {
-          "text": "A code_challenge and code_challenge_method in authorization.",
-          "feedback": "The documented endpoint requires both challenge and method."
-        },
-        {
           "text": "An ESP cipher proposal and phase-2 addke group list.",
           "feedback": "IKEv2 proposal data is not an OAuth request field."
+        },
+        {
+          "text": "A code_challenge and code_challenge_method in authorization.",
+          "feedback": "The documented endpoint requires both challenge and method."
         },
         {
           "text": "A FortiAnalyzer report dataset and archive roll time.",
@@ -760,12 +760,12 @@
           "feedback": "MPSK segmentation is separate from OAuth redirects."
         },
         {
-          "text": "FortiAuthenticator allowed redirect URIs and HTTPS preference.",
-          "feedback": "The RP explicitly registers redirect URIs; HTTPS is recommended."
-        },
-        {
           "text": "FortiSIEM ClickHouse worker region membership and shard.",
           "feedback": "SIEM region routing does not validate OAuth callback URIs."
+        },
+        {
+          "text": "FortiAuthenticator allowed redirect URIs and HTTPS preference.",
+          "feedback": "The RP explicitly registers redirect URIs; HTTPS is recommended."
         }
       ],
       "answer": 3
@@ -800,12 +800,12 @@
       "stem": "A FortiPAM secret inherits an eight-digit TOTP template, but its target expects six digits. What fixes the mismatch?",
       "choices": [
         {
-          "text": "Override the secret's TOTP length and verify interval/hash.",
-          "feedback": "Per-secret override can align length, duration and hash."
-        },
-        {
           "text": "Change FortiAuthenticator OAuth token expiry to six hours.",
           "feedback": "OAuth expiry does not change a target TOTP code length."
+        },
+        {
+          "text": "Override the secret's TOTP length and verify interval/hash.",
+          "feedback": "Per-secret override can align length, duration and hash."
         },
         {
           "text": "Disable the FortiNAC portal request-rule publish operation.",
@@ -828,12 +828,12 @@
           "feedback": "A launcher cannot simply disable target-enforced MFA."
         },
         {
-          "text": "Some non-proxy/web launches require manual TOTP entry.",
-          "feedback": "The guide identifies manual code entry for unsupported launchers."
-        },
-        {
           "text": "It always falls back to an IKE_INTERMEDIATE exchange.",
           "feedback": "IKEv2 exchanges are unrelated to browser OTP filling."
+        },
+        {
+          "text": "Some non-proxy/web launches require manual TOTP entry.",
+          "feedback": "The guide identifies manual code entry for unsupported launchers."
         },
         {
           "text": "It automatically enrolls a new FortiToken for every session.",
@@ -856,12 +856,12 @@
           "feedback": "Audit retention does not determine OTP code validity."
         },
         {
-          "text": "Target/PAM clock skew versus TOTP step duration and hash.",
-          "feedback": "TOTP depends on synchronized time and matching code parameters."
-        },
-        {
           "text": "The FortiAnalyzer per-ADOM log volume and archive age.",
           "feedback": "Archive metrics cannot validate OTP time windows."
+        },
+        {
+          "text": "Target/PAM clock skew versus TOTP step duration and hash.",
+          "feedback": "TOTP depends on synchronized time and matching code parameters."
         }
       ],
       "answer": 3
@@ -896,12 +896,12 @@
       "stem": "A load balancer sends all collectors to workers across two FortiSIEM storage regions. What is the design flaw?",
       "choices": [
         {
-          "text": "Collector traffic should reach workers in its intended region.",
-          "feedback": "The documented region architecture requires correct worker targeting."
-        },
-        {
           "text": "Regions require every collector to use all available workers.",
           "feedback": "Region isolation requires destination-aware routing, not all workers."
+        },
+        {
+          "text": "Collector traffic should reach workers in its intended region.",
+          "feedback": "The documented region architecture requires correct worker targeting."
         },
         {
           "text": "ClickHouse data nodes must overlap between every region.",
@@ -924,12 +924,12 @@
           "feedback": "Audit comments do not affect ClickHouse storage integrity."
         },
         {
-          "text": "Inspect database service/logs before any supported repair.",
-          "feedback": "Storage-engine errors need service/log evidence and safe recovery."
-        },
-        {
           "text": "Change the FortiNAC RADIUS VLAN to trigger new events.",
           "feedback": "NAC VLAN changes cannot repair ClickHouse data parts."
+        },
+        {
+          "text": "Inspect database service/logs before any supported repair.",
+          "feedback": "Storage-engine errors need service/log evidence and safe recovery."
         },
         {
           "text": "Reassign every collector to a different region immediately.",
@@ -952,12 +952,12 @@
           "feedback": "A received event supports source emission for that record."
         },
         {
-          "text": "Whether the expected shard committed and indexed the event.",
-          "feedback": "Worker receipt is upstream of shard persistence and query visibility."
-        },
-        {
           "text": "Whether the collector established a transport connection.",
           "feedback": "The worker observation already supports transport receipt."
+        },
+        {
+          "text": "Whether the expected shard committed and indexed the event.",
+          "feedback": "Worker receipt is upstream of shard persistence and query visibility."
         }
       ],
       "answer": 3
@@ -992,12 +992,12 @@
       "stem": "A reviewer requests a FortiSASE change comment from 45 days ago. What is the documented limitation?",
       "choices": [
         {
-          "text": "Existing change summaries are retained for 30 days.",
-          "feedback": "Fortinet documents a 30-day retention for change summaries."
-        },
-        {
           "text": "All change summaries are immutable for seven years.",
           "feedback": "The guide does not promise seven-year summary retention."
+        },
+        {
+          "text": "Existing change summaries are retained for 30 days.",
+          "feedback": "Fortinet documents a 30-day retention for change summaries."
         },
         {
           "text": "Only FortiManager can export SASE audit information.",
@@ -1020,12 +1020,12 @@
           "feedback": "NAC web publishing does not determine SASE audit timing."
         },
         {
-          "text": "Possible delay before FortiSASE audit logs appear.",
-          "feedback": "The guide warns new Administrator Events can appear later."
-        },
-        {
           "text": "FortiGate IKEv2 post-quantum rekey timing and groups.",
           "feedback": "IKE rekey is unrelated to audit-event ingestion latency."
+        },
+        {
+          "text": "Possible delay before FortiSASE audit logs appear.",
+          "feedback": "The guide warns new Administrator Events can appear later."
         },
         {
           "text": "FortiSwitch ACL hardware resource compaction windows.",
@@ -1048,12 +1048,12 @@
           "feedback": "The existence of the summary supports gate execution."
         },
         {
-          "text": "That the new policy was enforced correctly for endpoints.",
-          "feedback": "An audit note does not attest to actual endpoint enforcement."
-        },
-        {
           "text": "That an administrator supplied a summary before submission.",
           "feedback": "The comment is evidence of a submitted summary."
+        },
+        {
+          "text": "That the new policy was enforced correctly for endpoints.",
+          "feedback": "An audit note does not attest to actual endpoint enforcement."
         }
       ],
       "answer": 3
@@ -1088,12 +1088,12 @@
       "stem": "A FortiGuard SLA preset probe passes, but SaaS login fails. What does this observation mean?",
       "choices": [
         {
-          "text": "Probe success does not validate DNS/TLS/application login.",
-          "feedback": "Probe health is narrower than full application transaction success."
-        },
-        {
           "text": "The SaaS authentication system must be working normally.",
           "feedback": "Probe success does not test user authentication end-to-end."
+        },
+        {
+          "text": "Probe success does not validate DNS/TLS/application login.",
+          "feedback": "Probe health is narrower than full application transaction success."
         },
         {
           "text": "The FortiGate automatically disables all other WAN members.",
@@ -1116,12 +1116,12 @@
           "feedback": "These settings govern FortiSwitch ACL resource handling."
         },
         {
-          "text": "`set fortiguard enable` and `set fortiguard-name` values.",
-          "feedback": "These health-check fields select the FortiGuard SLA catalog entry."
-        },
-        {
           "text": "`set addke1` and `set childless-ike` on phase one.",
           "feedback": "These settings control IPsec hybrid key exchanges."
+        },
+        {
+          "text": "`set fortiguard enable` and `set fortiguard-name` values.",
+          "feedback": "These health-check fields select the FortiGuard SLA catalog entry."
         },
         {
           "text": "`set totp-length` and `set totp-duration` in a secret.",
@@ -1144,12 +1144,12 @@
           "feedback": "Archive quota is not an SD-WAN steering input."
         },
         {
-          "text": "Probe results, member eligibility, thresholds and rule matches.",
-          "feedback": "Member measurements and rule selection explain path differences."
-        },
-        {
           "text": "Only the display names of the configured SLA checks.",
           "feedback": "Identical names do not imply identical measured path quality."
+        },
+        {
+          "text": "Probe results, member eligibility, thresholds and rule matches.",
+          "feedback": "Member measurements and rule selection explain path differences."
         }
       ],
       "answer": 3
@@ -1184,12 +1184,12 @@
       "stem": "A dashboard is empty after a change, and operators propose resetting the database. Which evidence-first comparison best separates FortiAnalyzer from FortiSIEM?",
       "choices": [
         {
-          "text": "Check FAZ rolled files versus SIEM worker-to-shard persistence.",
-          "feedback": "FAZ file retention and SIEM region placement have distinct evidence."
-        },
-        {
           "text": "Use the same archive quota number for both products.",
           "feedback": "Different storage engines cannot be diagnosed from one quota."
+        },
+        {
+          "text": "Check FAZ rolled files versus SIEM worker-to-shard persistence.",
+          "feedback": "FAZ file retention and SIEM region placement have distinct evidence."
         },
         {
           "text": "Disable MPSK on all access points before examining logs.",
