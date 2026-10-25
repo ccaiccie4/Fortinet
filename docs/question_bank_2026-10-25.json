@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-25",
+  "source": "12 Fortinet feature/admin guide lessons; Community secondary scenario context",
+  "questions": [
+    {
+      "id": 1,
+      "lesson": 1,
+      "stem": "A hub negotiates IKE_SA_INIT, but a new tunnel stalls before IKE_AUTH after enabling PQC. Which comparison is decisive?",
+      "choices": [
+        {
+          "text": "Compare both peers' phase-1 additional KE groups and exchange support.",
+          "feedback": "IKE_INTERMEDIATE proposals must agree before authentication can finish."
+        },
+        {
+          "text": "Compare firewall policy sequence numbers on the inside interfaces.",
+          "feedback": "Forward policy ordering does not negotiate additional IKE keys."
+        },
+        {
+          "text": "Compare ESP traffic counters after clearing the active tunnel.",
+          "feedback": "ESP counters are downstream and may remain zero after negotiation fails."
+        },
+        {
+          "text": "Compare DNS resolver cache entries for the peer hostname.",
+          "feedback": "DNS cache may affect reachability but not a negotiated KE mismatch."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 2,
+      "lesson": 1,
+      "stem": "IKEv2 is established, but a new CHILD_SA fails following phase-2 PQC changes. Where should diagnosis start?",
+      "choices": [
+        {
+          "text": "Review both phase-2 addke proposals and FOLLOWUP_KE behavior.",
+          "feedback": "CHILD_SA rekey/additional KE can differ from the established IKE SA."
+        },
+        {
+          "text": "Review the FortiGate's global web proxy certificate settings.",
+          "feedback": "Proxy certificates do not determine CHILD_SA additional KE compatibility."
+        },
+        {
+          "text": "Review the switch's 802.1X port authorization counters.",
+          "feedback": "802.1X controls local access rather than IKE phase-2 negotiation."
+        },
+        {
+          "text": "Review the FortiAnalyzer report retention and roll schedule.",
+          "feedback": "Log retention cannot cause a phase-2 KEM proposal mismatch."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 3,
+      "lesson": 1,
+      "stem": "A tunnel's ESP counters increase after a PQC rollout. What is still unproven?",
+      "choices": [
+        {
+          "text": "Whether the firewall rule permits all production destinations.",
+          "feedback": "ESP counts alone do not prove every destination policy."
+        },
+        {
+          "text": "Whether the negotiated SA used the intended additional KEM.",
+          "feedback": "Data-plane counters cannot attest to the negotiated addke group."
+        },
+        {
+          "text": "Whether the peer can route return traffic through the tunnel.",
+          "feedback": "ESP counts alone do not show return-path reachability."
+        },
+        {
+          "text": "Whether the WAN MTU can carry ordinary encrypted packets.",
+          "feedback": "Packets can pass without proving all larger MTU cases."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 4,
+      "lesson": 1,
+      "stem": "An engineer wants to enable PQC on seven spoke tunnels in one change. Which staged test best reduces negotiation risk?",
+      "choices": [
+        {
+          "text": "Increase DPD retries and assume KEM compatibility follows.",
+          "feedback": "DPD timing does not establish cryptographic group support."
+        },
+        {
+          "text": "Enable all additional KE rounds on every spoke immediately.",
+          "feedback": "A simultaneous rollout hides which peer proposal first fails."
+        },
+        {
+          "text": "Test a compatible pair, verify exchanges, then stage spokes.",
+          "feedback": "A pilot verifies compatibility and rekey behavior before scale."
+        },
+        {
+          "text": "Enable only ESP encryption changes and skip peer checks.",
+          "feedback": "ESP cipher changes do not verify IKE additional exchanges."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 5,
+      "lesson": 2,
+      "stem": "FortiManager shows no DHCP Discover in a scheduled FortiSwitch PCAP. What should be checked first?",
+      "choices": [
+        {
+          "text": "Selected switch, ingress port, filter and capture time window.",
+          "feedback": "An empty capture is ambiguous until observation scope and time are correct."
+        },
+        {
+          "text": "FortiAnalyzer's archive file rolling interval and quota.",
+          "feedback": "Archive retention does not determine FortiSwitch capture visibility."
+        },
+        {
+          "text": "The WAN SD-WAN SLA target and FortiGuard license.",
+          "feedback": "WAN probe entitlement is unrelated to a local switch capture."
+        },
+        {
+          "text": "The wireless MPSK profile's SAE transition security type.",
+          "feedback": "MPSK mode is not the first explanation for a mis-scoped PCAP."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 6,
+      "lesson": 2,
+      "stem": "A FortiManager capture contains RADIUS Access-Accept for a wired endpoint. What cannot yet be concluded?",
+      "choices": [
+        {
+          "text": "The access switch installed the authorized VLAN on its port.",
+          "feedback": "An Access-Accept does not prove hardware VLAN assignment."
+        },
+        {
+          "text": "The RADIUS server returned an affirmative authentication decision.",
+          "feedback": "The packet directly shows the RADIUS response decision."
+        },
+        {
+          "text": "The management workflow captured a packet at that interface.",
+          "feedback": "The observed packet confirms capture operation at that point."
+        },
+        {
+          "text": "The upstream path carried a response toward the access switch.",
+          "feedback": "The observed packet supports upstream response transport."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 7,
+      "lesson": 2,
+      "stem": "An intermittent outage occurs only at 03:00. Which FortiManager capability most directly preserves evidence?",
+      "choices": [
+        {
+          "text": "A FortiGate firewall policy comparison from last week.",
+          "feedback": "Policy diffs cannot show which frames arrived at 03:00."
+        },
+        {
+          "text": "A scheduled switch packet capture covering the outage.",
+          "feedback": "Scheduled PCAPs observe transient traffic during the failure window."
+        },
+        {
+          "text": "An ADOM object deletion report after the outage.",
+          "feedback": "Object deletion history does not capture the transient packet path."
+        },
+        {
+          "text": "A full FortiAnalyzer backup performed during business hours.",
+          "feedback": "A backup does not record the packet exchange causing the outage."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 8,
+      "lesson": 2,
+      "stem": "A FortiManager PCAP shows DHCP Discover but no Offer. What is the next sound isolation step?",
+      "choices": [
+        {
+          "text": "Replace all client MPSK keys across the WLAN.",
+          "feedback": "Rotating WLAN keys is unrelated to an observed DHCP Discover."
+        },
+        {
+          "text": "Clear the FortiSIEM ClickHouse event database.",
+          "feedback": "SIEM event storage does not affect DHCP server replies."
+        },
+        {
+          "text": "Capture at the uplink or FortiGate DHCP boundary.",
+          "feedback": "Moving the capture boundary localizes where the reply disappears."
+        },
+        {
+          "text": "Immediately disable the FortiGate's DoS anomaly policy.",
+          "feedback": "DoS policy is unproven and may not govern this VLAN."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 9,
+      "lesson": 3,
+      "stem": "FortiAnalyzer reports archive data older than its 90-day setting. Which mechanism explains this?",
+      "choices": [
+        {
+          "text": "File-level retention waits until all records are out of window.",
+          "feedback": "Mixed-age rolled files remain until the entire file is eligible."
+        },
+        {
+          "text": "Each individual archive record is deleted at midnight.",
+          "feedback": "Archive deletion is file-granular, not per-record at midnight."
+        },
+        {
+          "text": "A report SQL dataset overrides archive deletion dates.",
+          "feedback": "Report datasets cannot alter archive file deletion granularity."
+        },
+        {
+          "text": "The log forwarding connector always duplicates old records.",
+          "feedback": "Forwarding may copy logs but does not explain file eligibility."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 10,
+      "lesson": 3,
+      "stem": "An ADOM's log rate is normal but a historical report lacks one day. What does rate evidence prove?",
+      "choices": [
+        {
+          "text": "Current log ingestion exists, not continuous historical retention.",
+          "feedback": "The command observes current ADOM ingestion, not file retention."
+        },
+        {
+          "text": "All historical archive files remain present and searchable.",
+          "feedback": "Current rate cannot attest to old archive completeness."
+        },
+        {
+          "text": "All log files have been rolled precisely every 24 hours.",
+          "feedback": "Daily rolling must be separately configured and verified."
+        },
+        {
+          "text": "The report's SQL query has no time-filter defects.",
+          "feedback": "A rate counter does not validate report query filters."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 11,
+      "lesson": 3,
+      "stem": "A low-volume ADOM has compressed files spanning several days. Which change targets deletion granularity?",
+      "choices": [
+        {
+          "text": "Increase the file size threshold to several gigabytes.",
+          "feedback": "Larger files generally span more days at low volume."
+        },
+        {
+          "text": "Configure scheduled daily rolling for bounded file spans.",
+          "feedback": "Daily rolling keeps files near day boundaries for retention."
+        },
+        {
+          "text": "Disable analytics indexing while keeping archive unchanged.",
+          "feedback": "Indexing does not change file-level archive roll boundaries."
+        },
+        {
+          "text": "Move the ADOM to a different FortiManager workspace.",
+          "feedback": "FortiManager workspaces are unrelated to FAZ archive files."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 12,
+      "lesson": 3,
+      "stem": "Storage-size pressure removes logs from days 60–89 while day 90 survives. Why might that occur?",
+      "choices": [
+        {
+          "text": "A new report dataset created a gap in the raw logs.",
+          "feedback": "Datasets cannot create archive retention gaps by themselves."
+        },
+        {
+          "text": "FortiAnalyzer automatically replays missing archived days.",
+          "feedback": "Retention does not automatically replay missing log history."
+        },
+        {
+          "text": "Whole-file deletion follows the oldest last-received log.",
+          "feedback": "Deleting whole files can leave non-contiguous date coverage."
+        },
+        {
+          "text": "Every record is deleted in strict chronological timestamp order.",
+          "feedback": "The deletion unit is a file, not an individual record."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 13,
+      "lesson": 4,
+      "stem": "A FortiSwitch ingress ACL appears in configuration but packets still pass. What evidence matters next?",
+      "choices": [
+        {
+          "text": "Assigned ACL group, hardware usage, action and match counters.",
+          "feedback": "Hardware enforcement requires attachment, support and matching action."
+        },
+        {
+          "text": "FortiGate's central NAT policy and translated address pool.",
+          "feedback": "Central NAT does not program a FortiSwitch ingress ACL."
+        },
+        {
+          "text": "FortiAnalyzer's report scheduling and analytics disk quota.",
+          "feedback": "Reporting storage is downstream of switch hardware decisions."
+        },
+        {
+          "text": "FortiSASE administrator comments for last month's edits.",
+          "feedback": "Audit comments do not prove switch ASIC policy installation."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 14,
+      "lesson": 4,
+      "stem": "An ACL match counter rises but traffic is not blocked. Which explanation fits the evidence?",
+      "choices": [
+        {
+          "text": "The matching ACL action may count or remark, not drop.",
+          "feedback": "A match can trigger non-drop actions such as counting or remarking."
+        },
+        {
+          "text": "The ACL must be acting as a FortiGate firewall policy.",
+          "feedback": "A switch ACL is not a FortiGate forwarding policy."
+        },
+        {
+          "text": "The switch's MCLAG heartbeat necessarily went down.",
+          "feedback": "MCLAG failure is not implied by ACL counter behavior."
+        },
+        {
+          "text": "The client must have received a different MPSK key.",
+          "feedback": "MPSK key assignment does not determine wired ACL action."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 15,
+      "lesson": 4,
+      "stem": "A switch in ACL density mode loses free entries after deleting rules. What is the documented remedy boundary?",
+      "choices": [
+        {
+          "text": "Change the FortiManager ADOM's policy revision status.",
+          "feedback": "ADOM revisions do not release switch density-mode allocation."
+        },
+        {
+          "text": "Plan ACL key-compaction or switch restart with disruption awareness.",
+          "feedback": "Density-mode hardware resources may need compaction or restart."
+        },
+        {
+          "text": "Run FortiNAC portal Publish to reload all access rules.",
+          "feedback": "FortiNAC web rules do not reclaim switch ACL hardware."
+        },
+        {
+          "text": "Disable the FortiGate's IPsec childless IKE negotiation.",
+          "feedback": "IKE negotiation has no bearing on ACL TCAM reclamation."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 16,
+      "lesson": 4,
+      "stem": "A managed FortiSwitch supports ingress ACLs but a configured action fails on one model. What is most likely?",
+      "choices": [
+        {
+          "text": "The RADIUS shared secret must be regenerated first.",
+          "feedback": "RADIUS secrets are unrelated to a hardware ACL action."
+        },
+        {
+          "text": "The DHCP relay agent is suppressing policy download.",
+          "feedback": "DHCP relay does not govern switch ACL ASIC capability."
+        },
+        {
+          "text": "The model-specific ACL feature matrix restricts that action.",
+          "feedback": "The guide explicitly documents model-specific classifier/action limits."
+        },
+        {
+          "text": "All switches support identical actions after FortiManager install.",
+          "feedback": "ACL action support differs by switch family and release."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 17,
+      "lesson": 5,
+      "stem": "Two MPSK clients associate to one SSID but land in different VLANs. What determines that split?",
+      "choices": [
+        {
+          "text": "The matched MPSK key/group's dynamic VLAN configuration.",
+          "feedback": "MPSK maps matched credentials to group/VLAN authorization."
+        },
+        {
+          "text": "The FortiAnalyzer archive retention policy for each client.",
+          "feedback": "Log retention has no role in WLAN VLAN assignment."
+        },
+        {
+          "text": "The SD-WAN rule's chosen underlay health-check target.",
+          "feedback": "WAN health checks occur after local WLAN segmentation."
+        },
+        {
+          "text": "The FortiPAM secret checkout duration for the administrator.",
+          "feedback": "PAM checkout does not select client WLAN VLANs."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 18,
+      "lesson": 5,
+      "stem": "After enabling MPSK, a legacy client loses DHCP although association succeeds. Which path is most relevant?",
+      "choices": [
+        {
+          "text": "The key-selected VLAN's tagging, DHCP and policy path.",
+          "feedback": "MPSK enables dynamic VLAN; L3 reachability must be revalidated."
+        },
+        {
+          "text": "The FortiGate's IKEv2 additional KE group proposal.",
+          "feedback": "IKE KEM negotiation is unrelated to WLAN DHCP."
+        },
+        {
+          "text": "The FortiSIEM region's ClickHouse shard placement.",
+          "feedback": "SIEM storage placement does not provide DHCP service."
+        },
+        {
+          "text": "The FortiAuthenticator OAuth token refresh expiry value.",
+          "feedback": "OAuth refresh tokens do not determine WPA association VLANs."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 19,
+      "lesson": 5,
+      "stem": "An SSID is configured for WPA3 SAE-only keys, but an older WPA2 client fails. Which mismatch should be examined?",
+      "choices": [
+        {
+          "text": "FortiManager's scheduled switch capture duration.",
+          "feedback": "Capture duration does not change client cipher capability."
+        },
+        {
+          "text": "The MPSK security mode versus the client's WPA capability.",
+          "feedback": "SAE-only key types may exclude WPA2-only supplicants."
+        },
+        {
+          "text": "FortiAnalyzer's compressed log file roll trigger.",
+          "feedback": "Archive roll triggers do not control WLAN authentication."
+        },
+        {
+          "text": "FortiSASE's required administrator change-summary field.",
+          "feedback": "Audit comments do not change WPA3 key negotiation."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 20,
+      "lesson": 5,
+      "stem": "A team assigns two MPSK profiles to one VAP and expects both to apply. What is the documented limit?",
+      "choices": [
+        {
+          "text": "Both profiles apply if they share the same security type.",
+          "feedback": "Matching security types do not bypass the one-profile limit."
+        },
+        {
+          "text": "The controller merges profiles after the next FortiAP reboot.",
+          "feedback": "A reboot does not change the VAP association model."
+        },
+        {
+          "text": "Only one MPSK profile can be bound to a VAP.",
+          "feedback": "The guide explicitly restricts VAPs to one MPSK profile."
+        },
+        {
+          "text": "Two profiles combine only when DHCP snooping is enabled.",
+          "feedback": "DHCP snooping does not merge MPSK profiles."
+        }
+      ],
+      "answer": 3
+    },
+    {
+      "id": 21,
+      "lesson": 6,
+      "stem": "A FortiNAC portal rule was edited but browsers still follow the old redirect. What was likely omitted?",
+      "choices": [
+        {
+          "text": "Publishing the rule set to restart the portal HTTP process.",
+          "feedback": "Stored edits are not active until portal rules are published."
+        },
+        {
+          "text": "Updating the FortiGate's SD-WAN FortiGuard preset database.",
+          "feedback": "SD-WAN presets do not change captive portal HTTP routing."
+        },
+        {
+          "text": "Rebuilding the FortiSwitch ingress ACL hardware key table.",
+          "feedback": "Switch ACL key compaction is unrelated to portal redirects."
+        },
+        {
+          "text": "Refreshing FortiSIEM's ClickHouse shard membership map.",
+          "feedback": "SIEM storage regions do not affect the portal HTTP process."
+        }
+      ],
+      "answer": 0
+    },
+    {
+      "id": 22,
+      "lesson": 6,
+      "stem": "A FortiNAC request matcher uses `example.com` as regex. What subtle problem can arise?",
+      "choices": [
+        {
+          "text": "The dot can match any character without escaping.",
+          "feedback": "Unescaped dot matches any single character in regex."
+        },
+        {
+          "text": "It automatically matches only exact hostname bytes.",
+          "feedback": "Regex dot is not an exact literal by default."
+        },
+        {
+          "text": "It can only match an HTTP User Agent, never a URI.",
+          "feedback": "Rules can match Request URI or HTTP User Agent."
+        },
+        {
+          "text": "It is interpreted as a RADIUS attribute rather than regex.",
+          "feedback": "Request Processing Rules inspect HTTP fields, not RADIUS attributes."
+        }
+      ],
+      "answer": 1
+    },
+    {
+      "id": 23,
+      "lesson": 6,
+      "stem": "A portal shows 102 Request Processing Rules instead of 51. What first action is justified?",
+      "choices": [
+        {
+          "text": "Disable portal service logging and restart the appliance.",
+          "feedback": "Disabling logs removes evidence without finding duplicates."
+        },
+        {
+          "text": "Identify duplicate matcher/action/target groups before changes.",
+          "feedback": "Grouping rule fields exposes duplicates for controlled remediation."
+        },
+        {
+          "text": "Delete half the records using an unreviewed SQL command.",
+          "feedback": "Unreviewed database deletion risks portal configuration integrity."
+        },
+        {
+          "text": "Replace all registration VLANs to clear stale browser cache.",
+          "feedback": "VLAN changes do not resolve duplicated portal HTTP rules."
+        }
+      ],
+      "answer": 2
+    },
+    {
+      "id": 24,
+      "lesson": 6,
+      "stem": "A captive portal's HTTP request is redirected correctly but endpoint registration fails. What is the correct inference?",
+      "choices": [
+        {
+          "text": "The FortiAnalyzer report database must be out of sync.",
+          "feedback": "FortiAnalyzer reporting does not control registration workflow."
+        },
+        {
+          "text": "The client has certainly completed all post-login compliance checks.",
+          "feedback": "The browser redirect is earlier than compliance completion."
+        },
+        {
+          "text": "HTTP request routing works; inspect downstream registration stages.",
+          "feedback": "The request-rule layer can succeed while registration later fails."
+        },
+        {
+          "text": "The portal HTTP rules also proved RADIUS VLAN authorization.",
+          "feedback": "A redirect does not prove access policy or registration success."
+        }
+      ],
+      "answer": 3
+    }
+  ]
+}
