@@ -30,20 +30,41 @@
     "result": "FAILED exact question count gate; rejected before publication"
   },
   "publication": {
-    "status_html": "pending",
-    "candidate_fingerprints": "pending",
-    "index_update": "pending"
+    "status_html": {
+      "path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-27.html",
+      "write": "SUCCESS",
+      "readback": "SUCCESS"
+    },
+    "standalone_status": {
+      "path": "docs/run_status_2026-10-27-08-27.html",
+      "write": "SUCCESS",
+      "readback": "SUCCESS"
+    },
+    "candidate_fingerprints": {
+      "path": "docs/selected_fingerprints_2026-10-27-08-27.json",
+      "write": "SUCCESS",
+      "readback": "SUCCESS"
+    },
+    "inventory": {
+      "path": "docs/exclusion_inventory_2026-10-27-08-27.json",
+      "write": "SUCCESS",
+      "readback": "SUCCESS"
+    },
+    "full_interactive_report": "NOT PUBLISHED: generation gate failed at 51 questions instead of exactly 50",
+    "diagrams": "NOT GENERATED/PUBLISHED: report generation gate failed before asset publication",
+    "index_update": "SUCCESS",
+    "index_readback": "SUCCESS"
   },
   "verification": {
-    "github_readback": "pending",
-    "index_readback": "pending",
-    "pages": "pending",
+    "github_readback": "SUCCESS for status report, candidate fingerprints, validation, inventory and index",
+    "index_readback": "SUCCESS; latest 08:27 entry visible",
+    "pages": "FAILED/INACCESSIBLE: both dated Pages URL and root URL could not be opened from this runtime",
     "email": "disabled; not sent"
   },
   "remediation": [
-    "Remove one redundant question so the exam has exactly 50.",
-    "Re-run uniqueness, answer distribution, 200-feedback and diagram checks.",
-    "Publish full report and 12 SVG/12 draw.io assets directly; retry each failed write independently.",
-    "Read back report/index/assets and retry Pages verification."
+    "Remove the redundant question from the drafted exam and rerun exact count (50), unique stems, 200 choice-feedback, balanced answer key and diagram validation.",
+    "Regenerate/publish the full report and 12 standalone SVG + 12 editable draw.io assets; independently retry each failed write.",
+    "Replace the candidate-only status with the complete report once all generation gates pass, then update index and read back every artifact.",
+    "Retry GitHub Pages verification after repository publication/propagation."
   ]
 }
