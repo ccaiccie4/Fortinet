@@ -2010,5 +2010,104 @@
   "record_count": 108,
   "inspected_artifact_count": 17,
   "historical_exclusion_count": 108,
-  "topic_selection_status": "NOT STARTED — inventory committed before topic selection"
+  "topic_selection_status": "Selected after pre-generation inventory commit/read-back; see selected_fingerprints_2026-10-28.json.",
+  "selected_topics_path": "docs/selected_fingerprints_2026-10-28.json",
+  "selected_topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Local-in policy boundaries and per-policy logging",
+      "feature_mechanism_fingerprint": "local-in destination classification + per-rule local traffic logging",
+      "workflow_transaction_fingerprint": "packet to FortiGate interface → service eligibility → IPv4/IPv6 local-in match → daemon or drop → local-traffic log",
+      "question_fingerprint": "Local-in policy boundaries and per-policy logging; local-in destination classification + per-rule local traffic logging",
+      "diagram_topology_layout_fingerprint": "Inbound packet for FortiGate IP -> Interface/service eligibility -> IPv4/IPv6 local-in rule match -> FortiGate service or explicit drop; A forward-policy hit does not prove local-in admission"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "CLI template timing: model bootstrap versus install phases",
+      "feature_mechanism_fingerprint": "pre-run model bootstrap vs pre-VDOM/post-VDOM template phase",
+      "workflow_transaction_fingerprint": "model/blueprint → pre-run once → Device Database → install → pre/post VDOM copy",
+      "question_fingerprint": "CLI template timing: model bootstrap versus install phases; pre-run model bootstrap vs pre-VDOM/post-VDOM template phase",
+      "diagram_topology_layout_fingerprint": "Model device / blueprint -> Pre-run template at bootstrap -> Device Database configuration -> Install pre/post VDOM phase; Success in one phase does not prove later package installation succeeded"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "RFC 6587 syslog framing: byte-counted TCP messages versus delimiters",
+      "feature_mechanism_fingerprint": "RFC6587 octet-counting independent of RFC5424 payload format",
+      "workflow_transaction_fingerprint": "FAZ log-forward → TCP byte stream → length prefix/delimiter → receiver parser → SIEM event",
+      "question_fingerprint": "RFC 6587 syslog framing: byte-counted TCP messages versus delimiters; RFC6587 octet-counting independent of RFC5424 payload format",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer log-forward entry -> TCP stream framing -> Receiver message-boundary parser -> SIEM normalization; Valid RFC 5424 fields can still be rejected by mismatched TCP framing"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Dynamic VLAN pruning: GVRP state and ISL trunk membership",
+      "feature_mechanism_fingerprint": "GVRP join/leave state dynamically narrows ISL VLAN forwarding set",
+      "workflow_transaction_fingerprint": "VLAN active → Join state advertised → ISL records active VLAN → Leave timer expires → unused VLAN removed",
+      "question_fingerprint": "Dynamic VLAN pruning: GVRP state and ISL trunk membership; GVRP join/leave state dynamically narrows ISL VLAN forwarding set",
+      "diagram_topology_layout_fingerprint": "VLAN active on switch -> GVRP Join/Leave messages -> ISL active-VLAN pruning state -> Forward required VLANs downstream; Configured VLAN database is not identical to dynamically pruned ISL set"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Legacy WTP profile LLDP state and post-upgrade AP stability",
+      "feature_mechanism_fingerprint": "WTP profile LLDP state retained across controller upgrade affects neighbor stability",
+      "workflow_transaction_fingerprint": "FortiGate applies WTP profile → FortiAP LLDP → switch neighbor/port behavior → CAPWAP control stability",
+      "question_fingerprint": "Legacy WTP profile LLDP state and post-upgrade AP stability; WTP profile LLDP state retained across controller upgrade affects neighbor stability",
+      "diagram_topology_layout_fingerprint": "Legacy profile retains lldp disable -> FortiGate pushes profile -> Switch neighbor state -> AP control and port stability; AP association symptoms can originate in profile/link discovery, not RF tuning"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiLink CoA disconnect failures: accounting access and return path",
+      "feature_mechanism_fingerprint": "FortiNAC Disconnect-Request over RADIUS CoA to FortiLink-managed FortiSwitch",
+      "workflow_transaction_fingerprint": "host posture changes → RFC5176 request → switch listener → ACK/NAK or timeout → session flush/reauth",
+      "question_fingerprint": "FortiLink CoA disconnect failures: accounting access and return path; FortiNAC Disconnect-Request over RADIUS CoA to FortiLink-managed FortiSwitch",
+      "diagram_topology_layout_fingerprint": "FortiNAC host state changes -> RFC5176 CoA/Disconnect -> Switch radius-acct listener -> ACK or timeout then reauth; Sending a request does not prove the switch accepted it"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "IoT profiling: combine fingerprints without blocking on missing data",
+      "feature_mechanism_fingerprint": "ranked multi-method profiling using FortiGuard category, OUI, DHCP and behavior",
+      "workflow_transaction_fingerprint": "MAC observed → collect fingerprints → ranked rules → device type/role → access policy",
+      "question_fingerprint": "IoT profiling: combine fingerprints without blocking on missing data; ranked multi-method profiling using FortiGuard category, OUI, DHCP and behavior",
+      "diagram_topology_layout_fingerprint": "Endpoint appears; MAC/OUI -> FortiGuard, DHCP, ports and behavior -> Ranked profile rule evaluation -> Device type/role and policy; Unavailable attributes can stop evaluation instead of skipping a rule"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FSSO filters: ingestion boundary versus per-FortiGate forwarding",
+      "feature_mechanism_fingerprint": "global pre-filter before FAC session database vs FortiGate-specific export filter",
+      "workflow_transaction_fingerprint": "login event → global pre-filter → FAC SSO database → per-FortiGate filter → FSSO export",
+      "question_fingerprint": "FSSO filters: ingestion boundary versus per-FortiGate forwarding; global pre-filter before FAC session database vs FortiGate-specific export filter",
+      "diagram_topology_layout_fingerprint": "LDAP/login information -> Global pre-filter -> FAC SSO session store -> Per-FortiGate filter/export; A filter can block ingestion or only block export depending on its scope"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Windows Application Filter: secret-scoped deny rules and WinRM",
+      "feature_mechanism_fingerprint": "Windows application execution deny profile managed through a secret and WinRM privileged account",
+      "workflow_transaction_fingerprint": "launch Windows secret → WinRM control → profile rules/exceptions → Windows execution decision",
+      "question_fingerprint": "Windows Application Filter: secret-scoped deny rules and WinRM; Windows application execution deny profile managed through a secret and WinRM privileged account",
+      "diagram_topology_layout_fingerprint": "User launches Windows secret -> FortiPAM target + WinRM -> Secret-bound filter rules -> Windows target execution; Profile object existing does not prove target accepted the rules"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Windows WMI/OMI monitoring: WinRM transport and event evidence",
+      "feature_mechanism_fingerprint": "agentless WMI/OMI WinRM monitoring distinct from Windows Agent template collection",
+      "workflow_transaction_fingerprint": "Supervisor/Collector poll → WinRM auth → WMI/OMI provider or agent → telemetry → normalization",
+      "question_fingerprint": "Windows WMI/OMI monitoring: WinRM transport and event evidence; agentless WMI/OMI WinRM monitoring distinct from Windows Agent template collection",
+      "diagram_topology_layout_fingerprint": "FortiSIEM Supervisor/Collector -> WinRM listener/auth -> WMI/OMI or Windows Agent -> Normalized events/metrics; Ping proves reachability, not WMI authorization or log subscription"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Certificate inspection versus deep inspection: endpoint trust boundary",
+      "feature_mechanism_fingerprint": "TLS metadata-only certificate inspection vs decrypt/re-encrypt deep inspection and CA trust",
+      "workflow_transaction_fingerprint": "client TLS handshake → inspection mode → metadata or interception → security profile → re-encrypted flow",
+      "question_fingerprint": "Certificate inspection versus deep inspection: endpoint trust boundary; TLS metadata-only certificate inspection vs decrypt/re-encrypt deep inspection and CA trust",
+      "diagram_topology_layout_fingerprint": "Client TLS handshake -> Certificate or deep inspection -> Trusted CA and payload access -> Security profiles/re-encrypt; Certificate inspection cannot read encrypted HTTP payload"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Local-out routing: steering FortiGate-originated service traffic",
+      "feature_mechanism_fingerprint": "self-originating traffic uses route lookup or per-service interface-select-method sdwan",
+      "workflow_transaction_fingerprint": "FortiGate service socket → local-out method → route table/SD-WAN → egress/source IP → external service",
+      "question_fingerprint": "Local-out routing: steering FortiGate-originated service traffic; self-originating traffic uses route lookup or per-service interface-select-method sdwan",
+      "diagram_topology_layout_fingerprint": "FortiGate service creates traffic -> Local-out selection method -> Route table or SD-WAN -> Egress interface/source IP; Transit SD-WAN rule match does not prove local-out uses SD-WAN"
+    }
+  ]
 }
