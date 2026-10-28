@@ -8,7 +8,7 @@
       "stem": "An HTTPS request targets the FortiGate interface address itself. Which policy plane first?",
       "options": [
         {
-          "text": "Local-in policy and interface service access",
+          "text": "Local-in policy plus interface access",
           "correct": true,
           "feedback": "Correct. The destination is the FortiGate itself, so local-in handling and interface service settings govern it."
         },
@@ -72,7 +72,7 @@
           "feedback": "Not correct: AP LLDP affects wireless neighbor behavior, not local-in logging."
         },
         {
-          "text": "The matching rule's logtraffic setting",
+          "text": "Rule-level logtraffic flag",
           "correct": true,
           "feedback": "Correct. Global local-in logging and the rule logtraffic setting work together."
         },
@@ -104,7 +104,7 @@
           "feedback": "Not correct: Forward-policy defaults do not replace local-in policy design."
         },
         {
-          "text": "Ordered source-specific allow followed by deny",
+          "text": "Ordered allow followed by deny",
           "correct": true,
           "feedback": "Correct. Explicit ordered local-in rules express the intended source boundary."
         }
@@ -116,7 +116,7 @@
       "stem": "Which template runs once on a model device during Add Device?",
       "options": [
         {
-          "text": "Pre-Run CLI Template assigned to a model",
+          "text": "Pre-run template on model device",
           "correct": true,
           "feedback": "Correct. Pre-run templates bootstrap model-device configuration and are unassigned after success."
         },
@@ -148,7 +148,7 @@
           "feedback": "Not correct: Post-VDOM Copy runs after the package."
         },
         {
-          "text": "Pre-VDOM Copy during installation",
+          "text": "Pre-VDOM Copy before package install",
           "correct": true,
           "feedback": "Correct. Pre-VDOM Copy runs before the package during installation."
         },
@@ -180,7 +180,7 @@
           "feedback": "Not correct: Pre-VDOM Copy is selectable but not the default."
         },
         {
-          "text": "Post-VDOM Copy after the policy package",
+          "text": "Post-VDOM Copy after package install",
           "correct": true,
           "feedback": "Correct. Post-VDOM Copy is the default for regular templates."
         },
@@ -212,7 +212,7 @@
           "feedback": "Not correct: Deleting the device discards state and avoids diagnosis."
         },
         {
-          "text": "Correct it, reassign it, then run install",
+          "text": "Fix it, reassign, then install",
           "correct": true,
           "feedback": "Correct. The guide calls for review/update, manual reassignment, and an install retry."
         }
@@ -224,7 +224,7 @@
       "stem": "A TCP syslog receiver reports framing errors despite valid fields. What layer first?",
       "options": [
         {
-          "text": "RFC 6587 record framing on the TCP stream",
+          "text": "RFC 6587 TCP framing",
           "correct": true,
           "feedback": "Correct. TCP has no message boundaries; framing must match the receiver."
         },
@@ -320,7 +320,7 @@
           "feedback": "Not correct: VLAN pruning timers do not affect receiver framing."
         },
         {
-          "text": "Non-Transparent Framing errors or merged records",
+          "text": "Framing errors or merged records",
           "correct": true,
           "feedback": "Correct. A framing mismatch can make the receiver reject or mis-segment TCP records."
         }
@@ -332,7 +332,7 @@
       "stem": "What does dynamic VLAN pruning change on an ISL?",
       "options": [
         {
-          "text": "The VLAN set carried based on learned activity",
+          "text": "Learned active VLAN set",
           "correct": true,
           "feedback": "Correct. Pruning narrows trunk carriage to VLANs indicated active downstream."
         },
@@ -364,7 +364,7 @@
           "feedback": "Not correct: It is not automatically enabled on every ISL."
         },
         {
-          "text": "Disabled until an administrator enables it",
+          "text": "Disabled until explicitly enabled",
           "correct": true,
           "feedback": "Correct. FortiSwitchOS 7.6.1 documents pruning as disabled by default."
         },
@@ -396,7 +396,7 @@
           "feedback": "Not correct: PoE settings manage power budgets."
         },
         {
-          "text": "Join advertisement interval and inactive-state delay",
+          "text": "Join interval and leave delay",
           "correct": true,
           "feedback": "Correct. Join controls repeated Join messages; leave controls inactive-state delay."
         },
@@ -440,7 +440,7 @@
       "stem": "APs destabilize after upgrade and assigned legacy profile has lldp disable. Focused test?",
       "options": [
         {
-          "text": "Enable LLDP on one affected profile and observe",
+          "text": "Enable LLDP on one profile",
           "correct": true,
           "feedback": "Correct. The older Fortinet scenario links legacy LLDP-disabled profiles with AP instability."
         },
@@ -472,7 +472,7 @@
           "feedback": "Not correct: SSID naming does not show the profile flag."
         },
         {
-          "text": "The WTP profile actually assigned to the AP",
+          "text": "The AP's assigned WTP profile",
           "correct": true,
           "feedback": "Correct. The stored lldp value lives in the assigned WTP profile."
         },
@@ -504,7 +504,7 @@
           "feedback": "Not correct: Ping says nothing about RF interference."
         },
         {
-          "text": "IP reachability only, not completed WTP management",
+          "text": "IP reachability only",
           "correct": true,
           "feedback": "Correct. Ping does not prove profile, CAPWAP state, or neighbor learning."
         },
@@ -536,7 +536,7 @@
           "feedback": "Not correct: Transit policy hits are not AP profile evidence."
         },
         {
-          "text": "Profile lldp value plus switch neighbor state",
+          "text": "Profile flag and switch neighbor state",
           "correct": true,
           "feedback": "Correct. Configuration and neighbor table directly test LLDP behavior."
         }
@@ -548,7 +548,7 @@
       "stem": "FortiNAC sends Disconnect-Request but switch never acknowledges. First check?",
       "options": [
         {
-          "text": "Switch CoA listener, accounting access, and UDP 3799",
+          "text": "Switch CoA listener and UDP 3799",
           "correct": true,
           "feedback": "Correct. Sending does not prove acceptance; listener and return path matter."
         },
@@ -612,7 +612,7 @@
           "feedback": "Not correct: The message does not directly rewrite switch config."
         },
         {
-          "text": "Disconnect flushes session; CoA changes attributes",
+          "text": "Disconnect flushes; CoA changes attributes",
           "correct": true,
           "feedback": "Correct. RFC 5176 supports distinct attribute-change and disconnect behavior."
         },
@@ -644,7 +644,7 @@
           "feedback": "Not correct: STP root ID does not explain a missing UDP response."
         },
         {
-          "text": "Source IP, shared secret, accounting and response path",
+          "text": "Source IP, secret, and response path",
           "correct": true,
           "feedback": "Correct. Different transactions can expose listener, secret, routing, or support differences."
         }
@@ -656,7 +656,7 @@
       "stem": "How does FortiNAC-F decide when to stop evaluating ranked profiling rules?",
       "options": [
         {
-          "text": "On pass, fail, or cannot-evaluate",
+          "text": "Pass, fail, or cannot-evaluate",
           "correct": true,
           "feedback": "Correct. Unavailable required data can stop evaluation instead of skipping a rule."
         },
@@ -688,7 +688,7 @@
           "feedback": "Not correct: FortiNAC is not the endpoint DHCP server here."
         },
         {
-          "text": "An IP Helper pointing to management eth0",
+          "text": "IP Helper to management eth0",
           "correct": true,
           "feedback": "Correct. The guide recommends L3 IP Helper to the management listener."
         },
@@ -720,7 +720,7 @@
           "feedback": "Not correct: Ranking still controls evaluation order."
         },
         {
-          "text": "Independent signals reduce single-fingerprint misclassification",
+          "text": "Complementary signals reduce misclassification",
           "correct": true,
           "feedback": "Correct. Signals are complementary; no one signal is universally definitive."
         },
@@ -752,7 +752,7 @@
           "feedback": "Not correct: Profiling has methods for non-802.1X devices."
         },
         {
-          "text": "It sends no DHCP fingerprint packets",
+          "text": "No DHCP fingerprint packet is sent",
           "correct": true,
           "feedback": "Correct. Static-IP endpoints may never send DHCP Discover/Request/Inform."
         }
@@ -764,7 +764,7 @@
       "stem": "What is the difference between global pre-filter and per-FortiGate filter?",
       "options": [
         {
-          "text": "Pre-filter controls ingestion; device filter controls export",
+          "text": "Ingestion versus per-device export",
           "correct": true,
           "feedback": "Correct. Global pre-filter is upstream of FAC database; device filter is downstream."
         },
@@ -796,7 +796,7 @@
           "feedback": "Not correct: A user DN selects one user."
         },
         {
-          "text": "A group-container DN with subcontainer scope",
+          "text": "Group-container DN including subcontainers",
           "correct": true,
           "feedback": "Correct. Group-container scope includes groups beneath the selected LDAP container."
         },
@@ -828,7 +828,7 @@
           "feedback": "Not correct: LLDP is unrelated."
         },
         {
-          "text": "That FortiGate's named export filter and connector",
+          "text": "The FortiGate's named export filter",
           "correct": true,
           "feedback": "Correct. Presence in FAC suggests ingestion succeeded; per-device export may exclude it."
         },
@@ -860,7 +860,7 @@
           "feedback": "Not correct: FSSO visibility does not grant administrator privileges."
         },
         {
-          "text": "Each firewall receives its intended group subset",
+          "text": "Each firewall's intended group subset",
           "correct": true,
           "feedback": "Correct. Per-device filters allow distinct export scope from one FAC database."
         }
@@ -872,7 +872,7 @@
       "stem": "What is the control-channel prerequisite for Windows Application Filter?",
       "options": [
         {
-          "text": "WinRM on Windows target plus privileged account",
+          "text": "WinRM plus privileged target account",
           "correct": true,
           "feedback": "Correct. FortiPAM manages target-side application rules through WinRM."
         },
@@ -904,7 +904,7 @@
           "feedback": "Not correct: Dashboard appearance does not control enforcement."
         },
         {
-          "text": "It was not attached to the tested secret",
+          "text": "Attach the profile to the secret",
           "correct": true,
           "feedback": "Correct. The profile is applied through a secret; an unattached profile does not enforce."
         },
@@ -936,7 +936,7 @@
           "feedback": "Not correct: VLAN pruning is a switch function."
         },
         {
-          "text": "Which accounts have which filters applied",
+          "text": "Accounts and applied filter profiles",
           "correct": true,
           "feedback": "Correct. The target view shows accounts and applied filter profiles."
         },
@@ -968,7 +968,7 @@
           "feedback": "Not correct: Session TTL is not the filter diagnostic."
         },
         {
-          "text": "Enable focused secret and HTTP WAD debug",
+          "text": "Focused secret/HTTP WAD debug",
           "correct": true,
           "feedback": "Correct. Focused secret/HTTP verbose diagnostics expose the launch control transaction."
         }
@@ -980,7 +980,7 @@
       "stem": "What does successful ping prove about WMI/OMI monitoring?",
       "options": [
         {
-          "text": "IP reachability, not WinRM authorization or query success",
+          "text": "Reachability, not WMI authorization",
           "correct": true,
           "feedback": "Correct. WMI/OMI needs service, credentials, permissions, and query success."
         },
@@ -1012,7 +1012,7 @@
           "feedback": "Not correct: Agent collection requires template configuration."
         },
         {
-          "text": "Install agent, define template, associate agent, verify events",
+          "text": "Install, template, associate, verify",
           "correct": true,
           "feedback": "Correct. The Supervisor distributes monitoring policy after template association."
         },
@@ -1044,7 +1044,7 @@
           "feedback": "Not correct: Switch ports are unrelated."
         },
         {
-          "text": "Include/exclude IDs as semicolon-separated lists",
+          "text": "Semicolon-separated event ID lists",
           "correct": true,
           "feedback": "Correct. The guide describes semicolon-separated IDs for inclusion and exclusion."
         },
@@ -1076,7 +1076,7 @@
           "feedback": "Not correct: SSL exemptions do not affect agent event IDs."
         },
         {
-          "text": "Template association, event filters, and Windows audit source",
+          "text": "Template, event filters, Windows audit",
           "correct": true,
           "feedback": "Correct. Agent status does not prove the desired event is enabled or generated."
         }
@@ -1088,7 +1088,7 @@
       "stem": "Which mode can inspect encrypted payloads for DLP or file filtering?",
       "options": [
         {
-          "text": "Deep inspection with a trusted inspection CA",
+          "text": "Deep inspection with trusted CA",
           "correct": true,
           "feedback": "Correct. Deep inspection decrypts content for payload-aware profiles and re-encrypts upstream."
         },
@@ -1120,7 +1120,7 @@
           "feedback": "Not correct: DHCP fingerprinting is a NAC feature."
         },
         {
-          "text": "Client sees an inspection certificate during interception",
+          "text": "Client receives an inspection certificate",
           "correct": true,
           "feedback": "Correct. Deep inspection substitutes an inspection certificate on the client side."
         },
@@ -1152,7 +1152,7 @@
           "feedback": "Not correct: VLAN pruning does not define SASE inspection mode."
         },
         {
-          "text": "Flow is certificate-only or exempt from deep inspection",
+          "text": "Certificate-only or exempted flow",
           "correct": true,
           "feedback": "Correct. Metadata inspection can categorize URLs but cannot read encrypted upload content."
         },
@@ -1184,7 +1184,7 @@
           "feedback": "Not correct: GVRP counters do not affect SaaS inspection."
         },
         {
-          "text": "Host/category exemptions and assigned profile group",
+          "text": "Host/category exemptions and profile group",
           "correct": true,
           "feedback": "Correct. A deep-inspection exemption or different policy assignment can bypass decryption."
         }
@@ -1196,7 +1196,7 @@
       "stem": "Which traffic is local-out?",
       "options": [
         {
-          "text": "Traffic generated by FortiGate services to external peers",
+          "text": "FortiGate-originated service traffic",
           "correct": true,
           "feedback": "Correct. Local-out is self-originating traffic such as DNS, FortiGuard, syslog, and authentication."
         },
@@ -1260,7 +1260,7 @@
           "feedback": "Not correct: The tunnel is a FortiGate-originated control session."
         },
         {
-          "text": "Local-out SD-WAN choice is checked at session creation",
+          "text": "Checked when the session is created",
           "correct": true,
           "feedback": "Correct. Central-management traffic is not terminated just because SD-WAN logic changes."
         },
@@ -1292,7 +1292,7 @@
           "feedback": "Not correct: RSSI controls wireless handoff."
         },
         {
-          "text": "Actual egress interface and chosen source IP",
+          "text": "Egress interface and source IP",
           "correct": true,
           "feedback": "Correct. A manual source may need to match upstream routing and allowlists."
         }
@@ -1304,7 +1304,7 @@
       "stem": "A local traffic log shows policyid=0. What should you avoid assuming?",
       "options": [
         {
-          "text": "That it means forward-policy implicit deny",
+          "text": "Different from forward-policy policyid=0",
           "correct": true,
           "feedback": "Correct. Built-in local-in policies can log policyid=0; context differs from forward logs."
         },
@@ -1336,7 +1336,7 @@
           "feedback": "Not correct: Aggregation time and retention are separate controls."
         },
         {
-          "text": "fwd-syslog-format selects content; transparent selects framing",
+          "text": "Format selects content; transparent selects framing",
           "correct": true,
           "feedback": "Correct. FortiAnalyzer treats message format and stream framing independently."
         },
