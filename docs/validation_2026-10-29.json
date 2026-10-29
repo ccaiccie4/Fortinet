@@ -127,14 +127,24 @@
     "index_blob_sha": "89061473945d472f53a1138c78f5ea13f1496982",
     "assets_readback": "success 24/24",
     "pages_verification": {
-      "status": "failed_from_runtime",
+      "status": "failed_from_runtime_after_retry",
       "attempted_at": "2026-10-29T08:07:00-07:00",
       "urls": [
         "https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-10-29-08-00.html",
         "https://ccaiccie4.github.io/Fortinet/"
       ],
       "result": "Both endpoints were inaccessible via the verification runtime; repository publication is confirmed independently.",
-      "remediation": "Retry public Pages verification after endpoint/deployment recovery."
+      "remediation": "Retry after endpoint/deployment recovery; GitHub main-branch blob read-back remains successful.",
+      "attempts": [
+        {
+          "attempted_at": "2026-10-29T08:07:00-07:00",
+          "result": "Both the dated report URL and site root were inaccessible through the web verification runtime."
+        },
+        {
+          "attempted_at": "2026-10-29T08:12:00-07:00",
+          "result": "Retried both URLs after the final report/index updates; both remained inaccessible through the web verification runtime."
+        }
+      ]
     },
     "email": {
       "enabled": false,
