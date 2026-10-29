@@ -18,13 +18,13 @@
       "stem": "A Support Tool capture starts after an intermittent GUI freeze, but the API key has expired before the next reproduction. What is the safest next step?",
       "choices": [
         {
-          "text": "Keep reusing the expired key and widen daemon collection",
+          "text": "Keep reusing the expired key and widen daemon collection for this release in this case",
           "feedback": "An expired credential cannot be repaired by collecting more logs; the connection gate fails first.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Disable trusted-host restrictions and use a permanent key",
+          "text": "Disable trusted-host restrictions and use a permanent key for this release",
           "feedback": "That removes a security boundary and does not address the expired key itself.",
           "letter": "B",
           "isCorrect": false
@@ -36,7 +36,7 @@
           "letter": "C"
         },
         {
-          "text": "Replace the GUI capture with a ping loop only",
+          "text": "Replace the GUI capture with a ping loop only after a state check on this path",
           "feedback": "Ping may show reachability but cannot collect the daemon and browser evidence required.",
           "letter": "D",
           "isCorrect": false
@@ -52,19 +52,19 @@
       "stem": "The Support Tool bundle has daemon logs and resource charts, but no video of the browser symptom. Which explanation best fits?",
       "choices": [
         {
-          "text": "The FortiGate has stopped sending all REST responses",
+          "text": "The FortiGate has stopped sending all REST responses for this release",
           "feedback": "The presence of daemon logs and resource charts contradicts a total capture failure.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "The target must be using a different SD-WAN member",
+          "text": "The target must be using a different SD-WAN member for this release in this case",
           "feedback": "Path choice does not explain why browser video was not collected in the capture.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The FortiGate certificate must be replaced before every capture",
+          "text": "The FortiGate certificate must be replaced before every capture in this case",
           "feedback": "Certificate rotation is not the documented requirement for GUI video capture.",
           "letter": "C",
           "isCorrect": false
@@ -92,19 +92,19 @@
           "letter": "A"
         },
         {
-          "text": "Enable every daemon debug permanently on the production firewall",
+          "text": "Enable every daemon debug permanently on the production firewall with live evidence",
           "feedback": "Persistent broad debug increases risk and is not the bounded capture workflow.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Capture only a screenshot after the crash has cleared",
+          "text": "Capture only a screenshot after the crash has cleared after a state check on this path",
           "feedback": "A screenshot cannot provide the preceding daemon and resource timeline.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Generate a key without selecting a scenario or capture duration",
+          "text": "Generate a key without selecting a scenario or capture duration after a state check",
           "feedback": "A key enables access but does not define the evidence collection needed.",
           "letter": "D",
           "isCorrect": false
@@ -120,13 +120,13 @@
       "stem": "A freeze occurs at 10:14 and CPU rises at the same time in the capture playback. What should the engineer do next?",
       "choices": [
         {
-          "text": "Treat the CPU chart alone as proof of the root cause",
+          "text": "Treat the CPU chart alone as proof of the root cause after a state check in this case",
           "feedback": "Correlation is useful, but CPU increase alone does not identify the responsible daemon.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Discard logs because the UI video already proves the failure",
+          "text": "Discard logs because the UI video already proves the failure for this release",
           "feedback": "The video shows the symptom; logs and resource data help explain it.",
           "letter": "B",
           "isCorrect": false
@@ -138,7 +138,7 @@
           "letter": "C"
         },
         {
-          "text": "Restart the FortiGate before saving the capture",
+          "text": "Restart the FortiGate before saving the capture after a state check on this path",
           "feedback": "Restarting can destroy volatile evidence and is not needed to correlate the timeline.",
           "letter": "D",
           "isCorrect": false
@@ -154,7 +154,7 @@
       "stem": "The desktop tool cannot connect although the FortiGate responds to ping. Which check best isolates the Support Tool connection boundary?",
       "choices": [
         {
-          "text": "Increase the capture duration before the tool connects",
+          "text": "Increase the capture duration before the tool connects after a state check in this case",
           "feedback": "Duration affects collection after connection, not initial API authentication.",
           "letter": "A",
           "isCorrect": false
@@ -166,13 +166,13 @@
           "letter": "B"
         },
         {
-          "text": "Change the wireless SSID security mode",
+          "text": "Change the wireless SSID security mode before widening the troubleshooting scope",
           "feedback": "SSID security is unrelated to the management API connection path.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Assume the daemon is unavailable because the GUI is reachable",
+          "text": "Assume the daemon is unavailable because the GUI is reachable on this path in this case",
           "feedback": "GUI reachability does not prove the key, port, or API request is accepted.",
           "letter": "D",
           "isCorrect": false
@@ -194,13 +194,13 @@
           "isCorrect": false
         },
         {
-          "text": "Delete BGP neighbors because a route exists",
+          "text": "Delete BGP neighbors because a route exists after a state check in this case",
           "feedback": "The route may be correct; the missing behavior is likely in SD-WAN policy.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Change the FortiSwitch Ethernet Segment ID",
+          "text": "Change the FortiSwitch Ethernet Segment ID after a state check on this path",
           "feedback": "EVPN multihoming identity does not govern FortiGate SD-WAN application steering.",
           "letter": "C",
           "isCorrect": false
@@ -222,7 +222,7 @@
       "stem": "Which template installation sequence follows the documented dependency order?",
       "choices": [
         {
-          "text": "SD-WAN template, then interface template, then IPsec template",
+          "text": "SD-WAN template, then interface template, then IPsec template in this case",
           "feedback": "That reverses dependencies and may reference members or interfaces not yet present.",
           "letter": "A",
           "isCorrect": false
@@ -234,7 +234,7 @@
           "letter": "B"
         },
         {
-          "text": "IPsec template, then SD-WAN template, then interface template",
+          "text": "IPsec template, then SD-WAN template, then interface template in this case",
           "feedback": "Tunnel objects can fail when their interface dependencies have not been installed.",
           "letter": "C",
           "isCorrect": false
@@ -262,19 +262,19 @@
           "letter": "A"
         },
         {
-          "text": "The business-service Maintenance field in FortiSIEM",
+          "text": "The business-service Maintenance field in FortiSIEM after a state check in this case",
           "feedback": "That CMDB field does not affect FortiManager tunnel establishment.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The FortiPAM checkout duration for the deployment user",
+          "text": "The FortiPAM checkout duration for the deployment user after a state check in this case",
           "feedback": "Privileged secret checkout does not determine IPsec reachability.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiGate Support Tool Chrome extension",
+          "text": "The FortiGate Support Tool Chrome extension after a state check on this path in this case",
           "feedback": "Browser video capture is unrelated to overlay transport establishment.",
           "letter": "D",
           "isCorrect": false
@@ -290,13 +290,13 @@
       "stem": "A FortiGate was locally changed and FortiManager now marks the SD-WAN template out of sync. What is the correct governance response?",
       "choices": [
         {
-          "text": "Keep changing the FortiGate locally until the out-of-sync flag disappears",
+          "text": "Keep changing the FortiGate locally until the out-of-sync flag disappears in this case",
           "feedback": "Local changes do not update the template source and can be overwritten on install.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Regenerate every branch's IPsec keys without reviewing the diff",
+          "text": "Regenerate every branch's IPsec keys without reviewing the diff on this path",
           "feedback": "The symptom is template drift, not evidence of key compromise or tunnel failure.",
           "letter": "B",
           "isCorrect": false
@@ -308,7 +308,7 @@
           "letter": "C"
         },
         {
-          "text": "Delete the device from FortiManager and rediscover it",
+          "text": "Delete the device from FortiManager and rediscover it after a state check in this case",
           "feedback": "Rediscovery does not reconcile the desired SD-WAN configuration or explain the drift.",
           "letter": "D",
           "isCorrect": false
@@ -330,19 +330,19 @@
           "letter": "A"
         },
         {
-          "text": "Increase Analytics retention days on FortiAnalyzer",
+          "text": "Increase Analytics retention days on FortiAnalyzer after a state check",
           "feedback": "Retention affects stored logs, not whether the secure transport establishes.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Change the FortiSwitch DF preference on the access layer",
+          "text": "Change the FortiSwitch DF preference on the access layer on this path in this case",
           "feedback": "EVPN flooded-traffic forwarding is not the OFTP connection negotiation.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Create a new report template and rerun it",
+          "text": "Create a new report template and rerun it after a state check on this path",
           "feedback": "Reports consume collected data and cannot repair a failed logging transport.",
           "letter": "D",
           "isCorrect": false
@@ -358,7 +358,7 @@
       "stem": "The TCP handshake completes, then the OFTP connection closes with TLS errors. Which conclusion is justified?",
       "choices": [
         {
-          "text": "The FortiGate has no route to the FortiAnalyzer",
+          "text": "The FortiGate has no route to the FortiAnalyzer after a state check on this path",
           "feedback": "The completed handshake demonstrates a transport path for that attempt.",
           "letter": "A",
           "isCorrect": false
@@ -370,13 +370,13 @@
           "letter": "B"
         },
         {
-          "text": "The Analytics database has deleted the newest log file",
+          "text": "The Analytics database has deleted the newest log file after a state check in this case",
           "feedback": "The failure occurs before successful OFTP log ingestion is established.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The sender's log rate exceeds the license by definition",
+          "text": "The sender's log rate exceeds the license by definition after a state check in this case",
           "feedback": "TLS errors alone do not establish a licensing or rate-limit cause.",
           "letter": "D",
           "isCorrect": false
@@ -398,19 +398,19 @@
           "letter": "A"
         },
         {
-          "text": "Raise the log-file rolling size from 200 MB",
+          "text": "Raise the log-file rolling size from 200 MB while preserving the intended policy boundary",
           "feedback": "File rolling does not resolve a remote server identity mismatch.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Disable certificate verification on every sender",
+          "text": "Disable certificate verification on every sender before widening the troubleshooting scope",
           "feedback": "That weakens trust and can hide the identity error instead of correcting it.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Change the ADOM retention policy to unlimited",
+          "text": "Change the ADOM retention policy to unlimited before changing the deployed configuration",
           "feedback": "Retention is downstream of the OFTP identity check.",
           "letter": "D",
           "isCorrect": false
@@ -426,19 +426,19 @@
       "stem": "Which evidence best distinguishes an OFTP transport failure from a later Analytics indexing delay?",
       "choices": [
         {
-          "text": "A dashboard showing free disk space only",
+          "text": "A dashboard showing free disk space only while preserving the intended policy boundary",
           "feedback": "Free disk does not prove transport negotiation or database indexing is healthy.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "A report's cached PDF output",
+          "text": "A report's cached PDF output after verifying the relevant object and dependency in this case",
           "feedback": "A report can be stale or cached and does not prove current ingestion.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The FortiGate's successful ping to the FAZ address",
+          "text": "The FortiGate's successful ping to the FAZ address after a state check for this release",
           "feedback": "Ping cannot show TLS acceptance, authorization, or Analytics indexing.",
           "letter": "C",
           "isCorrect": false
@@ -466,19 +466,19 @@
           "letter": "A"
         },
         {
-          "text": "The FortiGate's local-in policy order",
+          "text": "The FortiGate's local-in policy order after a state check on this path in this case",
           "feedback": "Local-in rules govern traffic to the FortiGate itself, not switch EVPN identity.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The FortiPAM secret's checkout-idle timer",
+          "text": "The FortiPAM secret's checkout-idle timer after a state check on this path",
           "feedback": "Secret lifecycle does not affect EVPN Ethernet Segment discovery.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiSASE endpoint's on-net detection rule",
+          "text": "The FortiSASE endpoint's on-net detection rule after a state check in this case",
           "feedback": "Endpoint split tunneling does not define switch ESI identity.",
           "letter": "D",
           "isCorrect": false
@@ -494,19 +494,19 @@
       "stem": "What does a higher EVPN designated-forwarder preference control in the documented multihoming design?",
       "choices": [
         {
-          "text": "Which leaf owns every unicast session regardless of route state",
+          "text": "Which leaf owns every unicast session regardless of route state for this release",
           "feedback": "The documented DF role is specifically about flooded traffic to the segment.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Which FortiSwitch port receives the lowest storm-control threshold",
+          "text": "Which FortiSwitch port receives the lowest storm-control threshold on this path in this case",
           "feedback": "Storm control is separate from EVPN DF election.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Which BGP peer is allowed to advertise the default route",
+          "text": "Which BGP peer is allowed to advertise the default route after a state check in this case",
           "feedback": "DF preference does not replace BGP route policy.",
           "letter": "C",
           "isCorrect": false
@@ -562,19 +562,19 @@
       "stem": "The duplicate-MAC diagnostic lists a server MAC in one VNI. What should happen before clearing the entry?",
       "choices": [
         {
-          "text": "Immediately clear all duplicate MACs across every VNI",
+          "text": "Immediately clear all duplicate MACs across every VNI after a state check in this case",
           "feedback": "Clearing state can hide a recurring conflict without fixing the competing source.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Disable BGP on both leafs and rely on STP",
+          "text": "Disable BGP on both leafs and rely on STP after a state check for this release",
           "feedback": "That removes the EVPN control plane instead of diagnosing its duplicate advertisement.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Increase the FortiAnalyzer Analytics retention period",
+          "text": "Increase the FortiAnalyzer Analytics retention period after a state check in this case",
           "feedback": "Log retention does not resolve switch MAC ownership.",
           "letter": "C",
           "isCorrect": false
@@ -596,7 +596,7 @@
       "stem": "A station associates to the WPA2-Enterprise SSID but the RADIUS server never receives a request. What is the best next boundary to inspect?",
       "choices": [
         {
-          "text": "The station's RSSI threshold only",
+          "text": "The station's RSSI threshold only after checking the target and runtime evidence",
           "feedback": "RF quality can affect association but does not explain a missing server-side RADIUS request by itself.",
           "letter": "A",
           "isCorrect": false
@@ -608,13 +608,13 @@
           "letter": "B"
         },
         {
-          "text": "The FortiSwitch EVPN DF preference",
+          "text": "The FortiSwitch EVPN DF preference while preserving the intended policy boundary",
           "feedback": "EVPN multihoming has no role in the RADIUS client TLS session.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiPAM secret checkout state",
+          "text": "The FortiPAM secret checkout state while preserving the intended policy boundary",
           "feedback": "Privileged-access locks do not govern wireless authentication transport.",
           "letter": "D",
           "isCorrect": false
@@ -630,13 +630,13 @@
       "stem": "TLS is established to the RADIUS server, but the server returns Access-Reject. What should be examined next?",
       "choices": [
         {
-          "text": "Replace the AP radio because TLS succeeded",
+          "text": "Replace the AP radio because TLS succeeded after a state check on this path",
           "feedback": "A radio replacement is not indicated by an explicit RADIUS rejection.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Change the FortiAnalyzer OFTP encryption level",
+          "text": "Change the FortiAnalyzer OFTP encryption level after a state check in this case",
           "feedback": "OFTP logging crypto is separate from RadSec authentication.",
           "letter": "B",
           "isCorrect": false
@@ -648,7 +648,7 @@
           "letter": "C"
         },
         {
-          "text": "Increase the FortiGate Support Tool capture to 48 hours",
+          "text": "Increase the FortiGate Support Tool capture to 48 hours for this release",
           "feedback": "Longer diagnostic capture does not change the RADIUS authorization result.",
           "letter": "D",
           "isCorrect": false
@@ -664,13 +664,13 @@
       "stem": "RADIUS returns Access-Accept, but the client gets an address on the wrong VLAN. Where should investigation move?",
       "choices": [
         {
-          "text": "TLS certificate trust on the RADIUS server",
+          "text": "TLS certificate trust on the RADIUS server for this release",
           "feedback": "A completed TLS session and Access-Accept make certificate trust less likely as the VLAN cause.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "RF channel width and DFS selection first",
+          "text": "RF channel width and DFS selection first for this release in this case",
           "feedback": "Radio settings do not explain a valid Access-Accept assigning the wrong network.",
           "letter": "B",
           "isCorrect": false
@@ -682,7 +682,7 @@
           "letter": "C"
         },
         {
-          "text": "FortiPAM checkout permissions",
+          "text": "FortiPAM checkout permissions after a state check on this path",
           "feedback": "Secret permissions have no relation to RADIUS VLAN attributes.",
           "letter": "D",
           "isCorrect": false
@@ -704,19 +704,19 @@
           "letter": "A"
         },
         {
-          "text": "It replaces 802.1X with a shared WPA-Personal key",
+          "text": "It replaces 802.1X with a shared WPA-Personal key after a state check on this path",
           "feedback": "WPA2/WPA3-Enterprise continues to use enterprise authentication.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "It guarantees that every authenticated client receives the same VLAN",
+          "text": "It guarantees that every authenticated client receives the same VLAN on this path",
           "feedback": "VLAN assignment remains dependent on authorization attributes and policy.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "It turns the AP into the authoritative RADIUS identity database",
+          "text": "It turns the AP into the authoritative RADIUS identity database for this release",
           "feedback": "The RADIUS server remains responsible for authentication and authorization policy.",
           "letter": "D",
           "isCorrect": false
@@ -738,19 +738,19 @@
           "letter": "A"
         },
         {
-          "text": "The workstation must disable IPv6 before portal registration",
+          "text": "The workstation must disable IPv6 before portal registration after a state check in this case",
           "feedback": "IPv6 portal communication is supported and need not be disabled for this symptom.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "FortiNAC requires all portal clients to use IPv4",
+          "text": "FortiNAC requires all portal clients to use IPv4 after a state check for this release",
           "feedback": "The guide explicitly supports IPv6 portal and agent communication.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiSwitch EVPN ESI must be converted to IPv6",
+          "text": "The FortiSwitch EVPN ESI must be converted to IPv6 after a state check on this path",
           "feedback": "EVPN ESI is unrelated to FortiNAC inventory management address family.",
           "letter": "D",
           "isCorrect": false
@@ -772,19 +772,19 @@
           "letter": "A"
         },
         {
-          "text": "Every infrastructure device has been discovered over IPv6",
+          "text": "Every infrastructure device has been discovered over IPv6 in this case",
           "feedback": "Inventory network-device discovery still has an IPv4 management requirement.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The host has passed every network access policy",
+          "text": "The host has passed every network access policy on this path",
           "feedback": "Address visibility does not prove profile match or enforcement outcome.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "L3 polling supports every SNMP vendor over IPv6",
+          "text": "L3 polling supports every SNMP vendor over IPv6 on this path",
           "feedback": "The documented polling support is limited to specified vendors and functions.",
           "letter": "D",
           "isCorrect": false
@@ -800,7 +800,7 @@
       "stem": "The team expects IPv6 IP-to-MAC polling from an unlisted switch vendor. What is the defensible next step?",
       "choices": [
         {
-          "text": "Assume standard SNMP guarantees the same IPv6 polling result",
+          "text": "Assume standard SNMP guarantees the same IPv6 polling result after a state check in this case",
           "feedback": "Protocol availability does not prove FortiNAC implements that vendor's required MIB behavior.",
           "letter": "A",
           "isCorrect": false
@@ -812,13 +812,13 @@
           "letter": "B"
         },
         {
-          "text": "Change the FortiAuthenticator SAML signing certificate",
+          "text": "Change the FortiAuthenticator SAML signing certificate after a state check in this case",
           "feedback": "SAML certificate state does not affect switch polling.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Delete the host record and wait for IPv6 to repopulate it",
+          "text": "Delete the host record and wait for IPv6 to repopulate it after a state check in this case",
           "feedback": "Deleting an endpoint does not add unsupported infrastructure polling capability.",
           "letter": "D",
           "isCorrect": false
@@ -834,13 +834,13 @@
       "stem": "Admin UI works over IPv6 on eth0, but inventory device discovery still fails. What should be checked?",
       "choices": [
         {
-          "text": "The portal's IPv6 address only",
+          "text": "The portal's IPv6 address only after a state check for this release",
           "feedback": "A working UI proves the appliance address path, not the switch management path.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "The FortiSASE steering bypass profile",
+          "text": "The FortiSASE steering bypass profile after a state check on this path",
           "feedback": "Endpoint split tunneling is unrelated to FortiNAC inventory polling.",
           "letter": "B",
           "isCorrect": false
@@ -852,7 +852,7 @@
           "letter": "C"
         },
         {
-          "text": "The FortiGate's Support Tool browser extension",
+          "text": "The FortiGate's Support Tool browser extension after a state check",
           "feedback": "Browser capture does not change the inventory device address requirement.",
           "letter": "D",
           "isCorrect": false
@@ -868,7 +868,7 @@
       "stem": "A machine passes EAP-TLS, registers, but its expected policy is not selected and the synchronized _host group has zero members. What is the strongest hypothesis?",
       "choices": [
         {
-          "text": "The EAP-TLS certificate must have failed validation",
+          "text": "The EAP-TLS certificate must have failed validation after a state check for this release",
           "feedback": "Successful machine authentication argues against an authentication failure as the first explanation.",
           "letter": "A",
           "isCorrect": false
@@ -880,13 +880,13 @@
           "letter": "B"
         },
         {
-          "text": "The switch failed to send a MAC notification trap",
+          "text": "The switch failed to send a MAC notification trap before widening the troubleshooting scope",
           "feedback": "The symptom points to group matching after registration, not necessarily host discovery.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiNAC-F license has exceeded log retention",
+          "text": "The FortiNAC-F license has exceeded log retention before widening the troubleshooting scope",
           "feedback": "That is unrelated to the described synchronized group-membership condition.",
           "letter": "D",
           "isCorrect": false
@@ -902,19 +902,19 @@
       "stem": "Why does synchronization create both a group ending in _host and another ending in _user?",
       "choices": [
         {
-          "text": "The suffixes identify active and passive HA nodes",
+          "text": "The suffixes identify active and passive HA nodes before widening the troubleshooting scope",
           "feedback": "The documented suffixes distinguish host and user group projections, not HA roles.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "One group stores IPv4 and the other stores IPv6 addresses",
+          "text": "One group stores IPv4 and the other stores IPv6 addresses after a state check on this path",
           "feedback": "Address family does not define the two directory group projections.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The second group is a backup of the first for failover",
+          "text": "The second group is a backup of the first for failover after a state check for this release",
           "feedback": "They have different membership semantics, not duplicate storage.",
           "letter": "C",
           "isCorrect": false
@@ -948,13 +948,13 @@
           "isCorrect": false
         },
         {
-          "text": "The user must first check out a FortiPAM secret",
+          "text": "The user must first check out a FortiPAM secret after a state check in this case",
           "feedback": "FortiPAM secret access has no bearing on FortiNAC directory import.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The user must authenticate with RadSec rather than EAP-TLS",
+          "text": "The user must authenticate with RadSec rather than EAP-TLS for this release",
           "feedback": "The described absence is a directory/registration behavior, not a required transport switch.",
           "letter": "D",
           "isCorrect": false
@@ -970,13 +970,13 @@
       "stem": "After changing the computer's AD group membership, what evidence closes the remediation loop?",
       "choices": [
         {
-          "text": "Only confirm the computer can ping the domain controller",
+          "text": "Only confirm the computer can ping the domain controller after a state check in this case",
           "feedback": "Reachability does not prove group sync or policy matching.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Reboot every access switch before resynchronizing",
+          "text": "Reboot every access switch before resynchronizing after a state check on this path in this case",
           "feedback": "Switch reboot is not the documented fix for a directory membership projection.",
           "letter": "B",
           "isCorrect": false
@@ -988,7 +988,7 @@
           "letter": "C"
         },
         {
-          "text": "Check only the user's _user group member count",
+          "text": "Check only the user's _user group member count before widening the troubleshooting scope",
           "feedback": "Machine policy may depend on the host projection rather than the user projection.",
           "letter": "D",
           "isCorrect": false
@@ -1004,13 +1004,13 @@
       "stem": "A new SAML signing certificate is imported. What must be staged before the automatic switch time?",
       "choices": [
         {
-          "text": "Replace the HTTPS admin certificate and assume SAML follows it",
+          "text": "Replace the HTTPS admin certificate and assume SAML follows it after a state check in this case",
           "feedback": "The SAML IdP signing certificate and HTTPS administration certificate are distinct.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Delete the old certificate immediately and let users discover the change",
+          "text": "Delete the old certificate immediately and let users discover the change on this path",
           "feedback": "Removing the old key does not distribute trust to the service providers.",
           "letter": "B",
           "isCorrect": false
@@ -1022,7 +1022,7 @@
           "letter": "C"
         },
         {
-          "text": "Change every user's password before certificate rollover",
+          "text": "Change every user's password before certificate rollover after a state check on this path",
           "feedback": "Signing-key rollover does not inherently require changing user passwords.",
           "letter": "D",
           "isCorrect": false
@@ -1038,13 +1038,13 @@
       "stem": "After the scheduled SAML certificate switch, the IdP authenticates users but the SP rejects the response signature. What is the likely missing step?",
       "choices": [
         {
-          "text": "Enable FortiNAC IPv6 support",
+          "text": "Enable FortiNAC IPv6 support before widening the troubleshooting scope",
           "feedback": "IPv6 host access does not change SAML signature trust.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Increase FortiPAM force-checkout idle time",
+          "text": "Increase FortiPAM force-checkout idle time after a state check in this case",
           "feedback": "Secret checkout timers do not affect SAML assertion validation.",
           "letter": "B",
           "isCorrect": false
@@ -1056,7 +1056,7 @@
           "letter": "C"
         },
         {
-          "text": "Change the FortiGate SD-WAN service rule",
+          "text": "Change the FortiGate SD-WAN service rule after a state check in this case",
           "feedback": "Traffic path policy does not repair a signature-validation failure.",
           "letter": "D",
           "isCorrect": false
@@ -1072,19 +1072,19 @@
       "stem": "Which configuration dependency is explicitly relevant to the SAML IdP portal's General settings?",
       "choices": [
         {
-          "text": "A FortiSwitch ESI must be unique across the fabric",
+          "text": "A FortiSwitch ESI must be unique across the fabric in this case",
           "feedback": "ESI is a switch multihoming identifier, not a SAML portal prerequisite.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "A FortiAnalyzer ADOM must be in Collector mode",
+          "text": "A FortiAnalyzer ADOM must be in Collector mode on this path",
           "feedback": "Analyzer operation mode is unrelated to FortiAuthenticator's SAML portal.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "A FortiPAM secret must be checked in",
+          "text": "A FortiPAM secret must be checked in after a state check",
           "feedback": "Secret checkout state is unrelated to IdP portal configuration.",
           "letter": "C",
           "isCorrect": false
@@ -1112,13 +1112,13 @@
           "isCorrect": false
         },
         {
-          "text": "To the FortiGate local-in policy log",
+          "text": "To the FortiGate local-in policy log after a state check in this case",
           "feedback": "Local-in logs are not a SAML response destination.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "To the FortiNAC _host group",
+          "text": "To the FortiNAC _host group after a state check for this release",
           "feedback": "Directory group membership is not involved in SAML response routing.",
           "letter": "C",
           "isCorrect": false
@@ -1140,7 +1140,7 @@
       "stem": "The Check-out icon is absent for an otherwise visible secret. What is the first explanation to verify?",
       "choices": [
         {
-          "text": "The FortiPAM appliance has no route to the RADIUS server",
+          "text": "The FortiPAM appliance has no route to the RADIUS server in this case",
           "feedback": "RADIUS reachability does not explain the secret's checkout icon state.",
           "letter": "A",
           "isCorrect": false
@@ -1152,13 +1152,13 @@
           "letter": "B"
         },
         {
-          "text": "The SAML IdP certificate is about to expire",
+          "text": "The SAML IdP certificate is about to expire with live evidence",
           "feedback": "Certificate rollover does not remove a secret checkout control.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiGate SD-WAN overlay has no BGP route",
+          "text": "The FortiGate SD-WAN overlay has no BGP route for this release",
           "feedback": "Routing overlays do not govern FortiPAM secret checkout ownership.",
           "letter": "D",
           "isCorrect": false
@@ -1180,7 +1180,7 @@
           "isCorrect": false
         },
         {
-          "text": "The secret must be deleted and recreated to release the lock",
+          "text": "The secret must be deleted and recreated to release the lock on this path",
           "feedback": "Deletion is not the intended recovery and may disrupt audit and permissions.",
           "letter": "B",
           "isCorrect": false
@@ -1192,7 +1192,7 @@
           "letter": "C"
         },
         {
-          "text": "The administrator needs to change the FortiAnalyzer encryption level",
+          "text": "The administrator needs to change the FortiAnalyzer encryption level in this case",
           "feedback": "OFTP encryption is unrelated to a secret launcher session.",
           "letter": "D",
           "isCorrect": false
@@ -1226,7 +1226,7 @@
           "isCorrect": false
         },
         {
-          "text": "Any user who can ping the target server",
+          "text": "Any user who can ping the target server for this release",
           "feedback": "Network reachability is not an authorization condition for viewing a secret.",
           "letter": "D",
           "isCorrect": false
@@ -1242,19 +1242,19 @@
       "stem": "Which pair of settings should be interpreted separately when an admin force-checkout is delayed?",
       "choices": [
         {
-          "text": "TLS minimum and SAML signing algorithm",
+          "text": "TLS minimum and SAML signing algorithm on this path",
           "feedback": "Those are cryptographic settings in other components, not checkout timers.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "RADIUS NAS-ID and VLAN assignment",
+          "text": "RADIUS NAS-ID and VLAN assignment for this release",
           "feedback": "Wireless authorization attributes do not govern secret checkout.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "Analytics retention and Archive rolling size",
+          "text": "Analytics retention and Archive rolling size in this case",
           "feedback": "FortiAnalyzer storage settings do not control FortiPAM secret locks.",
           "letter": "C",
           "isCorrect": false
@@ -1276,7 +1276,7 @@
       "stem": "The launch is confirmed closed, but force checkout is still unavailable. What should be verified before changing global policy?",
       "choices": [
         {
-          "text": "Whether the target's BGP route is preferred over the hub",
+          "text": "Whether the target's BGP route is preferred over the hub for this release",
           "feedback": "Routing preference does not control the secret lock lifecycle.",
           "letter": "A",
           "isCorrect": false
@@ -1288,13 +1288,13 @@
           "letter": "B"
         },
         {
-          "text": "Whether the FortiAP is using WPA3-Enterprise",
+          "text": "Whether the FortiAP is using WPA3-Enterprise after a state check in this case",
           "feedback": "Wireless authentication is unrelated to checkout recovery.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Whether the FortiSIEM business service has a Maintenance value",
+          "text": "Whether the FortiSIEM business service has a Maintenance value on this path",
           "feedback": "CMDB metadata does not determine secret checkout state.",
           "letter": "D",
           "isCorrect": false
@@ -1310,13 +1310,13 @@
       "stem": "A business-service record exists in CMDB, but users report the application is down. What evidence is needed next?",
       "choices": [
         {
-          "text": "Treat the CMDB row as proof that the application is healthy",
+          "text": "Treat the CMDB row as proof that the application is healthy after a state check in this case",
           "feedback": "The record can remain present while the underlying service is failing.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "Delete the service record to clear the incident",
+          "text": "Delete the service record to clear the incident after a state check for this release",
           "feedback": "Removing inventory context does not repair or validate the application.",
           "letter": "B",
           "isCorrect": false
@@ -1328,7 +1328,7 @@
           "letter": "C"
         },
         {
-          "text": "Change the FortiNAC IPv6 management address",
+          "text": "Change the FortiNAC IPv6 management address before widening the troubleshooting scope",
           "feedback": "NAC addressing does not establish FortiSIEM business-service health.",
           "letter": "D",
           "isCorrect": false
@@ -1350,19 +1350,19 @@
           "letter": "A"
         },
         {
-          "text": "RADIUS secret, ESI, DF preference, and VLAN ID",
+          "text": "RADIUS secret, ESI, DF preference, and VLAN ID for this release",
           "feedback": "Those belong to other product/configuration contexts, not the business-service record.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "IKE proposal, TLS key, and checkout duration",
+          "text": "IKE proposal, TLS key, and checkout duration for this release",
           "feedback": "Those values do not describe the CMDB business-service view.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Only the incident severity and parser recognizer",
+          "text": "Only the incident severity and parser recognizer on this path",
           "feedback": "The guide lists service inventory attributes beyond incident severity and parser data.",
           "letter": "D",
           "isCorrect": false
@@ -1384,19 +1384,19 @@
           "letter": "A"
         },
         {
-          "text": "That every component is healthy and every alert is suppressed",
+          "text": "That every component is healthy and every alert is suppressed for this release",
           "feedback": "The record does not prove component health or all automation behavior.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "That the service has passed a Selenium transaction",
+          "text": "That the service has passed a Selenium transaction after a state check on this path",
           "feedback": "The listed field is not a synthetic transaction result.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "That all raw events are current and correctly mapped",
+          "text": "That all raw events are current and correctly mapped after a state check in this case",
           "feedback": "Freshness and event mapping must be verified separately.",
           "letter": "D",
           "isCorrect": false
@@ -1412,7 +1412,7 @@
       "stem": "The service's Running on field points to a retired host. What is the best remediation?",
       "choices": [
         {
-          "text": "Increase the event worker's ClickHouse shard count immediately",
+          "text": "Increase the event worker's ClickHouse shard count immediately with live evidence",
           "feedback": "Storage topology is not the first fix for a stale service relationship.",
           "letter": "A",
           "isCorrect": false
@@ -1424,13 +1424,13 @@
           "letter": "B"
         },
         {
-          "text": "Disable all service alerts until the next upgrade",
+          "text": "Disable all service alerts until the next upgrade after a state check on this path",
           "feedback": "Suppressing alerts would hide impact without correcting CMDB mapping.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Change the FortiAuthenticator IdP signing certificate",
+          "text": "Change the FortiAuthenticator IdP signing certificate after a state check on this path",
           "feedback": "SAML signing keys do not repair CMDB service ownership.",
           "letter": "D",
           "isCorrect": false
@@ -1446,19 +1446,19 @@
       "stem": "A local printer remains reachable only when FortiSASE is disconnected. What should be checked first?",
       "choices": [
         {
-          "text": "The printer's FortiPAM secret checkout state",
+          "text": "The printer's FortiPAM secret checkout state while preserving the intended policy boundary",
           "feedback": "Privileged secret locks do not determine endpoint traffic steering.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "The FortiSwitch EVPN designated-forwarder preference",
+          "text": "The FortiSwitch EVPN designated-forwarder preference before widening the troubleshooting scope",
           "feedback": "EVPN flooding preference is unrelated to a remote endpoint's SASE tunnel route.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The FortiGate Support Tool key's expiry",
+          "text": "The FortiGate Support Tool key's expiry before attributing the fault to another subsystem",
           "feedback": "Support Tool API keys do not affect SASE endpoint routing.",
           "letter": "C",
           "isCorrect": false
@@ -1486,19 +1486,19 @@
           "letter": "A"
         },
         {
-          "text": "It becomes a permanent static route on every FortiGate",
+          "text": "It becomes a permanent static route on every FortiGate after a state check on this path",
           "feedback": "The documented route is endpoint-side and dynamic, not a permanent fleet-wide static route.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "It changes the RADIUS server certificate",
+          "text": "It changes the RADIUS server certificate before changing the deployed configuration",
           "feedback": "FQDN steering does not rotate RadSec certificates.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "It suppresses all traffic inspection for every domain in the same category",
+          "text": "It suppresses all traffic inspection for every domain in the same category on this path",
           "feedback": "A destination bypass is scoped to configured matches, not all category traffic.",
           "letter": "D",
           "isCorrect": false
@@ -1526,13 +1526,13 @@
           "isCorrect": false
         },
         {
-          "text": "Only FortiNAC-F can create wildcard FQDN routes",
+          "text": "Only FortiNAC-F can create wildcard FQDN routes for this release",
           "feedback": "The limitation is a FortiSASE endpoint-steering behavior, not a NAC function.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The rule must be converted into a SAML assertion",
+          "text": "The rule must be converted into a SAML assertion for this release",
           "feedback": "SAML assertions do not represent steering destinations.",
           "letter": "D",
           "isCorrect": false
@@ -1548,7 +1548,7 @@
       "stem": "Which endpoint condition is needed when a printer should bypass only on the corporate LAN?",
       "choices": [
         {
-          "text": "Set the condition to Both and assume it means office-only",
+          "text": "Set the condition to Both and assume it means office-only after a state check in this case",
           "feedback": "Both applies on-net and off-net, so it is broader than the stated requirement.",
           "letter": "A",
           "isCorrect": false
@@ -1560,13 +1560,13 @@
           "letter": "B"
         },
         {
-          "text": "Use an unsupported wildcard FQDN on every platform",
+          "text": "Use an unsupported wildcard FQDN on every platform after a state check on this path",
           "feedback": "The pattern is unsupported and does not enforce on-net scope.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "Change FortiSIEM's Maintenance field to On-net",
+          "text": "Change FortiSIEM's Maintenance field to On-net after a state check on this path",
           "feedback": "CMDB maintenance metadata does not classify endpoint network state.",
           "letter": "D",
           "isCorrect": false
@@ -1582,7 +1582,7 @@
       "stem": "BGP routes reach the remote spoke through the hub, but no direct shortcut forms. What should be compared?",
       "choices": [
         {
-          "text": "Only the hub's default route and route reflector configuration",
+          "text": "Only the hub's default route and route reflector configuration after a state check in this case",
           "feedback": "ADVPN 2.0 reduces dependence on several legacy BGP designs; bilateral path eligibility matters.",
           "letter": "A",
           "isCorrect": false
@@ -1594,13 +1594,13 @@
           "letter": "B"
         },
         {
-          "text": "The FortiAnalyzer archive retention period",
+          "text": "The FortiAnalyzer archive retention period before changing the deployed configuration",
           "feedback": "Log retention does not make a shortcut path viable.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiAuthenticator SAML certificate switch time",
+          "text": "The FortiAuthenticator SAML certificate switch time after a state check on this path in this case",
           "feedback": "Identity certificate rollover does not determine the overlay underlay match.",
           "letter": "D",
           "isCorrect": false
@@ -1616,19 +1616,19 @@
       "stem": "IKE debug reports 'vwl found no viable shortcut, drop exchange'. What does that most directly suggest?",
       "choices": [
         {
-          "text": "The FortiGate has no IPv4 route anywhere in the routing table",
+          "text": "The FortiGate has no IPv4 route anywhere in the routing table after a state check",
           "feedback": "A hub route can exist even when no direct shortcut satisfies criteria.",
           "letter": "A",
           "isCorrect": false
         },
         {
-          "text": "The RADIUS server rejected the wireless client's EAP method",
+          "text": "The RADIUS server rejected the wireless client's EAP method after a state check in this case",
           "feedback": "That message belongs to ADVPN path negotiation, not wireless authentication.",
           "letter": "B",
           "isCorrect": false
         },
         {
-          "text": "The switch's ESI is duplicated in EVPN",
+          "text": "The switch's ESI is duplicated in EVPN before changing the deployed configuration",
           "feedback": "Switch ESI state is a different control plane from FortiGate ADVPN path eligibility.",
           "letter": "C",
           "isCorrect": false
@@ -1656,7 +1656,7 @@
           "isCorrect": false
         },
         {
-          "text": "It replaces all firewall policies with BGP advertisements",
+          "text": "It replaces all firewall policies with BGP advertisements in this case",
           "feedback": "Routing and security policy remain separate functions.",
           "letter": "B",
           "isCorrect": false
@@ -1684,7 +1684,7 @@
       "stem": "A shortcut tunnel forms, but application traffic still follows the hub. Which layer should be verified next?",
       "choices": [
         {
-          "text": "The SAML IdP's default signing certificate",
+          "text": "The SAML IdP's default signing certificate before widening the troubleshooting scope",
           "feedback": "Certificate rollover does not steer an SD-WAN session.",
           "letter": "A",
           "isCorrect": false
@@ -1696,13 +1696,13 @@
           "letter": "B"
         },
         {
-          "text": "The FortiPAM force-checkout idle timer",
+          "text": "The FortiPAM force-checkout idle timer before changing the deployed configuration",
           "feedback": "Secret locks do not influence packet-path selection.",
           "letter": "C",
           "isCorrect": false
         },
         {
-          "text": "The FortiNAC IPv6 portal interface",
+          "text": "The FortiNAC IPv6 portal interface after checking the target and runtime evidence",
           "feedback": "NAC portal reachability is unrelated to the SD-WAN service decision.",
           "letter": "D",
           "isCorrect": false
@@ -1712,5 +1712,16 @@
       "correct_answer": "The SD-WAN service rule, SLA state, session selection, and shortcut eligibility",
       "correct_feedback": "Tunnel existence does not prove the active flow selected that path."
     }
-  ]
+  ],
+  "validation": {
+    "answer_distribution": {
+      "A": 13,
+      "B": 13,
+      "C": 12,
+      "D": 12
+    },
+    "correct_uniquely_longest": 0,
+    "max_choice_length_spread": 18,
+    "choice_length_review": "Distractor text was expanded with feature-relevant context where it was substantially shorter than the correct option; no length-metadata is shown to learners."
+  }
 }
