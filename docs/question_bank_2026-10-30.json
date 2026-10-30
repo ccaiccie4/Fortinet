@@ -680,15 +680,15 @@
         },
         {
           "label": "C",
-          "text": "Recreate the host record before checking port-group eligibility.",
+          "text": "Recreate the host record before checking port-group eligibility for this host.",
           "is_correct": false,
           "feedback": "A new host record does not replace the required Role-Based Access port group."
         },
         {
           "label": "D",
-          "text": "Confirm registration and membership of the port in the Role-Based Access group.",
+          "text": "Confirm host registration and its port's Role-Based Access membership.",
           "is_correct": true,
-          "feedback": "Policy evaluation requires registered-host eligibility and the appropriate port group."
+          "feedback": "Policy evaluation requires a registered host and a port in the Role-Based Access group."
         }
       ]
     },
@@ -1356,7 +1356,7 @@
         },
         {
           "label": "B",
-          "text": "Reassign licenses before reviewing endpoint PAC references.",
+          "text": "Reassign licenses before reviewing endpoint PAC references during migration.",
           "is_correct": false,
           "feedback": "License availability affects PoP options but does not update a stale PAC URL."
         },
@@ -1368,9 +1368,9 @@
         },
         {
           "label": "D",
-          "text": "Regional PAC fetch URLs and self-hosted PAC references to the old PoP.",
+          "text": "Inspect regional PAC URLs and self-hosted references to the old PoP.",
           "is_correct": true,
-          "feedback": "Regional PAC and self-hosted references may need updating."
+          "feedback": "Regional PAC and self-hosted references may need updating even when global PAC works."
         }
       ]
     },
@@ -1536,15 +1536,15 @@
       "options": [
         {
           "label": "A",
-          "text": "Assume SD-WAN rules never consume updated connector addresses after connector refresh for that cloud workload.",
+          "text": "Assume connector refreshes are ignored after a filter change.",
           "is_correct": false,
-          "feedback": "Dynamic connector addresses are designed to refresh external inventory."
+          "feedback": "The connector is designed to refresh external inventory; verify its update state instead of assuming updates are ignored."
         },
         {
           "label": "B",
-          "text": "Confirm connector refresh completed and the dynamic object resolved the new IP set.",
+          "text": "Verify the refreshed IP set in the dynamic address object.",
           "is_correct": true,
-          "feedback": "Control-plane refresh and resolved membership must be checked first."
+          "feedback": "The control-plane refresh and resolved membership must be checked before path selection."
         },
         {
           "label": "C",
@@ -1570,11 +1570,8 @@
       "C": 12,
       "D": 12
     },
-    "correct_option_uniquely_longest_count": 2,
-    "correct_option_uniquely_longest_question_ids": [
-      22,
-      44
-    ],
+    "correct_option_uniquely_longest_count": 0,
+    "correct_option_uniquely_longest_question_ids": [],
     "malformed_raw_rows": [],
     "option_word_lengths": [
       {
@@ -1810,14 +1807,14 @@
       },
       {
         "id": 22,
-        "gap": 4,
+        "gap": 2,
         "lens": [
           10,
           10,
-          8,
-          12
+          11,
+          9
         ],
-        "correct": 12
+        "correct": 9
       },
       {
         "id": 23,
@@ -2052,14 +2049,14 @@
       },
       {
         "id": 44,
-        "gap": 5,
+        "gap": 2,
         "lens": [
           11,
-          7,
+          9,
           11,
-          12
+          11
         ],
-        "correct": 12
+        "correct": 11
       },
       {
         "id": 45,
@@ -2118,22 +2115,19 @@
       },
       {
         "id": 50,
-        "gap": 6,
+        "gap": 1,
         "lens": [
-          15,
-          13,
+          9,
+          10,
           9,
           10
         ],
-        "correct": 13
+        "correct": 10
       }
     ],
     "answer_length_review": {
-      "manual_choice_revisions": 33,
-      "max_option_length_gap": 6,
-      "questions_with_gap_over_5": [
-        50
-      ]
+      "max_option_length_gap": 5,
+      "questions_with_gap_over_5": []
     }
   }
 }
