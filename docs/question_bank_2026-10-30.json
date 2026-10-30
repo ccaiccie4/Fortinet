@@ -252,9 +252,9 @@
         },
         {
           "label": "D",
-          "text": "Revision restore changes the FortiAnalyzer analytics database for that rollback point.",
+          "text": "Restore the device revision and assume the ADOM package follows automatically.",
           "is_correct": false,
-          "feedback": "FortiAnalyzer database rebuilds are unrelated to FortiManager revisions."
+          "feedback": "Device configuration restore does not automatically restore or install the ADOM package."
         }
       ]
     },
@@ -395,15 +395,15 @@
         },
         {
           "label": "B",
-          "text": "An ADOM revision is locked against automatic deletion in the LLDP-MED profile before DHCP succeeds.",
+          "text": "The phone must accept the advertised VLAN and tag its voice frames.",
           "is_correct": false,
-          "feedback": "ADOM retention does not control switch-port behavior."
+          "feedback": "A configured profile cannot make an endpoint use a VLAN it ignores."
         },
         {
           "label": "C",
-          "text": "The phone's DHCP lease is shorter than the LLDP interval for the attached phone.",
+          "text": "The voice VLAN must also be allowed on the port and trunks.",
           "is_correct": false,
-          "feedback": "Lease timing cannot fix a missing VLAN advertisement or trunk membership."
+          "feedback": "A profile can advertise a VLAN that the forwarding path does not carry."
         },
         {
           "label": "D",
@@ -463,15 +463,15 @@
         },
         {
           "label": "C",
-          "text": "Restore an ADOM revision to discover the wireless controller.",
+          "text": "Enable voice VLAN only in DHCP scope; no LLDP profile is needed.",
           "is_correct": false,
-          "feedback": "An ADOM revision does not make a standalone switch controller-managed."
+          "feedback": "DHCP scope settings cannot advertise the LLDP-MED network-policy TLV."
         },
         {
           "label": "D",
-          "text": "Change FortiAnalyzer fetch roles to enable LLDP-MED in the LLDP-MED profile.",
+          "text": "Change spanning-tree priority to advertise the voice VLAN.",
           "is_correct": false,
-          "feedback": "Log-fetch roles have no dependency on LLDP-MED."
+          "feedback": "STP priority controls root selection, not LLDP-MED VLAN advertisement."
         }
       ]
     },
@@ -482,15 +482,15 @@
       "options": [
         {
           "label": "A",
-          "text": "Assume DHCP is faulty because the TLV is correct.",
+          "text": "Assume DHCP is faulty because the TLV is correct, without checking VLAN carriage.",
           "is_correct": false,
-          "feedback": "The server may be fine if the phone never tags voice traffic."
+          "feedback": "The TLV proves advertisement only; the phone may still be on the wrong VLAN."
         },
         {
           "label": "B",
-          "text": "Disable LLDP transmit to force a fresh DHCP request.",
+          "text": "Disable LLDP transmit and force a new DHCP request on the voice VLAN.",
           "is_correct": false,
-          "feedback": "Disabling LLDP removes the advertisement instead of fixing later stages."
+          "feedback": "Removing LLDP removes the policy advertisement and does not repair DHCP."
         },
         {
           "label": "C",
@@ -500,9 +500,9 @@
         },
         {
           "label": "D",
-          "text": "Change FortiPAM approval tiers before retesting before DHCP succeeds.",
+          "text": "Change the voice DHCP scope before checking whether the phone tags traffic.",
           "is_correct": false,
-          "feedback": "PAM authorization does not affect voice VLAN DHCP."
+          "feedback": "A DHCP scope cannot help if the phone's frames never enter the voice VLAN."
         }
       ]
     },
@@ -525,15 +525,15 @@
         },
         {
           "label": "C",
-          "text": "Change the SSID VLAN to the least-used network in this RF cell.",
+          "text": "Choose the AP with lowest channel use even if the client cannot hear it well.",
           "is_correct": false,
-          "feedback": "VLAN selection is unrelated to AP load balancing."
+          "feedback": "Load balancing still depends on a usable neighboring AP and signal level."
         },
         {
           "label": "D",
-          "text": "Disable roaming clients so they reconnect through the controller for the selected profile.",
+          "text": "Force all roaming clients to reassociate before evaluating AP load.",
           "is_correct": false,
-          "feedback": "Roaming clients are excluded from the documented behavior."
+          "feedback": "The documented load-balancing logic is not applied to roaming clients."
         }
       ]
     },
@@ -550,15 +550,15 @@
         },
         {
           "label": "B",
-          "text": "Frequency handoff requires every client to use WPA3 Enterprise for that station.",
+          "text": "It uses station count alone and ignores per-band signal strength.",
           "is_correct": false,
-          "feedback": "WPA3 is not a prerequisite for frequency handoff."
+          "feedback": "The controller uses measured 5 GHz RSSI as part of its decision."
         },
         {
           "label": "C",
-          "text": "The controller cannot record RSSI for any 5 GHz client.",
+          "text": "It selects a DHCP scope from the AP handoff station threshold.",
           "is_correct": false,
-          "feedback": "The controller records per-band RSSI for client decisions."
+          "feedback": "Station thresholds govern load decisions, not DHCP scope selection."
         },
         {
           "label": "D",
@@ -575,9 +575,9 @@
       "options": [
         {
           "label": "A",
-          "text": "The feature works only when FortiAnalyzer fetching is enabled.",
+          "text": "The controller always forces roaming clients onto the least-loaded AP.",
           "is_correct": false,
-          "feedback": "Log fetching is unrelated to wireless association steering."
+          "feedback": "The guide excludes roaming clients from load-balancing behavior."
         },
         {
           "label": "B",
@@ -587,9 +587,9 @@
         },
         {
           "label": "C",
-          "text": "Roaming clients are always pinned to 2.4 GHz in this RF cell.",
+          "text": "The feature is disabled unless both handoff modes are enabled together.",
           "is_correct": false,
-          "feedback": "Band choice depends on capability and RSSI, not a universal pin."
+          "feedback": "AP handoff and frequency handoff are separate configurable behaviors."
         },
         {
           "label": "D",
@@ -668,21 +668,21 @@
       "options": [
         {
           "label": "A",
-          "text": "Confirm the FortiPAM secret request is approved before enforcement on that switch port.",
+          "text": "Move the catch-all policy above specific profiles to simplify evaluation.",
           "is_correct": false,
-          "feedback": "PAM approval is unrelated to NAC policy eligibility."
+          "feedback": "A catch-all above specific policies can shadow the desired match."
         },
         {
           "label": "B",
-          "text": "Confirm FortiAnalyzer indexed historical host logs for this registered host in the ranked list.",
+          "text": "Replace the access configuration with a default VLAN before testing.",
           "is_correct": false,
-          "feedback": "Log indexing does not determine host registration."
+          "feedback": "The policy engine still needs eligible host and port context to evaluate."
         },
         {
           "label": "C",
-          "text": "Confirm the FortiGate SNAT port is above 5117 at evaluation time.",
+          "text": "Recreate the host record before checking port-group eligibility.",
           "is_correct": false,
-          "feedback": "SNAT port preservation is unrelated to NAC policy evaluation."
+          "feedback": "A new host record does not replace the required Role-Based Access port group."
         },
         {
           "label": "D",
@@ -705,15 +705,15 @@
         },
         {
           "label": "B",
-          "text": "Use the FortiAnalyzer fetch-session monitor and rebuild banner on that switch port.",
+          "text": "Use the switch CLI diff to infer which profile won.",
           "is_correct": false,
-          "feedback": "Fetch monitoring tracks log transfer and indexing."
+          "feedback": "Device enforcement output does not identify the winning FortiNAC profile."
         },
         {
           "label": "C",
-          "text": "Use FortiPAM Approval List to inspect policy precedence for this registered host.",
+          "text": "Use Host View online status as proof of the exact winning policy.",
           "is_correct": false,
-          "feedback": "PAM approvals do not show NAC matching."
+          "feedback": "Online status proves visibility, not which ranked policy was assigned."
         },
         {
           "label": "D",
@@ -835,9 +835,9 @@
         },
         {
           "label": "C",
-          "text": "The shared secret determines whether Local RADIUS supports accounting on both HA nodes.",
+          "text": "Enable accounting on the Local server because it processes EAP.",
           "is_correct": false,
-          "feedback": "A shared secret secures RADIUS exchange but does not add Local accounting capability."
+          "feedback": "Local RADIUS does not provide accounting merely because it handles EAP."
         },
         {
           "label": "D",
@@ -860,15 +860,15 @@
         },
         {
           "label": "B",
-          "text": "Enable only legacy radius and remove all other access options.",
+          "text": "Enable OFTP and disable the RADIUS listener.",
           "is_correct": false,
-          "feedback": "Legacy proxy and Local RADIUS have distinct allowaccess requirements."
+          "feedback": "OFTP is unrelated to FortiNAC-F RADIUS listener permissions."
         },
         {
           "label": "C",
-          "text": "Enable OFTP and disable the RADIUS listener.",
+          "text": "Set the FortiGate interface as a central-SNAT member.",
           "is_correct": false,
-          "feedback": "OFTP is unrelated to the FortiNAC RADIUS listener."
+          "feedback": "SD-WAN/NAT membership does not enable a FortiNAC RADIUS service."
         },
         {
           "label": "D",
@@ -1040,9 +1040,9 @@
       "options": [
         {
           "label": "A",
-          "text": "Assume the target server is unreachable because revocation requires SSH.",
+          "text": "Check whether the request is waiting for an approval in its current tier.",
           "is_correct": false,
-          "feedback": "The issue may be approval-state semantics rather than target connectivity."
+          "feedback": "On older versions, revocation can be unavailable once a single-approver tier completes."
         },
         {
           "label": "B",
@@ -1052,9 +1052,9 @@
         },
         {
           "label": "C",
-          "text": "Delete and recreate the secret in a new folder for that requester.",
+          "text": "Disable all approval tiers so the request can be revoked.",
           "is_correct": false,
-          "feedback": "Deleting the secret is destructive and does not explain button state."
+          "feedback": "Removing approval controls weakens authorization and does not fix tier-state behavior."
         },
         {
           "label": "D",
@@ -1350,21 +1350,21 @@
       "options": [
         {
           "label": "A",
-          "text": "The FortiPAM approval tier assigned to each user after target activation.",
+          "text": "Check whether the global PAC address is failing despite regional access.",
           "is_correct": false,
-          "feedback": "PAM approval does not select PAC endpoints."
+          "feedback": "Global PAC access usually avoids regional PoP address changes; inspect the actual fetch path."
         },
         {
           "label": "B",
-          "text": "The FortiGate SNAT source-port preservation range before source decommission for the PAC fetch path.",
+          "text": "Reassign licenses before reviewing endpoint PAC references.",
           "is_correct": false,
-          "feedback": "SNAT port preservation does not update PAC URLs."
+          "feedback": "License availability affects PoP options but does not update a stale PAC URL."
         },
         {
           "label": "C",
-          "text": "The FortiAnalyzer fetch database rebuild state in the PoP transition during this migration.",
+          "text": "Update only the PoP label; PAC files cannot reference regional proxies.",
           "is_correct": false,
-          "feedback": "Log indexing is unrelated to the endpoint's PAC fetch address."
+          "feedback": "Regional and self-hosted PAC files may contain proxy references that need updating."
         },
         {
           "label": "D",
@@ -1393,9 +1393,9 @@
         },
         {
           "label": "C",
-          "text": "Rotate the FortiPAM approval tier for the workload.",
+          "text": "Inspect member status before confirming which cloud IPs resolved.",
           "is_correct": false,
-          "feedback": "PAM approvals do not control SDN resource selection."
+          "feedback": "Member health matters after confirming that the destination object contains the workload."
         },
         {
           "label": "D",
@@ -1548,15 +1548,15 @@
         },
         {
           "label": "C",
-          "text": "Change SLA targets to the workload's previous private address at path selection.",
+          "text": "Change SLA targets to the workload's previous private address.",
           "is_correct": false,
-          "feedback": "SLA targets do not correct a stale address-object result."
+          "feedback": "SLA targets measure path health and do not refresh connector inventory."
         },
         {
           "label": "D",
-          "text": "Restore an ADOM revision to refresh the cloud connector automatically with the selected member.",
+          "text": "Recreate the address as static and remove the connector filter.",
           "is_correct": false,
-          "feedback": "ADOM restore is not the FortiGate SDN polling mechanism."
+          "feedback": "That discards dynamic inventory behavior instead of verifying the refresh result."
         }
       ]
     }
@@ -1570,9 +1570,10 @@
       "C": 12,
       "D": 12
     },
-    "correct_option_uniquely_longest_count": 1,
+    "correct_option_uniquely_longest_count": 2,
     "correct_option_uniquely_longest_question_ids": [
-      16
+      22,
+      44
     ],
     "malformed_raw_rows": [],
     "option_word_lengths": [
@@ -1710,11 +1711,11 @@
       },
       {
         "id": 13,
-        "gap": 1,
+        "gap": 3,
         "lens": [
           15,
-          15,
-          14,
+          12,
+          12,
           14
         ],
         "correct": 14
@@ -1732,34 +1733,34 @@
       },
       {
         "id": 15,
-        "gap": 2,
+        "gap": 4,
         "lens": [
           9,
           10,
-          9,
-          11
+          12,
+          8
         ],
         "correct": 10
       },
       {
         "id": 16,
-        "gap": 1,
+        "gap": 3,
         "lens": [
-          9,
-          9,
+          13,
+          13,
           10,
-          9
+          12
         ],
         "correct": 10
       },
       {
         "id": 17,
-        "gap": 2,
+        "gap": 5,
         "lens": [
           13,
           14,
-          12,
-          13
+          15,
+          10
         ],
         "correct": 13
       },
@@ -1768,19 +1769,19 @@
         "gap": 3,
         "lens": [
           11,
-          12,
           10,
+          11,
           13
         ],
         "correct": 11
       },
       {
         "id": 19,
-        "gap": 3,
+        "gap": 2,
         "lens": [
-          9,
           10,
-          12,
+          10,
+          11,
           9
         ],
         "correct": 10
@@ -1809,11 +1810,11 @@
       },
       {
         "id": 22,
-        "gap": 3,
+        "gap": 4,
         "lens": [
-          13,
-          14,
-          11,
+          10,
+          10,
+          8,
           12
         ],
         "correct": 12
@@ -1823,7 +1824,7 @@
         "gap": 2,
         "lens": [
           10,
-          12,
+          10,
           12,
           10
         ],
@@ -1864,22 +1865,22 @@
       },
       {
         "id": 27,
-        "gap": 3,
+        "gap": 4,
         "lens": [
           14,
           13,
-          13,
+          10,
           11
         ],
         "correct": 11
       },
       {
         "id": 28,
-        "gap": 3,
+        "gap": 1,
         "lens": [
           8,
-          10,
           7,
+          8,
           8
         ],
         "correct": 8
@@ -1941,11 +1942,11 @@
       },
       {
         "id": 34,
-        "gap": 2,
+        "gap": 3,
         "lens": [
-          10,
+          13,
           11,
-          12,
+          10,
           10
         ],
         "correct": 11
@@ -2051,22 +2052,22 @@
       },
       {
         "id": 44,
-        "gap": 3,
+        "gap": 5,
         "lens": [
           11,
-          14,
-          13,
+          7,
+          11,
           12
         ],
         "correct": 12
       },
       {
         "id": 45,
-        "gap": 3,
+        "gap": 2,
         "lens": [
           11,
           9,
-          8,
+          9,
           9
         ],
         "correct": 9
@@ -2117,20 +2118,22 @@
       },
       {
         "id": 50,
-        "gap": 3,
+        "gap": 6,
         "lens": [
           15,
           13,
-          12,
-          14
+          9,
+          10
         ],
         "correct": 13
       }
     ],
     "answer_length_review": {
-      "suffix_edits": 105,
-      "max_option_length_gap": 4,
-      "questions_with_gap_over_5": []
+      "manual_choice_revisions": 33,
+      "max_option_length_gap": 6,
+      "questions_with_gap_over_5": [
+        50
+      ]
     }
   }
 }
