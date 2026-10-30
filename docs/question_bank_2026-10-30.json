@@ -1,0 +1,1608 @@
+{
+  "date": "2026-10-30",
+  "title": "Fortinet Enterprise Networking & Security — 50-question graded examination",
+  "question_count": 50,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "unique_stems": true,
+  "questions": [
+    {
+      "id": 1,
+      "lesson_id": 1,
+      "stem": "A FortiGate SNAT session changes source port 4500. The original port is below 5117. What should be checked first?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The port is below the documented preservation range, so normal allocation may translate it.",
+          "is_correct": true,
+          "feedback": "The preservation range begins at 5117; port 4500 can be translated normally."
+        },
+        {
+          "label": "B",
+          "text": "A policy route rewrites UDP source ports before NAT.",
+          "is_correct": false,
+          "feedback": "Policy routes select paths and do not generally rewrite transport ports."
+        },
+        {
+          "label": "C",
+          "text": "The service object converts IKE traffic from UDP to TCP.",
+          "is_correct": false,
+          "feedback": "A service object matches traffic; it does not convert UDP into TCP."
+        },
+        {
+          "label": "D",
+          "text": "Central SNAT disables reverse mapping for all UDP sessions.",
+          "is_correct": false,
+          "feedback": "SNAT maintains a reverse session mapping for translated tuples."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "lesson_id": 1,
+      "stem": "Two sessions request the same preserved source port. One keeps it and the other changes. Why?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Port preservation applies only to the first packet of every UDP flow.",
+          "is_correct": false,
+          "feedback": "The choice is made for the session and then tracked for later packets."
+        },
+        {
+          "label": "B",
+          "text": "The tuple was already in use, so the second session needed another available port.",
+          "is_correct": true,
+          "feedback": "Preservation is conditional on tuple availability; collisions require another port."
+        },
+        {
+          "label": "C",
+          "text": "The second session bypassed central SNAT after policy lookup.",
+          "is_correct": false,
+          "feedback": "An existing session does not make later traffic bypass the NAT rule base."
+        },
+        {
+          "label": "D",
+          "text": "The remote server selected the translated client source port.",
+          "is_correct": false,
+          "feedback": "The remote server normally does not choose FortiGate's SNAT port."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "lesson_id": 1,
+      "stem": "An existing flow keeps its old translated port after port-preserve is enabled. What is the best test?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Restart every HA member before testing the same traffic again.",
+          "is_correct": false,
+          "feedback": "A cluster restart is disproportionate and does not isolate the decision."
+        },
+        {
+          "label": "B",
+          "text": "Change the destination to force an unrelated SNAT rule.",
+          "is_correct": false,
+          "feedback": "Changing destination can change rule matching and confound the test."
+        },
+        {
+          "label": "C",
+          "text": "Disable session helpers so the existing tuple is re-evaluated.",
+          "is_correct": false,
+          "feedback": "Helpers do not cause an established NAT tuple to be recalculated."
+        },
+        {
+          "label": "D",
+          "text": "Clear only the test session, create a new flow, and inspect its tuple.",
+          "is_correct": true,
+          "feedback": "Established sessions retain their translation; a new session tests the setting."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "lesson_id": 1,
+      "stem": "A low source port must map deterministically. What constraint must be checked?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Use ICMP with a port field and an interface-address pool.",
+          "is_correct": false,
+          "feedback": "ICMP has no TCP/UDP-style port, and interface pools do not meet this mapping case."
+        },
+        {
+          "label": "B",
+          "text": "Configure policy NAT even though central NAT is active.",
+          "is_correct": false,
+          "feedback": "When central NAT is active, central-snat-map controls SNAT."
+        },
+        {
+          "label": "C",
+          "text": "Use a supported port protocol and an overload pool with valid explicit mapping.",
+          "is_correct": true,
+          "feedback": "Explicit mapping has protocol/pool limits and maps source to translated ranges."
+        },
+        {
+          "label": "D",
+          "text": "Assume any source port can be preserved without collision checks.",
+          "is_correct": false,
+          "feedback": "NAT still requires a unique reverse mapping for each session."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "lesson_id": 2,
+      "stem": "An ADOM revision was restored, but the managed FortiGate still has the newer package. What completes rollback?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Restore the same ADOM snapshot repeatedly until the device reboots.",
+          "is_correct": false,
+          "feedback": "Repeated restore does not replace the missing installation step."
+        },
+        {
+          "label": "B",
+          "text": "Lock the revision and assume the running device updates automatically.",
+          "is_correct": false,
+          "feedback": "A retention lock protects a snapshot but does not deploy it."
+        },
+        {
+          "label": "C",
+          "text": "Import the device configuration as needed, then install the intended package.",
+          "is_correct": true,
+          "feedback": "ADOM restore changes the database; import and install align device state."
+        },
+        {
+          "label": "D",
+          "text": "Delete the current package and wait for the snapshot to push itself.",
+          "is_correct": false,
+          "feedback": "Deleting the package removes management state instead of safely installing it."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "lesson_id": 2,
+      "stem": "Why lock a known-good ADOM revision before a migration?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To prevent administrators from viewing its revision diff.",
+          "is_correct": false,
+          "feedback": "The revision remains inspectable; locking is a retention control."
+        },
+        {
+          "label": "B",
+          "text": "To prevent automatic retention cleanup from deleting the rollback snapshot.",
+          "is_correct": true,
+          "feedback": "The lock protects the revision from configured auto-deletion."
+        },
+        {
+          "label": "C",
+          "text": "To make the snapshot apply to devices without an install operation.",
+          "is_correct": false,
+          "feedback": "A snapshot does not deploy itself to managed devices."
+        },
+        {
+          "label": "D",
+          "text": "To convert it into a FortiGate running-config revision.",
+          "is_correct": false,
+          "feedback": "ADOM and device configuration revisions are different objects."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "lesson_id": 2,
+      "stem": "Before restoring an ADOM snapshot, how can an engineer inspect its likely effect?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Compare the FortiGate session table with the SNAT tuple.",
+          "is_correct": false,
+          "feedback": "Session tables show traffic state, not ADOM object history."
+        },
+        {
+          "label": "B",
+          "text": "Run an install and infer the differences from the result.",
+          "is_correct": false,
+          "feedback": "An install result is not a pre-restore comparison."
+        },
+        {
+          "label": "C",
+          "text": "Delete the snapshot and inspect the current object database.",
+          "is_correct": false,
+          "feedback": "Deleting the baseline destroys the comparison point."
+        },
+        {
+          "label": "D",
+          "text": "View Revision Diff against the current ADOM database.",
+          "is_correct": true,
+          "feedback": "Revision Diff previews database differences before restoring."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "lesson_id": 2,
+      "stem": "A device configuration revision is reverted, but the policy package is unchanged. Why?",
+      "options": [
+        {
+          "label": "A",
+          "text": "FortiManager never stores managed-device configuration revisions.",
+          "is_correct": false,
+          "feedback": "Managed-device revisions exist but differ from ADOM snapshots."
+        },
+        {
+          "label": "B",
+          "text": "Device-config revert does not restore the ADOM package or other modules.",
+          "is_correct": true,
+          "feedback": "The revert scope is device configuration; package alignment is separate."
+        },
+        {
+          "label": "C",
+          "text": "A device reboot regenerates the ADOM package automatically.",
+          "is_correct": false,
+          "feedback": "A reboot does not guarantee package synchronization."
+        },
+        {
+          "label": "D",
+          "text": "Revision restore changes the FortiAnalyzer analytics database.",
+          "is_correct": false,
+          "feedback": "FortiAnalyzer database rebuilds are unrelated to FortiManager revisions."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "lesson_id": 3,
+      "stem": "A FortiAnalyzer fetch session says Done, but fetched logs are absent from reports. What next?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Check client indexing and ADOM/database rebuild progress.",
+          "is_correct": true,
+          "feedback": "Transfer completion precedes indexing; reports wait for the rebuild."
+        },
+        {
+          "label": "B",
+          "text": "Ask the server to retransmit because Done means no transfer occurred.",
+          "is_correct": false,
+          "feedback": "Done indicates transfer completion, not that the transfer failed."
+        },
+        {
+          "label": "C",
+          "text": "Assume the server deleted the client's analytics database.",
+          "is_correct": false,
+          "feedback": "The workflow does not automatically delete the client's database."
+        },
+        {
+          "label": "D",
+          "text": "Enable OFTP encryption on the syslog listener.",
+          "is_correct": false,
+          "feedback": "OFTP transport security is separate from post-fetch indexing."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "lesson_id": 3,
+      "stem": "When should the fetch client synchronize device and ADOM data with the server?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Only after every scheduled report succeeds.",
+          "is_correct": false,
+          "feedback": "Report generation occurs after the data becomes available."
+        },
+        {
+          "label": "B",
+          "text": "On first use of a profile or after device/ADOM changes.",
+          "is_correct": true,
+          "feedback": "The guide calls for sync on first use and relevant inventory changes."
+        },
+        {
+          "label": "C",
+          "text": "Only when the analyzers run different firmware versions.",
+          "is_correct": false,
+          "feedback": "Log fetching requires same firmware, not different versions."
+        },
+        {
+          "label": "D",
+          "text": "Every time a query runs against already indexed data.",
+          "is_correct": false,
+          "feedback": "Queries against indexed logs do not require a new fetch sync."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "lesson_id": 3,
+      "stem": "What firmware condition applies to a FortiAnalyzer fetch pair?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The client and server must run the same firmware.",
+          "is_correct": true,
+          "feedback": "Same-firmware compatibility is an explicit log-fetch requirement."
+        },
+        {
+          "label": "B",
+          "text": "The client must always be newer than the server.",
+          "is_correct": false,
+          "feedback": "A newer client is not the stated prerequisite."
+        },
+        {
+          "label": "C",
+          "text": "The server must be cloud-hosted and the client on-premises.",
+          "is_correct": false,
+          "feedback": "Cloud hosting is not required for log fetching."
+        },
+        {
+          "label": "D",
+          "text": "Both appliances must use different ADOM names for the same device.",
+          "is_correct": false,
+          "feedback": "Device/ADOM mappings must be synchronized, not deliberately inconsistent."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "lesson_id": 3,
+      "stem": "Two analysts request different historical intervals from the same analyzer pair. What should they plan for?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Requests automatically merge into one unfiltered transfer.",
+          "is_correct": false,
+          "feedback": "Merging changes the requested time ranges and filters."
+        },
+        {
+          "label": "B",
+          "text": "An analyzer can never act as both client and server.",
+          "is_correct": false,
+          "feedback": "An appliance can serve one peer and fetch from another peer."
+        },
+        {
+          "label": "C",
+          "text": "A second request bypasses approval while the first is active.",
+          "is_correct": false,
+          "feedback": "Approval remains part of the workflow; concurrency does not bypass it."
+        },
+        {
+          "label": "D",
+          "text": "Only one fetch session can run between that appliance pair at once.",
+          "is_correct": true,
+          "feedback": "The guide limits each pair to one concurrent fetch session."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "lesson_id": 4,
+      "stem": "An IP phone gets a data-VLAN lease despite an LLDP profile. What dependency is most likely missing?",
+      "options": [
+        {
+          "label": "A",
+          "text": "FortiAnalyzer has not rebuilt its fetched-log database.",
+          "is_correct": false,
+          "feedback": "Log indexing does not affect Layer-2 VLAN selection."
+        },
+        {
+          "label": "B",
+          "text": "An ADOM revision is locked against automatic deletion.",
+          "is_correct": false,
+          "feedback": "ADOM retention does not control switch-port behavior."
+        },
+        {
+          "label": "C",
+          "text": "The phone's DHCP lease is shorter than the LLDP interval.",
+          "is_correct": false,
+          "feedback": "Lease timing cannot fix a missing VLAN advertisement or trunk membership."
+        },
+        {
+          "label": "D",
+          "text": "The voice VLAN or profile is not correctly applied and carried on that port.",
+          "is_correct": true,
+          "feedback": "The phone needs the right TLV, profile assignment, and allowed VLAN path."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "lesson_id": 4,
+      "stem": "A capture shows LLDP-MED advertises DSCP 46. What does that prove?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The TLV advertises that value, not end-to-end QoS treatment.",
+          "is_correct": true,
+          "feedback": "The capture proves TLV content; downstream QoS needs separate verification."
+        },
+        {
+          "label": "B",
+          "text": "Every upstream router now prioritizes voice packets automatically.",
+          "is_correct": false,
+          "feedback": "LLDP does not configure every upstream router's queues."
+        },
+        {
+          "label": "C",
+          "text": "The phone accepted the VLAN and obtained a DHCP lease.",
+          "is_correct": false,
+          "feedback": "Advertisement does not prove endpoint acceptance or DHCP success."
+        },
+        {
+          "label": "D",
+          "text": "Every trunk has the voice VLAN allowed and tagged.",
+          "is_correct": false,
+          "feedback": "The TLV does not prove VLAN membership on every trunk."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "lesson_id": 4,
+      "stem": "A standalone FortiSwitch receives a controller-managed LLDP profile example. What should be done?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Enable central SNAT so voice VLANs are advertised dynamically.",
+          "is_correct": false,
+          "feedback": "SNAT does not control LLDP advertisements."
+        },
+        {
+          "label": "B",
+          "text": "Use the LLDP configuration hierarchy for the actual management mode.",
+          "is_correct": true,
+          "feedback": "Standalone and controller-managed switches use different configuration contexts."
+        },
+        {
+          "label": "C",
+          "text": "Restore an ADOM revision to discover the wireless controller.",
+          "is_correct": false,
+          "feedback": "An ADOM revision does not make a standalone switch controller-managed."
+        },
+        {
+          "label": "D",
+          "text": "Change FortiAnalyzer fetch roles to enable LLDP-MED.",
+          "is_correct": false,
+          "feedback": "Log-fetch roles have no dependency on LLDP-MED."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "lesson_id": 4,
+      "stem": "The correct LLDP-MED TLV is visible, but the phone has no voice address. What next?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Assume DHCP is faulty because the TLV is correct.",
+          "is_correct": false,
+          "feedback": "The server may be fine if the phone never tags voice traffic."
+        },
+        {
+          "label": "B",
+          "text": "Disable LLDP transmit to force a fresh DHCP request.",
+          "is_correct": false,
+          "feedback": "Disabling LLDP removes the advertisement instead of fixing later stages."
+        },
+        {
+          "label": "C",
+          "text": "Verify phone acceptance, VLAN carriage, and the voice DHCP path.",
+          "is_correct": true,
+          "feedback": "The TLV proves advertisement only; tagging and DHCP remain separate stages."
+        },
+        {
+          "label": "D",
+          "text": "Change FortiPAM approval tiers before retesting.",
+          "is_correct": false,
+          "feedback": "PAM authorization does not affect voice VLAN DHCP."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "lesson_id": 5,
+      "stem": "An AP exceeds its station threshold. What does AP handoff try to do?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Move a weak client to a nearby AP that can hear it adequately.",
+          "is_correct": true,
+          "feedback": "AP handoff selects weak stations only when a suitable neighbor exists."
+        },
+        {
+          "label": "B",
+          "text": "Move every client to 5 GHz immediately.",
+          "is_correct": false,
+          "feedback": "AP handoff differs from frequency handoff."
+        },
+        {
+          "label": "C",
+          "text": "Change the SSID VLAN to the least-used network.",
+          "is_correct": false,
+          "feedback": "VLAN selection is unrelated to AP load balancing."
+        },
+        {
+          "label": "D",
+          "text": "Disable roaming clients so they reconnect through the controller.",
+          "is_correct": false,
+          "feedback": "Roaming clients are excluded from the documented behavior."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "lesson_id": 5,
+      "stem": "Why might a dual-band client retry on 2.4 GHz with frequency handoff enabled?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Its measured 5 GHz RSSI may be below the configured threshold.",
+          "is_correct": true,
+          "feedback": "The controller uses band capability and 5 GHz signal strength to steer."
+        },
+        {
+          "label": "B",
+          "text": "Frequency handoff requires every client to use WPA3 Enterprise.",
+          "is_correct": false,
+          "feedback": "WPA3 is not a prerequisite for frequency handoff."
+        },
+        {
+          "label": "C",
+          "text": "The controller cannot record RSSI for any 5 GHz client.",
+          "is_correct": false,
+          "feedback": "The controller records per-band RSSI for client decisions."
+        },
+        {
+          "label": "D",
+          "text": "The AP handoff threshold selects the client's DHCP server.",
+          "is_correct": false,
+          "feedback": "AP handoff station count does not select a DHCP server."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "lesson_id": 5,
+      "stem": "An operator expects load balancing to move a client already roaming between APs. What limitation applies?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The feature works only when FortiAnalyzer fetching is enabled.",
+          "is_correct": false,
+          "feedback": "Log fetching is unrelated to wireless association steering."
+        },
+        {
+          "label": "B",
+          "text": "The documented load-balancing feature is not applied to roaming clients.",
+          "is_correct": true,
+          "feedback": "The guide separates roaming behavior from load-balancing decisions."
+        },
+        {
+          "label": "C",
+          "text": "Roaming clients are always pinned to 2.4 GHz.",
+          "is_correct": false,
+          "feedback": "Band choice depends on capability and RSSI, not a universal pin."
+        },
+        {
+          "label": "D",
+          "text": "The client needs an LLDP-MED voice VLAN before roaming.",
+          "is_correct": false,
+          "feedback": "LLDP-MED is a wired endpoint mechanism."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "lesson_id": 5,
+      "stem": "After aggressive handoff, retries rise while AP client counts fall. What evidence best diagnoses the cause?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Check only the total DHCP leases on the FortiGate.",
+          "is_correct": false,
+          "feedback": "DHCP totals do not show radio quality or association behavior."
+        },
+        {
+          "label": "B",
+          "text": "Compare neighbor RSSI, channel utilization, retries, and association events.",
+          "is_correct": true,
+          "feedback": "These measurements show whether steering targets are usable and airtime is constrained."
+        },
+        {
+          "label": "C",
+          "text": "Raise the station threshold without reviewing RF coverage.",
+          "is_correct": false,
+          "feedback": "Blind threshold changes may hide overload while retaining poor RF."
+        },
+        {
+          "label": "D",
+          "text": "Disable all 5 GHz radios to remove retry counters.",
+          "is_correct": false,
+          "feedback": "Disabling 5 GHz defeats the design instead of diagnosing it."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "lesson_id": 6,
+      "stem": "A specific FortiNAC policy never wins while a broad profile sits above it. Why?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The specific policy loses because its name is shorter.",
+          "is_correct": false,
+          "feedback": "Names do not determine precedence."
+        },
+        {
+          "label": "B",
+          "text": "FortiNAC randomly chooses among matching policies.",
+          "is_correct": false,
+          "feedback": "The first match wins; selection is not random."
+        },
+        {
+          "label": "C",
+          "text": "The earlier broad policy matches first and shadows the specific policy.",
+          "is_correct": true,
+          "feedback": "Policy evaluation is top-down first-match, so order controls treatment."
+        },
+        {
+          "label": "D",
+          "text": "The access configuration overrides profile matching regardless of rank.",
+          "is_correct": false,
+          "feedback": "The profile match selects the policy whose configuration supplies treatment."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "lesson_id": 6,
+      "stem": "A host is online in inventory but no Network Access Policy is evaluated. What prerequisite should be checked?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Confirm the FortiPAM secret request is approved.",
+          "is_correct": false,
+          "feedback": "PAM approval is unrelated to NAC policy eligibility."
+        },
+        {
+          "label": "B",
+          "text": "Confirm FortiAnalyzer indexed historical host logs.",
+          "is_correct": false,
+          "feedback": "Log indexing does not determine host registration."
+        },
+        {
+          "label": "C",
+          "text": "Confirm the FortiGate SNAT port is above 5117.",
+          "is_correct": false,
+          "feedback": "SNAT port preservation is unrelated to NAC policy evaluation."
+        },
+        {
+          "label": "D",
+          "text": "Confirm registration and membership of the port in the Role-Based Access group.",
+          "is_correct": true,
+          "feedback": "Policy evaluation requires registered-host eligibility and the appropriate port group."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "lesson_id": 6,
+      "stem": "Which tool helps identify the ranked profile that matches a host before enforcement testing?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Use Policy Simulator, then inspect Policy Details on the host.",
+          "is_correct": true,
+          "feedback": "Policy Simulator tests criteria; Policy Details shows the assigned treatment."
+        },
+        {
+          "label": "B",
+          "text": "Use the FortiAnalyzer fetch-session monitor and rebuild banner.",
+          "is_correct": false,
+          "feedback": "Fetch monitoring tracks log transfer and indexing."
+        },
+        {
+          "label": "C",
+          "text": "Use FortiPAM Approval List to inspect policy precedence.",
+          "is_correct": false,
+          "feedback": "PAM approvals do not show NAC matching."
+        },
+        {
+          "label": "D",
+          "text": "Use FortiGate session tuples to determine the NAC policy rank.",
+          "is_correct": false,
+          "feedback": "Session tuples show traffic translation, not policy selection."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "lesson_id": 6,
+      "stem": "FortiNAC selects the intended VLAN policy, but the switch port stays unchanged. What boundary is next?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Reorder every policy because selection cannot be correct if VLAN failed.",
+          "is_correct": false,
+          "feedback": "Changing order after a correct match can create a new error."
+        },
+        {
+          "label": "B",
+          "text": "Assume registration is invalid despite the assigned policy.",
+          "is_correct": false,
+          "feedback": "The assigned policy shows the host entered evaluation."
+        },
+        {
+          "label": "C",
+          "text": "Change the profile to match a broader catch-all policy.",
+          "is_correct": false,
+          "feedback": "A catch-all can shadow other policies and weaken specificity."
+        },
+        {
+          "label": "D",
+          "text": "Inspect the network-access treatment and device enforcement result.",
+          "is_correct": true,
+          "feedback": "A correct match proves classification, not successful device actuation."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "lesson_id": 7,
+      "stem": "After upgrading FortiNAC-F to 7.4+, what should happen before disabling Legacy Proxy?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Delete all old proxy objects and rely on the global default.",
+          "is_correct": false,
+          "feedback": "Deleting objects first can break requests still using them."
+        },
+        {
+          "label": "B",
+          "text": "Switch every device to Local RADIUS regardless of design.",
+          "is_correct": false,
+          "feedback": "Local and Proxy modes have different authentication/accounting behavior."
+        },
+        {
+          "label": "C",
+          "text": "Validate Virtual Proxy objects and update each device, VDOM, or SSID binding.",
+          "is_correct": true,
+          "feedback": "Migration requires validating new objects and changing their references."
+        },
+        {
+          "label": "D",
+          "text": "Disable accounting until the legacy tab disappears.",
+          "is_correct": false,
+          "feedback": "Disabling accounting hides rather than completes migration issues."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "lesson_id": 7,
+      "stem": "External RADIUS should handle 802.1X EAP while FortiNAC handles MAB locally. Which mode fits?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Use Local mode because it always forwards EAP externally.",
+          "is_correct": false,
+          "feedback": "Local mode terminates supported EAP locally."
+        },
+        {
+          "label": "B",
+          "text": "Use Legacy Proxy for all new FortiNAC-F 7.6 configurations.",
+          "is_correct": false,
+          "feedback": "New configurations should use Virtual Servers, not the legacy view."
+        },
+        {
+          "label": "C",
+          "text": "Use Local mode and expect it to provide accounting.",
+          "is_correct": false,
+          "feedback": "Local RADIUS does not provide accounting by itself."
+        },
+        {
+          "label": "D",
+          "text": "Use Proxy mode with Proxy MAB Requests disabled.",
+          "is_correct": true,
+          "feedback": "Proxy forwards EAP; with Proxy MAB disabled, MAB can be local."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "lesson_id": 7,
+      "stem": "After migration, 802.1X works but accounting is absent. Which distinction matters?",
+      "options": [
+        {
+          "label": "A",
+          "text": "A Virtual Proxy Server cannot handle authentication and accounting.",
+          "is_correct": false,
+          "feedback": "Virtual Proxy can handle both when configured for both."
+        },
+        {
+          "label": "B",
+          "text": "The SSID must be moved into a central-SNAT policy.",
+          "is_correct": false,
+          "feedback": "Central SNAT does not affect RADIUS accounting."
+        },
+        {
+          "label": "C",
+          "text": "The shared secret determines whether Local RADIUS supports accounting.",
+          "is_correct": false,
+          "feedback": "A shared secret secures RADIUS exchange but does not add Local accounting capability."
+        },
+        {
+          "label": "D",
+          "text": "Local RADIUS does not provide accounting; configure the proxy accounting path.",
+          "is_correct": true,
+          "feedback": "Accounting is supported through the proxy path; Local does not supply it alone."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "lesson_id": 7,
+      "stem": "Which interface permissions should be verified for FortiNAC-F Local RADIUS?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Confirm radius-local and, when required, radius-acct access options.",
+          "is_correct": true,
+          "feedback": "Local RADIUS has its own access token; accounting uses a separate path."
+        },
+        {
+          "label": "B",
+          "text": "Enable only legacy radius and remove all other access options.",
+          "is_correct": false,
+          "feedback": "Legacy proxy and Local RADIUS have distinct allowaccess requirements."
+        },
+        {
+          "label": "C",
+          "text": "Enable OFTP and disable the RADIUS listener.",
+          "is_correct": false,
+          "feedback": "OFTP is unrelated to the FortiNAC RADIUS listener."
+        },
+        {
+          "label": "D",
+          "text": "Set the FortiGate interface as a central-SNAT member.",
+          "is_correct": false,
+          "feedback": "Central-SNAT membership does not enable a RADIUS service."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "lesson_id": 8,
+      "stem": "A FortiAuthenticator request lacks NAS-IP-Address required by a policy. What should happen?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The policy matches because the user's password is valid.",
+          "is_correct": false,
+          "feedback": "Credential validity does not satisfy a missing selection attribute."
+        },
+        {
+          "label": "B",
+          "text": "FortiAuthenticator infers NAS-IP from the username realm.",
+          "is_correct": false,
+          "feedback": "Realm parsing does not substitute for the missing request field."
+        },
+        {
+          "label": "C",
+          "text": "That policy fails its criteria and evaluation continues down the list.",
+          "is_correct": true,
+          "feedback": "Every configured request-attribute criterion must match."
+        },
+        {
+          "label": "D",
+          "text": "The missing attribute forces all policies to be bypassed.",
+          "is_correct": false,
+          "feedback": "The request may match a later/default policy rather than bypassing all policies."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "lesson_id": 8,
+      "stem": "EAP options are configured in a FortiAuthenticator policy, but the request is proxied. What is the boundary?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Those EAP settings apply to locally terminated EAP, not proxied sessions.",
+          "is_correct": true,
+          "feedback": "The guide distinguishes local EAP termination from proxy forwarding."
+        },
+        {
+          "label": "B",
+          "text": "EAP settings always override the external server's response.",
+          "is_correct": false,
+          "feedback": "The external server handles the proxied EAP session."
+        },
+        {
+          "label": "C",
+          "text": "Proxy mode converts all EAP into local Password/OTP.",
+          "is_correct": false,
+          "feedback": "Proxy does not automatically convert EAP to Password/OTP."
+        },
+        {
+          "label": "D",
+          "text": "Policy order is ignored whenever EAP is enabled.",
+          "is_correct": false,
+          "feedback": "Policies remain ordered by request matching."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "lesson_id": 8,
+      "stem": "Two IPsec tunnels need different group outcomes from FortiAuthenticator. What discriminator is cleanest?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Use stable distinct request attributes such as NAS-IP-Address in ordered policies.",
+          "is_correct": true,
+          "feedback": "Distinct request attributes let each tunnel select the intended policy."
+        },
+        {
+          "label": "B",
+          "text": "Give both tunnels identical NAS attributes and rely on policy names.",
+          "is_correct": false,
+          "feedback": "Policy names do not distinguish Access-Requests."
+        },
+        {
+          "label": "C",
+          "text": "Put a no-criteria default policy at the top.",
+          "is_correct": false,
+          "feedback": "A broad top policy captures requests before specific policies."
+        },
+        {
+          "label": "D",
+          "text": "Change the certificate for every user login.",
+          "is_correct": false,
+          "feedback": "Certificate rotation is not normal tunnel-specific RADIUS selection."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "lesson_id": 8,
+      "stem": "How many request attributes can a FortiAuthenticator RADIUS policy use as criteria in the documented guide?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Any number, even if absent from the request.",
+          "is_correct": false,
+          "feedback": "Absent attributes cannot satisfy criteria."
+        },
+        {
+          "label": "B",
+          "text": "Exactly one, always User-Name.",
+          "is_correct": false,
+          "feedback": "The documented maximum is not one and does not mandate User-Name alone."
+        },
+        {
+          "label": "C",
+          "text": "Up to two, and the NAS must actually send them.",
+          "is_correct": true,
+          "feedback": "The guide documents up to two criteria, each of which must match."
+        },
+        {
+          "label": "D",
+          "text": "None; policies match only identity sources.",
+          "is_correct": false,
+          "feedback": "Identity-source settings follow policy selection; they are not the only input."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "lesson_id": 9,
+      "stem": "An approver revokes a FortiPAM 1.9+ request after launch. What should occur?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Only future launches are blocked; the current session remains active.",
+          "is_correct": false,
+          "feedback": "The documented behavior includes termination of an already launched session."
+        },
+        {
+          "label": "B",
+          "text": "The request is permanently approved and cannot be reviewed again.",
+          "is_correct": false,
+          "feedback": "The request resets and requires a new approval or denial."
+        },
+        {
+          "label": "C",
+          "text": "The active secret session terminates and the request resets for a new decision.",
+          "is_correct": true,
+          "feedback": "Revoke Approval withdraws authorization and terminates the associated session."
+        },
+        {
+          "label": "D",
+          "text": "All sessions for every FortiPAM user terminate.",
+          "is_correct": false,
+          "feedback": "Revocation is scoped to the request/session, not all users."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "lesson_id": 9,
+      "stem": "The revoke button is greyed out on an older FortiPAM deployment. What should be checked?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Assume the target server is unreachable because revocation requires SSH.",
+          "is_correct": false,
+          "feedback": "The issue may be approval-state semantics rather than target connectivity."
+        },
+        {
+          "label": "B",
+          "text": "Check the version and whether a single-approver tier is already complete.",
+          "is_correct": true,
+          "feedback": "Older tier behavior can make a completed single-approver approval non-revocable."
+        },
+        {
+          "label": "C",
+          "text": "Delete and recreate the secret in a new folder.",
+          "is_correct": false,
+          "feedback": "Deleting the secret is destructive and does not explain button state."
+        },
+        {
+          "label": "D",
+          "text": "Disable all approval tiers so the request can be revoked.",
+          "is_correct": false,
+          "feedback": "Removing approval controls weakens authorization instead of fixing workflow."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "lesson_id": 9,
+      "stem": "How do you verify revocation cut off an active FortiPAM session?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Check only that the approval comment was saved.",
+          "is_correct": false,
+          "feedback": "A comment is audit context, not proof of session termination."
+        },
+        {
+          "label": "B",
+          "text": "Check request reset and verify the session is gone from Active Sessions.",
+          "is_correct": true,
+          "feedback": "The operation affects both request state and active session state."
+        },
+        {
+          "label": "C",
+          "text": "Check only the secret's password-change timestamp.",
+          "is_correct": false,
+          "feedback": "Password rotation is a different secret lifecycle event."
+        },
+        {
+          "label": "D",
+          "text": "Check whether the target still resolves DNS.",
+          "is_correct": false,
+          "feedback": "DNS reachability does not prove FortiPAM terminated the session."
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "lesson_id": 9,
+      "stem": "Why might the approval request time differ between requester and approver?",
+      "options": [
+        {
+          "label": "A",
+          "text": "FortiPAM stores all approvals in UTC and never displays local time.",
+          "is_correct": false,
+          "feedback": "The UI documents timezone display behavior, not UTC-only display."
+        },
+        {
+          "label": "B",
+          "text": "The target server timezone exclusively determines approval display.",
+          "is_correct": false,
+          "feedback": "The target timezone does not exclusively determine the displayed time."
+        },
+        {
+          "label": "C",
+          "text": "Approval times inherit the FortiGate firewall schedule.",
+          "is_correct": false,
+          "feedback": "Firewall schedules are unrelated to PAM request time display."
+        },
+        {
+          "label": "D",
+          "text": "The approver timezone is default unless requestor timezone display is enabled.",
+          "is_correct": true,
+          "feedback": "The dialog supports approver timezone and an option for requestor timezone."
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "lesson_id": 10,
+      "stem": "A FortiSIEM rule groups by Source IP. Why can adding Destination Port reduce triggering?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Group By fields only label incidents after triggering.",
+          "is_correct": false,
+          "feedback": "Group By participates in threshold calculation, not just display."
+        },
+        {
+          "label": "B",
+          "text": "Adding fields merges all groups into one larger count.",
+          "is_correct": false,
+          "feedback": "More grouping keys generally split groups rather than merge them."
+        },
+        {
+          "label": "C",
+          "text": "The rule automatically switches from streaming to scheduled mode.",
+          "is_correct": false,
+          "feedback": "Adding a field does not change execution mode."
+        },
+        {
+          "label": "D",
+          "text": "Events split into more groups, so each group's count may fall below threshold.",
+          "is_correct": true,
+          "feedback": "Grouping defines aggregation buckets, so extra keys can fragment counts."
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "lesson_id": 10,
+      "stem": "A Scheduled via SQL incident lacks trigger events. Which explanation is supported?",
+      "options": [
+        {
+          "label": "A",
+          "text": "That ClickHouse rule mode does not expose trigger events in incidents.",
+          "is_correct": true,
+          "feedback": "The guide documents this mode limitation; absence alone is not parser proof."
+        },
+        {
+          "label": "B",
+          "text": "The parser discarded all events before rule evaluation.",
+          "is_correct": false,
+          "feedback": "Parser behavior must be tested separately from rule mode."
+        },
+        {
+          "label": "C",
+          "text": "Every FortiSIEM mode omits trigger events by design.",
+          "is_correct": false,
+          "feedback": "Streaming and scheduled modes have different evidence capabilities."
+        },
+        {
+          "label": "D",
+          "text": "The incident cap deletes trigger data when exceeded.",
+          "is_correct": false,
+          "feedback": "The incident cap limits generated incidents, not trigger-event display."
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "lesson_id": 10,
+      "stem": "Which prerequisites apply to Scheduled via SQL rules in FortiSIEM 7.4?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Any backend and tenant mode, with unlimited incidents per run.",
+          "is_correct": false,
+          "feedback": "The documented mode has backend/scope restrictions and an incident cap."
+        },
+        {
+          "label": "B",
+          "text": "ClickHouse and Super/Global mode, with time-only clear conditions.",
+          "is_correct": true,
+          "feedback": "The guide limits this mode to ClickHouse in Super/Global mode."
+        },
+        {
+          "label": "C",
+          "text": "Only Elasticsearch, with streaming-style testing available.",
+          "is_correct": false,
+          "feedback": "It cannot be tested like a streaming rule."
+        },
+        {
+          "label": "D",
+          "text": "Any backend, but multiple clear conditions are mandatory.",
+          "is_correct": false,
+          "feedback": "Time is the only clear-condition option for this mode."
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "lesson_id": 10,
+      "stem": "A scheduled rule with multiple subpatterns behaves unexpectedly on a non-ClickHouse backend. What should be checked?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Assume all scheduled rules support unlimited subpatterns on every backend.",
+          "is_correct": false,
+          "feedback": "Subpattern support differs by backend and mode."
+        },
+        {
+          "label": "B",
+          "text": "Change event source from metrics to device inventory.",
+          "is_correct": false,
+          "feedback": "Changing event source does not resolve a capability limit."
+        },
+        {
+          "label": "C",
+          "text": "Confirm the backend's subpattern limit and rule-mode capabilities.",
+          "is_correct": true,
+          "feedback": "The guide limits non-ClickHouse scheduled rules to one subpattern."
+        },
+        {
+          "label": "D",
+          "text": "Increase incident severity so subpatterns execute in parallel.",
+          "is_correct": false,
+          "feedback": "Severity is incident metadata, not a subpattern execution control."
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "lesson_id": 11,
+      "stem": "A new FortiSASE target PoP appears after migration begins. What does its initial state mean?",
+      "options": [
+        {
+          "label": "A",
+          "text": "It already carries all traffic because provisioning means activation.",
+          "is_correct": false,
+          "feedback": "The target does not carry traffic until enabled."
+        },
+        {
+          "label": "B",
+          "text": "It is permanently excluded from load balancing and cannot be enabled.",
+          "is_correct": false,
+          "feedback": "Disabled PoPs can be enabled; they are not permanently excluded."
+        },
+        {
+          "label": "C",
+          "text": "It has replaced the source and the old PoP is already deleted.",
+          "is_correct": false,
+          "feedback": "Source decommission happens later in the migration lifecycle."
+        },
+        {
+          "label": "D",
+          "text": "It is provisioned disabled and will not accept connections until enabled.",
+          "is_correct": true,
+          "feedback": "Provisioning and activation are separate states in the migration flow."
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "lesson_id": 11,
+      "stem": "Which FortiSASE edge deployment is most likely to need manual reconfiguration after migration?",
+      "options": [
+        {
+          "label": "A",
+          "text": "An edge device that directly references the old PoP IP address.",
+          "is_correct": true,
+          "feedback": "Direct IP references do not automatically follow the migration."
+        },
+        {
+          "label": "B",
+          "text": "An endpoint that uses the provided global FQDN.",
+          "is_correct": false,
+          "feedback": "The guide says FQDN-based edge deployments need no additional action."
+        },
+        {
+          "label": "C",
+          "text": "A client fetching a PAC file through the global address.",
+          "is_correct": false,
+          "feedback": "Global PAC access normally avoids regional address changes."
+        },
+        {
+          "label": "D",
+          "text": "A deployment with no reference to the source PoP.",
+          "is_correct": false,
+          "feedback": "No source reference means there is no old address to replace."
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "lesson_id": 11,
+      "stem": "A PoP migration is left unattended. What transition is documented after 30 days?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The target is deleted while the source remains active indefinitely.",
+          "is_correct": false,
+          "feedback": "This reverses the documented transition."
+        },
+        {
+          "label": "B",
+          "text": "All endpoint profiles reset to factory defaults.",
+          "is_correct": false,
+          "feedback": "PoP migration does not factory-reset endpoint profiles."
+        },
+        {
+          "label": "C",
+          "text": "The target is automatically enabled and the source is decommissioned.",
+          "is_correct": true,
+          "feedback": "The guide documents automatic target activation and source decommission."
+        },
+        {
+          "label": "D",
+          "text": "The target remains disabled until every client reconnects manually.",
+          "is_correct": false,
+          "feedback": "Manual reconnection is not the condition for the timed transition."
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "lesson_id": 11,
+      "stem": "Some proxy users fail after migration while global-PAC users work. What dependency should be inspected?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The FortiPAM approval tier assigned to each user.",
+          "is_correct": false,
+          "feedback": "PAM approval does not select PAC endpoints."
+        },
+        {
+          "label": "B",
+          "text": "The FortiGate SNAT source-port preservation range.",
+          "is_correct": false,
+          "feedback": "SNAT port preservation does not update PAC URLs."
+        },
+        {
+          "label": "C",
+          "text": "The FortiAnalyzer fetch database rebuild state.",
+          "is_correct": false,
+          "feedback": "Log indexing is unrelated to the endpoint's PAC fetch address."
+        },
+        {
+          "label": "D",
+          "text": "Regional PAC fetch URLs and self-hosted PAC references to the old PoP.",
+          "is_correct": true,
+          "feedback": "Regional PAC and self-hosted references may need updating."
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "lesson_id": 12,
+      "stem": "The SDN connector is connected, but new workloads do not match the SD-WAN rule. What next?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Change SD-WAN strategy before checking address membership.",
+          "is_correct": false,
+          "feedback": "Path strategy is downstream of address membership."
+        },
+        {
+          "label": "B",
+          "text": "Inspect the dynamic address filter and resolved IP list.",
+          "is_correct": true,
+          "feedback": "A connected connector can still return no matches because of filter/polling state."
+        },
+        {
+          "label": "C",
+          "text": "Rotate the FortiPAM approval tier for the workload.",
+          "is_correct": false,
+          "feedback": "PAM approvals do not control SDN resource selection."
+        },
+        {
+          "label": "D",
+          "text": "Assume connector health proves every resource matched the filter.",
+          "is_correct": false,
+          "feedback": "Connector health does not prove the dynamic filter matched workloads."
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "lesson_id": 12,
+      "stem": "Which commands separate SDN connector health from final SD-WAN service matching?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Use diagnose sys session list for both connector and rule membership.",
+          "is_correct": false,
+          "feedback": "Session output does not show connector inventory refresh state."
+        },
+        {
+          "label": "B",
+          "text": "Use ADOM revision diff and ignore the dynamic address object.",
+          "is_correct": false,
+          "feedback": "ADOM revisions do not show live FortiGate connector resolution."
+        },
+        {
+          "label": "C",
+          "text": "Use diagnose sys sdn status, then inspect diagnose sys sdwan service.",
+          "is_correct": true,
+          "feedback": "The first checks connector state; the second exposes service matching."
+        },
+        {
+          "label": "D",
+          "text": "Use only ping to prove the intended rule matched.",
+          "is_correct": false,
+          "feedback": "Ping reachability does not prove rule selection."
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "lesson_id": 12,
+      "stem": "How does a cloud resource become a destination match in an SD-WAN rule?",
+      "options": [
+        {
+          "label": "A",
+          "text": "The rule reads cloud tags directly without an address object.",
+          "is_correct": false,
+          "feedback": "The guide uses an address object to associate connector data with a rule."
+        },
+        {
+          "label": "B",
+          "text": "The SLA creates IP addresses from latency measurements.",
+          "is_correct": false,
+          "feedback": "An SLA measures path health, not cloud workload discovery."
+        },
+        {
+          "label": "C",
+          "text": "A connector refreshes inventory into a dynamic Fabric Connector Address object.",
+          "is_correct": true,
+          "feedback": "The documented workflow binds connector inventory and filters to an address object."
+        },
+        {
+          "label": "D",
+          "text": "The firewall policy converts every workload into a static address.",
+          "is_correct": false,
+          "feedback": "Dynamic connector addresses refresh rather than requiring each IP to be static."
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "lesson_id": 12,
+      "stem": "The dynamic address list is correct, but traffic uses an unexpected WAN member. What next?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Rebuild the connector because a correct list proves it is stale.",
+          "is_correct": false,
+          "feedback": "A correct address list argues against a connector refresh failure."
+        },
+        {
+          "label": "B",
+          "text": "Inspect rule order, strategy, and member health after confirming the match.",
+          "is_correct": true,
+          "feedback": "Once membership is correct, rule selection and path strategy are the next boundary."
+        },
+        {
+          "label": "C",
+          "text": "Change the filter until the desired member is selected.",
+          "is_correct": false,
+          "feedback": "Filters define destination membership, not the selected WAN member."
+        },
+        {
+          "label": "D",
+          "text": "Disable all higher-priority rules without reviewing their match conditions.",
+          "is_correct": false,
+          "feedback": "Blindly disabling rules can disrupt unrelated traffic and hide the match."
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "lesson_id": 1,
+      "stem": "A low source port must be mapped deterministically. Which conclusion is safest?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Normal preservation may not apply; explicit mapping needs supported protocol and pool settings.",
+          "is_correct": true,
+          "feedback": "The preservation floor and explicit-mapping constraints both matter for low ports."
+        },
+        {
+          "label": "B",
+          "text": "Port-preserve always retains low ports when the central rule matches.",
+          "is_correct": false,
+          "feedback": "The documented preservation range excludes low source ports."
+        },
+        {
+          "label": "C",
+          "text": "Disable reverse NAT so the peer sees the original port.",
+          "is_correct": false,
+          "feedback": "Reverse NAT is required to map replies to the original session."
+        },
+        {
+          "label": "D",
+          "text": "Use a static route to force the translated source port.",
+          "is_correct": false,
+          "feedback": "Routing selects a path; it does not dictate NAT port allocation."
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "lesson_id": 12,
+      "stem": "After a connector filter change, a workload should move into another destination group. What must be verified first?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Assume SD-WAN rules never consume updated connector addresses.",
+          "is_correct": false,
+          "feedback": "Dynamic connector addresses are designed to refresh external inventory."
+        },
+        {
+          "label": "B",
+          "text": "Confirm connector refresh completed and the dynamic object resolved the new IP set.",
+          "is_correct": true,
+          "feedback": "Control-plane refresh and resolved membership must be checked first."
+        },
+        {
+          "label": "C",
+          "text": "Change SLA targets to the workload's previous private address.",
+          "is_correct": false,
+          "feedback": "SLA targets do not correct a stale address-object result."
+        },
+        {
+          "label": "D",
+          "text": "Restore an ADOM revision to refresh the cloud connector automatically.",
+          "is_correct": false,
+          "feedback": "ADOM restore is not the FortiGate SDN polling mechanism."
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "all_questions_have_four_options": true,
+    "all_choices_have_feedback": true,
+    "correct_answer_distribution": {
+      "A": 13,
+      "B": 13,
+      "C": 12,
+      "D": 12
+    },
+    "correct_option_uniquely_longest_count": 30,
+    "correct_option_uniquely_longest_question_ids": [
+      1,
+      2,
+      3,
+      4,
+      8,
+      10,
+      12,
+      13,
+      15,
+      16,
+      17,
+      18,
+      19,
+      21,
+      22,
+      25,
+      27,
+      29,
+      30,
+      32,
+      33,
+      34,
+      35,
+      37,
+      38,
+      42,
+      44,
+      47,
+      49,
+      50
+    ],
+    "malformed_raw_rows": []
+  }
+}
