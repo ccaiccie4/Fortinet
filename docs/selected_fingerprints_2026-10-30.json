@@ -1,0 +1,248 @@
+{
+  "date": "2026-10-30",
+  "timestamp": "08:03 PDT",
+  "status": "SELECTED_AFTER_PREGENERATION_INVENTORY_READBACK",
+  "inventory_path": "docs/exclusion_inventory_2026-10-30-08-03.json",
+  "inventory_record_count": 138,
+  "selection_method": "Product admin/configuration/new-feature guides selected primary mechanisms. Community/KB pages are scenario context only. Candidate topics compared to the rolling 30-day inventory and known failed-draft candidates; semantically equivalent subjects rejected.",
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "SNAT source-port preservation under collision: port-preserve defaults, ephemeral-port floor, and explicit mapping",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.4.0/new-features/758009/fine-tuning-source-port-behavior-for-snat-7-4-4",
+        "https://docs.fortinet.com/document/fortigate/7.6.5/administration-guide/421028"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-understanding-snat-source-port-changes-for-ike-traffic-230447",
+      "scenario_date": "2026-10-09 (search result says published 3 weeks ago; exact date needs page-level confirmation)",
+      "mechanism": "SNAT source port preservation: preserve original source port only when eligible and available; fallback allocation and explicit mapping for low source ports",
+      "workflow": "session creation -> central SNAT/policy NAT -> port-preserve eligibility/collision -> translated tuple -> reverse tuple in session table",
+      "failure_class": "unexpected source-port translation breaks upstream pinholes or IKE NAT expectations",
+      "evidence": "diagnose sys session list origin/reply tuples and translated source port; compare after clearing old session",
+      "remediation": "check FortiOS version, port-preserve setting, 5117-65533 eligibility, existing tuple collisions; use explicit port mapping only when suitable",
+      "question": "Which session-table evidence distinguishes port-preserve eligibility from a collision-driven fallback?",
+      "diagram": "client original tuple -> FortiGate SNAT decision -> public tuple -> reply reverse mapping; branch for low port/collision"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "ADOM revision diff and restore: snapshot scope, auto-deletion locks, and re-install sequencing",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/54616/adom-revisions",
+        "https://docs.fortinet.com/document/fortimanager/latest/administration-guide/854217/revert"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-fortimanager-use-adom-revision-during-migration-162105",
+      "scenario_date": "2024-03-13",
+      "mechanism": "ADOM snapshot captures policy packages, objects, and VPN console settings; restore is distinct from managed-device config revision revert",
+      "workflow": "create named ADOM revision -> lock against auto-delete if needed -> compare diff -> restore database snapshot -> import device config -> reinstall package",
+      "failure_class": "restored ADOM database differs from device or package state after restore",
+      "evidence": "ADOM revision diff and revision metadata; device package status and install preview after restore",
+      "remediation": "make a pre-change revision, lock critical baseline, restore correct ADOM snapshot, import managed device configuration, re-install package",
+      "question": "After restoring an ADOM revision, which step realigns the package with the managed device?",
+      "diagram": "ADOM snapshot -> revision diff/restore -> ADOM DB -> device import -> package install"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Log Fetching between analyzers: fetch approval, ADOM synchronization, transfer completion, and database rebuild",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/651442/log-fetching",
+        "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/641494/fetch-monitoring"
+      ],
+      "scenario_community_url": null,
+      "scenario_date": null,
+      "mechanism": "pull archived logs from a server FortiAnalyzer to a client for historical analysis; transfer completion is separate from index/database rebuild completion",
+      "workflow": "fetch profile -> request -> sync device/ADOM mapping -> server approves -> transfer -> index fetched logs -> rebuild ADOM/database -> reports usable",
+      "failure_class": "fetch shows Done but logs are not yet queryable because indexing/rebuild remains incomplete or device/ADOM mapping is stale",
+      "evidence": "System Settings > Advanced > Log Fetch > Sessions; rebuild progress; query a known device/time range after indexing",
+      "remediation": "confirm same firmware, request approval, sync devices/ADOMs after changes, monitor transfer and rebuild, run ADOM rebuild if indexing option disabled",
+      "question": "What does a completed transfer fail to prove about historical log queryability?",
+      "diagram": "client profile/request <-> server approval -> archive transfer -> client index/rebuild -> query/report"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "LLDP-MED network policy for voice endpoints: VLAN advertisement, DSCP/priority, and port prerequisites",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/585556/lldp-med",
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/585561"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-configure-voice-vlan-on-fortiswitch-142967",
+      "scenario_date": "2023-08-28",
+      "mechanism": "LLDP-MED network-policy TLVs advertise voice VLAN and QoS to phones; the port still needs allowed VLAN and profile/LLDP TX-RX",
+      "workflow": "phone sends LLDP -> switch advertises network policy -> phone tags voice traffic -> VLAN trunk carries it -> DHCP reaches voice subnet",
+      "failure_class": "phone associates but receives native/data VLAN address or no voice DHCP lease",
+      "evidence": "show switch lldp profile, port LLDP status, VLAN membership, packet capture for LLDP-MED TLV, DHCP scope logs",
+      "remediation": "enable network-policy TLV and assign VLAN interface, apply profile to correct port, allow voice VLAN, enable LLDP tx/rx, verify DHCP relay/server",
+      "question": "Which missing dependency explains a phone receiving the data VLAN despite a configured LLDP-MED profile?",
+      "diagram": "FortiSwitch port + data PC/phone -> LLDP-MED TLV -> voice VLAN tag -> DHCP path"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Wireless client load balancing: AP handoff versus frequency handoff and RSSI-driven retries",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/7.6.6/fortiwifi-and-fortiap-configuration-guide/538473/wireless-client-load-balancing-for-high-density-deployments"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/technical-tip-load-balancing-between-fortiaps-185916",
+      "scenario_date": "2024 (older scenario; exact date is on the page)",
+      "mechanism": "controller chooses association response/handoff using station count and 5 GHz RSSI; AP handoff selects weakest client to move; roaming clients excluded",
+      "workflow": "client association request -> controller checks client/band/RSSI and AP load -> accept, defer/retry, or steer to another AP/band",
+      "failure_class": "sticky client, repeated association retries, or poor experience caused by aggressive handoff thresholds/overlapping coverage",
+      "evidence": "WTP profile handoff-sta-thresh, handoff-rssi, frequency-handoff/ap-handoff; client RSSI per band and association events",
+      "remediation": "tune threshold against actual cell design, ensure neighbor AP can hear client at target RSSI, avoid applying aggressive settings to IoT SSIDs, test roaming clients separately",
+      "question": "Why can enabling frequency handoff increase retries for a dual-band client with weak 5 GHz RSSI?",
+      "diagram": "controller with AP1/AP2, client 2.4/5 GHz RSSI decision, AP load branch"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Registered-host Network Access Policy first-match evaluation and catch-all ordering",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/8.3.0/administration-guide/926300/network-access-policies",
+        "https://docs.fortinet.com/document/fortinac/latest/administration-guide/926300/network-access"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-configuring-a-network-access-policy-95169",
+      "scenario_date": "2018-09-28",
+      "mechanism": "policy joins a User/Host Profile to a Network Access Configuration; ranked top-down first match wins for registered hosts; host/location is reevaluated as evidence changes",
+      "workflow": "host record/user/location evidence -> ordered profile match -> VLAN/CLI/VPN group treatment -> periodic re-evaluation after polling or agent contact",
+      "failure_class": "unexpected VLAN/treatment because a broad earlier profile matches or the host is not eligible/registered",
+      "evidence": "Host View online/registered state, port in Role-Based Access group, Policy Simulator, Policy Details, policy rank",
+      "remediation": "move specific policies above broad ones, keep catch-all last, verify registered-host eligibility and location/user criteria, re-evaluate after polls",
+      "question": "Why is a correctly configured specific policy ignored when a broad profile sits above it?",
+      "diagram": "host/user/location facts -> ordered policy list -> first matching treatment -> periodic reevaluation"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Upgrade migration from Legacy RADIUS Proxy to Virtual Proxy Server in FortiNAC-F 7.4+",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/647721",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/799560",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/450544"
+      ],
+      "scenario_community_url": null,
+      "scenario_date": null,
+      "mechanism": "7.4+ uses Virtual Servers (Local/Proxy); legacy proxy view persists only for upgraded pre-7.4 configs, and new virtual proxy objects may be auto-created",
+      "workflow": "upgrade -> inspect Virtual Servers and Legacy Proxy -> validate proxy server/auth-accounting ports -> update device/VDOM/SSID model configuration -> validate -> disable legacy mode",
+      "failure_class": "RADIUS requests stop or are misrouted after upgrade because device configuration still references legacy proxy or required allowaccess/attribute group is wrong",
+      "evidence": "Network > RADIUS tabs, virtual server type, model configuration RADIUS mode, port1 allowaccess, RADIUS activity/logs",
+      "remediation": "validate auto-created virtual proxy, switch each device/VDOM/SSID to it, review default RFC_Vlan attribute group, enable appropriate radius/radius-acct or radius-local, then disable legacy configuration only after tests",
+      "question": "What must be changed on devices after validating the newly created virtual proxy server?",
+      "diagram": "upgrade boundary -> legacy proxy config -> virtual server objects -> per-device/SSID binding -> auth/accounting"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "RADIUS policy selection: request-attribute criteria, top-down precedence, and EAP termination versus proxy",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.5/administration-guide/416152/policies",
+        "https://docs.fortinet.com/document/fortiauthenticator/6.4.5/administration-guide/416152/policies"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-how-to-use-specific-fortiauthenticator-radius-policies-for-different-ipsec-vpn-tunnels-in-fortigate-223728",
+      "scenario_date": "2026-03 (search result says published 7 months ago)",
+      "mechanism": "client-bound RADIUS policies match request attributes top-down; policy selects auth type/identity source/reply attributes; EAP options apply to locally terminated EAP, not proxied EAP",
+      "workflow": "RADIUS Access-Request -> client/policy match -> identity source and auth method -> local EAP or proxy -> Access-Accept/Reject with configured reply attrs",
+      "failure_class": "wrong identity source/group or unexpected reject because a request attribute fails the top-ranked policy criteria",
+      "evidence": "RADIUS debug Access-Request attributes, matched policy, identity source result, local/proxy virtual server and response attributes",
+      "remediation": "verify NAS-IP/NAS-Identifier and other request attrs, order specific policies before broad ones, distinguish local EAP termination from proxy, test each tunnel/client",
+      "question": "Why does a policy with missing NAS-IP criterion fail to match even when the user credentials are valid?",
+      "diagram": "NAS request attributes -> ordered RADIUS policies -> identity source/auth method -> local/proxy -> reply"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM approval revocation as a live session-control action",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/685876/approving-a-request",
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/679705/reviewing-multiple-requests"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/technical-tip-the-fortipam-revoke-button-is-greyed-out-200048",
+      "scenario_date": "2025-05 (search result says published 1.7 years ago; older context)",
+      "mechanism": "approval request has tier/approver state; in 1.9+ Revoke Approval can withdraw an approved request even after launch and terminates the active secret session",
+      "workflow": "request secret access -> approver tier(s) -> time-bounded authorization -> active launcher session -> revoke approval -> session termination and request reset",
+      "failure_class": "operator assumes revoke only affects future launches or sees revoke unavailable under older single-approver tier semantics",
+      "evidence": "Approval List status, tier/approver configuration, My Requests state, Monitoring > Active Sessions, session termination event",
+      "remediation": "confirm release supports Revoke Approval, configure tier/approver expectations, revoke from approval record, verify active session termination and request reset",
+      "question": "What is the operational effect of revoking an already approved request in FortiPAM 1.9+?",
+      "diagram": "request -> tier approvals -> authorized session -> revoke -> session termination + request reset"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Rule execution modes: streaming versus scheduled and scheduled-via-SQL evidence boundaries",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.4.2/user-guide/903877/creating-rules",
+        "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/903877/creating-rules"
+      ],
+      "scenario_community_url": null,
+      "scenario_date": null,
+      "mechanism": "rule subpatterns filter events, group-by attributes define incident identity, aggregate conditions set thresholds; scheduled/SQL modes trade time-window scale for trigger-event and testing limitations",
+      "workflow": "ingest/normalize event -> subpattern filters -> group by and aggregation within window -> trigger incident -> clear condition and scheduled run boundaries",
+      "failure_class": "rule fires differently or lacks trigger events because rule mode, backend, time window, group-by or clear condition differs",
+      "evidence": "rule type/mode, query window/timezone, group-by fields, aggregate threshold, trigger events and incident cap/status",
+      "remediation": "choose streaming for low-latency/testable behavior; scheduled for larger windows/complex analytics; validate ClickHouse-only SQL limitations and clear conditions",
+      "question": "Which mode can run complex SQL rules on ClickHouse but may omit trigger events from incidents?",
+      "diagram": "event stream -> rule mode selector -> filters/subpatterns -> group-by/aggregate -> incident evidence"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Security PoP migration lifecycle: staged target, 30-day cutover, and endpoint/PAC dependencies",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/470056/infrastructure"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-fortisase-automated-pop-migration-229184",
+      "scenario_date": "2026-07 (search result says published 3 months ago)",
+      "mechanism": "migration adds target PoP disabled; target can be activated before source decommission; unattended migration auto-enables target and decommissions source after 30 days",
+      "workflow": "select source/target -> provision target disabled -> enable/validate -> endpoint and PAC reference review -> source decommission after transition window",
+      "failure_class": "endpoint still references regional PoP IP or PAC fetch URL after migration, causing proxy connectivity failure despite new PoP healthy",
+      "evidence": "Infrastructure PoP state, edge config FQDN versus direct IP, PAC file fetch address and regional references, endpoint connectivity",
+      "remediation": "plan timing, enable/validate target, update direct-IP edges and regional PAC references, preserve global FQDN paths, verify before 30-day automatic transition",
+      "question": "Which deployment type still requires endpoint reconfiguration when its PAC file uses a regional PoP address?",
+      "diagram": "source PoP -> target provisioned disabled -> activation/validation -> endpoint/PAC references -> source decommission"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Dynamic SDN connector addresses in SD-WAN rules: cloud inventory refresh to path-selection match",
+      "primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/716691/sd-wan-rules",
+        "https://docs.fortinet.com/document/fortigate/7.0.18/administration-guide/762743/sdn-dynamic-connector-addresses-in-sd-wan-rules"
+      ],
+      "scenario_community_url": null,
+      "scenario_date": null,
+      "mechanism": "external SDN connector imports cloud resource addresses into a dynamic Fabric Connector Address; SD-WAN service rules match the refreshed address set",
+      "workflow": "connector API poll -> dynamic address object filter -> refreshed IP set -> SD-WAN rule destination match -> strategy selects healthy member",
+      "failure_class": "cloud workloads stop matching intended path rule because connector credentials, filters, polling or address-object linkage is stale",
+      "evidence": "diagnose sys sdn status, connector update logs, dynamic address resolved IP list, diagnose sys sdwan service destination address set",
+      "remediation": "verify connector connectivity and polling, filter/tag values, address object connector association and rule reference; use azd debug to observe IP refresh",
+      "question": "Which evidence distinguishes a healthy SDN connector from a dynamic address object actually used by an SD-WAN rule?",
+      "diagram": "cloud inventory -> SDN connector -> dynamic address object -> SD-WAN rule -> selected member"
+    }
+  ],
+  "community_sweep_findings": {
+    "recent_direct_scenarios_verified": [
+      "FortiGate SNAT source-port changes for IKE traffic (published within approximately 3 weeks; exact publication date should be verified from article page)."
+    ],
+    "older_contextual_scenarios": [
+      "FortiManager ADOM revision during migration",
+      "FortiSwitch LLDP-MED voice VLAN",
+      "FortiAP client load balancing",
+      "FortiNAC network access policy ranking",
+      "FortiAuthenticator RADIUS policy selection",
+      "FortiPAM approval revocation",
+      "FortiSASE automated PoP migration"
+    ],
+    "no_direct_scenario_verified": [
+      "FortiAnalyzer log fetching",
+      "FortiNAC-F legacy proxy migration",
+      "FortiSIEM rule execution modes",
+      "Secure SD-WAN dynamic connector addresses"
+    ],
+    "caveat": "Community searches were performed across the 12 product areas, but most matched scenario articles were older than 30 days or no directly matching scenario could be verified. Those gaps will be disclosed in the report."
+  },
+  "admin_guide_sweep": [
+    "FortiOS 7.6.5/7.4.4 Central SNAT and SNAT source-port feature guide",
+    "FortiManager 7.6.7 ADOM revisions and revision restore",
+    "FortiAnalyzer 7.6.6 log fetching and fetch monitoring",
+    "FortiSwitchOS 7.6.5 LLDP-MED and deployment example",
+    "FortiAP 7.6.6 wireless client load balancing guide",
+    "FortiNAC 8.3 network access policies",
+    "FortiNAC-F 7.6 RADIUS virtual servers and legacy proxy migration",
+    "FortiAuthenticator 6.6.5 RADIUS policies",
+    "FortiPAM 1.9 approval/revocation guide",
+    "FortiSIEM 7.4.2 rule creation",
+    "FortiSASE 7.4 infrastructure and PoP migration",
+    "FortiOS 7.6.6 SD-WAN rules and dynamic connector address guide"
+  ]
+}
