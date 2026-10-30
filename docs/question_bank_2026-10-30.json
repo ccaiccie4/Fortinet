@@ -203,9 +203,9 @@
       "options": [
         {
           "label": "A",
-          "text": "Compare the FortiGate session table with the SNAT tuple.",
+          "text": "Compare the live device configuration instead of the ADOM revision diff.",
           "is_correct": false,
-          "feedback": "Session tables show traffic state, not ADOM object history."
+          "feedback": "The live configuration shows current device state but does not preview the snapshot's database changes."
         },
         {
           "label": "B",
@@ -606,9 +606,9 @@
       "options": [
         {
           "label": "A",
-          "text": "Check only the total DHCP leases on the FortiGate.",
+          "text": "Check only AP station counts and ignore per-client RSSI.",
           "is_correct": false,
-          "feedback": "DHCP totals do not show radio quality or association behavior."
+          "feedback": "Station counts show load but not whether a neighboring AP can hear a weak client."
         },
         {
           "label": "B",
@@ -860,9 +860,9 @@
         },
         {
           "label": "B",
-          "text": "Enable OFTP and disable the RADIUS listener.",
+          "text": "Use proxy RADIUS access tokens for the Local RADIUS listener.",
           "is_correct": false,
-          "feedback": "OFTP is unrelated to FortiNAC-F RADIUS listener permissions."
+          "feedback": "Local and Proxy listeners use different allowaccess options; match the token to the configured server type."
         },
         {
           "label": "C",
@@ -872,9 +872,9 @@
         },
         {
           "label": "D",
-          "text": "Set the FortiGate interface as a central-SNAT member.",
+          "text": "Change allowaccess only on the current HA primary.",
           "is_correct": false,
-          "feedback": "Central-SNAT membership does not enable a RADIUS service."
+          "feedback": "For HA, verify the required RADIUS access options on both appliances."
         }
       ]
     },
@@ -1642,9 +1642,9 @@
       },
       {
         "id": 7,
-        "gap": 2,
+        "gap": 3,
         "lens": [
-          9,
+          11,
           10,
           9,
           8
@@ -1873,10 +1873,10 @@
       },
       {
         "id": 28,
-        "gap": 1,
+        "gap": 2,
         "lens": [
           8,
-          7,
+          10,
           8,
           8
         ],
