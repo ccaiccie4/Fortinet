@@ -23,19 +23,19 @@
         },
         {
           "label": "B",
-          "text": "A policy route rewrites UDP source ports before NAT.",
+          "text": "A policy route rewrites UDP source ports before NAT under that NAT rule.",
           "is_correct": false,
           "feedback": "Policy routes select paths and do not generally rewrite transport ports."
         },
         {
           "label": "C",
-          "text": "The service object converts IKE traffic from UDP to TCP.",
+          "text": "The service object converts IKE traffic from UDP to TCP in the observed tuple.",
           "is_correct": false,
           "feedback": "A service object matches traffic; it does not convert UDP into TCP."
         },
         {
           "label": "D",
-          "text": "Central SNAT disables reverse mapping for all UDP sessions.",
+          "text": "Central SNAT disables reverse mapping for all UDP sessions for this source port.",
           "is_correct": false,
           "feedback": "SNAT maintains a reverse session mapping for translated tuples."
         }
@@ -48,7 +48,7 @@
       "options": [
         {
           "label": "A",
-          "text": "Port preservation applies only to the first packet of every UDP flow.",
+          "text": "Port preservation applies only to the first packet of every UDP flow in the observed tuple.",
           "is_correct": false,
           "feedback": "The choice is made for the session and then tracked for later packets."
         },
@@ -60,13 +60,13 @@
         },
         {
           "label": "C",
-          "text": "The second session bypassed central SNAT after policy lookup.",
+          "text": "The second session bypassed central SNAT after policy lookup for this source port.",
           "is_correct": false,
           "feedback": "An existing session does not make later traffic bypass the NAT rule base."
         },
         {
           "label": "D",
-          "text": "The remote server selected the translated client source port.",
+          "text": "The remote server selected the translated client source port before a new flow.",
           "is_correct": false,
           "feedback": "The remote server normally does not choose FortiGate's SNAT port."
         }
@@ -79,19 +79,19 @@
       "options": [
         {
           "label": "A",
-          "text": "Restart every HA member before testing the same traffic again.",
+          "text": "Restart every HA member before testing the same traffic again for this source port.",
           "is_correct": false,
           "feedback": "A cluster restart is disproportionate and does not isolate the decision."
         },
         {
           "label": "B",
-          "text": "Change the destination to force an unrelated SNAT rule.",
+          "text": "Change the destination to force an unrelated SNAT rule before a new flow.",
           "is_correct": false,
           "feedback": "Changing destination can change rule matching and confound the test."
         },
         {
           "label": "C",
-          "text": "Disable session helpers so the existing tuple is re-evaluated.",
+          "text": "Disable session helpers so the existing tuple is re-evaluated with the same destination.",
           "is_correct": false,
           "feedback": "Helpers do not cause an established NAT tuple to be recalculated."
         },
@@ -110,13 +110,13 @@
       "options": [
         {
           "label": "A",
-          "text": "Use ICMP with a port field and an interface-address pool.",
+          "text": "Use ICMP with a port field and an interface-address pool before a new flow.",
           "is_correct": false,
           "feedback": "ICMP has no TCP/UDP-style port, and interface pools do not meet this mapping case."
         },
         {
           "label": "B",
-          "text": "Configure policy NAT even though central NAT is active.",
+          "text": "Configure policy NAT even though central NAT is active with the same destination.",
           "is_correct": false,
           "feedback": "When central NAT is active, central-snat-map controls SNAT."
         },
@@ -128,7 +128,7 @@
         },
         {
           "label": "D",
-          "text": "Assume any source port can be preserved without collision checks.",
+          "text": "Assume any source port can be preserved without collision checks for this session.",
           "is_correct": false,
           "feedback": "NAT still requires a unique reverse mapping for each session."
         }
@@ -172,7 +172,7 @@
       "options": [
         {
           "label": "A",
-          "text": "To prevent administrators from viewing its revision diff.",
+          "text": "To prevent administrators from viewing its revision diff in the selected ADOM.",
           "is_correct": false,
           "feedback": "The revision remains inspectable; locking is a retention control."
         },
@@ -190,7 +190,7 @@
         },
         {
           "label": "D",
-          "text": "To convert it into a FortiGate running-config revision.",
+          "text": "To convert it into a FortiGate running-config revision for the managed device.",
           "is_correct": false,
           "feedback": "ADOM and device configuration revisions are different objects."
         }
@@ -234,7 +234,7 @@
       "options": [
         {
           "label": "A",
-          "text": "FortiManager never stores managed-device configuration revisions.",
+          "text": "FortiManager never stores managed-device configuration revisions after the restore before package install.",
           "is_correct": false,
           "feedback": "Managed-device revisions exist but differ from ADOM snapshots."
         },
@@ -246,13 +246,13 @@
         },
         {
           "label": "C",
-          "text": "A device reboot regenerates the ADOM package automatically.",
+          "text": "A device reboot regenerates the ADOM package automatically in the revision diff.",
           "is_correct": false,
           "feedback": "A reboot does not guarantee package synchronization."
         },
         {
           "label": "D",
-          "text": "Revision restore changes the FortiAnalyzer analytics database.",
+          "text": "Revision restore changes the FortiAnalyzer analytics database for that rollback point.",
           "is_correct": false,
           "feedback": "FortiAnalyzer database rebuilds are unrelated to FortiManager revisions."
         }
@@ -296,7 +296,7 @@
       "options": [
         {
           "label": "A",
-          "text": "Only after every scheduled report succeeds.",
+          "text": "Only after every scheduled report succeeds within that ADOM.",
           "is_correct": false,
           "feedback": "Report generation occurs after the data becomes available."
         },
@@ -308,7 +308,7 @@
         },
         {
           "label": "C",
-          "text": "Only when the analyzers run different firmware versions.",
+          "text": "Only when the analyzers run different firmware versions for the same analyzer pair.",
           "is_correct": false,
           "feedback": "Log fetching requires same firmware, not different versions."
         },
@@ -358,19 +358,19 @@
       "options": [
         {
           "label": "A",
-          "text": "Requests automatically merge into one unfiltered transfer.",
+          "text": "Requests automatically merge into one unfiltered transfer on the fetching client.",
           "is_correct": false,
           "feedback": "Merging changes the requested time ranges and filters."
         },
         {
           "label": "B",
-          "text": "An analyzer can never act as both client and server.",
+          "text": "An analyzer can never act as both client and server for the requested interval.",
           "is_correct": false,
           "feedback": "An appliance can serve one peer and fetch from another peer."
         },
         {
           "label": "C",
-          "text": "A second request bypasses approval while the first is active.",
+          "text": "A second request bypasses approval while the first is active after transfer completion.",
           "is_correct": false,
           "feedback": "Approval remains part of the workflow; concurrency does not bypass it."
         },
@@ -389,19 +389,19 @@
       "options": [
         {
           "label": "A",
-          "text": "FortiAnalyzer has not rebuilt its fetched-log database.",
+          "text": "FortiAnalyzer has not rebuilt its fetched-log database for the phone's VLAN on the voice path.",
           "is_correct": false,
           "feedback": "Log indexing does not affect Layer-2 VLAN selection."
         },
         {
           "label": "B",
-          "text": "An ADOM revision is locked against automatic deletion.",
+          "text": "An ADOM revision is locked against automatic deletion in the LLDP-MED profile before DHCP succeeds.",
           "is_correct": false,
           "feedback": "ADOM retention does not control switch-port behavior."
         },
         {
           "label": "C",
-          "text": "The phone's DHCP lease is shorter than the LLDP interval.",
+          "text": "The phone's DHCP lease is shorter than the LLDP interval for the attached phone.",
           "is_correct": false,
           "feedback": "Lease timing cannot fix a missing VLAN advertisement or trunk membership."
         },
@@ -469,7 +469,7 @@
         },
         {
           "label": "D",
-          "text": "Change FortiAnalyzer fetch roles to enable LLDP-MED.",
+          "text": "Change FortiAnalyzer fetch roles to enable LLDP-MED in the LLDP-MED profile.",
           "is_correct": false,
           "feedback": "Log-fetch roles have no dependency on LLDP-MED."
         }
@@ -500,7 +500,7 @@
         },
         {
           "label": "D",
-          "text": "Change FortiPAM approval tiers before retesting.",
+          "text": "Change FortiPAM approval tiers before retesting before DHCP succeeds.",
           "is_correct": false,
           "feedback": "PAM authorization does not affect voice VLAN DHCP."
         }
@@ -519,19 +519,19 @@
         },
         {
           "label": "B",
-          "text": "Move every client to 5 GHz immediately.",
+          "text": "Move every client to 5 GHz immediately on the neighboring AP for that station.",
           "is_correct": false,
           "feedback": "AP handoff differs from frequency handoff."
         },
         {
           "label": "C",
-          "text": "Change the SSID VLAN to the least-used network.",
+          "text": "Change the SSID VLAN to the least-used network in this RF cell.",
           "is_correct": false,
           "feedback": "VLAN selection is unrelated to AP load balancing."
         },
         {
           "label": "D",
-          "text": "Disable roaming clients so they reconnect through the controller.",
+          "text": "Disable roaming clients so they reconnect through the controller for the selected profile.",
           "is_correct": false,
           "feedback": "Roaming clients are excluded from the documented behavior."
         }
@@ -550,7 +550,7 @@
         },
         {
           "label": "B",
-          "text": "Frequency handoff requires every client to use WPA3 Enterprise.",
+          "text": "Frequency handoff requires every client to use WPA3 Enterprise for that station.",
           "is_correct": false,
           "feedback": "WPA3 is not a prerequisite for frequency handoff."
         },
@@ -562,7 +562,7 @@
         },
         {
           "label": "D",
-          "text": "The AP handoff threshold selects the client's DHCP server.",
+          "text": "The AP handoff threshold selects the client's DHCP server in this RF cell.",
           "is_correct": false,
           "feedback": "AP handoff station count does not select a DHCP server."
         }
@@ -587,7 +587,7 @@
         },
         {
           "label": "C",
-          "text": "Roaming clients are always pinned to 2.4 GHz.",
+          "text": "Roaming clients are always pinned to 2.4 GHz in this RF cell.",
           "is_correct": false,
           "feedback": "Band choice depends on capability and RSSI, not a universal pin."
         },
@@ -637,13 +637,13 @@
       "options": [
         {
           "label": "A",
-          "text": "The specific policy loses because its name is shorter.",
+          "text": "The specific policy loses because its name is shorter for the selected treatment.",
           "is_correct": false,
           "feedback": "Names do not determine precedence."
         },
         {
           "label": "B",
-          "text": "FortiNAC randomly chooses among matching policies.",
+          "text": "FortiNAC randomly chooses among matching policies before enforcement on that switch port.",
           "is_correct": false,
           "feedback": "The first match wins; selection is not random."
         },
@@ -655,7 +655,7 @@
         },
         {
           "label": "D",
-          "text": "The access configuration overrides profile matching regardless of rank.",
+          "text": "The access configuration overrides profile matching regardless of rank for this registered host.",
           "is_correct": false,
           "feedback": "The profile match selects the policy whose configuration supplies treatment."
         }
@@ -668,19 +668,19 @@
       "options": [
         {
           "label": "A",
-          "text": "Confirm the FortiPAM secret request is approved.",
+          "text": "Confirm the FortiPAM secret request is approved before enforcement on that switch port.",
           "is_correct": false,
           "feedback": "PAM approval is unrelated to NAC policy eligibility."
         },
         {
           "label": "B",
-          "text": "Confirm FortiAnalyzer indexed historical host logs.",
+          "text": "Confirm FortiAnalyzer indexed historical host logs for this registered host in the ranked list.",
           "is_correct": false,
           "feedback": "Log indexing does not determine host registration."
         },
         {
           "label": "C",
-          "text": "Confirm the FortiGate SNAT port is above 5117.",
+          "text": "Confirm the FortiGate SNAT port is above 5117 at evaluation time.",
           "is_correct": false,
           "feedback": "SNAT port preservation is unrelated to NAC policy evaluation."
         },
@@ -705,13 +705,13 @@
         },
         {
           "label": "B",
-          "text": "Use the FortiAnalyzer fetch-session monitor and rebuild banner.",
+          "text": "Use the FortiAnalyzer fetch-session monitor and rebuild banner on that switch port.",
           "is_correct": false,
           "feedback": "Fetch monitoring tracks log transfer and indexing."
         },
         {
           "label": "C",
-          "text": "Use FortiPAM Approval List to inspect policy precedence.",
+          "text": "Use FortiPAM Approval List to inspect policy precedence for this registered host.",
           "is_correct": false,
           "feedback": "PAM approvals do not show NAC matching."
         },
@@ -767,7 +767,7 @@
         },
         {
           "label": "B",
-          "text": "Switch every device to Local RADIUS regardless of design.",
+          "text": "Switch every device to Local RADIUS regardless of design on the RADIUS path.",
           "is_correct": false,
           "feedback": "Local and Proxy modes have different authentication/accounting behavior."
         },
@@ -779,7 +779,7 @@
         },
         {
           "label": "D",
-          "text": "Disable accounting until the legacy tab disappears.",
+          "text": "Disable accounting until the legacy tab disappears after the upgrade for the selected virtual server.",
           "is_correct": false,
           "feedback": "Disabling accounting hides rather than completes migration issues."
         }
@@ -823,19 +823,19 @@
       "options": [
         {
           "label": "A",
-          "text": "A Virtual Proxy Server cannot handle authentication and accounting.",
+          "text": "A Virtual Proxy Server cannot handle authentication and accounting for the selected virtual server.",
           "is_correct": false,
           "feedback": "Virtual Proxy can handle both when configured for both."
         },
         {
           "label": "B",
-          "text": "The SSID must be moved into a central-SNAT policy.",
+          "text": "The SSID must be moved into a central-SNAT policy before disabling legacy mode.",
           "is_correct": false,
           "feedback": "Central SNAT does not affect RADIUS accounting."
         },
         {
           "label": "C",
-          "text": "The shared secret determines whether Local RADIUS supports accounting.",
+          "text": "The shared secret determines whether Local RADIUS supports accounting on both HA nodes.",
           "is_correct": false,
           "feedback": "A shared secret secures RADIUS exchange but does not add Local accounting capability."
         },
@@ -885,13 +885,13 @@
       "options": [
         {
           "label": "A",
-          "text": "The policy matches because the user's password is valid.",
+          "text": "The policy matches because the user's password is valid in the ordered policy list.",
           "is_correct": false,
           "feedback": "Credential validity does not satisfy a missing selection attribute."
         },
         {
           "label": "B",
-          "text": "FortiAuthenticator infers NAS-IP from the username realm.",
+          "text": "FortiAuthenticator infers NAS-IP from the username realm for this Access-Request.",
           "is_correct": false,
           "feedback": "Realm parsing does not substitute for the missing request field."
         },
@@ -903,7 +903,7 @@
         },
         {
           "label": "D",
-          "text": "The missing attribute forces all policies to be bypassed.",
+          "text": "The missing attribute forces all policies to be bypassed at policy selection.",
           "is_correct": false,
           "feedback": "The request may match a later/default policy rather than bypassing all policies."
         }
@@ -922,19 +922,19 @@
         },
         {
           "label": "B",
-          "text": "EAP settings always override the external server's response.",
+          "text": "EAP settings always override the external server's response for this Access-Request.",
           "is_correct": false,
           "feedback": "The external server handles the proxied EAP session."
         },
         {
           "label": "C",
-          "text": "Proxy mode converts all EAP into local Password/OTP.",
+          "text": "Proxy mode converts all EAP into local Password/OTP at policy selection.",
           "is_correct": false,
           "feedback": "Proxy does not automatically convert EAP to Password/OTP."
         },
         {
           "label": "D",
-          "text": "Policy order is ignored whenever EAP is enabled.",
+          "text": "Policy order is ignored whenever EAP is enabled before identity lookup.",
           "is_correct": false,
           "feedback": "Policies remain ordered by request matching."
         }
@@ -959,13 +959,13 @@
         },
         {
           "label": "C",
-          "text": "Put a no-criteria default policy at the top.",
+          "text": "Put a no-criteria default policy at the top at policy selection.",
           "is_correct": false,
           "feedback": "A broad top policy captures requests before specific policies."
         },
         {
           "label": "D",
-          "text": "Change the certificate for every user login.",
+          "text": "Change the certificate for every user login before identity lookup.",
           "is_correct": false,
           "feedback": "Certificate rotation is not normal tunnel-specific RADIUS selection."
         }
@@ -978,13 +978,13 @@
       "options": [
         {
           "label": "A",
-          "text": "Any number, even if absent from the request.",
+          "text": "Any number, even if absent from the request before identity lookup.",
           "is_correct": false,
           "feedback": "Absent attributes cannot satisfy criteria."
         },
         {
           "label": "B",
-          "text": "Exactly one, always User-Name.",
+          "text": "Exactly one, always User-Name with the received attributes for that NAS client.",
           "is_correct": false,
           "feedback": "The documented maximum is not one and does not mandate User-Name alone."
         },
@@ -996,7 +996,7 @@
         },
         {
           "label": "D",
-          "text": "None; policies match only identity sources.",
+          "text": "None; policies match only identity sources in the ordered policy list.",
           "is_correct": false,
           "feedback": "Identity-source settings follow policy selection; they are not the only input."
         }
@@ -1009,13 +1009,13 @@
       "options": [
         {
           "label": "A",
-          "text": "Only future launches are blocked; the current session remains active.",
+          "text": "Only future launches are blocked; the current session remains active after the approval decision.",
           "is_correct": false,
           "feedback": "The documented behavior includes termination of an already launched session."
         },
         {
           "label": "B",
-          "text": "The request is permanently approved and cannot be reviewed again.",
+          "text": "The request is permanently approved and cannot be reviewed again for that requester.",
           "is_correct": false,
           "feedback": "The request resets and requires a new approval or denial."
         },
@@ -1027,7 +1027,7 @@
         },
         {
           "label": "D",
-          "text": "All sessions for every FortiPAM user terminate.",
+          "text": "All sessions for every FortiPAM user terminate in the session monitor for the active secret session.",
           "is_correct": false,
           "feedback": "Revocation is scoped to the request/session, not all users."
         }
@@ -1052,7 +1052,7 @@
         },
         {
           "label": "C",
-          "text": "Delete and recreate the secret in a new folder.",
+          "text": "Delete and recreate the secret in a new folder for that requester.",
           "is_correct": false,
           "feedback": "Deleting the secret is destructive and does not explain button state."
         },
@@ -1071,7 +1071,7 @@
       "options": [
         {
           "label": "A",
-          "text": "Check only that the approval comment was saved.",
+          "text": "Check only that the approval comment was saved in the session monitor.",
           "is_correct": false,
           "feedback": "A comment is audit context, not proof of session termination."
         },
@@ -1083,13 +1083,13 @@
         },
         {
           "label": "C",
-          "text": "Check only the secret's password-change timestamp.",
+          "text": "Check only the secret's password-change timestamp for the active secret session.",
           "is_correct": false,
           "feedback": "Password rotation is a different secret lifecycle event."
         },
         {
           "label": "D",
-          "text": "Check whether the target still resolves DNS.",
+          "text": "Check whether the target still resolves DNS in this request during revocation.",
           "is_correct": false,
           "feedback": "DNS reachability does not prove FortiPAM terminated the session."
         }
@@ -1108,13 +1108,13 @@
         },
         {
           "label": "B",
-          "text": "The target server timezone exclusively determines approval display.",
+          "text": "The target server timezone exclusively determines approval display for the active secret session.",
           "is_correct": false,
           "feedback": "The target timezone does not exclusively determine the displayed time."
         },
         {
           "label": "C",
-          "text": "Approval times inherit the FortiGate firewall schedule.",
+          "text": "Approval times inherit the FortiGate firewall schedule in this request.",
           "is_correct": false,
           "feedback": "Firewall schedules are unrelated to PAM request time display."
         },
@@ -1133,19 +1133,19 @@
       "options": [
         {
           "label": "A",
-          "text": "Group By fields only label incidents after triggering.",
+          "text": "Group By fields only label incidents after triggering for this rule mode.",
           "is_correct": false,
           "feedback": "Group By participates in threshold calculation, not just display."
         },
         {
           "label": "B",
-          "text": "Adding fields merges all groups into one larger count.",
+          "text": "Adding fields merges all groups into one larger count in the same group.",
           "is_correct": false,
           "feedback": "More grouping keys generally split groups rather than merge them."
         },
         {
           "label": "C",
-          "text": "The rule automatically switches from streaming to scheduled mode.",
+          "text": "The rule automatically switches from streaming to scheduled mode before incident creation.",
           "is_correct": false,
           "feedback": "Adding a field does not change execution mode."
         },
@@ -1170,19 +1170,19 @@
         },
         {
           "label": "B",
-          "text": "The parser discarded all events before rule evaluation.",
+          "text": "The parser discarded all events before rule evaluation in the same group.",
           "is_correct": false,
           "feedback": "Parser behavior must be tested separately from rule mode."
         },
         {
           "label": "C",
-          "text": "Every FortiSIEM mode omits trigger events by design.",
+          "text": "Every FortiSIEM mode omits trigger events by design before incident creation.",
           "is_correct": false,
           "feedback": "Streaming and scheduled modes have different evidence capabilities."
         },
         {
           "label": "D",
-          "text": "The incident cap deletes trigger data when exceeded.",
+          "text": "The incident cap deletes trigger data when exceeded for the selected backend.",
           "is_correct": false,
           "feedback": "The incident cap limits generated incidents, not trigger-event display."
         }
@@ -1207,7 +1207,7 @@
         },
         {
           "label": "C",
-          "text": "Only Elasticsearch, with streaming-style testing available.",
+          "text": "Only Elasticsearch, with streaming-style testing available before incident creation.",
           "is_correct": false,
           "feedback": "It cannot be tested like a streaming rule."
         },
@@ -1257,7 +1257,7 @@
       "options": [
         {
           "label": "A",
-          "text": "It already carries all traffic because provisioning means activation.",
+          "text": "It already carries all traffic because provisioning means activation in the PoP transition.",
           "is_correct": false,
           "feedback": "The target does not carry traffic until enabled."
         },
@@ -1294,7 +1294,7 @@
         },
         {
           "label": "B",
-          "text": "An endpoint that uses the provided global FQDN.",
+          "text": "An endpoint that uses the provided global FQDN during this migration.",
           "is_correct": false,
           "feedback": "The guide says FQDN-based edge deployments need no additional action."
         },
@@ -1306,7 +1306,7 @@
         },
         {
           "label": "D",
-          "text": "A deployment with no reference to the source PoP.",
+          "text": "A deployment with no reference to the source PoP for the affected endpoint.",
           "is_correct": false,
           "feedback": "No source reference means there is no old address to replace."
         }
@@ -1325,7 +1325,7 @@
         },
         {
           "label": "B",
-          "text": "All endpoint profiles reset to factory defaults.",
+          "text": "All endpoint profiles reset to factory defaults for the affected endpoint.",
           "is_correct": false,
           "feedback": "PoP migration does not factory-reset endpoint profiles."
         },
@@ -1350,19 +1350,19 @@
       "options": [
         {
           "label": "A",
-          "text": "The FortiPAM approval tier assigned to each user.",
+          "text": "The FortiPAM approval tier assigned to each user after target activation.",
           "is_correct": false,
           "feedback": "PAM approval does not select PAC endpoints."
         },
         {
           "label": "B",
-          "text": "The FortiGate SNAT source-port preservation range.",
+          "text": "The FortiGate SNAT source-port preservation range before source decommission for the PAC fetch path.",
           "is_correct": false,
           "feedback": "SNAT port preservation does not update PAC URLs."
         },
         {
           "label": "C",
-          "text": "The FortiAnalyzer fetch database rebuild state.",
+          "text": "The FortiAnalyzer fetch database rebuild state in the PoP transition during this migration.",
           "is_correct": false,
           "feedback": "Log indexing is unrelated to the endpoint's PAC fetch address."
         },
@@ -1381,7 +1381,7 @@
       "options": [
         {
           "label": "A",
-          "text": "Change SD-WAN strategy before checking address membership.",
+          "text": "Change SD-WAN strategy before checking address membership for that cloud workload.",
           "is_correct": false,
           "feedback": "Path strategy is downstream of address membership."
         },
@@ -1430,7 +1430,7 @@
         },
         {
           "label": "D",
-          "text": "Use only ping to prove the intended rule matched.",
+          "text": "Use only ping to prove the intended rule matched at path selection.",
           "is_correct": false,
           "feedback": "Ping reachability does not prove rule selection."
         }
@@ -1449,7 +1449,7 @@
         },
         {
           "label": "B",
-          "text": "The SLA creates IP addresses from latency measurements.",
+          "text": "The SLA creates IP addresses from latency measurements with the selected member.",
           "is_correct": false,
           "feedback": "An SLA measures path health, not cloud workload discovery."
         },
@@ -1486,13 +1486,13 @@
         },
         {
           "label": "C",
-          "text": "Change the filter until the desired member is selected.",
+          "text": "Change the filter until the desired member is selected for the resolved address set.",
           "is_correct": false,
           "feedback": "Filters define destination membership, not the selected WAN member."
         },
         {
           "label": "D",
-          "text": "Disable all higher-priority rules without reviewing their match conditions.",
+          "text": "Disable all higher-priority rules without reviewing their match conditions under this service rule.",
           "is_correct": false,
           "feedback": "Blindly disabling rules can disrupt unrelated traffic and hide the match."
         }
@@ -1511,19 +1511,19 @@
         },
         {
           "label": "B",
-          "text": "Port-preserve always retains low ports when the central rule matches.",
+          "text": "Port-preserve always retains low ports when the central rule matches under that NAT rule.",
           "is_correct": false,
           "feedback": "The documented preservation range excludes low source ports."
         },
         {
           "label": "C",
-          "text": "Disable reverse NAT so the peer sees the original port.",
+          "text": "Disable reverse NAT so the peer sees the original port in the observed tuple.",
           "is_correct": false,
           "feedback": "Reverse NAT is required to map replies to the original session."
         },
         {
           "label": "D",
-          "text": "Use a static route to force the translated source port.",
+          "text": "Use a static route to force the translated source port for this source port.",
           "is_correct": false,
           "feedback": "Routing selects a path; it does not dictate NAT port allocation."
         }
@@ -1536,7 +1536,7 @@
       "options": [
         {
           "label": "A",
-          "text": "Assume SD-WAN rules never consume updated connector addresses.",
+          "text": "Assume SD-WAN rules never consume updated connector addresses after connector refresh for that cloud workload.",
           "is_correct": false,
           "feedback": "Dynamic connector addresses are designed to refresh external inventory."
         },
@@ -1548,13 +1548,13 @@
         },
         {
           "label": "C",
-          "text": "Change SLA targets to the workload's previous private address.",
+          "text": "Change SLA targets to the workload's previous private address at path selection.",
           "is_correct": false,
           "feedback": "SLA targets do not correct a stale address-object result."
         },
         {
           "label": "D",
-          "text": "Restore an ADOM revision to refresh the cloud connector automatically.",
+          "text": "Restore an ADOM revision to refresh the cloud connector automatically with the selected member.",
           "is_correct": false,
           "feedback": "ADOM restore is not the FortiGate SDN polling mechanism."
         }
@@ -1570,39 +1570,567 @@
       "C": 12,
       "D": 12
     },
-    "correct_option_uniquely_longest_count": 30,
+    "correct_option_uniquely_longest_count": 1,
     "correct_option_uniquely_longest_question_ids": [
-      1,
-      2,
-      3,
-      4,
-      8,
-      10,
-      12,
-      13,
-      15,
-      16,
-      17,
-      18,
-      19,
-      21,
-      22,
-      25,
-      27,
-      29,
-      30,
-      32,
-      33,
-      34,
-      35,
-      37,
-      38,
-      42,
-      44,
-      47,
-      49,
-      50
+      16
     ],
-    "malformed_raw_rows": []
+    "malformed_raw_rows": [],
+    "option_word_lengths": [
+      {
+        "id": 1,
+        "gap": 1,
+        "lens": [
+          14,
+          13,
+          14,
+          13
+        ],
+        "correct": 14
+      },
+      {
+        "id": 2,
+        "gap": 3,
+        "lens": [
+          16,
+          14,
+          13,
+          13
+        ],
+        "correct": 14
+      },
+      {
+        "id": 3,
+        "gap": 1,
+        "lens": [
+          14,
+          13,
+          13,
+          13
+        ],
+        "correct": 13
+      },
+      {
+        "id": 4,
+        "gap": 1,
+        "lens": [
+          14,
+          13,
+          13,
+          13
+        ],
+        "correct": 13
+      },
+      {
+        "id": 5,
+        "gap": 2,
+        "lens": [
+          10,
+          10,
+          11,
+          12
+        ],
+        "correct": 11
+      },
+      {
+        "id": 6,
+        "gap": 2,
+        "lens": [
+          12,
+          10,
+          11,
+          12
+        ],
+        "correct": 10
+      },
+      {
+        "id": 7,
+        "gap": 2,
+        "lens": [
+          9,
+          10,
+          9,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 8,
+        "gap": 1,
+        "lens": [
+          12,
+          11,
+          12,
+          11
+        ],
+        "correct": 11
+      },
+      {
+        "id": 9,
+        "gap": 4,
+        "lens": [
+          7,
+          11,
+          8,
+          7
+        ],
+        "correct": 7
+      },
+      {
+        "id": 10,
+        "gap": 4,
+        "lens": [
+          9,
+          10,
+          13,
+          9
+        ],
+        "correct": 10
+      },
+      {
+        "id": 11,
+        "gap": 2,
+        "lens": [
+          9,
+          9,
+          9,
+          11
+        ],
+        "correct": 9
+      },
+      {
+        "id": 12,
+        "gap": 3,
+        "lens": [
+          11,
+          14,
+          13,
+          12
+        ],
+        "correct": 12
+      },
+      {
+        "id": 13,
+        "gap": 1,
+        "lens": [
+          15,
+          15,
+          14,
+          14
+        ],
+        "correct": 14
+      },
+      {
+        "id": 14,
+        "gap": 2,
+        "lens": [
+          9,
+          8,
+          10,
+          9
+        ],
+        "correct": 9
+      },
+      {
+        "id": 15,
+        "gap": 2,
+        "lens": [
+          9,
+          10,
+          9,
+          11
+        ],
+        "correct": 10
+      },
+      {
+        "id": 16,
+        "gap": 1,
+        "lens": [
+          9,
+          9,
+          10,
+          9
+        ],
+        "correct": 10
+      },
+      {
+        "id": 17,
+        "gap": 2,
+        "lens": [
+          13,
+          14,
+          12,
+          13
+        ],
+        "correct": 13
+      },
+      {
+        "id": 18,
+        "gap": 3,
+        "lens": [
+          11,
+          12,
+          10,
+          13
+        ],
+        "correct": 11
+      },
+      {
+        "id": 19,
+        "gap": 3,
+        "lens": [
+          9,
+          10,
+          12,
+          9
+        ],
+        "correct": 10
+      },
+      {
+        "id": 20,
+        "gap": 1,
+        "lens": [
+          9,
+          9,
+          8,
+          9
+        ],
+        "correct": 9
+      },
+      {
+        "id": 21,
+        "gap": 2,
+        "lens": [
+          13,
+          12,
+          11,
+          13
+        ],
+        "correct": 11
+      },
+      {
+        "id": 22,
+        "gap": 3,
+        "lens": [
+          13,
+          14,
+          11,
+          12
+        ],
+        "correct": 12
+      },
+      {
+        "id": 23,
+        "gap": 2,
+        "lens": [
+          10,
+          12,
+          12,
+          10
+        ],
+        "correct": 10
+      },
+      {
+        "id": 24,
+        "gap": 3,
+        "lens": [
+          11,
+          8,
+          9,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 25,
+        "gap": 4,
+        "lens": [
+          11,
+          13,
+          12,
+          15
+        ],
+        "correct": 12
+      },
+      {
+        "id": 26,
+        "gap": 1,
+        "lens": [
+          9,
+          9,
+          9,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 27,
+        "gap": 3,
+        "lens": [
+          14,
+          13,
+          13,
+          11
+        ],
+        "correct": 11
+      },
+      {
+        "id": 28,
+        "gap": 3,
+        "lens": [
+          8,
+          10,
+          7,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 29,
+        "gap": 4,
+        "lens": [
+          14,
+          10,
+          11,
+          12
+        ],
+        "correct": 11
+      },
+      {
+        "id": 30,
+        "gap": 0,
+        "lens": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "correct": 11
+      },
+      {
+        "id": 31,
+        "gap": 1,
+        "lens": [
+          11,
+          11,
+          11,
+          10
+        ],
+        "correct": 11
+      },
+      {
+        "id": 32,
+        "gap": 2,
+        "lens": [
+          11,
+          12,
+          10,
+          11
+        ],
+        "correct": 10
+      },
+      {
+        "id": 33,
+        "gap": 3,
+        "lens": [
+          14,
+          13,
+          13,
+          16
+        ],
+        "correct": 13
+      },
+      {
+        "id": 34,
+        "gap": 2,
+        "lens": [
+          10,
+          11,
+          12,
+          10
+        ],
+        "correct": 11
+      },
+      {
+        "id": 35,
+        "gap": 1,
+        "lens": [
+          12,
+          12,
+          11,
+          12
+        ],
+        "correct": 12
+      },
+      {
+        "id": 36,
+        "gap": 3,
+        "lens": [
+          11,
+          13,
+          10,
+          11
+        ],
+        "correct": 11
+      },
+      {
+        "id": 37,
+        "gap": 1,
+        "lens": [
+          12,
+          13,
+          12,
+          13
+        ],
+        "correct": 13
+      },
+      {
+        "id": 38,
+        "gap": 1,
+        "lens": [
+          11,
+          12,
+          11,
+          12
+        ],
+        "correct": 11
+      },
+      {
+        "id": 39,
+        "gap": 2,
+        "lens": [
+          10,
+          8,
+          9,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 40,
+        "gap": 2,
+        "lens": [
+          10,
+          8,
+          8,
+          8
+        ],
+        "correct": 8
+      },
+      {
+        "id": 41,
+        "gap": 2,
+        "lens": [
+          13,
+          11,
+          12,
+          11
+        ],
+        "correct": 11
+      },
+      {
+        "id": 42,
+        "gap": 3,
+        "lens": [
+          11,
+          11,
+          10,
+          13
+        ],
+        "correct": 11
+      },
+      {
+        "id": 43,
+        "gap": 2,
+        "lens": [
+          10,
+          11,
+          10,
+          9
+        ],
+        "correct": 10
+      },
+      {
+        "id": 44,
+        "gap": 3,
+        "lens": [
+          11,
+          14,
+          13,
+          12
+        ],
+        "correct": 12
+      },
+      {
+        "id": 45,
+        "gap": 3,
+        "lens": [
+          11,
+          9,
+          8,
+          9
+        ],
+        "correct": 9
+      },
+      {
+        "id": 46,
+        "gap": 2,
+        "lens": [
+          11,
+          10,
+          11,
+          12
+        ],
+        "correct": 11
+      },
+      {
+        "id": 47,
+        "gap": 2,
+        "lens": [
+          10,
+          12,
+          11,
+          10
+        ],
+        "correct": 11
+      },
+      {
+        "id": 48,
+        "gap": 3,
+        "lens": [
+          11,
+          11,
+          14,
+          13
+        ],
+        "correct": 11
+      },
+      {
+        "id": 49,
+        "gap": 1,
+        "lens": [
+          13,
+          14,
+          14,
+          14
+        ],
+        "correct": 13
+      },
+      {
+        "id": 50,
+        "gap": 3,
+        "lens": [
+          15,
+          13,
+          12,
+          14
+        ],
+        "correct": 13
+      }
+    ],
+    "answer_length_review": {
+      "suffix_edits": 105,
+      "max_option_length_gap": 4,
+      "questions_with_gap_over_5": []
+    }
   }
 }
