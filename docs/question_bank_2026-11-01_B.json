@@ -1,0 +1,534 @@
+{
+  "run_date": "2026-11-01",
+  "part": "B",
+  "questions": [
+    {
+      "stem": "In FortiNAC-F global-object synchronization, which system is authoritative for shared objects?",
+      "choices": [
+        "The endpoint supplicant",
+        "The managed CA's local database row",
+        "FortiNAC Manager",
+        "The switch's RADIUS client table"
+      ],
+      "answer": 2,
+      "feedback": [
+        "The supplicant is not a configuration authority for FortiNAC global objects.",
+        "Managed CA global objects are read-only and are overwritten from the Manager.",
+        "Correct: FortiNAC Manager owns the shared global-object configuration.",
+        "The switch RADIUS table is unrelated to Manager object replication."
+      ]
+    },
+    {
+      "stem": "A managed CA's Group row ID differs from the Manager's row ID, but the GUID matches. What should the engineer conclude?",
+      "choices": [
+        "Different local row IDs are normal; the shared GUID identifies the global object",
+        "The objects are duplicates and both must be deleted",
+        "The managed CA is running the wrong VRRP group",
+        "The Manager must use the CA's local row ID"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: local database IDs are appliance-local; the GUID is the cross-appliance identity.",
+        "Different row IDs alone do not prove duplication and deleting global objects is unsafe.",
+        "VRRP group configuration has no relationship to FortiNAC object identity.",
+        "The Manager remains authoritative; local IDs do not need to match."
+      ]
+    },
+    {
+      "stem": "Which objects are examples of FortiNAC-F global synchronization content?",
+      "choices": [
+        "Live packet captures and interface counters",
+        "Only local host MAC learning tables",
+        "Only AP radio channel assignments",
+        "Groups, Roles, Admin Profiles, and endpoint compliance objects"
+      ],
+      "answer": 3,
+      "feedback": [
+        "Packet captures and counters are operational evidence, not the listed global configuration objects.",
+        "Host propagation is a separate replication function from global-object synchronization.",
+        "AP radio channels are not the listed FortiNAC-F global objects.",
+        "Correct: the guide lists Groups, Roles, Admin Profiles, and compliance objects."
+      ]
+    },
+    {
+      "stem": "A GUID conflict is confirmed for one global Group on a managed CA. What is the safe repair posture?",
+      "choices": [
+        "Run a broad UPDATE on every Group row",
+        "Back up, compare Manager/CA identity, and change only the stale managed-CA GUID under Support guidance",
+        "Change the Manager GUID to match the CA local ID",
+        "Delete all local-only groups before synchronizing"
+      ],
+      "answer": 1,
+      "feedback": [
+        "A broad update can damage valid global and local-only objects.",
+        "Correct: back up, compare exact objects, and perform a narrowly scoped repair with Support guidance.",
+        "The Manager is authoritative; changing its GUID to a local ID reverses the authority model.",
+        "Local-only objects must not be altered as part of a global-object repair."
+      ]
+    },
+    {
+      "stem": "Which timing is documented for automatic global-object synchronization in FortiNAC-F vF 7.6.3+?",
+      "choices": [
+        "Every ten minutes",
+        "Every ten seconds",
+        "Only during firmware upgrade",
+        "Only when a host changes VLAN"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the Manager guide documents a ten-minute interval for global-object synchronization.",
+        "Ten seconds is not the documented interval.",
+        "Synchronization is a regular configured process, not limited to firmware upgrade.",
+        "Host VLAN movement is not the trigger for global-object replication."
+      ]
+    },
+    {
+      "stem": "A TACACS+ request reaches FortiAuthenticator, but the NAS sends authorization before authentication. What is the core issue?",
+      "choices": [
+        "The user group lacks a VLAN ID",
+        "The server DNS suffix is missing",
+        "The NAS transaction order is incompatible with the supported authentication-first flow",
+        "The RADIUS shared secret is too short"
+      ],
+      "answer": 2,
+      "feedback": [
+        "VLAN assignment is not the core TACACS+ sequence issue.",
+        "DNS may affect reachability but does not change TACACS+ request ordering.",
+        "Correct: FortiAuthenticator does not provide an authorization-before-authentication mode for this flow.",
+        "A RADIUS shared secret is not the TACACS+ phase-order issue."
+      ]
+    },
+    {
+      "stem": "Before FortiAuthenticator accepts TACACS+ requests, what must exist?",
+      "choices": [
+        "A FortiSwitch VRRP virtual MAC",
+        "A registered client assigned to a TACACS+ policy",
+        "An Azure Data Collection Rule",
+        "A FortiPAM secret template"
+      ],
+      "answer": 1,
+      "feedback": [
+        "VRRP is unrelated to TACACS+ client registration.",
+        "Correct: the TACACS+ device must be registered and assigned to a policy.",
+        "A DCR is an Azure log-ingestion object, not an authentication prerequisite.",
+        "FortiPAM secret templates do not configure FortiAuthenticator TACACS+."
+      ]
+    },
+    {
+      "stem": "Where does FortiAuthenticator expose TACACS+ service debug logs?",
+      "choices": [
+        "System > SD-WAN > Health Check",
+        "FortiManager Install Preview",
+        "FortiAnalyzer Log Forwarding > Output Profile",
+        "The /debug/ page with TACACS+ selected as the service"
+      ],
+      "answer": 3,
+      "feedback": [
+        "SD-WAN health checks do not expose FortiAuthenticator TACACS+ logs.",
+        "Install Preview belongs to FortiManager device configuration deployment.",
+        "Output Profile is a FortiAnalyzer log-forwarding feature.",
+        "Correct: open /debug/ and select TACACS+ from the service dropdown."
+      ]
+    },
+    {
+      "stem": "What is the documented FortiAuthenticator TACACS+ limitation for two-factor authentication?",
+      "choices": [
+        "Append the token to the password because challenge/response is unsupported",
+        "Use a browser SAML redirect after every command",
+        "Send the token as a RADIUS Tunnel-Private-Group-Id",
+        "Require a client certificate on every SSH command"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: FortiAuthenticator documents token-appended password entry because TACACS+ challenge/response is unsupported.",
+        "SAML redirects are not the documented TACACS+ 2FA method.",
+        "Tunnel-Private-Group-Id is a RADIUS VLAN attribute, not TACACS+ OTP handling.",
+        "A client certificate is not the stated TACACS+ 2FA mechanism."
+      ]
+    },
+    {
+      "stem": "Why inspect both TACACS+ authentication and authorization logs?",
+      "choices": [
+        "They are the same event stored twice",
+        "Authorization always happens before authentication",
+        "Client registration, authentication, and command authorization are separate decision gates",
+        "The debug page records only failed DNS lookups"
+      ],
+      "answer": 2,
+      "feedback": [
+        "The stages have different outcomes and evidence, not merely duplicate records.",
+        "FortiAuthenticator's documented sequence does not support authorization-first behavior.",
+        "Correct: successful authentication can still be denied by a later authorization rule.",
+        "The TACACS+ debug page is for TACACS+ service evidence, not only DNS."
+      ]
+    },
+    {
+      "stem": "A FortiPAM REST request uses a client certificate and bearer token. What does each prove?",
+      "choices": [
+        "Both prove only the user's password",
+        "The certificate proves API role membership; the token proves the EMS tag",
+        "The certificate and token are interchangeable methods",
+        "The certificate establishes endpoint trust; the bearer token authenticates the API user"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A password is not what either artifact represents in this design.",
+        "The certificate is used for client trust; the token identifies the API user.",
+        "They are independent gates, not interchangeable alternatives.",
+        "Correct: device trust and API identity are separate controls."
+      ]
+    },
+    {
+      "stem": "FortiPAM ZTNA is enabled, but a managed endpoint cannot launch a protected secret. Which check is especially important?",
+      "choices": [
+        "The endpoint and FortiPAM use the same EMS server and expected tag is present",
+        "The SD-WAN quota counter has reset",
+        "The FortiSwitch VRRP priority is 255",
+        "The FortiAnalyzer DCR table has TimeGenerated"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: FortiPAM tag control depends on the same EMS control plane and matching posture tag.",
+        "Quota counters do not determine FortiPAM secret access.",
+        "VRRP priority is unrelated to endpoint posture.",
+        "Azure table schema does not authorize a FortiPAM secret launch."
+      ]
+    },
+    {
+      "stem": "What does the /pam URL map in the FortiPAM access proxy do?",
+      "choices": [
+        "It changes the API user's bearer token",
+        "It maps the incoming URL prefix to the pam-service API gateway",
+        "It creates the EMS endpoint tag automatically",
+        "It disables client certificate validation"
+      ],
+      "answer": 1,
+      "feedback": [
+        "The API token is generated for the API user and is not changed by URL mapping.",
+        "Correct: the API gateway maps /pam to the FortiPAM service.",
+        "EMS tags are created/evaluated by endpoint management, not URL maps.",
+        "Client certificate behavior is controlled separately in the access proxy."
+      ]
+    },
+    {
+      "stem": "A curl call succeeds only when -k is added. What is the safer production correction?",
+      "choices": [
+        "Disable the FortiPAM API user",
+        "Remove the bearer token from the request",
+        "Install/trust the correct server CA and validate the TLS certificate chain",
+        "Set every EMS tag to allow"
+      ],
+      "answer": 2,
+      "feedback": [
+        "Disabling the API user removes identity rather than fixing TLS trust.",
+        "The bearer token is still required for API-user authentication.",
+        "Correct: -k bypasses server validation; fix the trust chain instead.",
+        "Allowing every tag weakens posture controls and does not fix TLS validation."
+      ]
+    },
+    {
+      "stem": "FortiPAM login succeeds but access to one secret is denied. Which control may still block the operation?",
+      "choices": [
+        "The FortiSIEM offline repository mount",
+        "The FortiSwitch tracked destination",
+        "The Windows DNS priority list",
+        "Secret-level ZTNA posture or secret permission"
+      ],
+      "answer": 3,
+      "feedback": [
+        "The offline repo is unrelated to privileged secret authorization.",
+        "VRRP route tracking does not authorize a PAM secret.",
+        "DNS priority may affect name resolution, not the secret permission decision.",
+        "Correct: secret-level ZTNA and secret permissions are separate from appliance login."
+      ]
+    },
+    {
+      "stem": "For FortiSIEM 7.5.1 offline OS repository preparation, what storage requirement is documented?",
+      "choices": [
+        "At least 2 TB on the mounted staging filesystem",
+        "At least 2 GB on the Supervisor root partition",
+        "A 375 GB temporary directory only",
+        "No local storage because the ZIP contains all OS packages"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the 7.5.1 guide specifies at least 2 TB for the OS repository.",
+        "2 GB is far below the documented repository requirement.",
+        "375 GB belongs to earlier version documentation and must not be reused for 7.5.1.",
+        "The OS repository is a separate dependency from the main upgrade ZIP."
+      ]
+    },
+    {
+      "stem": "Why extract fsm-sync-os-repo.sh from the targeted upgrade package?",
+      "choices": [
+        "The script configures FortiGate BGP neighbors",
+        "The script is version-specific and should match the upgrade package",
+        "The script creates a new RADIUS client secret",
+        "The script replaces the Supervisor database"
+      ],
+      "answer": 1,
+      "feedback": [
+        "The script builds the FortiSIEM OS repository, not BGP configuration.",
+        "Correct: the Community tip recommends extracting the script from the target version's upgrade RPM.",
+        "RADIUS client secrets are unrelated to repository synchronization.",
+        "The repository script does not replace the FortiSIEM database."
+      ]
+    },
+    {
+      "stem": "Which command tells the Supervisor upgrade to use the mounted offline repository?",
+      "choices": [
+        "./upgrade.sh --proxy-only /repo",
+        "./upgrade.sh --skip-database-check",
+        "./upgrade.sh --offline-osrepo-path /offline-repo",
+        "./upgrade.sh --disable-wget"
+      ],
+      "answer": 2,
+      "feedback": [
+        "The documented parameter is not a proxy-only option.",
+        "Skipping database checks is not the offline repository selector.",
+        "Correct: the guide documents --offline-osrepo-path with the mounted repository path.",
+        "Disabling wget is not how the upgrade script selects offline packages."
+      ]
+    },
+    {
+      "stem": "After Supervisor is upgraded, what extra value does a Worker upgrade consume?",
+      "choices": [
+        "The FortiGate remote AS number",
+        "The FortiPAM API bearer token",
+        "The FortiAuthenticator TACACS+ shared secret",
+        "The offline repository OS update password from Supervisor"
+      ],
+      "answer": 3,
+      "feedback": [
+        "The BGP remote AS is unrelated to FortiSIEM Worker updates.",
+        "FortiPAM API credentials do not authorize FortiSIEM OS package access.",
+        "TACACS+ shared secrets do not participate in the Worker upgrade.",
+        "Correct: the Worker script uses the Supervisor's offline-repository OS update password."
+      ]
+    },
+    {
+      "stem": "Which order matches the documented FortiSIEM component dependencies?",
+      "choices": [
+        "Supervisor/Manager first, then Workers, then Collectors",
+        "Collectors first, then Workers, then Supervisor",
+        "Workers first, then Manager, then repository staging",
+        "All components concurrently without a mounted repository"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the guide upgrades Supervisor/Manager before Workers and then Collectors.",
+        "Collectors depend on the Supervisor image-server path and should not lead the sequence.",
+        "Workers require the upgraded Supervisor repository password and should not be first.",
+        "The offline procedure requires a complete mounted repository and staged order."
+      ]
+    },
+    {
+      "stem": "What is the Multi-Connect feature limitation documented for FortiClient?",
+      "choices": [
+        "Only SSL VPN tunnels can connect concurrently",
+        "Only IPsec IKEv2 tunnels are eligible and the feature is beta",
+        "Only one tunnel can be configured per profile",
+        "It supports every tunnel protocol without version constraints"
+      ],
+      "answer": 1,
+      "feedback": [
+        "SSL VPN is not the documented eligible tunnel type for this beta feature.",
+        "Correct: the guide limits Multi-Connect to eligible IPsec IKEv2 tunnels and marks it beta.",
+        "The profile can list up to 50 eligible IKEv2 tunnels.",
+        "The feature has explicit tunnel-type and platform constraints."
+      ]
+    },
+    {
+      "stem": "What does DNS Priority control on Windows when Multi-Connect is enabled?",
+      "choices": [
+        "Which tunnel receives all application traffic regardless of routing",
+        "Which tunnel is allowed to negotiate IKE first",
+        "The order of tunnel interfaces/DNS servers Windows tries for name queries",
+        "The FortiSASE PoP server certificate"
+      ],
+      "answer": 2,
+      "feedback": [
+        "DNS priority is not a general packet steering policy for every application flow.",
+        "IKE negotiation order is not what the DNS priority list configures.",
+        "Correct: Windows queries the DNS server on the highest-priority tunnel first, then tries the next if needed.",
+        "PoP certificate selection is unrelated to endpoint DNS resolver order."
+      ]
+    },
+    {
+      "stem": "A user reports the SASE tunnel is up but the on-prem tunnel is down. What is the right diagnostic approach?",
+      "choices": [
+        "Assume the endpoint profile was not received",
+        "Edit the FortiSASE-owned Phase 1 and Phase 2 settings",
+        "Disable the SASE tunnel for every endpoint",
+        "Inspect each tunnel independently and validate the custom gateway's IKEv2 parameters"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A working SASE tunnel suggests the profile may have reached the endpoint.",
+        "FortiSASE service-owned Phase 1/2 settings are not editable through that interface.",
+        "Disabling the SASE service is not a diagnosis of the separate custom tunnel.",
+        "Correct: SASE and custom IKEv2 tunnels have separate ownership and negotiation state."
+      ]
+    },
+    {
+      "stem": "Why must an on-prem gateway match the endpoint's custom-tunnel parameters?",
+      "choices": [
+        "FortiSASE configures specific IKEv2 proposals and lifetimes on FortiClient",
+        "The gateway inherits the FortiSwitch VRRP virtual MAC",
+        "The custom tunnel uses the Azure DCR identifier as its peer ID",
+        "Windows DNS Priority rewrites the Phase 2 proposal"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the tunnel settings guide lists endpoint parameters the remote gateway must match.",
+        "VRRP virtual MAC is not an IPsec proposal parameter.",
+        "DCR IDs belong to Azure log ingestion, not IKE identity.",
+        "DNS priority controls resolver order and does not rewrite IKE/Phase 2 negotiation."
+      ]
+    },
+    {
+      "stem": "Both tunnels are up, but an internal hostname resolves to the public answer. What should be inspected?",
+      "choices": [
+        "FortiSIEM repository mount state",
+        "Windows DNS Priority order and each tunnel's DNS server",
+        "FortiSwitch VRRP destination tracking",
+        "FortiAnalyzer output-profile variables"
+      ],
+      "answer": 1,
+      "feedback": [
+        "The offline repository does not affect endpoint name resolution.",
+        "Correct: DNS priority maps to Windows tunnel interface metric and determines resolver order.",
+        "VRRP route tracking is not the endpoint's resolver selection control.",
+        "Azure output variables do not determine which DNS server Windows queries."
+      ]
+    },
+    {
+      "stem": "The FortiSASE tunnel's Phase 1/2 settings are not editable in the console. What is the correct interpretation?",
+      "choices": [
+        "The endpoint has lost its EMS tag",
+        "The tunnel is using SSL VPN instead of IKEv2",
+        "The SASE service owns those parameters; configure custom on-prem tunnels separately",
+        "The API bearer token has expired"
+      ],
+      "answer": 2,
+      "feedback": [
+        "An EMS tag issue affects posture/authorization, not tunnel-setting ownership.",
+        "Missing edit controls do not indicate a change in VPN protocol.",
+        "Correct: the Community clarification says SASE Phase 1/2 settings cannot be changed there.",
+        "API tokens are unrelated to service-owned IPsec parameters."
+      ]
+    },
+    {
+      "stem": "What is the key role of quota-limit on an SD-WAN member?",
+      "choices": [
+        "It sets the interface MTU",
+        "It defines a monthly traffic-volume threshold in gigabytes",
+        "It forces the member physically down when the ISP link is up",
+        "It caps every packet to a fixed bandwidth rate"
+      ],
+      "answer": 1,
+      "feedback": [
+        "MTU is a separate interface setting.",
+        "Correct: quota-limit sets the volume threshold used for monthly overage steering.",
+        "The member can remain alive; the feature adjusts selection preference.",
+        "The quota feature is not a hard rate limiter or per-packet shaper."
+      ]
+    },
+    {
+      "stem": "Which command inspects quota/overage state for one SD-WAN member?",
+      "choices": [
+        "diagnose sys sdwan bill member <id>",
+        "get router info vrrp",
+        "diagnose wireless-controller wlac -c wtp",
+        "execute tacacs test user"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: FortiOS 8.0 adds the SD-WAN bill member diagnostic.",
+        "That command displays VRRP state, not billing counters.",
+        "The wireless controller command is not the quota diagnostic.",
+        "TACACS user testing is unrelated to SD-WAN member usage."
+      ]
+    },
+    {
+      "stem": "A member is over quota but traffic remains on it. What should be checked with billing output?",
+      "choices": [
+        "Whether the BGP neighbor is in OpenConfirm",
+        "Whether the FortiPAM certificate is valid",
+        "Whether the billing counter is overaged and overage is enabled",
+        "Whether the FortiNAC EAP session has expired"
+      ],
+      "answer": 2,
+      "feedback": [
+        "BGP state does not establish the member's quota accounting state.",
+        "FortiPAM certificate validation does not affect SD-WAN quota counters.",
+        "Correct: verify threshold, billing start day, overage enablement, and current overaged state.",
+        "EAP session state is unrelated to SD-WAN member selection."
+      ]
+    },
+    {
+      "stem": "Why might quota steering not move a flow even when overage is enabled?",
+      "choices": [
+        "The FortiGate must reboot at the billing boundary",
+        "The member must be removed from the routing table manually",
+        "The SD-WAN service ignores the configured eligible members and SLA",
+        "The alternate member is not alive or is excluded by the matching service"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A reboot is not the documented requirement for the quota feature.",
+        "Manual route removal is not the intended steering mechanism.",
+        "The service rule and selection mode still determine which members can be selected.",
+        "Correct: an alternate must be alive and eligible in the matching service."
+      ]
+    },
+    {
+      "stem": "How can an engineer prove that a quota-driven path change affected actual packets?",
+      "choices": [
+        "Compare service4/service6 selected members and capture the test flow's egress interface",
+        "Look only at quota-limit in configuration",
+        "Check whether the WAN interface has a green link LED",
+        "Review the FortiAnalyzer output-profile name"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: service state plus packet capture proves selected member and actual forwarding path.",
+        "Configuration shows intent, not that threshold was crossed or the flow moved.",
+        "A link LED proves physical link state, not SD-WAN service selection.",
+        "The output-profile name is unrelated to the packet's WAN egress."
+      ]
+    },
+    {
+      "stem": "What happens when the configured billing period resets?",
+      "choices": [
+        "The SD-WAN member is permanently disabled",
+        "The usage counter and overage preference reset for the new billing period",
+        "All SLA targets are deleted",
+        "The FortiGate clears every session table"
+      ],
+      "answer": 1,
+      "feedback": [
+        "The feature is designed to resume normal preference after the billing period resets.",
+        "Correct: the example resets accumulated usage and overage preference on the next billing day.",
+        "SLA targets remain configured; the quota feature does not delete them.",
+        "The feature does not require clearing all firewall sessions."
+      ]
+    },
+    {
+      "stem": "Which statement best distinguishes quota steering from health-check failover?",
+      "choices": [
+        "Quota steering only applies when the physical interface is down",
+        "Health checks count monthly gigabytes while quota checks RTT",
+        "Quota changes member preference while the link may remain alive; health checks measure path quality",
+        "Both mechanisms are identical and share the same counter"
+      ],
+      "answer": 2,
+      "feedback": [
+        "The member can stay physically up while becoming less preferred due to usage.",
+        "Health checks measure reachability/performance, not monthly billing volume.",
+        "Correct: quota is a billing-volume input; health checks are path-quality inputs.",
+        "The mechanisms use different evidence and should be diagnosed separately."
+      ]
+    }
+  ]
+}
