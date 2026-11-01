@@ -1,0 +1,235 @@
+{
+  "run_date": "2026-11-01",
+  "part": "A",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "title": "BGP neighbor transport establishment: Active state and debug error 107",
+      "primary": [
+        [
+          "FortiOS 8.0 CLI Reference — config router bgp",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/225427711"
+        ]
+      ],
+      "scenario": [
+        [
+          "Troubleshooting Tip — BGP debug output 107, October 30, 2026",
+          "https://community.fortinet.com/fortigate-3/explanation-for-bgp-debug-output-107-transport-endpoint-is-not-connected-231004"
+        ]
+      ],
+      "fingerprint": "bgp-peer-tcp179-fsm-active-connect-open-boundary",
+      "workflow": "RIB lookup → source/interface selection → TCP/179 handshake → BGP OPEN/capabilities → KEEPALIVE → Established",
+      "failure": "TCP transport does not complete or is reset before BGP OPEN; possible missing/asymmetric route, filter, wrong peer/source, password, QoS, or VPN selector",
+      "evidence": "get router info routing-table all; get router info bgp neighbors <peer>; debug 107 vs 104; packet capture of TCP/179 SYN/SYN-ACK/ACK",
+      "remediation": "Repair route symmetry, source/update-source, multihop, ACL, peer address/password, QoS, or IPsec selectors before changing route policy",
+      "question": "identify the layer boundary represented by Active and error 107",
+      "topology": "route lookup → TCP handshake → BGP OPEN; route/filter/source/VPN branches",
+      "sections": [
+        [
+          "Purpose and state-machine boundary",
+          "<p>BGP does not begin by exchanging prefixes. A configured neighbor first has to become a reachable TCP endpoint. FortiOS then moves through the BGP finite-state machine: <code>Idle</code>, <code>Connect</code>, <code>Active</code>, <code>OpenSent</code>, <code>OpenConfirm</code>, and <code>Established</code>. The first three states are still about getting transport started. Route maps, prefix lists, and inbound policy cannot repair a TCP connection that has not reached the BGP OPEN exchange.</p><p>The October 30 Fortinet troubleshooting note explains that a neighbor remaining in <code>Active</code> with debug message <code>107-Transport endpoint is not connected</code> has not completed the TCP three-way handshake. This is a transport boundary, not evidence that the peer rejected an NLRI. A related <code>104-Connection reset by peer</code> indicates that the remote side reset the attempt rather than simply leaving the handshake unanswered.</p>"
+        ],
+        [
+          "Objects and packet flow",
+          "<p>The local FortiGate needs a route to the configured neighbor address in the correct VDOM/VRF. It selects a source address and egress path, sends TCP SYN to destination port 179, receives SYN-ACK, and completes the handshake with ACK. Only then can peers exchange BGP OPEN messages, compare AS numbers and capabilities, negotiate timers, and proceed through KEEPALIVE to <code>Established</code>. A route to the peer is necessary but not sufficient: return routing, source address, security policy, and any intervening VPN must also permit the same flow.</p><p>For multihop eBGP, the peer may be several routed hops away. FortiOS exposes <code>ebgp-enforce-multihop</code> and <code>ebgp-multihop-ttl</code> under the neighbor object. <code>update-source</code> binds the local source to the selected interface address. It changes the local identity used for the TCP attempt; it is not a policy route.</p><pre><code>config router bgp\n  config neighbor\n    edit \"192.0.2.2\"\n      set remote-as 65002\n      set update-source \"loopback0\"\n      set ebgp-enforce-multihop enable\n      set ebgp-multihop-ttl 5\n    next\n  end\nend</code></pre><p>This is an illustrative neighbor fragment. Use the actual peer, AS, interface, and hop count; do not enable multihop merely to mask a missing route.</p>"
+        ],
+        [
+          "Evidence and what it proves",
+          "<p>Start with <code>get router info routing-table all</code> in the VDOM that owns the neighbor. Confirm the route's next hop and interface, then inspect <code>get router info bgp neighbors &lt;neighbor-ip&gt;</code> for the configured remote AS, local source, timers, and current state. A packet capture filtered to the peer and TCP/179 separates unanswered SYNs from a completed handshake. SYN with no SYN-ACK points toward routing, ACL, remote listener, or return-path failure; a reset points to an active rejection or mismatch. Debug 107 is consistent with an incomplete handshake; it does not identify which hop dropped the packet.</p><p>Check password configuration on both peers, QoS treatment of TCP/179, and IPsec Phase 2 selectors when BGP runs over a tunnel. A successful ping proves only that ICMP has a working path; it does not prove TCP/179 is allowed or that the correct source address is used. Once the state reaches <code>Established</code>, move to OPEN errors, capability negotiation, route advertisement, and policy diagnostics.</p>"
+        ],
+        [
+          "Operational troubleshooting sequence",
+          "<ol><li>Confirm VDOM/VRF, peer IP, remote AS, and route to that peer.</li><li>Check the selected local source and egress interface; compare with the remote neighbor configuration.</li><li>Capture TCP/179 in both directions and determine whether SYN, SYN-ACK, and ACK complete.</li><li>Inspect filters, asymmetric routing, multihop TTL, password, QoS, and VPN selectors according to the observed packet boundary.</li><li>After Established, inspect received/advertised routes and route policy separately.</li></ol><p>Diagnose the earliest uncompleted state transition. Changing prefix policy while TCP is still Active adds noise and leaves the actual failure untouched.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "title": "Install-time capability mismatch: udp-not-quic in SSL/SSH profiles",
+      "primary": [
+        [
+          "FortiManager 8.0 Administration Guide — Installing policy packages and device settings",
+          "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/153046/installing-policy-packages-and-device-settings"
+        ],
+        [
+          "FortiOS 7.6 CLI Reference — config firewall ssl-ssh-profile",
+          "https://docs.fortinet.com/document/fortigate/7.6.1/cli-reference/116695140/config-firewall-ssl-ssh-profile"
+        ],
+        [
+          "FortiManager 7.6.8 Release Notes — Known Issues",
+          "https://docs.fortinet.com/document/fortimanager/7.6.8/release-notes/454729/known-issues"
+        ]
+      ],
+      "scenario": [
+        [
+          "FortiManager 7.6.8 install failure on 2 GB / unsupported models; October 23–29, 2026",
+          "https://community.fortinet.com/fortimanager-27/fortimanager-version-7-6-8-trying-to-install-ssl-ssh-profile-settings-that-are-not-supported-on-2gb-fortigate-devices-230815"
+        ]
+      ],
+      "fingerprint": "fortimanager-install-generated-cli-target-platform-schema-udp-not-quic",
+      "workflow": "ADOM/profile object → target selection → install validation/preview → generated CLI → target parser/capability → commit or reject",
+      "failure": "Manager emits an SSL/SSH profile attribute unsupported by the selected FortiGate model/build; target rejects generated CLI or verification fails",
+      "evidence": "Install validation report, install preview, task log, target model/RAM/build, and target CLI parser response for udp-not-quic under https and dot",
+      "remediation": "Use model/build-specific device configuration; unset unsupported fields where appropriate; avoid a global ADOM change; verify the fixed release before rollout",
+      "question": "distinguish manager-side object validity from target-side parser and hardware support",
+      "topology": "one package fans out to heterogeneous targets; capability gate accepts supported models and rejects unsupported branch",
+      "sections": [
+        [
+          "Why a valid manager object can fail",
+          "<p>FortiManager's policy package is a desired configuration model; installation is a compilation and deployment transaction against target devices. A setting can be representable in the FortiManager database and still be unsupported by a particular FortiGate model or FortiOS build. The install wizard validates selected devices, prepares the installation, and can show a CLI preview. The target then parses and applies that payload. These are distinct gates: a clean object editor does not prove every target understands every generated command.</p><p>The recent FortiManager 7.6.8 Community case documents bug 1352524. FortiManager adds <code>udp-not-quic</code> to the HTTPS and DNS-over-TLS portions of an SSL/SSH profile. Certain FortiGate devices running FortiOS 7.6 do not expose that attribute, so the device rejects the generated configuration. The issue was initially described for 2 GB devices, but later comments report other models too; model/build capability, not RAM alone, must drive the decision.</p>"
+        ],
+        [
+          "Understand the two protocol controls",
+          "<p>Under <code>config firewall ssl-ssh-profile</code>, the <code>https</code> and <code>dot</code> subtrees contain separate protocol controls. <code>quic</code> selects how QUIC traffic is inspected, bypassed, or blocked. <code>udp-not-quic</code> specifies the action when matched UDP traffic is not QUIC. They are not synonyms. A model that lacks the CLI node cannot accept a value merely because the manager's schema contains it.</p><pre><code>config firewall ssl-ssh-profile\n  edit \"custom-deep-inspection\"\n    config https\n      set quic bypass\n      unset udp-not-quic\n    end\n    config dot\n      set quic bypass\n      unset udp-not-quic\n    end\n  next\nend</code></pre><p>This illustrates a device-specific removal strategy reported in the Community discussion, not a universal template. Other targets may support the field and require an explicit action. The FortiOS CLI reference documents the option and its meaning for supported targets.</p>"
+        ],
+        [
+          "Use validation and preview as evidence",
+          "<p>Record the FortiManager build, ADOM version, target model, memory class, and FortiOS build. In the install wizard, run validation for each device and inspect the detailed progress report. The preview is useful: if the unsupported line appears under both <code>https</code> and <code>dot</code>, compare it with the target's CLI parser. A manual command that returns a parse error or return code -61 is strong evidence that the target build does not recognize the node; it is not a routing or reachability failure.</p><p>Do not treat a successful install to a higher-capability model as proof that every device in the group supports the setting. A successful retrieve does not necessarily remove a manager-generated default from the desired configuration. Keep the target-specific override scoped to the affected model and inspect the next install preview to prove the line is gone only where intended.</p>"
+        ],
+        [
+          "Safe remediation and rollout",
+          "<ol><li>Inventory exact target model and FortiOS build; test the CLI node on a representative device.</li><li>Inspect install preview and task log to identify the unsupported command and subtree.</li><li>For unsupported targets, use a model-scoped device override or unset the field only there; do not globally downgrade the ADOM object.</li><li>Re-run validation and preview for affected and unaffected models.</li><li>Check current release notes before adopting a fix. The Community article said fixes were expected in 7.6.9 and 8.0.3; verify the actual released build and resolved-issue entry.</li></ol><p>A broad workaround can remove inspection behavior from capable devices, while a narrow workaround can leave the unsupported line in later generated payloads if the source of truth is not corrected.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "title": "Fluentd Azure Monitor Log Ingestion: output profile, secret variables, and remote-server attachment",
+      "primary": [
+        [
+          "FortiAnalyzer 8.0 New Features — Fluentd supports Azure Monitor Log Ingestion API",
+          "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api"
+        ],
+        [
+          "FortiAnalyzer 8.0 Administration Guide — Output profile example",
+          "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/138745/output-profile-example"
+        ]
+      ],
+      "scenario": [
+        [
+          "Masking Fields in FortiAnalyzer output profiles, October 30, 2026",
+          "https://community.fortinet.com/fortianalyzer-6/masking-fields-in-fortianalyzer-output-profiles-231005"
+        ]
+      ],
+      "fingerprint": "fortianalyzer-fluentd-azure-logs-ingestion-dce-dcr-variable-secret-output-profile",
+      "workflow": "FAZ log → Fluentd output profile → variable substitution/client token → Azure DCE/DCR → custom _CL table and TimeGenerated transform",
+      "failure": "Profile validates locally but Azure rejects authentication, DCR/table mapping, schema, timestamp transform, or remote-server attachment",
+      "evidence": "Validate and Save; Remote Server profile binding; Azure DCR/table ingestion and TimeGenerated; variables without literal secrets",
+      "remediation": "Create App Registration, workspace, DCE, DCR and _CL table; grant Monitoring Metrics Publisher; define six variables; attach profile to Remote Server",
+      "question": "separate profile construction from forwarding activation and remote ingestion acceptance",
+      "topology": "FortiAnalyzer profile/remote-server chain feeds Azure identity, endpoint, DCR transform, and custom table",
+      "sections": [
+        [
+          "Feature purpose and object model",
+          "<p>FortiAnalyzer 8.0 adds a Fluentd output-profile type for the Azure Monitor Logs Ingestion API. This is two linked configuration objects, not one forwarding switch. The Output Profile stores the plugin type and parameters. A Log Forwarding Remote Server object selects the output plugin and references that profile. Creating the profile alone does not send logs; the forwarding destination must be attached to the log-forwarding settings.</p><p>On Azure, the pipeline uses an App Registration, Log Analytics Workspace, Data Collection Endpoint (DCE), Data Collection Rule (DCR), and custom table. The application identity needs the documented <em>Monitoring Metrics Publisher</em> role assignment associated with the DCR. The DCR controls the stream and transformation that maps the incoming record into the table schema.</p>"
+        ],
+        [
+          "Schema and timestamp requirements",
+          "<p>Fortinet's example creates a custom table with the <code>_CL</code> suffix and uses a transformation to derive <code>TimeGenerated</code> from the incoming <code>logtime</code> field. The Logs Ingestion API requires <code>TimeGenerated</code>; a payload with another timestamp name is insufficient unless the DCR transform creates the required column. The sample transformation is:</p><pre><code>source\n| extend TimeGenerated = todatetime(logtime)\n| project-away logtime</code></pre><p>The first expression converts the source timestamp to datetime. The second removes the source field after conversion. If the table name, DCR stream, input columns, or transform disagree, authentication can succeed while ingestion fails at schema processing.</p>"
+        ],
+        [
+          "Build the profile without exposing secrets",
+          "<p>In FortiAnalyzer, go to System Settings → Advanced → Log Forwarding → Output Profile, create a profile, and select <em>Azure Logs Ingestion</em>. Use the default Fluentd configuration as the starting point. Fortinet's example requires six parameters: <code>tenant_id</code>, <code>client_id</code>, <code>client_secret</code>, <code>dce_url</code>, <code>dcr_id</code>, and <code>table_name</code>. The October 30 Community tip shows variable references rather than literal secret values:</p><pre><code>&lt;match&gt;\n  tenant_id &#36;{TENANT_ID}\n  client_id &#36;{CLIENT_ID}\n  client_secret &#36;{CLIENT_SECRET}\n  dce_url &#36;{DCE_URL}\n  dcr_id &#36;{DCR_ID}\n  table_name &#36;{TABLE_NAME}\n&lt;/match&gt;</code></pre><p>Define variables under Configuration and Fields, then use Validate and Save. Variable indirection reduces accidental disclosure in profile text, but does not remove the need to protect the variable store and restrict administrative access.</p>"
+        ],
+        [
+          "Activate and prove the end-to-end path",
+          "<p>After the profile validates, create a Log Forwarding setting with server type <em>Remote Server</em>, select <em>Forward via Output Plugin</em>, and choose the saved profile. Send a small, known test log and correlate it across the chain. Validate and Save proves FortiAnalyzer accepted local profile configuration; it does not prove the DCE is reachable, the client secret is valid, the DCR authorizes the identity, or the table received a row.</p><p>Separate failures by layer: token acquisition points to tenant/client/secret or role assignment; endpoint connection points to DCE URL and network path; ingestion rejection points to DCR ID, stream/table name, transform, or schema; no forwarding points first to the Remote Server attachment and selected profile. Inspect Azure-side ingestion diagnostics and table arrival rather than treating local validation as an end-to-end receipt.</p>"
+        ],
+        [
+          "Operational controls",
+          "<ol><li>Create the Azure identity and grant only the required publisher role for the target DCR.</li><li>Create the DCE, DCR, transform, and _CL table before configuring FortiAnalyzer.</li><li>Populate the six required variables and validate the output profile.</li><li>Attach the profile to a Remote Server forwarding setting and enable intended log types.</li><li>Send a controlled event and verify it in the expected table with a valid TimeGenerated value.</li></ol><p>Keep credentials out of exported configuration and screenshots. Rotate the client secret through Azure identity management and update the FortiAnalyzer variable without changing the DCR/table contract.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "title": "VRRP destination-route tracking: fail over when the gateway is alive but upstream reachability is lost",
+      "primary": [
+        [
+          "FortiSwitch 8.0 Administration Guide — VRRP",
+          "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/508059/vrrp"
+        ]
+      ],
+      "scenario": [
+        [
+          "Technical Tip — VRRP failover based on destination route monitor, October 14, 2026",
+          "https://community.fortinet.com/fortiswitch-36/technical-tip-fortiswitch-vrrp-failover-based-on-destination-route-monitor-230554"
+        ]
+      ],
+      "fingerprint": "fortiswitch-vrrp-vrdst-route-reachability-priority-zero-vmac",
+      "workflow": "VRRP Master advertises VIP/VMAC → route to tracked destination evaluated → loss changes priority to zero → Backup becomes Master → forwarding moves to shared VMAC",
+      "failure": "Master remains operational but loses a critical upstream route, leaving clients on a black-holed gateway",
+      "evidence": "get router info vrrp; vrdst and priority fields; route table and tracked destination reachability; peer MASTER/BACKUP state",
+      "remediation": "Enable VRRP/VMAC on all members, set a meaningful tracked destination, validate backup path/preemption, and respect model/license constraints",
+      "question": "distinguish advertisement/link failure from tracked-route failure",
+      "topology": "two switches share VIP/VMAC; tracked upstream destination drives priority reduction and role transition",
+      "sections": [
+        [
+          "VRRP role and virtual identity",
+          "<p>FortiSwitch VRRP provides a shared virtual IP address for a gateway on an interface. One switch is Master and sends advertisements; backups monitor them and can take over when the Master fails. The group uses a VRID and virtual router IP. FortiSwitch also supports a virtual MAC address, disabled by default and required to be enabled on every member of a VMAC-based group. VRRP requires the advanced-features license.</p><p>Ordinary VRRP detects loss of the Master as a VRRP participant. It does not necessarily detect a subtler failure: the switch is powered, its VLAN interface is up, and advertisements continue, but the route to a critical upstream destination has disappeared. Clients still send frames to the virtual gateway, and the active Master can black-hole traffic. Destination tracking extends the election decision beyond local interface state.</p>"
+        ],
+        [
+          "How vrdst changes the election",
+          "<p>The <code>vrdst</code> setting identifies an IPv4 destination whose route reachability the VRRP instance monitors; IPv6 uses <code>vrdst6</code>. The FortiSwitch 8.0 guide documents one or two tracked addresses. If the Master cannot reach the tracked address, its priority changes to zero. A backup that still has reachability can become Master and own the shared gateway. When the route returns, preemption determines whether the recovered switch takes Master again.</p><pre><code>config system interface\n  edit \"CORE\"\n    set vrrp-virtual-mac enable\n    config vrrp\n      edit 110\n        set priority 200\n        set vrgrp 10\n        set vrip 10.10.1.1\n        set vrdst 1.1.1.1\n      next\n    end\n  next\nend</code></pre><p>This is a shortened example; use the correct interface/VLAN, VRID, group, address, and tracked target. The peer must share the VRID and virtual IP, with priority/preemption chosen for the intended takeover.</p>"
+        ],
+        [
+          "Evidence and design caveats",
+          "<p><code>get router info vrrp</code> should show VRID, virtual IP, VMAC state, Master/Backup role, priority, and configured <code>vrdst</code>. The Community example shows the original Master moving to BACKUP with priority zero after the monitored destination becomes unreachable, while the peer becomes MASTER. Also inspect the route table and test the tracked destination from both switches; a ping from a management workstation does not prove the switch's own route lookup succeeds.</p><p>Choose a destination representing the upstream path whose loss should trigger failover. Do not track an Internet host blocked from both switches or a single endpoint whose ICMP policy changes independently of routing. If both devices lose the same target, both can reduce priority and the desired active/standby result may not occur. Test recovery and preemption deliberately.</p>"
+        ],
+        [
+          "Platform and rollout constraints",
+          "<p>The FortiSwitch 8.0 guide notes a model-specific conflict: on FS-6xxF models, <code>set vrrp-virtual-mac enable</code> cannot be used with <code>set allow-mac-move enable</code>. Validate the feature matrix and license before building the design. A VMAC takeover is a Layer 2 identity change; verify that upstream switching learns the shared MAC on the new path and that ARP/forwarding converges.</p><ol><li>Confirm advanced-features entitlement and model support.</li><li>Configure identical VRID/VIP and VMAC behavior on all peers.</li><li>Set the tracked destination and verify route reachability from each peer.</li><li>Simulate loss, observe priority zero and role transition, then restore reachability and test preemption.</li></ol>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "title": "IPv6 CAPWAP management: multicast or DHCPv6 discovery, controller access, and NPU boundary",
+      "primary": [
+        [
+          "FortiOS 8.0 New Features — FortiAP management through IPv6",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6"
+        ],
+        [
+          "FortiAP 8.0 Configuration Guide — AP network interface",
+          "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/434872"
+        ]
+      ],
+      "scenario": [
+        [
+          "FortiAP 231K repeated cwWtpd/lldpd restarts and CAPWAP failure; active October 22–30, 2026",
+          "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547"
+        ]
+      ],
+      "fingerprint": "fortiap-ipv6-capwap-ac-discovery-multicast-dhcpv6-option52-npu",
+      "workflow": "AP IPv6 link → multicast or DHCPv6 Option 52 discovery → FortiGate fabric-accessible IPv6 interface → CAPWAP control/data → SSID and firmware management",
+      "failure": "AP cannot discover or sustain controller channel because IPv6 access, discovery, routing, CAPWAP reachability, certificate, or platform assumptions are wrong",
+      "evidence": "ip6-allowaccess fabric; discovery-mc-addr6; DHCPv6 option 52; UDP 5246/5247 capture; AP FSM/crash/certificate/power diagnostics",
+      "remediation": "Enable IPv6 fabric access, configure a supported discovery method, validate routed IPv6 CAPWAP, verify AP certificate/firmware, and account for NPU generation",
+      "question": "separate AP management IPv6 from client IPv6 and daemon-restart symptoms from CAPWAP path proof",
+      "topology": "multicast and DHCPv6 discovery converge on controller; CAPWAP control/data then passes through platform offload gate",
+      "sections": [
+        [
+          "What IPv6 management changes",
+          "<p>FortiOS 8.0 allows FortiGate to manage FortiAP over IPv6 for major wireless management functions. IPv6 can be used for Access Controller discovery, CAPWAP control and data channels, managed AP upgrades, and tunnel- or bridge-mode SSID connections. This is a management/control-plane capability; it is not the same as enabling IPv6 addressing for wireless clients. A client can use IPv6 on an SSID while the AP discovers its controller over IPv4, or the AP can use IPv6 for CAPWAP while client addressing remains IPv4.</p><p>The AP must learn the controller's IPv6 address and reach the FortiGate interface that accepts wireless-fabric management. The interface's IPv6 access list must include <code>fabric</code>. An IPv6 address alone does not enable AP management. Routing, neighbor discovery, multicast scope, DHCPv6 service, and control/data ports must align.</p>"
+        ],
+        [
+          "Two discovery methods",
+          "<p>Fortinet documents two controller discovery paths. Multicast discovery uses the controller multicast address configured under <code>config wireless-controller global</code>. DHCPv6 discovery uses Option 52 to advertise the Access Controller IPv6 address to the AP. Select the method supported by the reachable management network and ensure the advertised address is routable from the AP.</p><pre><code>config system interface\n  edit \"port3.66\"\n    config ipv6\n      set ip6-address 2001:db8:66::1/64\n      set ip6-allowaccess ping fabric\n      set ip6-send-adv enable\n      set ip6-manage-flag enable\n      set ip6-other-flag enable\n    end\n  next\nend\nconfig wireless-controller global\n  set discovery-mc-addr6 FF02::18C\nend</code></pre><p>For DHCPv6, the server's Option 52 carries the controller IPv6 address. Do not advertise a link-local address if the AP/controller relationship requires routed reachability.</p>"
+        ],
+        [
+          "CAPWAP data path and hardware caveat",
+          "<p>After discovery, the AP establishes CAPWAP control and data communication with the controller. A capture should distinguish UDP 5246 control traffic from UDP 5247 data traffic and show actual IPv6 source/destination addresses. Fortinet documents CAPWAP offload for IPv4 and IPv6 data traffic on NP7 and NP7lite platforms. It explicitly does not support CAPWAP offload on NP6/NP6lite FortiGates. Lack of offload is a performance/platform boundary, not proof IPv6 CAPWAP cannot function.</p><p>Verify controller address, interface fabric access, route, and packet flow before investigating SSID or client authentication. If the AP is authorized but no data channel forms, inspect data separately from discovery/control.</p>"
+        ],
+        [
+          "Use the recent CAPWAP failure as a diagnostic lesson",
+          "<p>The October 22 Community discussion describes a FortiAP 231K repeatedly restarting <code>lldpd</code> and <code>cwWtpd</code>, with “Send debug config info to capwap failed.” Fortinet staff noted that these logs alone do not identify root cause and requested the exact AP firmware build, FSM state, crash log, power information, and certificate status. The same symptoms on replacement hardware make it important to test software/compatibility and network reachability before another RMA.</p><p>Useful AP-side evidence includes <code>fap-tech</code>, <code>wcfg | grep fsm-state</code>, <code>diag_debug_crashlog read</code>, <code>cw_diag power</code>, and <code>cw_diag -c cert Fortinet_CA1.cer</code>. Correlate these with an on-wire capture from the AP management VLAN. A daemon restart is a symptom; it is not proof of a missing CA certificate, broken CAPWAP route, or defective radio.</p>"
+        ],
+        [
+          "Verification sequence",
+          "<ol><li>Confirm FortiOS/AP compatibility and AP firmware build.</li><li>Check the FortiGate IPv6 address and <code>ip6-allowaccess fabric</code>.</li><li>Verify multicast discovery or DHCPv6 Option 52.</li><li>Capture IPv6 CAPWAP control/data packets and check the return path.</li><li>Inspect AP FSM/crash/certificate/power evidence before changing authorization or replacing hardware.</li></ol>"
+        ]
+      ]
+    }
+  ]
+}
