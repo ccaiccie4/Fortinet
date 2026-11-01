@@ -1,0 +1,1516 @@
+{
+  "run_date": "2026-11-01",
+  "question_count": 50,
+  "unique_question_stems": 50,
+  "choice_feedback_count": 200,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "correct_answer_uniquely_longest": 0,
+  "max_option_word_spread": 5,
+  "questions": [
+    {
+      "number": 1,
+      "stem": "A FortiGate neighbor stays Active and debug reports 107. Which protocol exchange has not completed?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The TCP three-way handshake to peer port 179",
+          "correct": true,
+          "feedback": "Correct: Active plus error 107 marks an incomplete TCP handshake before BGP OPEN can begin."
+        },
+        {
+          "letter": "B",
+          "text": "The BGP OPEN capability negotiation between peers",
+          "correct": false,
+          "feedback": "OPEN follows TCP establishment; an OPEN failure occurs after the transport socket exists."
+        },
+        {
+          "letter": "C",
+          "text": "The first UPDATE carrying accepted prefixes for this BGP peer",
+          "correct": false,
+          "feedback": "UPDATE exchange is later; prefixes cannot be exchanged before the session is Established."
+        },
+        {
+          "letter": "D",
+          "text": "The route-map evaluation for received networks for this BGP peer",
+          "correct": false,
+          "feedback": "Route maps govern route policy after BGP messages arrive; they do not complete TCP transport."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "stem": "The route to a BGP peer exists, but capture shows repeated SYN packets without SYN-ACK. What should be checked next?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The inbound prefix-list permit sequence for this BGP peer",
+          "correct": false,
+          "feedback": "A prefix list is evaluated for route updates, not for the missing TCP response."
+        },
+        {
+          "letter": "B",
+          "text": "The return route and any filter for TCP/179",
+          "correct": true,
+          "feedback": "Correct: the missing SYN-ACK points to the remote return path, an ACL, or a listener/filter problem."
+        },
+        {
+          "letter": "C",
+          "text": "The maximum-prefix threshold on received routes for this BGP peer",
+          "correct": false,
+          "feedback": "Maximum-prefix is enforced after routes are exchanged and cannot explain an incomplete handshake."
+        },
+        {
+          "letter": "D",
+          "text": "The route-map set-local-preference action for this BGP peer",
+          "correct": false,
+          "feedback": "Local preference is assigned to received routes after BGP reaches the update stage."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "stem": "A multihop eBGP peer is reachable through a routed core. Which neighbor settings address the local source and hop behavior?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Set passive and change the router ID for this BGP peer",
+          "correct": false,
+          "feedback": "Passive changes who initiates a session; it does not select the intended local source or permit multihop."
+        },
+        {
+          "letter": "B",
+          "text": "Set route-map-in and soft-reconfiguration for this BGP peer",
+          "correct": false,
+          "feedback": "Route-map and soft-reconfiguration affect route processing, not TCP source identity or TTL."
+        },
+        {
+          "letter": "C",
+          "text": "Set update-source and enable multihop with a suitable TTL",
+          "correct": true,
+          "feedback": "Correct: update-source selects the local source; multihop and TTL allow the routed peer distance."
+        },
+        {
+          "letter": "D",
+          "text": "Set next-hop-self and remove the remote AS for this BGP peer",
+          "correct": false,
+          "feedback": "Next-hop-self changes advertised next-hop attributes; the remote AS is required for eBGP identity."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "stem": "The debug shows 104, Connection reset by peer, rather than 107. What does that change in the diagnosis?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It proves the local route table is empty",
+          "correct": false,
+          "feedback": "A reset does not establish that the local route table is empty; inspect the packet path."
+        },
+        {
+          "letter": "B",
+          "text": "It proves a route-map rejected every prefix for this BGP peer",
+          "correct": false,
+          "feedback": "Route-map rejection cannot be inferred from a transport reset before route exchange."
+        },
+        {
+          "letter": "C",
+          "text": "It proves BGP reached Established and lost keepalives",
+          "correct": false,
+          "feedback": "Established-state keepalive loss is a later failure and would show a different state history."
+        },
+        {
+          "letter": "D",
+          "text": "It indicates the remote side reset the TCP attempt",
+          "correct": true,
+          "feedback": "Correct: 104 indicates the peer or an intermediary reset the connection during the attempt."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "stem": "FortiManager installs a profile to a 2 GB FortiGate and the preview includes udp-not-quic. What is the most useful first comparison?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Compare generated CLI with that model's FortiOS parser support",
+          "correct": true,
+          "feedback": "Correct: the defect is a manager-generated attribute unsupported by the target model/build."
+        },
+        {
+          "letter": "B",
+          "text": "Compare the destination address object with the firewall policy",
+          "correct": false,
+          "feedback": "Address matching is unrelated to whether the target recognizes a CLI node in an SSL profile."
+        },
+        {
+          "letter": "C",
+          "text": "Compare the device HA priority with the ADOM revision",
+          "correct": false,
+          "feedback": "HA priority and ADOM revision do not determine parser capability for this command."
+        },
+        {
+          "letter": "D",
+          "text": "Compare the administrator GUI theme with the install owner",
+          "correct": false,
+          "feedback": "GUI appearance and task ownership have no bearing on target-side command support."
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "stem": "Why can an SSL/SSH profile save successfully in FortiManager but fail on one FortiGate during install?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The manager skipped the device route lookup on this target model",
+          "correct": false,
+          "feedback": "Route lookup is not the relevant validation boundary for a syntax rejection."
+        },
+        {
+          "letter": "B",
+          "text": "The target parser lacks this option on that build",
+          "correct": true,
+          "feedback": "Correct: manager-side schema validity does not guarantee target model/build support for every CLI option."
+        },
+        {
+          "letter": "C",
+          "text": "The firewall policy has no matching destination service",
+          "correct": false,
+          "feedback": "Policy service matching does not explain a parser rejection in the SSL/SSH profile subtree."
+        },
+        {
+          "letter": "D",
+          "text": "The device DNS cache has not refreshed QUIC records",
+          "correct": false,
+          "feedback": "DNS cache state does not affect whether the FortiGate accepts a configuration command."
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "stem": "Which distinction matters when reviewing the FortiOS SSL/SSH profile fields?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "quic and udp-not-quic are interchangeable block controls on this target model",
+          "correct": false,
+          "feedback": "The fields have different protocol meanings; treating them as aliases can change inspection behavior."
+        },
+        {
+          "letter": "B",
+          "text": "https and dot share one global action with no separate context",
+          "correct": false,
+          "feedback": "FortiOS exposes separate https and dot subtrees, so the actions are not one global value."
+        },
+        {
+          "letter": "C",
+          "text": "quic handles QUIC; udp-not-quic handles matched UDP that is not QUIC",
+          "correct": true,
+          "feedback": "Correct: udp-not-quic is the action for matched UDP traffic that is not QUIC."
+        },
+        {
+          "letter": "D",
+          "text": "udp-not-quic controls TCP fallback after a QUIC handshake on this target model",
+          "correct": false,
+          "feedback": "TCP fallback behavior is not what the udp-not-quic field defines."
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "stem": "A workaround works on one target but makes capable models lose intended inspection behavior. What does this suggest?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The entire ADOM must be downgraded immediately on this target model",
+          "correct": false,
+          "feedback": "Downgrading the ADOM may create wider compatibility issues and is not the first response."
+        },
+        {
+          "letter": "B",
+          "text": "The manager should stop validating every install on this target model",
+          "correct": false,
+          "feedback": "Validation is needed to expose target differences; disabling it hides evidence."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiGate routing process is rewriting the profile",
+          "correct": false,
+          "feedback": "Routing does not rewrite SSL/SSH profile attributes during installation."
+        },
+        {
+          "letter": "D",
+          "text": "The workaround is too broad; scope it by model",
+          "correct": true,
+          "feedback": "Correct: use a device/model-scoped override and verify affected and unaffected targets."
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "stem": "FortiAnalyzer's Azure output profile validates, but no rows appear in Log Analytics. Which object is still required to activate forwarding?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Attach a Remote Server to the saved output profile",
+          "correct": true,
+          "feedback": "Correct: the profile must be selected by a Remote Server forwarding setting using the output plugin."
+        },
+        {
+          "letter": "B",
+          "text": "A second FortiAnalyzer ADOM revision for the custom table",
+          "correct": false,
+          "feedback": "An ADOM revision does not activate log forwarding or reference the output profile."
+        },
+        {
+          "letter": "C",
+          "text": "A FortiGate central SNAT map for the DCE address",
+          "correct": false,
+          "feedback": "SNAT may be part of network reachability, but it does not attach the forwarding profile."
+        },
+        {
+          "letter": "D",
+          "text": "A FortiSwitch VLAN mapping for the Azure workspace",
+          "correct": false,
+          "feedback": "Switch VLAN mapping has no role in the FortiAnalyzer-to-Azure plugin configuration."
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "stem": "Why does the Azure custom-table transform create TimeGenerated from logtime?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Azure requires the source field to be named logtime",
+          "correct": false,
+          "feedback": "logtime is only the sample source field; the destination requirement is a separate column."
+        },
+        {
+          "letter": "B",
+          "text": "FortiAnalyzer only sends timestamps in local time in this ingestion path",
+          "correct": false,
+          "feedback": "Time conversion is performed by the DCR transform; the requirement is not simply local time."
+        },
+        {
+          "letter": "C",
+          "text": "The DCR must create TimeGenerated from logtime",
+          "correct": true,
+          "feedback": "Correct: the DCR transform creates the mandatory TimeGenerated field from the source timestamp."
+        },
+        {
+          "letter": "D",
+          "text": "The DCE uses TimeGenerated as its client secret",
+          "correct": false,
+          "feedback": "The DCE URL and application secret are separate settings; TimeGenerated is a schema field."
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "stem": "Which six values does the FortiAnalyzer Fluentd Azure profile require?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Workspace name, firewall serial, ADOM name, source port, log type, and username",
+          "correct": false,
+          "feedback": "These are not the documented Azure Logs Ingestion parameters for the Fluentd profile."
+        },
+        {
+          "letter": "B",
+          "text": "Tenant ID, client ID, client secret, DCE URL, DCR ID, and table name",
+          "correct": true,
+          "feedback": "Correct: those are the six required parameters listed in FortiAnalyzer's example."
+        },
+        {
+          "letter": "C",
+          "text": "DCR name, device ID, interface name, time zone, proxy port, and token cache",
+          "correct": false,
+          "feedback": "Device and interface inventory values are not the six plugin credentials and endpoint fields."
+        },
+        {
+          "letter": "D",
+          "text": "Tenant name, DCE secret, log filter, CA certificate, UDP port, and group ID",
+          "correct": false,
+          "feedback": "The DCE URL is not a DCE secret; the listed values do not match the documented profile."
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "stem": "What is the purpose of variable references such as ${CLIENT_SECRET} in the output profile?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "They replace the DCR transformation at ingestion time",
+          "correct": false,
+          "feedback": "The DCR transform still defines the target schema and TimeGenerated mapping."
+        },
+        {
+          "letter": "B",
+          "text": "They make the App Registration anonymous in this ingestion path",
+          "correct": false,
+          "feedback": "Azure still authenticates the application; variable indirection does not remove identity."
+        },
+        {
+          "letter": "C",
+          "text": "They select which FortiGate logs are collected",
+          "correct": false,
+          "feedback": "Log selection is controlled by forwarding settings and filters, not secret variables."
+        },
+        {
+          "letter": "D",
+          "text": "Variables keep literal secrets out of profile text",
+          "correct": true,
+          "feedback": "Correct: the Community tip uses variables to mask values such as the client secret."
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "stem": "Azure returns an ingestion schema error after the token succeeds. Which area deserves attention first?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "DCR stream, custom table schema, and TimeGenerated transformation",
+          "correct": true,
+          "feedback": "Correct: successful token acquisition moves the fault boundary toward DCR/table schema and transform."
+        },
+        {
+          "letter": "B",
+          "text": "FortiAnalyzer administrator password expiration for this VRRP group",
+          "correct": false,
+          "feedback": "An admin password does not explain an authenticated ingestion request rejected for schema."
+        },
+        {
+          "letter": "C",
+          "text": "FortiGate BGP neighbor update-source configuration for this VRRP group",
+          "correct": false,
+          "feedback": "BGP update-source is unrelated to Azure log schema validation."
+        },
+        {
+          "letter": "D",
+          "text": "FortiSwitch VRRP preemption timer for this VRRP group",
+          "correct": false,
+          "feedback": "VRRP preemption does not affect the table schema accepted by Azure."
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "stem": "A FortiSwitch VRRP Master is still sending advertisements, but the upstream route is gone. Which feature addresses this?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Lowering the advertisement interval only for this VRRP group",
+          "correct": false,
+          "feedback": "Faster advertisements detect peer failure, not a live Master that has lost upstream reachability."
+        },
+        {
+          "letter": "B",
+          "text": "Changing the virtual router ID on the backup",
+          "correct": false,
+          "feedback": "Changing the VRID breaks group identity rather than monitoring the route."
+        },
+        {
+          "letter": "C",
+          "text": "Configuring vrdst to track a critical destination",
+          "correct": true,
+          "feedback": "Correct: vrdst monitors destination reachability and can reduce the Master's priority to zero."
+        },
+        {
+          "letter": "D",
+          "text": "Disabling the virtual MAC on the primary",
+          "correct": false,
+          "feedback": "Disabling VMAC can disrupt the shared gateway identity and does not provide route tracking."
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "stem": "What does priority zero in get router info vrrp indicate in the documented route-monitor scenario?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The VRRP group has been deleted for this VRRP group",
+          "correct": false,
+          "feedback": "The group remains configured; priority zero is the route-tracking response."
+        },
+        {
+          "letter": "B",
+          "text": "The tracked destination failed; Master priority became zero",
+          "correct": true,
+          "feedback": "Correct: loss of the monitored destination drives the Master priority to zero."
+        },
+        {
+          "letter": "C",
+          "text": "The backup has a higher interface speed for this VRRP group",
+          "correct": false,
+          "feedback": "Interface speed is not the condition shown by the vrdst example."
+        },
+        {
+          "letter": "D",
+          "text": "The virtual IP address has changed to the physical address",
+          "correct": false,
+          "feedback": "The virtual IP remains the shared gateway; it does not become the physical address."
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "stem": "Which design choice makes a vrdst monitor useful rather than noisy?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Choose a critical destination reachable through the intended upstream path",
+          "correct": true,
+          "feedback": "Correct: the target should represent the path whose loss should trigger gateway failover."
+        },
+        {
+          "letter": "B",
+          "text": "Choose a public host that both switches may be unable to ping",
+          "correct": false,
+          "feedback": "A target unreachable from both peers can make both priorities fall and defeat the design."
+        },
+        {
+          "letter": "C",
+          "text": "Choose the switch's own management address on the same VLAN for this VRRP group",
+          "correct": false,
+          "feedback": "The local management address does not test the upstream route being protected."
+        },
+        {
+          "letter": "D",
+          "text": "Choose a host whose ICMP policy changes frequently for this VRRP group",
+          "correct": false,
+          "feedback": "An unstable ICMP policy can cause false failovers unrelated to actual routing."
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "stem": "Which prerequisite is called out for FortiSwitch VRRP virtual MAC operation?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable allow-mac-move on every FS-6xxF first on the AP management path",
+          "correct": false,
+          "feedback": "On some models allow-mac-move conflicts with VMAC; it is not a universal prerequisite."
+        },
+        {
+          "letter": "B",
+          "text": "Use a unique virtual IP on every member",
+          "correct": false,
+          "feedback": "Members of the same VRRP group share the virtual IP rather than each using a different one."
+        },
+        {
+          "letter": "C",
+          "text": "Disable the advanced-features license on the AP management path",
+          "correct": false,
+          "feedback": "VRRP requires the advanced-features license; disabling it removes the entitlement."
+        },
+        {
+          "letter": "D",
+          "text": "Enable VMAC on all members; check model conflicts",
+          "correct": true,
+          "feedback": "Correct: VMAC is disabled by default and must be enabled across the group, subject to model limits."
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "stem": "FortiGate manages a FortiAP over IPv6. Which interface permission is required for the wireless fabric management path?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "ip6-allowaccess ping only",
+          "correct": false,
+          "feedback": "Ping allows ICMP testing but does not enable the wireless fabric management service."
+        },
+        {
+          "letter": "B",
+          "text": "ip6-allowaccess fabric",
+          "correct": true,
+          "feedback": "Correct: Fortinet's IPv6 management example includes fabric in ip6-allowaccess."
+        },
+        {
+          "letter": "C",
+          "text": "allowaccess radius-acct on IPv4",
+          "correct": false,
+          "feedback": "RADIUS accounting access is unrelated to AP controller discovery over IPv6."
+        },
+        {
+          "letter": "D",
+          "text": "set vrrp-virtual-mac enable",
+          "correct": false,
+          "feedback": "VRRP VMAC is a gateway feature, not a FortiAP management permission."
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "stem": "Which two methods are documented for FortiAP IPv6 controller discovery?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "DNS SRV and static ARP on the AP management path",
+          "correct": false,
+          "feedback": "Those are not the two discovery methods documented for IPv6 AP controller discovery."
+        },
+        {
+          "letter": "B",
+          "text": "BGP route reflection and LLDP on the AP management path",
+          "correct": false,
+          "feedback": "Routing and LLDP may support connectivity but are not the discovery mechanisms listed."
+        },
+        {
+          "letter": "C",
+          "text": "IPv6 multicast and DHCPv6 Option 52 discovery",
+          "correct": true,
+          "feedback": "Correct: the AP can discover through controller multicast or DHCPv6 Option 52."
+        },
+        {
+          "letter": "D",
+          "text": "SAML redirect and RADIUS CoA on the AP management path",
+          "correct": false,
+          "feedback": "SAML and CoA belong to identity workflows, not CAPWAP controller discovery."
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "stem": "What does NP7/NP7lite support that NP6/NP6lite does not in this feature?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "CAPWAP offload for IPv4 and IPv6 data",
+          "correct": true,
+          "feedback": "Correct: Fortinet documents CAPWAP data offload on NP7/NP7lite, not NP6/NP6lite."
+        },
+        {
+          "letter": "B",
+          "text": "DHCPv6 Option 52 address assignment on the AP management path",
+          "correct": false,
+          "feedback": "DHCPv6 Option 52 is a discovery method, not an NPU offload capability."
+        },
+        {
+          "letter": "C",
+          "text": "IPv6 client SLAAC on the wireless SSID",
+          "correct": false,
+          "feedback": "Client SLAAC is an IPv6 client service and not the documented hardware boundary."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiAP authorization database on the AP management path",
+          "correct": false,
+          "feedback": "AP authorization is controller logic, not the NPU offload feature."
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "stem": "The AP console shows cwWtpd restarting repeatedly. What is the strongest next step?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "RMA the AP because the process name proves hardware failure",
+          "correct": false,
+          "feedback": "A process restart is a symptom and does not establish a hardware defect."
+        },
+        {
+          "letter": "B",
+          "text": "Change every SSID to bridge mode in this EAP exchange",
+          "correct": false,
+          "feedback": "SSID forwarding mode does not explain a controller process restarting before stable CAPWAP."
+        },
+        {
+          "letter": "C",
+          "text": "Disable CAPWAP encryption without checking compatibility in this EAP exchange",
+          "correct": false,
+          "feedback": "Disabling security without evidence is unsafe and may not address the cause."
+        },
+        {
+          "letter": "D",
+          "text": "Correlate AP firmware, FSM/crash/certificate/power evidence with an on-network CAPWAP capture",
+          "correct": true,
+          "feedback": "Correct: collect firmware, FSM, crash, power and certificate evidence plus real network testing."
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "stem": "FortiNAC reports “No EAP session matching state.” What does the message most directly indicate?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The user's password has definitely expired in this EAP exchange",
+          "correct": false,
+          "feedback": "Credential failure is possible later, but the message describes missing EAP session context."
+        },
+        {
+          "letter": "B",
+          "text": "EAP arrived without a matching active server session",
+          "correct": true,
+          "feedback": "Correct: the server received EAP traffic but could not associate it with a live EAP state."
+        },
+        {
+          "letter": "C",
+          "text": "The switch VLAN tag is malformed in this EAP exchange",
+          "correct": false,
+          "feedback": "A VLAN error may affect access after authentication but does not explain this EAP state message."
+        },
+        {
+          "letter": "D",
+          "text": "The endpoint has no IPv6 default route",
+          "correct": false,
+          "feedback": "IPv6 routing is unrelated to the RADIUS/EAP session correlation symptom."
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "stem": "In FortiNAC proxy RADIUS mode, what happens to 802.1X EAP authentication?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "FortiNAC processes only accounting and drops EAP in this EAP exchange",
+          "correct": false,
+          "feedback": "Proxy mode is an authentication path, not a policy to drop EAP."
+        },
+        {
+          "letter": "B",
+          "text": "FortiNAC converts EAP into SNMP polling in this EAP exchange",
+          "correct": false,
+          "feedback": "SNMP polling is a separate network-device management mechanism."
+        },
+        {
+          "letter": "C",
+          "text": "FortiNAC proxies EAP authentication to an external RADIUS server",
+          "correct": true,
+          "feedback": "Correct: proxy mode handles MAC auth locally and proxies 802.1X EAP to external RADIUS."
+        },
+        {
+          "letter": "D",
+          "text": "FortiNAC assigns a VLAN without consulting an authentication service",
+          "correct": false,
+          "feedback": "VLAN assignment can follow authorization, but it does not replace EAP authentication."
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "stem": "Which prerequisite applies to FortiNAC Local RADIUS EAP authentication?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A server certificate must be installed for EAP",
+          "correct": true,
+          "feedback": "Correct: the Local RADIUS guide requires a server certificate for EAP authentication."
+        },
+        {
+          "letter": "B",
+          "text": "The switch must use BGP multihop in this EAP exchange",
+          "correct": false,
+          "feedback": "BGP multihop is unrelated to the RADIUS EAP service."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiNAC Manager must share a VRID with the NAS",
+          "correct": false,
+          "feedback": "VRID is a VRRP identifier, not a RADIUS requirement."
+        },
+        {
+          "letter": "D",
+          "text": "The DCR table must end in _CL in this EAP exchange",
+          "correct": false,
+          "feedback": "_CL is an Azure table naming convention, not an EAP prerequisite."
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "stem": "The same endpoint succeeds off-peak but intermittently loses EAP state during busy periods. Which hypothesis best matches the forum discussion?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A permanent VLAN mismatch on every port",
+          "correct": false,
+          "feedback": "A fixed VLAN error would not normally explain intermittent EAP state correlation."
+        },
+        {
+          "letter": "B",
+          "text": "An invalid AP certificate in all cases",
+          "correct": false,
+          "feedback": "An AP certificate issue is not established by the EAP session message and affects more than one path."
+        },
+        {
+          "letter": "C",
+          "text": "A missing BGP route to the RADIUS server",
+          "correct": false,
+          "feedback": "BGP reachability may affect RADIUS transport, but the stated symptom is a missing active EAP context."
+        },
+        {
+          "letter": "D",
+          "text": "Delay, load distribution, or a restarted EAP exchange",
+          "correct": true,
+          "feedback": "Correct: these are the specific classes of causes raised by Fortinet staff in the recent discussion."
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "stem": "What does FortiNAC Local RADIUS not provide by itself?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "EAP authentication for supported methods in this EAP exchange",
+          "correct": false,
+          "feedback": "Local RADIUS supports documented EAP methods when prerequisites are met."
+        },
+        {
+          "letter": "B",
+          "text": "RADIUS accounting; proxy it externally if required",
+          "correct": true,
+          "feedback": "Correct: Local RADIUS does not provide accounting; it can be proxied externally."
+        },
+        {
+          "letter": "C",
+          "text": "MAC authentication processing in this EAP exchange",
+          "correct": false,
+          "feedback": "Local RADIUS processes MAC authentication as well as EAP authentication."
+        },
+        {
+          "letter": "D",
+          "text": "RADIUS Access-Accept attributes in this EAP exchange",
+          "correct": false,
+          "feedback": "FortiNAC can return configured RADIUS attributes in an Access-Accept."
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "stem": "In FortiNAC-F global-object synchronization, which system is authoritative for shared objects?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The endpoint supplicant for this global object",
+          "correct": false,
+          "feedback": "The supplicant is not a configuration authority for FortiNAC global objects."
+        },
+        {
+          "letter": "B",
+          "text": "The managed CA's local database row",
+          "correct": false,
+          "feedback": "Managed CA global objects are read-only and are overwritten from the Manager."
+        },
+        {
+          "letter": "C",
+          "text": "FortiNAC Manager",
+          "correct": true,
+          "feedback": "Correct: FortiNAC Manager owns the shared global-object configuration."
+        },
+        {
+          "letter": "D",
+          "text": "The switch's RADIUS client table",
+          "correct": false,
+          "feedback": "The switch RADIUS table is unrelated to Manager object replication."
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "stem": "A managed CA's Group row ID differs from the Manager's row ID, but the GUID matches. What should the engineer conclude?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Local IDs may differ; shared GUID identifies the object",
+          "correct": true,
+          "feedback": "Correct: local database IDs are appliance-local; the GUID is the cross-appliance identity."
+        },
+        {
+          "letter": "B",
+          "text": "The objects are duplicates and both must be deleted",
+          "correct": false,
+          "feedback": "Different row IDs alone do not prove duplication and deleting global objects is unsafe."
+        },
+        {
+          "letter": "C",
+          "text": "The managed CA is running the wrong VRRP group",
+          "correct": false,
+          "feedback": "VRRP group configuration has no relationship to FortiNAC object identity."
+        },
+        {
+          "letter": "D",
+          "text": "The Manager must use the CA's local row ID",
+          "correct": false,
+          "feedback": "The Manager remains authoritative; local IDs do not need to match."
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "stem": "Which objects are examples of FortiNAC-F global synchronization content?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Live packet captures and interface counters",
+          "correct": false,
+          "feedback": "Packet captures and counters are operational evidence, not the listed global configuration objects."
+        },
+        {
+          "letter": "B",
+          "text": "Only local host MAC learning tables",
+          "correct": false,
+          "feedback": "Host propagation is a separate replication function from global-object synchronization."
+        },
+        {
+          "letter": "C",
+          "text": "Only AP radio channel assignments for this global object",
+          "correct": false,
+          "feedback": "AP radio channels are not the listed FortiNAC-F global objects."
+        },
+        {
+          "letter": "D",
+          "text": "Groups, Roles, Admin Profiles, and compliance objects",
+          "correct": true,
+          "feedback": "Correct: the guide lists Groups, Roles, Admin Profiles, and compliance objects."
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "stem": "A GUID conflict is confirmed for one global Group on a managed CA. What is the safe repair posture?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Run a broad UPDATE on every Group row for this global object",
+          "correct": false,
+          "feedback": "A broad update can damage valid global and local-only objects."
+        },
+        {
+          "letter": "B",
+          "text": "Back up, compare GUIDs, repair only the stale CA row",
+          "correct": true,
+          "feedback": "Correct: back up, compare exact objects, and perform a narrowly scoped repair with Support guidance."
+        },
+        {
+          "letter": "C",
+          "text": "Change the Manager GUID to match the CA local ID",
+          "correct": false,
+          "feedback": "The Manager is authoritative; changing its GUID to a local ID reverses the authority model."
+        },
+        {
+          "letter": "D",
+          "text": "Delete all local-only groups before synchronizing for this global object",
+          "correct": false,
+          "feedback": "Local-only objects must not be altered as part of a global-object repair."
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "stem": "A TACACS+ request reaches FortiAuthenticator, but the NAS sends authorization before authentication. What is the core issue?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The user group lacks a VLAN ID",
+          "correct": false,
+          "feedback": "VLAN assignment is not the core TACACS+ sequence issue."
+        },
+        {
+          "letter": "B",
+          "text": "The server DNS suffix is missing",
+          "correct": false,
+          "feedback": "DNS may affect reachability but does not change TACACS+ request ordering."
+        },
+        {
+          "letter": "C",
+          "text": "The NAS sends authorization before authentication",
+          "correct": true,
+          "feedback": "Correct: FortiAuthenticator does not provide an authorization-before-authentication mode for this flow."
+        },
+        {
+          "letter": "D",
+          "text": "The RADIUS shared secret is too short",
+          "correct": false,
+          "feedback": "A RADIUS shared secret is not the TACACS+ phase-order issue."
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "stem": "Before FortiAuthenticator accepts TACACS+ requests, what must exist?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A FortiSwitch VRRP virtual MAC for this TACACS+ client",
+          "correct": false,
+          "feedback": "VRRP is unrelated to TACACS+ client registration."
+        },
+        {
+          "letter": "B",
+          "text": "Register the NAS and assign its TACACS+ policy",
+          "correct": true,
+          "feedback": "Correct: the TACACS+ device must be registered and assigned to a policy."
+        },
+        {
+          "letter": "C",
+          "text": "An Azure Data Collection Rule for this TACACS+ client",
+          "correct": false,
+          "feedback": "A DCR is an Azure log-ingestion object, not an authentication prerequisite."
+        },
+        {
+          "letter": "D",
+          "text": "A FortiPAM secret template for this TACACS+ client",
+          "correct": false,
+          "feedback": "FortiPAM secret templates do not configure FortiAuthenticator TACACS+."
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "stem": "Where does FortiAuthenticator expose TACACS+ service debug logs?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "System > SD-WAN > Health Check",
+          "correct": false,
+          "feedback": "SD-WAN health checks do not expose FortiAuthenticator TACACS+ logs."
+        },
+        {
+          "letter": "B",
+          "text": "FortiManager Install Preview for this TACACS+ client",
+          "correct": false,
+          "feedback": "Install Preview belongs to FortiManager device configuration deployment."
+        },
+        {
+          "letter": "C",
+          "text": "FortiAnalyzer Log Forwarding > Output Profile",
+          "correct": false,
+          "feedback": "Output Profile is a FortiAnalyzer log-forwarding feature."
+        },
+        {
+          "letter": "D",
+          "text": "Open /debug/ and select TACACS+",
+          "correct": true,
+          "feedback": "Correct: open /debug/ and select TACACS+ from the service dropdown."
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "stem": "What is the documented FortiAuthenticator TACACS+ limitation for two-factor authentication?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Append the OTP to the password; no challenge flow",
+          "correct": true,
+          "feedback": "Correct: FortiAuthenticator documents token-appended password entry because TACACS+ challenge/response is unsupported."
+        },
+        {
+          "letter": "B",
+          "text": "Use a browser SAML redirect after every command",
+          "correct": false,
+          "feedback": "SAML redirects are not the documented TACACS+ 2FA method."
+        },
+        {
+          "letter": "C",
+          "text": "Send the token as a RADIUS Tunnel-Private-Group-Id for this TACACS+ client",
+          "correct": false,
+          "feedback": "Tunnel-Private-Group-Id is a RADIUS VLAN attribute, not TACACS+ OTP handling."
+        },
+        {
+          "letter": "D",
+          "text": "Require a client certificate on every SSH command",
+          "correct": false,
+          "feedback": "A client certificate is not the stated TACACS+ 2FA mechanism."
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "stem": "A FortiPAM REST request uses a client certificate and bearer token. What does each prove?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Both prove only the user's password for this protected secret at the API gateway",
+          "correct": false,
+          "feedback": "A password is not what either artifact represents in this design."
+        },
+        {
+          "letter": "B",
+          "text": "The certificate proves API role membership; the token proves the EMS tag",
+          "correct": false,
+          "feedback": "The certificate is used for client trust; the token identifies the API user."
+        },
+        {
+          "letter": "C",
+          "text": "The certificate and token are interchangeable methods for this protected secret",
+          "correct": false,
+          "feedback": "They are independent gates, not interchangeable alternatives."
+        },
+        {
+          "letter": "D",
+          "text": "The certificate establishes endpoint trust; the bearer token authenticates the API user",
+          "correct": true,
+          "feedback": "Correct: device trust and API identity are separate controls."
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "stem": "FortiPAM ZTNA is enabled, but a managed endpoint cannot launch a protected secret. Which check is especially important?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Confirm same EMS and the expected endpoint tag",
+          "correct": true,
+          "feedback": "Correct: FortiPAM tag control depends on the same EMS control plane and matching posture tag."
+        },
+        {
+          "letter": "B",
+          "text": "The SD-WAN quota counter has reset for this protected secret",
+          "correct": false,
+          "feedback": "Quota counters do not determine FortiPAM secret access."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiSwitch VRRP priority is 255 for this protected secret",
+          "correct": false,
+          "feedback": "VRRP priority is unrelated to endpoint posture."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiAnalyzer DCR table has TimeGenerated for this protected secret",
+          "correct": false,
+          "feedback": "Azure table schema does not authorize a FortiPAM secret launch."
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "stem": "What does the /pam URL map in the FortiPAM access proxy do?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It changes the API user's bearer token",
+          "correct": false,
+          "feedback": "The API token is generated for the API user and is not changed by URL mapping."
+        },
+        {
+          "letter": "B",
+          "text": "Map /pam requests to the pam-service gateway",
+          "correct": true,
+          "feedback": "Correct: the API gateway maps /pam to the FortiPAM service."
+        },
+        {
+          "letter": "C",
+          "text": "It creates the EMS endpoint tag automatically",
+          "correct": false,
+          "feedback": "EMS tags are created/evaluated by endpoint management, not URL maps."
+        },
+        {
+          "letter": "D",
+          "text": "It disables client certificate validation for this protected secret",
+          "correct": false,
+          "feedback": "Client certificate behavior is controlled separately in the access proxy."
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "stem": "FortiPAM login succeeds but access to one secret is denied. Which control may still block the operation?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The FortiSIEM offline repository mount",
+          "correct": false,
+          "feedback": "The offline repo is unrelated to privileged secret authorization."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiSwitch tracked destination",
+          "correct": false,
+          "feedback": "VRRP route tracking does not authorize a PAM secret."
+        },
+        {
+          "letter": "C",
+          "text": "The Windows DNS priority list",
+          "correct": false,
+          "feedback": "DNS priority may affect name resolution, not the secret permission decision."
+        },
+        {
+          "letter": "D",
+          "text": "Secret-level ZTNA and secret permissions",
+          "correct": true,
+          "feedback": "Correct: secret-level ZTNA and secret permissions are separate from appliance login."
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "stem": "For FortiSIEM 7.5.1 offline OS repository preparation, what storage requirement is documented?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "At least 2 TB on the mounted staging filesystem",
+          "correct": true,
+          "feedback": "Correct: the 7.5.1 guide specifies at least 2 TB for the OS repository."
+        },
+        {
+          "letter": "B",
+          "text": "At least 2 GB on the Supervisor root partition",
+          "correct": false,
+          "feedback": "2 GB is far below the documented repository requirement."
+        },
+        {
+          "letter": "C",
+          "text": "A 375 GB temporary directory only in this offline upgrade",
+          "correct": false,
+          "feedback": "375 GB belongs to earlier version documentation and must not be reused for 7.5.1."
+        },
+        {
+          "letter": "D",
+          "text": "No local storage because the ZIP contains all OS packages",
+          "correct": false,
+          "feedback": "The OS repository is a separate dependency from the main upgrade ZIP."
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "stem": "Why extract fsm-sync-os-repo.sh from the targeted upgrade package?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The script configures FortiGate BGP neighbors in this offline upgrade",
+          "correct": false,
+          "feedback": "The script builds the FortiSIEM OS repository, not BGP configuration."
+        },
+        {
+          "letter": "B",
+          "text": "It matches the target upgrade release",
+          "correct": true,
+          "feedback": "Correct: the Community tip recommends extracting the script from the target version's upgrade RPM."
+        },
+        {
+          "letter": "C",
+          "text": "The script creates a new RADIUS client secret",
+          "correct": false,
+          "feedback": "RADIUS client secrets are unrelated to repository synchronization."
+        },
+        {
+          "letter": "D",
+          "text": "The script replaces the Supervisor database in this offline upgrade",
+          "correct": false,
+          "feedback": "The repository script does not replace the FortiSIEM database."
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "stem": "Which command tells the Supervisor upgrade to use the mounted offline repository?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "./upgrade.sh --proxy-only /repo",
+          "correct": false,
+          "feedback": "The documented parameter is not a proxy-only option."
+        },
+        {
+          "letter": "B",
+          "text": "./upgrade.sh --skip-database-check",
+          "correct": false,
+          "feedback": "Skipping database checks is not the offline repository selector."
+        },
+        {
+          "letter": "C",
+          "text": "./upgrade.sh --offline-osrepo-path /offline-repo",
+          "correct": true,
+          "feedback": "Correct: the guide documents --offline-osrepo-path with the mounted repository path."
+        },
+        {
+          "letter": "D",
+          "text": "./upgrade.sh --disable-wget",
+          "correct": false,
+          "feedback": "Disabling wget is not how the upgrade script selects offline packages."
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "stem": "After Supervisor is upgraded, what extra value does a Worker upgrade consume?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The FortiGate remote AS number",
+          "correct": false,
+          "feedback": "The BGP remote AS is unrelated to FortiSIEM Worker updates."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiPAM API bearer token",
+          "correct": false,
+          "feedback": "FortiPAM API credentials do not authorize FortiSIEM OS package access."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiAuthenticator TACACS+ shared secret",
+          "correct": false,
+          "feedback": "TACACS+ shared secrets do not participate in the Worker upgrade."
+        },
+        {
+          "letter": "D",
+          "text": "The Supervisor's offline-repository password",
+          "correct": true,
+          "feedback": "Correct: the Worker script uses the Supervisor's offline-repository OS update password."
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "stem": "What is the Multi-Connect feature limitation documented for FortiClient?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Only SSL VPN tunnels can connect concurrently",
+          "correct": false,
+          "feedback": "SSL VPN is not the documented eligible tunnel type for this beta feature."
+        },
+        {
+          "letter": "B",
+          "text": "Only IKEv2 IPsec tunnels qualify; feature is beta",
+          "correct": true,
+          "feedback": "Correct: the guide limits Multi-Connect to eligible IPsec IKEv2 tunnels and marks it beta."
+        },
+        {
+          "letter": "C",
+          "text": "Only one tunnel can be configured per profile",
+          "correct": false,
+          "feedback": "The profile can list up to 50 eligible IKEv2 tunnels."
+        },
+        {
+          "letter": "D",
+          "text": "It supports every tunnel protocol without version constraints",
+          "correct": false,
+          "feedback": "The feature has explicit tunnel-type and platform constraints."
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "stem": "What does DNS Priority control on Windows when Multi-Connect is enabled?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Which tunnel receives all application traffic regardless of routing",
+          "correct": false,
+          "feedback": "DNS priority is not a general packet steering policy for every application flow."
+        },
+        {
+          "letter": "B",
+          "text": "Which tunnel is allowed to negotiate IKE first",
+          "correct": false,
+          "feedback": "IKE negotiation order is not what the DNS priority list configures."
+        },
+        {
+          "letter": "C",
+          "text": "Windows DNS resolver priority across tunnel interfaces",
+          "correct": true,
+          "feedback": "Correct: Windows queries the DNS server on the highest-priority tunnel first, then tries the next if needed."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiSASE PoP server certificate for this IKEv2 tunnel",
+          "correct": false,
+          "feedback": "PoP certificate selection is unrelated to endpoint DNS resolver order."
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "stem": "A user reports the SASE tunnel is up but the on-prem tunnel is down. What is the right diagnostic approach?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Assume the endpoint profile was not received for this IKEv2 tunnel",
+          "correct": false,
+          "feedback": "A working SASE tunnel suggests the profile may have reached the endpoint."
+        },
+        {
+          "letter": "B",
+          "text": "Edit the FortiSASE-owned Phase 1 and Phase 2 settings",
+          "correct": false,
+          "feedback": "FortiSASE service-owned Phase 1/2 settings are not editable through that interface."
+        },
+        {
+          "letter": "C",
+          "text": "Disable the SASE tunnel for every endpoint for this IKEv2 tunnel",
+          "correct": false,
+          "feedback": "Disabling the SASE service is not a diagnosis of the separate custom tunnel."
+        },
+        {
+          "letter": "D",
+          "text": "Check each tunnel separately and validate custom IKEv2 settings",
+          "correct": true,
+          "feedback": "Correct: SASE and custom IKEv2 tunnels have separate ownership and negotiation state."
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "stem": "Why must an on-prem gateway match the endpoint's custom-tunnel parameters?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "FortiSASE configures specific IKEv2 proposals and lifetimes on FortiClient",
+          "correct": true,
+          "feedback": "Correct: the tunnel settings guide lists endpoint parameters the remote gateway must match."
+        },
+        {
+          "letter": "B",
+          "text": "The gateway inherits the FortiSwitch VRRP virtual MAC for this IKEv2 tunnel",
+          "correct": false,
+          "feedback": "VRRP virtual MAC is not an IPsec proposal parameter."
+        },
+        {
+          "letter": "C",
+          "text": "The custom tunnel uses the Azure DCR identifier as its peer ID",
+          "correct": false,
+          "feedback": "DCR IDs belong to Azure log ingestion, not IKE identity."
+        },
+        {
+          "letter": "D",
+          "text": "Windows DNS Priority rewrites the Phase 2 proposal for this IKEv2 tunnel",
+          "correct": false,
+          "feedback": "DNS priority controls resolver order and does not rewrite IKE/Phase 2 negotiation."
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "stem": "The FortiSASE tunnel's Phase 1/2 settings are not editable in the console. What is the correct interpretation?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The endpoint has lost its EMS tag for this SD-WAN service",
+          "correct": false,
+          "feedback": "An EMS tag issue affects posture/authorization, not tunnel-setting ownership."
+        },
+        {
+          "letter": "B",
+          "text": "The tunnel is using SSL VPN instead of IKEv2",
+          "correct": false,
+          "feedback": "Missing edit controls do not indicate a change in VPN protocol."
+        },
+        {
+          "letter": "C",
+          "text": "SASE owns its tunnel settings; configure custom tunnels separately",
+          "correct": true,
+          "feedback": "Correct: the Community clarification says SASE Phase 1/2 settings cannot be changed there."
+        },
+        {
+          "letter": "D",
+          "text": "The API bearer token has expired for this SD-WAN service",
+          "correct": false,
+          "feedback": "API tokens are unrelated to service-owned IPsec parameters."
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "stem": "What is the key role of quota-limit on an SD-WAN member?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It sets the interface MTU for this SD-WAN service during the billing period",
+          "correct": false,
+          "feedback": "MTU is a separate interface setting."
+        },
+        {
+          "letter": "B",
+          "text": "It defines a monthly traffic-volume threshold in gigabytes",
+          "correct": true,
+          "feedback": "Correct: quota-limit sets the volume threshold used for monthly overage steering."
+        },
+        {
+          "letter": "C",
+          "text": "It forces the member physically down when the ISP link is up",
+          "correct": false,
+          "feedback": "The member can remain alive; the feature adjusts selection preference."
+        },
+        {
+          "letter": "D",
+          "text": "It caps every packet to a fixed bandwidth rate for this SD-WAN service",
+          "correct": false,
+          "feedback": "The quota feature is not a hard rate limiter or per-packet shaper."
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "stem": "Which command inspects quota/overage state for one SD-WAN member?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "diagnose sys sdwan bill member <id>",
+          "correct": true,
+          "feedback": "Correct: FortiOS 8.0 adds the SD-WAN bill member diagnostic."
+        },
+        {
+          "letter": "B",
+          "text": "get router info vrrp for this SD-WAN service",
+          "correct": false,
+          "feedback": "That command displays VRRP state, not billing counters."
+        },
+        {
+          "letter": "C",
+          "text": "diagnose wireless-controller wlac -c wtp",
+          "correct": false,
+          "feedback": "The wireless controller command is not the quota diagnostic."
+        },
+        {
+          "letter": "D",
+          "text": "execute tacacs test user for this SD-WAN service",
+          "correct": false,
+          "feedback": "TACACS user testing is unrelated to SD-WAN member usage."
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "stem": "A member is over quota but traffic remains on it. What should be checked with billing output?",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Whether the BGP neighbor is in OpenConfirm",
+          "correct": false,
+          "feedback": "BGP state does not establish the member's quota accounting state."
+        },
+        {
+          "letter": "B",
+          "text": "Whether the FortiPAM certificate is valid",
+          "correct": false,
+          "feedback": "FortiPAM certificate validation does not affect SD-WAN quota counters."
+        },
+        {
+          "letter": "C",
+          "text": "Check overage state and the enabled flag",
+          "correct": true,
+          "feedback": "Correct: verify threshold, billing start day, overage enablement, and current overaged state."
+        },
+        {
+          "letter": "D",
+          "text": "Whether the FortiNAC EAP session has expired",
+          "correct": false,
+          "feedback": "EAP session state is unrelated to SD-WAN member selection."
+        }
+      ]
+    }
+  ]
+}
