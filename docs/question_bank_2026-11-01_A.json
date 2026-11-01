@@ -1,0 +1,422 @@
+{
+  "run_date": "2026-11-01",
+  "part": "A",
+  "questions": [
+    {
+      "stem": "A FortiGate neighbor stays Active and debug reports 107. Which protocol exchange has not completed?",
+      "choices": [
+        "The TCP three-way handshake to peer port 179",
+        "The BGP OPEN capability negotiation between peers",
+        "The first UPDATE carrying accepted prefixes",
+        "The route-map evaluation for received networks"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: Active plus error 107 marks an incomplete TCP handshake before BGP OPEN can begin.",
+        "OPEN follows TCP establishment; an OPEN failure occurs after the transport socket exists.",
+        "UPDATE exchange is later; prefixes cannot be exchanged before the session is Established.",
+        "Route maps govern route policy after BGP messages arrive; they do not complete TCP transport."
+      ]
+    },
+    {
+      "stem": "The route to a BGP peer exists, but capture shows repeated SYN packets without SYN-ACK. What should be checked next?",
+      "choices": [
+        "The inbound prefix-list permit sequence",
+        "The return route and any filter for TCP/179",
+        "The maximum-prefix threshold on received routes",
+        "The route-map set-local-preference action"
+      ],
+      "answer": 1,
+      "feedback": [
+        "A prefix list is evaluated for route updates, not for the missing TCP response.",
+        "Correct: the missing SYN-ACK points to the remote return path, an ACL, or a listener/filter problem.",
+        "Maximum-prefix is enforced after routes are exchanged and cannot explain an incomplete handshake.",
+        "Local preference is assigned to received routes after BGP reaches the update stage."
+      ]
+    },
+    {
+      "stem": "A multihop eBGP peer is reachable through a routed core. Which neighbor settings address the local source and hop behavior?",
+      "choices": [
+        "Set passive and change the router ID",
+        "Set route-map-in and soft-reconfiguration",
+        "Set update-source and enable eBGP multihop with a suitable TTL",
+        "Set next-hop-self and remove the remote AS"
+      ],
+      "answer": 2,
+      "feedback": [
+        "Passive changes who initiates a session; it does not select the intended local source or permit multihop.",
+        "Route-map and soft-reconfiguration affect route processing, not TCP source identity or TTL.",
+        "Correct: update-source selects the local source; multihop and TTL allow the routed peer distance.",
+        "Next-hop-self changes advertised next-hop attributes; the remote AS is required for eBGP identity."
+      ]
+    },
+    {
+      "stem": "The debug shows 104, Connection reset by peer, rather than 107. What does that change in the diagnosis?",
+      "choices": [
+        "It proves the local route table is empty",
+        "It proves a route-map rejected every prefix",
+        "It proves BGP reached Established and lost keepalives",
+        "It indicates the remote side reset the TCP attempt"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A reset does not establish that the local route table is empty; inspect the packet path.",
+        "Route-map rejection cannot be inferred from a transport reset before route exchange.",
+        "Established-state keepalive loss is a later failure and would show a different state history.",
+        "Correct: 104 indicates the peer or an intermediary reset the connection during the attempt."
+      ]
+    },
+    {
+      "stem": "FortiManager installs a profile to a 2 GB FortiGate and the preview includes udp-not-quic. What is the most useful first comparison?",
+      "choices": [
+        "Compare generated CLI with that model's FortiOS parser support",
+        "Compare the destination address object with the firewall policy",
+        "Compare the device HA priority with the ADOM revision",
+        "Compare the administrator GUI theme with the install owner"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the defect is a manager-generated attribute unsupported by the target model/build.",
+        "Address matching is unrelated to whether the target recognizes a CLI node in an SSL profile.",
+        "HA priority and ADOM revision do not determine parser capability for this command.",
+        "GUI appearance and task ownership have no bearing on target-side command support."
+      ]
+    },
+    {
+      "stem": "Why can an SSL/SSH profile save successfully in FortiManager but fail on one FortiGate during install?",
+      "choices": [
+        "The manager skipped the device route lookup",
+        "The target parser or platform does not implement the emitted option",
+        "The firewall policy has no matching destination service",
+        "The device DNS cache has not refreshed QUIC records"
+      ],
+      "answer": 1,
+      "feedback": [
+        "Route lookup is not the relevant validation boundary for a syntax rejection.",
+        "Correct: manager-side schema validity does not guarantee target model/build support for every CLI option.",
+        "Policy service matching does not explain a parser rejection in the SSL/SSH profile subtree.",
+        "DNS cache state does not affect whether the FortiGate accepts a configuration command."
+      ]
+    },
+    {
+      "stem": "Which distinction matters when reviewing the FortiOS SSL/SSH profile fields?",
+      "choices": [
+        "quic and udp-not-quic are interchangeable block controls",
+        "https and dot share one global action with no separate context",
+        "quic handles QUIC; udp-not-quic handles matched UDP that is not QUIC",
+        "udp-not-quic controls TCP fallback after a QUIC handshake"
+      ],
+      "answer": 2,
+      "feedback": [
+        "The fields have different protocol meanings; treating them as aliases can change inspection behavior.",
+        "FortiOS exposes separate https and dot subtrees, so the actions are not one global value.",
+        "Correct: udp-not-quic is the action for matched UDP traffic that is not QUIC.",
+        "TCP fallback behavior is not what the udp-not-quic field defines."
+      ]
+    },
+    {
+      "stem": "A workaround works on one target but makes capable models lose intended inspection behavior. What does this suggest?",
+      "choices": [
+        "The entire ADOM must be downgraded immediately",
+        "The manager should stop validating every install",
+        "The FortiGate routing process is rewriting the profile",
+        "The workaround was applied too broadly instead of being model-scoped"
+      ],
+      "answer": 3,
+      "feedback": [
+        "Downgrading the ADOM may create wider compatibility issues and is not the first response.",
+        "Validation is needed to expose target differences; disabling it hides evidence.",
+        "Routing does not rewrite SSL/SSH profile attributes during installation.",
+        "Correct: use a device/model-scoped override and verify affected and unaffected targets."
+      ]
+    },
+    {
+      "stem": "FortiAnalyzer's Azure output profile validates, but no rows appear in Log Analytics. Which object is still required to activate forwarding?",
+      "choices": [
+        "A Log Forwarding Remote Server setting that references the output profile",
+        "A second FortiAnalyzer ADOM revision for the custom table",
+        "A FortiGate central SNAT map for the DCE address",
+        "A FortiSwitch VLAN mapping for the Azure workspace"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the profile must be selected by a Remote Server forwarding setting using the output plugin.",
+        "An ADOM revision does not activate log forwarding or reference the output profile.",
+        "SNAT may be part of network reachability, but it does not attach the forwarding profile.",
+        "Switch VLAN mapping has no role in the FortiAnalyzer-to-Azure plugin configuration."
+      ]
+    },
+    {
+      "stem": "Why does the Azure custom-table transform create TimeGenerated from logtime?",
+      "choices": [
+        "Azure requires the source field to be named logtime",
+        "FortiAnalyzer only sends timestamps in local time",
+        "The Logs Ingestion API requires a TimeGenerated column in the target schema",
+        "The DCE uses TimeGenerated as its client secret"
+      ],
+      "answer": 2,
+      "feedback": [
+        "logtime is only the sample source field; the destination requirement is a separate column.",
+        "Time conversion is performed by the DCR transform; the requirement is not simply local time.",
+        "Correct: the DCR transform creates the mandatory TimeGenerated field from the source timestamp.",
+        "The DCE URL and application secret are separate settings; TimeGenerated is a schema field."
+      ]
+    },
+    {
+      "stem": "Which six values does the FortiAnalyzer Fluentd Azure profile require?",
+      "choices": [
+        "Workspace name, firewall serial, ADOM name, source port, log type, and username",
+        "Tenant ID, client ID, client secret, DCE URL, DCR ID, and table name",
+        "DCR name, device ID, interface name, time zone, proxy port, and token cache",
+        "Tenant name, DCE secret, log filter, CA certificate, UDP port, and group ID"
+      ],
+      "answer": 1,
+      "feedback": [
+        "These are not the documented Azure Logs Ingestion parameters for the Fluentd profile.",
+        "Correct: those are the six required parameters listed in FortiAnalyzer's example.",
+        "Device and interface inventory values are not the six plugin credentials and endpoint fields.",
+        "The DCE URL is not a DCE secret; the listed values do not match the documented profile."
+      ]
+    },
+    {
+      "stem": "What is the purpose of variable references such as ${CLIENT_SECRET} in the output profile?",
+      "choices": [
+        "They replace the DCR transformation at ingestion time",
+        "They make the App Registration anonymous",
+        "They select which FortiGate logs are collected",
+        "They avoid placing the literal secret directly in the profile text"
+      ],
+      "answer": 3,
+      "feedback": [
+        "The DCR transform still defines the target schema and TimeGenerated mapping.",
+        "Azure still authenticates the application; variable indirection does not remove identity.",
+        "Log selection is controlled by forwarding settings and filters, not secret variables.",
+        "Correct: the Community tip uses variables to mask values such as the client secret."
+      ]
+    },
+    {
+      "stem": "Azure returns an ingestion schema error after the token succeeds. Which area deserves attention first?",
+      "choices": [
+        "DCR stream, custom table schema, and TimeGenerated transformation",
+        "FortiAnalyzer administrator password expiration",
+        "FortiGate BGP neighbor update-source configuration",
+        "FortiSwitch VRRP preemption timer"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: successful token acquisition moves the fault boundary toward DCR/table schema and transform.",
+        "An admin password does not explain an authenticated ingestion request rejected for schema.",
+        "BGP update-source is unrelated to Azure log schema validation.",
+        "VRRP preemption does not affect the table schema accepted by Azure."
+      ]
+    },
+    {
+      "stem": "A FortiSwitch VRRP Master is still sending advertisements, but the upstream route is gone. Which feature addresses this?",
+      "choices": [
+        "Lowering the advertisement interval only",
+        "Changing the virtual router ID on the backup",
+        "Configuring vrdst to track a critical destination",
+        "Disabling the virtual MAC on the primary"
+      ],
+      "answer": 2,
+      "feedback": [
+        "Faster advertisements detect peer failure, not a live Master that has lost upstream reachability.",
+        "Changing the VRID breaks group identity rather than monitoring the route.",
+        "Correct: vrdst monitors destination reachability and can reduce the Master's priority to zero.",
+        "Disabling VMAC can disrupt the shared gateway identity and does not provide route tracking."
+      ]
+    },
+    {
+      "stem": "What does priority zero in get router info vrrp indicate in the documented route-monitor scenario?",
+      "choices": [
+        "The VRRP group has been deleted",
+        "The tracked destination is unreachable and the Master has yielded priority",
+        "The backup has a higher interface speed",
+        "The virtual IP address has changed to the physical address"
+      ],
+      "answer": 1,
+      "feedback": [
+        "The group remains configured; priority zero is the route-tracking response.",
+        "Correct: loss of the monitored destination drives the Master priority to zero.",
+        "Interface speed is not the condition shown by the vrdst example.",
+        "The virtual IP remains the shared gateway; it does not become the physical address."
+      ]
+    },
+    {
+      "stem": "Which design choice makes a vrdst monitor useful rather than noisy?",
+      "choices": [
+        "Choose a critical destination reachable through the intended upstream path",
+        "Choose a public host that both switches may be unable to ping",
+        "Choose the switch's own management address on the same VLAN",
+        "Choose a host whose ICMP policy changes frequently"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the target should represent the path whose loss should trigger gateway failover.",
+        "A target unreachable from both peers can make both priorities fall and defeat the design.",
+        "The local management address does not test the upstream route being protected.",
+        "An unstable ICMP policy can cause false failovers unrelated to actual routing."
+      ]
+    },
+    {
+      "stem": "Which prerequisite is called out for FortiSwitch VRRP virtual MAC operation?",
+      "choices": [
+        "Enable allow-mac-move on every FS-6xxF first",
+        "Use a unique virtual IP on every member",
+        "Disable the advanced-features license",
+        "Enable vrrp-virtual-mac on all members and check model conflicts"
+      ],
+      "answer": 3,
+      "feedback": [
+        "On some models allow-mac-move conflicts with VMAC; it is not a universal prerequisite.",
+        "Members of the same VRRP group share the virtual IP rather than each using a different one.",
+        "VRRP requires the advanced-features license; disabling it removes the entitlement.",
+        "Correct: VMAC is disabled by default and must be enabled across the group, subject to model limits."
+      ]
+    },
+    {
+      "stem": "FortiGate manages a FortiAP over IPv6. Which interface permission is required for the wireless fabric management path?",
+      "choices": [
+        "ip6-allowaccess ping only",
+        "ip6-allowaccess fabric",
+        "allowaccess radius-acct on IPv4",
+        "set vrrp-virtual-mac enable"
+      ],
+      "answer": 1,
+      "feedback": [
+        "Ping allows ICMP testing but does not enable the wireless fabric management service.",
+        "Correct: Fortinet's IPv6 management example includes fabric in ip6-allowaccess.",
+        "RADIUS accounting access is unrelated to AP controller discovery over IPv6.",
+        "VRRP VMAC is a gateway feature, not a FortiAP management permission."
+      ]
+    },
+    {
+      "stem": "Which two methods are documented for FortiAP IPv6 controller discovery?",
+      "choices": [
+        "DNS SRV and static ARP",
+        "BGP route reflection and LLDP",
+        "IPv6 multicast discovery and DHCPv6 Option 52",
+        "SAML redirect and RADIUS CoA"
+      ],
+      "answer": 2,
+      "feedback": [
+        "Those are not the two discovery methods documented for IPv6 AP controller discovery.",
+        "Routing and LLDP may support connectivity but are not the discovery mechanisms listed.",
+        "Correct: the AP can discover through controller multicast or DHCPv6 Option 52.",
+        "SAML and CoA belong to identity workflows, not CAPWAP controller discovery."
+      ]
+    },
+    {
+      "stem": "What does NP7/NP7lite support that NP6/NP6lite does not in this feature?",
+      "choices": [
+        "CAPWAP data traffic offload for IPv4 and IPv6",
+        "DHCPv6 Option 52 address assignment",
+        "IPv6 client SLAAC on the wireless SSID",
+        "The FortiAP authorization database"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: Fortinet documents CAPWAP data offload on NP7/NP7lite, not NP6/NP6lite.",
+        "DHCPv6 Option 52 is a discovery method, not an NPU offload capability.",
+        "Client SLAAC is an IPv6 client service and not the documented hardware boundary.",
+        "AP authorization is controller logic, not the NPU offload feature."
+      ]
+    },
+    {
+      "stem": "The AP console shows cwWtpd restarting repeatedly. What is the strongest next step?",
+      "choices": [
+        "RMA the AP because the process name proves hardware failure",
+        "Change every SSID to bridge mode",
+        "Disable CAPWAP encryption without checking compatibility",
+        "Correlate AP firmware, FSM/crash/certificate/power evidence with an on-network CAPWAP capture"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A process restart is a symptom and does not establish a hardware defect.",
+        "SSID forwarding mode does not explain a controller process restarting before stable CAPWAP.",
+        "Disabling security without evidence is unsafe and may not address the cause.",
+        "Correct: collect firmware, FSM, crash, power and certificate evidence plus real network testing."
+      ]
+    },
+    {
+      "stem": "FortiNAC reports “No EAP session matching state.” What does the message most directly indicate?",
+      "choices": [
+        "The user's password has definitely expired",
+        "An EAP packet arrived without a matching active server-side exchange context",
+        "The switch VLAN tag is malformed",
+        "The endpoint has no IPv6 default route"
+      ],
+      "answer": 1,
+      "feedback": [
+        "Credential failure is possible later, but the message describes missing EAP session context.",
+        "Correct: the server received EAP traffic but could not associate it with a live EAP state.",
+        "A VLAN error may affect access after authentication but does not explain this EAP state message.",
+        "IPv6 routing is unrelated to the RADIUS/EAP session correlation symptom."
+      ]
+    },
+    {
+      "stem": "In FortiNAC proxy RADIUS mode, what happens to 802.1X EAP authentication?",
+      "choices": [
+        "FortiNAC processes only accounting and drops EAP",
+        "FortiNAC converts EAP into SNMP polling",
+        "FortiNAC proxies EAP authentication to an external RADIUS server",
+        "FortiNAC assigns a VLAN without consulting an authentication service"
+      ],
+      "answer": 2,
+      "feedback": [
+        "Proxy mode is an authentication path, not a policy to drop EAP.",
+        "SNMP polling is a separate network-device management mechanism.",
+        "Correct: proxy mode handles MAC auth locally and proxies 802.1X EAP to external RADIUS.",
+        "VLAN assignment can follow authorization, but it does not replace EAP authentication."
+      ]
+    },
+    {
+      "stem": "Which prerequisite applies to FortiNAC Local RADIUS EAP authentication?",
+      "choices": [
+        "A server certificate must be installed for EAP",
+        "The switch must use BGP multihop",
+        "The FortiNAC Manager must share a VRID with the NAS",
+        "The DCR table must end in _CL"
+      ],
+      "answer": 0,
+      "feedback": [
+        "Correct: the Local RADIUS guide requires a server certificate for EAP authentication.",
+        "BGP multihop is unrelated to the RADIUS EAP service.",
+        "VRID is a VRRP identifier, not a RADIUS requirement.",
+        "_CL is an Azure table naming convention, not an EAP prerequisite."
+      ]
+    },
+    {
+      "stem": "The same endpoint succeeds off-peak but intermittently loses EAP state during busy periods. Which hypothesis best matches the forum discussion?",
+      "choices": [
+        "A permanent VLAN mismatch on every port",
+        "An invalid AP certificate in all cases",
+        "A missing BGP route to the RADIUS server",
+        "Delay, load distribution, NAS/supplicant restart, or service load affecting state continuity"
+      ],
+      "answer": 3,
+      "feedback": [
+        "A fixed VLAN error would not normally explain intermittent EAP state correlation.",
+        "An AP certificate issue is not established by the EAP session message and affects more than one path.",
+        "BGP reachability may affect RADIUS transport, but the stated symptom is a missing active EAP context.",
+        "Correct: these are the specific classes of causes raised by Fortinet staff in the recent discussion."
+      ]
+    },
+    {
+      "stem": "What does FortiNAC Local RADIUS not provide by itself?",
+      "choices": [
+        "EAP authentication for supported methods",
+        "RADIUS accounting; accounting can be proxied externally",
+        "MAC authentication processing",
+        "RADIUS Access-Accept attributes"
+      ],
+      "answer": 1,
+      "feedback": [
+        "Local RADIUS supports documented EAP methods when prerequisites are met.",
+        "Correct: Local RADIUS does not provide accounting; it can be proxied externally.",
+        "Local RADIUS processes MAC authentication as well as EAP authentication.",
+        "FortiNAC can return configured RADIUS attributes in an Access-Accept."
+      ]
+    }
+  ]
+}
