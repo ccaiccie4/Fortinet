@@ -1,0 +1,311 @@
+{
+  "run_date": "2026-11-01",
+  "inventory_path": "docs/exclusion_inventory_2026-11-01-07-55.json",
+  "inventory_readback_confirmed": true,
+  "topics": [
+    {
+      "id": "L01",
+      "product": "FortiGate",
+      "lesson_subject": "BGP neighbor transport establishment: Active state and debug error 107",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/225427711",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/explanation-for-bgp-debug-output-107-transport-endpoint-is-not-connected-231004",
+      "feature_mechanism_fingerprint": "bgp-peer-tcp179-fsm-active-connect-open-boundary",
+      "workflow_transaction_fingerprint": "RIB lookup → source/interface selection → TCP/179 handshake → BGP OPEN/capabilities → KEEPALIVE → Established",
+      "failure_class": "TCP transport does not complete or is reset before BGP OPEN; possible missing/asymmetric route, filter, wrong peer/source, password, QoS, or VPN selector",
+      "evidence_pattern": "get router info routing-table all; get router info bgp neighbors <peer>; debug 107 vs 104; packet capture of TCP/179 SYN/SYN-ACK/ACK",
+      "remediation_path": "Repair route symmetry, source/update-source, multihop, ACL, peer address/password, QoS, or IPsec selectors before changing route policy",
+      "question_fingerprint": "identify the layer boundary represented by Active and error 107",
+      "diagram_topology_layout_fingerprint": "route lookup → TCP handshake → BGP OPEN; route/filter/source/VPN branches",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L02",
+      "product": "FortiManager",
+      "lesson_subject": "Install-time capability mismatch: udp-not-quic in SSL/SSH profiles",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/153046/installing-policy-packages-and-device-settings",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.6.1/cli-reference/116695140/config-firewall-ssl-ssh-profile",
+        "https://docs.fortinet.com/document/fortimanager/7.6.8/release-notes/454729/known-issues"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-version-7-6-8-trying-to-install-ssl-ssh-profile-settings-that-are-not-supported-on-2gb-fortigate-devices-230815",
+      "feature_mechanism_fingerprint": "fortimanager-install-generated-cli-target-platform-schema-udp-not-quic",
+      "workflow_transaction_fingerprint": "ADOM/profile object → target selection → install validation/preview → generated CLI → target parser/capability → commit or reject",
+      "failure_class": "Manager emits an SSL/SSH profile attribute unsupported by the selected FortiGate model/build; target rejects generated CLI or verification fails",
+      "evidence_pattern": "Install validation report, install preview, task log, target model/RAM/build, and target CLI parser response for udp-not-quic under https and dot",
+      "remediation_path": "Use model/build-specific device configuration; unset unsupported fields where appropriate; avoid a global ADOM change; verify the fixed release before rollout",
+      "question_fingerprint": "distinguish manager-side object validity from target-side parser and hardware support",
+      "diagram_topology_layout_fingerprint": "one package fans out to heterogeneous targets; capability gate accepts supported models and rejects unsupported branch",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L03",
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Fluentd Azure Monitor Log Ingestion: output profile, secret variables, and remote-server attachment",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/138745/output-profile-example"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/masking-fields-in-fortianalyzer-output-profiles-231005",
+      "feature_mechanism_fingerprint": "fortianalyzer-fluentd-azure-logs-ingestion-dce-dcr-variable-secret-output-profile",
+      "workflow_transaction_fingerprint": "FAZ log → Fluentd output profile → variable substitution/client token → Azure DCE/DCR → custom _CL table and TimeGenerated transform",
+      "failure_class": "Profile validates locally but Azure rejects authentication, DCR/table mapping, schema, timestamp transform, or remote-server attachment",
+      "evidence_pattern": "Validate and Save; Remote Server profile binding; Azure DCR/table ingestion and TimeGenerated; variables without literal secrets",
+      "remediation_path": "Create App Registration, workspace, DCE, DCR and _CL table; grant Monitoring Metrics Publisher; define six variables; attach profile to Remote Server",
+      "question_fingerprint": "separate profile construction from forwarding activation and remote ingestion acceptance",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer profile/remote-server chain feeds Azure identity, endpoint, DCR transform, and custom table",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L04",
+      "product": "FortiSwitch",
+      "lesson_subject": "VRRP destination-route tracking: fail over when the gateway is alive but upstream reachability is lost",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/508059/vrrp",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-fortiswitch-vrrp-failover-based-on-destination-route-monitor-230554",
+      "feature_mechanism_fingerprint": "fortiswitch-vrrp-vrdst-route-reachability-priority-zero-vmac",
+      "workflow_transaction_fingerprint": "VRRP Master advertises VIP/VMAC → route to tracked destination evaluated → loss changes priority to zero → Backup becomes Master → forwarding moves to shared VMAC",
+      "failure_class": "Master remains operational but loses a critical upstream route, leaving clients on a black-holed gateway",
+      "evidence_pattern": "get router info vrrp; vrdst and priority fields; route table and tracked destination reachability; peer MASTER/BACKUP state",
+      "remediation_path": "Enable VRRP/VMAC on all members, set a meaningful tracked destination, validate backup path/preemption, and respect model/license constraints",
+      "question_fingerprint": "distinguish advertisement/link failure from tracked-route failure",
+      "diagram_topology_layout_fingerprint": "two switches share VIP/VMAC; tracked upstream destination drives priority reduction and role transition",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L05",
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "IPv6 CAPWAP management: multicast or DHCPv6 discovery, controller access, and NPU boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/434872"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547",
+      "feature_mechanism_fingerprint": "fortiap-ipv6-capwap-ac-discovery-multicast-dhcpv6-option52-npu",
+      "workflow_transaction_fingerprint": "AP IPv6 link → multicast or DHCPv6 Option 52 discovery → FortiGate fabric-accessible IPv6 interface → CAPWAP control/data → SSID and firmware management",
+      "failure_class": "AP cannot discover or sustain controller channel because IPv6 access, discovery, routing, CAPWAP reachability, certificate, or platform assumptions are wrong",
+      "evidence_pattern": "ip6-allowaccess fabric; discovery-mc-addr6; DHCPv6 option 52; UDP 5246/5247 capture; AP FSM/crash/certificate/power diagnostics",
+      "remediation_path": "Enable IPv6 fabric access, configure a supported discovery method, validate routed IPv6 CAPWAP, verify AP certificate/firmware, and account for NPU generation",
+      "question_fingerprint": "separate AP management IPv6 from client IPv6 and daemon-restart symptoms from CAPWAP path proof",
+      "diagram_topology_layout_fingerprint": "multicast and DHCPv6 discovery converge on controller; CAPWAP control/data then passes through platform offload gate",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L06",
+      "product": "FortiNAC",
+      "lesson_subject": "802.1X EAP session correlation: interpreting “No EAP session matching state”",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/28084/wired-devices-and-802-1x",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/270902/activity"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/no-eap-session-matching-state-230594",
+      "feature_mechanism_fingerprint": "fortinac-8021x-eap-session-correlation-local-proxy-radius-state",
+      "workflow_transaction_fingerprint": "supplicant EAPOL → authenticator switch/AP → RADIUS Access-Request/EAP-Message → local or proxy EAP processing → Access-Challenge/Accept/Reject → port state",
+      "failure_class": "EAP packet arrives without matching active exchange state; possible interrupted/restarted exchange, delay, load distribution, service restart, or NAS/supplicant retry",
+      "evidence_pattern": "RADIUS Activity/authentication logs, NAS-IP, Calling-Station-Id, EAP identifier, outer-method result, timestamps, and correlated request/challenge/response",
+      "remediation_path": "Keep EAP exchange on a consistent RADIUS service path; check NAS retransmission, supplicant restart, server load/restarts, certificate/domain prerequisites, and local-versus-proxy mode",
+      "question_fingerprint": "distinguish missing EAP session state from bad credentials or a generic VLAN assignment error",
+      "diagram_topology_layout_fingerprint": "supplicant/authenticator exchange with stateful RADIUS service and failure branch when a response has no matching live EAP context",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L07",
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC Manager global-object synchronization: GUID identity versus local database IDs",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/263748/server-synchronization-fortinac-vf-7-6-3",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/159343/ca-management",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/669686/requirements"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-manager-synchronization-fails-with-guid-conflict-for-table-group-group-name-230483",
+      "feature_mechanism_fingerprint": "fortinac-f-global-object-sync-guid-identity-local-id-stale-managed-ca",
+      "workflow_transaction_fingerprint": "Manager owns global object → managed CA stores local row plus global GUID → scheduled/manual sync compares GUID identity → newer Manager object overwrites CA global copy",
+      "failure_class": "managed CA has stale/local GUID for a globally synchronized object, causing GUID conflict and sync failure",
+      "evidence_pattern": "output.master GlobalObjectGRPCClient error; compare object name, local ID, GUID, landscape, globalModifiedDate on Manager and managed CA",
+      "remediation_path": "Back up database; identify only affected global objects; under Fortinet Support guidance reset stale managed-CA GUID to -1 and re-run synchronization",
+      "question_fingerprint": "distinguish local database row ID from cross-appliance GUID identity",
+      "diagram_topology_layout_fingerprint": "FortiNAC Manager authoritative global object replicated to managed CAs; stale GUID branch blocks synchronization",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L08",
+      "product": "FortiAuthenticator",
+      "lesson_subject": "TACACS+ client-policy binding and the authentication-before-authorization boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/791531/tacacs-service",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/254905/creating-authorization-rules"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortiauthenticator-tacacs-server-not-working-with-nvidia-cumulus-switch-231006",
+      "feature_mechanism_fingerprint": "fortiauthenticator-tacacs-client-policy-authentication-then-authorization-no-challenge",
+      "workflow_transaction_fingerprint": "NAS TACACS+ request → client registration/policy match → authentication → user/group authorization rule → service/command decision",
+      "failure_class": "NAS sends authorization before authentication, or service/client/policy binding is missing; FAC does not support authorization-first challenge flow",
+      "evidence_pattern": "/debug/ TACACS+ logs; client match, policy, authentication result, authorization rule and session; interface service enablement",
+      "remediation_path": "Align NAS to authentication-first flow; register client, bind policy, enable TACACS+ on ingress interface, map user/group rules; append OTP token to password for 2FA",
+      "question_fingerprint": "identify protocol transaction-order incompatibility rather than attempting to repair it with an authorization rule",
+      "diagram_topology_layout_fingerprint": "TACACS+ client gate followed by authentication stage and separate authorization stage",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L09",
+      "product": "FortiPAM",
+      "lesson_subject": "ZTNA-protected FortiPAM REST API: endpoint trust, EMS tags, and bearer-token identity",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/334309/ztna-based-fortipam-access-control",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/46481/ztna-user-control"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/technical-tip-how-to-use-rest-api-to-access-fortipam-when-client-connects-to-ztna-230500",
+      "feature_mechanism_fingerprint": "fortipam-ztna-access-proxy-client-cert-ems-tag-api-bearer-token",
+      "workflow_transaction_fingerprint": "FortiClient endpoint → EMS posture/tag → access proxy validates client certificate → access-proxy policy → /pam API gateway → bearer identity and secret-level authorization",
+      "failure_class": "certificate, EMS tag, API token, access-proxy URL map, or secret permission fails at a different gate",
+      "evidence_pattern": "EMS connector/tag; client certificate thumbprint/chain; access-proxy policy; API bearer response; /pam URL map",
+      "remediation_path": "Use same EMS, enable ZTNA on intended proxy policy, validate client cert/tag, scope API token, and separate trusted/untrusted VIPs",
+      "question_fingerprint": "distinguish device trust from API-user authentication and secret authorization",
+      "diagram_topology_layout_fingerprint": "endpoint-to-EMS control plane plus endpoint-to-FortiPAM mTLS/API data path with separate identity gates",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L10",
+      "product": "FortiSIEM",
+      "lesson_subject": "Offline OS repository synchronization and ordered Supervisor, Worker, and Collector upgrades",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/offline-installation-and-upgrade-guide",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/technical-tip-how-to-get-fsm-sync-os-repo-sh-for-offline-upgrades-230601",
+      "feature_mechanism_fingerprint": "fortisiem-offline-osrepo-version-matched-script-mount-supervisor-worker-collector",
+      "workflow_transaction_fingerprint": "internet staging host → version-matched repository sync → NFS/USB mount → Supervisor/Manager → Worker uses Supervisor repo password → Collector Image Server workflow",
+      "failure_class": "repository incomplete/wrong version, mount absent after reboot, storage insufficient, or component upgrade still attempts Internet access",
+      "evidence_pattern": "target upgrade ZIP/script version; wget completion; df -h; mount and fstab; upgrade command; Supervisor/Worker/Collector logs and version",
+      "remediation_path": "Extract sync script from target upgrade RPM, allocate documented space, verify repo completeness, mount persistently, and follow component sequence",
+      "question_fingerprint": "identify which offline repository artifact and parameter each FortiSIEM component consumes",
+      "diagram_topology_layout_fingerprint": "staging repository fans out to Supervisor/Manager, then Workers and Collectors in dependency order",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L11",
+      "product": "FortiSASE",
+      "lesson_subject": "FortiClient Multi-Connect: concurrent IKEv2 tunnels and Windows DNS priority",
+      "primary_url": "https://docs.fortinet.com/document/fortiendpoint/latest/administration-guide/682498",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/357569/tunnel-settings"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortisase-ipsec-multi-connec-230614",
+      "feature_mechanism_fingerprint": "fortisase-forticlient-multiconnect-concurrent-ikev2-dns-priority-managed-tunnel",
+      "workflow_transaction_fingerprint": "FortiSASE endpoint profile → FortiClient establishes SASE IKEv2 tunnel plus eligible custom tunnel → Windows interface metric/DNS priority chooses resolver order",
+      "failure_class": "one parallel tunnel fails or DNS queries use unintended tunnel because ownership, IKE settings, eligibility, or priority is misunderstood",
+      "evidence_pattern": "profile Multi-Connect setting; per-tunnel IKE state; Windows tunnel metrics and DNS server order; FortiSASE PoP tunnel status",
+      "remediation_path": "Use supported FortiClient/platform versions, only IKEv2 tunnels, leave service-owned SASE Phase1/2 intact, align custom gateway proposals, set DNS priority",
+      "question_fingerprint": "separate service-managed SASE tunnel from endpoint-managed custom tunnel and DNS preference",
+      "diagram_topology_layout_fingerprint": "two independent IKEv2 tunnels controlled by endpoint profile; DNS priority selects Windows resolver interface order",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    },
+    {
+      "id": "L12",
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Monthly traffic-volume quota steering: billing counters, overage values, and SLA member selection",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "sdwan-member-monthly-volume-quota-billing-start-overage-cost-weight-volume-ratio",
+      "workflow_transaction_fingerprint": "member byte counter accumulates → billing day/quota evaluated → overage cost/weight/volume-ratio adjusted in memory → eligible SLA service selects alternate → period resets",
+      "failure_class": "traffic remains on expensive member because quota/overage is disabled, service mode ignores preference, or alternatives are ineligible",
+      "evidence_pattern": "diagnose sys sdwan bill member <id>; diagnose sys sdwan service4/service6; member/SLA/selected state; packet capture on egress",
+      "remediation_path": "Set quota-limit, billing-start-day and overage values; ensure alternate is alive and eligible in matching SLA service; verify reset date and HA behavior",
+      "question_fingerprint": "distinguish usage quota steering from SLA failure and physical link-down",
+      "diagram_topology_layout_fingerprint": "per-member usage counter and monthly reset feed overage decision that modifies member preference before SLA service selection",
+      "uniqueness_check": "Compared against 150-record pre-generation inventory; no substantially equivalent published lesson identified."
+    }
+  ],
+  "community_sweep": [
+    {
+      "product": "FortiGate",
+      "scenario_url": "https://community.fortinet.com/fortigate-3/explanation-for-bgp-debug-output-107-transport-endpoint-is-not-connected-231004",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiManager",
+      "scenario_url": "https://community.fortinet.com/fortimanager-27/fortimanager-version-7-6-8-trying-to-install-ssl-ssh-profile-settings-that-are-not-supported-on-2gb-fortigate-devices-230815",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "scenario_url": "https://community.fortinet.com/fortianalyzer-6/masking-fields-in-fortianalyzer-output-profiles-231005",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiSwitch",
+      "scenario_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-fortiswitch-vrrp-failover-based-on-destination-route-monitor-230554",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "scenario_url": "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiNAC",
+      "scenario_url": "https://community.fortinet.com/support-forum-92/no-eap-session-matching-state-230594",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiNAC-F",
+      "scenario_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-manager-synchronization-fails-with-guid-conflict-for-table-group-group-name-230483",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "scenario_url": "https://community.fortinet.com/support-forum-92/fortiauthenticator-tacacs-server-not-working-with-nvidia-cumulus-switch-231006",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiPAM",
+      "scenario_url": "https://community.fortinet.com/fortipam-52/technical-tip-how-to-use-rest-api-to-access-fortipam-when-client-connects-to-ztna-230500",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiSIEM",
+      "scenario_url": "https://community.fortinet.com/fortisiem-34/technical-tip-how-to-get-fsm-sync-os-repo-sh-for-offline-upgrades-230601",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "FortiSASE",
+      "scenario_url": "https://community.fortinet.com/support-forum-92/fortisase-ipsec-multi-connec-230614",
+      "status": "recent or related scenario found"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "scenario_url": null,
+      "status": "no direct recent scenario verified"
+    }
+  ],
+  "admin_guide_sweep": {
+    "status": "broad, not exhaustive across every release/document type",
+    "primary_sources": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/225427711",
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/153046/installing-policy-packages-and-device-settings",
+      "https://docs.fortinet.com/document/fortigate/7.6.1/cli-reference/116695140/config-firewall-ssl-ssh-profile",
+      "https://docs.fortinet.com/document/fortimanager/7.6.8/release-notes/454729/known-issues",
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api",
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/138745/output-profile-example",
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/508059/vrrp",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6",
+      "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/434872",
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server",
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/28084/wired-devices-and-802-1x",
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/270902/activity",
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/263748/server-synchronization-fortinac-vf-7-6-3",
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/159343/ca-management",
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/669686/requirements",
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/791531/tacacs-service",
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/254905/creating-authorization-rules",
+      "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/334309/ztna-based-fortipam-access-control",
+      "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/46481/ztna-user-control",
+      "https://docs.fortinet.com/document/fortisiem/7.5.1/offline-installation-and-upgrade-guide",
+      "https://docs.fortinet.com/document/fortiendpoint/latest/administration-guide/682498",
+      "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/357569/tunnel-settings",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+    ]
+  }
+}
