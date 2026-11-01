@@ -1,0 +1,328 @@
+{
+  "run_date": "2026-11-01",
+  "part": "B",
+  "lessons": [
+    {
+      "product": "FortiNAC",
+      "title": "802.1X EAP session correlation: interpreting “No EAP session matching state”",
+      "primary": [
+        [
+          "FortiNAC 9.4 Administration Guide — Local RADIUS Server",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server"
+        ],
+        [
+          "FortiNAC 9.4 Administration Guide — Wired devices and 802.1X",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/28084/wired-devices-and-802-1x"
+        ],
+        [
+          "FortiNAC 9.4 Administration Guide — RADIUS activity",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/270902/activity"
+        ]
+      ],
+      "scenario": [
+        [
+          "Support Forum — No EAP session matching state, October 16–20, 2026",
+          "https://community.fortinet.com/support-forum-92/no-eap-session-matching-state-230594"
+        ]
+      ],
+      "fingerprint": "fortinac-8021x-eap-session-correlation-local-proxy-radius-state",
+      "workflow": "supplicant EAPOL → authenticator switch/AP → RADIUS Access-Request/EAP-Message → local or proxy EAP processing → Access-Challenge/Accept/Reject → port state",
+      "failure": "EAP packet arrives without matching active exchange state; possible interrupted/restarted exchange, delay, load distribution, service restart, or NAS/supplicant retry",
+      "evidence": "RADIUS Activity/authentication logs, NAS-IP, Calling-Station-Id, EAP identifier, outer-method result, timestamps, and correlated request/challenge/response",
+      "remediation": "Keep EAP exchange on a consistent RADIUS service path; check NAS retransmission, supplicant restart, server load/restarts, certificate/domain prerequisites, and local-versus-proxy mode",
+      "question": "distinguish missing EAP session state from bad credentials or a generic VLAN assignment error",
+      "topology": "supplicant/authenticator exchange with stateful RADIUS service and failure branch when a response has no matching live EAP context",
+      "sections": [
+        [
+          "EAP is a stateful exchange",
+          "<p>In 802.1X, the endpoint supplicant and network authenticator do not send a username/password in one self-contained packet and receive a final answer. They exchange EAP messages through the switch or wireless controller, which relays them to RADIUS. FortiNAC must maintain context for the EAP conversation while it processes Access-Request, Access-Challenge, and subsequent responses. The outer RADIUS transaction carries EAP-Message attributes and an identifier; the server must associate each continuation with the active authentication state.</p><p>The recent FortiNAC support discussion reports intermittent wired and wireless failures with “No EAP session matching state” and an outer-method failure between the switch IP and FortiNAC. A Fortinet staff response explains that the server is receiving EAP packets but cannot match them to an active EAP session. Possible causes include delays, load balancing, or the NAS/supplicant interrupting or restarting authentication. That symptom does not by itself prove that the user's password is wrong.</p>"
+        ],
+        [
+          "Local and proxy RADIUS are different paths",
+          "<p>FortiNAC supports proxy RADIUS and local RADIUS modes. Proxy mode is enabled by default: FortiNAC processes MAC authentication but proxies 802.1X EAP authentication to an external RADIUS server, and can proxy accounting to that server. Local mode, introduced in FortiNAC 8.8 and disabled by default, processes MAC and EAP authentication itself. Local mode supports TTLS/PAP, TTLS/MSCHAPv2, PEAP/MSCHAPv2, TLS, and FAST, subject to prerequisites. The local RADIUS service does not provide accounting; accounting can still be proxied externally.</p><p>For local EAP, FortiNAC needs a server certificate. PEAP/MSCHAPv2 and TTLS/MSCHAPv2 authenticate AD users and require FortiNAC to join the domain; the documented limitation is one domain. EAP-TLS validates the client certificate and requires the Endpoint Trust Certificate. If both local and proxy modes are configured, their authentication ports must differ. A correct EAP state machine can still fail later at certificate, domain, or credential validation.</p>"
+        ],
+        [
+          "Correlate the transaction, not just the final message",
+          "<p>Use Network → RADIUS → Activity and authentication logs to identify the device, NAS IP, user or MAC identity, time, EAP method, and outer-method result. Correlate the switch/AP's RADIUS request and response sequence with FortiNAC logs. If a request is retransmitted, the authenticator restarts EAP, or different RADIUS destinations receive different portions of the exchange, the server may see a packet for which it has no active session context. The Community response specifically suggests checking delays, load balancing, NAS/supplicant interruptions, peak load, and service restarts.</p><p>Do not assume “RADIUS server reachable” proves the EAP exchange is coherent. A successful Access-Request or open UDP/1812 path proves only transport to the service. It does not prove a later EAP-Message is associated with the same live exchange or that the outer method completed.</p>"
+        ],
+        [
+          "Troubleshooting and configuration discipline",
+          "<ol><li>Confirm whether the device/SSID uses local or proxy RADIUS and identify the selected profile.</li><li>Compare NAS-IP, Calling-Station-Id, EAP method, and timestamps for a success and failure from the same endpoint.</li><li>Check whether the NAS retransmits, changes source, or restarts the supplicant exchange; avoid uncontrolled load balancing across stateful RADIUS servers.</li><li>Inspect FortiNAC load, RADIUS service restarts, and exact EAP certificate/domain prerequisites.</li><li>After changing the RADIUS path or EAP method, test one endpoint and verify a complete Access-Challenge/Accept sequence.</li></ol><p>Escalate with correlated RADIUS Activity and output.master evidence if the issue persists. Ask which EAP continuation lost its server-side context rather than assuming a password failure.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "title": "FortiNAC Manager global-object synchronization: GUID identity versus local database IDs",
+      "primary": [
+        [
+          "FortiNAC-F 7.6 Manager Guide — Server Synchronization (vF 7.6.3+)",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/263748/server-synchronization-fortinac-vf-7-6-3"
+        ],
+        [
+          "FortiNAC-F 7.6 Manager Guide — CA Management",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/159343/ca-management"
+        ],
+        [
+          "FortiNAC-F 7.6 Manager Guide — Requirements",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/669686/requirements"
+        ]
+      ],
+      "scenario": [
+        [
+          "Troubleshooting Tip — Manager synchronization GUID conflict for Group-GROUP_NAME, October 9, 2026",
+          "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-manager-synchronization-fails-with-guid-conflict-for-table-group-group-name-230483"
+        ]
+      ],
+      "fingerprint": "fortinac-f-global-object-sync-guid-identity-local-id-stale-managed-ca",
+      "workflow": "Manager owns global object → managed CA stores local row plus global GUID → scheduled/manual sync compares GUID identity → newer Manager object overwrites CA global copy",
+      "failure": "managed CA has stale/local GUID for a globally synchronized object, causing GUID conflict and sync failure",
+      "evidence": "output.master GlobalObjectGRPCClient error; compare object name, local ID, GUID, landscape, globalModifiedDate on Manager and managed CA",
+      "remediation": "Back up database; identify only affected global objects; under Fortinet Support guidance reset stale managed-CA GUID to -1 and re-run synchronization",
+      "question": "distinguish local database row ID from cross-appliance GUID identity",
+      "topology": "FortiNAC Manager authoritative global object replicated to managed CAs; stale GUID branch blocks synchronization",
+      "sections": [
+        [
+          "Two synchronization mechanisms",
+          "<p>FortiNAC Manager controls more than one kind of replication. Host and user propagation moves endpoint identity/state between managed Control Servers as devices roam. Global Object Synchronization distributes centrally managed configuration objects such as Admin Profiles, Groups, Roles, User/Host Profiles, Endpoint Compliance Policies, configurations, scans, and Security Actions used by Endpoint Compliance. These are different data flows with different identities and timing. The FortiNAC-F 7.6.3+ guide describes host propagation separately from global-object synchronization; the latter runs automatically on a ten-minute interval when enabled.</p><p>For global objects, the Manager is authoritative. Information on the managed FortiNAC server is read-only, and information older than the Manager's copy is overwritten. A manual Synchronize Now also overwrites the managed server's copy of globally shared objects. Investigate an object-identity and authority problem before editing the local CA object.</p>"
+        ],
+        [
+          "GUID is not the local row ID",
+          "<p>The October 9 Community troubleshooting tip describes a GUID conflict for a globally synchronized Group. Its example shows the Manager's row ID and GUID as a large value, while the managed CA has a different local row ID. That difference is normal: database primary keys are local to each appliance. The cross-appliance GUID is the identity used to associate the same global object. The failure occurs when the managed server's GUID is stale or incorrectly set, not merely because its local numeric ID differs.</p><p>The log signature is a <code>GlobalObjectGRPCClient sync Failed GUID conflict</code> message for a group table. The article compares <code>ID</code>, <code>name</code>, <code>guid</code>, <code>landscape</code>, <code>globalModifiedDate</code>, and modification metadata on both Manager and managed CA. The object name and GUID relationship matter more than equality of local row IDs.</p>"
+        ],
+        [
+          "Synchronization mechanics and prerequisites",
+          "<p>When global synchronization is enabled, managed CAs synchronize with the Manager every ten minutes. The CA Management view exposes managed server status and last configuration sync, and the Manager can manually push global objects to a selected CA. The FortiNAC-F requirements guide says the Manager and managed CA servers must run the same code version for functions such as server synchronization to be supported. Inter-server ports must be open; if a proxy is configured, Manager and CA port1 addresses must be in the proxy exclusion list.</p><p>A healthy CA-management connection does not prove every global object synchronized. A CA can be reachable while an individual row fails GUID validation. Conversely, a stale global object may be overwritten by the next sync, so manual local edits are not a durable correction.</p>"
+        ],
+        [
+          "Safe repair and verification",
+          "<p>The Community article demonstrates setting the stale managed-CA GUID to the unassigned value <code>-1</code> for the specific affected global object, then synchronizing again. It explicitly instructs administrators to back up the database first, compare object names and GUIDs with the Manager, and avoid changing objects that exist only on the managed server. Direct database writes are high-risk maintenance; perform them only with a current backup and preferably under Fortinet Support guidance in a maintenance window.</p><pre><code>-- Example only: verify the exact row and GUID before any change\nSELECT ID,name,guid,globalModifiedDate\nFROM Group\nWHERE name='ALL_MANAGEMENT';\n\n-- Only after backup and Support review:\nUPDATE Group SET guid=-1\nWHERE ID=1 AND name='ALL_MANAGEMENT' AND guid=1;</code></pre><p>Afterward, query the same row, confirm the intended GUID state, trigger Synchronize Now, and inspect Manager/CA logs plus Last Configuration Sync. Verify that the group is present as a global read-only object. Do not run a broad update across all groups; local-only objects must retain their local identity.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "title": "TACACS+ client-policy binding and the authentication-before-authorization boundary",
+      "primary": [
+        [
+          "FortiAuthenticator 8.0.3 Administration Guide — TACACS+ service",
+          "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/791531/tacacs-service"
+        ],
+        [
+          "FortiAuthenticator 8.0.3 Administration Guide — Creating authorization rules",
+          "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/254905/creating-authorization-rules"
+        ]
+      ],
+      "scenario": [
+        [
+          "Support Forum — FortiAuthenticator TACACS+ with Cumulus switch, October 30, 2026",
+          "https://community.fortinet.com/support-forum-92/fortiauthenticator-tacacs-server-not-working-with-nvidia-cumulus-switch-231006"
+        ]
+      ],
+      "fingerprint": "fortiauthenticator-tacacs-client-policy-authentication-then-authorization-no-challenge",
+      "workflow": "NAS TACACS+ request → client registration/policy match → authentication → user/group authorization rule → service/command decision",
+      "failure": "NAS sends authorization before authentication, or service/client/policy binding is missing; FAC does not support authorization-first challenge flow",
+      "evidence": "/debug/ TACACS+ logs; client match, policy, authentication result, authorization rule and session; interface service enablement",
+      "remediation": "Align NAS to authentication-first flow; register client, bind policy, enable TACACS+ on ingress interface, map user/group rules; append OTP token to password for 2FA",
+      "question": "identify protocol transaction-order incompatibility rather than attempting to repair it with an authorization rule",
+      "topology": "TACACS+ client gate followed by authentication stage and separate authorization stage",
+      "sections": [
+        [
+          "Client registration and service binding",
+          "<p>FortiAuthenticator does not accept an arbitrary TACACS+ packet merely because the daemon is reachable. The network device must be registered as a TACACS+ client and assigned to a policy. The TACACS+ service is enabled or disabled per FortiAuthenticator network interface, so the interface receiving the request must have the service enabled. The policy determines how the request is authenticated; authorization rules then apply to users and groups to decide which services or commands are permitted.</p><p>This produces a layered decision: network-device identity and shared secret, service listener, policy selection, authentication, then authorization. A failed login should be traced through those stages rather than immediately editing command rules. A client that never matches a policy has not reached the user authorization decision.</p>"
+        ],
+        [
+          "The authentication/authorization ordering issue",
+          "<p>The October 30 Community post describes a Cumulus switch whose Linux PAM TACACS+ client sends an authorization request before it sends authentication. The same FortiAuthenticator server works with another network-device family that performs authentication first. The FortiAuthenticator TACACS+ guide documents authentication and authorization as distinct operations and does not offer an “authorize before authenticate” compatibility mode. Changing a command authorization rule cannot fix a client that invokes the phases in an unsupported order.</p><p>Establish which TACACS+ packet arrives first and whether FortiAuthenticator has an authenticated user/session to which the authorization request can be attached. If the NAS implementation requires authorization-first behavior, align the NAS/client workflow with the supported sequence or use a supported authentication method—not broader authorization rules.</p>"
+        ],
+        [
+          "Authorization rules and supported limitations",
+          "<p>Create authorization rules and assign them to users or groups. They can distinguish shell and non-shell service requests and define which command/service attributes are accepted. Confirm the rule assignment and group membership after authentication. FortiAuthenticator exposes TACACS+ debug logs at <code>https://&lt;FAC-IP&gt;/debug/</code>; select TACACS+ from the Service dropdown. This is useful to confirm client matching, policy selection, authentication, and authorization events.</p><p>Two protocol limitations matter. TACACS+ authentication on FortiAuthenticator does not currently support challenge/response. For two-factor authentication, the user appends the token to the password—for example, password followed by the OTP value. End users cannot change their password during login. A client expecting an interactive challenge or password-change exchange will not become compatible by changing an authorization profile.</p>"
+        ],
+        [
+          "Operational verification",
+          "<ol><li>Verify TACACS+ is enabled on the ingress interface and the NAS IP/secret is registered.</li><li>Confirm the device is assigned to the intended policy and that the request matches it.</li><li>Inspect TACACS+ debug to determine whether authentication or authorization arrived first.</li><li>Confirm successful authentication and then inspect user/group authorization-rule matches.</li><li>Test one allowed and one denied command; preserve logs for both.</li></ol><p>A Cisco success does not prove another NAS sends the same TACACS+ sequence. Validate each NAS implementation independently and do not treat server reachability as protocol interoperability.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "title": "ZTNA-protected FortiPAM REST API: endpoint trust, EMS tags, and bearer-token identity",
+      "primary": [
+        [
+          "FortiPAM 1.9 Administration Guide — ZTNA-based access control",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/334309/ztna-based-fortipam-access-control"
+        ],
+        [
+          "FortiPAM 1.9 Administration Guide — ZTNA user control",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/46481/ztna-user-control"
+        ]
+      ],
+      "scenario": [
+        [
+          "Technical Tip — REST API access when client connects to ZTNA, October 12, 2026",
+          "https://community.fortinet.com/fortipam-52/technical-tip-how-to-use-rest-api-to-access-fortipam-when-client-connects-to-ztna-230500"
+        ]
+      ],
+      "fingerprint": "fortipam-ztna-access-proxy-client-cert-ems-tag-api-bearer-token",
+      "workflow": "FortiClient endpoint → EMS posture/tag → access proxy validates client certificate → access-proxy policy → /pam API gateway → bearer identity and secret-level authorization",
+      "failure": "certificate, EMS tag, API token, access-proxy URL map, or secret permission fails at a different gate",
+      "evidence": "EMS connector/tag; client certificate thumbprint/chain; access-proxy policy; API bearer response; /pam URL map",
+      "remediation": "Use same EMS, enable ZTNA on intended proxy policy, validate client cert/tag, scope API token, and separate trusted/untrusted VIPs",
+      "question": "distinguish device trust from API-user authentication and secret authorization",
+      "topology": "endpoint-to-EMS control plane plus endpoint-to-FortiPAM mTLS/API data path with separate identity gates",
+      "sections": [
+        [
+          "Two enforcement levels",
+          "<p>FortiPAM ZTNA control can be applied at appliance access level and protected-secret level. Access-level control determines whether an endpoint may log in through a particular interface. Secret-level control determines whether that endpoint may access or launch a secret protected by ZTNA. A trusted endpoint must present a valid client certificate and meet required posture-tag conditions. FortiPAM must be connected to the same FortiClient EMS server that the endpoint uses; a tag from another EMS control plane is not equivalent evidence.</p><p>The access proxy validates the client certificate. A firewall access-proxy policy can require <code>ztna-status enable</code> and one or more <code>ztna-ems-tag</code> values. The proxy's API gateway maps URL prefixes to services; Fortinet's example maps <code>/pam</code> to <code>pam-service</code>, separately from TCP forwarding and GUI routes.</p>"
+        ],
+        [
+          "Certificate and bearer token are different identities",
+          "<p>The October 12 Community tip demonstrates REST API access using both a client certificate and an API user's bearer token. The certificate establishes endpoint/device trust at the TLS/access-proxy layer. The bearer token identifies the FortiPAM API user and is evaluated by the API service. Passing one does not substitute for the other. A request can complete TLS and still fail API authentication, or carry a valid bearer token from an endpoint not allowed by ZTNA policy.</p><pre><code>curl.exe --location \"https://pam.example.net/pam/&lt;resource&gt;\" ^\n  -H \"Authorization: Bearer &lt;API_TOKEN&gt;\" ^\n  --cert \"CurrentUser\\MY\\&lt;CERT_THUMBPRINT&gt;\"</code></pre><p>The Community example uses <code>-k</code>; that disables server-certificate verification and should not be the production default. Install and trust the correct server CA and validate the TLS chain. Protect the API token and certificate private key separately.</p>"
+        ],
+        [
+          "Access-proxy design and unmanaged endpoints",
+          "<p>FortiPAM's guide explains that trusted and untrusted endpoints can be separated by using different NICs or multiple access proxies/VIPs. One interface can enforce ZTNA while another remains unrestricted, but the network must then restrict who can reach the open interface. The guide also documents <code>empty-cert-action accept</code> for a design in which endpoints without a certificate may log in to access non-ZTNA-protected secrets. This does not make protected secrets available to unmanaged endpoints; secret-level policy still governs what they can launch.</p><p>Use separate VIPs and policies when managed and unmanaged clients must coexist. Keep the no-ZTNA path source-restricted and avoid a broad any-to-any policy that bypasses the device-trust boundary.</p>"
+        ],
+        [
+          "Verification sequence",
+          "<ol><li>Confirm FortiPAM's EMS connector is connected to the same EMS server as the client.</li><li>Verify endpoint tag and certificate chain/thumbprint.</li><li>Inspect access-proxy client-cert setting, VIP, API gateway URL map, and firewall policy tag.</li><li>Test TLS first, then API bearer authentication, then secret-level authorization.</li><li>Use a controlled API resource and confirm the user has only intended secret permissions.</li></ol><p>Identify whether the failed gate is TLS/device trust, EMS posture, API identity, URL routing, or secret authorization. Do not label every failure simply “ZTNA denied.”</p>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "title": "Offline OS repository synchronization and ordered Supervisor, Worker, and Collector upgrades",
+      "primary": [
+        [
+          "FortiSIEM 7.5.1 Offline Installation and Upgrade Guide",
+          "https://docs.fortinet.com/document/fortisiem/7.5.1/offline-installation-and-upgrade-guide"
+        ]
+      ],
+      "scenario": [
+        [
+          "Technical Tip — retrieve fsm-sync-os-repo.sh from target upgrade package, October 16, 2026",
+          "https://community.fortinet.com/fortisiem-34/technical-tip-how-to-get-fsm-sync-os-repo-sh-for-offline-upgrades-230601"
+        ]
+      ],
+      "fingerprint": "fortisiem-offline-osrepo-version-matched-script-mount-supervisor-worker-collector",
+      "workflow": "internet staging host → version-matched repository sync → NFS/USB mount → Supervisor/Manager → Worker uses Supervisor repo password → Collector Image Server workflow",
+      "failure": "repository incomplete/wrong version, mount absent after reboot, storage insufficient, or component upgrade still attempts Internet access",
+      "evidence": "target upgrade ZIP/script version; wget completion; df -h; mount and fstab; upgrade command; Supervisor/Worker/Collector logs and version",
+      "remediation": "Extract sync script from target upgrade RPM, allocate documented space, verify repo completeness, mount persistently, and follow component sequence",
+      "question": "identify which offline repository artifact and parameter each FortiSIEM component consumes",
+      "topology": "staging repository fans out to Supervisor/Manager, then Workers and Collectors in dependency order",
+      "sections": [
+        [
+          "Why offline upgrades need a separate OS repository",
+          "<p>FortiSIEM's offline installation and upgrade guide distinguishes fresh installation from upgrading an existing environment. In a disconnected deployment, the OS repository must be mirrored to a staging host and mounted where the upgrade process can read it. Copying only the main FortiSIEM upgrade ZIP is not enough; the OS package repository is a separate dependency.</p><p>For FortiSIEM 7.5.1, the guide requires at least 2 TB on a mounted filesystem for the repository. Earlier 7.5.0 documentation described a smaller 375 GB requirement, so do not carry an old capacity estimate into a 7.5.1 run. The synchronization script launches multiple wget processes in the background. The command returning does not prove all downloads completed or disk space was sufficient.</p>"
+        ],
+        [
+          "Get the script from the correct release",
+          "<p>The October 16 Community technical tip explains how to extract <code>fsm-sync-os-repo.sh</code> from the targeted upgrade ZIP. It creates <code>/opt/upgrade</code>, transfers and unpacks the ZIP, then extracts the script from the versioned FortiSIEM RPM using <code>rpm2cpio</code> and <code>cpio</code>. This avoids blindly reusing a script from a different running version. Verify the package/build in the path and keep the script paired with the upgrade package that will consume the repository.</p><pre><code>mkdir -p /opt/upgrade\ncd /opt/upgrade\n7za x FSM_Upgrade_All_&lt;BUILD&gt;.zip\nrpm2cpio &lt;VERSIONED_RPM&gt; | cpio -i --to-stdout './opt/phoenix/deployment/jumpbox/fsm-sync-os-repo.sh' &gt; fsm-sync-os-repo.sh</code></pre><p>Run the script with documented permissions. Monitor all background wget processes and confirm the full repository is present before moving it to the isolated environment.</p>"
+        ],
+        [
+          "Mount and upgrade the core nodes",
+          "<p>Copy the repository to USB or export it through NFS. Mount it on the Supervisor at a stable path such as <code>/offline-repo</code>, and add the mount to <code>/etc/fstab</code> so it survives reboot. Check the mount and run <code>mount -a</code> before upgrading. Unzip the target package under <code>/opt/upgrade</code> and invoke:</p><pre><code>./upgrade.sh --offline-osrepo-path /offline-repo</code></pre><p>The Supervisor or Manager uses the mounted repository instead of reaching the Internet. If the mount is missing or the parameter points to the wrong path, an offline site can still attempt to access the remote repository. The core node must return healthy before proceeding to Workers.</p>"
+        ],
+        [
+          "Worker and Collector dependencies",
+          "<p>After the Supervisor is upgraded and online, the Worker can reuse the same offline repository. The guide instructs the operator to verify the mount, copy the upgrade package to the Worker, and obtain the offline-repository OS update password from the upgraded Supervisor's <code>/etc/dnf/dnf.conf</code>. The Worker script consumes it with <code>--offline-osrepo-super-passwd</code>. Protect that password; it is not a general-purpose user credential.</p><p>Collectors follow a different path through the GUI and Image Server. The guide says to select Disabled for Hash Check in Image Server settings before the documented offline Collector upgrade so the Collector can obtain the image from Supervisor without Internet access. Treat this as a version-specific procedure and protect the repository through controlled staging, checksums, and access control; do not interpret it as permission to disable integrity checks broadly.</p>"
+        ],
+        [
+          "Verification and failure isolation",
+          "<ol><li>Confirm target release/build and use its matching sync script.</li><li>Verify at least the documented 2 TB for 7.5.1 and monitor wget completion.</li><li>Validate mounted path and persistent fstab entry on Supervisor and each Worker.</li><li>Upgrade Supervisor/Manager first, then Workers with the required password, then Collectors through Image Server.</li><li>If a component reaches out to the Internet, inspect its own parameter/mount/role path rather than assuming all nodes inherit the Supervisor's offline setting.</li></ol>"
+        ]
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "title": "FortiClient Multi-Connect: concurrent IKEv2 tunnels and Windows DNS priority",
+      "primary": [
+        [
+          "FortiEndpoint Administration Guide — Remote Access / Multi-Connect",
+          "https://docs.fortinet.com/document/fortiendpoint/latest/administration-guide/682498"
+        ],
+        [
+          "FortiSASE Feature Administration Guide — Tunnel settings",
+          "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/357569/tunnel-settings"
+        ]
+      ],
+      "scenario": [
+        [
+          "Support Forum — FortiSASE IPsec Multi-Connect, October 16–17, 2026",
+          "https://community.fortinet.com/support-forum-92/fortisase-ipsec-multi-connec-230614"
+        ]
+      ],
+      "fingerprint": "fortisase-forticlient-multiconnect-concurrent-ikev2-dns-priority-managed-tunnel",
+      "workflow": "FortiSASE endpoint profile → FortiClient establishes SASE IKEv2 tunnel plus eligible custom tunnel → Windows interface metric/DNS priority chooses resolver order",
+      "failure": "one parallel tunnel fails or DNS queries use unintended tunnel because ownership, IKE settings, eligibility, or priority is misunderstood",
+      "evidence": "profile Multi-Connect setting; per-tunnel IKE state; Windows tunnel metrics and DNS server order; FortiSASE PoP tunnel status",
+      "remediation": "Use supported FortiClient/platform versions, only IKEv2 tunnels, leave service-owned SASE Phase1/2 intact, align custom gateway proposals, set DNS priority",
+      "question": "separate service-managed SASE tunnel from endpoint-managed custom tunnel and DNS preference",
+      "topology": "two independent IKEv2 tunnels controlled by endpoint profile; DNS priority selects Windows resolver interface order",
+      "sections": [
+        [
+          "What Multi-Connect enables",
+          "<p>FortiClient's Multi-Connect option allows more than one eligible IPsec VPN tunnel to be connected concurrently. The FortiEndpoint administration guide labels the feature beta and limits it to IPsec IKEv2 tunnels. The endpoint profile can contain up to 50 eligible IKEv2 tunnels. This is an endpoint tunnel capability, not a statement that every FortiSASE tunnel object exposes editable Phase 1 and Phase 2 settings.</p><p>In FortiSASE, the SASE service tunnel is managed by the service. The October 16 Community thread asked why Phase 1 and Phase 2 could not be entered for the SASE tunnel; Fortinet staff clarified that those settings cannot be changed there and asked whether the SASE tunnel or on-premises tunnel was failing. The SASE-managed tunnel and an endpoint-profile custom tunnel have different ownership.</p>"
+        ],
+        [
+          "Tunnel settings and control/data planes",
+          "<p>FortiSASE uses IKEv2 settings for its security PoPs and configures corresponding settings on FortiClient. The tunnel-settings guide lists different proposals and parameters for PoPs and endpoint clients; custom/alternative IPsec gateways must match the settings FortiSASE configures on the endpoint for that tunnel type. Do not copy a PoP-side table into an unrelated custom gateway without checking which side the table describes.</p><p>The endpoint management/telemetry channel distributes the profile and tunnel definitions. IKEv2 establishes each data tunnel independently. A healthy telemetry connection proves the endpoint received policy; it does not prove each IKE_SA and CHILD_SA negotiated successfully. One working tunnel does not prove the second has a matching peer ID, proposal, route, or firewall path.</p>"
+        ],
+        [
+          "DNS Priority is a Windows interface preference",
+          "<p>When Multi-Connect is enabled, the DNS Priority list contains eligible IPsec IKEv2 tunnels in the profile. The administrator orders the list by drag-and-drop. The guide states Windows uses this order to determine which tunnel interface has higher priority for DNS queries; the priority corresponds to the VPN tunnel interface metric. Windows queries the DNS server from the highest-priority tunnel first and, if that query fails, tries the next tunnel. This is not a general traffic-steering rule for every application packet.</p><p>Changing the list can alter which DNS view a user receives even when both tunnels remain up. Split-horizon names may resolve differently through SASE and on-premises DNS, so validate name resolution from the endpoint rather than inferring it from tunnel status.</p>"
+        ],
+        [
+          "Verification workflow",
+          "<ol><li>Confirm FortiClient version, platform, beta feature status, and that each tunnel is IKEv2.</li><li>Identify the SASE-managed tunnel separately from each custom/on-prem tunnel.</li><li>Check IKE and CHILD_SA state for each tunnel independently and compare proposals, IDs, NAT-T, DPD, and routing.</li><li>Inspect Windows interface metrics and DNS Priority; test a name with different answers on each resolver.</li><li>Do not modify SASE-owned Phase 1/2 settings; correct the custom gateway or endpoint profile through supported controls.</li></ol><p>Isolate tunnel establishment from DNS preference. Two tunnels can be up while names resolve through the wrong DNS path, or one tunnel can fail independently.</p>"
+        ]
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "title": "Monthly traffic-volume quota steering: billing counters, overage values, and SLA member selection",
+      "primary": [
+        [
+          "FortiOS 8.0 New Features — Control SD-WAN interface usage based on monthly traffic volume",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota"
+        ],
+        [
+          "FortiOS 8.0 SD-WAN New Features — Overview",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+        ]
+      ],
+      "scenario": [],
+      "fingerprint": "sdwan-member-monthly-volume-quota-billing-start-overage-cost-weight-volume-ratio",
+      "workflow": "member byte counter accumulates → billing day/quota evaluated → overage cost/weight/volume-ratio adjusted in memory → eligible SLA service selects alternate → period resets",
+      "failure": "traffic remains on expensive member because quota/overage is disabled, service mode ignores preference, or alternatives are ineligible",
+      "evidence": "diagnose sys sdwan bill member <id>; diagnose sys sdwan service4/service6; member/SLA/selected state; packet capture on egress",
+      "remediation": "Set quota-limit, billing-start-day and overage values; ensure alternate is alive and eligible in matching SLA service; verify reset date and HA behavior",
+      "question": "distinguish usage quota steering from SLA failure and physical link-down",
+      "topology": "per-member usage counter and monthly reset feed overage decision that modifies member preference before SLA service selection",
+      "sections": [
+        [
+          "Why volume quota is a steering input",
+          "<p>Some WAN underlays have a monthly data allowance and charge overage once the allowance is exceeded. FortiOS 8.0 adds per-member volume quota settings so SD-WAN can alter member preference when accumulated traffic reaches a billing threshold. The member remains physically up; this is a cost/weight/volume-ratio adjustment used by SD-WAN selection, not a link-down detector. The feature supports HA.</p><p>Under <code>config system sdwan</code>, each member can have <code>quota-limit</code> in gigabytes, <code>billing-start-day</code>, <code>overage</code>, <code>overage-cost</code>, <code>overage-weight</code>, and <code>overage-volume-ratio</code>. The billing start day controls when usage begins to count for the monthly period. Overage settings are available when a quota is configured. When the threshold is crossed and overage is enabled, preference values are applied to influence member selection.</p>"
+        ],
+        [
+          "Configure quota and the consuming service",
+          "<p>The quota configuration does not independently define which applications move. SD-WAN service rules still determine which traffic matches and which members are eligible. Fortinet's example uses SLA-mode services for IPv4 and IPv6 and gives two members: one with a small monthly allowance and another as the alternative. The first member is preferred before the threshold; after it is over quota, its in-memory cost is increased so the service can select the other eligible member.</p><pre><code>config system sdwan\n  config members\n    edit 1\n      set interface \"agg1\"\n      set quota-limit 2\n      set billing-start-day 1\n      set overage enable\n      set overage-cost 10\n      set overage-weight 1\n      set overage-volume-ratio 1\n    next\n  end\nend</code></pre><p>This is an illustrative member fragment. The matching service must reference intended members and SLA, and the alternate must be alive and allowed by the service rule. If the service excludes the alternate, changing quota preference cannot force traffic to an unavailable path.</p>"
+        ],
+        [
+          "Read billing and service state together",
+          "<p>Fortinet adds <code>diagnose sys sdwan bill member &lt;id&gt;</code> to inspect quota state. Output includes member interface, overage enablement, quota limit, whether it is overaged, billing start day, reset information, current bytes, and bytes used since the billing day. This is evidence for the accounting mechanism. It does not prove which member a particular flow uses.</p><p>Use <code>diagnose sys sdwan service4</code> and <code>service6</code> to inspect the service's selected members, SLA state, and ordering. Then capture a known flow on ingress and egress to prove the data plane moved. The guide's example shows usage crossing 2 GB, the member becoming overaged, the cost changing in memory, and the flow moving to the second member while both links remain up.</p>"
+        ],
+        [
+          "Failure isolation and billing-cycle behavior",
+          "<p>If traffic stays on the quota-exceeded member, check whether it is actually overaged, whether <code>overage enable</code> is set, and whether the billing start day matches the ISP contract. Then inspect the matching service: the alternate may fail its SLA, be excluded by the member list, or lose to another service rule. Do not diagnose this as a health-check failure unless SLA state actually changes. A link can remain alive and become less preferred because of quota.</p><p>On the next billing day, accumulated usage and overage preference reset according to the configured period. Validate reset and HA behavior before relying on quota as a cost-control mechanism. The feature controls selection; it does not enforce a hard bandwidth cap or stop packets if the service still chooses the member.</p>"
+        ],
+        [
+          "Operational checklist",
+          "<ol><li>Translate the ISP billing cycle into billing-start-day and quota values.</li><li>Enable overage and define the intended cost/weight/volume-ratio adjustment.</li><li>Confirm matching IPv4/IPv6 services use an appropriate selection mode and include the alternate member.</li><li>Monitor billing counters and member SLA state together.</li><li>Test pre-quota, over-quota, and reset-day behavior with a controlled flow.</li></ol><p>No directly matched recent Community scenario for this new quota mechanism was verified in today's sweep; the lesson is driven by the FortiOS 8.0 New Features and SD-WAN documentation.</p>"
+        ]
+      ]
+    }
+  ]
+}
