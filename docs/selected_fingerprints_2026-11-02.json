@@ -84,7 +84,7 @@
       "workflow_transaction_fingerprint": "enable secure-port capability in switch model -> L2 poll reads static MAC table -> FortiNAC maps MAC to host/port -> host disable action installs/remains as static disabled MAC on switch",
       "failure_class": "connected hosts invisible to FortiNAC because secure-port MAC entries are static and omitted from normal L2 polling; disabled MAC persists after host record deletion",
       "evidence_pattern": "switch MAC table shows STATIC instead of DYNAMIC; FortiNAC Ports View lacks host while L2 poll reports success; Model Configuration secure-port flag and ForwardTableStatic attribute",
-      "remediation_path": "enable Secure Ports is enabled for ports on this device in Model Configuration; set ForwardTableStatic true where required; run L2 Hosts Poll Now; verify port group Physical Address Filtering and secure-port-per-VLAN prerequisites",
+      "remediation_path": "enable Secure Ports is enabled for ports on this device in Model Configuration; set ForwardTableStatic true where required; run L2 Hosts Poll Now; verify Physical Address Filtering group and per-VLAN secure-port prerequisites",
       "question_fingerprint": "distinguish a successful L2 poll from complete MAC visibility when switch port security converts learned entries to static entries",
       "diagram_topology_layout_fingerprint": "secure switch port/static MAC table -> FortiNAC model capability -> L2 poll/host mapping -> physical-address filtering disable action"
     },
@@ -94,12 +94,12 @@
       "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/178069",
       "scenario_community_url": null,
       "feature_mechanism_fingerprint": "FortiNAC-F custom scan invokes Persistent Agent registry-key check against configured Windows hive/key; scan context runs under agent service identity, not interactive logged-on user",
-      "workflow_transaction_fingerprint": "create registry-key custom scan -> choose hive/key and failure severity -> assign scan to host/scan policy -> agent evaluates registry path -> pass/fail result returned to FortiNAC -> configured remediation/registration action",
-      "failure_class": "false compliance failure when required registry value is in a user hive unavailable to the service identity, or incorrect hive/path/severity/agent order",
-      "evidence_pattern": "custom scan result label and failure severity; selected hive/key; agent log scan result; compare HKLM versus HKCU access under Local System context",
-      "remediation_path": "place machine-wide compliance settings in supported machine hives such as HKLM; do not rely on HKCU for a service running as a different user; validate key path and scan order on a representative endpoint before enforcing quarantine",
-      "question_fingerprint": "identify why a registry key exists for the interactive user but the Persistent Agent scan cannot read it",
-      "diagram_topology_layout_fingerprint": "FortiNAC-F scan definition -> Persistent Agent service identity -> Windows registry hive/key -> scan result -> policy/remediation branch",
+      "workflow_transaction_fingerprint": "create registry-key custom scan -> choose hive/key/value/type/operator and failure severity -> attach scan to general scan/endpoint compliance policy -> agent evaluates registry path -> pass/fail result returned to FortiNAC-F -> policy/remediation branch",
+      "failure_class": "false compliance failure when required registry value is in HKEY_CURRENT_USER, unavailable to the service identity, or incorrect hive/path/severity/OS applicability",
+      "evidence_pattern": "custom scan result label/severity; selected hive/key/value; agent log scan result; compare HKLM versus HKCU access under service identity; Windows OS applicability selection",
+      "remediation_path": "use machine-wide HKLM/HKEY_USERS locations for machine compliance; do not rely on HKCU when the agent runs as another user; validate key path, REG_DWORD decimal value, operator, OS applicability, and scan order before enforcing denial",
+      "question_fingerprint": "identify why a registry value exists for the interactive user but the Persistent Agent scan cannot read it",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F scan definition -> Persistent Agent service identity -> Windows registry hive/key/value -> scan result -> compliance policy/remediation branch",
       "secondary_primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/4612/scans"
     },
     {
@@ -130,17 +130,17 @@
     },
     {
       "product": "FortiSIEM",
-      "lesson_subject": "SNMPv3 trap ingestion: engine identity, USM security parameters, collector receipt, and Analytics parsing boundary",
-      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/external-systems-configuration-guide/84859/snmp-v3-traps",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/316163/setup",
-      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/troubleshooting-tip-cisco-meraki-cloud-controller-snmp-v3-traps-are-not-parsed-in-fortisiem-analytics-or-cmdb-229141",
-      "feature_mechanism_fingerprint": "SNMPv3 trap receiver authenticates/decrypts USM messages using engine ID, security name, auth and privacy protocols; Collector receipt is distinct from parser/CMDB normalization",
-      "workflow_transaction_fingerprint": "device sends SNMPv3 trap to Collector -> USM engine/user/time-window/auth/privacy validation -> phParser receives trap -> event parser maps varbinds -> Analytics/CMDB displays normalized event",
-      "failure_class": "trap reaches network/Collector but is rejected by USM, engine identity/time-window, or parsed event mapping; packet receipt alone does not prove Analytics ingestion",
-      "evidence_pattern": "UDP/162 packet capture; SNMPv3 engine ID and engine boots/time; USM error code; phParser state; Analytics event query; CMDB device identity",
-      "remediation_path": "configure matching SNMPv3 user/auth/privacy on sender and FortiSIEM; synchronize NTP and engine time; verify trap destination is the correct Collector; test a known trap and validate parser/CMDB mapping separately",
-      "question_fingerprint": "separate SNMPv3 network receipt, USM acceptance, parser normalization, and Analytics/CMDB visibility",
-      "diagram_topology_layout_fingerprint": "SNMPv3 sender -> Collector UDP/162 -> USM engine/time/auth/privacy validation -> phParser -> event attributes -> Analytics/CMDB"
+      "lesson_subject": "Windows Event Forwarding (WEF): source-initiated subscription, centralized agent collection, and original-host attribution",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.2.4/external-systems-configuration-guide/918043",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/142943/windows-agent-releases",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/technical-tip-logs-collected-via-wef-display-the-wef-server-as-the-source-instead-of-the-original-source-device-228162",
+      "feature_mechanism_fingerprint": "Windows Event Sources push selected Windows Security/Application/System events to a central Windows Event Collector; one FortiSIEM Windows Agent on WEC forwards ForwardedEvents while parser fields preserve original source identity",
+      "workflow_transaction_fingerprint": "source-initiated WEF subscription -> WinRM/WEC accepts event source -> source pushes event to ForwardedEvents log -> FortiSIEM Agent reads ForwardedEvents -> Collector parses XML/event fields -> Analytics retains original reporting host attributes while CMDB source is WEF host",
+      "failure_class": "events absent due WinRM/WEC subscription or firewall/ACL problem; source identity appears as WEF server because parser/template/source fields are misinterpreted; unsupported event channels assumed to be forwarded",
+      "evidence_pattern": "wecutil subscription runtime status; Event Viewer ForwardedEvents entries; Windows Agent template event name ForwardedEvents (case-sensitive); Include Events ALL/Exclude NONE; parsed SourceHostName/Reporting Host and event source fields",
+      "remediation_path": "configure WinRM and Windows Event Collector on WEC; create source-initiated subscription and source authorization; install FortiSIEM Agent only on WEC; configure ForwardedEvents case-sensitively; verify original host attributes in parsed events; use native agents for FIM/Sysmon/custom data not covered by WEF",
+      "question_fingerprint": "separate WEF transport source/CMDB identity from original reporting host attributes inside the forwarded event",
+      "diagram_topology_layout_fingerprint": "many Windows source computers -> source-initiated WEF/WinRM subscriptions -> central WEC ForwardedEvents log -> single FortiSIEM Agent -> Collector parser -> Analytics source attributes"
     },
     {
       "product": "FortiSASE",
@@ -176,73 +176,73 @@
       "product": "FortiGate",
       "subject": "FIPS-CC boot lifecycle: CPU-jitter entropy, cryptographic self-tests, and certified-branch maintenance",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiManager",
       "subject": "Firmware templates: scheduled target versions, preview, fabric dependency sequencing, and upgrade stop conditions",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiAnalyzer",
       "subject": "Device Manager Up/Down state: OFTP connectivity, log-recency thresholds, and post-reboot reconciliation",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiSwitch",
       "subject": "SSH host-key regeneration after OpenSSH/firmware upgrade: trust negotiation, daemon restart, and managed-switch recovery",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiAP/Wireless",
       "subject": "Distributed Automatic Radio Resource Provisioning (DARRP): channel scoring, density profiles, monitor thresholds, and schedules",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiNAC",
       "subject": "Secure/static port enforcement: physical-address filtering, switch MAC-table visibility, and disabled-host persistence",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiNAC-F",
       "subject": "Persistent Agent registry-key scans: hive selection, execution identity, severity, and remediation workflow",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiAuthenticator",
       "subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiPAM",
       "subject": "Active-passive HA: configuration replication, primary-only audit/video persistence, heartbeat topology, and failover maintenance mode",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiSIEM",
-      "subject": "SNMPv3 trap ingestion: engine identity, USM security parameters, collector receipt, and Analytics parsing boundary",
+      "subject": "Windows Event Forwarding (WEF): source-initiated subscription, centralized agent collection, and original-host attribution",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "FortiSASE",
       "subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     },
     {
       "product": "Secure SD-WAN",
       "subject": "BGP route tags as dynamic SD-WAN destinations: community matching, route-map tagging, and service-rule selection",
       "unique": true,
-      "review": "Compared product, feature/mechanism, transaction, failure class, evidence, remediation, question, and topology against the pre-generation inventory; broad token matches were manually reviewed and rejected where only generic words or adjacent but different control planes overlapped."
+      "review": "Compared feature, workflow, failure, evidence, remediation, question and topology fingerprints against the 174-record pre-generation inventory. Three first-pass candidates were rejected and replaced; broad token-only matches were manually reviewed as distinct mechanisms."
     }
   ],
   "community_sweep": {
@@ -251,16 +251,16 @@
     "FortiAnalyzer": "recent Oct 5 post-reboot stale status behavior",
     "FortiSwitch": "recent Sep 28-Oct 6 SSH/sshd upgrade issue",
     "FortiAP": "recent roaming evidence-collection tip; not DARRP-specific",
-    "FortiNAC": "no directly matched recent secure-port article; older FortiNAC secure-port visibility article and July 2026 multi-domain/voice-port forum discussion used as contextual scenario material",
-    "FortiNAC-F": "no directly matched recent registry-key scan article; official scan guide is primary and no Community troubleshooting source is claimed",
+    "FortiNAC": "no directly matched recent secure-port article; older secure-port visibility tip and July 2026 voice/data multi-domain port discussion used as scenario context",
+    "FortiNAC-F": "no directly matched recent registry-key scan article; no Community scenario is claimed",
     "FortiAuthenticator": "no directly matched recent LDAP TLS scenario; older LDAP trust-chain failure article used",
     "FortiPAM": "no directly matched recent HA scenario; April 2026 HA sync troubleshooting used",
-    "FortiSIEM": "no recent SNMPv3 trap scenario; a 3-month-old Community report about traps received but not parsed is used as related ingestion-boundary context",
+    "FortiSIEM": "WEF source-attribution article is about four months old; it is used as behavior/scenario context, not a recent finding",
     "FortiSASE": "recent Oct 6 403 domain-fronting/SIA-proxy conflict",
     "Secure SD-WAN": "no directly matched recent BGP route-tag scenario found"
   },
   "admin_guide_sweep": "For each of the twelve products, searched official Fortinet administration/configuration/new-features/CLI/deployment documentation for a primary feature. Selected primary sources are all Fortinet documentation, not Community troubleshooting posts.",
-  "semantic_uniqueness": "All 12 final candidates are distinct from the 174 historical records. Three first-pass candidates were rejected before generation because they were too close to prior material; replacements were rechecked. DARRP was selected instead of Wi-Fi 7 MLO because an October 26 candidate record already covered MLO.",
+  "semantic_uniqueness": "All 12 final candidates are distinct from the 174 historical records. DARRP was selected instead of Wi-Fi 7 MLO because MLO appeared in an October 26 candidate exclusion record. Three first-pass candidates were rejected before lesson generation.",
   "initial_candidates_rejected": [
     {
       "product": "FortiNAC",
@@ -275,7 +275,7 @@
     {
       "product": "FortiSIEM",
       "subject": "Performance-monitor job scheduling after discovery",
-      "reason": "adjacent to earlier device discovery/performance-monitor material; replaced with SNMPv3 trap USM ingestion and parser boundary"
+      "reason": "adjacent to earlier device discovery/performance-monitor material; replaced with Windows Event Forwarding source attribution and WEF subscription mechanics"
     }
   ]
 }
