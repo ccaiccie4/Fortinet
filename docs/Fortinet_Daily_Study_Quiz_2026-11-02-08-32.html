@@ -60,7 +60,7 @@ end</code></pre><p>A custom profile can change selection-period; the global wire
  }
  function gradeAll(){
   let score=0,answered=0;
-  bank.forEach(q=>{const card=document.getElementById('q'+q.id);const sel=card.querySelector('input[type=radio]:checked');if(sel){answered++;if(Number(sel.value)===q.correct_index)score++;check(q,card);}else{const fb=card.querySelector('.feedback');fb.hidden=false;fb.replaceChildren(create('p','incorrect','Unanswered. Correct answer: '+String.fromCharCode(65+q.correct_index)+'.'));q.choices.forEach((c,i)=>fb.append(create('p','',String.fromCharCode(65+i)+' '+(c.correct?'(correct)':'(not best)')+' — '+c.feedback));}});
+  bank.forEach(q=>{const card=document.getElementById('q'+q.id);const sel=card.querySelector('input[type=radio]:checked');if(sel){answered++;if(Number(sel.value)===q.correct_index)score++;check(q,card);}else{const fb=card.querySelector('.feedback');fb.hidden=false;fb.replaceChildren(create('p','incorrect','Unanswered. Correct answer: '+String.fromCharCode(65+q.correct_index)+'.'));q.choices.forEach((c,i)=>{fb.append(create('p','',String.fromCharCode(65+i)+' '+(c.correct?'(correct)':'(not best)')+' — '+c.feedback));});}});
   document.getElementById('grade-result').textContent='Score: '+score+'/'+bank.length+' ('+Math.round(score/bank.length*100)+'%). Answered: '+answered+'/'+bank.length+'.';
  }
  function reset(){checked.clear();render();document.getElementById('grade-result').textContent='No score yet.';}
