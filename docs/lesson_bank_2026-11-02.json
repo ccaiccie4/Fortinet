@@ -1,0 +1,669 @@
+{
+  "run_date": "2026-11-02",
+  "inventory_path": "docs/exclusion_inventory_2026-11-02-08-04.json",
+  "inventory_sha": "57d1863ce2686cfa3d3df06354e1238f5bae5507",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "subject": "FIPS-CC boot lifecycle: CPU-jitter entropy, cryptographic self-tests, and certified-branch maintenance",
+      "primary": [
+        [
+          "Built-in entropy source — FortiOS 7.2.6 Administration Guide",
+          "https://docs.fortinet.com/document/fortigate/7.2.6/administration-guide/235160"
+        ],
+        [
+          "FIPS-CC CLI reference",
+          "https://docs.fortinet.com/document/fortigate/7.2.7/cli-reference/101620/config-system-fips-cc"
+        ]
+      ],
+      "scenario": [
+        [
+          "Frontier AI-assisted firmware updates for FIPS-enabled FortiGates — October 22, 2026",
+          "https://community.fortinet.com/fortigate-3/frontier-ai-assisted-firmware-updates-for-fips-enabled-fortigates-october-2026-230877"
+        ]
+      ],
+      "scenario_status": "Recent, directly relevant firmware-branch scenario; not a boot self-test failure case.",
+      "body_md": "### Purpose and security boundary\nFIPS-CC is a system operating mode with boot-time cryptographic requirements; it is not a checkbox that retroactively certifies an arbitrary FortiOS image. The FortiOS 7.2.6 guide documents a built-in entropy source based on CPU-jitter entropy, removing the need for a physical USB entropy token on supported platforms. Entropy is consumed early in boot, before normal VPN, TLS, and management services are available. A device can have a valid configuration backup and still fail its intended security posture if the wrong firmware branch is installed or required self-tests do not pass.\n\n### Boot and configuration mechanics\nEnabling FIPS-CC uses the config system fips-cc hierarchy and set status enable. Fortinet documents that this change reboots the appliance and warns that most configuration can be lost. Treat it as a rebuild/maintenance operation: save configuration and recovery material first, verify platform eligibility, and schedule an outage. On SoC3, SoC4, and CP9 devices, the entropy-token parameter is removed because the built-in source is used. Do not attempt to add a USB token workflow to a platform whose CLI schema no longer exposes it.\n\nAt boot, the CPU-jitter source supplies entropy to the random-number generator. Cryptographic algorithm self-tests and integrity checks then establish whether the system can proceed under the selected mode. These are separate gates: entropy-source selection is not itself proof that every algorithm self-test passed, and a successful boot does not prove the currently installed build is on the correct certification branch.\n\n### Firmware branch and release maintenance\nKeep three questions separate: Is FIPS-CC mode enabled? Did the boot-time tests complete successfully? Is the running build the supported FIPS-CC/CVE-patched image for the platform and release train? Fortinet's October 22, 2026 security-hardening update published separate FIPS-CC images for 7.2 and 7.4 and directs administrators to read the firmware-specific ReadMe. It also states that the 7.0 FIPS support path has ended. Do not substitute a General Availability image merely because its version number looks newer. Certification status, candidate status, and vulnerability remediation status are branch-specific.\n\n### Verification and fault isolation\nCapture the boot console or approved diagnostic output showing the FIPS-CC mode, entropy source, per-algorithm self-test result, and firmware-integrity result. Record the exact build string and compare it with the matching FIPS-CC download directory and ReadMe. A passing self-test proves the local test completed; it does not prove the image is currently certified, that the platform is in scope, or that all external crypto peers meet policy. If a test fails, preserve the full boot output and stop production admission rather than repeatedly rebooting and hoping the state clears.\n\n### Operational sequence\nBack up, verify platform and release eligibility, stage the matching FIPS-CC image, review its ReadMe, perform the disruptive mode change in a maintenance window, and validate every boot test before restoring traffic. Retain the pre-change configuration and a console recovery path. After an upgrade, repeat branch/build verification; do not assume that an ordinary firmware upgrade preserves FIPS-CC certification alignment.",
+      "diagram": {
+        "title": "FIPS-CC boot and branch validation",
+        "nodes": [
+          "Matching FIPS-CC image",
+          "FIPS-CC mode gate",
+          "CPU-jitter entropy",
+          "Algorithm self-tests",
+          "Integrity + build verification",
+          "Admit traffic"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Firmware-template profile database: desired-version records, scheduled campaign state, hidden profiles, and safe ADOM-scoped cleanup",
+      "primary": [
+        [
+          "Firmware templates — FortiManager 7.6.5 Administration Guide",
+          "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/302126/firmware-templates"
+        ],
+        [
+          "Creating firmware templates — FortiManager 8.0 Administration Guide",
+          "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/360034/creating-firmware-templates"
+        ]
+      ],
+      "scenario": [
+        [
+          "How to check and clear the firmware upgrade profile database — Fortinet Community, October 27, 2026",
+          "https://community.fortinet.com/fortimanager-27/how-to-check-and-clear-the-firmware-upgrade-profile-database-scheduled-upgrade-tasks-on-fortimanager-230895"
+        ]
+      ],
+      "scenario_status": "Recent, directly relevant operational tip; the CLI cleanup command is scenario evidence, while template behavior is defined by the Administration Guide.",
+      "body_md": "### Purpose and object model\nA FortiManager firmware template expresses desired firmware state for FortiGate and managed access devices such as FortiAP, FortiSwitch, and FortiExtender. The template can be assigned to one or more devices, with either a scheduled campaign or a manually initiated upgrade. The Device Manager firmware-template column reports whether each assigned device conforms to the requested version. This is a desired-state mechanism, not simply a one-time firmware upload.\n\n### Transaction and persistence\nThe management workflow has distinct objects: the template definition, device assignment, ADOM context, schedule, upgrade task, and per-device result. A scheduled template is consumed by the firmware scheduler at its configured time; the device's actual firmware is then compared with the template's required version. FortiManager also keeps internal firmware-upgrade profile records by ADOM. The recent Community tip documents cases where stored profile records and GUI-visible templates or scheduled tasks can diverge. A missing GUI row does not automatically prove the scheduler has no persisted profile to process.\n\n### Inspect before changing state\nThe Community article documents diagnose fwmanager profile list to inspect profile records across ADOMs. The output includes the ADOM, profile name, object identifier, enforced version, schedule, image source, and checksum. Treat the command as a read-only inventory step. Compare it with the Firmware Templates page, device assignments, and Task Monitor. A profile entry is evidence of stored state; it does not alone prove that a device upgrade is currently executing.\n\nFor a stale profile, the documented cleanup command is diagnose fwmanager profile clear <ADOM_NAME>. The ADOM argument is a safety boundary. Omitting it clears profiles for all ADOMs, not just the affected tenant. In a multi-ADOM manager, an unscoped clear can remove scheduled firmware state for unrelated teams.\n\n### Safe remediation and verification\nExport or record the relevant ADOM's template definitions and scheduled campaign details. Run the list command, identify the exact ADOM and profile, confirm no intended campaign depends on it, then clear only that ADOM. Run the list command again and compare the result. Recreate the intended template, reassign it to the intended devices, and preview the upgrade before launching a campaign. Verify per-device compliance and task history afterward.\n\n### Operational caveats\nTemplate assignment makes a version a required state; it can therefore trigger upgrades at a later scheduled time even if the operator has moved on from the original change window. Treat schedule edits and profile cleanup as change-controlled operations. Use the preview and history features before a fleet campaign, and avoid deleting internal state simply because the GUI appears inconsistent.",
+      "diagram": {
+        "title": "Firmware template desired state to scheduled campaign",
+        "nodes": [
+          "Template + desired version",
+          "ADOM profile record",
+          "Device assignment",
+          "Scheduler / Task Monitor",
+          "Device upgrade",
+          "Compliance status"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Device Manager Up/Down state: OFTP connectivity, log-recency thresholds, and post-reboot reconciliation",
+      "primary": [
+        [
+          "Device Manager — FortiAnalyzer 8.0 Administration Guide",
+          "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/781928/device-manager"
+        ],
+        [
+          "Device Manager — FortiAnalyzer 7.6.6 Administration Guide",
+          "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/781928/device-manager"
+        ]
+      ],
+      "scenario": [
+        [
+          "Devices show down and stale Last Log for 10–15 minutes after reboot — Community, October 5, 2026",
+          "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376"
+        ]
+      ],
+      "scenario_status": "Recent, directly matched post-reboot status-convergence scenario.",
+      "body_md": "### What Device Manager is measuring\nFortiAnalyzer's Device Manager Up/Down value is a derived health indicator. For devices that support OFTP, it considers the OFTP connection state and/or the freshness of the last received log. The Administration Guide documents different default stale-log thresholds: 15 minutes for near-real-time logging and 6 hours for scheduled uploads. These thresholds are not universal proof that the network path is down; they are policy inputs to the GUI status calculation.\n\nThe corresponding CLI settings are config system log settings, set log-interval-dev-no-logging <minutes> for near-real-time log silence, and set log-upload-interval-dev-no-logging <minutes> for scheduled uploads. Changing them changes when the GUI considers a device Down. It does not repair OFTP, restart ingestion, or create missing logs.\n\n### Reboot reconciliation\nAfter a FortiAnalyzer reboot, a FortiGate may reconnect and resume transmitting before Device Manager refreshes its last-log timestamp. The October 5 Community tip documents an expected 10–15 minute interval where the FortiGate reports the analyzer connection as registered/up while Device Manager still shows Down or an old Last Log Time. Prove the data path independently before changing configuration.\n\nOn the FortiGate, run execute log fortianalyzer test-connectivity and get log fortianalyzer setting status; the device should report registered/up. On FortiAnalyzer, diagnose test application oftpd 3 lists devices currently sending logs; confirm the correct IP and serial number and that the received-packet count increases. diagnose fortilogd lograte shows whether the log receiver is ingesting. These three observations isolate connection, transport receipt, and log-rate evidence.\n\n### Evidence boundaries\nA registered/up connection proves the control/transport relationship is established; it does not prove the analyzer database has indexed every event. Increasing OFTP packet counters prove packets arrive; they do not prove all log types are accepted or queryable. A positive log rate proves ingestion activity; it does not prove a specific ADOM or report is populated. If the GUI is stale for only a few minutes after reboot while these counters advance, wait and refresh.\n\n### Troubleshooting sequence\nAllow 10–15 minutes for the normal status refresh. If it remains stale beyond 30 minutes, check IP reachability and the port 514 path, Device Manager registration/authorization, fortilogd health, release-specific known issues, and log storage/ADOM assignment. Capture firmware versions, reboot time, command outputs, and a short packet capture for TAC. Avoid changing thresholds merely to make the GUI green; that can hide genuine logging gaps.",
+      "diagram": {
+        "title": "FortiGate log transport and Device Manager health derivation",
+        "nodes": [
+          "FortiGate OFTP",
+          "FortiAnalyzer oftpd",
+          "fortilogd ingestion",
+          "Last-log freshness evaluator",
+          "Device Manager Up/Down"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "SSH host-key regeneration after OpenSSH/firmware upgrade: trust negotiation, daemon restart, and managed-switch recovery",
+      "primary": [
+        [
+          "Using SSH and the Telnet client — FortiSwitchOS 7.6.4 Administration Guide",
+          "https://docs.fortinet.com/document/fortiswitch/7.6.4/fortiswitchos-administration-guide/296990/using-ssh-and-the-telnet-client"
+        ],
+        [
+          "execute ssh-regen-keys — FortiSwitchOS CLI reference",
+          "https://docs.fortinet.com/document/fortiswitch/7.4.9/fortiswitchos-cli-reference/434023/execute"
+        ]
+      ],
+      "scenario": [
+        [
+          "FortiSwitch 108 SSH issue in 7.6.6/7.6.7/7.6.8 — Community, September 28, 2026",
+          "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193"
+        ]
+      ],
+      "scenario_status": "Recent, directly matched version-specific failure; Fortinet states the 108-model issue is fixed in 7.6.9.",
+      "body_md": "### Separate transport, server identity, and user authentication\nSSH access has several stages. The TCP connection must reach the management service; client and server negotiate protocol and algorithms; the client validates the server host key; only then does user authentication complete. A password prompt or a public-key exchange in debug output does not prove the SSH server is healthy. A failure such as client_loop: send disconnect: Broken pipe can occur while the server daemon is repeatedly crashing or failing its key exchange.\n\nFortiSwitchOS documents execute ssh-regen-keys for regenerating SSH server keys. The command restarts the SSH server and disconnects current SSH sessions. It changes the server's cryptographic identity, so every SSH client that pins the old host-key fingerprint must learn and verify the new fingerprint. This is not the same as resetting an administrator password.\n\n### Version-specific failure\nThe September 28, 2026 Community troubleshooting tip describes FortiSwitch 108 units running 7.6.6, 7.6.7, or 7.6.8 where SSH sessions fail with Broken pipe and sshd repeatedly exits. The debug includes public-key authentication packets and the crash log repeatedly identifies /bin/sshd. Fortinet states the issue is fixed in 7.6.9 and gives console-based execute ssh-regen-keys as a workaround. A Community reply also reports a similar symptom on a different branch; verify that against applicable release notes rather than treating it as a blanket version statement.\n\n### Recovery without losing management\nBefore running the command, establish an alternate management path: serial console or a reachable HTTPS management page with a console feature if supported and enabled. Execute the key-regeneration command from that path. Expect existing SSH sessions to drop. Reconnect and compare the new host-key fingerprint through a trusted channel; do not blindly disable strict host-key checking across the automation fleet. Update known-hosts records only after validating the device identity.\n\n### Evidence and limits\nsshd crash entries and repeated daemon restarts support a server-process failure; an SSH client Broken pipe alone does not. A host-key mismatch after regeneration is expected and should be handled as a trust update, not automatically as a man-in-the-middle event. If the server remains unavailable after regeneration, collect console output, firmware build, crash logs, and the exact negotiation trace. Do not leave Telnet enabled as a permanent workaround; if temporarily used, restrict it to an isolated management segment and remove it after SSH is restored.\n\n### Operational lesson\nFor affected 108 models, upgrade to the fixed release where approved, then validate SSH from the actual automation clients. Treat key regeneration as a disruptive identity change and plan host-key inventory updates alongside the firmware change.",
+      "diagram": {
+        "title": "SSH host-key negotiation and controlled regeneration",
+        "nodes": [
+          "SSH client TCP",
+          "Algorithm negotiation",
+          "Host-key validation",
+          "User authentication",
+          "sshd process",
+          "Regenerate key + restart"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Distributed Automatic Radio Resource Provisioning (DARRP): channel scoring, density profiles, monitor thresholds, and schedules",
+      "primary": [
+        [
+          "Configuring Distributed Radio Resource Provisioning — FortiAP 8.0 Configuration Guide",
+          "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/299720/configuring-distributed-radio-resource-provisioning"
+        ],
+        [
+          "Optimize and update default DARRP parameters — FortiOS 8.0 New Features Guide",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/211539/optimize-and-update-default-darrp-parameters"
+        ]
+      ],
+      "scenario": [
+        [
+          "Collecting logs and information for wireless client roaming issues — Fortinet Community",
+          "https://community.fortinet.com/fortiap-5/collecting-logs-and-informations-for-wireless-client-roaming-issues-230638"
+        ]
+      ],
+      "scenario_status": "Related operational evidence guide; it is a troubleshooting collection article, not a DARRP feature specification.",
+      "body_md": "### Purpose and control model\nDistributed Automatic Radio Resource Provisioning (DARRP) lets managed FortiAP radios choose operating channels from RF measurements rather than relying only on a static channel plan. It is disabled by default. Enabling it is a per-radio decision in the FortiAP profile; the radio then uses an ARRP profile containing the weights and thresholds that influence channel scoring. FortiOS 8.0 replaces the older default arrp-default with arrp-default-high-density and arrp-default-medium-density. The first enablement automatically selects the high-density profile, so review the resulting profile rather than assuming a neutral default.\n\n### How channel selection works\nThe guide describes weighted observations including total RSSI, noise floor, channel load, spectral RSSI, and other RF indicators. Each measured parameter is multiplied by a profile weight. High-density and medium-density profiles express different tradeoffs; custom profiles let the administrator tune them to the building's actual RF survey and client behavior. A profile change can therefore alter which channels score best even when the physical environment has not changed.\n\nDARRP also has two time concepts: the optimization schedule controls when the channel-selection calculation runs, while monitor-period and threshold settings determine how later RF behavior is observed. The default optimization interval is 86400 seconds (24 hours), with a default daily 1:00–1:30 schedule. Fortinet warns that channel changes can briefly interrupt connected clients and advises against running optimization too frequently.\n\n### Configuration example\nA managed WTP profile enables DARRP under a radio and attaches an ARRP profile:\n\nconfig wireless-controller wtp-profile\n edit \"FAP433F-DARRP\"\n  config radio-1\n   set darrp enable\n   set arrp-profile \"arrp-default-high-density\"\n  end\n next\nend\n\nA custom profile can change selection-period; the global wireless-controller setting selects the optimization interval and schedule. Confirm the exact CLI schema for the FortiOS release before deployment because profile names and available parameters can change between trains.\n\n### Verification and failure isolation\nRecord the WTP profile, radio-level darrp state, ARRP profile name, selection schedule, channel, channel load, noise floor, spectral RSSI, TX retries, and RX errors. A channel change proves the optimizer acted; it does not prove that roaming improved. A high retry count may be caused by interference, client driver behavior, hidden nodes, or poor coverage rather than a bad DARRP weight alone.\n\nFor a roaming incident, collect a synchronized FortiGate wireless-controller debug, FortiAP fap-tech/klog, Wi-Fi event log, client WLAN report, driver version, and an over-the-air capture on the affected channel. The Community roaming article recommends capturing the same client event on controller, AP, and client. Correlate timestamps before tuning weights.\n\n### Design caveats\nSchedule optimization in a low-traffic window, account for DFS/weather-channel behavior and channel width, and avoid changing several RF weights at once. Validate the resulting channel plan across neighboring APs; a locally optimal channel can still increase co-channel contention in the larger RF cell.",
+      "diagram": {
+        "title": "DARRP weighted RF scoring and monitor feedback",
+        "nodes": [
+          "AP RF measurements",
+          "ARRP density profile + weights",
+          "Candidate channel scoring",
+          "Scheduled optimizer",
+          "Monitor retries/errors",
+          "Next optimization"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Secure/static port enforcement: physical-address filtering, switch MAC-table visibility, and disabled-host persistence",
+      "primary": [
+        [
+          "Secure port/static port overview — FortiNAC 9.4 Administration Guide",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/501025/secure-port-static-port-overview"
+        ],
+        [
+          "Model configuration — FortiNAC 9.4 Administration Guide",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/151724/model-configuration"
+        ]
+      ],
+      "scenario": [
+        [
+          "Host connection not detected on secure ports — Fortinet Community",
+          "https://community.fortinet.com/fortinac-28/technical-tip-host-connection-not-detected-on-secure-ports-98361"
+        ]
+      ],
+      "scenario_status": "Directly matched but old (September 28, 2018); used only as a mechanism example, not represented as a recent article.",
+      "body_md": "### Why secure/static ports exist\nFortiNAC can disable an individual host by physical address when a shared switch port serves multiple endpoints or a Dead End VLAN is unavailable. On supported switches, a secure/static port acts as the restricted port for disabled MAC addresses. When FortiNAC disables a host manually or through an alarm action, it sends the device a message that places that MAC in the device's restricted list. The disabled MAC is then permitted only on the designated secure/static port; if it appears on another port, the switch blocks its access.\n\nThe secure port itself is a security boundary. It must not be connected to an ordinary production endpoint or an unrestricted access segment. If a disabled host is plugged into the secure port, the mechanism can intentionally permit access there, defeating the containment design.\n\n### Required FortiNAC objects\nThe switch model must have secure-port support enabled in Model Configuration. A secure/static port must be designated on the switch, and the device must belong to the Physical Address Filtering group. Depending on switch vendor and VLAN design, a secure port may be needed per participating VLAN. Group membership can cause VLAN switching, so verify the port/VLAN impact before enabling the feature broadly. Device-specific requirements vary; some switches need local CLI configuration, and some platforms do not support Physical Address Filtering.\n\n### Static MAC visibility is a separate issue\nA successful Layer-2 poll does not guarantee that FortiNAC has read every MAC entry. The older Community article explains that secure-port configurations can convert learned MACs from DYNAMIC to STATIC. FortiNAC's normal polling may ignore static MAC-table entries unless the model is configured to read them. Where supported and required, the model attribute ForwardTableStatic can be enabled, then an L2 Hosts Poll Now can refresh the host-to-port mapping. This is a visibility fix; it does not itself configure the disabled-host enforcement action.\n\n### Disable and delete lifecycle\nThe FortiNAC guide warns that deleting a disabled host does not remove its MAC from the switch's disabled list. Reusing the endpoint's address or moving the device can therefore produce confusing results. Re-enable the host before deleting its record, or deliberately remove the device-side restriction through the supported vendor procedure. Keep a record of the MAC, VLAN, secure port, and alarm action that created the restriction.\n\n### Verification and troubleshooting\nCompare the switch MAC table with FortiNAC Ports View. If the switch shows a STATIC entry but the host is absent, inspect the model's secure-port/static-table polling capability before declaring L2 polling broken. Confirm the Physical Address Filtering group, secure port per VLAN, and device support matrix. Then run an L2 host poll and verify the MAC appears on the expected port. Separately test a disabled host on a normal port and on the designated secure port in a controlled lab. Do not infer that the containment rule is working from the GUI host status alone; confirm the switch-side MAC restriction and actual forwarding behavior.",
+      "diagram": {
+        "title": "FortiNAC physical-address containment and static MAC discovery",
+        "nodes": [
+          "FortiNAC disable action",
+          "Physical Address Filtering",
+          "Switch disabled-MAC list",
+          "Secure/static port",
+          "L2 poll + static MAC read",
+          "Host/port inventory"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Persistent Agent registry-key scans: hive selection, execution identity, severity, and remediation workflow",
+      "primary": [
+        [
+          "Registry key scan — FortiNAC-F 7.6 Administration Guide",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/178069"
+        ],
+        [
+          "Using the Persistent Agent — FortiNAC-F 7.6 Manager Guide",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/60925/using-the-persistent-agent"
+        ]
+      ],
+      "scenario": [
+        [
+          "Persistent Agent not picking up the certificate — Fortinet Community, June 5, 2026",
+          "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-persistent-agent-not-picking-up-the-certificate-228065"
+        ]
+      ],
+      "scenario_status": "Older related custom-scan scenario; it concerns certificate-store visibility, not registry-key scans.",
+      "body_md": "### What the scan evaluates\nFortiNAC-F custom scans can inspect a specific Windows registry key and value through the Persistent Agent. The scan definition includes a user-facing label, optional remediation web address, severity, hive, key name, value name, type, expected data, comparison operation, Prohibit behavior, and Windows OS applicability. Supported hives include HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS, and HKEY_CURRENT_CONFIG. The scan result is then consumed by the endpoint compliance policy; it is not simply a remote registry query from the manager.\n\n### Execution identity is the critical boundary\nThe Administration Guide explicitly warns that HKEY_CURRENT_USER scans will not succeed because the user running Persistent Agent differs from the user logged on to the host. The service runs under its service identity; it does not automatically inherit the interactive user's HKCU view. A registry value can be visible in Regedit for the logged-on user and still be invisible to the agent. For machine compliance, prefer a machine-wide key under HKLM or an appropriately scoped HKEY_USERS location, and test under the actual agent service context.\n\n### Match versus mutate\nFor REG_SZ and REG_DWORD, the scan can check a configured value. A REG_DWORD expected value must be entered in decimal, not hexadecimal. The comparison operator is available when the action is Match Value; for example, >= requires the host's value to be greater than or equal to the expected value. The guide also exposes a Sets the value (Use Caution) action that can create or overwrite the key/value. That is a remediation/mutation behavior, not a read-only compliance check. For REG_DWORD, the available actions are Match Value and Sets the value. Use the mutating action only when policy explicitly intends the agent to change endpoint state.\n\nProhibit changes the meaning of a found key: when enabled, a prohibited product/key can cause the host to fail. Severity controls the result's severity when the key is missing. These are separate controls and should not be conflated. OS applicability is also important: the guide states that if a Windows version is not selected, a host with that OS can automatically pass the general scan.\n\n### Troubleshooting a false failure\nCheck the exact hive, key path, value name, type, decimal data, operator, Prohibit flag, severity, and selected OS versions. Confirm the key under the agent service identity, not only the desktop user's profile. Review the Persistent Agent scan result and logs, then compare with the FortiNAC-F policy that consumes the result. If a certificate or registry item is absent from the agent payload, distinguish local store/permissions/format limitations from a server-side policy decision.\n\n### Deployment practice\nStart with a non-enforcing test policy, validate a small set of Windows builds, and only then use the scan in an access-deny rule. Keep machine-wide controls in machine hives, use a stable label for help-desk interpretation, and provide a remediation page that explains the expected key/value.",
+      "diagram": {
+        "title": "Persistent Agent registry scan under service identity",
+        "nodes": [
+          "FortiNAC-F scan definition",
+          "Persistent Agent service identity",
+          "Selected registry hive/key",
+          "Match / prohibit / set action",
+          "Compliance result + severity",
+          "Access policy"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity",
+      "primary": [
+        [
+          "LDAP — FortiAuthenticator 8.0.3 Administration Guide",
+          "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/569230/ldap"
+        ],
+        [
+          "Remote user sync rules — FortiAuthenticator Administration Guide",
+          "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/"
+        ]
+      ],
+      "scenario": [
+        [
+          "Remote sync LDAP certificate verification failure — Fortinet Community",
+          "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-how-to-resolve-the-remote-sync-rule-error-with-can-t-contact-ldap-server-error-0a000086-ssl-routines-certificate-verify-failed-219705"
+        ]
+      ],
+      "scenario_status": "Older contextual case (2025); directly illustrates missing intermediate CA and remote-sync TLS failure.",
+      "body_md": "### LDAP transport is more than a bind credential\nFortiAuthenticator can connect to a remote LDAP directory using LDAPS or StartTLS. The TLS handshake occurs before the LDAP bind/search transaction. If the server certificate chain cannot be built to a trusted CA, the LDAP server may be reachable and the bind account may be correct while remote synchronization still fails. Treat TCP reachability, TLS server identity, optional client-certificate authentication, LDAP bind, search base, and user mapping as separate diagnostic stages.\n\n### Trust and revocation controls\nThe LDAP server configuration exposes Protocol (LDAPS or STARTTLS), Trusted CA scope (Single or All Trusted), the CA certificate used to verify the server, CRL Check Mode, and optional client-certificate TLS authentication. CRL Check Mode has three meanings:\n- None: do not check CRLs.\n- Leaf Node: check the CRL, if any, for the CA that issued the remote LDAP server certificate.\n- All Nodes: check CRLs for every CA in the chain.\n\nAll Nodes is stricter but requires a CRL for every CA in the chain and requires the LDAP server to present the full certificate chain during the handshake. If an intermediate CA is missing or its CRL is unavailable, the connection can fail before any LDAP credentials are evaluated. The optional client certificate is a separate mutual-TLS identity for FortiAuthenticator to the LDAP server; it is not the same as trusting the server certificate.\n\n### A disciplined certificate diagnosis\nThe older Community remote-sync case shows 0A000086 SSL routines certificate verify failed and unable to get local issuer certificate. The LDAP endpoint was reachable and browsable, but the sync rule failed because the full certificate chain was not trusted. Capture the TLS handshake and inspect the chain actually presented by the LDAP server. Verify SAN/FQDN match, validity dates, intermediate CA presence, trusted-CA selection, and CRL coverage. Import the missing intermediate/root certificates into Certificate Authorities > Trusted CAs; choose Single or All Trusted based on the intended trust boundary, not simply to make the error disappear.\n\n### Verification sequence\nFirst test the secure LDAP connection and browse with the configured bind account. Then run a remote sync and inspect its own event/error record. A successful browse proves the bind/search path worked for that test; it does not prove the sync rule's filter, group mapping, or schedule is correct. Conversely, a certificate error means do not spend time changing passwords or user filters yet. If All Nodes is selected, verify every required CRL and the server's full-chain presentation.\n\n### Operational caveats\nCertificate renewal can change intermediates or chain order even when the LDAP hostname and account remain unchanged. Document the CA bundle, CRL mode, client certificate, and renewal owner. After a directory certificate rotation, retest both interactive LDAP authentication and scheduled remote-user synchronization.",
+      "diagram": {
+        "title": "FortiAuthenticator secure LDAP handshake and bind",
+        "nodes": [
+          "FAC resolves LDAP FQDN",
+          "LDAPS / StartTLS",
+          "Server chain + CRL validation",
+          "Optional FAC client certificate",
+          "LDAP bind + search",
+          "Remote sync / user mapping"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Active-passive HA: configuration replication, primary-only audit/video persistence, heartbeat topology, and failover maintenance mode",
+      "primary": [
+        [
+          "High availability — FortiPAM 1.9 Administration Guide",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/544915/high-availability"
+        ]
+      ],
+      "scenario": [
+        [
+          "HA synchronization errors on FortiPAM nodes — Fortinet Community",
+          "https://community.fortinet.com/fortipam-52/troubleshooting-tip-ha-synchronization-errors-on-fortipam-nodes-226761"
+        ]
+      ],
+      "scenario_status": "Older operational case (about six months); useful for file-sync, platform, license-SKU, and heartbeat diagnosis.",
+      "body_md": "### What is and is not replicated\nFortiPAM supports Active-Passive HA. One unit handles PAM tasks while configuration, users, and secrets are synchronized to passive nodes. The guide supports up to three devices: one Active and up to two Passive. Nodes must use the same model and version; VMs must run on the same virtualization platform. Different license seat counts can be used, but the license SKU/contract requirements must be compatible.\n\nA critical durability boundary is easy to miss: system events and logs are recorded only on the primary node, and logs/session videos are not synchronized between primary and secondary disks. The serial number shown for log records identifies the unit that owns them. A failover can restore service configuration while historical audit/video data remains on the original node. Do not promise that a secondary contains every privileged-session recording.\n\n### Heartbeat and failover\nHA uses heartbeat interfaces and monitored interfaces. At least one heartbeat interface is required; dedicated interfaces are recommended because heartbeat packets contain sensitive cluster information and can consume bandwidth. In VM environments where broadcast is not supported or multicast is congested, the guide describes unicast heartbeat with a peer IP. If heartbeat communication is interrupted, the cluster stops processing traffic. Monitor-interface failure can trigger link failover.\n\nPriority and override determine which unit becomes primary. The guide notes that override and device priority are not synchronized; configure them manually and separately on each node. When the primary goes down, the secondary takes the primary role and enters maintenance mode, where critical processes are temporarily suspended. An administrator must restore the original primary or disable maintenance mode on the new primary to resume all FortiPAM features.\n\n### Troubleshooting sync errors\nThe Community article shows hasync failures backing up files under /data2 and recommends checking that both nodes use the same virtualization platform and UTM contract/license SKU. It also identifies heartbeat congestion as a possible source of intermittent sync delay and suggests testing unicast heartbeat. Capture diagnose debug application hasync -1 and diagnose debug application hatalk -1, then use execute ha sync start in a controlled window. Look for the exact file path and phase that failed; do not interpret a generic out-of-sync state as proof that every secret or user object is corrupt.\n\n### Verification and operations\nCheck role, state, priority, hostname, serial number, uptime, sessions, throughput, heartbeat status, and sync status on each node. Confirm the passive has current configuration and secrets, then test a planned failover. After promotion, verify maintenance mode and critical services explicitly. Build a separate retention strategy for logs and videos, because the HA cluster is not an audit archive. Keep the original primary available until local-only recordings and logs have been exported or retained according to policy.",
+      "diagram": {
+        "title": "FortiPAM active-passive HA and local-only evidence stores",
+        "nodes": [
+          "Active primary",
+          "Config / users / secrets sync",
+          "Passive node A",
+          "Passive node B",
+          "Primary-local logs + videos",
+          "Failover -> maintenance mode"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Windows Event Forwarding (WEF): source-initiated subscription, centralized agent collection, and original-host attribution",
+      "primary": [
+        [
+          "Windows Event Forwarding — FortiSIEM External Systems Configuration Guide",
+          "https://docs.fortinet.com/document/fortisiem/7.2.4/external-systems-configuration-guide/918043"
+        ],
+        [
+          "Windows Agent releases — FortiSIEM 7.5.1 User Guide",
+          "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/142943/windows-agent-releases"
+        ]
+      ],
+      "scenario": [
+        [
+          "Logs collected via WEF show WEF server as source — Fortinet Community, June 9, 2026",
+          "https://community.fortinet.com/fortisiem-34/technical-tip-logs-collected-via-wef-display-the-wef-server-as-the-source-instead-of-the-original-source-device-228162"
+        ]
+      ],
+      "scenario_status": "Older contextual case (June 2026); directly explains CMDB source identity versus original event source attributes.",
+      "body_md": "### Collection architecture\nWindows Event Forwarding (WEF) is a Windows-native aggregation path. Source computers forward selected event channels to a Windows Event Collector (WEC); the WEC stores them in its ForwardedEvents log. FortiSIEM's Windows Agent is installed on the WEC host and reads that consolidated log. This reduces the number of FortiSIEM agents, but changes what the collector sees as the transport source.\n\nWith source-initiated subscriptions, each Windows source initiates the subscription relationship to the WEC. WinRM, Windows Event Collector service state, subscription authorization, firewall rules, and event-channel selection all affect whether the events arrive. The FortiSIEM agent cannot collect events that never reach ForwardedEvents.\n\n### Agent template and identity semantics\nIn the FortiSIEM Agent Template Event tab, the event name must be ForwardedEvents with the correct case. The Community article recommends Include Events = ALL and Exclude Events = NONE when the intent is to collect all forwarded categories, then narrowing only after verifying the event flow. Confirm that the Windows Event Viewer on the WEC actually contains the expected events before troubleshooting FortiSIEM parsing.\n\nThe WEC is the agent's log source and therefore commonly becomes the CMDB device associated with the agent. The original Domain Controller or workstation is still represented inside the forwarded event payload. Parsed attributes such as SourceHostName, Reporting Host, OriginalHost, or Source IP preserve that context, but they do not automatically create CMDB records for every originating computer. This is expected behavior, not necessarily a parser failure.\n\n### Evidence and troubleshooting\nUse wecutil to inspect subscription runtime status, and inspect the WEC ForwardedEvents channel for the event IDs and timestamps expected from the source systems. Verify WinRM connectivity and source authorization. In FortiSIEM, confirm the Windows Agent is installed on the WEC, the event template uses the exact log name, and the parser preserves original-host fields. If the event is present in Windows but absent in FortiSIEM, inspect agent collection, template filters, and collector parsing. If it is present but attributed to the WEC in CMDB, inspect event attributes rather than expecting a new CMDB device.\n\n### Coverage limits\nWEF is appropriate for supported Windows event channels. It is not a universal replacement for native endpoint collection. File-integrity monitoring, Sysmon-specific data, custom application logs, and telemetry not forwarded by the configured subscription may still require native agents or separate integrations. Validate the event channel list and source-initiated subscription scope before treating WEF as complete coverage.\n\n### Operational design\nDocument the WEC host as a collection dependency, monitor its ForwardedEvents backlog, protect WinRM/WEC communications, and avoid duplicate CMDB creation by filtering the aggregator appropriately. Test both event presence and original-source attribution with known event IDs before expanding to the full fleet.",
+      "diagram": {
+        "title": "Windows WEF/WEC to FortiSIEM with source attribution",
+        "nodes": [
+          "Windows source endpoints",
+          "Source-initiated WEF / WinRM",
+          "WEC ForwardedEvents",
+          "FortiSIEM Windows Agent",
+          "Collector parser",
+          "CMDB WEC + original host fields"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
+      "primary": [
+        [
+          "Agentless proxy deployment overview — FortiSASE 26.1.107 Deployment Guide",
+          "https://docs.fortinet.com/document/fortisase/26.1.107/feature-sia-agentless-proxy-deployment-guide/891466/deployment-overview"
+        ],
+        [
+          "SIA concept guide — FortiSASE 26.1",
+          "https://docs.fortinet.com/document/fortisase/26.1.26/concept-guide/308001/sia"
+        ]
+      ],
+      "scenario": [
+        [
+          "Investigating a 403 domain-fronting blocked error — Fortinet Community, October 6, 2026",
+          "https://community.fortinet.com/fortisase-58/troubleshooting-tip-investigating-a-403-domain-fronting-blocked-error-230414"
+        ]
+      ],
+      "scenario_status": "Recent, directly matched operational scenario with port 9443 and SNI evidence.",
+      "body_md": "### Two steering models, one flow\nFortiSASE can steer browser traffic through an agentless explicit-proxy/PAC path or through an agent-based Secure Internet Access (SIA) tunnel. They are different access models. The explicit proxy terminates the browser's proxy connection at the FortiSASE proxy service (default port 9443) and applies web policy there. The SIA tunnel encapsulates endpoint traffic into the managed tunnel path. They should not both steer the same browser flow.\n\n### Why the 403 occurs\nThe October 6, 2026 Community troubleshooting tip describes a 403 domain-fronting blocked response when the proxy and SIA tunnel are active together. The proxy service changes the Server Name Indication (SNI). When the already-proxied traffic then reaches FortiSASE through the SIA tunnel, the SNI and tunnel path conflict with the expected domain identity, so FortiSASE blocks the request. The destination web server may be healthy; the 403 is generated by the FortiSASE steering/security boundary.\n\n### Prove which path the browser is using\nOpen browser developer tools before reproducing the failure. Inspect the request port: ordinary HTTPS to a destination is normally port 443, while 9443 indicates the FortiSASE explicit-proxy service. Check the PAC URL, Windows proxy settings, FortiClient tunnel state, and the request's SNI/host details. A 403 alone does not prove the destination site rejected the request; correlate it with proxy port and tunnel state.\n\n### Safe correction\nChoose one steering model for the endpoint/traffic flow. If the endpoint should use the SIA tunnel, disable the explicit proxy/PAC setting on that endpoint and verify the tunnel carries the traffic. If the deployment is intentionally agentless, remove the competing tunnel path for that flow and validate PAC selection. Do not disable TLS inspection, weaken certificate validation, or alter the destination site's DNS merely to clear the 403; those actions do not address the duplicate steering path.\n\n### Rollout and edge cases\nCheck whether PAC settings are delivered by GPO, MDM, browser policy, or a local agent. A stale proxy configuration can survive a tunnel deployment and affect only some applications or user profiles. After changing the steering model, clear stale browser connections, test both direct and tunneled destinations, and confirm the expected egress path. Keep a small endpoint test group before changing the fleet.\n\n### Operational evidence\nRecord the browser request port, PAC decision, SIA tunnel state, SNI, and FortiSASE policy/log result. The useful distinction is which endpoint steering mechanism selected this flow rather than whether the website is up.",
+      "diagram": {
+        "title": "Mutually exclusive FortiSASE proxy and SIA tunnel paths",
+        "nodes": [
+          "Browser / endpoint",
+          "PAC explicit proxy :9443",
+          "SIA IPsec tunnel",
+          "SNI rewrite at proxy",
+          "FortiSASE domain-fronting gate",
+          "Allowed flow or 403"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "Remote-health-check BGP route suppression when every hub-to-spoke overlay is dead: MED failover across dual hubs",
+      "primary": [
+        [
+          "Suppress BGP routes when all links to a spoke are down — FortiOS 7.6.6 Administration Guide",
+          "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/61914/allow-sd-wan-hubs-to-suppress-bgp-routes-when-all-links-to-a-spoke-are-down-new"
+        ],
+        [
+          "Same feature — FortiOS 8.0 Administration Guide",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/61914/allow-sd-wan-hubs-to-suppress-bgp-routes-when-all-links-to-a-spoke-are-down"
+        ]
+      ],
+      "scenario": [],
+      "scenario_status": "No directly matched recent Community troubleshooting scenario verified; the Fortinet feature guide includes a full dual-hub failure and failover example.",
+      "body_md": "### Failure this feature prevents\nIn a dual-hub ADVPN/SD-WAN design, a hub may continue advertising a spoke's prefixes after every overlay member between that hub and the spoke has failed. The hub can still have a healthy BGP session to the data center, so the route remains visible even though the next hop is unusable. Without route suppression, the data center can keep sending traffic to the dead hub and blackhole it.\n\nFortiOS 7.6.5 introduced the ability for an SD-WAN hub to detect a dead spoke from remote SLA probes and suppress routes to that spoke. This is different from selecting another local WAN member for a flow: it changes the BGP advertisement so external peers can prefer another hub.\n\n### Probe state to BGP attribute\nThe remote health-check is configured under config system sdwan config health-check. It uses detect-mode remote, a probe timeout, failtime and recoverytime, the relevant overlay members, and set update-bgp-route enable. As long as at least one probe path to the spoke remains alive, the hub continues to treat the spoke as reachable. When all members are dead, the route is flagged as suppressed.\n\nAn outbound BGP route-map matches that suppression state with set match-suppress enable. A later rule handles normal routes. In Fortinet's example, suppressed routes receive MED 999 while normal routes receive a lower MED such as 10 on Hub-1 and 20 on Hub-2. The BGP neighbor uses set route-map-out and set attribute-unchanged med so the intended MED is preserved to the external peer. The higher MED makes the other hub's advertisement preferable when both paths are present.\n\n### Verify the state transition\nUse diagnose sys sdwan health-check remote to inspect remote probe statistics and SLA status. diagnose sys link-monitor dynamic-bgp-peers exposes the alive count, total members, and route-suppressed state. Then inspect get router info bgp network <prefix> on the receiving peer to verify both paths and their MED values. A packet capture can confirm that traffic moved to the alternate hub tunnel.\n\nA single failed member should reduce the alive count but should not suppress the spoke route if another member remains alive. The key transition is all-member failure, not the first lost tunnel. When probes recover, verify the route is no longer suppressed and the normal MED is restored.\n\n### Design caveats\nfailtime and recoverytime control convergence sensitivity; overly aggressive values can cause route churn during transient loss. Both hubs must have consistent remote health-check and route-map behavior. Confirm the external peer's MED comparison policy and ensure MED is not discarded or rewritten by an intermediate router. Test partial failure, all-member failure, and recovery separately.\n\n### Operational use\nThis mechanism closes the gap between overlay health and underlay BGP reachability. It is particularly useful when the data center can reach two hubs but only one hub still has a viable path to a spoke.",
+      "diagram": {
+        "title": "Dual-hub remote SLA route suppression and MED failover",
+        "nodes": [
+          "Spoke overlay members",
+          "Hub-1 remote SLA probes",
+          "All members dead?",
+          "BGP route-map sets MED 999",
+          "External peer selects Hub-2",
+          "Recovery restores normal MED"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            2
+          ]
+        ]
+      }
+    }
+  ]
+}
