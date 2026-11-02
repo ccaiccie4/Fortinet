@@ -1,0 +1,1430 @@
+{
+  "run_date": "2026-11-02",
+  "question_count": 50,
+  "choice_explanation_count": 200,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "correct_answer_uniquely_longest": [
+    17,
+    24,
+    25,
+    28,
+    30,
+    32,
+    33,
+    34,
+    37,
+    41,
+    42,
+    43,
+    44,
+    47
+  ],
+  "maximum_choice_word_spread": 6,
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "stem": "A FortiGate on a supported SoC4 platform enters FIPS-CC mode without a USB entropy token. What should the engineer expect?",
+      "choices": [
+        {
+          "text": "The appliance silently skips entropy initialization and relies on the last boot seed.",
+          "feedback": "FIPS boot still requires an entropy source; skipping initialization would not satisfy the documented path.",
+          "correct": false
+        },
+        {
+          "text": "A FortiManager template supplies the entropy token during device installation.",
+          "feedback": "Firmware templates manage image versions and schedules, not boot-time entropy.",
+          "correct": false
+        },
+        {
+          "text": "CPU-jitter entropy supplies the built-in boot entropy source.",
+          "feedback": "FortiOS 7.2.6 documents CPU-jitter entropy and removes the token parameter on SoC3/4/CP9.",
+          "correct": true
+        },
+        {
+          "text": "The General Availability image automatically inherits the FIPS-CC certification state.",
+          "feedback": "Certification and image branch are separate; GA firmware is not interchangeable with FIPS-CC builds.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "stem": "Boot self-tests pass, but the running build is from the ordinary GA branch. What conclusion is justified?",
+      "choices": [
+        {
+          "text": "The build is certified because every algorithm self-test passed during boot.",
+          "feedback": "Self-tests are one gate; certification status is tied to the approved image and release branch.",
+          "correct": false
+        },
+        {
+          "text": "The appliance should disable FIPS-CC until a USB token is installed.",
+          "feedback": "Supported SoC3/4/CP9 platforms use built-in CPU-jitter entropy rather than a USB token.",
+          "correct": false
+        },
+        {
+          "text": "The firmware branch can be inferred from the administrator's configuration backup.",
+          "feedback": "The backup does not identify the currently running signed firmware branch or build.",
+          "correct": false
+        },
+        {
+          "text": "The cryptographic mode is enabled, but branch eligibility still needs verification.",
+          "feedback": "A passing local self-test does not establish the image's certification or branch status.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "stem": "A change window is planned to enable FIPS-CC, and the CLI warns configuration may be lost. What is the safest preparation?",
+      "choices": [
+        {
+          "text": "Enable the mode during peak hours, then compare VPN counters afterward.",
+          "feedback": "The documented change reboots the unit and may lose most configuration.",
+          "correct": false
+        },
+        {
+          "text": "Export configuration, verify the platform and image, and stage console recovery.",
+          "feedback": "The mode change is disruptive; backup and recovery access must precede the reboot.",
+          "correct": true
+        },
+        {
+          "text": "Install the newest GA image first, then enable the FIPS-CC flag.",
+          "feedback": "The matching FIPS-CC branch and its ReadMe must drive image selection.",
+          "correct": false
+        },
+        {
+          "text": "Remove the external entropy token and assume the saved configuration is preserved.",
+          "feedback": "The guide warns configuration can be lost during the mode change.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "stem": "Fortinet publishes a security-hardening update for FIPS-enabled appliances. Which image-selection rule is correct?",
+      "choices": [
+        {
+          "text": "Use the matching FIPS-CC branch image and follow its release ReadMe.",
+          "feedback": "Fortinet publishes branch-specific FIPS images and directs administrators to each image's ReadMe.",
+          "correct": true
+        },
+        {
+          "text": "Choose the highest GA build number, regardless of certification branch.",
+          "feedback": "A higher GA build does not prove FIPS-CC branch compatibility.",
+          "correct": false
+        },
+        {
+          "text": "Keep the old image because boot self-tests are already passing.",
+          "feedback": "Security-hardening updates and branch support still require current release review.",
+          "correct": false
+        },
+        {
+          "text": "Select any candidate image that lists the same FortiOS major version.",
+          "feedback": "Candidate, certification, and patched status are branch-specific.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 5,
+      "product": "FortiManager",
+      "stem": "A scheduled firmware campaign is not visible in the GUI, but the CLI lists a profile under one ADOM. What does this prove?",
+      "choices": [
+        {
+          "text": "A FortiGate has already downloaded and installed the scheduled image.",
+          "feedback": "A stored profile is not proof that a device upgrade executed.",
+          "correct": false
+        },
+        {
+          "text": "The profile belongs to every ADOM because schedules are global.",
+          "feedback": "The profile database is grouped by ADOM; scope must be identified.",
+          "correct": false
+        },
+        {
+          "text": "The device database has been replaced by the firmware scheduler.",
+          "feedback": "Firmware profiles and device configuration databases are separate management objects.",
+          "correct": false
+        },
+        {
+          "text": "An internal firmware profile record remains stored for that ADOM.",
+          "feedback": "The diagnostic command exposes persistent per-ADOM profile data beyond the visible GUI list.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "stem": "The stale firmware profile is confirmed in ADOM Retail. Which cleanup command limits the change?",
+      "choices": [
+        {
+          "text": "diagnose fwmanager profile clear",
+          "feedback": "Without an ADOM, the command clears profiles across all ADOMs.",
+          "correct": false
+        },
+        {
+          "text": "diagnose fwmanager profile clear Retail",
+          "feedback": "The ADOM argument scopes the clear operation to Retail.",
+          "correct": true
+        },
+        {
+          "text": "execute device database reset Retail",
+          "feedback": "This is not the documented firmware-profile cleanup command.",
+          "correct": false
+        },
+        {
+          "text": "diagnose fwmanager profile list Retail",
+          "feedback": "The list command inspects records but does not remove them.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "stem": "Why is running the profile-clear command without an ADOM argument risky on a multi-tenant manager?",
+      "choices": [
+        {
+          "text": "It clears only profiles that have already completed their upgrades.",
+          "feedback": "The command scope is all ADOMs, not only completed tasks.",
+          "correct": false
+        },
+        {
+          "text": "It deletes device configuration revisions but leaves schedules untouched.",
+          "feedback": "The command targets firmware profile records, not device revisions.",
+          "correct": false
+        },
+        {
+          "text": "It can remove scheduled firmware profiles belonging to unrelated ADOMs.",
+          "feedback": "The Community tip states an omitted name clears profiles for all ADOMs.",
+          "correct": true
+        },
+        {
+          "text": "It changes the global firmware image repository for every managed device.",
+          "feedback": "The profile clear operation does not modify the image repository itself.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "stem": "After a scoped cleanup, what evidence best confirms the intended profile was removed without affecting other ADOMs?",
+      "choices": [
+        {
+          "text": "Check only the device's running firmware version after a reboot.",
+          "feedback": "A device version does not reveal whether stale scheduler metadata remains.",
+          "correct": false
+        },
+        {
+          "text": "Compare profile-list output before and after, then inspect the task monitor.",
+          "feedback": "The list shows stored profiles; Task Monitor shows remaining scheduled work.",
+          "correct": true
+        },
+        {
+          "text": "Delete the ADOM and recreate it with the same name.",
+          "feedback": "That is unnecessarily destructive and does not verify the scoped cleanup.",
+          "correct": false
+        },
+        {
+          "text": "Rely on the absence of a GUI template row as the sole check.",
+          "feedback": "The problem itself is a possible GUI/database visibility mismatch.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 9,
+      "product": "FortiAnalyzer",
+      "stem": "After a FortiAnalyzer reboot, Device Manager shows Down, but the FortiGate reports registered/up and OFTP counters rise. What is the best first action?",
+      "choices": [
+        {
+          "text": "Allow the documented 10–15 minute status refresh interval, then recheck.",
+          "feedback": "The October 5 tip describes expected GUI reconciliation delay after reboot.",
+          "correct": true
+        },
+        {
+          "text": "Increase the no-log threshold immediately to six hours for every device.",
+          "feedback": "Changing thresholds can mask real silence and is not required for expected convergence.",
+          "correct": false
+        },
+        {
+          "text": "Re-register the FortiGate and rebuild every ADOM database.",
+          "feedback": "The transport is already active; these actions are not supported by the evidence.",
+          "correct": false
+        },
+        {
+          "text": "Disable OFTP and switch the device to scheduled upload mode.",
+          "feedback": "The current evidence shows the existing OFTP path is working.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "stem": "Which command most directly shows that FortiAnalyzer is receiving logs at a positive rate?",
+      "choices": [
+        {
+          "text": "diagnose sys sdwan health-check remote",
+          "feedback": "That command inspects SD-WAN remote probes, not analyzer ingestion.",
+          "correct": false
+        },
+        {
+          "text": "diagnose fwmanager profile list",
+          "feedback": "That command lists FortiManager firmware profiles.",
+          "correct": false
+        },
+        {
+          "text": "get router info bgp network",
+          "feedback": "That command displays BGP route information.",
+          "correct": false
+        },
+        {
+          "text": "diagnose fortilogd lograte",
+          "feedback": "This reports the log receive rate at the analyzer.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "stem": "A device uses scheduled uploads. Which default stale-log threshold does Device Manager use before showing Down?",
+      "choices": [
+        {
+          "text": "Six hours for scheduled uploading.",
+          "feedback": "The Administration Guide documents a six-hour default for scheduled upload mode.",
+          "correct": true
+        },
+        {
+          "text": "Fifteen minutes for all device logging modes.",
+          "feedback": "Fifteen minutes is the near-real-time default, not the scheduled-upload default.",
+          "correct": false
+        },
+        {
+          "text": "Thirty seconds after the last OFTP packet.",
+          "feedback": "The guide specifies time-based thresholds in minutes, not a universal 30-second timer.",
+          "correct": false
+        },
+        {
+          "text": "One day regardless of logging mode.",
+          "feedback": "The documented scheduled-upload default is six hours.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "stem": "The GUI remains stale more than 30 minutes after reboot, and the OFTP packet count no longer increases. What should be checked next?",
+      "choices": [
+        {
+          "text": "Network path, device authorization, port 514, and fortilogd health.",
+          "feedback": "The recent tip recommends transport, registration, and receiver checks after the normal delay.",
+          "correct": true
+        },
+        {
+          "text": "The FortiAP DARRP optimization schedule and channel weights.",
+          "feedback": "Wireless channel optimization does not explain analyzer log transport.",
+          "correct": false
+        },
+        {
+          "text": "The FortiManager firmware profile database for the affected ADOM.",
+          "feedback": "Firmware scheduler metadata is unrelated to OFTP receipt.",
+          "correct": false
+        },
+        {
+          "text": "The Windows WEC ForwardedEvents subscription state.",
+          "feedback": "That is a FortiSIEM WEF collection dependency, not FortiAnalyzer OFTP.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 13,
+      "product": "FortiSwitch",
+      "stem": "A FortiSwitch 108 on 7.6.7 returns Broken pipe and crash logs repeatedly show /bin/sshd exits. What recovery path matches the documented workaround?",
+      "choices": [
+        {
+          "text": "Use console access to run execute ssh-regen-keys.",
+          "feedback": "Fortinet's Community tip gives this command as the workaround for the affected 108 versions.",
+          "correct": true
+        },
+        {
+          "text": "Reset every administrator password and leave host keys unchanged.",
+          "feedback": "The evidence points to the SSH daemon/key issue, not a credential-only failure.",
+          "correct": false
+        },
+        {
+          "text": "Disable host-key checking on all automation clients permanently.",
+          "feedback": "That weakens identity verification and does not repair the server daemon.",
+          "correct": false
+        },
+        {
+          "text": "Rebuild the switch's VLAN database before retrying SSH.",
+          "feedback": "VLAN state does not address the reported sshd crash.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "stem": "After SSH keys are regenerated, an automation client reports a host-key mismatch. What is the correct next step?",
+      "choices": [
+        {
+          "text": "Disable strict host-key checking for every switch in the inventory.",
+          "feedback": "That removes an important server-identity control rather than validating the changed key.",
+          "correct": false
+        },
+        {
+          "text": "Assume the switch is under attack and factory-reset it immediately.",
+          "feedback": "A changed key is expected after the documented regeneration command.",
+          "correct": false
+        },
+        {
+          "text": "Keep the old key pinned and retry until the SSH session succeeds.",
+          "feedback": "The server now presents a new host key, so the old pin will continue to fail.",
+          "correct": false
+        },
+        {
+          "text": "Verify the new fingerprint through a trusted channel, then update known-hosts.",
+          "feedback": "Key regeneration changes server identity; clients must validate the new fingerprint.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "stem": "Why does execute ssh-regen-keys terminate existing management sessions?",
+      "choices": [
+        {
+          "text": "It restarts the switching ASIC to relearn all forwarding entries.",
+          "feedback": "The command is an SSH service operation, not a forwarding-table reset.",
+          "correct": false
+        },
+        {
+          "text": "It reboots the entire FortiSwitch and clears its startup configuration.",
+          "feedback": "The documented behavior is an SSH server restart, not a factory reset.",
+          "correct": false
+        },
+        {
+          "text": "It disables all remote management protocols until the next firmware upgrade.",
+          "feedback": "The command regenerates SSH keys and restarts the SSH daemon.",
+          "correct": false
+        },
+        {
+          "text": "The command restarts the SSH server after replacing its key material.",
+          "feedback": "The CLI reference warns that sshd restarts and current SSH connections disconnect.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "stem": "Which release is identified as fixing the FortiSwitch 108 SSH issue described for 7.6.6–7.6.8?",
+      "choices": [
+        {
+          "text": "FortiSwitchOS 7.6.5",
+          "feedback": "The issue is described in later releases; 7.6.5 is not the stated fix.",
+          "correct": false
+        },
+        {
+          "text": "FortiSwitchOS 7.4.3",
+          "feedback": "That release added the key-regeneration command, not the specific 108 fix.",
+          "correct": false
+        },
+        {
+          "text": "FortiSwitchOS 7.6.9",
+          "feedback": "The Community article explicitly identifies 7.6.9 as the fixed release.",
+          "correct": true
+        },
+        {
+          "text": "FortiSwitchOS 8.0.0",
+          "feedback": "The cited troubleshooting tip identifies 7.6.9 as the correction.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 17,
+      "product": "FortiAP/Wireless",
+      "stem": "A managed FortiAP is expected to choose channels automatically, but no DARRP optimization occurs. What configuration should be checked first?",
+      "choices": [
+        {
+          "text": "The FortiNAC Physical Address Filtering group membership.",
+          "feedback": "That group controls host containment, not RF channel selection.",
+          "correct": false
+        },
+        {
+          "text": "The FortiManager firmware profile checksum for the AP's ADOM.",
+          "feedback": "Firmware profile metadata does not enable DARRP on a radio.",
+          "correct": false
+        },
+        {
+          "text": "The FortiAuthenticator LDAP CRL Check Mode.",
+          "feedback": "LDAP certificate validation is unrelated to radio provisioning.",
+          "correct": false
+        },
+        {
+          "text": "The per-radio darrp setting and attached ARRP profile in the WTP profile.",
+          "feedback": "DARRP is disabled by default and enabled under each radio.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "stem": "An engineer enables DARRP and sees arrp-default-high-density applied automatically. What should be considered?",
+      "choices": [
+        {
+          "text": "Assume the AP has measured client density and selected the perfect profile.",
+          "feedback": "The profile is an automatic default, not proof of an RF survey result.",
+          "correct": false
+        },
+        {
+          "text": "Replace the profile with arrp-default because it remains the only supported option.",
+          "feedback": "FortiOS 8.0 replaces the old default with high- and medium-density profiles.",
+          "correct": false
+        },
+        {
+          "text": "Disable channel monitoring because DARRP runs only once at boot.",
+          "feedback": "DARRP uses scheduled optimization and subsequent monitoring behavior.",
+          "correct": false
+        },
+        {
+          "text": "Review whether high-density weights fit the actual RF environment.",
+          "feedback": "FortiOS 8.0 selects the high-density profile on first enablement by default.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "stem": "Why does Fortinet recommend avoiding frequent DARRP optimization during business hours?",
+      "choices": [
+        {
+          "text": "Every optimization reboots the FortiGate wireless controller.",
+          "feedback": "The documented impact is channel change and client disruption, not a controller reboot.",
+          "correct": false
+        },
+        {
+          "text": "Channel changes can briefly disrupt connected wireless clients.",
+          "feedback": "The guide warns that optimization may change AP channels and interrupt clients.",
+          "correct": true
+        },
+        {
+          "text": "The ARRP profile deletes the SSID and recreates it on each radio.",
+          "feedback": "DARRP evaluates channel parameters; it does not recreate SSID objects.",
+          "correct": false
+        },
+        {
+          "text": "The optimizer disables DFS channels permanently after the first run.",
+          "feedback": "DFS behavior is a channel-selection caveat, not a permanent disable action.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "stem": "A roaming complaint occurs after a channel change. Which evidence set best correlates the client experience with AP behavior?",
+      "choices": [
+        {
+          "text": "Only the FortiGate routing table and BGP neighbor summary.",
+          "feedback": "Those outputs do not show association, authentication, or RF roaming events.",
+          "correct": false
+        },
+        {
+          "text": "Controller debug, AP klog, client WLAN report, and an OTA capture.",
+          "feedback": "The Community guide recommends synchronized evidence from controller, AP, and client.",
+          "correct": true
+        },
+        {
+          "text": "Only the ARRP profile name from the WTP configuration.",
+          "feedback": "The profile shows intent, not the client's actual disconnect sequence.",
+          "correct": false
+        },
+        {
+          "text": "Only a screenshot of the Wi-Fi SSID and its VLAN assignment.",
+          "feedback": "SSID/VLAN state does not expose RF roaming and authentication timing.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 21,
+      "product": "FortiNAC",
+      "stem": "A successful L2 poll completes, but hosts on secure ports do not appear in Ports View. What is the likely missing model capability?",
+      "choices": [
+        {
+          "text": "Reading static MAC-table entries through the secure-port model setting.",
+          "feedback": "Secure ports can turn learned entries static, which normal polling may ignore.",
+          "correct": true
+        },
+        {
+          "text": "Enabling BGP route suppression for the switch management subnet.",
+          "feedback": "BGP suppression has no relationship to FortiNAC MAC-table discovery.",
+          "correct": false
+        },
+        {
+          "text": "Increasing the FortiNAC EAP session timeout for all wired hosts.",
+          "feedback": "EAP state does not control whether static MAC entries are polled.",
+          "correct": false
+        },
+        {
+          "text": "Changing the switch to a different spanning-tree root priority.",
+          "feedback": "STP root selection does not enable static MAC-table visibility.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "stem": "A disabled host record is deleted, but the endpoint remains blocked when it returns. What explains the behavior?",
+      "choices": [
+        {
+          "text": "The host's IP address is still cached in the FortiAnalyzer database.",
+          "feedback": "The enforcement list is stored on the switch by physical address, not analyzer logs.",
+          "correct": false
+        },
+        {
+          "text": "The disabled MAC can remain in the switch's secure-port list after deletion.",
+          "feedback": "The FortiNAC guide warns that deleting a disabled host does not remove the device entry.",
+          "correct": true
+        },
+        {
+          "text": "The device was automatically moved into the FortiNAC-F registry scan group.",
+          "feedback": "Registry scan policy does not explain a switch-side MAC restriction.",
+          "correct": false
+        },
+        {
+          "text": "The endpoint still has the old DHCP lease and cannot renew it.",
+          "feedback": "The documented secure-port behavior is based on MAC restriction, not lease age.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "stem": "Why must the designated secure/static port be protected from ordinary endpoint access?",
+      "choices": [
+        {
+          "text": "The port becomes the switch's STP root and blocks all other VLANs.",
+          "feedback": "Secure-port enforcement is not an STP root-election feature.",
+          "correct": false
+        },
+        {
+          "text": "FortiNAC stops polling every other access port on the switch.",
+          "feedback": "The guide describes a restricted port, not a global polling shutdown.",
+          "correct": false
+        },
+        {
+          "text": "The switch stops learning MAC addresses on every production port.",
+          "feedback": "The feature restricts selected disabled MACs; it does not disable all learning.",
+          "correct": false
+        },
+        {
+          "text": "A disabled host connected there may regain network access by design.",
+          "feedback": "The secure port is the permitted restricted location for disabled MAC addresses.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "stem": "Before deleting a disabled host from inventory, what should the operator do?",
+      "choices": [
+        {
+          "text": "Delete the switch model so the MAC list is cleared automatically.",
+          "feedback": "Removing the model is destructive and is not the documented cleanup path.",
+          "correct": false
+        },
+        {
+          "text": "Re-enable the host or remove the device-side restriction through the supported process.",
+          "feedback": "The device may retain the disabled MAC after the FortiNAC host record is deleted.",
+          "correct": true
+        },
+        {
+          "text": "Change the host's VLAN and leave its disabled record untouched.",
+          "feedback": "A VLAN move does not necessarily remove the secure-port MAC restriction.",
+          "correct": false
+        },
+        {
+          "text": "Run a full FortiAnalyzer SQL rebuild for the affected ADOM.",
+          "feedback": "The restriction is on the switch, not the analyzer database.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC-F",
+      "stem": "A registry value exists under the logged-on user's HKCU, but the Persistent Agent scan reports it missing. What is the likely cause?",
+      "choices": [
+        {
+          "text": "The agent service runs under a different identity and does not see that HKCU hive.",
+          "feedback": "The Administration Guide explicitly warns that HKCU scans will not succeed for this reason.",
+          "correct": true
+        },
+        {
+          "text": "The scan engine can read only HKEY_CLASSES_ROOT and HKEY_CURRENT_CONFIG.",
+          "feedback": "The guide lists several supported hives, including HKLM and HKEY_USERS.",
+          "correct": false
+        },
+        {
+          "text": "FortiNAC-F converts every HKCU scan into a REG_DWORD comparison.",
+          "feedback": "Hive selection and value type are separate scan parameters.",
+          "correct": false
+        },
+        {
+          "text": "The Windows endpoint must first register a new DHCP Option 82 lease.",
+          "feedback": "DHCP relay identity does not determine registry visibility to the agent.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "stem": "A REG_DWORD compliance value is configured as hexadecimal text. What correction matches the guide?",
+      "choices": [
+        {
+          "text": "Change the hive to HKEY_CURRENT_USER and retain hexadecimal data.",
+          "feedback": "The hive does not change the documented decimal requirement.",
+          "correct": false
+        },
+        {
+          "text": "Select the Sets the value action for every DWORD comparison.",
+          "feedback": "The guide provides Match Value for comparisons and cautions about mutation.",
+          "correct": false
+        },
+        {
+          "text": "Enter the expected DWORD data as a decimal value.",
+          "feedback": "The FortiNAC-F guide explicitly requires decimal input for REG_DWORD.",
+          "correct": true
+        },
+        {
+          "text": "Convert the value to REG_SZ so the scan treats it as a number.",
+          "feedback": "REG_SZ is a string type and does not preserve DWORD comparison semantics.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "stem": "A custom scan should report a mismatch but never alter endpoint state. Which action is appropriate?",
+      "choices": [
+        {
+          "text": "Match Value with the required comparison operator.",
+          "feedback": "Match Value evaluates the existing data without writing a new registry value.",
+          "correct": true
+        },
+        {
+          "text": "Sets the value, because it both compares and reports the existing value.",
+          "feedback": "That action can create or overwrite the registry value.",
+          "correct": false
+        },
+        {
+          "text": "Prohibit, because it always writes the expected DWORD into the hive.",
+          "feedback": "Prohibit changes failure semantics; it is not a value-setting action.",
+          "correct": false
+        },
+        {
+          "text": "General scan pass-through, because it preserves the current key.",
+          "feedback": "A pass-through setting does not perform the required registry comparison.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "stem": "How do Prohibit and Severity differ in a registry-key custom scan?",
+      "choices": [
+        {
+          "text": "Prohibit chooses the Windows hive; Severity chooses the DWORD operator.",
+          "feedback": "Hive and comparison operator are separate scan parameters.",
+          "correct": false
+        },
+        {
+          "text": "Prohibit enables the Persistent Agent service; Severity restarts its process.",
+          "feedback": "Neither field controls agent service lifecycle.",
+          "correct": false
+        },
+        {
+          "text": "Prohibit can fail a host when the key is found; Severity grades a missing-key failure.",
+          "feedback": "The guide treats prohibited-key logic and missing-key severity as separate fields.",
+          "correct": true
+        },
+        {
+          "text": "Prohibit selects the registry value type; Severity converts hexadecimal data.",
+          "feedback": "Type and data representation are configured independently.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 29,
+      "product": "FortiAuthenticator",
+      "stem": "LDAP is reachable and the bind account browses successfully, but remote sync fails with unable to get local issuer. What should be examined first?",
+      "choices": [
+        {
+          "text": "The server's presented certificate chain and FortiAuthenticator trusted intermediates.",
+          "feedback": "The error indicates TLS chain validation failed before the sync could complete.",
+          "correct": true
+        },
+        {
+          "text": "The user's password-expiration policy in Active Directory.",
+          "feedback": "The failure is certificate verification, not an invalid user credential.",
+          "correct": false
+        },
+        {
+          "text": "The FortiPAM HA heartbeat interface and cluster priority.",
+          "feedback": "That is unrelated to remote LDAP TLS validation.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate SD-WAN service rule for the LDAP destination.",
+          "feedback": "The endpoint is reachable; the error is in the TLS trust stage.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "stem": "What additional material is required when CRL Check Mode is set to All Nodes?",
+      "choices": [
+        {
+          "text": "Only the leaf certificate and the LDAP bind password.",
+          "feedback": "All Nodes checks every CA in the chain, not only the leaf issuer.",
+          "correct": false
+        },
+        {
+          "text": "A client certificate for every LDAP user in the directory.",
+          "feedback": "The optional client certificate authenticates FortiAuthenticator to the server, not each user.",
+          "correct": false
+        },
+        {
+          "text": "A DNS SRV record for every intermediate certificate authority.",
+          "feedback": "DNS service discovery does not satisfy the documented CRL requirements.",
+          "correct": false
+        },
+        {
+          "text": "CRLs for every CA in the chain and the full server chain in the handshake.",
+          "feedback": "The guide explicitly requires CRL coverage for every chain CA and full-chain presentation.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "stem": "The LDAP server requires mutual TLS. Which setting addresses FortiAuthenticator's client identity?",
+      "choices": [
+        {
+          "text": "Trusted CA = All Trusted.",
+          "feedback": "That setting controls which server certificate authorities are trusted.",
+          "correct": false
+        },
+        {
+          "text": "CRL Check Mode = Leaf Node.",
+          "feedback": "That setting checks revocation of the issuing CA for the server certificate.",
+          "correct": false
+        },
+        {
+          "text": "Use Client Certificate for TLS Authentication.",
+          "feedback": "This setting presents a selected client certificate to the secure LDAP server.",
+          "correct": true
+        },
+        {
+          "text": "Protocol = StartTLS only.",
+          "feedback": "Protocol selects the TLS establishment method, not the client certificate.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "stem": "LDAP browse works, but scheduled remote-user synchronization still fails. What distinction should be tested?",
+      "choices": [
+        {
+          "text": "Whether FortiSwitch has regenerated its SSH host keys.",
+          "feedback": "SSH server identity is unrelated to LDAP synchronization.",
+          "correct": false
+        },
+        {
+          "text": "Whether FortiNAC reads static MAC addresses from the switch.",
+          "feedback": "MAC polling is unrelated to remote LDAP user synchronization.",
+          "correct": false
+        },
+        {
+          "text": "The sync rule's own TLS, filter, mapping, and schedule transaction.",
+          "feedback": "A successful browse does not prove the separate sync workflow completed.",
+          "correct": true
+        },
+        {
+          "text": "Whether the FortiGate has a CPU-jitter entropy source enabled.",
+          "feedback": "FIPS boot entropy does not explain LDAP sync behavior.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 33,
+      "product": "FortiPAM",
+      "stem": "After a primary FortiPAM fails, which data should not be assumed to exist on the new primary?",
+      "choices": [
+        {
+          "text": "The synchronized user and secret configuration.",
+          "feedback": "The guide says PAM configuration, users, and secrets are synchronized.",
+          "correct": false
+        },
+        {
+          "text": "Historical system logs and session videos written to the original primary's disks.",
+          "feedback": "The guide states logs and videos are not synchronized between HA nodes.",
+          "correct": true
+        },
+        {
+          "text": "The cluster name and shared HA password.",
+          "feedback": "Those are cluster configuration items, not local-only audit records.",
+          "correct": false
+        },
+        {
+          "text": "The passive node's device model and firmware identity.",
+          "feedback": "Those are required node properties, not session evidence artifacts.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "stem": "The passive node takes the primary role after failover but privileged services remain suspended. What should be checked?",
+      "choices": [
+        {
+          "text": "The FortiAnalyzer Device Manager 15-minute log threshold.",
+          "feedback": "That threshold affects analyzer status, not FortiPAM failover maintenance.",
+          "correct": false
+        },
+        {
+          "text": "The Windows WEC ForwardedEvents log on the collector.",
+          "feedback": "WEF collection is unrelated to FortiPAM service resumption.",
+          "correct": false
+        },
+        {
+          "text": "Maintenance mode on the new primary and the documented resume action.",
+          "feedback": "The guide says the promoted secondary enters maintenance mode until an administrator resumes services.",
+          "correct": true
+        },
+        {
+          "text": "The switch's secure/static port list for the PAM subnet.",
+          "feedback": "Switch MAC restrictions do not control FortiPAM HA maintenance mode.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "stem": "HA synchronization fails between a VMware node and a KVM node. What is the primary compatibility issue?",
+      "choices": [
+        {
+          "text": "The nodes have different numbers of licensed seats.",
+          "feedback": "The guide allows different seat counts; platform compatibility is the issue.",
+          "correct": false
+        },
+        {
+          "text": "FortiPAM does not support cross-platform VM HA membership.",
+          "feedback": "The Administration Guide requires VMs in one cluster to use the same platform.",
+          "correct": true
+        },
+        {
+          "text": "The primary has a different hostname from the secondary.",
+          "feedback": "Hostname is not the documented platform compatibility requirement.",
+          "correct": false
+        },
+        {
+          "text": "The nodes use different FortiAnalyzer ADOM assignments.",
+          "feedback": "FortiPAM HA compatibility is independent of analyzer ADOMs.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "stem": "Why must HA priority and override be checked on each FortiPAM node separately?",
+      "choices": [
+        {
+          "text": "The settings are stored only in the FortiAnalyzer archive database.",
+          "feedback": "They are local HA settings, not analyzer archive metadata.",
+          "correct": false
+        },
+        {
+          "text": "Priority is derived from the number of active privileged sessions.",
+          "feedback": "The guide describes configured priority values, not session-count election.",
+          "correct": false
+        },
+        {
+          "text": "Those settings are not synchronized across cluster members.",
+          "feedback": "The guide explicitly requires manual, separate configuration of priority and override.",
+          "correct": true
+        },
+        {
+          "text": "Override is enabled only after the secondary enters maintenance mode.",
+          "feedback": "Override is an HA preference setting, separate from maintenance mode.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 37,
+      "product": "FortiSIEM",
+      "stem": "WEF events arrive in FortiSIEM, but the CMDB source is the WEC server. Is this necessarily a fault?",
+      "choices": [
+        {
+          "text": "Yes; every forwarded workstation must create its own CMDB device automatically.",
+          "feedback": "The Community tip explains that origin fields do not automatically create CMDB entries.",
+          "correct": false
+        },
+        {
+          "text": "No; the agent collects ForwardedEvents from WEC while origin hosts remain in event fields.",
+          "feedback": "The WEC is the agent host; original source identity is parsed from the event payload.",
+          "correct": true
+        },
+        {
+          "text": "Yes; WEF cannot preserve the original hostname inside the event.",
+          "feedback": "The original host can remain visible in parsed event attributes.",
+          "correct": false
+        },
+        {
+          "text": "No; FortiSIEM should discard the WEC and create no source device.",
+          "feedback": "The agent's transport source is the WEC, which remains the collection host.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "stem": "A source computer is not represented in FortiSIEM. What should be verified before changing parser rules?",
+      "choices": [
+        {
+          "text": "That the FortiPAM secondary node has exited maintenance mode.",
+          "feedback": "FortiPAM HA state does not affect WEF collection.",
+          "correct": false
+        },
+        {
+          "text": "That the FortiGate FIPS-CC self-tests passed during boot.",
+          "feedback": "Cryptographic boot tests do not establish WEF subscription delivery.",
+          "correct": false
+        },
+        {
+          "text": "That the FortiAnalyzer Device Manager status threshold is six hours.",
+          "feedback": "Analyzer status thresholds do not affect WEC event forwarding.",
+          "correct": false
+        },
+        {
+          "text": "That its event actually reached the WEC ForwardedEvents channel.",
+          "feedback": "If Windows never receives the forwarded event, FortiSIEM cannot collect it.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "stem": "Which agent-template event name is required for the WEF collection described by Fortinet?",
+      "choices": [
+        {
+          "text": "ForwardedEvents, entered in any letter case.",
+          "feedback": "The tip explicitly notes the event name is case-sensitive.",
+          "correct": false
+        },
+        {
+          "text": "Security, because WEF stores all events in the Security channel.",
+          "feedback": "ForwardedEvents is the WEC log name for forwarded events.",
+          "correct": false
+        },
+        {
+          "text": "ForwardedEvents, with the documented capitalization.",
+          "feedback": "The Community tip specifies ForwardedEvents as a case-sensitive event name.",
+          "correct": true
+        },
+        {
+          "text": "WindowsEvents, because the agent infers the collector log automatically.",
+          "feedback": "The documented template uses the exact ForwardedEvents name.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "stem": "Which workload may still require native endpoint collection rather than relying only on WEF?",
+      "choices": [
+        {
+          "text": "File-integrity monitoring and telemetry not forwarded by the subscription.",
+          "feedback": "WEF covers selected Windows event channels, not every endpoint telemetry source.",
+          "correct": true
+        },
+        {
+          "text": "Standard forwarded Security events already present in WEC.",
+          "feedback": "Those are the intended WEF collection payload.",
+          "correct": false
+        },
+        {
+          "text": "Kerberos events already present in ForwardedEvents.",
+          "feedback": "The Community article lists Kerberos event IDs as examples of forwarded data.",
+          "correct": false
+        },
+        {
+          "text": "Events that the WEC subscription successfully writes to ForwardedEvents.",
+          "feedback": "Those are available for the FortiSIEM agent to collect.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 41,
+      "product": "FortiSASE",
+      "stem": "A user receives 403 domain-fronting blocked; browser DevTools shows port 9443 and the SIA tunnel is active. What is the likely cause?",
+      "choices": [
+        {
+          "text": "The explicit proxy and SIA tunnel are steering the same flow and SNI conflicts.",
+          "feedback": "Fortinet documents that proxy and SIA tunnel should not be used simultaneously.",
+          "correct": true
+        },
+        {
+          "text": "The destination web server has stopped listening on TCP/443.",
+          "feedback": "The 9443 proxy path and tunnel state point to a FortiSASE steering conflict.",
+          "correct": false
+        },
+        {
+          "text": "The FortiAuthenticator LDAP server rejected the user's certificate chain.",
+          "feedback": "LDAP trust is unrelated to the browser proxy and SIA path.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate failed to learn the remote site's BGP route tag.",
+          "feedback": "The reported symptom is a proxy/tunnel SNI conflict, not BGP route matching.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "stem": "The endpoint is intended to use only the SIA tunnel. Which correction follows the Community troubleshooting tip?",
+      "choices": [
+        {
+          "text": "Change the destination server's certificate to a different SAN.",
+          "feedback": "The error is caused by duplicate steering and SNI rewrite, not the server certificate.",
+          "correct": false
+        },
+        {
+          "text": "Disable the endpoint's proxy/PAC settings and retest the tunnel path.",
+          "feedback": "The article recommends removing proxy settings when using the SIA tunnel.",
+          "correct": true
+        },
+        {
+          "text": "Increase the proxy listener port from 9443 to 443.",
+          "feedback": "Changing the port does not remove the conflicting proxy path.",
+          "correct": false
+        },
+        {
+          "text": "Disable all FortiSASE domain-fronting protections for the tenant.",
+          "feedback": "That weakens security and does not correct the endpoint steering design.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "stem": "What does a 403 response alone prove in this scenario?",
+      "choices": [
+        {
+          "text": "Only that a request was blocked; correlate port, PAC, tunnel, and SNI.",
+          "feedback": "The Community tip requires path evidence to identify the domain-fronting conflict.",
+          "correct": true
+        },
+        {
+          "text": "That the destination server is unavailable for every endpoint.",
+          "feedback": "A FortiSASE policy block does not establish destination availability.",
+          "correct": false
+        },
+        {
+          "text": "That the endpoint has an invalid FortiClient license.",
+          "feedback": "The cited root cause is simultaneous proxy and SIA steering.",
+          "correct": false
+        },
+        {
+          "text": "That the user's identity failed SAML authentication.",
+          "feedback": "The error occurs at the traffic steering/SNI boundary, not necessarily identity login.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "stem": "Which evidence set best isolates the duplicate steering path?",
+      "choices": [
+        {
+          "text": "FortiPAM session recording quota and FortiAnalyzer archive age.",
+          "feedback": "Those systems do not participate in FortiSASE browser steering.",
+          "correct": false
+        },
+        {
+          "text": "FortiNAC secure-port MAC list and switch L2 poll result.",
+          "feedback": "Those outputs describe wired host containment, not web proxy traffic.",
+          "correct": false
+        },
+        {
+          "text": "FortiGate boot entropy source and FIPS self-test status.",
+          "feedback": "Cryptographic boot state does not show PAC or SIA flow selection.",
+          "correct": false
+        },
+        {
+          "text": "Browser request port, PAC decision, SIA tunnel state, and observed SNI.",
+          "feedback": "Those observations distinguish the explicit-proxy path from the SIA tunnel.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 45,
+      "product": "Secure SD-WAN",
+      "stem": "One of two overlay members to a spoke fails, but the other continues passing remote SLA probes. Should the hub suppress the spoke route?",
+      "choices": [
+        {
+          "text": "Yes; any single failed tunnel immediately raises MED to 999.",
+          "feedback": "The guide describes suppression after every member in the health check is dead.",
+          "correct": false
+        },
+        {
+          "text": "No; suppression is intended when all monitored members to the spoke are dead.",
+          "feedback": "The feature distinguishes one failed member from all-member remote probe failure.",
+          "correct": true
+        },
+        {
+          "text": "Yes; the BGP peer must be reset whenever one SLA probe is lost.",
+          "feedback": "The mechanism changes route attributes based on aggregate member state.",
+          "correct": false
+        },
+        {
+          "text": "No; remote SLA probes are unrelated to BGP route advertisement.",
+          "feedback": "The feature explicitly links remote health-check state to BGP route suppression.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "stem": "All hub-to-spoke members are dead. Which combination enables the intended route-suppression transaction?",
+      "choices": [
+        {
+          "text": "Enable BGP route tags and use an inbound firewall address object only.",
+          "feedback": "Route-tag destination classification is a different mechanism from suppression state.",
+          "correct": false
+        },
+        {
+          "text": "Disable remote probes and lower MED on the failed hub's routes.",
+          "feedback": "Without probes, the hub cannot determine that all overlay members are dead.",
+          "correct": false
+        },
+        {
+          "text": "Restart the spoke BGP process and clear the SD-WAN member table.",
+          "feedback": "The documented feature uses health-check state and route-map-out behavior.",
+          "correct": false
+        },
+        {
+          "text": "Enable update-bgp-route and use an outbound route-map matching suppression.",
+          "feedback": "The health-check marks route state and the route-map translates it into BGP attributes.",
+          "correct": true
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "stem": "An external peer still prefers the dead hub after suppression. What should be checked on the BGP advertisement?",
+      "choices": [
+        {
+          "text": "The spoke advertises a lower MED for the failed hub's path.",
+          "feedback": "A lower MED makes that path more attractive, not less.",
+          "correct": false
+        },
+        {
+          "text": "The route-map rewrites the destination prefix to a null route.",
+          "feedback": "The documented mechanism adjusts MED based on suppression state.",
+          "correct": false
+        },
+        {
+          "text": "The route-map sets a higher MED for suppressed routes and the peer preserves it.",
+          "feedback": "The guide uses a high MED for suppressed routes and requires MED preservation toward peers.",
+          "correct": true
+        },
+        {
+          "text": "The hub disables every BGP neighbor until the tunnel returns.",
+          "feedback": "The feature preserves BGP peering and changes route preference.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "stem": "Which command output directly exposes alive-count and route-suppressed state for dynamic BGP peers?",
+      "choices": [
+        {
+          "text": "diagnose fortilogd lograte",
+          "feedback": "That command reports FortiAnalyzer log ingestion rate.",
+          "correct": false
+        },
+        {
+          "text": "diagnose sys link-monitor dynamic-bgp-peers",
+          "feedback": "This command displays the peer's alive count and suppression state.",
+          "correct": true
+        },
+        {
+          "text": "diagnose fwmanager profile list",
+          "feedback": "That command lists FortiManager firmware profile records.",
+          "correct": false
+        },
+        {
+          "text": "diagnose wireless-controller wlac show all",
+          "feedback": "That command displays wireless-controller station information.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 49,
+      "product": "Cross-product",
+      "stem": "A green management status appears after a reboot, but the engineer needs proof of application data processing. Which principle applies to both FortiAnalyzer and FortiSIEM?",
+      "choices": [
+        {
+          "text": "Separate transport/collector health from successful parsing, indexing, and query visibility.",
+          "feedback": "Connection or receipt counters do not prove downstream analytics or parsing completed.",
+          "correct": true
+        },
+        {
+          "text": "Treat every green connection indicator as proof that all events are searchable.",
+          "feedback": "Both systems have separate ingestion, parsing, and display stages.",
+          "correct": false
+        },
+        {
+          "text": "Increase all status timeouts until the user interface shows no warnings.",
+          "feedback": "Changing timeouts can hide gaps without proving processing success.",
+          "correct": false
+        },
+        {
+          "text": "Rebuild every database before checking packet or event counters.",
+          "feedback": "Evidence should isolate the failing stage before disruptive rebuilds.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 50,
+      "product": "Cross-product",
+      "stem": "A troubleshooting command changes cryptographic identity or routing preference. What should the change plan preserve?",
+      "choices": [
+        {
+          "text": "Only the command transcript, because the system restores old state automatically.",
+          "feedback": "Neither operation automatically restores the previous identity or routing state.",
+          "correct": false
+        },
+        {
+          "text": "A screenshot of the GUI, with no peer-side verification.",
+          "feedback": "Both changes need evidence from clients or external routing peers.",
+          "correct": false
+        },
+        {
+          "text": "Before/after evidence, rollback path, scope, and an independent validation test.",
+          "feedback": "Host-key regeneration and BGP route suppression both change trust or path behavior.",
+          "correct": true
+        },
+        {
+          "text": "The full configuration reset, because narrow rollback is unsupported.",
+          "feedback": "Both mechanisms can be changed with scoped, planned operations.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2
+    }
+  ]
+}
