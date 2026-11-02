@@ -158,17 +158,17 @@
     },
     {
       "product": "Secure SD-WAN",
-      "lesson_subject": "BGP route tags as dynamic SD-WAN destinations: community matching, route-map tagging, and service-rule selection",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/672387/using-bgp-tags-with-sd-wan-rules",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/256748/controlling-traffic-with-bgp-route-mapping-and-service-rules",
+      "lesson_subject": "Remote-health-check BGP route suppression when every hub-to-spoke overlay is dead: MED failover across dual hubs",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/61914/allow-sd-wan-hubs-to-suppress-bgp-routes-when-all-links-to-a-spoke-are-down-new",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/61914/allow-sd-wan-hubs-to-suppress-bgp-routes-when-all-links-to-a-spoke-are-down",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "BGP route-map matches route community/origin/prefix and assigns local route-tag; SD-WAN service rule references destination tag so dynamic BGP prefixes become rule destinations",
-      "workflow_transaction_fingerprint": "neighbor advertises changing prefixes with BGP community -> inbound route-map matches community and sets route-tag -> route enters BGP table with tag -> SD-WAN rule dst-tag matches route set -> selected member/path forwards flow",
-      "failure_class": "dynamic destination not matched because community missing/mismatched, inbound route-map not applied, route tag absent, or service rule order/zone/policy prerequisites wrong",
-      "evidence_pattern": "BGP received route/community and RouteTag in get router info bgp network; neighbor route-map-in; route-map match-community/set-route-tag; SD-WAN rule dst-tag and counters; route table",
-      "remediation_path": "confirm advertised community on received route; validate community-list and inbound route-map; verify route-tag in BGP table; match dst-tag in correct SD-WAN service and keep policy/static routing prerequisites; retest with new prefix",
-      "question_fingerprint": "trace a dynamic prefix from BGP community through route-map tag into SD-WAN destination matching",
-      "diagram_topology_layout_fingerprint": "remote BGP neighbor advertises community-tagged prefixes -> inbound route-map assigns tag -> BGP route table -> SD-WAN service rule dst-tag -> WAN member"
+      "feature_mechanism_fingerprint": "remote-SLA-probe all-member-dead state -> dynamic BGP route suppression -> outbound route-map matches suppress flag -> MED raised to 999 so alternate hub wins; distinct from route-tag destination classification and cloud connector address matching",
+      "workflow_transaction_fingerprint": "spoke emits remote SLA probes across hub overlay members -> hub counts alive members -> when all are dead, health-check update-bgp-route marks spoke route suppressed -> outbound route-map match-suppress sets high MED and neighbor preserves MED -> remote peer selects alternate hub -> recovery restores normal MED after probes return",
+      "failure_class": "blackhole through preferred hub after every overlay tunnel to a spoke has failed but BGP route remains advertised with preferred metric",
+      "evidence_pattern": "diagnose sys sdwan health-check remote; diagnose sys link-monitor dynamic-bgp-peers showing alive-count and route-suppressed; get router info bgp network <prefix> showing alternate paths and MED; packet capture showing selected alternate overlay",
+      "remediation_path": "enable update-bgp-route on the remote health-check; match suppression in route-map-out; set high MED for suppressed and lower MED for normal; preserve MED toward external peers; tune failtime/recoverytime and validate both hubs before rollout",
+      "question_fingerprint": "distinguish one failed overlay member from all-member remote probe failure and identify the MED change that moves traffic to the alternate hub",
+      "diagram_topology_layout_fingerprint": "dual hub / dual spoke overlay; remote probe fan-out; alive-count gate; suppressed-route state; outbound BGP route-map MED rewrite; alternate hub best path"
     }
   ],
   "audit": [
@@ -277,5 +277,39 @@
       "subject": "Performance-monitor job scheduling after discovery",
       "reason": "adjacent to earlier device discovery/performance-monitor material; replaced with Windows Event Forwarding source attribution and WEF subscription mechanics"
     }
-  ]
+  ],
+  "discovery_audit": {
+    "completed_before_lesson_generation": true,
+    "report_files_enumerated": 23,
+    "substantive_reports_inspected": [
+      "2026-10-10",
+      "2026-10-16",
+      "2026-10-21",
+      "2026-10-23",
+      "2026-10-24",
+      "2026-10-25",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30",
+      "2026-11-01"
+    ],
+    "status_or_fallback_artifacts_inspected": [
+      "2026-10-03",
+      "2026-10-06",
+      "2026-10-08",
+      "2026-10-11",
+      "2026-10-13",
+      "2026-10-15",
+      "2026-10-18",
+      "2026-10-26",
+      "2026-10-31"
+    ],
+    "inventory_path": "docs/exclusion_inventory_2026-11-02-08-04.json",
+    "inventory_sha": "57d1863ce2686cfa3d3df06354e1238f5bae5507",
+    "inventory_records": 174,
+    "semantic_uniqueness": "12 candidates compared with historical subject, mechanism, workflow, failure, evidence, question, and diagram fingerprints; no substantially equivalent in-window mechanism found. Secure SD-WAN BGP route suppression replaced BGP route-tag dynamic destination matching to avoid functional overlap with prior dynamic SDN connector/FQDN destination lessons.",
+    "community_sweep": "All 12 mandatory product areas searched. Recent direct scenarios verified for FortiGate, FortiManager, FortiAnalyzer, FortiSwitch, and FortiSASE; related but older contextual material for FortiAP, FortiNAC, FortiAuthenticator, FortiPAM, and FortiSIEM; no directly matched recent scenario verified for FortiNAC-F or Secure SD-WAN.",
+    "admin_guide_sweep": "Current administration/configuration/new-feature/release documentation inspected for all 12 targets; source corpus drove final topics."
+  }
 }
