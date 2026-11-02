@@ -9,7 +9,7 @@
       "product": "FortiGate",
       "lesson_subject": "FIPS-CC boot lifecycle: CPU-jitter entropy, cryptographic self-tests, and certified-branch maintenance",
       "primary_url": "https://docs.fortinet.com/document/fortigate/7.2.6/administration-guide/235160",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/7.2.7/cli-reference/101620/config-system-fips-cc",
+      "secondary_primary_url": null,
       "scenario_community_url": "https://community.fortinet.com/fortigate-3/frontier-ai-assisted-firmware-updates-for-fips-enabled-fortigates-october-2026-230877",
       "feature_mechanism_fingerprint": "FIPS-CC mode boot-time cryptographic self-test plus CPU-jitter entropy source; firmware branch and validation status remain separate lifecycle controls",
       "workflow_transaction_fingerprint": "backup/configure FIPS-CC -> reboot -> run self-tests and seed RNG from CPU jitter -> verify self-test/firmware-integrity output -> maintain on matching FIPS-CC firmware branch",
@@ -17,12 +17,18 @@
       "evidence_pattern": "FIPS-CC boot banner; per-algorithm self-test pass/fail lines; firmware integrity test; config system fips-cc status; release/readme build identity",
       "remediation_path": "verify platform and branch eligibility; back up because enabling/disabling FIPS-CC is disruptive and can lose configuration; follow matching FIPS-CC build ReadMe; verify self-tests before returning traffic",
       "question_fingerprint": "distinguish cryptographic self-test/entropy readiness from a firmware branch or certification claim",
-      "diagram_topology_layout_fingerprint": "boot sequence: firmware image -> FIPS-CC mode gate -> CPU-jitter RNG seed -> algorithm self-tests -> integrity check -> operational state"
+      "diagram_topology_layout_fingerprint": "boot sequence: firmware image -> FIPS-CC mode gate -> CPU-jitter RNG seed -> algorithm self-tests -> integrity check -> operational state",
+      "scenario_status": "Recent, directly relevant firmware-branch scenario; not a boot self-test failure case.",
+      "community_sweep": {
+        "date": "2026-10-27",
+        "status": "recent_direct",
+        "note": "FIPS-CC/CVE-patched branch update; supports branch-maintenance lesson, not a self-test failure."
+      }
     },
     {
       "product": "FortiManager",
       "lesson_subject": "Firmware-template profile database: desired-version records, scheduled campaign state, hidden profiles, and safe ADOM-scoped cleanup",
-      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/302126/firmware-templates",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/302126/firmware-templates",
       "secondary_primary_url": "https://docs.fortinet.com/document/fortimanager/latest/administration-guide/360034/creating-firmware-templates",
       "scenario_community_url": "https://community.fortinet.com/fortimanager-27/how-to-check-and-clear-the-firmware-upgrade-profile-database-scheduled-upgrade-tasks-on-fortimanager-230895",
       "feature_mechanism_fingerprint": "FortiManager firmware templates persist per-ADOM enforced-version and schedule profiles in an internal profile database; GUI visibility and cached scheduled profile records can diverge",
@@ -31,7 +37,13 @@
       "evidence_pattern": "diagnose fwmanager profile list grouped by ADOM; profile name/oid/enforced version/schedule/checksum; GUI Firmware Templates inventory; task monitor scheduled job entries",
       "remediation_path": "list profiles before and after; identify exact ADOM and profile; clear only that ADOM with diagnose fwmanager profile clear <ADOM_NAME>; never run unscoped clear without change approval and backup; re-create desired template and verify schedule",
       "question_fingerprint": "recognize GUI-hidden scheduled firmware profile state and select a scoped rather than global cleanup operation",
-      "diagram_topology_layout_fingerprint": "per-ADOM firmware template GUI -> persistent profile database -> scheduler/task monitor -> firmware campaign; scoped cleanup isolates one ADOM"
+      "diagram_topology_layout_fingerprint": "per-ADOM firmware template GUI -> persistent profile database -> scheduler/task monitor -> firmware campaign; scoped cleanup isolates one ADOM",
+      "scenario_status": "Recent, directly relevant operational tip; the CLI cleanup command is scenario evidence, while template behavior is defined by the Administration Guide.",
+      "community_sweep": {
+        "date": "2026-10-27",
+        "status": "recent_direct",
+        "note": "Firmware profile database list/clear procedure and ADOM scope."
+      }
     },
     {
       "product": "FortiAnalyzer",
@@ -44,13 +56,20 @@
       "evidence_pattern": "FortiGate test-connectivity registered/up; oftpd device entry and increasing received packet count; fortilogd lograte; Device Manager last-log timestamp; 15-minute near-real-time and 6-hour scheduled-upload defaults",
       "remediation_path": "allow 10-15 minute UI reconciliation window; if still down after 30 minutes inspect OFTP, port 514 path, registration/authorization, fortilogd, and release notes",
       "question_fingerprint": "separate delayed UI state convergence from a real OFTP or log-ingestion outage using independent evidence",
-      "diagram_topology_layout_fingerprint": "FortiGate OFTP/log stream -> FortiAnalyzer oftpd -> fortilogd -> Device Manager status evaluator -> GUI last-log/status view"
+      "diagram_topology_layout_fingerprint": "FortiGate OFTP/log stream -> FortiAnalyzer oftpd -> fortilogd -> Device Manager status evaluator -> GUI last-log/status view",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/781928/device-manager",
+      "scenario_status": "Recent, directly matched post-reboot status-convergence scenario.",
+      "community_sweep": {
+        "date": "2026-10-05",
+        "status": "recent_direct",
+        "note": "Post-reboot Device Manager status lag and OFTP/log-rate verification."
+      }
     },
     {
       "product": "FortiSwitch",
       "lesson_subject": "SSH host-key regeneration after OpenSSH/firmware upgrade: trust negotiation, daemon restart, and managed-switch recovery",
-      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/bc09f81d-7229-11f0-a9d0-d2b0d2e22f7d/FortiSwitchOS-7.6.4_CLI_Reference.pdf",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortiswitch/7.4.10/fortilink-release-notes",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.4/fortiswitchos-administration-guide/296990/using-ssh-and-the-telnet-client",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortiswitch/7.4.9/fortiswitchos-cli-reference/434023/execute",
       "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193",
       "feature_mechanism_fingerprint": "SSH server host-key material and algorithm negotiation; execute ssh-regen-keys replaces host keys and restarts sshd",
       "workflow_transaction_fingerprint": "client connects -> algorithm/host-key negotiation -> host authenticates server key -> user authentication; regeneration changes server identity and terminates active SSH sessions",
@@ -58,7 +77,13 @@
       "evidence_pattern": "client_loop Broken pipe; SSH packet type 50/51 publickey trace; repeated /bin/sshd killed entries; known-host fingerprint mismatch; CLI command confirmation",
       "remediation_path": "use console or supported alternate management path; execute ssh-regen-keys; accept/verify new host fingerprint on clients; disable temporary telnet access immediately; upgrade to fixed release where applicable",
       "question_fingerprint": "distinguish server host-key negotiation failure from user credential failure and identify the safe recovery path",
-      "diagram_topology_layout_fingerprint": "SSH client -> FortiGate management proxy (optional) -> FortiSwitch sshd host-key negotiation -> regenerated key/fingerprint trust update"
+      "diagram_topology_layout_fingerprint": "SSH client -> FortiGate management proxy (optional) -> FortiSwitch sshd host-key negotiation -> regenerated key/fingerprint trust update",
+      "scenario_status": "Recent, directly matched version-specific failure; Fortinet states the 108-model issue is fixed in 7.6.9.",
+      "community_sweep": {
+        "date": "2026-09-28",
+        "status": "older_direct",
+        "note": "108-series SSH daemon/key regeneration issue; outside rolling 30-day window."
+      }
     },
     {
       "product": "FortiAP/Wireless",
@@ -72,7 +97,13 @@
       "evidence_pattern": "DARRP profile assignment; selection-period and monitor-period; channel load/noise/spectral RSSI; TX retries/RX errors; schedule and channel-change events",
       "remediation_path": "choose high/medium-density profile or tune weights with RF survey evidence; set realistic thresholds and optimization schedule; account for DFS/radar channels and channel width; capture client/AP logs during observed roaming issue",
       "question_fingerprint": "choose whether a channel change is caused by candidate scoring, monitor-stage retry threshold, or schedule timing",
-      "diagram_topology_layout_fingerprint": "multiple FortiAP radios feed RF metric vectors into DARRP scoring/profile engine -> scheduled channel selector -> monitor feedback loop"
+      "diagram_topology_layout_fingerprint": "multiple FortiAP radios feed RF metric vectors into DARRP scoring/profile engine -> scheduled channel selector -> monitor feedback loop",
+      "scenario_status": "Related operational evidence guide; it is a troubleshooting collection article, not a DARRP feature specification.",
+      "community_sweep": {
+        "date": "2026-10-19",
+        "status": "recent_related",
+        "note": "Recent roaming evidence collection; related troubleshooting evidence, not DARRP feature specification."
+      }
     },
     {
       "product": "FortiNAC",
@@ -86,13 +117,19 @@
       "evidence_pattern": "switch MAC table shows STATIC instead of DYNAMIC; FortiNAC Ports View lacks host while L2 poll reports success; Model Configuration secure-port flag and ForwardTableStatic attribute",
       "remediation_path": "enable Secure Ports is enabled for ports on this device in Model Configuration; set ForwardTableStatic true where required; run L2 Hosts Poll Now; verify Physical Address Filtering group and per-VLAN secure-port prerequisites",
       "question_fingerprint": "distinguish a successful L2 poll from complete MAC visibility when switch port security converts learned entries to static entries",
-      "diagram_topology_layout_fingerprint": "secure switch port/static MAC table -> FortiNAC model capability -> L2 poll/host mapping -> physical-address filtering disable action"
+      "diagram_topology_layout_fingerprint": "secure switch port/static MAC table -> FortiNAC model capability -> L2 poll/host mapping -> physical-address filtering disable action",
+      "scenario_status": "Directly matched but old (September 28, 2018); used only as a mechanism example, not represented as a recent article.",
+      "community_sweep": {
+        "date": "2018-09-28",
+        "status": "older_direct",
+        "note": "Secure-port static-MAC polling visibility; direct mechanism but old."
+      }
     },
     {
       "product": "FortiNAC-F",
       "lesson_subject": "Persistent Agent registry-key scans: hive selection, execution identity, severity, and remediation workflow",
       "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/178069",
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-persistent-agent-not-picking-up-the-certificate-228065",
       "feature_mechanism_fingerprint": "FortiNAC-F custom scan invokes Persistent Agent registry-key check against configured Windows hive/key; scan context runs under agent service identity, not interactive logged-on user",
       "workflow_transaction_fingerprint": "create registry-key custom scan -> choose hive/key/value/type/operator and failure severity -> attach scan to general scan/endpoint compliance policy -> agent evaluates registry path -> pass/fail result returned to FortiNAC-F -> policy/remediation branch",
       "failure_class": "false compliance failure when required registry value is in HKEY_CURRENT_USER, unavailable to the service identity, or incorrect hive/path/severity/OS applicability",
@@ -100,7 +137,13 @@
       "remediation_path": "use machine-wide HKLM/HKEY_USERS locations for machine compliance; do not rely on HKCU when the agent runs as another user; validate key path, REG_DWORD decimal value, operator, OS applicability, and scan order before enforcing denial",
       "question_fingerprint": "identify why a registry value exists for the interactive user but the Persistent Agent scan cannot read it",
       "diagram_topology_layout_fingerprint": "FortiNAC-F scan definition -> Persistent Agent service identity -> Windows registry hive/key/value -> scan result -> compliance policy/remediation branch",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/4612/scans"
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/60925/using-the-persistent-agent",
+      "scenario_status": "Older related custom-scan scenario; it concerns certificate-store visibility, not registry-key scans.",
+      "community_sweep": {
+        "date": "2026-06-05",
+        "status": "older_related",
+        "note": "Persistent Agent custom-scan certificate visibility; related, not registry-key scan."
+      }
     },
     {
       "product": "FortiAuthenticator",
@@ -113,7 +156,14 @@
       "evidence_pattern": "FAC remote sync error SSL routines certificate verify failed/unable to get local issuer; packet capture TLS handshake; server-presented chain; trusted CA selection; CRL Check Mode; LDAP sync logs",
       "remediation_path": "import complete trusted chain; verify server name/SAN and validity; choose Single CA or All Trusted deliberately; for All Nodes supply CRLs for each CA and full server chain; test LDAP browse/sync before changing user mapping",
       "question_fingerprint": "determine whether LDAP bind failure is caused by TLS chain trust, CRL scope, client certificate, or LDAP credentials",
-      "diagram_topology_layout_fingerprint": "FortiAuthenticator LDAP client -> TLS handshake/server chain validation -> optional CRL/OCSP decision -> optional client certificate -> LDAP bind/search"
+      "diagram_topology_layout_fingerprint": "FortiAuthenticator LDAP client -> TLS handshake/server chain validation -> optional CRL/OCSP decision -> optional client certificate -> LDAP bind/search",
+      "secondary_primary_url": null,
+      "scenario_status": "Older contextual case (2025); directly illustrates missing intermediate CA and remote-sync TLS failure.",
+      "community_sweep": {
+        "date": "2026-01-02",
+        "status": "older_direct",
+        "note": "Remote LDAP sync certificate-chain verification failure."
+      }
     },
     {
       "product": "FortiPAM",
@@ -126,13 +176,20 @@
       "evidence_pattern": "HA role/state/priority; hasync and hatalk debug; file synchronization failure paths; checksum/sync status; node serial owning log records; heartbeat packet path",
       "remediation_path": "match model/version/platform and license SKU; verify dedicated heartbeat and monitored interfaces; test unicast heartbeat where multicast congestion exists; set priority/override separately on each node; design external log/video retention because data is not replicated",
       "question_fingerprint": "identify which FortiPAM state survives failover and which audit/video artifacts remain tied to the original primary",
-      "diagram_topology_layout_fingerprint": "active FortiPAM node with configuration sync to two passive nodes; separate unsynchronized local log/video stores; heartbeat and monitored data interfaces"
+      "diagram_topology_layout_fingerprint": "active FortiPAM node with configuration sync to two passive nodes; separate unsynchronized local log/video stores; heartbeat and monitored data interfaces",
+      "secondary_primary_url": null,
+      "scenario_status": "Older operational case (about six months); useful for file-sync, platform, license-SKU, and heartbeat diagnosis.",
+      "community_sweep": {
+        "date": "2026-04-07",
+        "status": "older_direct",
+        "note": "HA file synchronization, platform, license, and heartbeat troubleshooting."
+      }
     },
     {
       "product": "FortiSIEM",
       "lesson_subject": "Windows Event Forwarding (WEF): source-initiated subscription, centralized agent collection, and original-host attribution",
       "primary_url": "https://docs.fortinet.com/document/fortisiem/7.2.4/external-systems-configuration-guide/918043",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/142943/windows-agent-releases",
+      "secondary_primary_url": null,
       "scenario_community_url": "https://community.fortinet.com/fortisiem-34/technical-tip-logs-collected-via-wef-display-the-wef-server-as-the-source-instead-of-the-original-source-device-228162",
       "feature_mechanism_fingerprint": "Windows Event Sources push selected Windows Security/Application/System events to a central Windows Event Collector; one FortiSIEM Windows Agent on WEC forwards ForwardedEvents while parser fields preserve original source identity",
       "workflow_transaction_fingerprint": "source-initiated WEF subscription -> WinRM/WEC accepts event source -> source pushes event to ForwardedEvents log -> FortiSIEM Agent reads ForwardedEvents -> Collector parses XML/event fields -> Analytics retains original reporting host attributes while CMDB source is WEF host",
@@ -140,13 +197,19 @@
       "evidence_pattern": "wecutil subscription runtime status; Event Viewer ForwardedEvents entries; Windows Agent template event name ForwardedEvents (case-sensitive); Include Events ALL/Exclude NONE; parsed SourceHostName/Reporting Host and event source fields",
       "remediation_path": "configure WinRM and Windows Event Collector on WEC; create source-initiated subscription and source authorization; install FortiSIEM Agent only on WEC; configure ForwardedEvents case-sensitively; verify original host attributes in parsed events; use native agents for FIM/Sysmon/custom data not covered by WEF",
       "question_fingerprint": "separate WEF transport source/CMDB identity from original reporting host attributes inside the forwarded event",
-      "diagram_topology_layout_fingerprint": "many Windows source computers -> source-initiated WEF/WinRM subscriptions -> central WEC ForwardedEvents log -> single FortiSIEM Agent -> Collector parser -> Analytics source attributes"
+      "diagram_topology_layout_fingerprint": "many Windows source computers -> source-initiated WEF/WinRM subscriptions -> central WEC ForwardedEvents log -> single FortiSIEM Agent -> Collector parser -> Analytics source attributes",
+      "scenario_status": "Older contextual case (June 2026); directly explains CMDB source identity versus original event source attributes.",
+      "community_sweep": {
+        "date": "2026-06-09",
+        "status": "older_direct",
+        "note": "WEF/WEC source identity and ForwardedEvents collection."
+      }
     },
     {
       "product": "FortiSASE",
       "lesson_subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
       "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-sia-agentless-proxy-deployment-guide/891466/deployment-overview",
-      "secondary_primary_url": "https://docs.fortinet.com/document/fortisase/26.1.26/concept-guide/308001/sia",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortisase/26.1.99/concept-guide/308001",
       "scenario_community_url": "https://community.fortinet.com/fortisase-58/troubleshooting-tip-investigating-a-403-domain-fronting-blocked-error-230414",
       "feature_mechanism_fingerprint": "agentless PAC/explicit proxy path and agent-based SIA tunnel are distinct access modes; proxy changes SNI and cannot be layered concurrently with SIA tunnel for same flow",
       "workflow_transaction_fingerprint": "browser PAC/proxy selects FortiSASE proxy endpoint (default 9443) -> proxy applies web policy and modifies SNI -> endpoint SIA tunnel simultaneously encapsulates traffic -> FortiSASE domain-fronting control rejects conflicting SNI/tunnel path",
@@ -154,7 +217,13 @@
       "evidence_pattern": "browser DevTools shows proxy port 9443 rather than direct HTTPS 443; endpoint proxy settings/PAC; SIA tunnel state; HTTP 403 domain-fronting blocked; SNI seen on tunneled flow",
       "remediation_path": "choose one access mode per endpoint/traffic flow; disable endpoint proxy/PAC when using SIA tunnel or remove tunnel for agentless proxy use; verify DNS/PAC and SNI path after change",
       "question_fingerprint": "identify the duplicate steering path from port/SNI evidence and select the mutually exclusive access mode",
-      "diagram_topology_layout_fingerprint": "endpoint browser PAC/proxy and FortiClient SIA tunnel as parallel mutually exclusive paths to FortiSASE PoP; conflict converges at SNI/domain-fronting gate"
+      "diagram_topology_layout_fingerprint": "endpoint browser PAC/proxy and FortiClient SIA tunnel as parallel mutually exclusive paths to FortiSASE PoP; conflict converges at SNI/domain-fronting gate",
+      "scenario_status": "Recent, directly matched operational scenario with port 9443 and SNI evidence.",
+      "community_sweep": {
+        "date": "2026-10-06",
+        "status": "recent_direct",
+        "note": "403 domain-fronting block caused by explicit proxy and SIA tunnel conflict."
+      }
     },
     {
       "product": "Secure SD-WAN",
@@ -168,7 +237,13 @@
       "evidence_pattern": "diagnose sys sdwan health-check remote; diagnose sys link-monitor dynamic-bgp-peers showing alive-count and route-suppressed; get router info bgp network <prefix> showing alternate paths and MED; packet capture showing selected alternate overlay",
       "remediation_path": "enable update-bgp-route on the remote health-check; match suppression in route-map-out; set high MED for suppressed and lower MED for normal; preserve MED toward external peers; tune failtime/recoverytime and validate both hubs before rollout",
       "question_fingerprint": "distinguish one failed overlay member from all-member remote probe failure and identify the MED change that moves traffic to the alternate hub",
-      "diagram_topology_layout_fingerprint": "dual hub / dual spoke overlay; remote probe fan-out; alive-count gate; suppressed-route state; outbound BGP route-map MED rewrite; alternate hub best path"
+      "diagram_topology_layout_fingerprint": "dual hub / dual spoke overlay; remote probe fan-out; alive-count gate; suppressed-route state; outbound BGP route-map MED rewrite; alternate hub best path",
+      "scenario_status": "No directly matched recent Community troubleshooting scenario verified; the Fortinet feature guide includes a full dual-hub failure and failover example.",
+      "community_sweep": {
+        "date": null,
+        "status": "no_direct_match",
+        "note": "No directly matched Community scenario verified; official feature guide supplies a dual-hub failover example."
+      }
     }
   ],
   "audit": [
@@ -309,7 +384,7 @@
     "inventory_sha": "57d1863ce2686cfa3d3df06354e1238f5bae5507",
     "inventory_records": 174,
     "semantic_uniqueness": "12 candidates compared with historical subject, mechanism, workflow, failure, evidence, question, and diagram fingerprints; no substantially equivalent in-window mechanism found. Secure SD-WAN BGP route suppression replaced BGP route-tag dynamic destination matching to avoid functional overlap with prior dynamic SDN connector/FQDN destination lessons.",
-    "community_sweep": "All 12 mandatory product areas searched. Recent direct scenarios verified for FortiGate, FortiManager, FortiAnalyzer, FortiSwitch, and FortiSASE; related but older contextual material for FortiAP, FortiNAC, FortiAuthenticator, FortiPAM, and FortiSIEM; no directly matched recent scenario verified for FortiNAC-F or Secure SD-WAN.",
+    "community_sweep": "All 12 product areas searched. Recent directly relevant Community scenarios verified for FortiGate, FortiManager, FortiAnalyzer, and FortiSASE; recent related evidence guide for FortiAP. FortiSwitch article is dated Sep 28 (outside 30 days); FortiNAC, FortiNAC-F, FortiAuthenticator, FortiPAM, and FortiSIEM references are older; no direct recent match verified for Secure SD-WAN.",
     "admin_guide_sweep": "Current administration/configuration/new-feature/release documentation inspected for all 12 targets; source corpus drove final topics."
   }
 }
