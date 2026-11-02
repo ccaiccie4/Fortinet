@@ -9,22 +9,10 @@
     "D": 12
   },
   "correct_answer_uniquely_longest": [
-    17,
-    24,
-    25,
     28,
-    30,
-    32,
-    33,
-    34,
-    37,
-    41,
-    42,
-    43,
-    44,
-    47
+    37
   ],
-  "maximum_choice_word_spread": 6,
+  "maximum_choice_word_spread": 5,
   "questions": [
     {
       "id": 1,
@@ -495,7 +483,7 @@
           "correct": false
         },
         {
-          "text": "The per-radio darrp setting and attached ARRP profile in the WTP profile.",
+          "text": "Per-radio DARRP enablement and its attached ARRP profile.",
           "feedback": "DARRP is disabled by default and enabled under each radio.",
           "correct": true
         }
@@ -681,7 +669,7 @@
           "correct": false
         },
         {
-          "text": "Re-enable the host or remove the device-side restriction through the supported process.",
+          "text": "Re-enable the host before removing its inventory record.",
           "feedback": "The device may retain the disabled MAC after the FortiNAC host record is deleted.",
           "correct": true
         },
@@ -704,7 +692,7 @@
       "stem": "A registry value exists under the logged-on user's HKCU, but the Persistent Agent scan reports it missing. What is the likely cause?",
       "choices": [
         {
-          "text": "The agent service runs under a different identity and does not see that HKCU hive.",
+          "text": "The agent service identity differs from the interactive user's HKCU context.",
           "feedback": "The Administration Guide explicitly warns that HKCU scans will not succeed for this reason.",
           "correct": true
         },
@@ -798,7 +786,7 @@
           "correct": false
         },
         {
-          "text": "Prohibit can fail a host when the key is found; Severity grades a missing-key failure.",
+          "text": "Prohibit fails when the key is found; Severity grades missing-key failures.",
           "feedback": "The guide treats prohibited-key logic and missing-key severity as separate fields.",
           "correct": true
         },
@@ -859,7 +847,7 @@
           "correct": false
         },
         {
-          "text": "CRLs for every CA in the chain and the full server chain in the handshake.",
+          "text": "CRLs for every CA, plus the server's full chain.",
           "feedback": "The guide explicitly requires CRL coverage for every chain CA and full-chain presentation.",
           "correct": true
         }
@@ -910,7 +898,7 @@
           "correct": false
         },
         {
-          "text": "The sync rule's own TLS, filter, mapping, and schedule transaction.",
+          "text": "Test the sync rule's TLS, filters, mapping, and schedule.",
           "feedback": "A successful browse does not prove the separate sync workflow completed.",
           "correct": true
         },
@@ -933,7 +921,7 @@
           "correct": false
         },
         {
-          "text": "Historical system logs and session videos written to the original primary's disks.",
+          "text": "Original-primary logs and session videos are not replicated.",
           "feedback": "The guide states logs and videos are not synchronized between HA nodes.",
           "correct": true
         },
@@ -966,7 +954,7 @@
           "correct": false
         },
         {
-          "text": "Maintenance mode on the new primary and the documented resume action.",
+          "text": "Check the promoted node's maintenance mode and resume procedure.",
           "feedback": "The guide says the promoted secondary enters maintenance mode until an administrator resumes services.",
           "correct": true
         },
@@ -1040,12 +1028,12 @@
       "stem": "WEF events arrive in FortiSIEM, but the CMDB source is the WEC server. Is this necessarily a fault?",
       "choices": [
         {
-          "text": "Yes; every forwarded workstation must create its own CMDB device automatically.",
+          "text": "Yes; each forwarded workstation should create its own CMDB device automatically.",
           "feedback": "The Community tip explains that origin fields do not automatically create CMDB entries.",
           "correct": false
         },
         {
-          "text": "No; the agent collects ForwardedEvents from WEC while origin hosts remain in event fields.",
+          "text": "No; WEC is the agent host; origin names stay in event fields.",
           "feedback": "The WEC is the agent host; original source identity is parsed from the event payload.",
           "correct": true
         },
@@ -1152,7 +1140,7 @@
       "stem": "A user receives 403 domain-fronting blocked; browser DevTools shows port 9443 and the SIA tunnel is active. What is the likely cause?",
       "choices": [
         {
-          "text": "The explicit proxy and SIA tunnel are steering the same flow and SNI conflicts.",
+          "text": "Proxy and SIA tunnel both steer the flow, changing SNI.",
           "feedback": "Fortinet documents that proxy and SIA tunnel should not be used simultaneously.",
           "correct": true
         },
@@ -1185,7 +1173,7 @@
           "correct": false
         },
         {
-          "text": "Disable the endpoint's proxy/PAC settings and retest the tunnel path.",
+          "text": "Remove the endpoint proxy/PAC setting and retest SIA.",
           "feedback": "The article recommends removing proxy settings when using the SIA tunnel.",
           "correct": true
         },
@@ -1208,7 +1196,7 @@
       "stem": "What does a 403 response alone prove in this scenario?",
       "choices": [
         {
-          "text": "Only that a request was blocked; correlate port, PAC, tunnel, and SNI.",
+          "text": "A block occurred; correlate port, PAC, tunnel, and SNI.",
           "feedback": "The Community tip requires path evidence to identify the domain-fronting conflict.",
           "correct": true
         },
@@ -1251,7 +1239,7 @@
           "correct": false
         },
         {
-          "text": "Browser request port, PAC decision, SIA tunnel state, and observed SNI.",
+          "text": "Port, PAC decision, tunnel state, and SNI together.",
           "feedback": "Those observations distinguish the explicit-proxy path from the SIA tunnel.",
           "correct": true
         }
@@ -1330,7 +1318,7 @@
           "correct": false
         },
         {
-          "text": "The route-map sets a higher MED for suppressed routes and the peer preserves it.",
+          "text": "Set higher MED on suppressed routes and preserve it downstream.",
           "feedback": "The guide uses a high MED for suppressed routes and requires MED preservation toward peers.",
           "correct": true
         },
