@@ -1,0 +1,362 @@
+{
+  "run_date": "2026-11-02",
+  "selected_after_inventory_readback": true,
+  "inventory_path": "docs/exclusion_inventory_2026-11-02-08-04.json",
+  "inventory_sha": "57d1863ce268c6fa3d3df06354e1238f5bae5507",
+  "inventory_record_count": 174,
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "FIPS-CC boot lifecycle: CPU-jitter entropy, cryptographic self-tests, and certified-branch maintenance",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.2.6/administration-guide/235160",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/7.2.7/cli-reference/101620/config-system-fips-cc",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/frontier-ai-assisted-firmware-updates-for-fips-enabled-fortigates-october-2026-230877",
+      "feature_mechanism_fingerprint": "FIPS-CC mode boot-time cryptographic self-test plus CPU-jitter entropy source; firmware branch and validation status remain separate lifecycle controls",
+      "workflow_transaction_fingerprint": "backup/configure FIPS-CC -> reboot -> run self-tests and seed RNG from CPU jitter -> verify self-test/firmware-integrity output -> maintain on matching FIPS-CC firmware branch",
+      "failure_class": "FIPS-CC boot/self-test or entropy-source incompatibility; wrong GA versus FIPS-CC image/branch selection",
+      "evidence_pattern": "FIPS-CC boot banner; per-algorithm self-test pass/fail lines; firmware integrity test; config system fips-cc status; release/readme build identity",
+      "remediation_path": "verify platform and branch eligibility; back up because enabling/disabling FIPS-CC is disruptive and can lose configuration; follow matching FIPS-CC build ReadMe; verify self-tests before returning traffic",
+      "question_fingerprint": "distinguish cryptographic self-test/entropy readiness from a firmware branch or certification claim",
+      "diagram_topology_layout_fingerprint": "boot sequence: firmware image -> FIPS-CC mode gate -> CPU-jitter RNG seed -> algorithm self-tests -> integrity check -> operational state"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Firmware templates: scheduled target versions, preview, fabric dependency sequencing, and upgrade stop conditions",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/302126/firmware-templates",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortimanager/latest/administration-guide/360034/creating-firmware-templates",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-firmware-template-warning-message-please-note-this-is-not-a-recommended-upgrade-path-209162",
+      "feature_mechanism_fingerprint": "assigned firmware-template desired-version state machine with preview, schedule, sequential fabric-device upgrade, and per-device adherence",
+      "workflow_transaction_fingerprint": "create template -> assign FortiGate/fabric devices -> preview path -> scheduled/on-demand trigger -> FortiGate then sequential FortiSwitch then FortiAP then FortiExtender -> history/report/adherence",
+      "failure_class": "upgrade campaign blocked by offline fabric child, unsupported path, contract/entitlement gap, or closed-network path metadata gap",
+      "evidence_pattern": "Firmware Template column; previewed upgrade path; upgrade history/report; device online state; FMWR contract and FortiCare/FortiGuard account association",
+      "remediation_path": "preview and validate every path; import every intermediate image for closed networks; confirm FMWR entitlement and HA members; recover/offline child before continuing dependent sequence",
+      "question_fingerprint": "predict which downstream fabric upgrades stop when one device in a FortiGate's sequence is offline",
+      "diagram_topology_layout_fingerprint": "FortiManager template controller branching to parallel FortiGate campaigns, each with serial FortiGate -> FortiSwitch chain -> FortiAP -> FortiExtender"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Device Manager Up/Down state: OFTP connectivity, log-recency thresholds, and post-reboot reconciliation",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/781928/device-manager",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+      "feature_mechanism_fingerprint": "Device Manager status is derived from OFTP connection state and/or last-log-received freshness with separate near-real-time and scheduled-upload thresholds",
+      "workflow_transaction_fingerprint": "FortiGate OFTP reconnects and logs resume -> oftpd observes packets -> fortilogd ingests -> Device Manager recalculates status/last-log display on refresh cycle",
+      "failure_class": "false-down/stale-last-log after FortiAnalyzer reboot versus genuine transport, authorization, or log-ingestion failure",
+      "evidence_pattern": "FortiGate test-connectivity registered/up; oftpd device entry and increasing received packet count; fortilogd lograte; Device Manager last-log timestamp; 15-minute near-real-time and 6-hour scheduled-upload defaults",
+      "remediation_path": "allow 10-15 minute UI reconciliation window; if still down after 30 minutes inspect OFTP, port 514 path, registration/authorization, fortilogd, and release notes",
+      "question_fingerprint": "separate delayed UI state convergence from a real OFTP or log-ingestion outage using independent evidence",
+      "diagram_topology_layout_fingerprint": "FortiGate OFTP/log stream -> FortiAnalyzer oftpd -> fortilogd -> Device Manager status evaluator -> GUI last-log/status view"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "SSH host-key regeneration after OpenSSH/firmware upgrade: trust negotiation, daemon restart, and managed-switch recovery",
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/bc09f81d-7229-11f0-a9d0-d2b0d2e22f7d/FortiSwitchOS-7.6.4_CLI_Reference.pdf",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortiswitch/7.4.10/fortilink-release-notes",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193",
+      "feature_mechanism_fingerprint": "SSH server host-key material and algorithm negotiation; execute ssh-regen-keys replaces host keys and restarts sshd",
+      "workflow_transaction_fingerprint": "client connects -> algorithm/host-key negotiation -> host authenticates server key -> user authentication; regeneration changes server identity and terminates active SSH sessions",
+      "failure_class": "host-key/algorithm negotiation failure or sshd crash after version-specific OpenSSH upgrade",
+      "evidence_pattern": "client_loop Broken pipe; SSH packet type 50/51 publickey trace; repeated /bin/sshd killed entries; known-host fingerprint mismatch; CLI command confirmation",
+      "remediation_path": "use console or supported alternate management path; execute ssh-regen-keys; accept/verify new host fingerprint on clients; disable temporary telnet access immediately; upgrade to fixed release where applicable",
+      "question_fingerprint": "distinguish server host-key negotiation failure from user credential failure and identify the safe recovery path",
+      "diagram_topology_layout_fingerprint": "SSH client -> FortiGate management proxy (optional) -> FortiSwitch sshd host-key negotiation -> regenerated key/fingerprint trust update"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Distributed Automatic Radio Resource Provisioning (DARRP): channel scoring, density profiles, monitor thresholds, and schedules",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/299720/configuring-distributed-radio-resource-provisioning",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/211539/optimize-and-update-default-darrp-parameters",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/collecting-logs-and-informations-for-wireless-client-roaming-issues-230638",
+      "feature_mechanism_fingerprint": "DARRP selects channels using weighted RF observations (total RSSI, noise floor, channel load, spectral RSSI, retries/errors) and scheduled optimization/monitor windows",
+      "workflow_transaction_fingerprint": "FortiAP radios collect RF/channel measurements -> DARRP profile weights/thresholds score candidate channels -> scheduled optimizer chooses channel -> monitor interval observes retries/errors and may trigger reselection",
+      "failure_class": "suboptimal or unstable channel assignment from poor density profile, stale measurement window, DFS/weather-channel behavior, or excessive reselection thresholds",
+      "evidence_pattern": "DARRP profile assignment; selection-period and monitor-period; channel load/noise/spectral RSSI; TX retries/RX errors; schedule and channel-change events",
+      "remediation_path": "choose high/medium-density profile or tune weights with RF survey evidence; set realistic thresholds and optimization schedule; account for DFS/radar channels and channel width; capture client/AP logs during observed roaming issue",
+      "question_fingerprint": "choose whether a channel change is caused by candidate scoring, monitor-stage retry threshold, or schedule timing",
+      "diagram_topology_layout_fingerprint": "multiple FortiAP radios feed RF metric vectors into DARRP scoring/profile engine -> scheduled channel selector -> monitor feedback loop"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Guest self-registration: captive-portal request, sponsor/request-pool approval, scoped sponsor permissions, and temporary-account expiry",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-control-manager/687558/guest-self-registration",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/828107/add-a-guest-self-registration-profile",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-guest-self-registration-displaying-error-the-input-is-required-135057",
+      "feature_mechanism_fingerprint": "guest self-registration request object routed to sponsor or request pool; sponsor profile grants only request-processing permissions; approved account derives from a guest template and expires",
+      "workflow_transaction_fingerprint": "isolated guest opens portal -> submits request -> FortiNAC stores request -> sponsor approves/denies by email or admin UI -> guest receives credentials -> logs in and moves to production -> account expires by template duration",
+      "failure_class": "request cannot be submitted or approved due missing portal message templates, sponsor profile/permissions, request timeout, or invalid generated links",
+      "evidence_pattern": "pending request record; sponsor email action links; portal request-expiry timer (default 20 minutes); selected GuestSelfRegistration template; account enabled/start/end dates; portal message-template assignments",
+      "remediation_path": "validate portal self-registration fields and message templates; verify sponsor administrator profile has Self Registration Requests permission and email; check request-pool/sponsor routing and generated links; distinguish request timeout from account expiry",
+      "question_fingerprint": "trace the guest onboarding transaction and identify which object/permission controls a pending request versus the resulting account lifetime",
+      "diagram_topology_layout_fingerprint": "guest captive portal -> request queue -> sponsor/request pool -> approval decision -> guest template/account -> credential delivery -> production access/expiry"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "PEAP-MS-CHAPv2 cached-credential failures after Windows KB5127648: endpoint NTLMv1 SSO behavior versus RADIUS/Winbind health",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/670285",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-radius-802-1x-peap-authentication-failures-on-windows-hosts-230556",
+      "feature_mechanism_fingerprint": "Windows supplicant cached-credential PEAP-MS-CHAPv2/NTLMv1 SSO behavior interacts with FortiNAC Winbind domain authentication; endpoint update changes BlockNTLMv1SSO default",
+      "workflow_transaction_fingerprint": "Windows supplicant starts PEAP -> inner MSCHAPv2 uses cached credentials/NTLMv1 SSO -> RADIUS request reaches FortiNAC -> Winbind/domain controller validates; endpoint policy may fail before server-side credential validation",
+      "failure_class": "post-update cached-credential OneX held-state timeout; not necessarily RADIUS secret, Winbind join, or certificate failure",
+      "evidence_pattern": "Windows Event ID 12014 OneX Held State Timeout; KB5127648 installed; failures limited to cached username/password PEAP-MS-CHAPv2; client-certificate EAP-TLS unaffected; Winbind service/domain join status",
+      "remediation_path": "confirm endpoint update and authentication method; assess BlockNTLMv1SSO audit/production policy with Windows security guidance; do not weaken RADIUS/Winbind or switch all users to legacy auth; verify FQDN DNS/DC and Winbind only after client-side cause is isolated",
+      "question_fingerprint": "distinguish a Windows supplicant cached-credential behavior change from FortiNAC Winbind/domain connectivity failure",
+      "diagram_topology_layout_fingerprint": "Windows supplicant PEAP outer TLS -> inner MSCHAPv2 cached credential/NTLMv1 SSO -> RADIUS -> FortiNAC Winbind -> AD domain controller"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/569230/ldap",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-how-to-resolve-the-remote-sync-rule-error-with-can-t-contact-ldap-server-error-0a000086-ssl-routines-certificate-verify-failed-219705",
+      "feature_mechanism_fingerprint": "remote LDAP connection TLS mode plus selected trusted CA and CRL scope; optional client certificate authenticates FAC to LDAP server",
+      "workflow_transaction_fingerprint": "FAC resolves LDAP FQDN -> TCP/636 LDAPS or StartTLS upgrade -> server certificate chain validation -> optional CRL checks at leaf/all chain nodes -> optional client-certificate auth -> LDAP bind/search/user sync",
+      "failure_class": "TLS certificate verification failure due missing intermediate/root, incomplete chain, expired/revoked certificate, CRL gap, or server-name mismatch",
+      "evidence_pattern": "FAC remote sync error SSL routines certificate verify failed/unable to get local issuer; packet capture TLS handshake; server-presented chain; trusted CA selection; CRL Check Mode; LDAP sync logs",
+      "remediation_path": "import complete trusted chain; verify server name/SAN and validity; choose Single CA or All Trusted deliberately; for All Nodes supply CRLs for each CA and full server chain; test LDAP browse/sync before changing user mapping",
+      "question_fingerprint": "determine whether LDAP bind failure is caused by TLS chain trust, CRL scope, client certificate, or LDAP credentials",
+      "diagram_topology_layout_fingerprint": "FortiAuthenticator LDAP client -> TLS handshake/server chain validation -> optional CRL/OCSP decision -> optional client certificate -> LDAP bind/search"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Active-passive HA: configuration replication, primary-only audit/video persistence, heartbeat topology, and failover maintenance mode",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/544915/high-availability",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/troubleshooting-tip-ha-synchronization-errors-on-fortipam-nodes-226761",
+      "feature_mechanism_fingerprint": "one active plus up to two passive FortiPAM nodes; configuration/users/secrets synchronize, but event logs and session videos remain on the node that recorded them",
+      "workflow_transaction_fingerprint": "primary handles all PAM tasks -> HA heartbeat and config sync to passive -> monitored-interface/primary failure -> passive takes primary role and enters maintenance mode -> administrator resumes services after recovery/maintenance action",
+      "failure_class": "HA sync failure from cross-platform/version/model mismatch, license SKU mismatch, file backup/sync error, heartbeat congestion, or data-retention expectation mismatch",
+      "evidence_pattern": "HA role/state/priority; hasync and hatalk debug; file synchronization failure paths; checksum/sync status; node serial owning log records; heartbeat packet path",
+      "remediation_path": "match model/version/platform and license SKU; verify dedicated heartbeat and monitored interfaces; test unicast heartbeat where multicast congestion exists; set priority/override separately on each node; design external log/video retention because data is not replicated",
+      "question_fingerprint": "identify which FortiPAM state survives failover and which audit/video artifacts remain tied to the original primary",
+      "diagram_topology_layout_fingerprint": "active FortiPAM node with configuration sync to two passive nodes; separate unsynchronized local log/video stores; heartbeat and monitored data interfaces"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Performance-monitor job lifecycle: discovery, credential association, scheduling state, and polling-job evidence",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/728689/editing-performance-monitors",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/398283/working-with-custom-performance-monitors",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/troubleshooting-tip-fortisiem-snmp-monitoring-not-scheduled-despite-successful-discovery-227511",
+      "feature_mechanism_fingerprint": "post-discovery performance jobs are independently scheduled/enabled per device and monitor type; custom performance objects map protocol OIDs/attributes to FortiSIEM event types and device types",
+      "workflow_transaction_fingerprint": "define/associate credentials -> discover device -> create/assign performance monitor jobs -> scheduler executes polling on selected Supervisor/Collector -> job state/errors and generated monitor events",
+      "failure_class": "discovery/test-connectivity succeeds but performance monitor remains Not Scheduled or Execution Failed due missing/invalid credential mapping or wrong polling node/source reachability",
+      "evidence_pattern": "Monitor column Running/Not Scheduled/Execution Failed; hover detail; Errors view; PH_AUDIT_DEV_MON_JOB_STATUS_CHANGE; SNMP credential association to IP; Collector/Supervisor selection",
+      "remediation_path": "verify credential protocol/security parameters and IP-range association; test from the actual monitoring Collector; inspect job Errors; enable device/monitor; Apply after changes; verify OID/event-attribute mapping for custom monitors",
+      "question_fingerprint": "separate discovery success from scheduled polling success and select the next diagnostic based on monitor state",
+      "diagram_topology_layout_fingerprint": "credential/IP mapping -> discovery -> device/monitor association -> Supervisor/Collector scheduler -> SNMP poll -> monitor job state/event"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-sia-agentless-proxy-deployment-guide/891466/deployment-overview",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortisase/26.1.26/concept-guide/308001/sia",
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/troubleshooting-tip-investigating-a-403-domain-fronting-blocked-error-230414",
+      "feature_mechanism_fingerprint": "agentless PAC/explicit proxy path and agent-based SIA tunnel are distinct access modes; proxy changes SNI and cannot be layered concurrently with SIA tunnel for same flow",
+      "workflow_transaction_fingerprint": "browser PAC/proxy selects FortiSASE proxy endpoint (default 9443) -> proxy applies web policy and modifies SNI -> endpoint SIA tunnel simultaneously encapsulates traffic -> FortiSASE domain-fronting control rejects conflicting SNI/tunnel path",
+      "failure_class": "403 domain-fronting block caused by dual steering/proxy+tunnel path and SNI mismatch, not destination website availability",
+      "evidence_pattern": "browser DevTools shows proxy port 9443 rather than direct HTTPS 443; endpoint proxy settings/PAC; SIA tunnel state; HTTP 403 domain-fronting blocked; SNI seen on tunneled flow",
+      "remediation_path": "choose one access mode per endpoint/traffic flow; disable endpoint proxy/PAC when using SIA tunnel or remove tunnel for agentless proxy use; verify DNS/PAC and SNI path after change",
+      "question_fingerprint": "identify the duplicate steering path from port/SNI evidence and select the mutually exclusive access mode",
+      "diagram_topology_layout_fingerprint": "endpoint browser PAC/proxy and FortiClient SIA tunnel as parallel mutually exclusive paths to FortiSASE PoP; conflict converges at SNI/domain-fronting gate"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "BGP route tags as dynamic SD-WAN destinations: community matching, route-map tagging, and service-rule selection",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/672387/using-bgp-tags-with-sd-wan-rules",
+      "secondary_primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/256748/controlling-traffic-with-bgp-route-mapping-and-service-rules",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "BGP route-map matches route community/origin/prefix and assigns local route-tag; SD-WAN service rule references destination tag so dynamic BGP prefixes become rule destinations",
+      "workflow_transaction_fingerprint": "neighbor advertises changing prefixes with BGP community -> inbound route-map matches community and sets route-tag -> route enters BGP table with tag -> SD-WAN rule dst-tag matches route set -> selected member/path forwards flow",
+      "failure_class": "dynamic destination not matched because community missing/mismatched, inbound route-map not applied, route tag absent, or service rule order/zone/policy prerequisites wrong",
+      "evidence_pattern": "BGP received route/community and RouteTag in get router info bgp network; neighbor route-map-in; route-map match-community/set-route-tag; SD-WAN rule dst-tag and counters; route table",
+      "remediation_path": "confirm advertised community on received route; validate community-list and inbound route-map; verify route-tag in BGP table; match dst-tag in correct SD-WAN service and keep policy/static routing prerequisites; retest with new prefix",
+      "question_fingerprint": "trace a dynamic prefix from BGP community through route-map tag into SD-WAN destination matching",
+      "diagram_topology_layout_fingerprint": "remote BGP neighbor advertises community-tagged prefixes -> inbound route-map assigns tag -> BGP route table -> SD-WAN service rule dst-tag -> WAN member"
+    }
+  ],
+  "audit": [
+    {
+      "product": "FortiGate",
+      "subject": "FIPS-CC boot lifecycle: CPU-jitter entropy, cryptographic self-tests, and certified-branch maintenance",
+      "similar_records": [],
+      "unique": true
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Firmware templates: scheduled target versions, preview, fabric dependency sequencing, and upgrade stop conditions",
+      "similar_records": [],
+      "unique": true
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Device Manager Up/Down state: OFTP connectivity, log-recency thresholds, and post-reboot reconciliation",
+      "similar_records": [
+        {
+          "date": "2026-10-10",
+          "subject": "Device revision retrieval, revert, and policy-package reconciliation"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "SSH host-key regeneration after OpenSSH/firmware upgrade: trust negotiation, daemon restart, and managed-switch recovery",
+      "similar_records": [],
+      "unique": true
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Distributed Automatic Radio Resource Provisioning (DARRP): channel scoring, density profiles, monitor thresholds, and schedules",
+      "similar_records": [],
+      "unique": true
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Guest self-registration: captive-portal request, sponsor/request-pool approval, scoped sponsor permissions, and temporary-account expiry",
+      "similar_records": [
+        {
+          "date": "2026-10-28",
+          "subject": "FortiLink CoA disconnect failures: accounting access and return path"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiNAC — Portal Request Processing Rules: HTTP regex matching, publishing and duplicate-rule failure"
+        },
+        {
+          "date": "2026-10-02",
+          "subject": "FortiAP/Wireless — Dynamic captive-portal redirect URL from RADIUS authorization"
+        },
+        {
+          "date": "2026-10-30",
+          "subject": "Log Fetching between analyzers: approval, ADOM synchronization, transfer, and database rebuild"
+        },
+        {
+          "date": "2026-10-30",
+          "subject": "Upgrade migration from Legacy RADIUS Proxy to Virtual Proxy Server in FortiNAC-F 7.4+"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "PEAP-MS-CHAPv2 cached-credential failures after Windows KB5127648: endpoint NTLMv1 SSO behavior versus RADIUS/Winbind health",
+      "similar_records": [
+        {
+          "date": "2026-10-28",
+          "subject": "FortiLink CoA disconnect failures: accounting access and return path"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiNAC-F — Winbind MSCHAPv2 AD domain join versus non-AD LDAP/Kerberos directories"
+        },
+        {
+          "date": "2026-10-30",
+          "subject": "RADIUS policy selection: request attributes, top-down precedence, and local EAP versus proxy"
+        },
+        {
+          "date": "2026-10-10",
+          "subject": "F — EAP-TLS endpoint trust certificate target and unknown-CA failures"
+        },
+        {
+          "date": "2026-10-10",
+          "subject": "Per-profile OCSP certificate validation: hard fail versus soft fail"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity",
+      "similar_records": [
+        {
+          "date": "2026-10-23",
+          "subject": "FortiSASE — Endpoint-to-endpoint private access through SPA hub and BGP re-advertisement"
+        },
+        {
+          "date": "2026-10-30",
+          "subject": "RADIUS policy selection: request attributes, top-down precedence, and local EAP versus proxy"
+        },
+        {
+          "date": "2026-10-10",
+          "subject": "F — EAP-TLS endpoint trust certificate target and unknown-CA failures"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Active-passive HA: configuration replication, primary-only audit/video persistence, heartbeat topology, and failover maintenance mode",
+      "similar_records": [
+        {
+          "date": "2026-10-29",
+          "subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiPAM — Target TOTP secret auto-delivery: template overrides and SSH keyboard-interactive limits"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiAnalyzer — FortiAnalyzer Fabric member HA: primary-only supervisor registration and failover visibility"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiNAC-F — FortiNAC-F active/passive HA: control ownership versus interface allowaccess"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Performance-monitor job lifecycle: discovery, credential association, scheduling state, and polling-job evidence",
+      "similar_records": [
+        {
+          "date": "2026-10-02",
+          "subject": "FortiSIEM — Credentialed device discovery and monitoring assignment"
+        },
+        {
+          "date": "2026-10-16",
+          "subject": "FortiSIEM — Events versus performance metrics"
+        }
+      ],
+      "unique": false
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
+      "similar_records": [],
+      "unique": true
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "BGP route tags as dynamic SD-WAN destinations: community matching, route-map tagging, and service-rule selection",
+      "similar_records": [
+        {
+          "date": "2026-10-29",
+          "subject": "Steering bypass destinations: dynamic FQDN routes and on-net/off-net conditions"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Local-out routing: steering FortiGate-originated service traffic"
+        },
+        {
+          "date": "2026-10-30",
+          "subject": "Dynamic SDN connector addresses in SD-WAN rules: cloud inventory refresh to path match"
+        }
+      ],
+      "unique": false
+    }
+  ],
+  "community_sweep": {
+    "FortiGate": "recent Oct 27 FIPS branch update",
+    "FortiManager": "no directly matched recent firmware-template scenario found; older upgrade-path warning used as context",
+    "FortiAnalyzer": "recent Oct 5 post-reboot stale status behavior",
+    "FortiSwitch": "recent Sep 28-Oct 6 SSH/sshd upgrade issue",
+    "FortiAP": "recent roaming evidence-collection tip; not DARRP-specific",
+    "FortiNAC": "no directly matched recent guest self-registration scenario; older message-template/portal articles used as context",
+    "FortiNAC-F": "recent Oct 14 PEAP cached-credential failure after Windows KB5127648",
+    "FortiAuthenticator": "no directly matched recent LDAP TLS scenario; older LDAP trust-chain failure article used",
+    "FortiPAM": "no directly matched recent HA scenario; April 2026 HA sync troubleshooting used",
+    "FortiSIEM": "no directly matched recent performance-monitor scenario; May 2026 scheduling article used",
+    "FortiSASE": "recent Oct 6 403 domain-fronting/SIA-proxy conflict",
+    "Secure SD-WAN": "no directly matched recent BGP route-tag scenario found"
+  },
+  "admin_guide_sweep": "For each of the twelve products, searched official Fortinet administration/configuration/new-features/CLI/deployment documentation for a primary feature. Selected primary sources are all Fortinet documentation, not Community troubleshooting posts.",
+  "semantic_uniqueness": "All 12 selected feature/workflow fingerprints were checked against the 174-record historical exclusion inventory; no substantial mechanism/workflow match was found. DARRP selected instead of the previously considered MLO topic because MLO appeared in an October 26 candidate exclusion record."
+}
