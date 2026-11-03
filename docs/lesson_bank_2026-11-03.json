@@ -1,0 +1,277 @@
+{
+  "run_date": "2026-11-03",
+  "inventory_path": "docs/exclusion_inventory_2026-11-03-07-58.json",
+  "inventory_sha": "9c164c0c395ca8c022b4bdc67403bc04263f0f11",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "subject": "BGP route leaking between VRFs through virtual inter-VDOM links: prefix control, symmetric return paths, and policy isolation",
+      "primary": [
+        [
+          "FortiOS 8.0 Administration Guide — Route leaking between VRFs with BGP",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/834664/route-leaking-between-vrfs-with-bgp"
+        ],
+        [
+          "FortiOS 8.0 Administration Guide — Route leaking between multiple VRFs",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/342655/route-leaking-between-multiple-vrfs"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Route leaking between VRFs using VDOM link and advertising VRF routes over ADVPN (older contextual example)",
+          "https://community.fortinet.com/fortigate-3/technical-tip-route-leaking-between-vrfs-using-vdom-link-and-advertising-vrfs-routes-over-advpn-tunnel-204061"
+        ]
+      ],
+      "scenario_status": "Older contextual scenario; no directly matched Community case verified in the rolling 30-day window. Primary mechanics come from FortiOS 8.0 Administration Guide.",
+      "body_html": "\n<h3>Purpose and isolation model</h3>\n<p>FortiGate VRFs create separate routing tables. A route learned in VRF 10 is not automatically visible in VRF 20, even when both VRFs live in the same VDOM. Route leaking is an explicit control-plane operation that copies selected reachability between routing instances. It does not merge the routing tables, bypass firewall policy, or make every interface mutually reachable.</p>\n<h3>Objects and transaction flow</h3>\n<p>The documented BGP example uses a hub with branch prefixes learned into separate VRFs. A pair of virtual inter-VDOM-link interfaces forms the logical handoff. Although an inter-VDOM link normally joins VDOMs, FortiOS can use two ends in the same VDOM with different VRF assignments. Each end receives an address and a VRF ID. Prefix lists define which networks are eligible; route maps bind those lists to the leak; BGP leak-target entries identify the destination VRF and transit interface. The return direction needs its own leak-target and route map. A one-way leak may install a route but still leave replies without a route.</p>\n<p>Fortinet’s example enables subnet overlap when the interface design requires it, creates the VDOM link, assigns the two interface endpoints to VRF 10 and VRF 20, defines prefix lists and route maps, then configures the BGP VRF leak targets. The core relationship is source VRF → route map → destination VRF over the selected link. Keep the prefixes narrow; a broad prefix list can accidentally expose management or tenant networks.</p>\n<pre><code>config system global\n    set single-vdom-npuvlink enable\nend\nconfig router bgp\n    config vrf\n        edit 10\n            config leak-target\n                edit 20\n                    set route-map \"Leak_from_VRF10_to_VRF20\"\n                    set interface \"link-10-20-0\"\n                next\n            end\n        next\n    end\nend</code></pre>\n<p>The NPU-link setting is an optional acceleration path on supported models; it does not create the route leak by itself. The Fortinet guide also requires a firewall policy that permits the inter-VRF traffic. A route in the destination table is therefore necessary but not sufficient for packet delivery.</p>\n<h3>Evidence and troubleshooting</h3>\n<p>Inspect the source VRF first: the expected BGP prefix must exist and be active. Then inspect the prefix-list match, route-map rule, BGP leak-target destination, and transit interface assignment. Check the destination VRF routing table for the leaked prefix and verify the reverse prefix is present in the opposite direction. Finally inspect the firewall policy counters and capture both sides of the link. A route-table entry proves control-plane reachability; it does not prove the policy allows the packet or that the return path exists.</p>\n<p>If the route is present but traffic fails, do not keep changing BGP timers. Check the inter-VRF firewall policy, source/destination interface selection, overlapping subnet assumptions, and reverse leak. If the route is absent, isolate the failure before the data plane: BGP learning, prefix-list match, route-map, leak-target, then link/VRF binding. For larger topologies, the Fortinet multi-VRF example uses a central VRF and VLAN subinterfaces over VDOM links to avoid a full-mesh set of pairwise links.</p>"
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Workflow mode as an ADOM change transaction: session isolation, ordered approval, rejection cascades, and separate device installation",
+      "primary": [
+        [
+          "FortiManager 7.6.6 Administration Guide — Workflow mode",
+          "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/424502/workflow-mode"
+        ],
+        [
+          "FortiManager 7.6.6 Administration Guide — Enable workflow mode",
+          "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/360315/enable-workflow-mode"
+        ],
+        [
+          "FortiManager Administration Guide — Workspace settings",
+          "https://docs.fortinet.com/document/fortimanager/latest/administration-guide/233813/workspace-settings"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Workflow mode modifier/approver names not displayed in FortiManager 7.2.11 (February 20, 2026)",
+          "https://community.fortinet.com/fortimanager-27/technical-tip-fortimanager-in-workflow-mode-does-not-show-modifier-approver-224018"
+        ]
+      ],
+      "scenario_status": "Related older release-specific scenario (February 20, 2026); not a recent 30-day workflow-session failure. The lesson mechanics are defined by the 7.6.6 Administration Guide.",
+      "body_html": "\n<h3>Why workflow mode exists</h3>\n<p>FortiManager workflow mode makes an ADOM change a reviewable transaction instead of allowing administrators to edit the shared database directly. It is intended for environments where policy and object changes require a submitter, one or more approval groups, and an auditable decision before changes are committed to the ADOM. This differs from ordinary workspace locking: workspace mode prevents concurrent edits by locking an ADOM, device, or policy package; workflow mode records a session with a change set and approval state.</p>\n<h3>Session lifecycle</h3>\n<p>Workflow approvals must be configured for the ADOM before a session can be created. The ADOM is locked, a session is started, and policy/object changes are made inside that session. The session list tracks the transaction. View Diff compares the proposed change set with the ADOM baseline; it can be inspected without locking the ADOM. A session can be saved and continued later, submitted for approval, or discarded. A saved session blocks creation of another new session until it is submitted or discarded.</p>\n<p>Approval is ordered. Sessions are approved in the order they were created, and each configured approval group must satisfy its approval requirement. A rejection blocks later sessions from advancing until the rejected session is repaired/resubmitted or discarded. Discarding a session also discards all later sessions, because those later change sets were built on a sequence that no longer exists. Reverting to an earlier approved session creates a new rollback transaction; it is not an invisible edit of history.</p>\n<p>Per-ADOM workspace mode lets one ADOM use Workflow while another uses Workspace or Disable. Fortinet documents <code>set workspace-mode per-adom</code> for enabling per-ADOM selection and <code>set workspace-mode workflow</code> for workflow mode across all ADOMs. Changing workspace mode ends the current GUI session and requires a new login. In workflow mode, Device Manager and Policy &amp; Objects are read-only outside an active workflow session.</p>\n<h3>Approval is not the device install</h3>\n<p>Approval commits the approved changes into FortiManager’s ADOM configuration workflow. It does not prove the target FortiGate has received the configuration. After approval, use the Install Wizard, select the intended policy package and device settings, review the install preview, and run the installation. Verify the task history and the device’s configuration/policy-package status separately.</p>\n<h3>Operational evidence</h3>\n<p>For a stalled change, inspect the ADOM’s workflow mode, approval matrix, session state, creator, creation order, and View Diff. A submitted session awaiting approval is not an install failure. A fully approved session with an out-of-date FortiGate points to the separate install stage. If the modifier/approver identity is wrong or appears as a generic account, compare the FortiManager release with known issues before altering the approval matrix. Preserve the session log and diff; do not discard an earlier session casually because later queued sessions can be removed with it.</p>"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Report dataset execution: Log Type binding, $log/$filter expansion, query analysis, hcache, and test-result boundaries",
+      "primary": [
+        [
+          "FortiAnalyzer 8.0 Administration Guide — Creating datasets",
+          "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/495456/creating-datasets"
+        ],
+        [
+          "FortiAnalyzer 8.0 Administration Guide — How auto-cache works",
+          "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Custom SQL queries for FortiAnalyzer reports (older context)",
+          "https://community.fortinet.com/fortianalyzer-6/technical-tip-how-to-create-fortianalyzer-reports-using-custom-sql-queries-92490"
+        ],
+        [
+          "Community Technical Tip — Report for received log volume (July 30, 2025)",
+          "https://community.fortinet.com/fortianalyzer-6/technical-tip-how-to-generate-a-fortianalyzer-report-for-the-received-log-volume-210575"
+        ]
+      ],
+      "scenario_status": "Older scenario material; no directly matched recent dataset-engineering failure was verified in the rolling 30-day window.",
+      "body_html": "\n<h3>Dataset is the report’s query contract</h3>\n<p>A FortiAnalyzer dataset is a named query over log data. Charts and report macros reference the dataset; when a report runs, the dataset supplies the rows used to render those components. The dataset’s Log Type is not a cosmetic label: it selects the underlying log family/table that the query’s <code>$log</code> macro represents. A query written for Traffic logs cannot be assumed to work unchanged against Event, UTM, or Local Event data because the columns and semantics differ.</p>\n<h3>Execution pipeline</h3>\n<p>In an ADOM deployment, first select the correct ADOM. Create the dataset under Reports → Report Definitions → Datasets, choose the Log Type, and write SQL against <code>$log</code>. Fortinet’s examples use <code>$filter</code> in the WHERE clause so the report time-range filter is injected into the query. If it is omitted, a report can ignore the user-selected time window or produce misleading results. A compact traffic example is:</p>\n<pre><code>SELECT from_itime(itime)::date AS day,\n       SUM(rcvdbyte) AS inbound,\n       SUM(sentbyte) AS outbound,\n       policyid, devid\nFROM $log\nWHERE $filter\nGROUP BY day, policyid, devid\nORDER BY day</code></pre>\n<p>Use Validate to catch SQL syntax/field errors. Analyze Query is more diagnostic: it shows the original query, any transformed query, validation results, and the hcache query when auto-cache is enabled. The transformed query matters because the report engine may rewrite a dataset for chart/report context. A query that validates is not necessarily performant at production scale.</p>\n<p>Variables can expose expressions as report filter fields. For example, a User variable can normalize a username and fall back to the source IP. This creates a stable report filter even when the raw logs have inconsistent user fields. Test lets the administrator choose a time period and devices/VDOMs before saving. The Community SQL guidance notes that test output is a sample rather than a full report result; treat it as query validation, not a complete volume audit.</p>\n<h3>Failure isolation</h3>\n<p>If the dataset returns no rows, verify the ADOM, Log Type, selected devices, time window, and whether the relevant FortiGate policies actually logged the events. If the query validates but the report is empty, inspect the report-level device filter and chart-level filters. If a chart’s Order By is enabled, it can override the dataset’s ORDER BY clause. For local-event datasets, verify the source is available in the correct ADOM and that local-event retention covers the requested interval.</p>\n<p>Use predefined datasets as the starting point where possible; Fortinet optimizes them for its report engine and hcache behavior. A custom query should be tested with a narrow period, analyzed for its transformed form, and then exercised against representative devices before being placed in a scheduled report. A successful Test proves the sample query ran; it does not prove the report’s final filters, full time span, or cache plan are correct.</p>"
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "MAB Access-Request integrity: Message-Authenticator, call-check semantics, and RADIUS server compatibility",
+      "primary": [
+        [
+          "FortiSwitchOS 8.0 Administration Guide — Supported attributes for RADIUS CoA and RSSO",
+          "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/137894/appendix-b-supported-attributes-for-radius-coa-and-rsso"
+        ],
+        [
+          "FortiSwitchOS 7.0.8 Administration Guide — What’s new",
+          "https://docs.fortinet.com/document/fortiswitch/7.0.8/administration-guide/755567/introduction"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Modify MAC format for MAB on FortiSwitch (September 3, 2024)",
+          "https://community.fortinet.com/fortiswitch-36/technical-tip-how-to-modify-mac-format-for-mab-on-fortiswitch-180850"
+        ]
+      ],
+      "scenario_status": "Older contextual MAB interoperability article; no recent directly matched Message-Authenticator rejection case was verified.",
+      "body_html": "\n<h3>MAB is a RADIUS identity exchange, not 802.1X</h3>\n<p>MAC Authentication Bypass is used when an endpoint cannot run an 802.1X supplicant. The FortiSwitch acts as the NAS and sends a RADIUS Access-Request using the endpoint MAC address as the identity. FortiSwitchOS documents the MAB request attributes: NAS-Identifier, User-Name, User-Password, Service-Type, NAS-Port-Id, NAS-Port, NAS-Port-Type, Calling-Station-ID, Framed-MTU, and Message-Authenticator. For MAB, Service-Type is always <code>call-check</code>, regardless of the configured Service-Type setting. This differs from an 802.1X request, which carries EAP-Message and the EAP exchange.</p>\n<h3>Why Message-Authenticator matters</h3>\n<p>FortiSwitchOS 7.0.8 introduced Message-Authenticator in MAB Access-Request messages. Attribute 80 authenticates the entire RADIUS packet using the shared secret; it is not simply a field containing the endpoint MAC. The server must validate the attribute and the same RADIUS shared secret must be configured on both sides. A server policy or older RADIUS implementation that assumes a legacy MAB request shape can reject the packet even though the MAC identity and NAS-Port are correct.</p>\n<p>When comparing a working and failing switch, inspect the actual Access-Request. Confirm the username/calling-station ID format, NAS-Identifier, NAS-Port-Id, Service-Type=call-check, and Message-Authenticator presence/validation. The Community MAC-format tip shows that username, password, and calling-station delimiters can be changed (hyphen, colon, or none; upper/lower case). That is a separate interoperability variable from Message-Authenticator. A matching MAC string does not prove packet integrity validation passed.</p>\n<h3>Operational troubleshooting</h3>\n<p>Start with the switch’s RADIUS server definition and shared secret, then capture the request at the server. Determine whether the request reaches the server, whether the server rejects integrity validation, whether the policy matches the NAS/client identity, and whether the response returns to the switch. Compare MAB with a known-good 802.1X request: the MAB request uses the call-check service type and MAC identity, while 802.1X carries EAP payloads. Do not diagnose every Access-Reject as a bad endpoint MAC.</p>\n<p>On a firmware upgrade, confirm the target FortiSwitch model and FortiSwitchOS feature support before changing the RADIUS policy. A new Message-Authenticator field can expose a server-side compatibility or shared-secret problem that did not appear with the older request format. If the server rejects the packet, fix its RADIUS validation/client policy; changing VLAN assignment on the switch will not repair a failed authentication transaction. After an Access-Accept, separately verify the authorization attributes and resulting port/VLAN state.</p>"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Wireless mesh backhaul: root/leaf roles, CAPWAP transport, radio contention, and bridge-mode consequences",
+      "primary": [
+        [
+          "FortiAP 8.0 Configuration Guide — Wireless mesh configuration",
+          "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/196651/wireless-mesh-configuration"
+        ],
+        [
+          "FortiAP 8.0 Configuration Guide — Mesh variables",
+          "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide"
+        ]
+      ],
+      "scenario": [],
+      "scenario_status": "No directly matched recent Community troubleshooting scenario was verified for this mesh-backhaul mechanism; selection is driven by the current FortiAP 8.0 Configuration Guide.",
+      "body_html": "\n<h3>Mesh replaces the wired controller path with a radio backhaul</h3>\n<p>In a FortiAP wireless mesh, one AP is connected to the wired network and acts as the mesh root. Leaf APs reach the controller through a dedicated backhaul SSID rather than Ethernet. Fortinet documents that the backhaul SSID carries CAPWAP discovery, configuration, and other controller communications that a wired uplink would normally carry. The backhaul SSID is not a client SSID. Treat it as infrastructure transport, not as a second user WLAN.</p>\n<p>A leaf can associate directly to the root or to another leaf. This allows a multi-hop layout and gives a leaf an alternate parent when an AP fails, but each hop still consumes wireless airtime and reduces the capacity available to downstream clients. All mesh APs need at least one radio configured for backhaul. The root may be a FortiAP or the built-in AP of a FortiWiFi acting as controller.</p>\n<h3>Dedicated versus shared radio</h3>\n<p>Fortinet recommends a dedicated radio for the backhaul when the AP has sufficient radios. On a dual-radio AP, for example, one band can carry the mesh SSID while the other serves clients. This gives the backhaul a more predictable airtime budget and allows background Wi-Fi scanning in the documented dedicated-radio mode. If the same radio carries both backhaul and client SSIDs, user traffic and mesh transit contend for the same airtime. Performance is reduced, and background Wi-Fi scanning is not available in that shared-radio mode.</p>\n<p>Wireless mesh and wireless bridging are related but different deployment modes. In ordinary mesh, users associate to SSIDs on the leaf APs as they would on wired APs. In wireless bridging, the leaf AP’s Ethernet port can connect a remote wired segment; wired and wireless users behind the leaf are bridged to the LAN segment at the root. This affects where broadcast domains extend and how a remote switch or endpoint is attached.</p>\n<h3>Verification and fault isolation</h3>\n<p>When a leaf is offline, separate discovery from authorization and backhaul association. Confirm the root is online and authorized, the mesh SSID and security settings match, and the leaf has a radio assigned to backhaul. Check whether the leaf is associating to the expected parent and whether the backhaul radio is sharing airtime with client traffic. A leaf visible in the controller inventory proves discovery; it does not prove a stable backhaul or sufficient RF quality.</p>\n<p>When users report low throughput at distant leaves, map the parent chain and count wireless hops. Compare a dedicated-radio deployment with a shared-radio deployment, and inspect channel overlap, signal quality, and client airtime. Do not try to fix a backhaul capacity problem by changing a client SSID’s VLAN. If wireless bridging is used, verify the remote Ethernet segment and its loop/broadcast design separately. Mesh availability depends on the radio path, not merely on the AP’s management IP being reachable.</p>"
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "FortiNAC 9.4 RADIUS group ingestion: Fortinet-Group-Name parsing, profile-scoped group identity, and membership reconciliation",
+      "primary": [
+        [
+          "FortiNAC 9.4 Administration Guide — RADIUS",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius"
+        ],
+        [
+          "FortiNAC 9.4 Administration Guide — What’s new",
+          "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — FortiNAC-F RADIUS Dynamic User Groups using FortiAuthenticator (June 16, 2025)",
+          "https://community.fortinet.com/fortinac-f-57/technical-tip-creating-and-using-fortinac-f-radius-dynamic-user-groups-208111"
+        ]
+      ],
+      "scenario_status": "Older related FortiNAC-F/FortiAuthenticator group-attribute example; not a recent 30-day FortiNAC 9.4 failure case.",
+      "body_html": "\n<h3>What FortiNAC 9.4 changed</h3>\n<p>FortiNAC 9.4 adds support for receiving user groups from FortiAuthenticator during RADIUS authentication. The important distinction is that group membership can be carried in the RADIUS response rather than being recreated manually in FortiNAC or requiring a special FortiAuthenticator configuration change for each FortiNAC integration. The attribute is the Fortinet vendor-specific <code>Fortinet-Group-Name</code>, and a response can carry one or more group values.</p>\n<h3>Response processing</h3>\n<p>In proxy mode, FortiNAC forwards the authentication request to the selected external RADIUS server. When the Access-Accept returns, FortiNAC extracts the group names. It scopes the resulting FortiNAC group by the RADIUS proxy profile name, for example <code>RADIUS/FAC1/Employee</code>. If the group does not exist, FortiNAC creates a user-type group. It then finds or creates the user record and adds the user to the returned group. This namespace prevents two different RADIUS proxy profiles from silently sharing an identically named external group.</p>\n<p>Membership is reconciled, not only appended. For the same proxy-profile namespace, groups that previously existed for the user but are not present in the new returned Fortinet-Group-Name list are removed. That means the Access-Accept is the current group assertion for that RADIUS profile. If the external server stops returning a group because its policy filter changed, FortiNAC may remove the user’s membership on the next authentication.</p>\n<h3>Configuration and verification</h3>\n<p>On FortiAuthenticator, create or edit the user group, add the Fortinet vendor attribute and a stable group value, ensure the user is a member (directly or through the configured filter), and include that group in the applicable RADIUS policy. The group must actually be emitted in the Access-Accept; defining a local group object alone is not evidence that the attribute is sent. On FortiNAC, verify the proxy profile selected for the device/SSID, inspect the RADIUS response, and check the generated group name and user membership.</p>\n<p>If authentication succeeds but the expected Network Access Policy does not match, inspect the Access-Accept attributes first. Then confirm the FortiNAC group name includes the expected profile prefix and that the policy references that generated group. A successful RADIUS authentication proves the credentials were accepted; it does not prove the expected group attribute was returned or that the policy used the resulting group. If membership disappears, compare the latest Access-Accept with the previous one before rebuilding the user record.</p>"
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "VPN captive portal state machine: identity-known versus agentless download, portal selection limits, and isolation release",
+      "primary": [
+        [
+          "FortiNAC-F 7.6 VPN integration guide — Captive Portal",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortigate-vpn-integration/902299/captive-portal"
+        ],
+        [
+          "FortiNAC-F 7.6 Cisco ASA VPN integration guide — Captive Portal",
+          "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-asa-vpn-device-integration/441861/captive-portal"
+        ]
+      ],
+      "scenario": [
+        [
+          "Fortinet Community — FortiNAC-F captive portal error: Physical Address not found (July 22, 2026)",
+          "https://community.fortinet.com/support-forum-92/fortinac-f-captive-portal-error-228967"
+        ]
+      ],
+      "scenario_status": "Related July 2026 community case, outside the rolling 30-day window; it concerns endpoint identity discovery rather than the VPN portal page-selection mechanism.",
+      "body_html": "\n<h3>Portal selection is a host-state transaction</h3>\n<p>FortiNAC-F’s VPN captive portal is not just a static web page. The VPN integration presents a redirect while NAC evaluates the host and decides which content page is appropriate. The VPN branch of the portal content editor includes an Index (Redirect) page, Download Page, Profile Configuration Download, Mobile Agent Download, Instructions, User Login, and Success. These are workflow states, not interchangeable HTML templates.</p>\n<p>If the VPN device provides host/user information but the endpoint does not have an agent, the Download Page is presented. If FortiNAC-F cannot find user information from the VPN device, the User Login form is used when the client first reaches the VPN context. If a host matches a supplicant policy, the Profile Configuration Download page can provide the supplicant configuration where supported. The Success page represents a host that has completed scanning and is released from isolation; it is not simply the result of a successful HTTP redirect.</p>\n<h3>Multiple portal caveat</h3>\n<p>When multiple captive portals are configured, Portal Policies normally determine which portal is shown during isolation. Fortinet documents a VPN-specific limitation: FortiNAC cannot properly determine the portal for VPN connections if the host does not already have an agent installed. In that agentless case, use the default portal for VPN connections. This prevents an administrator from relying on a policy selector that lacks the endpoint context it needs.</p>\n<h3>Operational workflow</h3>\n<p>Trace the client from VPN connection to redirect, then identify which host information arrived from the VPN device. Determine whether the endpoint is agentless and whether a user identity is available. Verify the portal content fields and the default portal association. If a scan is required, confirm the agent download/install path and the policy that releases the host from isolation. Keep the VPN portal workflow separate from wired rogue-host isolation; the state names can look similar while the identity source and redirect path differ.</p>\n<p>A portal error such as “Physical Address not found” is an identity/discovery symptom, not proof that the page template is broken. The July 2026 Community case shows this symptom for a wired isolation registration scenario. For a VPN client, first confirm what the VPN integration supplies to FortiNAC-F and whether an agent is installed. A successful VPN tunnel proves the remote user reached the VPN gateway; it does not prove NAC has a usable host record, a selected portal, or a completed scan.</p>"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "LDAP authentication cache: two-minute successful-authentication reuse, imported-user dependency, and revocation timing",
+      "primary": [
+        [
+          "FortiAuthenticator 8.0.3 Administration Guide — Remote users",
+          "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/441267"
+        ],
+        [
+          "FortiAuthenticator 6.6.0 New Features — LDAP authentication cache",
+          "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/760429/fortiauthenticator-6-6-0"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Remote User Sync Rule log reading and troubleshooting (older context)",
+          "https://community.fortinet.com/fortiauthenticator-8/technical-tip-remote-user-sync-rule-log-reading-and-troubleshooting-197979"
+        ]
+      ],
+      "scenario_status": "Older LDAP synchronization troubleshooting context; no recent direct cache-invalidation scenario was verified in the rolling 30-day window.",
+      "body_html": "\n<h3>Cache scope and purpose</h3>\n<p>FortiAuthenticator’s documented LDAP authentication cache reduces repeated calls to a remote directory. Remote LDAP users must be imported into the FortiAuthenticator user database. After an LDAP user authenticates successfully, subsequent authentication requests from the same user within a two-minute window can succeed without another check against the remote LDAP server. This is a short successful-authentication cache, not a replacement for LDAP user import, directory synchronization, or the remote directory’s identity store.</p>\n<h3>Transaction behavior</h3>\n<p>On a cache miss, FortiAuthenticator must perform the remote LDAP authentication path. If that succeeds, the successful result can be reused for the same user during the documented two-minute window. Repeated requests in that interval therefore may not create a matching bind/authentication event on the LDAP server. A cache hit proves FortiAuthenticator has a recent successful result for that user; it does not prove the remote LDAP server was contacted for the current request.</p>\n<p>The performance benefit is also an operational boundary. If an account is disabled or its group membership changes in LDAP immediately after a successful authentication, do not assume every subsequent request in the next two minutes will force a fresh remote check. Treat this as a possible revocation-latency window and validate the exact behavior for the deployed release and authentication method before designing a high-risk access policy around immediate directory revocation.</p>\n<h3>Verification and fault isolation</h3>\n<p>Test with a controlled imported LDAP user. Record a successful authentication, then issue another authentication request within two minutes while observing both FortiAuthenticator logs and the LDAP server logs. Compare with a request after the cache window. If the first request fails, the cache is not the starting point: check LDAP server reachability, bind identity, certificate trust for LDAPS/StartTLS, search base, user import, and account state. If the first succeeds but the second succeeds during an LDAP outage, that is consistent with cache reuse; it does not prove the directory is healthy.</p>\n<p>Do not confuse the two-minute authentication cache with Remote User Sync Rule scheduling. Sync rules control importing/updating users and groups; the authentication cache controls whether a recent successful user authentication must query the remote LDAP server again. When investigating stale access, capture the exact time of the last successful authentication, the next request time, and the directory change time. Escalate only after separating cache timing from sync timing and directory reachability.</p>"
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Over-the-shoulder live recording: secret-level recording, global live stream, SSH event/video correlation, and replay lifecycle",
+      "primary": [
+        [
+          "FortiPAM 1.9 Administration Guide — Over-the-shoulder monitoring (Live recording)",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/170626/over-the-shoulder-monitoring-live-recording"
+        ],
+        [
+          "FortiPAM 1.9 Administration Guide — Secret event & video",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/205262"
+        ],
+        [
+          "FortiPAM 1.9 Administration Guide — Settings",
+          "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/35785/settings"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Troubleshooting Tip — Unable to replay a video captured with FortiPAM (March 24, 2025)",
+          "https://community.fortinet.com/fortipam-52/troubleshooting-tip-unable-to-replay-a-video-captured-with-fortipam-202011"
+        ]
+      ],
+      "scenario_status": "Older but directly relevant recording/replay failure scenario; no recent 30-day Community recording case was verified.",
+      "body_html": "\n<h3>Recording is controlled at two levels</h3>\n<p>FortiPAM session recording is enabled on the secret/session configuration, while Live Recording is a global setting under System Settings. Over-the-shoulder monitoring requires both: the launched secret must have Session Recording enabled, and Live Recording must be enabled globally. The live-monitoring workflow also requires Fortinet Privileged Access Agent 7.2.3 or later. Enabling the global setting alone does not turn every secret session into a recordable session.</p>\n<h3>Live monitor and event correlation</h3>\n<p>During a session, an administrator opens Monitoring → Active Sessions, selects the secret session, and chooses Monitor. A red video icon indicates the session is ready to be live-streamed. The monitor window displays user activity in real time, and the administrator can disconnect the active secret session from that view. This is an operational control point: live monitoring is not only post-event evidence; it can also terminate an active privileged session.</p>\n<p>For SSH sessions, FortiPAM can associate SSH command events with the session video. The secret must enable SSH service, use an SSH Filter profile, and have Session Recording enabled. In the SSH filter, only command patterns with Log enabled are linked to video. From the SSH Event log, selecting a command’s play control jumps the video to the time that command executed. Fortinet notes a one-to-two-second timestamp difference, so do not treat the event timestamp and video frame as clock-identical.</p>\n<h3>Storage and replay boundary</h3>\n<p>Live recording stores session video parts in an internal .chk format; the .chk file is not directly playable. FortiPAM creates a WebM representation for playback/export. The Community replay troubleshooting case documents a failure when a session does not close gracefully and the uploaded manifest is not static. That failure is different from a missing SSH command event: the recording may exist while the final manifest/video assembly is incomplete.</p>\n<h3>Verification and capacity</h3>\n<p>For a missing live stream, check the agent version, secret-level Session Recording, global Live Recording, active-session icon, and resource capacity. Fortinet’s guidance for multiple concurrent live sessions is eight logical CPU processors and 16 GB memory. For missing command/video links, inspect the SSH filter’s Log flag and the secret’s SSH filter assignment. For a video that never finishes loading, confirm the session closed cleanly and that the recording manifest reached a stable state; do not delete raw parts before preserving evidence. Export a playable WebM and verify the exported artifact before relying on it for an audit.</p>"
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "ClickHouse event retention: ranked time policies, Hot/Warm/Cold space thresholds, archive independence, and purge boundaries",
+      "primary": [
+        [
+          "FortiSIEM 7.5.1 User Guide — Creating Retention Policy",
+          "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/997299/creating-retention-policy"
+        ],
+        [
+          "FortiSIEM 7.5.0 User Guide — Creating ClickHouse Time Based Event Retention Policy",
+          "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/997299/creating-retention-policy"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — Verify whether old ClickHouse events remain after retention expires (recent, about two months old)",
+          "https://community.fortinet.com/fortisiem-34/technical-tip-how-to-verify-if-old-events-in-clickhouse-still-exist-after-event-retention-period-is-over-229665"
+        ]
+      ],
+      "scenario_status": "Related recent-by-relative-age scenario (approximately two months; outside the rolling 30-day window). It demonstrates events not covered by a retention policy.",
+      "body_html": "\n<h3>Retention has two independent control planes</h3>\n<p>FortiSIEM ClickHouse deployments use Online storage tiers (Hot, Warm, Cold) and may also use Archive storage. Time-based retention determines how long selected events should remain online. Space-based retention protects storage capacity when a tier approaches exhaustion. Archive retention is a separate lifecycle; an event can exist in both online and archive stores, and each has its own retention behavior.</p>\n<h3>Time-based policy matching</h3>\n<p>Online retention policies can scope by organization, reporting device, and event type. Policies are evaluated by rank: lower rank is evaluated first, and the first matching policy applies. After creating or changing a ClickHouse retention policy, click Apply to push it. A saved GUI row without Apply is not proof the new policy is active. Events not matched by any policy use the documented default retention value, so an unexpectedly old event may be uncovered rather than incorrectly retained by a matching policy.</p>\n<p>When the policy’s retention period expires, the event is purged from Online storage. This is different from a move from Hot to Warm or Warm to Cold, which is a capacity-tier transition and does not necessarily mean the event has expired. On non-AWS/non-GCP deployments, Cold may be sufficient as an archive tier; otherwise FortiSIEM can copy events in real time to NFS in EventDB format. AWS and GCP use their corresponding object storage options.</p>\n<h3>Space-based thresholds</h3>\n<p>FortiSIEM’s documented ClickHouse behavior uses free-space thresholds. If free Hot-tier disk falls below 10%, events move to Warm if configured until Hot free space exceeds 20%; without Warm, they are purged. If Warm free space falls below 10%, events move to Cold if configured until Warm exceeds 20%; without Cold, they are purged. If Cold is defined and free space drops below 10%, oldest events are purged until free space exceeds 20%. Selection is global oldest-first across retention buckets, not simply “purge the oldest event in the policy that is currently being edited.”</p>\n<p>Archive has its own space threshold. The guide describes purging oldest archive events when free archive space falls below 10 GB until it exceeds 20 GB, plus organization-based archive retention. Archive retention should not be treated as a guarantee that online events remain searchable indefinitely.</p>\n<h3>Operational diagnosis</h3>\n<p>If old events remain, inspect the event’s organization, reporting device, event type, policy rank, and actual retentionDays value before assuming the engine failed. The recent Community ClickHouse tip uses queries against <code>fsiem.events_replicated</code> to compare retentionDays with oldest/newest event dates. If events disappear earlier than expected, check space-based thresholds and whether a lower-rank policy matched first. If a policy change appears ineffective, confirm Apply was clicked. Preserve database and policy evidence before any manual cleanup; direct file deletion is not a substitute for supported retention configuration.</p>"
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Security posture tags for Secure Private Access: endpoint checks, dynamic policy source tags, and default allow-all restriction",
+      "primary": [
+        [
+          "FortiSASE 26.1.107 Feature Administration Guide — Configuring security posture tags in private access policies",
+          "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/284120/configuring-security-posture-tags-in-private-access-policies"
+        ],
+        [
+          "FortiSASE 26.1.107 Feature Administration Guide — Configuration workflow",
+          "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/731015"
+        ]
+      ],
+      "scenario": [],
+      "scenario_status": "No directly matched recent Community scenario was verified for posture-tag-driven private access; primary lesson is based on the FortiSASE feature guide.",
+      "body_html": "\n<h3>Why posture tags matter</h3>\n<p>In FortiSASE Secure Private Access (SPA) deployments using a FortiGate hub, the documented default is an Allow-All Private Traffic policy for agent-based remote users. That is convenient for initial connectivity but too broad when access must depend on endpoint health. Security posture tagging lets FortiSASE classify a remote user’s endpoint based on configured posture checks and then use the resulting tag as the source of a dynamic private access policy.</p>\n<h3>Evaluation flow</h3>\n<p>Build a posture tagging rule set for compliant endpoints and another for non-compliant endpoints. The rule sets assign tags to remote users according to the endpoint checks. A dynamic private access policy then references the tag as its source and permits or denies access to the target private application. Fortinet’s configuration workflow demonstrates a policy that allows a specific private server from compliant endpoints and a second policy that denies the same server from non-compliant endpoints. The mechanism applies to TCP, UDP, ICMP, and other private application protocols; it is not limited to web proxy traffic.</p>\n<p>The key object relationship is endpoint posture result → user tag → dynamic private access policy → FortiGate hub path → private application. A tag is an authorization input, not a route. The hub still needs a working path to the private network, and the private application still needs to listen on the expected protocol/port. If the endpoint is compliant but the private server is unreachable, do not start by changing the tag rule.</p>\n<h3>Configuration and evidence</h3>\n<p>Follow the documented order: create compliant posture rules, create non-compliant posture rules, create the allow policy for the compliant tag, and create the deny policy for the non-compliant tag. Test both endpoint states against the same target. The guide uses ICMP ping as a simple test, but ping only proves ICMP reachability; it does not prove a TCP application handshake, DNS resolution, or application authentication.</p>\n<p>For a user who unexpectedly has access, inspect the actual posture result and tag assigned to that user, then verify the dynamic policy source and target. For a compliant user who cannot reach an application, check the hub tunnel/path, route, FortiGate policy, and application listener after confirming the tag. Do not assume that changing a posture check instantly rewrites an already established application session; test new connections and document the release-specific reevaluation behavior. Remove or narrow the default Allow-All policy only after the restrictive tag-based policies are tested, or administrators may inadvertently create a broad access outage.</p>"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "Adaptive FEC profile selection by SLA metrics and ToS/DSCP: two-stage mapping, masks, negate thresholds, and tunnel redundancy",
+      "primary": [
+        [
+          "FortiOS 8.0 Administration Guide — Adaptive Forward Error Correction",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/169010/adaptive-forward-error-correction"
+        ],
+        [
+          "FortiOS 8.0 New Features — ToS matching and negate options on adaptive FEC profiles",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/187229/tos-matching-and-negate-options-on-adaptive-fec-profiles"
+        ],
+        [
+          "FortiOS 8.0 SD-WAN New Features — Overview",
+          "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+        ]
+      ],
+      "scenario": [
+        [
+          "Community Technical Tip — SD-WAN steering by ToS with identical source/destination (February 25, 2026)",
+          "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-steering-traffic-based-on-tos-value-with-same-source-and-destination-224289"
+        ]
+      ],
+      "scenario_status": "Related older DSCP steering scenario, not an adaptive-FEC failure case. No recent 30-day Community adaptive-FEC case was verified.",
+      "body_html": "\n<h3>FEC protects a tunnel flow from loss</h3>\n<p>Forward Error Correction sends redundant packets so the receiver can reconstruct some lost data without waiting for retransmission. Fortinet describes a base/redundant relationship: x redundant packets are sent for every y base packets. Adaptive FEC changes that ratio as SD-WAN SLA measurements change. With low loss, the profile can send a low redundancy ratio; as packet loss rises, the ratio can increase. This trades bandwidth for resilience, so an aggressive profile can consume capacity precisely when a link is already degraded.</p>\n<h3>Two-stage mapping in FortiOS 8.0</h3>\n<p>FortiOS 8.0 adds ToS/DSCP-aware matching and negate options to adaptive FEC profiles. The first matching round evaluates packet-loss, latency, and bandwidth thresholds. The second round evaluates the packet’s ToS value and mask. This order matters: a DSCP match does not bypass the SLA threshold stage. The mask allows multiple DSCP codepoints to match a class. For example, the upper six bits of the ToS byte carry DSCP, so a value/mask pair such as 0xB8/0xFC can identify the EF codepoint while ignoring the low ECN bits.</p>\n<p>Negate options match the inverse of a threshold. Fortinet’s example explains that “negate packet-loss of 5%” matches packet loss below 5%, rather than above it. This is useful when a profile is intended for healthy paths, but it is easy to misread because the threshold number is unchanged while the comparison direction reverses.</p>\n<pre><code>config vpn ipsec fec\n    edit \"fec-voice\"\n        config mappings\n            edit 1\n                config tos\n                    edit 1\n                        set tos 0xB8\n                        set tos-mask 0xFC\n                    next\n                end\n            next\n        end\n    next\nend</code></pre>\n<p>Use the release’s CLI reference for the complete mapping and threshold fields; the example shows the ToS selector only. The feature depends on the IPsec FEC profile and the SD-WAN SLA measurements used by that profile. It is not the same as an SD-WAN service rule selecting a WAN member based on ToS. The Community example about ToS-based SD-WAN steering also shows that an established session is not dynamically re-steered just because later packets change their ToS value.</p>\n<h3>Verification and tuning</h3>\n<p>Confirm the SLA health-check values, selected FEC profile, threshold match, ToS/mask match, and actual DSCP bits on the packet. Compare the observed redundancy ratio and tunnel counters before and after a controlled test. A healthy SLA probe does not prove the intended FEC mapping matched; a DSCP value in a capture does not prove the correct FEC profile was selected. If traffic receives too much redundancy, inspect negate settings and threshold ordering before increasing bandwidth. Tune with representative traffic and monitor the additional tunnel bandwidth consumed.</p>"
+    }
+  ]
+}
