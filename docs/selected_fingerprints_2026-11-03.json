@@ -1,0 +1,599 @@
+{
+  "run_date": "2026-11-03",
+  "inventory_path": "docs/exclusion_inventory_2026-11-03-07-58.json",
+  "inventory_sha": "9c164c0c395ca8c022b4bdc67403bc04263f0f11",
+  "inventory_record_count": 174,
+  "selected_after_inventory_readback": true,
+  "semantic_uniqueness_checks": [
+    {
+      "product": "FortiGate",
+      "subject": "BGP route leaking between VRFs through virtual inter-VDOM links: prefix control, symmetric return paths, and policy isolation",
+      "closest": {
+        "date": "2026-10-28",
+        "subject": "Local-in policy boundaries and per-policy logging",
+        "jaccard": 0.05
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Workflow mode as an ADOM change transaction: session isolation, ordered approval, rejection cascades, and separate device installation",
+      "closest": {
+        "date": "2026-10-10",
+        "subject": "Device revision retrieval, revert, and policy-package reconciliation",
+        "jaccard": 0.05263157894736842
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Report dataset execution: Log Type binding, $log/$filter expansion, query analysis, hcache, and test-result boundaries",
+      "closest": {
+        "date": "2026-10-26",
+        "subject": "Scheduled log aggregation between FortiAnalyzer appliances",
+        "jaccard": 0.05555555555555555
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "MAB Access-Request integrity: Message-Authenticator, call-check semantics, and RADIUS server compatibility",
+      "closest": {
+        "date": "2026-10-29",
+        "subject": "BGP EVPN multihoming: ESI identity, designated-forwarder preference, and MAC holdtime",
+        "jaccard": 0
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Wireless mesh backhaul: root/leaf roles, CAPWAP transport, radio contention, and bridge-mode consequences",
+      "closest": {
+        "date": "2026-10-23",
+        "subject": "FortiAP/Wireless — Wi-Fi 7 SAE_EXT AKM24 selection and radio-profile compatibility",
+        "jaccard": 0.09090909090909091
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "FortiNAC 9.4 RADIUS group ingestion: Fortinet-Group-Name parsing, profile-scoped group identity, and membership reconciliation",
+      "closest": {
+        "date": "2026-10-24",
+        "subject": "FortiNAC — Legacy FortiNAC L2/L3 polling: MAC location versus ARP identity reconciliation",
+        "jaccard": 0.15
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "VPN captive portal state machine: identity-known versus agentless download, portal selection limits, and isolation release",
+      "closest": {
+        "date": "2026-11-02",
+        "subject": "Persistent Agent registry-key scans: hive selection, execution identity, severity, and remediation workflow",
+        "jaccard": 0.08695652173913043
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "LDAP authentication cache: two-minute successful-authentication reuse, imported-user dependency, and revocation timing",
+      "closest": {
+        "date": "2026-10-23",
+        "subject": "FortiAuthenticator — FIDO2 user-verification policy and authenticator behavior",
+        "jaccard": 0.05555555555555555
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Over-the-shoulder live recording: secret-level recording, global live stream, SSH event/video correlation, and replay lifecycle",
+      "closest": {
+        "date": "2026-10-29",
+        "subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout",
+        "jaccard": 0.09523809523809523
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "ClickHouse event retention: ranked time policies, Hot/Warm/Cold space thresholds, archive independence, and purge boundaries",
+      "closest": {
+        "date": "2026-10-25",
+        "subject": "FortiSIEM — ClickHouse storage regions: event-worker routing and non-overlapping shard placement",
+        "jaccard": 0.08333333333333333
+      },
+      "unique": true
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Security posture tags for Secure Private Access: endpoint checks, dynamic policy source tags, and default allow-all restriction",
+      "closest": {
+        "date": "2026-10-23",
+        "subject": "FortiSASE — Endpoint-to-endpoint private access through SPA hub and BGP re-advertisement",
+        "jaccard": 0.13636363636363635
+      },
+      "unique": true
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "Adaptive FEC profile selection by SLA metrics and ToS/DSCP: two-stage mapping, masks, negate thresholds, and tunnel redundancy",
+      "closest": {
+        "date": "2026-11-01",
+        "subject": "Monthly traffic-volume quota steering: billing counters, overage values, and SLA member selection",
+        "jaccard": 0.07692307692307693
+      },
+      "unique": true
+    }
+  ],
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "BGP route leaking between VRFs through virtual inter-VDOM links: prefix control, symmetric return paths, and policy isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/834664/route-leaking-between-vrfs-with-bgp",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-route-leaking-between-vrfs-using-vdom-link-and-advertising-vrfs-routes-over-advpn-tunnel-204061",
+      "feature_mechanism_fingerprint": "bgp-route-leaking-between-vrfs-through-virtual-inter-vdom-links-prefix-control-symmetric-return-paths-and-policy-isolation",
+      "workflow_transaction_fingerprint": "Purpose and isolation model FortiGate VRFs create separate routing tables. A route learned in VRF 10 is not automatically visible in VRF 20, even when both VRFs live in the same VDOM. Route leaking is an explicit control-plane operation that copies selected reachability between routing instances. It does not merge the routing tables, bypass firewall policy, or make every interface mutually reachable. Objects and transaction flow The documented BGP example uses a hub with bran",
+      "failure_class": "cross-VRF route absent or asymmetric; route present but policy blocks packet",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiGate:bgp-route-leaking-between-vrfs-through-virtual-inter-vdom-links-prefix-control-symmetric-return-paths-and-policy-isolation:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-01:bgp-route-leaking-between-vrfs-through-virtual-inter-vdom-links-prefix-control-symmetric-return-paths-and-policy-isolation:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Workflow mode as an ADOM change transaction: session isolation, ordered approval, rejection cascades, and separate device installation",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/424502/workflow-mode",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-fortimanager-in-workflow-mode-does-not-show-modifier-approver-224018",
+      "feature_mechanism_fingerprint": "workflow-mode-as-an-adom-change-transaction-session-isolation-ordered-approval-rejection-cascades-and-separate-device-installation",
+      "workflow_transaction_fingerprint": "Why workflow mode exists FortiManager workflow mode makes an ADOM change a reviewable transaction instead of allowing administrators to edit the shared database directly. It is intended for environments where policy and object changes require a submitter, one or more approval groups, and an auditable decision before changes are committed to the ADOM. This differs from ordinary workspace locking: workspace mode prevents concurrent edits by locking an ADOM, device, or policy pa",
+      "failure_class": "unapproved or out-of-order ADOM session; approved changes not installed on device",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiManager:workflow-mode-as-an-adom-change-transaction-session-isolation-ordered-approval-rejection-cascades-and-separate-device-installation:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-02:workflow-mode-as-an-adom-change-transaction-session-isolation-ordered-approval-rejection-cascades-and-separate-device-installation:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Report dataset execution: Log Type binding, $log/$filter expansion, query analysis, hcache, and test-result boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/495456/creating-datasets",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-how-to-create-fortianalyzer-reports-using-custom-sql-queries-92490",
+      "feature_mechanism_fingerprint": "report-dataset-execution-log-type-binding-log-filter-expansion-query-analysis-hcache-and-test-result-boundaries",
+      "workflow_transaction_fingerprint": "Dataset is the report’s query contract A FortiAnalyzer dataset is a named query over log data. Charts and report macros reference the dataset; when a report runs, the dataset supplies the rows used to render those components. The dataset’s Log Type is not a cosmetic label: it selects the underlying log family/table that the query’s $log macro represents. A query written for Traffic logs cannot be assumed to work unchanged against Event, UTM, or Local Event data because the co",
+      "failure_class": "empty/incorrect report output from wrong log type, missing filter macro, or query transformation",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiAnalyzer:report-dataset-execution-log-type-binding-log-filter-expansion-query-analysis-hcache-and-test-result-boundaries:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-03:report-dataset-execution-log-type-binding-log-filter-expansion-query-analysis-hcache-and-test-result-boundaries:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "MAB Access-Request integrity: Message-Authenticator, call-check semantics, and RADIUS server compatibility",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/137894/appendix-b-supported-attributes-for-radius-coa-and-rsso",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-how-to-modify-mac-format-for-mab-on-fortiswitch-180850",
+      "feature_mechanism_fingerprint": "mab-access-request-integrity-message-authenticator-call-check-semantics-and-radius-server-compatibility",
+      "workflow_transaction_fingerprint": "MAB is a RADIUS identity exchange, not 802.1X MAC Authentication Bypass is used when an endpoint cannot run an 802.1X supplicant. The FortiSwitch acts as the NAS and sends a RADIUS Access-Request using the endpoint MAC address as the identity. FortiSwitchOS documents the MAB request attributes: NAS-Identifier, User-Name, User-Password, Service-Type, NAS-Port-Id, NAS-Port, NAS-Port-Type, Calling-Station-ID, Framed-MTU, and Message-Authenticator. For MAB, Service-Type is always",
+      "failure_class": "MAB Access-Reject due to shared-secret, Message-Authenticator, or request-format mismatch",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiSwitch:mab-access-request-integrity-message-authenticator-call-check-semantics-and-radius-server-compatibility:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-04:mab-access-request-integrity-message-authenticator-call-check-semantics-and-radius-server-compatibility:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Wireless mesh backhaul: root/leaf roles, CAPWAP transport, radio contention, and bridge-mode consequences",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/196651/wireless-mesh-configuration",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "wireless-mesh-backhaul-root-leaf-roles-capwap-transport-radio-contention-and-bridge-mode-consequences",
+      "workflow_transaction_fingerprint": "Mesh replaces the wired controller path with a radio backhaul In a FortiAP wireless mesh, one AP is connected to the wired network and acts as the mesh root. Leaf APs reach the controller through a dedicated backhaul SSID rather than Ethernet. Fortinet documents that the backhaul SSID carries CAPWAP discovery, configuration, and other controller communications that a wired uplink would normally carry. The backhaul SSID is not a client SSID. Treat it as infrastructure transpor",
+      "failure_class": "mesh leaf unavailable or poor throughput due to parent/backhaul/radio contention",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiAP/Wireless:wireless-mesh-backhaul-root-leaf-roles-capwap-transport-radio-contention-and-bridge-mode-consequences:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-05:wireless-mesh-backhaul-root-leaf-roles-capwap-transport-radio-contention-and-bridge-mode-consequences:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 RADIUS group ingestion: Fortinet-Group-Name parsing, profile-scoped group identity, and membership reconciliation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-creating-and-using-fortinac-f-radius-dynamic-user-groups-208111",
+      "feature_mechanism_fingerprint": "fortinac-9-4-radius-group-ingestion-fortinet-group-name-parsing-profile-scoped-group-identity-and-membership-reconciliation",
+      "workflow_transaction_fingerprint": "What FortiNAC 9.4 changed FortiNAC 9.4 adds support for receiving user groups from FortiAuthenticator during RADIUS authentication. The important distinction is that group membership can be carried in the RADIUS response rather than being recreated manually in FortiNAC or requiring a special FortiAuthenticator configuration change for each FortiNAC integration. The attribute is the Fortinet vendor-specific Fortinet-Group-Name , and a response can carry one or more group value",
+      "failure_class": "RADIUS authentication succeeds but group mapping or access-policy membership is wrong",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiNAC:fortinac-9-4-radius-group-ingestion-fortinet-group-name-parsing-profile-scoped-group-identity-and-membership-reconciliation:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-06:fortinac-9-4-radius-group-ingestion-fortinet-group-name-parsing-profile-scoped-group-identity-and-membership-reconciliation:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "VPN captive portal state machine: identity-known versus agentless download, portal selection limits, and isolation release",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortigate-vpn-integration/902299/captive-portal",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortinac-f-captive-portal-error-228967",
+      "feature_mechanism_fingerprint": "vpn-captive-portal-state-machine-identity-known-versus-agentless-download-portal-selection-limits-and-isolation-release",
+      "workflow_transaction_fingerprint": "Portal selection is a host-state transaction FortiNAC-F’s VPN captive portal is not just a static web page. The VPN integration presents a redirect while NAC evaluates the host and decides which content page is appropriate. The VPN branch of the portal content editor includes an Index (Redirect) page, Download Page, Profile Configuration Download, Mobile Agent Download, Instructions, User Login, and Success. These are workflow states, not interchangeable HTML templates. If th",
+      "failure_class": "VPN client receives wrong portal or cannot progress from redirect to scan/release",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiNAC-F:vpn-captive-portal-state-machine-identity-known-versus-agentless-download-portal-selection-limits-and-isolation-release:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-07:vpn-captive-portal-state-machine-identity-known-versus-agentless-download-portal-selection-limits-and-isolation-release:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "LDAP authentication cache: two-minute successful-authentication reuse, imported-user dependency, and revocation timing",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/441267",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-remote-user-sync-rule-log-reading-and-troubleshooting-197979",
+      "feature_mechanism_fingerprint": "ldap-authentication-cache-two-minute-successful-authentication-reuse-imported-user-dependency-and-revocation-timing",
+      "workflow_transaction_fingerprint": "Cache scope and purpose FortiAuthenticator’s documented LDAP authentication cache reduces repeated calls to a remote directory. Remote LDAP users must be imported into the FortiAuthenticator user database. After an LDAP user authenticates successfully, subsequent authentication requests from the same user within a two-minute window can succeed without another check against the remote LDAP server. This is a short successful-authentication cache, not a replacement for LDAP user",
+      "failure_class": "repeated LDAP authentication succeeds from cache while directory state has changed",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiAuthenticator:ldap-authentication-cache-two-minute-successful-authentication-reuse-imported-user-dependency-and-revocation-timing:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-08:ldap-authentication-cache-two-minute-successful-authentication-reuse-imported-user-dependency-and-revocation-timing:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Over-the-shoulder live recording: secret-level recording, global live stream, SSH event/video correlation, and replay lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/170626/over-the-shoulder-monitoring-live-recording",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/troubleshooting-tip-unable-to-replay-a-video-captured-with-fortipam-202011",
+      "feature_mechanism_fingerprint": "over-the-shoulder-live-recording-secret-level-recording-global-live-stream-ssh-event-video-correlation-and-replay-lifecycle",
+      "workflow_transaction_fingerprint": "Recording is controlled at two levels FortiPAM session recording is enabled on the secret/session configuration, while Live Recording is a global setting under System Settings. Over-the-shoulder monitoring requires both: the launched secret must have Session Recording enabled, and Live Recording must be enabled globally. The live-monitoring workflow also requires Fortinet Privileged Access Agent 7.2.3 or later. Enabling the global setting alone does not turn every secret sess",
+      "failure_class": "live stream or replay missing due to recording prerequisites, filter logging, or incomplete manifest",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiPAM:over-the-shoulder-live-recording-secret-level-recording-global-live-stream-ssh-event-video-correlation-and-replay-lifecycle:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-09:over-the-shoulder-live-recording-secret-level-recording-global-live-stream-ssh-event-video-correlation-and-replay-lifecycle:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "ClickHouse event retention: ranked time policies, Hot/Warm/Cold space thresholds, archive independence, and purge boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/997299/creating-retention-policy",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/technical-tip-how-to-verify-if-old-events-in-clickhouse-still-exist-after-event-retention-period-is-over-229665",
+      "feature_mechanism_fingerprint": "clickhouse-event-retention-ranked-time-policies-hot-warm-cold-space-thresholds-archive-independence-and-purge-boundaries",
+      "workflow_transaction_fingerprint": "Retention has two independent control planes FortiSIEM ClickHouse deployments use Online storage tiers (Hot, Warm, Cold) and may also use Archive storage. Time-based retention determines how long selected events should remain online. Space-based retention protects storage capacity when a tier approaches exhaustion. Archive retention is a separate lifecycle; an event can exist in both online and archive stores, and each has its own retention behavior. Time-based policy matchin",
+      "failure_class": "events remain online or purge early due to policy coverage/rank or space thresholds",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiSIEM:clickhouse-event-retention-ranked-time-policies-hot-warm-cold-space-thresholds-archive-independence-and-purge-boundaries:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-10:clickhouse-event-retention-ranked-time-policies-hot-warm-cold-space-thresholds-archive-independence-and-purge-boundaries:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Security posture tags for Secure Private Access: endpoint checks, dynamic policy source tags, and default allow-all restriction",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/284120/configuring-security-posture-tags-in-private-access-policies",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "security-posture-tags-for-secure-private-access-endpoint-checks-dynamic-policy-source-tags-and-default-allow-all-restriction",
+      "workflow_transaction_fingerprint": "Why posture tags matter In FortiSASE Secure Private Access (SPA) deployments using a FortiGate hub, the documented default is an Allow-All Private Traffic policy for agent-based remote users. That is convenient for initial connectivity but too broad when access must depend on endpoint health. Security posture tagging lets FortiSASE classify a remote user’s endpoint based on configured posture checks and then use the resulting tag as the source of a dynamic private access poli",
+      "failure_class": "private access too broad or denied because posture tag/policy/path does not align",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "FortiSASE:security-posture-tags-for-secure-private-access-endpoint-checks-dynamic-policy-source-tags-and-default-allow-all-restriction:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-11:security-posture-tags-for-secure-private-access-endpoint-checks-dynamic-policy-source-tags-and-default-allow-all-restriction:feature-specific multi-stage topology/decision flow"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Adaptive FEC profile selection by SLA metrics and ToS/DSCP: two-stage mapping, masks, negate thresholds, and tunnel redundancy",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/169010/adaptive-forward-error-correction",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-steering-traffic-based-on-tos-value-with-same-source-and-destination-224289",
+      "feature_mechanism_fingerprint": "adaptive-fec-profile-selection-by-sla-metrics-and-tos-dscp-two-stage-mapping-masks-negate-thresholds-and-tunnel-redundancy",
+      "workflow_transaction_fingerprint": "FEC protects a tunnel flow from loss Forward Error Correction sends redundant packets so the receiver can reconstruct some lost data without waiting for retransmission. Fortinet describes a base/redundant relationship: x redundant packets are sent for every y base packets. Adaptive FEC changes that ratio as SD-WAN SLA measurements change. With low loss, the profile can send a low redundancy ratio; as packet loss rises, the ratio can increase. This trades bandwidth for resilie",
+      "failure_class": "adaptive FEC mapping selects wrong redundancy profile due to SLA/ToS/mask/negate logic",
+      "evidence_pattern": [
+        "source and destination VRF routing tables; leak-target route-map; IVL interface/VRF; firewall counters; packet capture both directions",
+        "ADOM workspace mode; session list and creation order; View Diff; approval matrix; install wizard task/history; device package/config status",
+        "dataset Log Type; SQL Validate/Analyze Query; $log/$filter; hcache query; test period/device selection; report chart filters",
+        "RADIUS Access-Request fields including Service-Type call-check, User-Name, Calling-Station-ID, Message-Authenticator; server reject reason; shared-secret/client match",
+        "root/leaf parent map; mesh SSID/radio assignment; backhaul signal/channel; AP authorization; shared-radio airtime and client throughput",
+        "Access-Accept Fortinet-Group-Name values; proxy profile; generated RADIUS/<profile>/<group> object; user membership before/after auth; policy match",
+        "VPN redirect and VPN_Redirect context; host/user metadata from VPN device; agent presence; selected portal content page; scan/release state",
+        "FortiAuthenticator auth log; LDAP server bind log; imported-user record; request timestamps within/outside two-minute window",
+        "secret Session Recording; global Live Recording; agent version; Active Sessions red icon; SSH filter Log flag; event/video timestamp; WebM manifest",
+        "retention policy rank and filters; Apply status; retentionDays; Hot/Warm/Cold free space; archive free space and oldest event dates",
+        "endpoint posture result; assigned tag; dynamic private access policy source/target; hub route/tunnel; FortiGate policy; protocol test",
+        "SLA packet-loss/latency/bandwidth; FEC profile and mapping; DSCP/ToS byte/mask; negate setting; tunnel redundancy counters"
+      ],
+      "remediation_path": [
+        "repair source BGP learning or prefix/route-map; correct symmetric leak-target and IVL VRF/interface; add narrowly scoped firewall policy; use NPU link only if supported",
+        "configure approval groups; lock ADOM and open session; inspect diff/order; repair/re-submit or carefully discard; install approved package separately and verify device result",
+        "choose correct ADOM/Log Type; include $filter in WHERE; validate/analyze transformed query and hcache; test representative devices/time; inspect report/chart filters",
+        "align shared secret and RADIUS client policy; validate Message-Authenticator handling; preserve MAB call-check and MAC format; confirm Access-Accept then authorization",
+        "stabilize root and parent chain; dedicate backhaul radio where possible; align mesh SSID/security; reduce hop count and RF contention; verify wired bridge segment",
+        "ensure FAC group attribute is included in RADIUS policy and Access-Accept; verify profile namespace and user group membership; update policy to generated group",
+        "use default portal for agentless VPN clients when multiple portals exist; verify identity source, content page, agent download, scan, and release transition",
+        "confirm imported LDAP user; correlate request time with last successful auth; allow cache window to expire for a fresh test; validate directory revocation timing for risk policy",
+        "enable recording at secret and global levels; meet agent/resource prerequisites; enable Log on SSH filter patterns; close sessions gracefully; export/verify WebM",
+        "fix policy coverage/rank and click Apply; size tiers; check space thresholds and archive; inspect retentionDays for events; avoid manual file deletion",
+        "assign correct compliant/noncompliant tags; bind tags to dynamic policy; validate hub route and firewall path; test application protocol, not only ping",
+        "correct first-stage SLA thresholds, ToS value/mask, and negate direction; confirm profile supports tunnel; compare packet DSCP and tunnel counters; tune redundancy bandwidth"
+      ],
+      "question_fingerprint": "Secure SD-WAN:adaptive-fec-profile-selection-by-sla-metrics-and-tos-dscp-two-stage-mapping-masks-negate-thresholds-and-tunnel-redundancy:mechanism discrimination; evidence boundary; remediation choice",
+      "diagram_topology_layout_fingerprint": "lesson-12:adaptive-fec-profile-selection-by-sla-metrics-and-tos-dscp-two-stage-mapping-masks-negate-thresholds-and-tunnel-redundancy:feature-specific multi-stage topology/decision flow"
+    }
+  ]
+}
