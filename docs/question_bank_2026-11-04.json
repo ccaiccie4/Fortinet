@@ -610,24 +610,24 @@
       "id": "Q25",
       "product": "FortiNAC-F",
       "topic": "SAML redirect loop",
-      "question": "A recent FortiNAC-F SAML case shows ACS POST 302, SignatureValidator success, Registration complete and CoA success, but the browser still loops. Which mismatch should be checked?",
+      "question": "A FortiNAC-F SAML user is sent back to the portal start page. The ACS POST receives a generic 302 to the portal FQDN; FortiAuthenticator logs IdP success, but FortiNAC-F has no SAMLUtils lines, no SSO user and no CoA. Which mismatch is most likely?",
       "correct_index": 1,
       "choices": [
         {
-          "text": "The FortiNAC MAC address table and DHCP lease age.",
-          "feedback": "Host registration and CoA logs show the access state progressed; the documented case points to the SP URL/portal FQDN mismatch."
+          "text": "The FortiNAC-F host record has the wrong MAC address.",
+          "feedback": "MAC identity matters for registration enforcement, but it does not explain why the ACS POST is redirected before SAML processing."
         },
         {
-          "text": "The SP URL and browser-visible portal FQDN.",
-          "feedback": "Correct. The Community case identifies the mismatch between the SAML SP URL and portal FQDN as the redirect-loop cause."
+          "text": "The SP URL and captive-portal FQDN are different.",
+          "feedback": "Correct. The ACS URL is built from the SP URL; if it differs from the portal FQDN, FortiNAC-F can return a generic portal redirect without processing the assertion."
         },
         {
-          "text": "The FortiGate external-resource hash mode and category.",
-          "feedback": "Hash feed settings do not participate in the SAML ACS return path."
+          "text": "The IdP signing certificate has expired.",
+          "feedback": "The IdP has returned a successful response; the missing SAMLUtils processing lines point to the ACS hostname path, not a signature rejection."
         },
         {
-          "text": "The FortiSwitch split-brain timer and peer priority.",
-          "feedback": "MCLAG peer state does not explain the SAML browser redirect loop."
+          "text": "The FortiSwitch ICL is down and one peer is dormant.",
+          "feedback": "An MCLAG failure can affect access, but it does not explain a generic HTTP redirect at the SAML ACS endpoint."
         }
       ]
     },
@@ -1235,24 +1235,24 @@
       "id": "Q50",
       "product": "Integrated scenario",
       "topic": "FortiNAC-F SAML evidence",
-      "question": "A SAML ACS POST returns 302, the signature is verified, registration completes and CoA succeeds. Which conclusion is best supported?",
+      "question": "After aligning the SP URL and portal FQDN, the ACS POST returns 302 without a generic redirect body. FortiNAC-F logs Signature verified, SAML Authentication status true and Registration complete; the controller records CoA SUCCESS. What does this evidence establish?",
       "correct_index": 0,
       "choices": [
         {
-          "text": "The IdP authentication and network-registration path succeeded; inspect the portal/SP URL if the browser still loops.",
-          "feedback": "Correct. The logged signature, registration and CoA evidence show the flow progressed; the reported redirect loop was tied to the SP URL/portal FQDN mismatch."
+          "text": "The SAML assertion was processed and the host-registration/CoA path completed.",
+          "feedback": "Correct. The SAMLUtils success, registration completion and CoA success show the authentication-to-enforcement transaction progressed; confirm the host is in the production VLAN and repeat after HA failover."
         },
         {
-          "text": "The SAML signature failed, so the IdP certificate must be replaced immediately.",
-          "feedback": "A verified signature contradicts the claim that signature validation failed."
+          "text": "The IdP failed to return an assertion, so the browser must retry.",
+          "feedback": "The ACS POST and signature-validation messages prove a SAML response was received and processed."
         },
         {
-          "text": "The RADIUS server rejected the user, so the endpoint should remain isolated.",
-          "feedback": "CoA success contradicts a RADIUS rejection as the primary explanation in this evidence set."
+          "text": "The RADIUS server rejected the user before group assignment.",
+          "feedback": "A controller CoA with SUCCESS contradicts a RADIUS rejection as the primary result in this evidence set."
         },
         {
-          "text": "The FortiNAC-F service never received the SAML response from the browser.",
-          "feedback": "The ACS POST and signature logs prove FortiNAC-F received and processed the response."
+          "text": "The host is still Rogue because a 302 always indicates a portal failure.",
+          "feedback": "A 302 can be the expected response after ACS processing; inspect the body and SAMLUtils logs rather than treating every redirect as failure."
         }
       ]
     }
