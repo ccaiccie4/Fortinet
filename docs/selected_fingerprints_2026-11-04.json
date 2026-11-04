@@ -1,0 +1,614 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-04T08:22:54-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-04-08-22.json",
+  "inventory_record_count": 156,
+  "topic_count": 12,
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Hashed URL and SNI threat feeds for Web Filter",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/fortios-release-notes/743723",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "External-resource hash-db mode supplies hashed URL and SNI indicators to Web Filter profiles; FortiOS 8.0.0 documents feature 1171657.",
+      "workflow_transaction_fingerprint": "FortiGate pulls an external resource on a refresh schedule, interprets it as a hash database, exposes its category to Web Filter, then evaluates eligible URL/SNI observations against the feed without requiring a plaintext URL list.",
+      "failure_class": "Feed fetch or parsing failure; wrong feed mode/format; stale feed; egress or certificate validation failure; feed category not referenced by the active Web Filter profile.",
+      "evidence_pattern": [
+        "External-resource enabled/mode/category/refresh status",
+        "Web Filter profile references the category",
+        "Known positive indicator logs expected category/action; benign control remains allowed"
+      ],
+      "remediation_path": [
+        "Match hash-db/plain-text mode to publisher format",
+        "Verify HTTPS certificate, source interface/IP, DNS, route and refresh",
+        "Bind the external-resource category to the active Web Filter profile"
+      ],
+      "question_fingerprint": "Hash feed object mode/category/refresh state versus Web Filter profile binding and observed URL/SNI match.",
+      "diagram_topology_layout_fingerprint": "FortiGate pulls hash feed -> parses hash database -> Web Filter profile binds category -> URL/SNI observation -> match/action.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 18,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-21",
+            "subject": "Secure SD-WAN — Packet duplication and de-duplication",
+            "score": 0.07692307692307693
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "Local-in policy boundaries and per-policy logging",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-23",
+            "subject": "FortiGate — Explicit-proxy HTTP connection coalescing: static, multiplex and serverpool",
+            "score": 0.05555555555555555
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortigate-hashed-url-sni-feeds.drawio",
+        "svg": "diagrams/fortigate-hashed-url-sni-feeds.svg"
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Zero-touch provisioning with model devices, auto-link and pre-run templates",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/155479/zero-touch-and-low-touch-provisioning",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/ldaps-configuration-erased-after-fortimanager-upgrade-230637",
+      "feature_mechanism_fingerprint": "FortiManager ZTP/LTP uses offline model devices, assigned provisioning templates/policy packages and an auto-link transaction that replaces the model with the real FortiGate.",
+      "workflow_transaction_fingerprint": "Create model device -> assign firmware/configuration/templates/policy package -> real FortiGate discovers FortiManager -> authorization/ISDB check -> auto-link -> Device Database diff -> install to real device.",
+      "failure_class": "Unsupported platform/firmware; incorrect discovery method; model configuration overwrites an existing device; missing imported revision/admin password; package not pre-installed for device-group target; DHCP option method used after factory-default state changed.",
+      "evidence_pattern": [
+        "Auto-link task status",
+        "Model-device auto-link flag and assigned firmware/configuration",
+        "Device Database diff and live install verification"
+      ],
+      "remediation_path": [
+        "Confirm platform/firmware support and factory-default discovery method",
+        "Validate model revision, admin password, pre-run template and package assignment",
+        "Inspect auto-link task, Device Database and live install diff"
+      ],
+      "question_fingerprint": "Model-device auto-link prerequisites and the distinction between ADOM database, Device Database and live FortiGate.",
+      "diagram_topology_layout_fingerprint": "Offline model in FMG -> ADOM objects -> Device DB -> discovery/FGFM -> real FortiGate authorization -> config diff/install.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 12,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-28",
+            "subject": "CLI template timing: model bootstrap versus install phases",
+            "score": 0.05263157894736842
+          },
+          {
+            "date": "2026-10-10",
+            "subject": "Device revision retrieval, revert, and policy-package reconciliation",
+            "score": 0.05263157894736842
+          },
+          {
+            "date": "2026-10-23",
+            "subject": "FortiManager — Object reference closure and the forced-deletion guard",
+            "score": 0.05
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortimanager-ztp-model-devices.drawio",
+        "svg": "diagrams/fortimanager-ztp-model-devices.svg"
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Alert-handler automation stitches from FortiAnalyzer into FortiGate actions",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/433192/using-the-automation-stitch-for-alert-handlers",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAnalyzer alert handlers can emit an automation-stitch notification to the FortiGate automation framework; the FortiGate owns the corresponding trigger and action.",
+      "workflow_transaction_fingerprint": "Analytics logs -> ADOM data selector and alert-handler rules -> alert generated -> FAZ notification -> FortiGate trigger match -> FortiGate automation action.",
+      "failure_class": "Handler disabled or wrong ADOM; selector excludes the log; alert uses Archive rather than Analytics logs; stitch flag disabled; FortiGate FAZ logging or matching trigger absent.",
+      "evidence_pattern": [
+        "Analytics log present in correct ADOM",
+        "Alert handler rule and Automation Stitch flag",
+        "FortiGate matching trigger and downstream action event"
+      ],
+      "remediation_path": [
+        "Confirm Analytics logs, ADOM and data selector",
+        "Enable handler Automation Stitch and configure FortiGate FAZ logging",
+        "Create the matching FortiGate trigger and test the action independently"
+      ],
+      "question_fingerprint": "Distinguish alert generation in FortiAnalyzer from notification delivery and action execution on FortiGate.",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer Analytics logs -> handler/rules -> alert + stitch notification -> FortiGate trigger -> CLI/email/system action.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 13,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-21",
+            "subject": "FortiAnalyzer — JSON API request/response audit",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-16",
+            "subject": "FortiAnalyzer — Receive, insert and lag metrics",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-23",
+            "subject": "FortiAnalyzer — Incident-driven on-demand playbooks and report eligibility",
+            "score": 0.0625
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortianalyzer-alert-handler-stitch.drawio",
+        "svg": "diagrams/fortianalyzer-alert-handler-stitch.svg"
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "MCLAG inter-chassis link failure and split-brain prevention",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/860027",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch MCLAG uses an inter-chassis link (ICL) between two peers and a dual-homed LACP trunk; split-brain detection makes one peer dormant if the ICL fails while both peers remain active.",
+      "workflow_transaction_fingerprint": "Configure ICL and MCLAG trunks -> downstream LACP member links -> peer state synchronization -> ICL failure detection -> priority/MAC tie-break -> one peer dormant -> restore when ICL/LACP returns.",
+      "failure_class": "ICL trunk down while both peers forward; inconsistent trunk or VLAN configuration; split-brain detection disabled; wrong priority; third-party topology limitations.",
+      "evidence_pattern": [
+        "ICL LACP state and peer communication",
+        "MCLAG split-brain detection/priority",
+        "Dormant peer state and recovery after ICL restoration"
+      ],
+      "remediation_path": [
+        "Restore ICL physical/LACP connectivity",
+        "Enable split-brain detection and supported priority/all-ports-down behavior",
+        "Verify dual-homed downstream LAG and version/topology caveats"
+      ],
+      "question_fingerprint": "Distinguish a peer failure from an ICL-only failure and predict which peer becomes dormant.",
+      "diagram_topology_layout_fingerprint": "Switch A <-> ICL LACP <-> Switch B; downstream switch dual-homed LACP; on split brain one peer dormant.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 13,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-10",
+            "subject": "FortiSwitchOS 8.0 inter-switch STP cost selection",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-16",
+            "subject": "FortiSwitch — PoE allocation, priority and guard band",
+            "score": 0.06666666666666667
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "Dynamic VLAN pruning: GVRP state and ISL trunk membership",
+            "score": 0.058823529411764705
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortiswitch-mclag-split-brain.drawio",
+        "svg": "diagrams/fortiswitch-mclag-split-brain.svg"
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Captive portal security and external portal transaction flow",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/292926/captive-portal-security",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547",
+      "feature_mechanism_fingerprint": "FortiGate-managed FortiAP SSIDs can redirect unauthenticated clients to a built-in or external captive portal; external portals return a magic-bound credential POST to FortiGate.",
+      "workflow_transaction_fingerprint": "Client associates to SSID -> first web request is redirected -> portal collects credentials -> browser POSTs magic/session/username/password to FortiGate -> authentication/group policy -> authorized session.",
+      "failure_class": "Portal host unreachable; wrong external-web hostname; missing/altered magic value; HTTP credential submission; user group not referenced; walled-garden DNS/HTTPS dependency; captive portal mode mismatch.",
+      "evidence_pattern": [
+        "Client association/IP state",
+        "Initial redirect and magic-bound POST",
+        "FortiGate auth/group and post-auth policy result"
+      ],
+      "remediation_path": [
+        "Verify SSID traffic mode and portal host reachability",
+        "Preserve magic value and submit to FortiGate over HTTPS",
+        "Correct user group, walled-garden dependencies and post-auth policy"
+      ],
+      "question_fingerprint": "Separate 802.11 association, portal authentication, and post-auth firewall authorization.",
+      "diagram_topology_layout_fingerprint": "Client/SSID -> FortiAP -> FortiGate redirect -> external portal -> magic POST -> FortiGate auth/group -> permitted network.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 14,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-10",
+            "subject": "Automatic 802.11ax BSS coloring and spatial reuse",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "Legacy WTP profile LLDP state and post-upgrade AP stability",
+            "score": 0.06666666666666667
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "FortiAP/Wireless — Rogue AP detection: RF observation, on-wire proof, and suppression",
+            "score": 0.06666666666666667
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortiap-captive-portal.drawio",
+        "svg": "diagrams/fortiap-captive-portal.svg"
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Security Fabric quarantine action and MAC-level endpoint isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/167245/security-fabric-connection",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-checking-dns-when-winbind-reports-wbc-err-winbind-not-available-230552",
+      "feature_mechanism_fingerprint": "A FortiGate automation stitch can invoke the Quarantine via FortiNAC action; FortiNAC disables the endpoint MAC and enforces isolation at the access layer.",
+      "workflow_transaction_fingerprint": "FortiNAC joins Security Fabric -> FortiGate receives Compromised Host or webhook trigger -> stitch calls FortiNAC -> MAC is disabled -> access-layer model places endpoint in dead-end/isolation VLAN.",
+      "failure_class": "Missing certificate-capable license; FortiGate/FortiNAC version mismatch; REST API key or connector failure; incorrect MAC/FCT UID; disabled-host isolation not configured on AP/Switch.",
+      "evidence_pattern": [
+        "FortiGate stitch event and trigger count",
+        "FortiNAC host record/MAC disabled",
+        "Dead End VLAN or FortiGate endpoint isolation result"
+      ],
+      "remediation_path": [
+        "Validate Security Fabric connector, license, FortiGate compatibility and API key",
+        "Verify source IP/MAC/FCT UID in webhook and host record",
+        "Configure disabled-host isolation, Dead End VLAN and switch filtering group"
+      ],
+      "question_fingerprint": "Distinguish FortiGate trigger success from actual NAC MAC disable and access-layer enforcement.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 14,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-10",
+            "subject": "Chained endpoint compliance scans and graduated access",
+            "score": 0.14285714285714285
+          },
+          {
+            "date": "2026-10-10",
+            "subject": "F — EAP-TLS endpoint trust certificate target and unknown-CA failures",
+            "score": 0.125
+          },
+          {
+            "date": "2026-11-02",
+            "subject": "Secure/static port enforcement: physical-address filtering, switch MAC-table visibility, and disabled-host persistence",
+            "score": 0.09090909090909091
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortinac-security-fabric-quarantine.drawio",
+        "svg": "diagrams/fortinac-security-fabric-quarantine.svg"
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "User SAML SSO for captive portal with attribute-based group assignment",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/saml-sso/790967/user-saml-sso",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-captive-portal-user-saml-sso-redirect-loop-caused-by-sp-url-portal-fqdn-mismatch-230903",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6.3 User SAML SSO authenticates captive-portal users at an external IdP, maps SAML attributes to FortiNAC groups/access policies and can continue into device registration.",
+      "workflow_transaction_fingerprint": "Client reaches captive portal -> chooses User -> FortiNAC redirects to IdP -> IdP authenticates and posts SAML response to ACS -> FortiNAC validates -> maps attributes to group/session -> optional device registration -> CoA/VLAN enforcement.",
+      "failure_class": "SP entity ID/ACS/portal FQDN mismatch; missing or mis-mapped SAML group attribute; untrusted IdP signing chain; clock skew; HA node or return URL mismatch.",
+      "evidence_pattern": [
+        "ACS POST/302 and SAML signature verification",
+        "SAML Authentication status and registration completion",
+        "RADIUS CoA success and host VLAN transition"
+      ],
+      "remediation_path": [
+        "Align portal FQDN, SP entity ID and ACS URL",
+        "Validate IdP signing chain, assertion attributes and FortiNAC group mapping",
+        "Verify registration, CoA, HA node and production VLAN"
+      ],
+      "question_fingerprint": "Interpret the SAML ACS, registration and CoA evidence to distinguish authentication success from redirect completion.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 11,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-29",
+            "subject": "Directory-sync machine-auth RBAC: host/user group projections and the AD primary-group trap",
+            "score": 0.09090909090909091
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "VPN captive portal state machine: identity-known versus agentless download, portal selection limits, and isolation release",
+            "score": 0.08333333333333333
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "IoT profiling: combine fingerprints without blocking on missing data",
+            "score": 0
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortinac-f-user-saml-sso.drawio",
+        "svg": "diagrams/fortinac-f-user-saml-sso.svg"
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Including remote LDAP groups in Fortinet Single Sign-On filters",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.2/administration-guide/760429/fortiauthenticator-6-6-0",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/resolved-eappassworderror-with-ikev2-eap-ttls-and-fortiauthenticator-2fa-230861",
+      "feature_mechanism_fingerprint": "FortiAuthenticator 6.6.0 can project selected imported remote LDAP user groups into FSSO and expose them as Remote LDAP Groups in FortiGate filters.",
+      "workflow_transaction_fingerprint": "Remote LDAP server -> import selected remote LDAP users -> remote LDAP user group -> Include for FSSO -> FAC FSSO group membership -> FortiGate SSO filter -> policy/group match.",
+      "failure_class": "User retrieval set to LDAP filter rather than imported-user list; Include for FSSO left disabled; global include option disabled; stale imported membership; incorrect LDAP objectClass/memberOf mapping.",
+      "evidence_pattern": [
+        "Imported LDAP user list and group membership",
+        "Per-group Include for FSSO and global inclusion toggle",
+        "FortiGate Remote LDAP Group filter and FSSO session"
+      ],
+      "remediation_path": [
+        "Use imported remote LDAP user retrieval for FSSO inclusion",
+        "Enable group-level and global FSSO inclusion",
+        "Validate LDAP attributes, imported membership, FSSO filter and user session"
+      ],
+      "question_fingerprint": "Distinguish LDAP authentication success from FSSO group projection and policy authorization.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 12,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-11-02",
+            "subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity",
+            "score": 0.09090909090909091
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "LDAP authentication cache: two-minute successful-authentication reuse, imported-user dependency, and revocation timing",
+            "score": 0.05
+          },
+          {
+            "date": "2026-10-29",
+            "subject": "SAML IdP signing-certificate auto-rotation: staged trust and timed cutover",
+            "score": 0
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortiauthenticator-fsso-ldap-groups.drawio",
+        "svg": "diagrams/fortiauthenticator-fsso-ldap-groups.svg"
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Secret Gateway Chaining with reverse-service mutual TLS",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/245150/secret-gateway-chaining",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9.0 dynamically chains secret gateways through downstream reverse connections, mTLS certificate authentication and automatic gateway advertisement to the root FortiPAM.",
+      "workflow_transaction_fingerprint": "Enable root reverse service -> configure downstream reverse gateway and root serial -> certificate CN allowlist -> persistent mTLS reverse connection -> dynamic gateway discovery -> select terminal gateway for secret target -> launch through chain.",
+      "failure_class": "Reverse service disabled; port/interface unreachable; wrong root serial; client CA missing; certificate CN not allowlisted; mTLS version/certificate mismatch; terminal gateway lacks target route.",
+      "evidence_pattern": [
+        "Reverse Service port/interface/TLS/certificate",
+        "Root serial and certificate-CN allowlist",
+        "Discovered gateway chain and terminal target reachability"
+      ],
+      "remediation_path": [
+        "Enable Reverse Service on intended interface/port and TLS version",
+        "Trust downstream client CA and allowlist certificate CN",
+        "Set correct root serial and verify terminal gateway target route"
+      ],
+      "question_fingerprint": "Determine which gateway needs direct target reachability and which connection is the persistent control plane.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 13,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-10",
+            "subject": "One-time external secret invitation with time-bound access",
+            "score": 0.14285714285714285
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "Windows Application Filter: secret-scoped deny rules and WinRM",
+            "score": 0.0625
+          },
+          {
+            "date": "2026-10-29",
+            "subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout",
+            "score": 0.058823529411764705
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortipam-secret-gateway-chaining.drawio",
+        "svg": "diagrams/fortipam-secret-gateway-chaining.svg"
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Automation Policies for incident notification, remediation and case creation",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/744529",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM Automation Policies replace Notification Policies and apply shared severity, rule, time, affected-item and organization conditions to notification/remediation actions.",
+      "workflow_transaction_fingerprint": "Incident created by analytics rule -> enabled Automation Policy matches severity/rule/time/affected item/org -> exception check -> email/SMS/webhook/remediation/playbook/integration/case action.",
+      "failure_class": "Policy disabled; incident outside time range; wrong severity or rule; affected device/IP excluded; wrong organization; cleared-incident exception suppresses action; missing analyst group or case-management policy.",
+      "evidence_pattern": [
+        "Incident rule/severity/time/org/affected item",
+        "Automation Policy enabled and exception match",
+        "Action log or case/webhook/remediation result"
+      ],
+      "remediation_path": [
+        "Correct rule, severity, time window, affected item and organization",
+        "Check cleared-incident exceptions and enable policy",
+        "Configure action prerequisites including analyst group/case policy"
+      ],
+      "question_fingerprint": "Distinguish event detection from Automation Policy routing and suppression.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 13,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-11-03",
+            "subject": "ClickHouse event retention: ranked time policies, Hot/Warm/Cold space thresholds, archive independence, and purge boundaries",
+            "score": 0.08695652173913043
+          },
+          {
+            "date": "2026-10-21",
+            "subject": "FortiSIEM — Watch Lists as dynamic incident memory",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-28",
+            "subject": "Windows WMI/OMI monitoring: WinRM transport and event evidence",
+            "score": 0.058823529411764705
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortisiem-automation-policies.drawio",
+        "svg": "diagrams/fortisiem-automation-policies.svg"
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "API-based CASB data protection with FortiGuard and custom DLP patterns",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.99/feature-administration-guide/24075/data-protection",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE API-based CASB scans onboarded SaaS files with FortiGuard/custom DLP patterns and data policies that scope file types, activity and mitigation.",
+      "workflow_transaction_fingerprint": "Onboard SaaS tenant/API connector -> grant API permissions -> select FortiGuard/custom patterns -> define data policy -> SaaS API scan -> alert/action on matching file/activity.",
+      "failure_class": "SaaS account not onboarded; API permission/token expired; pattern size limit excludes file; regex threshold too strict; data policy not bound to app/file activity; OCR not enabled for image content.",
+      "evidence_pattern": [
+        "SaaS API connector authorization and account sync",
+        "Pattern fields/size limits and data-policy scope",
+        "DLP alert identifies file/activity and mitigation result"
+      ],
+      "remediation_path": [
+        "Repair SaaS API consent/token and account onboarding",
+        "Adjust PCRE threshold, file-size limits, OCR and file/activity scope",
+        "Validate alert and mitigation separately from inline SIA controls"
+      ],
+      "question_fingerprint": "Distinguish API-based CASB DLP from inline traffic inspection and identify the policy objects required for a file alert.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 13,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-24",
+            "subject": "FortiSASE — FortiSASE intrusion prevention: profile modes, custom signature precedence and packet logging",
+            "score": 0.1
+          },
+          {
+            "date": "2026-10-21",
+            "subject": "FortiSASE — Branch On-ramp IKEv2 mode config and BGP",
+            "score": 0.05555555555555555
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "FortiSASE — SCIM provisioning: entitlement, identity lifecycle, and delete caveats",
+            "score": 0.05263157894736842
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/fortisase-api-casb-dlp.drawio",
+        "svg": "diagrams/fortisase-api-casb-dlp.svg"
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "SD-WAN traffic shaping and QoS profiles with advanced shaping groups",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/249147/sd-wan-traffic-shaping-and-qos",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/ipsec-tunnel-probes-drop-reverse-path-check-fail-drop-208594",
+      "feature_mechanism_fingerprint": "FortiGate SD-WAN QoS combines traffic shapers in firewall shaping policies with advanced shaping policies and profiles that allocate interface bandwidth across up to 30 traffic groups.",
+      "workflow_transaction_fingerprint": "SD-WAN service selects eligible egress member -> firewall shaping policy classifies traffic -> shaper/profile assigns guarantee, maximum and priority -> interface queue schedules egress.",
+      "failure_class": "Wrong interface outgoing-bandwidth value; traffic does not match shaping policy; shaping policy priority/order wrong; profile group not mapped; SD-WAN member differs from expected egress; tunnel egress not shaped as assumed.",
+      "evidence_pattern": [
+        "SD-WAN service selected member",
+        "Shaping policy match and interface bandwidth base",
+        "Shaper/profile counters and throughput under controlled load"
+      ],
+      "remediation_path": [
+        "Verify service-rule member selection independently",
+        "Correct interface outgoing bandwidth and shaping policy match/order",
+        "Test under congestion and correlate policy, shaper and egress counters"
+      ],
+      "question_fingerprint": "Distinguish path selection from egress bandwidth/priority enforcement and reason about per-interface profile allocation.",
+      "semantic_uniqueness_review": {
+        "prior_record_count": 10,
+        "nearest_prior_subjects": [
+          {
+            "date": "2026-10-23",
+            "subject": "Secure SD-WAN — Preserving original-direction DSCP on return traffic with diffserv-copy",
+            "score": 0.17647058823529413
+          },
+          {
+            "date": "2026-10-16",
+            "subject": "Secure SD-WAN — Explicit service rules and fallback",
+            "score": 0.14285714285714285
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "Secure SD-WAN — Application steering: first-flow identification and top-down rule matching",
+            "score": 0.10526315789473684
+          }
+        ],
+        "manual_decision": "UNIQUE",
+        "reason": "The new lesson teaches a different primary object and transaction/control mechanism than the closest prior 30-day lessons; any shared protocol or adjacent product family is not the taught mechanism."
+      },
+      "source_roles": {
+        "primary": "Fortinet administration/configuration/new-feature/release documentation",
+        "scenario": "Community/KB/TAC only; never used as the primary lesson source"
+      },
+      "diagram_files": {
+        "drawio": "diagrams/secure-sdwan-traffic-shaping-qos.drawio",
+        "svg": "diagrams/secure-sdwan-traffic-shaping-qos.svg"
+      }
+    }
+  ]
+}
