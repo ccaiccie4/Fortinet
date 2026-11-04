@@ -1,0 +1,436 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-04T08:22:54-08:00",
+  "report_date": "2026-11-04",
+  "discovery_inventory": "exclusion_inventory_2026-11-04-08-22.json",
+  "topic_selection_rule": "Primary lesson feature selected from current Fortinet documentation after manual semantic comparison against all 156 prior-30-day published lesson records. Community/KB material is scenario context only.",
+  "lesson_count": 12,
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "subject": "Hashed URL and SNI threat feeds for Web Filter",
+      "slug": "fortigate-hashed-url-sni-feeds",
+      "feature": "External-resource hash-db mode supplies hashed URL and SNI indicators to Web Filter profiles; FortiOS 8.0.0 documents feature 1171657.",
+      "workflow": "FortiGate pulls an external resource on a refresh schedule, interprets it as a hash database, exposes its category to Web Filter, then evaluates eligible URL/SNI observations against the feed without requiring a plaintext URL list.",
+      "failure": "Feed fetch or parsing failure; wrong feed mode/format; stale feed; egress or certificate validation failure; feed category not referenced by the active Web Filter profile.",
+      "evidence": "External-resource object status and last refresh; configured hash-db mode and category; Web Filter log showing the matching category/action; controlled positive and negative test URLs/SNIs.",
+      "remediation": "Correct the publisher's hash format and the resource URL; verify routing, DNS, TLS identity, refresh interval and category binding; retest a known indicator and a benign control.",
+      "question": "Hash feed object mode/category/refresh state versus Web Filter profile binding and observed URL/SNI match.",
+      "diagram": "FortiGate pulls hash feed -> parses hash database -> Web Filter profile binds category -> URL/SNI observation -> match/action.",
+      "primary": [
+        {
+          "title": "New features or enhancements — FortiGate / FortiOS 8.0.0",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/fortios-release-notes/743723",
+          "role": "authoritative release feature description, feature 1171657"
+        },
+        {
+          "title": "config system external-resource — FortiGate CLI Reference 8.0.0",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/549356530/config-system-external-resource",
+          "role": "authoritative object fields, refresh, update method, hash-db mode and server identity checks"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>Purpose and design boundary</h3>\n<p>FortiOS 8.0.0 adds external hash-based URL and SNI lists for Web Filter profiles (feature 1171657). The value is not simply “another blocklist.” A publisher can distribute indicators in a hash database so the firewall can match the supported URL/SNI representation without needing a plaintext URL list in the feed. This is useful when the feed publisher does not want to expose its full indicator corpus to every consuming appliance. It does not make the destination invisible to every other inspection or logging subsystem: DNS, IP, TLS metadata, application logs, and endpoint telemetry remain separate visibility planes.</p>\n<h3>Objects and transaction flow</h3>\n<p>The control object is <code>config system external-resource</code>. It identifies the resource URL, status, refresh interval, update method, optional authentication, source interface/IP, VRF, and server certificate validation behavior. FortiOS exposes <code>threat-feed-hash-mode</code> with <code>hash-db</code> and <code>plain-text-db</code>; plain-text is the documented default. The release feature specifically adds hash-based URL/SNI lists for Web Filter. A feed configured in the wrong mode can be fetched successfully yet never produce the intended matches.</p>\n<p>The documented example creates a resource named <code>hash</code>, assigns a custom category, selects hash-db mode, and points to the publisher URL. The firewall retrieves the resource on its refresh schedule (the CLI reference gives a 1–43200 minute range and a five-minute default). The resulting category must then be used by the Web Filter configuration that handles the traffic. Feed ingestion and policy enforcement are two separate stages: a healthy connector does not prove that the active policy references its category.</p>\n<pre><code>config system external-resource\n    edit \"hash\"\n        set category 192\n        set threat-feed-hash-mode hash-db\n        set resource \"https://feeds.example.net/fortigate/url-sni-hashes\"\n        set refresh-rate 5\n        set server-identity-check full\n    next\nend</code></pre>\n<p>The resource URL and category above are illustrative; use the publisher's actual feed endpoint and the category allocation approved for the VDOM. The CLI reference documents certificate checking modes and source-interface/VRF selection. Prefer full server identity checking for an HTTPS feed, and ensure the FortiGate can resolve and reach the feed host using the intended egress path.</p>\n<h3>Verification and diagnostic boundaries</h3>\n<p>First verify the external-resource object is enabled, the configured mode is <code>hash-db</code>, the category is the one expected by the Web Filter profile, and the last refresh completed. Then run a controlled positive test using an indicator explicitly supplied by the publisher and a benign negative control. Confirm the Web Filter log identifies the expected category and action. If the connector refreshes but no traffic matches, inspect the profile and policy path before changing the feed URL. If no refresh occurs, investigate DNS, routing, source IP, proxy requirements, TLS certificate trust, and publisher authentication.</p>\n<p>Do not infer a particular digest algorithm, URL canonicalization rule, or hash length from the CLI field name. The cited Fortinet documentation establishes hash-db mode and URL/SNI use, but the feed producer must follow the supported format for the target release. A locally generated SHA-256 list is not automatically compatible merely because it is hashed. Keep the publisher format, firmware release, VDOM category, and profile binding in the change record.</p>\n<h3>Operational use</h3>\n<p>Roll out a new feed first to a monitor/logging policy or a small pilot VDOM, validate both positive and negative matches, then extend it to blocking profiles. Monitor refresh failures and false positives separately. A feed that becomes stale is a different risk from a false-positive match; dashboards should report both connector health and enforcement outcomes.</p>",
+      "word_count": 560,
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/fortios-release-notes/743723",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortigate-hashed-url-sni-feeds.drawio",
+      "svg_file": "diagrams/fortigate-hashed-url-sni-feeds.svg"
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Zero-touch provisioning with model devices, auto-link and pre-run templates",
+      "slug": "fortimanager-ztp-model-devices",
+      "feature": "FortiManager ZTP/LTP uses offline model devices, assigned provisioning templates/policy packages and an auto-link transaction that replaces the model with the real FortiGate.",
+      "workflow": "Create model device -> assign firmware/configuration/templates/policy package -> real FortiGate discovers FortiManager -> authorization/ISDB check -> auto-link -> Device Database diff -> install to real device.",
+      "failure": "Unsupported platform/firmware; incorrect discovery method; model configuration overwrites an existing device; missing imported revision/admin password; package not pre-installed for device-group target; DHCP option method used after factory-default state changed.",
+      "evidence": "Auto-link task result; model-device Auto-link Status; Device Database online state; enforced firmware version; install preview and verification report.",
+      "remediation": "Check supported-platform list, discovery prerequisites, model-device settings, configuration revision and admin password; pre-install policy packages where required; correct the DHCP/USB/FortiCloud discovery path.",
+      "question": "Model-device auto-link prerequisites and the distinction between ADOM database, Device Database and live FortiGate.",
+      "diagram": "Offline model in FMG -> ADOM objects -> Device DB -> discovery/FGFM -> real FortiGate authorization -> config diff/install.",
+      "primary": [
+        {
+          "title": "Zero-touch and low-touch provisioning — FortiManager 7.6.6",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/155479/zero-touch-and-low-touch-provisioning",
+          "role": "authoritative ZTP/LTP discovery and model-device lifecycle"
+        },
+        {
+          "title": "Sequence of operations for installation to managed devices — FortiManager 7.6.6",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/680244/sequence-of-operations-for-installation-to-managed-devices",
+          "role": "authoritative ADOM/Device Database copy, template order and auto-link behavior"
+        },
+        {
+          "title": "Adding offline model devices — FortiManager 7.6.6",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/615344/adding-offline-model-devices",
+          "role": "authoritative model-device settings, firmware enforcement and configuration safeguards"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "LDAPS configuration erased after FortiManager upgrade",
+          "url": "https://community.fortinet.com/fortimanager-27/ldaps-configuration-erased-after-fortimanager-upgrade-230637",
+          "date": "2026-10-26",
+          "role": "adjacent upgrade/configuration-preservation scenario; not the ZTP lesson source"
+        },
+        {
+          "title": "Install failure on 2 GB RAM FortiGates after FortiManager 7.6.8 upgrade",
+          "url": "https://community.fortinet.com/support-forum-92/install-failure-on-2-gb-ram-fortigates-after-fortimanager-7-6-8-upgrade-ssl-ssh-profile-udp-not-quic-230808",
+          "date": "2026-10-23",
+          "role": "adjacent platform-capability and install-verification scenario"
+        }
+      ],
+      "body_html": "<h3>Purpose: pre-stage a device before it exists on the wire</h3>\n<p>FortiManager zero-touch provisioning is designed for new FortiGate deployments where the intended configuration can be prepared centrally before the appliance is connected. The administrator creates an offline model device, associates the intended configuration and policy objects, and lets the real appliance discover FortiManager. During auto-link, the real device is authorized, receives the staged configuration, and replaces the model entry as the managed device. Low-touch provisioning uses the same model-device concept but requires some initial FortiGate network or manager-location configuration.</p>\n<h3>Discovery and control-plane sequence</h3>\n<p>FortiManager documents three common ZTP discovery paths: FortiCloud/FortiDeploy, DHCP Option 240/241, and USB boot configuration. In the FortiCloud path, the factory-default FortiGate obtains WAN connectivity through DHCP, contacts FortiCloud, and learns the FortiManager location. With DHCP Option 240/241, the DHCP service provides both network addressing and the FortiManager location. USB boot provides initial configuration locally. LTP is appropriate when a technician must configure network settings or the manager address first.</p>\n<p>Do not assume DHCP Option 240/241 works on every port or after arbitrary staging. Fortinet documents that this method only works on models whose selected WAN interface is already a DHCP client in factory-default state; if a setting is modified, the FortiGate no longer accepts those options. Model selection and factory-default behavior therefore belong in the deployment design, not in a late troubleshooting note.</p>\n<h3>What auto-link actually installs</h3>\n<p>FortiManager separates the ADOM Database from the per-device Device Database. The ADOM Database holds shared objects, policy packages, and provisioning templates. The Device Database holds the complete configuration intended for an individual FortiGate. During installation, FortiManager copies relevant ADOM objects into the Device Database, retrieves the live configuration, computes a difference, and installs the difference—not a blind line-by-line replay of the original template content.</p>\n<p>For model devices, Pre-Run CLI/Jinja templates execute once in the model Device Database after the Add Device wizard completes. They are then unassigned. The documented model-device sequence applies pre-run templates, system templates, pre-VDOM CLI, threat-weight, IPsec, static route, BGP, SD-WAN, AP, FortiSwitch, FortiExtender, policy package, and post-VDOM CLI content. This ordering matters when a later policy references an interface or object created by an earlier template.</p>\n<h3>Configuration example and preflight</h3>\n<p>Use Device Manager &gt; Add Device &gt; Add Model Device, select the supported platform and firmware, enable auto-link as appropriate, assign provisioning templates and policy packages, and define enforced firmware/configuration behavior. A pre-run CLI template is suitable for one-time model initialization, such as creating required interfaces on a FortiGate-VM. It is not a recurring post-install template for every live device.</p>\n<pre><code>diagnose dvm supported-platforms list</code></pre>\n<p>Use this command to confirm that the FortiManager release recognizes the target platform and firmware. If enforcing device configuration, be careful with management-interface settings: Fortinet warns that a bad management-interface configuration can prevent the newly linked FortiGate from reconnecting to FortiManager.</p>\n<h3>Failure isolation</h3>\n<p>If the device never appears, investigate discovery, DHCP, FortiCloud registration, USB configuration, and FGFM reachability before editing policy objects. If it auto-links but fails to install, inspect the auto-link task and install preview, the Device Database, firmware compatibility, and the assigned revision. A model device intended to overwrite a new appliance is not a safe migration mechanism for a live firewall whose existing configuration must be preserved. Fortinet explicitly recommends pre-installing a policy package assigned to a model device before bringing the real device online; a package targeted only at a device group is not automatically installed during auto-link.</p>\n<p>Also import the model's intended configuration revision and ensure FortiManager knows the existing administrator password where required. Otherwise the first auto-push can fail because FortiGate will not allow the administrator password to be unset without knowing the current value. Treat ZTP as a transaction with a preflight, an authorization stage, a Device Database build, and a final live-device diff—not as a single “plug it in” event.</p>",
+      "word_count": 635,
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/155479/zero-touch-and-low-touch-provisioning",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/ldaps-configuration-erased-after-fortimanager-upgrade-230637",
+      "diagram_file": "diagrams/fortimanager-ztp-model-devices.drawio",
+      "svg_file": "diagrams/fortimanager-ztp-model-devices.svg"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Alert-handler automation stitches from FortiAnalyzer into FortiGate actions",
+      "slug": "fortianalyzer-alert-handler-stitch",
+      "feature": "FortiAnalyzer alert handlers can emit an automation-stitch notification to the FortiGate automation framework; the FortiGate owns the corresponding trigger and action.",
+      "workflow": "Analytics logs -> ADOM data selector and alert-handler rules -> alert generated -> FAZ notification -> FortiGate trigger match -> FortiGate automation action.",
+      "failure": "Handler disabled or wrong ADOM; selector excludes the log; alert uses Archive rather than Analytics logs; stitch flag disabled; FortiGate FAZ logging or matching trigger absent.",
+      "evidence": "Alert visible under Incidents & Alerts; Automation Stitch column enabled; FortiGate system event and automation-stitch execution; downstream action log.",
+      "remediation": "Validate Analytics ingestion, ADOM, data selector and rule; enable stitch on handler; configure FortiGate logging and matching trigger; test the action independently.",
+      "question": "Distinguish alert generation in FortiAnalyzer from notification delivery and action execution on FortiGate.",
+      "diagram": "FortiAnalyzer Analytics logs -> handler/rules -> alert + stitch notification -> FortiGate trigger -> CLI/email/system action.",
+      "primary": [
+        {
+          "title": "Using the Automation Stitch for alert handlers — FortiAnalyzer 8.0.0",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/433192/using-the-automation-stitch-for-alert-handlers",
+          "role": "authoritative FAZ-to-FortiGate notification flow and prerequisites"
+        },
+        {
+          "title": "Creating a custom alert handler — FortiAnalyzer 8.0.0",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/348606",
+          "role": "authoritative handler attributes, data selector, rules and stitch toggle"
+        },
+        {
+          "title": "Alert handlers — FortiAnalyzer 8.0.0",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/444315/alert-handlers",
+          "role": "authoritative basic/correlation handler behavior and Analytics-versus-Archive boundary"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>Purpose: move from an alert to a controlled response</h3>\n<p>FortiAnalyzer alert handlers analyze ingested logs and produce alerts. With Automation Stitch enabled on a handler, FortiAnalyzer can also notify the FortiGate automation framework. The important architectural boundary is that FortiAnalyzer detects and sends the notification; the FortiGate must already have a matching automation trigger and owns the action that follows. This avoids treating a FortiAnalyzer alert as an unrestricted remote command.</p>\n<h3>Detection plane and handler objects</h3>\n<p>A basic alert handler generates an alert when any enabled rule matches (OR semantics). A correlation handler evaluates a sequence using operators such as AND, AND_NOT, OR, FOLLOWED_BY, and NOT_FOLLOWED_BY. A data selector determines which devices, subnets, and log filters are in scope. A notification profile determines how the alert is delivered. The alert handler combines its attributes, rules, data selector, optional incident creation, and Automation Stitch setting.</p>\n<p>Fortinet documents that alert handlers generate alerts from Analytics logs, not Archive logs. In Analyzer–Collector collaboration, the Analyzer evaluates the handlers. With ADOMs enabled, each ADOM has its own alert handlers and alert list; verify the active ADOM before troubleshooting a missing alert. A handler can be technically enabled but still receive no qualifying records because its data selector or log type excludes them.</p>\n<h3>End-to-end transaction</h3>\n<p>All FortiGates added to FortiAnalyzer have a default high-severity alert handler such as Default-Botnet-Communication-Detection, with Automation Stitch enabled. Custom handlers can enable the same option. When the handler produces an alert, FortiAnalyzer sends a notification to the FortiGate. The FortiGate then matches the notification to a locally configured trigger for that handler and executes the associated stitch actions—such as an email, CLI script, or system action. The alert remains visible in FortiAnalyzer under Incidents &amp; Alerts &gt; Alerts.</p>\n<p>For a custom handler, create the alert handler in Incidents &amp; Alerts &gt; Alert Handlers, define its data selector and rules, and enable Automation Stitch. On the FortiGate, ensure FortiAnalyzer logging is configured and create the matching automation trigger for that handler. Do not assume that enabling the FAZ-side checkbox automatically creates the FortiGate trigger.</p>\n<h3>Verification: prove each boundary separately</h3>\n<ol><li>Confirm the relevant device logs are arriving in Analytics storage and the correct ADOM is selected.</li><li>Confirm the data selector includes the device, log type and fields used by the rule.</li><li>Confirm the handler is enabled and the rule condition actually matches; verify the alert appears in FortiAnalyzer.</li><li>Confirm the Automation Stitch column is enabled for the handler.</li><li>On FortiGate, confirm FAZ logging is configured and a trigger exists for that alert handler; then verify the FortiGate system event and the action's own evidence.</li></ol>\n<p>An alert in FortiAnalyzer proves detection, not successful notification delivery. A notification received by FortiGate proves the integration path, not that the correct action ran. A successful CLI script or email proves the action executed, not that the endpoint remediation succeeded. Keep these as separate validation checkpoints.</p>\n<h3>Operational cautions</h3>\n<p>Start with a harmless test action and a narrowly scoped selector. Use a correlation handler only when event order or multiple conditions matter; otherwise a basic handler is easier to reason about. Avoid broad selectors and high-impact actions until alert volume, suppression behavior, and action idempotency are understood. If a handler is duplicated across ADOMs or FortiAnalyzer units, verify the exported/imported selector and trigger names on each target.</p>",
+      "word_count": 545,
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/433192/using-the-automation-stitch-for-alert-handlers",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortianalyzer-alert-handler-stitch.drawio",
+      "svg_file": "diagrams/fortianalyzer-alert-handler-stitch.svg"
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "MCLAG inter-chassis link failure and split-brain prevention",
+      "slug": "fortiswitch-mclag-split-brain",
+      "feature": "FortiSwitch MCLAG uses an inter-chassis link (ICL) between two peers and a dual-homed LACP trunk; split-brain detection makes one peer dormant if the ICL fails while both peers remain active.",
+      "workflow": "Configure ICL and MCLAG trunks -> downstream LACP member links -> peer state synchronization -> ICL failure detection -> priority/MAC tie-break -> one peer dormant -> restore when ICL/LACP returns.",
+      "failure": "ICL trunk down while both peers forward; inconsistent trunk or VLAN configuration; split-brain detection disabled; wrong priority; third-party topology limitations.",
+      "evidence": "ICL LACP state, MCLAG peer state, dual-homed trunk membership, split-brain detection status and dormant-peer behavior.",
+      "remediation": "Restore ICL members/LACP; enable split-brain detection; set supported peer priority; verify downstream dual-homed topology and firmware-specific behavior.",
+      "question": "Distinguish a peer failure from an ICL-only failure and predict which peer becomes dormant.",
+      "diagram": "Switch A <-> ICL LACP <-> Switch B; downstream switch dual-homed LACP; on split brain one peer dormant.",
+      "primary": [
+        {
+          "title": "MCLAG — FortiSwitchOS 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/860027",
+          "role": "authoritative MCLAG, ICL and split-brain behavior"
+        },
+        {
+          "title": "MCLAG — current FortiSwitch Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiswitch/latest/administration-guide/860027/mclag",
+          "role": "current split-brain timeout and priority details"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>What MCLAG is solving</h3>\n<p>Multi-chassis link aggregation lets a downstream device build one LACP bundle across two FortiSwitch peers. The downstream switch or server sees a single logical aggregate even though member links terminate on different physical switches. The two FortiSwitch peers coordinate through an inter-chassis link (ICL). The ICL is not merely another user-facing trunk: it carries peer coordination needed to keep the two halves of the logical LAG consistent.</p>\n<h3>Objects and configuration relationship</h3>\n<p>Fortinet's example creates an LACP-active trunk on each peer and marks it as the MCLAG ICL with <code>set mclag-icl enable</code>. A separate trunk on each peer is marked with <code>set mclag enable</code> and connects to the downstream dual-homed device. The downstream device configures one LACP-active aggregate whose member ports connect to both peers. The ICL trunk and the downstream MCLAG trunk are different objects with different roles; confusing them makes troubleshooting difficult.</p>\n<pre><code>config switch trunk\n    edit \"MCLAG-ICL-trunk\"\n        set mode lacp-active\n        set mclag-icl enable\n        set members \"port15\" \"port16\"\n    next\n    edit \"first-mclag\"\n        set mode lacp-active\n        set mclag enable\n        set members \"port7\" \"port8\"\n    next\nend\n\nconfig switch global\n    set mclag-split-brain-detect enable\nend</code></pre>\n<p>Apply the corresponding ICL and MCLAG configuration to the second peer using its actual port map. Fortinet documents split-brain detection as disabled by default. The documented default interval before declaring a split-brain state is 60 seconds, and it can be increased up to 600 seconds.</p>\n<h3>Failure mechanics</h3>\n<p>A split-brain condition is specifically an ICL communication failure while both peers are still processing traffic. Without protection, each peer may continue forwarding independently and the logical dual-homed topology can become inconsistent. With split-brain detection enabled, one peer becomes dormant while the other remains active and forwarding. When ICL communication is restored and LACP re-establishes the trunk, the dormant peer becomes active again.</p>\n<p>FortiSwitchOS supports a configurable split-brain priority from 0 to 100, default 50. The peer with the lower priority value becomes dormant. If priorities match, the peer with the numerically lower MAC address becomes dormant. An optional all-ports-down behavior can shut down all ports on the dormant peer while leaving ICL ports unchanged. This makes the isolation more explicit but also increases the number of endpoints that lose connectivity during the event.</p>\n<h3>Important release and topology caveats</h3>\n<p>Starting in FortiSwitchOS 7.4.1, the switch can distinguish an ICL-down event from a peer switch that is actually down or restarting, avoiding an unnecessary all-ports-down response. Fortinet states this behavior requires at least one dual-homed FortiSwitch connected to the MCLAG peer group. Starting in 7.6.2, a dual-homed connection to third-party switches is supported in specified topologies; however, the split-brain priority command is not supported when third-party switches are present. Validate the exact topology and release before relying on the priority tie-break.</p>\n<h3>Verification and troubleshooting</h3>\n<p>Check physical ICL members first, then LACP state on the ICL trunk, peer communication, the dual-homed downstream LAG, and the configured split-brain timer/priority. A peer that is dormant after an ICL-only failure is evidence that split-brain protection acted; it is not proof that the ICL itself is healthy. After restoring the ICL, verify that LACP and peer state recover and that the downstream aggregate returns to its intended member set. If a peer reboot is mistaken for an ICL-only failure, verify the FortiSwitchOS release and the presence of a dual-homed FortiSwitch in the topology.</p>",
+      "word_count": 549,
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/860027",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortiswitch-mclag-split-brain.drawio",
+      "svg_file": "diagrams/fortiswitch-mclag-split-brain.svg"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Captive portal security and external portal transaction flow",
+      "slug": "fortiap-captive-portal",
+      "feature": "FortiGate-managed FortiAP SSIDs can redirect unauthenticated clients to a built-in or external captive portal; external portals return a magic-bound credential POST to FortiGate.",
+      "workflow": "Client associates to SSID -> first web request is redirected -> portal collects credentials -> browser POSTs magic/session/username/password to FortiGate -> authentication/group policy -> authorized session.",
+      "failure": "Portal host unreachable; wrong external-web hostname; missing/altered magic value; HTTP credential submission; user group not referenced; walled-garden DNS/HTTPS dependency; captive portal mode mismatch.",
+      "evidence": "Redirect URL and magic value; POST to /fgtauth; auth event/log; user/group and policy match; successful post-auth traffic.",
+      "remediation": "Correct portal FQDN, HTTPS, auth-secure-http, magic propagation, group selection and walled-garden access; verify tunnel/bridge mode and policy.",
+      "question": "Separate 802.11 association, portal authentication, and post-auth firewall authorization.",
+      "diagram": "Client/SSID -> FortiAP -> FortiGate redirect -> external portal -> magic POST -> FortiGate auth/group -> permitted network.",
+      "primary": [
+        {
+          "title": "Captive Portal Security — FortiAP / FortiWiFi 7.6.3",
+          "url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/292926/captive-portal-security",
+          "role": "authoritative external portal flow, POST fields and HTTPS setting"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "FortiAP 231K repeated cwWtpd/lldpd restarts and CAPWAP failure",
+          "url": "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547",
+          "date": "2026-10-19 to 2026-10-22",
+          "role": "recent adjacent wireless control-plane scenario; not a captive-portal failure"
+        }
+      ],
+      "body_html": "<h3>Separate association from authorization</h3>\n<p>A client can successfully associate to a FortiAP SSID and still be unable to reach the network because captive portal authentication has not completed. In a FortiGate-managed wireless deployment, the AP provides radio access and forwards the client traffic into the configured SSID traffic mode; FortiGate owns the captive-portal redirect, authentication, group mapping, and firewall policy decision. Treat 802.11 association, portal authentication, and post-authentication authorization as separate state transitions.</p>\n<h3>External portal transaction</h3>\n<p>An external captive portal is a web page hosted on a separate server. The page presents the organization’s login, disclaimer, or registration experience, but it must return a specifically formatted POST to FortiGate. Fortinet documents the endpoint as <code>https://&lt;FGT_IP&gt;:1000/fgtauth</code>. The POST includes the <code>magic</code> value from the original redirect plus the username and password. The magic value ties the browser's return to the pending authentication transaction. If a portal template drops, caches, or replaces it, the browser can display a successful login while FortiGate cannot complete the original session.</p>\n<pre><code>config user setting\n    set auth-secure-http enable\nend\n\nconfig wireless-controller vap\n    edit \"wifi-vap\"\n        set ssid \"Fortinet-Captive\"\n        set security wpa3-sae\n        set captive-portal enable\n        set external-web \"portal.example.net\"\n        set selected-usergroups \"Guest-group\"\n        set schedule \"always\"\n    next\nend</code></pre>\n<p>The example illustrates the documented tunnel-mode configuration. The <code>external-web</code> value is the portal host name or IP; do not include the <code>http://</code> or <code>https://</code> scheme in that field. Enable HTTPS for credential submission using <code>auth-secure-http</code>. Select the permitted user group deliberately: a valid username is not sufficient if its group is not permitted by the portal or subsequent policy.</p>\n<h3>Walled garden and traffic path</h3>\n<p>Before authentication, the user is confined to a walled garden. The portal page, DNS, certificate chain, identity provider, and any required static assets must be reachable before the user has a normal network session. If the portal depends on a hostname but DNS is not allowed pre-authentication, the user sees a blank page or redirect loop even though the SSID is functioning. The portal's certificate must also match the hostname the client actually visits.</p>\n<p>Fortinet documents external captive portals for tunnel mode and local-bridge mode. The exact traffic path and where policy enforcement occurs depend on the SSID mode. Verify the mode before applying a troubleshooting procedure written for a different deployment. A captive portal is not a replacement for enterprise 802.1X authentication when device/user certificate-based network admission is required.</p>\n<h3>Verification ladder</h3>\n<ol><li>Confirm the client associates and receives the expected IP address/VLAN.</li><li>Capture the initial HTTP redirect and confirm the portal hostname is reachable before authentication.</li><li>Inspect the POST to <code>/fgtauth</code>; verify the original magic value and expected user fields are present.</li><li>Confirm FortiGate records a successful authentication and the intended user group.</li><li>Test a post-authentication destination and verify the firewall policy, NAT and DNS path.</li></ol>\n<p>A successful POST proves that the portal returned credentials; it does not prove that the user matched the allowed group or that a later firewall policy permits traffic. Conversely, a client that never receives a redirect points to the SSID/portal configuration or initial HTTP behavior, not to an invalid password. Keep those evidence boundaries separate when triaging.</p>",
+      "word_count": 519,
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/292926/captive-portal-security",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortiap-231k-repeated-cwwtpd-lldpd-restarts-and-capwap-failure-230547",
+      "diagram_file": "diagrams/fortiap-captive-portal.drawio",
+      "svg_file": "diagrams/fortiap-captive-portal.svg"
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Security Fabric quarantine action and MAC-level endpoint isolation",
+      "slug": "fortinac-security-fabric-quarantine",
+      "feature": "A FortiGate automation stitch can invoke the Quarantine via FortiNAC action; FortiNAC disables the endpoint MAC and enforces isolation at the access layer.",
+      "workflow": "FortiNAC joins Security Fabric -> FortiGate receives Compromised Host or webhook trigger -> stitch calls FortiNAC -> MAC is disabled -> access-layer model places endpoint in dead-end/isolation VLAN.",
+      "failure": "Missing certificate-capable license; FortiGate/FortiNAC version mismatch; REST API key or connector failure; incorrect MAC/FCT UID; disabled-host isolation not configured on AP/Switch.",
+      "evidence": "FortiGate system event and stitch activation; automation diagnostic state; FortiNAC Host View showing quarantine and MAC disabled; endpoint placed in isolation VLAN.",
+      "remediation": "Validate Security Fabric connection and port 8013, API admin key, trigger payload and MAC, FortiNAC disabled-host isolation model, dead-end VLAN and switch physical-address filtering group.",
+      "question": "Distinguish FortiGate trigger success from actual NAC MAC disable and access-layer enforcement.",
+      "primary": [
+        {
+          "title": "Security Fabric Connection — FortiNAC 9.4.0",
+          "url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/167245/security-fabric-connection",
+          "role": "authoritative FortiNAC Security Fabric connector and compatibility requirements"
+        },
+        {
+          "title": "Quarantine via FortiNAC action — FortiGate / FortiOS 6.4.9",
+          "url": "https://docs.fortinet.com/document/fortigate/6.4.9/administration-guide/188426",
+          "role": "authoritative automation trigger, API key, MAC disable and enforcement prerequisites"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "Checking DNS when Winbind reports WBC_ERR_WINBIND_NOT_AVAILABLE",
+          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-checking-dns-when-winbind-reports-wbc-err-winbind-not-available-230552",
+          "date": "2026-10-14",
+          "role": "recent FortiNAC/F identity dependency case; adjacent to quarantine"
+        },
+        {
+          "title": "RADIUS-only network device integration",
+          "url": "https://community.fortinet.com/fortinac-f-57/technical-tip-a-simple-example-of-integrating-a-network-device-using-the-radius-protocol-only-229630",
+          "date": "2026-10-12",
+          "role": "recent FortiNAC 7.6.7+ device-integration capability; not the quarantine lesson source"
+        }
+      ],
+      "body_html": "<h3>What the action changes</h3>\n<p>“Quarantine via FortiNAC” is not simply an IP block on FortiGate. The FortiGate automation stitch invokes FortiNAC, and FortiNAC disables the endpoint's MAC address in its managed network inventory. The access layer then enforces the disabled-host state. This makes the action useful when the endpoint can move between ports or wireless access points: the response is based on the endpoint identity known to NAC, not only the IP address observed in one firewall session.</p>\n<h3>Control-plane relationship</h3>\n<p>FortiNAC is added to the Security Fabric as a service connector from Network &gt; Service Connectors, using the root FortiGate address and port 8013. Fortinet documents certificate-capable licensing requirements and minimum FortiOS compatibility for supported FortiNAC releases. On the FortiGate, create an automation stitch with a Compromised Host or Incoming Webhook trigger and the Quarantine via FortiNAC action. The action uses a REST API administrator key; create a dedicated API admin, restrict its trusted hosts and VDOM scope, and place the key in the stitch rather than reusing a human administrator credential.</p>\n<p>For an incoming webhook, the payload must identify the endpoint using the expected fields, including the source IP and MAC address (and FortiClient UID where applicable). A valid webhook request can trigger the stitch even when the MAC is not the one that should be quarantined, so validate the payload and source permissions. The FortiGate event is the trigger plane; FortiNAC's host record and access-layer enforcement are the remediation plane.</p>\n<h3>Enforcement prerequisites</h3>\n<p>FortiNAC must be configured to isolate disabled hosts. For endpoints on FortiWiFi or wired FortiGate ports, configure the required FortiNAC endpoint-management integration. For FortiAP and FortiSwitch access, set the Dead End VLAN in the model configuration. FortiSwitch deployments also require the switch to be in the physical address filtering group. If these settings are missing, FortiNAC may mark the host disabled while the endpoint continues to pass traffic through an access device that has not been configured to enforce the state.</p>\n<h3>Configuration and evidence</h3>\n<p>Fortinet's documented sequence is: create the automation stitch; create a REST API admin and copy its key; add the key to the stitch; send a test webhook; verify the system event and last-triggered time; then inspect the FortiNAC Host View. A CLI configuration uses an automation action of type <code>quarantine-fortinac</code>, an incoming-webhook trigger, and an automation-stitch object that binds the two.</p>\n<pre><code>config system automation-action\n    edit \"quarantine-fnac\"\n        set action-type quarantine-fortinac\n    next\nend\n\nconfig system automation-trigger\n    edit \"quarantine-webhook\"\n        set event-type incoming-webhook\n    next\nend</code></pre>\n<p>To inspect stitch state, the FortiGate guide includes <code>diagnose test application autod 2</code>. The FortiGate event log proves that the trigger fired; it does not prove the host was disabled. FortiNAC Host View must show the host quarantined and the MAC disabled. Then test from the endpoint and confirm it lands in the intended isolation network.</p>\n<h3>Operational troubleshooting</h3>\n<p>If the stitch never fires, inspect the trigger type, webhook URL, API key and FortiGate system event. If it fires but FortiNAC does not change state, verify Security Fabric connector health, license, API reachability, payload MAC and FortiNAC logs. If the MAC is disabled but the host still has production access, inspect the access-device model, dead-end VLAN and physical-address filtering group. These are three different failures and should not be collapsed into “quarantine failed.”</p>",
+      "word_count": 542,
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/167245/security-fabric-connection",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-checking-dns-when-winbind-reports-wbc-err-winbind-not-available-230552",
+      "diagram_file": "diagrams/fortinac-security-fabric-quarantine.drawio",
+      "svg_file": "diagrams/fortinac-security-fabric-quarantine.svg"
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "User SAML SSO for captive portal with attribute-based group assignment",
+      "slug": "fortinac-f-user-saml-sso",
+      "feature": "FortiNAC-F 7.6.3 User SAML SSO authenticates captive-portal users at an external IdP, maps SAML attributes to FortiNAC groups/access policies and can continue into device registration.",
+      "workflow": "Client reaches captive portal -> chooses User -> FortiNAC redirects to IdP -> IdP authenticates and posts SAML response to ACS -> FortiNAC validates -> maps attributes to group/session -> optional device registration -> CoA/VLAN enforcement.",
+      "failure": "SP entity ID/ACS/portal FQDN mismatch; missing or mis-mapped SAML group attribute; untrusted IdP signing chain; clock skew; HA node or return URL mismatch.",
+      "evidence": "ACS POST status; SignatureValidator success; SAML Authentication status true; Registration complete; RADIUS CoA success; host record shows SSO User and production VLAN.",
+      "remediation": "Align portal FQDN, SP metadata and ACS URL; verify IdP claims and attribute mapping; import the full certificate chain; validate time, registration page and HA failover behavior.",
+      "question": "Interpret the SAML ACS, registration and CoA evidence to distinguish authentication success from redirect completion.",
+      "primary": [
+        {
+          "title": "User SAML SSO — FortiNAC-F 7.6.3",
+          "url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/saml-sso/790967/user-saml-sso",
+          "role": "authoritative user SAML login workflow and attribute-to-group behavior"
+        },
+        {
+          "title": "What's new in FortiNAC-F 7.6.3",
+          "url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/release-notes/590876/whats-new-in-fortinac-f-7-6-3",
+          "role": "authoritative SAML SSO enhancements and supported use cases"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "FortiNAC-F captive portal User SAML SSO redirect loop caused by SP URL/Portal FQDN mismatch",
+          "url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-captive-portal-user-saml-sso-redirect-loop-caused-by-sp-url-portal-fqdn-mismatch-230903",
+          "date": "2026-10-27",
+          "role": "direct recent troubleshooting scenario"
+        }
+      ],
+      "body_html": "<h3>Purpose and identity boundary</h3>\n<p>FortiNAC-F 7.6.3 adds User SAML SSO for captive-portal users. The user authenticates at an external identity provider, while FortiNAC remains responsible for the network-access session, group assignment and device-registration workflow. Multiple User SAML SSO connectors are supported, and custom attribute mapping lets FortiNAC select a group and access policy from SAML assertion values. This is distinct from FortiNAC administrator SSO: this lesson concerns end-user access through the captive portal.</p>\n<h3>Authentication and registration transaction</h3>\n<p>The documented sequence is: a device reaches the captive portal; the user selects the User login method; FortiNAC redirects the browser to the configured IdP; the IdP authenticates the user and returns the SAML response to FortiNAC; FortiNAC creates a temporary or permanent user session and assigns the user to the matching FortiNAC group; if configured, the user then sees a modified registration page to register the device. That final registration step matters for shared devices such as gaming consoles, printers or unmanaged endpoints: an authenticated person and a registered device are related but not identical records.</p>\n<p>Attribute mapping is the policy bridge. A SAML response can be cryptographically valid yet still fail to select the intended FortiNAC group if the IdP sends a different attribute name, value format or group identifier than the FortiNAC connector expects. Conversely, a valid group assignment does not prove the device registration or VLAN transition completed.</p>\n<h3>Configuration dependencies</h3>\n<p>Use the FortiNAC-F 7.6.3 SAML SSO guide and release notes as the primary reference. Configure the SAML connector with the correct IdP metadata, signing certificate, SP entity ID and Assertion Consumer Service URL. Keep the captive portal's externally visible FQDN consistent with the SP metadata and the address users actually browse to. Import the full issuing certificate chain into the trust store used for SAML validation. Configure the attribute mapping for the FortiNAC group and ensure the resulting group has the intended network-access policy.</p>\n<p>Do not treat a browser redirect loop as proof that the IdP password is wrong. A loop can occur after the IdP has successfully authenticated the user if the ACS/portal FQDNs differ, the browser returns to a different host, or the registration stage cannot complete. Keep the authentication callback, user-session creation, registration and RADIUS Change of Authorization as separate checkpoints.</p>\n<h3>Recent field scenario and evidence interpretation</h3>\n<p>A Fortinet Community troubleshooting case dated October 27, 2026 describes a User SAML SSO redirect loop caused by an SP URL/portal FQDN mismatch. Its evidence is especially useful: the access log shows an ACS POST followed by a 302; the application log records <code>Signature verified using SignatureValidator</code>, <code>SAML Authentication status: true</code>, and <code>Registration complete</code>; the controller log records a successful RADIUS CoA. The GUI then shows the host registered to an SSO User and moved to the production VLAN.</p>\n<p>Those lines prove the assertion was validated and the registration/enforcement transaction completed in the observed test. A 302 alone is not an error; it is an HTTP redirect. If the user still sees a loop, compare the browser's current host, portal FQDN, ACS URL and relay/return URL. Repeat the test after HA failover and confirm the same registration and CoA evidence on the node that becomes active.</p>\n<h3>Operational troubleshooting order</h3>\n<ol><li>Verify the portal FQDN and SP metadata are identical in the browser-visible path.</li><li>Confirm the ACS endpoint receives the POST and SAML signature validation succeeds.</li><li>Inspect the assertion's username and group attributes against FortiNAC mapping.</li><li>Confirm FortiNAC creates the intended temporary/permanent user session.</li><li>Verify registration completion, CoA success, host ownership and production VLAN placement.</li></ol>\n<p>Use the earliest failed checkpoint to guide remediation. Rebuilding the IdP application before proving a certificate or FQDN mismatch can make the incident harder to diagnose.</p>",
+      "word_count": 613,
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/saml-sso/790967/user-saml-sso",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-captive-portal-user-saml-sso-redirect-loop-caused-by-sp-url-portal-fqdn-mismatch-230903",
+      "diagram_file": "diagrams/fortinac-f-user-saml-sso.drawio",
+      "svg_file": "diagrams/fortinac-f-user-saml-sso.svg"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Including remote LDAP groups in Fortinet Single Sign-On filters",
+      "slug": "fortiauthenticator-fsso-ldap-groups",
+      "feature": "FortiAuthenticator 6.6.0 can project selected imported remote LDAP user groups into FSSO and expose them as Remote LDAP Groups in FortiGate filters.",
+      "workflow": "Remote LDAP server -> import selected remote LDAP users -> remote LDAP user group -> Include for FSSO -> FAC FSSO group membership -> FortiGate SSO filter -> policy/group match.",
+      "failure": "User retrieval set to LDAP filter rather than imported-user list; Include for FSSO left disabled; global include option disabled; stale imported membership; incorrect LDAP objectClass/memberOf mapping.",
+      "evidence": "Remote LDAP group settings; imported user list; Include for FSSO; global user-group membership toggle; FortiGate filter object list; FSSO session/group membership.",
+      "remediation": "Use imported remote LDAP user retrieval; enable per-group and global inclusion; test LDAP membership and sync; verify username/group mapping and FortiGate filter selection.",
+      "question": "Distinguish LDAP authentication success from FSSO group projection and policy authorization.",
+      "primary": [
+        {
+          "title": "FortiAuthenticator 6.6.0 new features — FortiAuthenticator 6.6.2 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.2/administration-guide/760429/fortiauthenticator-6-6-0",
+          "role": "authoritative FSSO LDAP group feature and global enable control"
+        },
+        {
+          "title": "User groups — FortiAuthenticator 6.6.0",
+          "url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/876446",
+          "role": "authoritative retrieval modes, Include for FSSO prerequisites and group configuration"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "Resolved EAPPasswordError with IKEv2, EAP-TTLS and FortiAuthenticator 2FA",
+          "url": "https://community.fortinet.com/support-forum-92/resolved-eappassworderror-with-ikev2-eap-ttls-and-fortiauthenticator-2fa-230861",
+          "date": "2026-10-29",
+          "role": "adjacent RADIUS/EAP troubleshooting case; not an FSSO group failure"
+        },
+        {
+          "title": "Technical Tip: FSSO resource list",
+          "url": "https://community.fortinet.com/fortigate-3/technical-tip-fsso-resource-list-230258",
+          "date": "2026-10-12",
+          "role": "recent FSSO operational reference"
+        }
+      ],
+      "body_html": "<h3>Why this feature matters</h3>\n<p>FortiAuthenticator 6.6.0 adds a way to include selected remote LDAP user groups in Fortinet Single Sign-On (FSSO). This allows FortiGate filters to use LDAP groups defined on FortiAuthenticator rather than requiring every group to be represented through a separate identity source. It is a group-membership projection feature, not a new LDAP authentication protocol and not a substitute for learning user logon sessions.</p>\n<h3>Prerequisites and object relationships</h3>\n<p>The option appears when creating or editing a remote LDAP user group under Authentication &gt; User Management &gt; User Groups. The group type must be Remote LDAP, and User retrieval must be set to <em>Set a list of imported remote LDAP users</em>. The Include for FSSO option is unavailable for the LDAP-filter retrieval mode and is disabled by default. This distinction is operationally important: the imported-user list gives FortiAuthenticator a defined set of remote users to associate with the group before that group can be exposed to FSSO.</p>\n<p>There is also a global control under Fortinet SSO &gt; Settings &gt; User Group Membership named Include locally-defined remote LDAP groups. It is disabled by default. Enabling only the per-group checkbox is therefore insufficient if the global FSSO setting remains disabled. Both the group-level and global inclusion controls must permit the group to appear in FSSO filters.</p>\n<h3>Configuration workflow</h3>\n<ol><li>Configure the remote LDAP server and confirm its user object class and group-membership attribute.</li><li>Create or edit a Remote LDAP user group.</li><li>Set User retrieval to the list of imported remote LDAP users and select the users to include.</li><li>Enable Include for FSSO on that group.</li><li>Enable Include locally-defined remote LDAP groups under FSSO User Group Membership.</li><li>In Fortinet SSO &gt; Filtering &gt; FortiGate, edit the relevant filter and select the Remote LDAP Groups object from the SSO users/groups picker.</li></ol>\n<p>When building an LDAP group filter, FortiAuthenticator's documentation notes that <code>objectClass</code> and <code>memberOf</code> must align with the user object class and group-membership attribute configured on the remote LDAP server. Use Test Filter where the LDAP-filter retrieval mode is used for other groups; for this feature, validate the imported-user list and membership sync directly.</p>\n<h3>What to verify—and what not to infer</h3>\n<p>Confirm the imported remote users are present, the remote LDAP group is populated, the per-group Include for FSSO flag is enabled, and the global inclusion setting is enabled. Then inspect the FortiGate filter object list and verify that the intended Remote LDAP Group is selectable and referenced. Finally, test a user session and verify the expected group is present in the FSSO view and the firewall policy matches it.</p>\n<p>An LDAP bind or successful password authentication proves that the directory is reachable and credentials were accepted; it does not prove that the user's group has been imported or exposed to FSSO. Likewise, a group appearing in the filter picker does not prove a current user logon session exists. Keep directory authentication, group projection, FSSO session learning and firewall authorization as separate evidence layers.</p>\n<h3>Recent troubleshooting context</h3>\n<p>A Community case dated October 29, 2026 describes an IKEv2 EAP-TTLS authentication that returned a generic EAPPasswordError even though LDAP, FortiToken assignment and RADIUS policy were configured. The discussion identified OTP concatenation/challenge behavior as a separate RADIUS/EAP path. Do not apply that diagnosis to an FSSO group-selection problem: this lesson concerns group projection into FSSO, not EAP challenge completion.</p>",
+      "word_count": 547,
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.2/administration-guide/760429/fortiauthenticator-6-6-0",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/resolved-eappassworderror-with-ikev2-eap-ttls-and-fortiauthenticator-2fa-230861",
+      "diagram_file": "diagrams/fortiauthenticator-fsso-ldap-groups.drawio",
+      "svg_file": "diagrams/fortiauthenticator-fsso-ldap-groups.svg"
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Secret Gateway Chaining with reverse-service mutual TLS",
+      "slug": "fortipam-secret-gateway-chaining",
+      "feature": "FortiPAM 1.9.0 dynamically chains secret gateways through downstream reverse connections, mTLS certificate authentication and automatic gateway advertisement to the root FortiPAM.",
+      "workflow": "Enable root reverse service -> configure downstream reverse gateway and root serial -> certificate CN allowlist -> persistent mTLS reverse connection -> dynamic gateway discovery -> select terminal gateway for secret target -> launch through chain.",
+      "failure": "Reverse service disabled; port/interface unreachable; wrong root serial; client CA missing; certificate CN not allowlisted; mTLS version/certificate mismatch; terminal gateway lacks target route.",
+      "evidence": "Reverse service status/interface/port; server and client CA; Root FortiPAM SN; Gateway ID Whitelist; discovered gateway list; mTLS connection/health state; target launch path.",
+      "remediation": "Align root serial and gateway certificate CN; import trusted CA; permit TCP 8443 or configured port; enable reverse service; confirm only terminal gateway needs target reachability.",
+      "question": "Determine which gateway needs direct target reachability and which connection is the persistent control plane.",
+      "primary": [
+        {
+          "title": "Secret gateway chaining — FortiPAM 1.9.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/245150/secret-gateway-chaining",
+          "role": "authoritative chain architecture and mTLS behavior"
+        },
+        {
+          "title": "Reverse service — FortiPAM 1.9.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/601549/reverse-service",
+          "role": "authoritative port, TLS, certificate, root serial and gateway allowlist settings"
+        },
+        {
+          "title": "FortiPAM 1.9.0 release features",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
+          "role": "authoritative new feature summary and gateway permission changes"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>Problem: reach targets behind multiple trust boundaries</h3>\n<p>FortiPAM Secret Gateway Chaining is designed for environments where the central FortiPAM server is in a public cloud or DMZ, while privileged targets reside behind one or more segmented networks. A traditional forward gateway requires the central FortiPAM to open an inbound connection toward the gateway; that direction may be blocked by edge firewalls. In the reverse model, a downstream gateway initiates the control-plane connection back to an upstream FortiPAM. Version 1.9.0 extends this to dynamically chained gateways.</p>\n<h3>Control plane and gateway discovery</h3>\n<p>The root FortiPAM enables Reverse Service under Network &gt; Secret Gateway. The service binds to selected interfaces and a listening port (8443 by default), selects the server certificate and client CA used for mutual TLS, and identifies the root FortiPAM serial number. The root also configures a Gateway ID Whitelist. A downstream gateway's identity is derived from the Common Name (CN) in its certificate; only certificate CNs in the allowlist may establish reverse connections and participate in the chain.</p>\n<p>Downstream gateways are configured with the root FortiPAM serial number so they advertise their gateway information to the correct central device. Once the persistent mTLS connection is established, gateway information is automatically advertised upstream. The root FortiPAM can then discover intermediate and downstream gateways without requiring administrators to manually configure every intermediate hop. The reverse connection is a control-plane channel with health checks and reconnection behavior.</p>\n<h3>Data path and the terminal gateway</h3>\n<p>The key design rule is that only the terminal gateway in the chain requires direct network connectivity to the target. Intermediate gateways provide the secure chain and do not each need a direct route to the final server. When a secret target is configured, the administrator can choose a dynamic or static gateway. Dynamic selection uses the discovered chain; static selection pins the target to a specific gateway. The chain therefore separates central control-plane reachability from the last-hop target data path.</p>\n<pre><code>Root FortiPAM\n  - Reverse Service: TCP 8443, TLS 1.3\n  - Server certificate + trusted Client CA\n  - Root FortiPAM SN + Gateway ID Whitelist\n        ^\n        | persistent mTLS reverse connection\n        |\nDownstream gateway A -> downstream gateway B -> privileged target\n                                      (terminal gateway has target route)</code></pre>\n<p>Fortinet documents TLS 1.3 as the default maximum version for Reverse Service, with configurable TLS versions. The server certificate authenticates the upstream service, while the client CA validates the downstream gateway certificate. The whitelist checks the gateway certificate CN. These are separate controls: a certificate can chain to a trusted CA yet still be rejected because its CN is not on the gateway allowlist.</p>\n<h3>Operational verification</h3>\n<p>On the root, verify Reverse Service is enabled on the intended interface and port, the server certificate is selected, the client CA is correct, the Root FortiPAM SN is populated, and each expected downstream certificate CN is allowlisted. On downstream gateways, confirm the root serial is configured and the reverse service can be reached through the intervening firewalls. Confirm the dynamic gateway list shows the expected chain and that the terminal gateway can resolve and reach the target port.</p>\n<p>If the gateway does not appear, inspect the mTLS handshake, CA chain, certificate CN, whitelist and root serial before troubleshooting target reachability. If the gateway appears but a launch fails, verify the terminal gateway's route, DNS, firewall policy and target credentials. A healthy mTLS control channel proves gateway registration, not target connectivity.</p>\n<h3>Mode and version caveats</h3>\n<p>FortiPAM also documents Service Gateway mode, where a client can launch directly through a nearby service gateway to reduce latency and central-server load. Service mode requires another FortiPAM device and compatible image versions; some secret protections such as DLP, antivirus scanning or RDP event filtering can force the session back through the central FortiPAM. Keep this distinction clear: dynamic reverse chaining solves gateway reachability and discovery; service mode changes the session data path.</p>",
+      "word_count": 641,
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/245150/secret-gateway-chaining",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortipam-secret-gateway-chaining.drawio",
+      "svg_file": "diagrams/fortipam-secret-gateway-chaining.svg"
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Automation Policies for incident notification, remediation and case creation",
+      "slug": "fortisiem-automation-policies",
+      "feature": "FortiSIEM Automation Policies replace Notification Policies and apply shared severity, rule, time, affected-item and organization conditions to notification/remediation actions.",
+      "workflow": "Incident created by analytics rule -> enabled Automation Policy matches severity/rule/time/affected item/org -> exception check -> email/SMS/webhook/remediation/playbook/integration/case action.",
+      "failure": "Policy disabled; incident outside time range; wrong severity or rule; affected device/IP excluded; wrong organization; cleared-incident exception suppresses action; missing analyst group or case-management policy.",
+      "evidence": "Incident attributes; Automation Policy enabled state; matched rule/severity/time/org; affected-item inclusion/exclusion; action execution record; created case/webhook.",
+      "remediation": "Enable the policy; correct time window and affected-item scope; verify org and exceptions; configure analyst group/case policy; test each action separately.",
+      "question": "Distinguish event detection from Automation Policy routing and suppression.",
+      "primary": [
+        {
+          "title": "Automation Policy Settings — FortiSIEM 7.5.1 User Guide",
+          "url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/744529",
+          "role": "authoritative Automation Policy conditions, actions and exception behavior"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>Purpose: centralize response routing across many rules</h3>\n<p>FortiSIEM Automation Policies replace the older Notification Policy model. Instead of configuring the same notification action independently on every analytics rule, an Automation Policy can be associated with multiple rules and apply shared severity, time, affected-item and organization constraints. The policy is an incident response/routing layer; it does not replace the analytics rule that detects the event or creates the incident.</p>\n<h3>Policy match model</h3>\n<p>An Automation Policy can select one or more severities and one or more triggering rules. It also defines a time range during which notifications are active. Affected Items scope the devices or applications that qualify. You can select individual devices, groups, or IP ranges, and explicitly move groups into the NOT Selections column to exclude them. In Service Provider deployments, Affected Orgs restrict the policy to incidents affecting selected organizations. The policy is only effective when enabled.</p>\n<p>Think of the policy as a conjunction of gates: incident severity must be selected; its rule must be selected; the incident time must fall inside the policy window; the affected item must be in scope and not excluded; and, for service-provider use, the organization must match. A valid incident can therefore exist without triggering the expected notification if any one of those gates is false.</p>\n<h3>Available actions</h3>\n<p>The documented action list includes email, SMS and webhook notification; Run Remediation/Script; Run Playbook on Incident Trigger; invoke an integration policy; create a case; send an SNMP message; send an XML file over HTTP(S); open a Remedy ticket; and invoke FortiAI to update comments. Case creation has additional dependencies: an analyst group must exist under FortiSIEM Analysts, a Case Management Policy must be configured, and the case action is not available at the organization level. Email can target CMDB users, and webhook actions use a separately configured webhook notification.</p>\n<p>Automation Policies also have exceptions that suppress notification when an incident is cleared automatically, manually or by the system. Those exceptions are important for noisy environments, but they can hide expected notifications if the operator assumes every incident creation always triggers an action.</p>\n<h3>Configuration and verification</h3>\n<p>Go to Admin &gt; Settings &gt; General &gt; Automation Policy. Add a policy, select severity and rules, set the active time range, choose affected devices/applications or IP ranges, configure organization scope if required, select the action, and save. For webhook or email, configure the destination and template separately. For case creation, configure the case policy and analyst group first. Finally, enable the policy using the Enabled column; saving a disabled policy does not activate it.</p>\n<p>When troubleshooting, inspect the incident first: rule, severity, timestamp, affected CI/device/IP and organization. Then inspect the policy match criteria and exceptions. If the policy matches but no action appears, verify the action-specific prerequisite—SMTP, webhook destination, script/playbook, integration policy, SNMP/HTTP destination or case management. A detected incident proves the analytics layer worked; it does not prove an Automation Policy matched or executed.</p>\n<h3>Operational design</h3>\n<p>Use separate policies for different response classes rather than a single broad policy with many overlapping rules. Keep remediation actions narrow and idempotent, especially when an incident can be updated repeatedly. Test the policy with a known incident and a negative control that should be excluded by time, device or organization. Record the exact policy version, target scope and action evidence so a later analyst can distinguish detection, routing, suppression and execution.</p>",
+      "word_count": 557,
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/744529",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortisiem-automation-policies.drawio",
+      "svg_file": "diagrams/fortisiem-automation-policies.svg"
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "API-based CASB data protection with FortiGuard and custom DLP patterns",
+      "slug": "fortisase-api-casb-dlp",
+      "feature": "FortiSASE API-based CASB scans onboarded SaaS files with FortiGuard/custom DLP patterns and data policies that scope file types, activity and mitigation.",
+      "workflow": "Onboard SaaS tenant/API connector -> grant API permissions -> select FortiGuard/custom patterns -> define data policy -> SaaS API scan -> alert/action on matching file/activity.",
+      "failure": "SaaS account not onboarded; API permission/token expired; pattern size limit excludes file; regex threshold too strict; data policy not bound to app/file activity; OCR not enabled for image content.",
+      "evidence": "Connector/account sync status; API authorization; selected pattern and file limits; data policy scope; alert with file/application/activity and action result.",
+      "remediation": "Repair SaaS API authorization; verify tenant/account onboarding; test regex and threshold; set compressed/uncompressed size limits; enable OCR where required; correct file/activity policy scope.",
+      "question": "Distinguish API-based CASB DLP from inline traffic inspection and identify the policy objects required for a file alert.",
+      "primary": [
+        {
+          "title": "Data Protection — FortiSASE Feature Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortisase/26.1.99/feature-administration-guide/24075/data-protection",
+          "role": "authoritative API-based CASB DLP patterns, custom pattern fields and data policy behavior"
+        }
+      ],
+      "scenario": [],
+      "body_html": "<h3>What API-based CASB changes</h3>\n<p>FortiSASE API-based CASB uses the SaaS provider's API to inspect files and activity in onboarded cloud applications. This is a different inspection plane from an inline secure web gateway: it does not require every user packet to traverse a FortiSASE inspection point. The API integration gives visibility into files and permissions stored in supported SaaS tenants, while policy objects determine which patterns, file types and activities should produce an alert or mitigation action.</p>\n<h3>Three data-protection objects</h3>\n<p>Fortinet documents three main components under Security &gt; API-based CASB &gt; Data Protection. FortiGuard patterns provide default DLP patterns for categories including financial information, malware and personal identity information. Custom patterns let administrators define a category, maximum uncompressed file size, maximum compressed file size, matching threshold and PCRE regular expression. Data policies bind patterns to cloud applications and define which file types, permissions and file activities are monitored and what action should follow a data-security alert.</p>\n<p>The policy model is therefore more than a regex. A custom pattern may be correct but never evaluated if the data policy does not reference it, the SaaS account is not onboarded, the file type is excluded, or the activity does not match the policy. Likewise, a file can exceed the configured compressed or uncompressed size and fall outside the scan boundary. Document those size limits alongside the pattern itself.</p>\n<h3>Build the inspection chain</h3>\n<ol><li>Onboard the SaaS application account and authorize the API connector with the required tenant permissions.</li><li>Confirm the account is synchronized and the connector can enumerate the intended files and activity.</li><li>Select FortiGuard patterns or create a custom pattern with a realistic PCRE, matching threshold and compressed/uncompressed size limits.</li><li>Create a data policy that binds the pattern to the intended cloud application, file types and file activities.</li><li>Choose the alert and mitigation behavior, and enable OCR scanning for image files where the use case requires text extraction from screenshots or scanned documents.</li></ol>\n<p>Fortinet documents a default policy that monitors files across onboarded cloud application accounts using predefined patterns. A custom rule can tailor file types, OCR, access permissions and file-activity triggers. The default is useful for a baseline, but it should not be assumed to match every organization's data-handling policy.</p>\n<h3>Verification and limits</h3>\n<p>Verify API account authorization and file synchronization before tuning the regex. Then test a known matching file, a benign control, a file near the configured size boundary, and a file with a different activity such as sharing or permission change. Confirm the alert identifies the correct SaaS application, file and activity, and inspect the mitigation result. An API connector that is healthy proves the control plane can query the SaaS tenant; it does not prove a particular DLP pattern or policy matched.</p>\n<p>API-based CASB is not an inline packet filter. It should not be described as guaranteeing that every upload is blocked before it reaches the SaaS service. Its value is API visibility and policy-driven data protection in the onboarded cloud account. Use inline SIA controls for network traffic enforcement and API-based CASB for the SaaS data/activity plane; they complement rather than replace one another.</p>\n<h3>Operational tuning</h3>\n<p>Start with a small set of high-confidence patterns, verify file-size boundaries and OCR behavior, then expand. Avoid overly broad regular expressions and low thresholds that create noise. When alerts disappear after an application change, check tenant consent, API token validity and account onboarding before changing the DLP pattern. Keep the API permission set and the SaaS account owner documented because those are dependencies outside the FortiSASE policy object itself.</p>",
+      "word_count": 586,
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.99/feature-administration-guide/24075/data-protection",
+      "scenario_community_url": null,
+      "diagram_file": "diagrams/fortisase-api-casb-dlp.drawio",
+      "svg_file": "diagrams/fortisase-api-casb-dlp.svg"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "SD-WAN traffic shaping and QoS profiles with advanced shaping groups",
+      "slug": "secure-sdwan-traffic-shaping-qos",
+      "feature": "FortiGate SD-WAN QoS combines traffic shapers in firewall shaping policies with advanced shaping policies and profiles that allocate interface bandwidth across up to 30 traffic groups.",
+      "workflow": "SD-WAN service selects eligible egress member -> firewall shaping policy classifies traffic -> shaper/profile assigns guarantee, maximum and priority -> interface queue schedules egress.",
+      "failure": "Wrong interface outgoing-bandwidth value; traffic does not match shaping policy; shaping policy priority/order wrong; profile group not mapped; SD-WAN member differs from expected egress; tunnel egress not shaped as assumed.",
+      "evidence": "SD-WAN selected member; firewall shaping-policy match; interface outgoing bandwidth; shaper/profile counters; queue/throughput and latency under controlled load.",
+      "remediation": "Verify service-rule member selection separately; set accurate interface bandwidth; correct shaping-policy match/order; map application classes to profile groups; test under controlled congestion.",
+      "question": "Distinguish path selection from egress bandwidth/priority enforcement and reason about per-interface profile allocation.",
+      "primary": [
+        {
+          "title": "SD-WAN traffic shaping and QoS — FortiGate / FortiOS 7.6.3 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/249147/sd-wan-traffic-shaping-and-qos",
+          "role": "authoritative shaper, priority, advanced shaping policy and profile behavior"
+        }
+      ],
+      "scenario": [
+        {
+          "title": "IPSec tunnel probes drop reverse path check fail, drop",
+          "url": "https://community.fortinet.com/support-forum-92/ipsec-tunnel-probes-drop-reverse-path-check-fail-drop-208594",
+          "date": "2026-10-17",
+          "role": "recent SD-WAN/IPsec probe asymmetry scenario; not a shaping-policy failure"
+        },
+        {
+          "title": "Single IPsec tunnel with two WAN interfaces",
+          "url": "https://community.fortinet.com/support-forum-92/single-ipsec-tunnel-with-two-wan-interfacies-231012",
+          "date": "2026-10-31",
+          "role": "recent WAN redundancy and SD-WAN path design scenario"
+        }
+      ],
+      "body_html": "<h3>Separate path choice from queue treatment</h3>\n<p>SD-WAN service rules decide which eligible member carries a session. Traffic shaping and QoS decide how traffic is treated as it leaves an interface: maximum bandwidth, guaranteed bandwidth and relative priority. A correct SD-WAN member selection does not prove the traffic received the intended queue or rate, and a shaping profile does not decide which WAN member is selected. Troubleshoot those planes independently.</p>\n<h3>Shaper and profile mechanics</h3>\n<p>Fortinet documents traffic shapers in firewall shaping policies. A shaper can control maximum and guaranteed bandwidth or assign one of three priorities: high, medium or low. An advanced shaping policy can classify traffic into as many as 30 groups. A shaping profile defines the percentage of interface bandwidth allocated to each group. Each group's speed limit is calculated using the outgoing bandwidth limit configured on the interface.</p>\n<p>This creates a dependency that is easy to miss: an incorrect interface outgoing-bandwidth value changes the effective allocation for every group in the profile. If a WAN link is provisioned for 100 Mb/s but configured as 20 Mb/s, a profile percentage is calculated against the wrong base. The profile is not a global pool across all SD-WAN members; the documented model is based on the outgoing bandwidth configured on the egress interface.</p>\n<h3>Example design</h3>\n<p>Assume the default SD-WAN zone has two members, wan1 and wan2, each with a configured outgoing bandwidth limit of 10 Mb/s. A shaping policy can classify HTTP/HTTPS as high priority and FTP as low priority so that, under contention, interactive web traffic is scheduled ahead of bulk transfers. An advanced profile can allocate a defined share to traffic groups and impose a ceiling/guarantee per group. The SD-WAN service rule still determines whether a session uses wan1 or wan2; the shaping policy then controls the egress treatment on the chosen path.</p>\n<p>Build the classification so that it matches the actual traffic attributes used in the policy. If the application is encrypted or unidentified at the point the shaper classifies it, a rule relying on an application signature may not match as expected. Confirm the policy order and the fields available to the shaping classifier rather than assuming that a broad service name is equivalent to an application signature.</p>\n<h3>Verification sequence</h3>\n<ol><li>Confirm the SD-WAN service rule and selected member for the test session.</li><li>Confirm the firewall shaping policy matches the source, destination, service/application and egress path.</li><li>Check the interface outgoing-bandwidth value used by the shaping profile.</li><li>Verify the profile group assignment and shaper guarantee/maximum/priority.</li><li>Generate controlled congestion and compare throughput/latency for high- and low-priority traffic.</li></ol>\n<p>A successful ping or a session on the expected WAN member does not prove QoS is working; without congestion, priority differences may not be observable. Likewise, a shaping counter increment does not prove that the correct member or application was selected. Use a repeatable load test and correlate the service rule, shaping-policy hit and egress interface.</p>\n<h3>Operational context</h3>\n<p>Recent Community discussions about SD-WAN/IPsec probes show why the path-selection layer must be validated separately. An October 17, 2026 case records an SLA probe entering an IPsec tunnel and being dropped by reverse-path checking because the route back pointed to the default WAN. That is an asymmetric-routing/RPF failure, not a shaping failure. Do not tune QoS when the probe or session is being discarded before it reaches the egress queue.</p>",
+      "word_count": 555,
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/249147/sd-wan-traffic-shaping-and-qos",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/ipsec-tunnel-probes-drop-reverse-path-check-fail-drop-208594",
+      "diagram_file": "diagrams/secure-sdwan-traffic-shaping-qos.drawio",
+      "svg_file": "diagrams/secure-sdwan-traffic-shaping-qos.svg"
+    }
+  ]
+}
