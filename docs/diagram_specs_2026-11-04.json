@@ -1,0 +1,996 @@
+[
+  {
+    "slug": "fortigate-hashed-url-sni-feeds",
+    "title": "FortiGate hashed URL/SNI feed pipeline",
+    "fingerprint": "feed-pull -> hash-db -> category -> Web Filter profile -> URL/SNI match",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Publisher\nhashed URL/SNI feed",
+        "x": 30,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "External resource\nHTTPS pull / refresh",
+        "x": 220,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "Hash database\ncategory 192-221",
+        "x": 410,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "Web Filter profile\ncategory reference",
+        "x": 600,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Observed URL/SNI\nmatch and action",
+        "x": 790,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Separate visibility\nDNS / TLS / logs",
+        "x": 600,
+        "y": 310,
+        "w": 150,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "feed URL"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "hash-db parse"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "category"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "policy evaluation"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "not hidden everywhere"
+      }
+    ]
+  },
+  {
+    "slug": "fortimanager-ztp-model-devices",
+    "title": "FortiManager model-device auto-link",
+    "fingerprint": "model device -> Device DB -> discovery -> authorization -> auto-link diff/install",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Offline model device\nADOM objects",
+        "x": 35,
+        "y": 145,
+        "w": 155,
+        "h": 100
+      },
+      {
+        "id": "n2",
+        "label": "Device Database\npre-run + templates",
+        "x": 235,
+        "y": 145,
+        "w": 155,
+        "h": 100
+      },
+      {
+        "id": "n3",
+        "label": "Discovery\nFortiCloud / DHCP / USB",
+        "x": 435,
+        "y": 145,
+        "w": 165,
+        "h": 100
+      },
+      {
+        "id": "n4",
+        "label": "Real FortiGate\nFGFM authorization",
+        "x": 645,
+        "y": 145,
+        "w": 150,
+        "h": 100
+      },
+      {
+        "id": "n5",
+        "label": "Auto-link\nconfig diff + install",
+        "x": 835,
+        "y": 145,
+        "w": 140,
+        "h": 100
+      },
+      {
+        "id": "n6",
+        "label": "Preflight gate\nplatform / revision / password",
+        "x": 235,
+        "y": 315,
+        "w": 180,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "assign package"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "stage"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "connect"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "auto-link"
+      },
+      {
+        "from": "n6",
+        "to": "n2",
+        "label": "validate first"
+      }
+    ]
+  },
+  {
+    "slug": "fortianalyzer-alert-handler-stitch",
+    "title": "FortiAnalyzer alert to FortiGate automation",
+    "fingerprint": "Analytics logs -> alert handler -> FAZ notification -> FGT trigger -> action",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "FortiGate logs\nAnalytics storage",
+        "x": 30,
+        "y": 145,
+        "w": 150,
+        "h": 95
+      },
+      {
+        "id": "n2",
+        "label": "ADOM + data selector\nscope and filters",
+        "x": 220,
+        "y": 145,
+        "w": 155,
+        "h": 95
+      },
+      {
+        "id": "n3",
+        "label": "Alert handler\nbasic OR / correlation",
+        "x": 420,
+        "y": 145,
+        "w": 160,
+        "h": 95
+      },
+      {
+        "id": "n4",
+        "label": "FAZ notification\nAutomation Stitch flag",
+        "x": 625,
+        "y": 145,
+        "w": 160,
+        "h": 95
+      },
+      {
+        "id": "n5",
+        "label": "FortiGate trigger\nhandler-specific",
+        "x": 830,
+        "y": 145,
+        "w": 150,
+        "h": 95
+      },
+      {
+        "id": "n6",
+        "label": "FortiGate action\nemail / CLI / system",
+        "x": 830,
+        "y": 315,
+        "w": 150,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "log record"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "selector"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "alert"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "notification"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "execute"
+      }
+    ]
+  },
+  {
+    "slug": "fortiswitch-mclag-split-brain",
+    "title": "FortiSwitch MCLAG ICL and split-brain protection",
+    "fingerprint": "peer A <-> ICL <-> peer B; downstream dual-homed LACP; one peer dormant on ICL-only failure",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "FortiSwitch peer A\nMCLAG trunk",
+        "x": 70,
+        "y": 90,
+        "w": 190,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "ICL LACP trunk\npeer coordination",
+        "x": 365,
+        "y": 90,
+        "w": 190,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "FortiSwitch peer B\nMCLAG trunk",
+        "x": 660,
+        "y": 90,
+        "w": 190,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "Downstream switch/server\none LACP aggregate",
+        "x": 365,
+        "y": 300,
+        "w": 190,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Split-brain guard\npriority / MAC tie-break",
+        "x": 365,
+        "y": 195,
+        "w": 190,
+        "h": 70
+      },
+      {
+        "id": "n6",
+        "label": "Failure state\none peer dormant",
+        "x": 660,
+        "y": 300,
+        "w": 190,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "ICL members"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "ICL"
+      },
+      {
+        "from": "n1",
+        "to": "n4",
+        "label": "LACP member"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "LACP member"
+      },
+      {
+        "from": "n2",
+        "to": "n5",
+        "label": "loss detection"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "isolate one peer"
+      }
+    ]
+  },
+  {
+    "slug": "fortiap-captive-portal",
+    "title": "FortiAP captive portal authentication transaction",
+    "fingerprint": "client association -> redirect -> external portal -> magic POST -> FortiGate group/policy",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Wireless client\nSSID association",
+        "x": 25,
+        "y": 145,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "FortiAP\nbridge / tunnel mode",
+        "x": 210,
+        "y": 145,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "FortiGate redirect\npending magic/session",
+        "x": 395,
+        "y": 145,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "External portal\nlogin / disclaimer",
+        "x": 595,
+        "y": 145,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "POST /fgtauth\nmagic + credentials",
+        "x": 790,
+        "y": 145,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Auth group + policy\npost-auth session",
+        "x": 790,
+        "y": 315,
+        "w": 150,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "802.11"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "client traffic"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "HTTP redirect"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "HTTPS POST"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "authenticate"
+      }
+    ]
+  },
+  {
+    "slug": "fortinac-security-fabric-quarantine",
+    "title": "FortiNAC quarantine control and enforcement planes",
+    "fingerprint": "FortiGate trigger -> automation stitch -> REST API -> NAC MAC disable -> access-edge isolation",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Compromised host\nor webhook",
+        "x": 25,
+        "y": 150,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "FortiGate stitch\ntrigger + action",
+        "x": 215,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "REST API\nscoped API key",
+        "x": 410,
+        "y": 150,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "FortiNAC Host View\nMAC disabled",
+        "x": 600,
+        "y": 150,
+        "w": 160,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Access edge\nDead End VLAN",
+        "x": 805,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Verification\nsystem event + host state",
+        "x": 410,
+        "y": 315,
+        "w": 190,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "event"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "quarantine API"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "disable MAC"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "enforce"
+      },
+      {
+        "from": "n2",
+        "to": "n6",
+        "label": "stitch hit"
+      },
+      {
+        "from": "n4",
+        "to": "n6",
+        "label": "host status"
+      }
+    ]
+  },
+  {
+    "slug": "fortinac-f-user-saml-sso",
+    "title": "FortiNAC-F User SAML SSO and device registration",
+    "fingerprint": "portal -> IdP -> ACS signature validation -> attribute group -> registration -> CoA/VLAN",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Client device\ncaptive portal",
+        "x": 25,
+        "y": 150,
+        "w": 140,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "FortiNAC-F SP\nredirect + ACS",
+        "x": 210,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "External IdP\nuser authentication",
+        "x": 405,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "ACS validation\nsignature / claims",
+        "x": 600,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Group + session\nattribute mapping",
+        "x": 795,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Device registration\nCoA / production VLAN",
+        "x": 600,
+        "y": 315,
+        "w": 190,
+        "h": 75
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "login"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "SAML AuthnRequest"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "SAML response"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "validated claims"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "register + authorize"
+      }
+    ]
+  },
+  {
+    "slug": "fortiauthenticator-fsso-ldap-groups",
+    "title": "FortiAuthenticator remote LDAP group projection into FSSO",
+    "fingerprint": "LDAP imported-user list -> group Include for FSSO -> global include -> FortiGate SSO filter",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Remote LDAP\nusers + groups",
+        "x": 25,
+        "y": 150,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "FAC import list\nselected LDAP users",
+        "x": 215,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "Remote LDAP group\nInclude for FSSO",
+        "x": 415,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "Global FSSO gate\nlocally-defined groups",
+        "x": 615,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "FortiGate filter\nRemote LDAP Group",
+        "x": 815,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "FSSO session\npolicy group match",
+        "x": 815,
+        "y": 315,
+        "w": 150,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "retrieve users"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "membership"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "group flag"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "publish group"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "session/policy"
+      }
+    ]
+  },
+  {
+    "slug": "fortipam-secret-gateway-chaining",
+    "title": "FortiPAM secret gateway chain: control plane and target path",
+    "fingerprint": "root reverse service <- mTLS downstream gateways -> terminal gateway -> private target",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Root FortiPAM\nReverse Service :8443",
+        "x": 35,
+        "y": 120,
+        "w": 170,
+        "h": 95
+      },
+      {
+        "id": "n2",
+        "label": "Service Gateway\nreverse mTLS peer",
+        "x": 300,
+        "y": 120,
+        "w": 170,
+        "h": 95
+      },
+      {
+        "id": "n3",
+        "label": "Terminal Gateway\ntrusted CN allowlist",
+        "x": 565,
+        "y": 120,
+        "w": 170,
+        "h": 95
+      },
+      {
+        "id": "n4",
+        "label": "Private target\nSSH / RDP / app",
+        "x": 825,
+        "y": 120,
+        "w": 145,
+        "h": 95
+      },
+      {
+        "id": "n5",
+        "label": "Root SN + Client CA\nGateway ID whitelist",
+        "x": 35,
+        "y": 300,
+        "w": 190,
+        "h": 75
+      },
+      {
+        "id": "n6",
+        "label": "Only terminal gateway\nneeds target route",
+        "x": 565,
+        "y": 300,
+        "w": 190,
+        "h": 75
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "reverse mTLS"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "reverse mTLS"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "target data path"
+      },
+      {
+        "from": "n5",
+        "to": "n1",
+        "label": "trust policy"
+      },
+      {
+        "from": "n6",
+        "to": "n3",
+        "label": "route boundary"
+      }
+    ]
+  },
+  {
+    "slug": "fortisiem-automation-policies",
+    "title": "FortiSIEM Automation Policy evaluation",
+    "fingerprint": "analytics incident -> severity/rule/time/item/org gates -> exception -> action",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Analytics rule\nincident created",
+        "x": 35,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "Policy match gates\nseverity / rule / time",
+        "x": 245,
+        "y": 150,
+        "w": 165,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "Scope gates\naffected item / org",
+        "x": 470,
+        "y": 150,
+        "w": 160,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "Exception check\ncleared incident?",
+        "x": 690,
+        "y": 150,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Action\nwebhook / playbook / case",
+        "x": 870,
+        "y": 150,
+        "w": 145,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Execution evidence\naction log / case ID",
+        "x": 870,
+        "y": 315,
+        "w": 145,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "incident fields"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "match"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "scope"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "not suppressed"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "record result"
+      }
+    ]
+  },
+  {
+    "slug": "fortisase-api-casb-dlp",
+    "title": "FortiSASE API-based CASB DLP pipeline",
+    "fingerprint": "SaaS API connector -> file/activity -> DLP patterns -> data policy -> alert/mitigation",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "SaaS tenant\nonboarded account",
+        "x": 25,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "API connector\nconsent + token",
+        "x": 220,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "Files and activity\nAPI scan scope",
+        "x": 415,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "DLP patterns\nFortiGuard / PCRE",
+        "x": 610,
+        "y": 150,
+        "w": 150,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Data policy\nfile / OCR / activity",
+        "x": 805,
+        "y": 150,
+        "w": 160,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Alert / mitigation\nAPI data plane",
+        "x": 805,
+        "y": 315,
+        "w": 160,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "tenant consent"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "enumerate"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "scan content"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "pattern match"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "policy action"
+      }
+    ]
+  },
+  {
+    "slug": "secure-sdwan-traffic-shaping-qos",
+    "title": "Secure SD-WAN member selection versus QoS enforcement",
+    "fingerprint": "SD-WAN service selects member -> shaping policy classifies -> profile/queue -> egress bandwidth",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Client flow\napp / service",
+        "x": 25,
+        "y": 150,
+        "w": 140,
+        "h": 90
+      },
+      {
+        "id": "n2",
+        "label": "SD-WAN service\nmember selection",
+        "x": 210,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n3",
+        "label": "Egress interface\nWAN bandwidth base",
+        "x": 410,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n4",
+        "label": "Shaping policy\ntraffic classification",
+        "x": 610,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n5",
+        "label": "Profile / queue\nguarantee + priority",
+        "x": 810,
+        "y": 150,
+        "w": 155,
+        "h": 90
+      },
+      {
+        "id": "n6",
+        "label": "Congested egress\nrate / latency result",
+        "x": 610,
+        "y": 315,
+        "w": 190,
+        "h": 70
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "session"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "chosen member"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "egress path"
+      },
+      {
+        "from": "n4",
+        "to": "n5",
+        "label": "class match"
+      },
+      {
+        "from": "n5",
+        "to": "n6",
+        "label": "queue schedule"
+      }
+    ]
+  }
+]
