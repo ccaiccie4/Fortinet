@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "report_date": "2026-11-04",
+  "diagram_count": 12,
+  "format_requirements": {
+    "editable": "draw.io XML",
+    "standalone": "SVG",
+    "per_lesson": 2
+  },
+  "diagrams": [
+    {
+      "product": "fortigate",
+      "slug": "fortigate-hashed-url-sni-feeds",
+      "title": "FortiGate hashed URL/SNI feed pipeline",
+      "topology_fingerprint": "feed-pull -> hash-db -> category -> Web Filter profile -> URL/SNI match",
+      "drawio": "diagrams/fortigate-hashed-url-sni-feeds.drawio",
+      "svg": "diagrams/fortigate-hashed-url-sni-feeds.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortimanager",
+      "slug": "fortimanager-ztp-model-devices",
+      "title": "FortiManager model-device auto-link",
+      "topology_fingerprint": "model device -> Device DB -> discovery -> authorization -> auto-link diff/install",
+      "drawio": "diagrams/fortimanager-ztp-model-devices.drawio",
+      "svg": "diagrams/fortimanager-ztp-model-devices.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortianalyzer",
+      "slug": "fortianalyzer-alert-handler-stitch",
+      "title": "FortiAnalyzer alert to FortiGate automation",
+      "topology_fingerprint": "Analytics logs -> alert handler -> FAZ notification -> FGT trigger -> action",
+      "drawio": "diagrams/fortianalyzer-alert-handler-stitch.drawio",
+      "svg": "diagrams/fortianalyzer-alert-handler-stitch.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortiswitch",
+      "slug": "fortiswitch-mclag-split-brain",
+      "title": "FortiSwitch MCLAG ICL and split-brain protection",
+      "topology_fingerprint": "peer A <-> ICL <-> peer B; downstream dual-homed LACP; one peer dormant on ICL-only failure",
+      "drawio": "diagrams/fortiswitch-mclag-split-brain.drawio",
+      "svg": "diagrams/fortiswitch-mclag-split-brain.svg",
+      "node_count": 6,
+      "edge_count": 6
+    },
+    {
+      "product": "fortiap",
+      "slug": "fortiap-captive-portal",
+      "title": "FortiAP captive portal authentication transaction",
+      "topology_fingerprint": "client association -> redirect -> external portal -> magic POST -> FortiGate group/policy",
+      "drawio": "diagrams/fortiap-captive-portal.drawio",
+      "svg": "diagrams/fortiap-captive-portal.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortinac",
+      "slug": "fortinac-security-fabric-quarantine",
+      "title": "FortiNAC quarantine control and enforcement planes",
+      "topology_fingerprint": "FortiGate trigger -> automation stitch -> REST API -> NAC MAC disable -> access-edge isolation",
+      "drawio": "diagrams/fortinac-security-fabric-quarantine.drawio",
+      "svg": "diagrams/fortinac-security-fabric-quarantine.svg",
+      "node_count": 6,
+      "edge_count": 6
+    },
+    {
+      "product": "fortinac",
+      "slug": "fortinac-f-user-saml-sso",
+      "title": "FortiNAC-F User SAML SSO and device registration",
+      "topology_fingerprint": "portal -> IdP -> ACS signature validation -> attribute group -> registration -> CoA/VLAN",
+      "drawio": "diagrams/fortinac-f-user-saml-sso.drawio",
+      "svg": "diagrams/fortinac-f-user-saml-sso.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortiauthenticator",
+      "slug": "fortiauthenticator-fsso-ldap-groups",
+      "title": "FortiAuthenticator remote LDAP group projection into FSSO",
+      "topology_fingerprint": "LDAP imported-user list -> group Include for FSSO -> global include -> FortiGate SSO filter",
+      "drawio": "diagrams/fortiauthenticator-fsso-ldap-groups.drawio",
+      "svg": "diagrams/fortiauthenticator-fsso-ldap-groups.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortipam",
+      "slug": "fortipam-secret-gateway-chaining",
+      "title": "FortiPAM secret gateway chain: control plane and target path",
+      "topology_fingerprint": "root reverse service <- mTLS downstream gateways -> terminal gateway -> private target",
+      "drawio": "diagrams/fortipam-secret-gateway-chaining.drawio",
+      "svg": "diagrams/fortipam-secret-gateway-chaining.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortisiem",
+      "slug": "fortisiem-automation-policies",
+      "title": "FortiSIEM Automation Policy evaluation",
+      "topology_fingerprint": "analytics incident -> severity/rule/time/item/org gates -> exception -> action",
+      "drawio": "diagrams/fortisiem-automation-policies.drawio",
+      "svg": "diagrams/fortisiem-automation-policies.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "fortisase",
+      "slug": "fortisase-api-casb-dlp",
+      "title": "FortiSASE API-based CASB DLP pipeline",
+      "topology_fingerprint": "SaaS API connector -> file/activity -> DLP patterns -> data policy -> alert/mitigation",
+      "drawio": "diagrams/fortisase-api-casb-dlp.drawio",
+      "svg": "diagrams/fortisase-api-casb-dlp.svg",
+      "node_count": 6,
+      "edge_count": 5
+    },
+    {
+      "product": "secure",
+      "slug": "secure-sdwan-traffic-shaping-qos",
+      "title": "Secure SD-WAN member selection versus QoS enforcement",
+      "topology_fingerprint": "SD-WAN service selects member -> shaping policy classifies -> profile/queue -> egress bandwidth",
+      "drawio": "diagrams/secure-sdwan-traffic-shaping-qos.drawio",
+      "svg": "diagrams/secure-sdwan-traffic-shaping-qos.svg",
+      "node_count": 6,
+      "edge_count": 5
+    }
+  ]
+}
