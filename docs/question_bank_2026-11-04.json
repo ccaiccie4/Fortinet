@@ -1,0 +1,1260 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-11-04",
+  "generated_at_local": "2026-11-04T08:22:54-08:00",
+  "question_count": 50,
+  "choice_count": 200,
+  "grading": "exactly one correct option per question; each of four choices includes specific feedback; score computed only after submission",
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "topic": "Hashed URL/SNI feeds",
+      "question": "A feed refresh succeeds, but a known indicator is not blocked. The external resource is in hash-db mode and shows category 192. What should be checked next?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Change the refresh interval to one minute and restart the update daemon.",
+          "feedback": "A shorter refresh interval does not fix a missing policy reference; first prove the feed is being used."
+        },
+        {
+          "text": "Replace the publisher URL with the same feed using plain-text mode.",
+          "feedback": "Changing to plain-text can break a hash database feed and does not establish policy use."
+        },
+        {
+          "text": "Confirm the active Web Filter profile references category 192.",
+          "feedback": "Correct. A fetched feed and a Web Filter profile reference are separate stages; the category must be consumed by the active profile."
+        },
+        {
+          "text": "Create a firewall address object for every hostname in the feed.",
+          "feedback": "Manual address objects create a different control path and defeat the intended hash-feed workflow."
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "topic": "Hashed URL/SNI feeds",
+      "question": "Which configuration choice selects the hash database interpretation for the external resource?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Set threat-feed-hash-mode to hash-db on the external-resource object.",
+          "feedback": "Correct. FortiOS exposes hash-db versus plain-text-db on the external-resource object; the publisher's feed format must match."
+        },
+        {
+          "text": "Set the update method to push and leave the hash mode unchanged.",
+          "feedback": "Push changes delivery method, not the database interpretation used to parse the feed."
+        },
+        {
+          "text": "Set the resource type to malware and reference it from IPS.",
+          "feedback": "Malware hash feeds are a different resource use case and do not create a Web Filter URL/SNI category."
+        },
+        {
+          "text": "Set the server identity check to basic and change the category.",
+          "feedback": "Certificate verification and category selection do not switch the feed parser into hash-db mode."
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "topic": "Hashed URL/SNI feeds",
+      "question": "A HTTPS feed intermittently fails after a certificate renewal. Which evidence most directly tests server identity validation?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Check the firewall policy hit count for the user's web session.",
+          "feedback": "Policy hits show traffic handling, not whether the external-resource TLS session trusts the feed server."
+        },
+        {
+          "text": "Compare the URL category with the antivirus signature database version.",
+          "feedback": "Antivirus signatures do not validate the TLS identity of the external feed endpoint."
+        },
+        {
+          "text": "Inspect the SD-WAN rule selected for the user's browser session.",
+          "feedback": "SD-WAN can affect the path, but it does not prove certificate trust or hostname matching."
+        },
+        {
+          "text": "Review the feed certificate chain and hostname match for full identity checking.",
+          "feedback": "Correct. Full checking validates the certificate and verifies that the domain matches the server certificate."
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "topic": "Community scenario boundary",
+      "question": "After a FortiOS 7.6.8 upgrade, administrator SSO fails with 'Single Sign-On Failed' while local login remains available. What is the safest first response?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "Rebuild all Web Filter external resources and reload hash databases.",
+          "feedback": "External-resource configuration is unrelated to administrator SSO and should not be changed as a first response."
+        },
+        {
+          "text": "Use the documented local or RADIUS/LDAP/TACACS+ administrator path and investigate the release-specific SSO issue.",
+          "feedback": "Correct. Preserve administrative access through a confirmed local or remote non-SSO account, then investigate the documented 7.6.8 SSO failure."
+        },
+        {
+          "text": "Disable all administrator authentication and expose HTTPS management on the WAN.",
+          "feedback": "Disabling authentication or exposing management increases risk and is not a controlled recovery method."
+        },
+        {
+          "text": "Replace the IdP signing certificate before collecting the failed login evidence.",
+          "feedback": "Certificate rotation without evidence can make a release-specific regression harder to isolate."
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiManager",
+      "topic": "ZTP discovery",
+      "question": "A factory-default FortiGate should discover FortiManager through DHCP Option 240/241, but it never contacts the manager. Which prerequisite is most important to verify?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "Confirm the model device already has a live device configuration revision.",
+          "feedback": "A model revision is important for installation, but it does not make DHCP options work on an interface that will not accept them."
+        },
+        {
+          "text": "Confirm the selected WAN interface is DHCP-client in factory-default state.",
+          "feedback": "Correct. Fortinet limits this ZTP method to factory-default models whose selected WAN interface is already a DHCP client."
+        },
+        {
+          "text": "Confirm the policy package uses only global address objects.",
+          "feedback": "Policy object scope is evaluated later; it does not control initial manager discovery."
+        },
+        {
+          "text": "Confirm the FortiGate has completed a firmware upgrade before discovery.",
+          "feedback": "ZTP is intended to provision a new device; upgrading first is not a discovery prerequisite."
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "topic": "Model-device template timing",
+      "question": "A one-time CLI script must create interfaces on a FortiGate-VM before other templates are installed. Which mechanism fits this requirement?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Assign a Pre-Run CLI/Jinja template to the offline model device.",
+          "feedback": "Correct. Pre-Run CLI/Jinja templates are model-device-only, run once against the model Device Database, and are then unassigned."
+        },
+        {
+          "text": "Assign a Post-VDOM CLI template to the device group.",
+          "feedback": "Post-VDOM templates run after the policy package and are not the one-time model bootstrap stage."
+        },
+        {
+          "text": "Run a CLI script from the live device after policy installation.",
+          "feedback": "A live-device script runs too late to create prerequisites needed by earlier provisioning steps."
+        },
+        {
+          "text": "Attach a normal CLI template to the ADOM global layer.",
+          "feedback": "A normal ADOM template is not the model-only one-time pre-run mechanism."
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "topic": "Auto-link package safety",
+      "question": "A model device has a policy package assigned, but the package is targeted only at a device group. What should the engineer do before the real FortiGate comes online?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Wait for auto-link to install the group package automatically.",
+          "feedback": "Fortinet documents that a package targeted at a device group is not automatically installed during auto-link."
+        },
+        {
+          "text": "Convert the policy package to a global database object.",
+          "feedback": "Global object scope does not change the documented auto-link package-install behavior."
+        },
+        {
+          "text": "Disable auto-link and retrieve the real device configuration first.",
+          "feedback": "Retrieving a new live configuration is not possible before the device is online and is not the required step."
+        },
+        {
+          "text": "Install the package explicitly before bringing the real device online.",
+          "feedback": "Correct. Pre-install the package to catch errors; model-device auto-link does not automatically install a group-targeted package."
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "topic": "Community scenario boundary",
+      "question": "After upgrading FortiManager, an LDAPS configuration without ca-cert disappears. Which upgrade-preparation action matches the documented Community case?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Change the LDAP port from 636 to 389 before upgrading.",
+          "feedback": "Changing to cleartext LDAP avoids neither the upgrade condition nor the security requirement for LDAPS."
+        },
+        {
+          "text": "Disable all remote authentication servers until the upgrade finishes.",
+          "feedback": "Disabling authentication does not preserve the configuration and can remove administrative access paths."
+        },
+        {
+          "text": "Assign a valid CA certificate that issued the LDAP server certificate before upgrading.",
+          "feedback": "Correct. The Community case states that LDAPS configurations without ca-cert are deleted on affected upgrades; configure the issuing CA first."
+        },
+        {
+          "text": "Replace the LDAP server with a RADIUS server using the same address.",
+          "feedback": "Changing protocols does not preserve the LDAPS object and introduces an unrelated migration."
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiAnalyzer",
+      "topic": "Alert handler to FortiGate",
+      "question": "A FortiAnalyzer alert is visible, but no FortiGate action runs. Which missing configuration is the most likely next checkpoint?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "Enable Archive-log indexing on the FortiAnalyzer ADOM.",
+          "feedback": "Archive logs are not the source used by alert handlers; indexing them does not create the FortiGate trigger."
+        },
+        {
+          "text": "Create the matching alert-handler trigger on FortiGate and ensure FAZ logging is configured.",
+          "feedback": "Correct. FAZ sends a notification, but FortiGate requires its own matching trigger and FAZ logging configuration before the action can run."
+        },
+        {
+          "text": "Change the alert handler from Basic to Correlation after it has been saved.",
+          "feedback": "Fortinet does not allow changing a saved handler type; recreate it only if the detection semantics are wrong."
+        },
+        {
+          "text": "Move the incident to a different FortiAnalyzer ADOM.",
+          "feedback": "Moving ADOMs can change scope but does not create the required FortiGate automation trigger."
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "topic": "Analytics versus Archive",
+      "question": "A rule matches only records that have already been moved to Archive logs. Why does the alert handler not fire?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Alert handlers generate alerts from Analytics logs, not Archive logs.",
+          "feedback": "Correct. The documented boundary is Analytics logs; Archive-only records do not feed the handler."
+        },
+        {
+          "text": "Archive logs are evaluated only after a FortiGate automation stitch runs.",
+          "feedback": "Automation stitches are downstream response actions, not an Archive-log indexing mechanism."
+        },
+        {
+          "text": "Correlation handlers cannot evaluate any log fields from FortiGate.",
+          "feedback": "Correlation handlers can evaluate sequences of rules; the issue is the log storage class."
+        },
+        {
+          "text": "Notification profiles must be attached to the Archive log database.",
+          "feedback": "Notification profiles are separate handler objects and do not change the Analytics/Archive source boundary."
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "topic": "Basic versus correlation handlers",
+      "question": "A detection requires event A, then event B within a sequence. Which handler type is appropriate?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "A basic handler with two rules because basic rules execute in order.",
+          "feedback": "Basic handler rules have OR relationships; they do not encode ordered sequences."
+        },
+        {
+          "text": "A notification profile with two recipients and a shared data selector.",
+          "feedback": "Notification profiles control delivery, not detection logic or event ordering."
+        },
+        {
+          "text": "A basic handler with one OR rule and a shorter refresh interval.",
+          "feedback": "Changing refresh timing does not make basic rules evaluate a sequence."
+        },
+        {
+          "text": "A correlation handler with sequence operators such as FOLLOWED_BY.",
+          "feedback": "Correct. Correlation handlers support sequence operators such as FOLLOWED_BY and NOT_FOLLOWED_BY."
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "topic": "Alert/action evidence",
+      "question": "Which statement correctly describes the FortiAnalyzer Automation Stitch integration?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "FortiAnalyzer directly executes the FortiGate CLI script when an alert rule matches.",
+          "feedback": "FAZ does not directly execute arbitrary FortiGate CLI scripts; the FortiGate owns the action."
+        },
+        {
+          "text": "An alert handler automatically creates every required FortiGate trigger and action.",
+          "feedback": "Fortinet requires the FortiGate trigger to be configured for each handler with Automation Stitch enabled."
+        },
+        {
+          "text": "FortiAnalyzer notifies FortiGate, and the FortiGate's configured trigger invokes its local action.",
+          "feedback": "Correct. The integration is a notification bridge; the FortiGate trigger and action complete the response."
+        },
+        {
+          "text": "FortiGate sends its automation action to FortiAnalyzer for execution in the ADOM.",
+          "feedback": "Execution direction is reversed; FortiAnalyzer generates the alert and notifies FortiGate."
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "topic": "MCLAG split brain",
+      "question": "The ICL fails, but both FortiSwitch peers are still forwarding. What does split-brain detection protect against?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "It moves all traffic to the downstream switch's standalone STP root.",
+          "feedback": "STP root selection is not the documented MCLAG split-brain response."
+        },
+        {
+          "text": "It disables LACP on both peers until the ICL is repaired.",
+          "feedback": "Both peers do not have to lose LACP; one is isolated to avoid dual-active forwarding."
+        },
+        {
+          "text": "It makes one peer dormant while the other remains active and forwarding.",
+          "feedback": "Correct. Split-brain detection prevents both peers from continuing to forward independently after ICL loss."
+        },
+        {
+          "text": "It converts the MCLAG into two independent access VLANs.",
+          "feedback": "MCLAG does not automatically redesign VLAN topology when the ICL fails."
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "topic": "MCLAG tie-break",
+      "question": "Both peers have split-brain priority 50. Which peer becomes dormant when the ICL-only split-brain condition is detected?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The peer with the higher numerical MAC address becomes dormant.",
+          "feedback": "The documented tie-break is the lower numerical MAC, not the higher one."
+        },
+        {
+          "text": "The peer with the lower numerical MAC address becomes dormant.",
+          "feedback": "Correct. Lower priority value wins the dormant state; equal priorities fall back to the lower numerical MAC address."
+        },
+        {
+          "text": "The peer with the greater number of downstream LACP members becomes dormant.",
+          "feedback": "Member count is not the documented tie-break mechanism."
+        },
+        {
+          "text": "The peer with the higher firmware build number becomes dormant.",
+          "feedback": "Firmware build number is not used as the split-brain peer selection criterion."
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "topic": "MCLAG failure classification",
+      "question": "A peer reboots and the other peer remains online. Which release behavior helps avoid mistaking this for an ICL-only split-brain event?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "FortiSwitchOS 7.4.1 distinguishes a peer down/restart from an ICL down event.",
+          "feedback": "Correct. Starting in 7.4.1, FortiSwitchOS distinguishes peer down/restart from ICL down, with a dual-homed FortiSwitch requirement."
+        },
+        {
+          "text": "FortiSwitchOS 6.2.2 disables MCLAG whenever any peer reboots.",
+          "feedback": "6.2.2 added CLI split-brain detection; it does not disable MCLAG on every reboot."
+        },
+        {
+          "text": "FortiSwitchOS 7.6.2 forces every third-party switch to become the active peer.",
+          "feedback": "Third-party topology support does not transfer active-peer control to the third-party switch."
+        },
+        {
+          "text": "FortiSwitchOS 8.0.0 removes the ICL and relies on STP convergence.",
+          "feedback": "The ICL remains a core MCLAG component in the documented topology."
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "topic": "Third-party MCLAG topology",
+      "question": "A FortiSwitchOS 7.6.2 design dual-homes to third-party switches. Which caveat matters for split-brain design?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Split-brain detection is unavailable whenever any third-party switch is present.",
+          "feedback": "Fortinet documents third-party dual-homed support in specified topologies; it does not remove all split-brain detection."
+        },
+        {
+          "text": "The ICL must be converted to an untagged access port.",
+          "feedback": "ICL configuration remains an LACP trunk, not a generic access port."
+        },
+        {
+          "text": "The downstream third-party switch chooses the dormant FortiSwitch by STP priority.",
+          "feedback": "Peer selection remains a FortiSwitch function; STP priority on the third-party switch is not the documented tie-break."
+        },
+        {
+          "text": "The split-brain priority command is not supported in the documented third-party topology.",
+          "feedback": "Correct. Fortinet notes that mclag-split-brain-priority is not supported when third-party switches are present."
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP/Wireless",
+      "topic": "External captive portal",
+      "question": "An external portal accepts the user's credentials but FortiGate never completes the pending login. Which field must the portal preserve from the original redirect?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "The magic value associated with the pending captive-portal session.",
+          "feedback": "Correct. The external portal must return the original magic value with the username and password to /fgtauth."
+        },
+        {
+          "text": "The AP radio's BSSID and channel assignment.",
+          "feedback": "BSSID and channel are radio association data, not the captive-portal transaction token."
+        },
+        {
+          "text": "The DHCP server identifier from the client's lease.",
+          "feedback": "DHCP server identity does not bind the browser's return to the pending authentication session."
+        },
+        {
+          "text": "The FortiAP serial number used during CAPWAP discovery.",
+          "feedback": "AP serial number is unrelated to the documented /fgtauth POST fields."
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "topic": "Portal authentication versus policy",
+      "question": "A client associates and authenticates successfully but cannot reach the Internet. Which next check best separates identity success from authorization?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Rebuild the FortiAP radio profile and change the channel width.",
+          "feedback": "Radio settings do not explain a successful authentication followed by denied routed traffic."
+        },
+        {
+          "text": "Disable WPA3 and force every client to use an open SSID.",
+          "feedback": "Removing wireless encryption is unsafe and does not correct group or policy authorization."
+        },
+        {
+          "text": "Verify the selected user group and the post-authentication firewall policy.",
+          "feedback": "Correct. Portal success must be followed by a permitted group and matching firewall policy/NAT path."
+        },
+        {
+          "text": "Reset the AP to factory defaults and repeat CAPWAP discovery.",
+          "feedback": "Factory reset is disproportionate when association and portal authentication already work."
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "topic": "Credential transport",
+      "question": "Which setting protects credentials returned from an external captive portal to FortiGate?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "Enable client isolation on the SSID and leave the portal HTTP endpoint unchanged.",
+          "feedback": "Client isolation does not encrypt the browser's credential POST to FortiGate."
+        },
+        {
+          "text": "Enable auth-secure-http under config user setting.",
+          "feedback": "Correct. Fortinet documents auth-secure-http enable to secure the credential submission."
+        },
+        {
+          "text": "Set the SSID traffic mode to bridge and disable the portal redirect.",
+          "feedback": "Disabling the portal removes the authentication flow rather than protecting it."
+        },
+        {
+          "text": "Use the portal's original HTTP URL as the external-web field.",
+          "feedback": "The external-web field is the host name, and the credential return should use HTTPS."
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "topic": "Community scenario boundary",
+      "question": "A FortiAP 231K repeatedly restarts cwWtpd/lldpd and CAPWAP fails. What does the restart log prove?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "It proves the portal's user-group mapping is invalid.",
+          "feedback": "Portal group mapping is downstream of AP control-plane stability and is not shown by daemon restart logs."
+        },
+        {
+          "text": "It proves the RADIUS server rejected the client password.",
+          "feedback": "RADIUS rejection would require authentication evidence, not only daemon restart messages."
+        },
+        {
+          "text": "It proves the external portal lost its magic value.",
+          "feedback": "Magic values exist in captive-portal transactions and do not explain AP daemon restarts."
+        },
+        {
+          "text": "It proves the daemons restarted, but not the underlying cause.",
+          "feedback": "Correct. The Community thread explicitly notes that restart messages alone do not identify the cause; firmware/build and certificate compatibility need checking."
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "topic": "Quarantine enforcement",
+      "question": "FortiGate logs show the Quarantine via FortiNAC stitch fired, but the endpoint still reaches production. What is the most likely missing dependency?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "The FortiGate needs a new SD-WAN health-check target.",
+          "feedback": "SD-WAN health checks do not enforce a NAC-disabled MAC state."
+        },
+        {
+          "text": "The FortiNAC connector must be moved to an Archive ADOM.",
+          "feedback": "ADOM placement is unrelated to the FortiNAC access-layer isolation behavior."
+        },
+        {
+          "text": "The FortiNAC disabled-host isolation and access-edge Dead End VLAN are not configured.",
+          "feedback": "Correct. FortiNAC can disable the MAC, but the AP/Switch or FortiGate access edge must enforce the disabled-host state."
+        },
+        {
+          "text": "The endpoint must receive a new DHCP lease from FortiGate.",
+          "feedback": "A DHCP lease change does not create the required quarantine VLAN or port enforcement."
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "topic": "Webhook identity",
+      "question": "A webhook triggers quarantine for the wrong endpoint. Which part of the request should be validated first?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "The source IP, MAC address and FortiClient UID in the webhook payload.",
+          "feedback": "Correct. The webhook payload identifies the endpoint; an incorrect MAC can quarantine the wrong host."
+        },
+        {
+          "text": "The FortiGate's Web Filter category and external-resource refresh timer.",
+          "feedback": "Web Filter objects do not identify the endpoint for the FortiNAC quarantine action."
+        },
+        {
+          "text": "The FortiSwitch MCLAG split-brain priority and ICL LACP state.",
+          "feedback": "MCLAG health is an access-layer availability concern, not the webhook identity payload."
+        },
+        {
+          "text": "The FortiAnalyzer notification profile and Archive log retention.",
+          "feedback": "FAZ alert delivery and Archive retention do not validate the MAC supplied to the action."
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "topic": "Quarantine evidence",
+      "question": "Which observation proves FortiNAC actually changed the endpoint state rather than only receiving the FortiGate trigger?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The FortiGate system event says the automation stitch was triggered.",
+          "feedback": "The FortiGate event proves the trigger ran, not that the NAC host record changed."
+        },
+        {
+          "text": "The FortiNAC Host View shows the host quarantined and its MAC disabled.",
+          "feedback": "Correct. Host View confirms the endpoint is quarantined and the MAC is disabled."
+        },
+        {
+          "text": "The webhook client received an HTTP response from FortiGate.",
+          "feedback": "A webhook response proves request handling, not the downstream NAC state change."
+        },
+        {
+          "text": "The FortiGate automation page shows a nonzero last-triggered timestamp.",
+          "feedback": "A last-triggered time proves activation, not access-layer enforcement."
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "topic": "Community Winbind case",
+      "question": "A FortiNAC domain join reports WBC_ERR_WINBIND_NOT_AVAILABLE and cannot obtain domain details. Which dependency should be tested before changing user credentials?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "The MCLAG ICL LACP state between access switches.",
+          "feedback": "MCLAG affects switching availability but does not resolve a Winbind domain lookup error."
+        },
+        {
+          "text": "The FortiAnalyzer Analytics log retention setting.",
+          "feedback": "Analytics retention is unrelated to the FortiNAC domain-join dependency."
+        },
+        {
+          "text": "The FortiGate external-resource category assignment.",
+          "feedback": "External-resource categories are unrelated to Winbind or AD discovery."
+        },
+        {
+          "text": "DNS resolution of the Active Directory domain controller and domain.",
+          "feedback": "Correct. The Community case identifies DNS resolution as a cause of Winbind being unable to locate the domain controller."
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "topic": "SAML redirect loop",
+      "question": "A recent FortiNAC-F SAML case shows ACS POST 302, SignatureValidator success, Registration complete and CoA success, but the browser still loops. Which mismatch should be checked?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The FortiNAC MAC address table and DHCP lease age.",
+          "feedback": "Host registration and CoA logs show the access state progressed; the documented case points to the SP URL/portal FQDN mismatch."
+        },
+        {
+          "text": "The SP URL and browser-visible portal FQDN.",
+          "feedback": "Correct. The Community case identifies the mismatch between the SAML SP URL and portal FQDN as the redirect-loop cause."
+        },
+        {
+          "text": "The FortiGate external-resource hash mode and category.",
+          "feedback": "Hash feed settings do not participate in the SAML ACS return path."
+        },
+        {
+          "text": "The FortiSwitch split-brain timer and peer priority.",
+          "feedback": "MCLAG peer state does not explain the SAML browser redirect loop."
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "topic": "SAML attribute mapping",
+      "question": "SAML signature validation succeeds, but the user lands in the wrong FortiNAC access group. What should be inspected?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "The FortiGate interface's outgoing bandwidth limit.",
+          "feedback": "Bandwidth limits affect egress shaping, not SAML group selection."
+        },
+        {
+          "text": "The RADIUS shared secret on every switch in the fabric.",
+          "feedback": "RADIUS secrets can affect later CoA/authentication, but not the validated SAML claim mapping itself."
+        },
+        {
+          "text": "The SAML assertion attribute names/values and FortiNAC custom group mapping.",
+          "feedback": "Correct. FortiNAC assigns groups and access policies from SAML attribute values; verify the claim and mapping."
+        },
+        {
+          "text": "The FortiNAC server's external DNS forwarder cache only.",
+          "feedback": "DNS may affect portal reachability, but it does not explain a valid assertion mapped to the wrong group."
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "topic": "SAML trust",
+      "question": "The ACS receives a SAML response but signature verification fails after an IdP certificate rollover. What is the best corrective path?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Import the correct IdP signing certificate and trust chain, then validate the connector metadata.",
+          "feedback": "Correct. The SP must trust the signing certificate used by the IdP and validate the expected metadata."
+        },
+        {
+          "text": "Change the captive portal to open authentication and bypass SAML.",
+          "feedback": "Open authentication bypasses the identity requirement and is not a secure certificate repair."
+        },
+        {
+          "text": "Disable CoA so the browser can complete the IdP login.",
+          "feedback": "CoA is a later network-enforcement step; it does not repair a failed SAML signature."
+        },
+        {
+          "text": "Replace the FortiNAC-F user group with a local MAC group.",
+          "feedback": "MAC groups are not a replacement for the IdP user attribute mapping."
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "topic": "HA SAML validation",
+      "question": "A primary-node SAML test succeeds. What additional test is required before declaring the integration production-ready?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Test only a second browser on the same primary node.",
+          "feedback": "A second browser does not test the HA control-plane transition."
+        },
+        {
+          "text": "Verify the FortiGate Web Filter profile contains the SAML group name.",
+          "feedback": "Web Filter profiles do not prove the FortiNAC-F SAML flow works after failover."
+        },
+        {
+          "text": "Disable the secondary node's captive portal service.",
+          "feedback": "Disabling the secondary removes the failover path rather than validating it."
+        },
+        {
+          "text": "Repeat the login and registration flow after HA failover on the active secondary.",
+          "feedback": "Correct. The Community case explicitly recommends repeating the SAML/registration evidence after failover."
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "topic": "FSSO group inclusion",
+      "question": "A Remote LDAP group has Include for FSSO enabled, but the option was unavailable for another group. Which retrieval mode is required?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Specify an LDAP filter with dynamic group membership.",
+          "feedback": "The new Include for FSSO option is documented for imported remote LDAP users, not the LDAP-filter retrieval mode."
+        },
+        {
+          "text": "Set the group type to Remote RADIUS and import the users.",
+          "feedback": "Remote RADIUS groups are a different identity source and do not satisfy the LDAP prerequisite."
+        },
+        {
+          "text": "Set User retrieval to a list of imported remote LDAP users.",
+          "feedback": "Correct. The option is available only when User retrieval is set to a list of imported remote LDAP users."
+        },
+        {
+          "text": "Create a local MAC group and add the LDAP users manually.",
+          "feedback": "Manual MAC groups do not expose remote LDAP group membership to FSSO."
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "topic": "FSSO global gate",
+      "question": "A group is flagged Include for FSSO, but it never appears in the FortiGate filter picker. Which second setting must be checked?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Include locally-defined remote LDAP groups under FSSO User Group Membership.",
+          "feedback": "Correct. FortiAuthenticator requires both per-group inclusion and the global FSSO group-membership inclusion setting."
+        },
+        {
+          "text": "Enable FortiToken push without an Access-Challenge in the RADIUS policy.",
+          "feedback": "FortiToken push is a separate RADIUS authentication behavior and does not publish LDAP groups to FSSO."
+        },
+        {
+          "text": "Change the remote LDAP server from LDAPS to plain LDAP.",
+          "feedback": "Changing transport security is not required to expose a correctly imported LDAP group."
+        },
+        {
+          "text": "Enable FortiGate SSL deep inspection for the LDAP server.",
+          "feedback": "SSL deep inspection is unrelated to FAC's local FSSO group inclusion setting."
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "topic": "Identity evidence",
+      "question": "A user can authenticate successfully against LDAP, but a FortiGate policy using an FSSO group does not match. What does the successful LDAP bind fail to prove?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "It proves the FortiGate has learned a current logon session and group.",
+          "feedback": "LDAP authentication does not itself prove FSSO session or group projection."
+        },
+        {
+          "text": "It proves only that LDAP authentication worked, not that group projection and FSSO session learning succeeded.",
+          "feedback": "Correct. Authentication, imported group membership, FSSO filter publication and session learning are separate stages."
+        },
+        {
+          "text": "It proves the firewall policy has the correct source interface and service.",
+          "feedback": "Policy interface and service matching are independent from the LDAP bind."
+        },
+        {
+          "text": "It proves the imported LDAP user list is synchronized and current.",
+          "feedback": "A successful bind does not prove the imported list or group sync is current."
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "topic": "Community EAP scenario",
+      "question": "A FortiClient IKEv2 EAP-TTLS login reports EAPPasswordError, while LDAP, FortiToken and the RADIUS policy are already working. Which diagnostic boundary is most relevant?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Treat the error as proof that the remote LDAP password is wrong.",
+          "feedback": "The Community case says LDAP was already working; the generic client error does not prove a bad password."
+        },
+        {
+          "text": "Change the FSSO Remote LDAP Group filter to a local user group.",
+          "feedback": "FSSO group filters do not control the EAP-TTLS/OTP challenge exchange."
+        },
+        {
+          "text": "Disable certificate validation on every remote authentication server.",
+          "feedback": "Disabling trust validation is unsafe and not supported by the reported symptom."
+        },
+        {
+          "text": "Inspect RADIUS challenge and OTP-concatenation behavior separately from LDAP password validation.",
+          "feedback": "Correct. The discussion identifies OTP concatenation/challenge behavior as a separate RADIUS/EAP path."
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "topic": "Gateway target reachability",
+      "question": "A root FortiPAM and two gateways form a chain to an isolated SSH target. Which gateway needs direct network access to that target?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The root FortiPAM must reach every target and every intermediate gateway.",
+          "feedback": "The root needs the reverse control-plane connection, not direct access to every private target."
+        },
+        {
+          "text": "Only the terminal gateway in the chain needs direct target connectivity.",
+          "feedback": "Correct. Fortinet explicitly states only the terminal gateway requires direct network connectivity to the target."
+        },
+        {
+          "text": "Every gateway in the chain must have a route to every protected target.",
+          "feedback": "Intermediate gateways forward the chain; they do not all need target routes."
+        },
+        {
+          "text": "The service gateway nearest the root must reach the target directly.",
+          "feedback": "The first gateway is not necessarily the terminal gateway; target reachability belongs at the last hop."
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "topic": "Gateway identity",
+      "question": "A downstream gateway establishes TLS to the root, but it is not dynamically discovered. Which pair of settings is most directly relevant?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Correct Root FortiPAM serial and an allowlisted certificate Common Name.",
+          "feedback": "Correct. The root serial identifies the central FortiPAM, while the gateway ID whitelist checks the downstream certificate CN."
+        },
+        {
+          "text": "Matching SSH port and target username on every secret.",
+          "feedback": "Target service credentials do not establish the reverse gateway's identity or root association."
+        },
+        {
+          "text": "Matching RDP NLA realm and a shared secret password.",
+          "feedback": "RDP realm and secret passwords are not part of the reverse-service mTLS discovery check."
+        },
+        {
+          "text": "Matching gateway interface MTU and target DNS suffix.",
+          "feedback": "MTU and DNS can affect reachability, but they do not satisfy root serial or CN allowlisting."
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "topic": "Reverse service transport",
+      "question": "Which default transport configuration is documented for the FortiPAM Reverse Service?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "TCP 443 with TLS 1.1 and a server-only certificate.",
+          "feedback": "Port 443 is used in some data-plane examples, not the default reverse control-plane listener."
+        },
+        {
+          "text": "UDP 8443 with TLS 1.2 and a shared gateway password.",
+          "feedback": "Reverse Service uses a TCP listening port and certificate-based mTLS, not UDP/password-only authentication."
+        },
+        {
+          "text": "TCP 8443 with TLS 1.3 as the default maximum and client CA validation.",
+          "feedback": "Correct. The documented default is port 8443, TLS 1.3 maximum, server certificate and client CA."
+        },
+        {
+          "text": "TCP 22 with SSH host keys and a gateway API token.",
+          "feedback": "SSH is a target protocol and not the reverse-service mTLS transport."
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "topic": "Gateway versus target failure",
+      "question": "The dynamic gateway chain is visible at the root, but launching a target fails. Which next check is most precise?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "Rebuild the root gateway certificate before checking any network path.",
+          "feedback": "A discovered chain indicates the mTLS registration succeeded; replacing certificates first may destroy working trust."
+        },
+        {
+          "text": "Change the root FortiPAM serial number to the terminal gateway serial.",
+          "feedback": "The root serial identifies the central FortiPAM and should not be replaced by the terminal gateway serial."
+        },
+        {
+          "text": "Remove the Gateway ID Whitelist to permit all downstream certificates.",
+          "feedback": "Removing the allowlist weakens trust and does not solve a target data-path failure."
+        },
+        {
+          "text": "Verify the terminal gateway's route, DNS, firewall and target service reachability.",
+          "feedback": "Correct. Once discovery succeeds, the terminal gateway's direct target path is the next independent boundary."
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "topic": "Automation Policy match",
+      "question": "An incident exists, but no Automation Policy sends an email. Which first check most directly tests whether the policy should match?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "Compare incident rule, severity, timestamp and affected item with the policy gates.",
+          "feedback": "Correct. Rule, severity, time range and affected item are the core match gates before the action is evaluated."
+        },
+        {
+          "text": "Increase the ClickHouse warm-storage allocation and restart the collector.",
+          "feedback": "Storage capacity may affect event retention, but it does not correct a policy that does not match."
+        },
+        {
+          "text": "Change the incident from Analytics to Archive log storage.",
+          "feedback": "FortiSIEM Automation Policies route incidents; Archive storage is not the relevant match control."
+        },
+        {
+          "text": "Create a second incident with the same source IP and event name.",
+          "feedback": "Duplicate incidents can add noise and do not prove the existing policy's scope."
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "topic": "Affected item exclusion",
+      "question": "A policy applies to a device group except one excluded device group. Where is the exclusion represented?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "In the event handler's correlation sequence.",
+          "feedback": "Correlation sequences create incidents; they do not hold the Automation Policy's explicit exclusion list."
+        },
+        {
+          "text": "In the action's SMTP recipient list.",
+          "feedback": "Recipients affect who receives an email, not which device incidents match the policy."
+        },
+        {
+          "text": "In the FortiSIEM global device discovery schedule.",
+          "feedback": "Discovery schedules do not define the policy's affected-item scope."
+        },
+        {
+          "text": "In the Affected Items NOT Selections column.",
+          "feedback": "Correct. The documented policy editor lets selected groups be moved to the NOT Selections column."
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "topic": "Case creation prerequisites",
+      "question": "A policy matches and should create a case, but the case action is unavailable. Which prerequisite pair should be checked?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "A FortiGate REST API admin and a FortiAnalyzer ADOM.",
+          "feedback": "Those objects are used by other products and do not enable FortiSIEM case creation."
+        },
+        {
+          "text": "A FortiSIEM Analysts group and a Case Management Policy.",
+          "feedback": "Correct. FortiSIEM requires an Analysts group and a Case Management Policy; the action is not available at Org level."
+        },
+        {
+          "text": "A FortiSASE API connector and a FortiGuard DLP pattern.",
+          "feedback": "CASB objects are unrelated to FortiSIEM incident case management."
+        },
+        {
+          "text": "A FortiNAC security fabric connector and a Dead End VLAN.",
+          "feedback": "NAC quarantine prerequisites do not affect FortiSIEM case actions."
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "topic": "Automation Policy exceptions",
+      "question": "An incident is created and quickly auto-cleared. The policy is configured not to notify on automatically cleared incidents. What should happen?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "The policy should send an email twice to preserve the incident history.",
+          "feedback": "The policy exception is not a duplicate-email mechanism."
+        },
+        {
+          "text": "The incident should be deleted before the analytics rule runs.",
+          "feedback": "Auto-clearing occurs after detection; deleting the incident is not the documented exception behavior."
+        },
+        {
+          "text": "The policy should create a case but suppress only the webhook action.",
+          "feedback": "The exception applies to the policy's notification trigger, not only one action type."
+        },
+        {
+          "text": "The exception should suppress the notification/action for that cleared incident.",
+          "feedback": "Correct. FortiSIEM documents an exception to not notify when an incident is cleared automatically."
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "topic": "API CASB versus inline inspection",
+      "question": "A file is uploaded directly to a SaaS tenant and later flagged by API-based CASB DLP. Which statement best describes the inspection plane?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The DLP engine must have been inline on every packet before the upload completed.",
+          "feedback": "That describes inline inspection, not the API-based CASB data plane."
+        },
+        {
+          "text": "API-based CASB queries onboarded SaaS accounts through provider APIs and evaluates file/activity data.",
+          "feedback": "Correct. The API connector supplies visibility into onboarded SaaS files and activity without requiring all packets to traverse SIA."
+        },
+        {
+          "text": "The alert proves the file was blocked before it reached the cloud application.",
+          "feedback": "An API-based alert does not by itself prove pre-upload inline blocking."
+        },
+        {
+          "text": "The SaaS tenant is inspected only when a user connects through an IPsec tunnel.",
+          "feedback": "An IPsec tunnel is not the prerequisite for the SaaS provider API integration."
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "topic": "Custom DLP pattern",
+      "question": "A custom pattern misses large compressed documents even though the regex is correct. Which settings are most likely to explain the gap?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "The SIA tunnel port and the endpoint posture tag.",
+          "feedback": "SIA transport and posture tags do not define the API CASB pattern's file-size boundary."
+        },
+        {
+          "text": "The SD-WAN member priority and the branch underlay bandwidth.",
+          "feedback": "SD-WAN steering is unrelated to the CASB file scanning limits."
+        },
+        {
+          "text": "The FortiGuard pattern category and the web-filter cache.",
+          "feedback": "FortiGuard pattern categories do not override the custom pattern's configured size limits."
+        },
+        {
+          "text": "The custom pattern's compressed and uncompressed file-size limits.",
+          "feedback": "Correct. The custom pattern exposes separate maximum compressed and uncompressed file sizes."
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "topic": "Data policy scope",
+      "question": "A custom regex exists, but no DLP alert appears for a supported SaaS file. Which policy object binds the pattern to app activity?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "The Data Policy that selects the cloud application, file types and file activities.",
+          "feedback": "Correct. Data policies bind patterns to cloud applications, file types, access permissions and activity triggers."
+        },
+        {
+          "text": "The SIA tunnel profile that chooses the user's closest point of presence.",
+          "feedback": "SIA steering selects a traffic path and does not bind API DLP patterns."
+        },
+        {
+          "text": "The endpoint posture tag group that matches device compliance.",
+          "feedback": "Posture tags affect access control and are not the API CASB DLP data policy."
+        },
+        {
+          "text": "The private-access application definition that maps an internal FQDN.",
+          "feedback": "Private-access application definitions describe private resources, not SaaS file DLP."
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "topic": "DLP verification",
+      "question": "The API connector reports healthy, but a file is never scanned. What is the most useful next investigation?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Increase the branch IPsec MTU and change the default route.",
+          "feedback": "Branch MTU is not the primary dependency for a SaaS API file scan."
+        },
+        {
+          "text": "Disable all FortiGuard patterns and rely only on inline IPS.",
+          "feedback": "Inline IPS is a different inspection plane and does not replace API-based CASB data policies."
+        },
+        {
+          "text": "Check account onboarding, API permissions, file-size boundary and data-policy activity scope.",
+          "feedback": "Correct. Connector health alone does not prove account enumeration, file eligibility or policy activity matching."
+        },
+        {
+          "text": "Rebuild the user's FortiClient endpoint certificate.",
+          "feedback": "Endpoint certificates do not normally determine the SaaS tenant API connector's file scope."
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "topic": "Path selection versus shaping",
+      "question": "A session uses the expected WAN member but bulk traffic still starves voice traffic during congestion. Which layer should be examined next?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "The firewall shaping policy, shaper priority and advanced shaping profile.",
+          "feedback": "Correct. Member selection succeeded; QoS classification and egress scheduling are the next independent layer."
+        },
+        {
+          "text": "The SD-WAN health-check target name and probe interval only.",
+          "feedback": "Health checks influence member eligibility, not the shaper's priority or bandwidth guarantee."
+        },
+        {
+          "text": "The IPsec phase-1 peer ID and remote gateway certificate.",
+          "feedback": "VPN authentication is unrelated if the session already uses the expected member."
+        },
+        {
+          "text": "The routing protocol's router ID and route-reflector cluster ID.",
+          "feedback": "Routing identifiers do not determine the configured traffic shaper priority."
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "topic": "Shaping profile bandwidth base",
+      "question": "An advanced shaping profile allocates percentages to traffic groups. Which configured value determines each group's effective speed limit?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "The FortiGate's total system memory and NP session count.",
+          "feedback": "Memory and NP capacity do not set the interface bandwidth base for a shaping profile."
+        },
+        {
+          "text": "The remote site's BGP local preference and AS path length.",
+          "feedback": "BGP path attributes may influence routing but do not define the shaping percentage base."
+        },
+        {
+          "text": "The outgoing bandwidth limit configured on the egress interface.",
+          "feedback": "Correct. Fortinet states each group is shaped to its assigned speed based on the interface's outgoing bandwidth limit."
+        },
+        {
+          "text": "The SD-WAN SLA latency threshold and packet-loss threshold.",
+          "feedback": "SLA thresholds influence path eligibility/steering, not the profile's configured bandwidth base."
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "topic": "Priority under congestion",
+      "question": "Why may a high-priority HTTP/HTTPS flow and a low-priority FTP flow show similar throughput in an idle lab?",
+      "correct_index": 3,
+      "choices": [
+        {
+          "text": "The SD-WAN rule automatically removes the shaping policy when no traffic exists.",
+          "feedback": "The shaping policy is not automatically removed when the interface is idle."
+        },
+        {
+          "text": "The low-priority shaper always receives a higher guarantee than high-priority traffic.",
+          "feedback": "Low priority does not imply a higher guarantee than high priority."
+        },
+        {
+          "text": "The interface ignores traffic shaping until an SLA probe fails.",
+          "feedback": "SLA probe failure is not a prerequisite for traffic shaping."
+        },
+        {
+          "text": "Priority differences are most observable when competing traffic creates congestion.",
+          "feedback": "Correct. Priority determines relative scheduling under contention; an idle link may not expose the difference."
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "topic": "Community RPF probe scenario",
+      "question": "An SLA probe enters an IPsec tunnel and debug flow reports reverse path check fail, drop. What should be checked before tuning QoS?",
+      "correct_index": 1,
+      "choices": [
+        {
+          "text": "The traffic shaping profile's low-priority group percentage.",
+          "feedback": "Shaping cannot repair a probe discarded by reverse-path validation before egress scheduling."
+        },
+        {
+          "text": "The route back to the probe source and the interface on which the packet arrived.",
+          "feedback": "Correct. The Community case traced the drop to a return route pointing through the default WAN rather than the incoming tunnel."
+        },
+        {
+          "text": "The FortiAnalyzer alert handler's Automation Stitch flag.",
+          "feedback": "FAZ alert handling is unrelated to the FortiGate packet's reverse-path decision."
+        },
+        {
+          "text": "The FortiPAM gateway certificate Common Name.",
+          "feedback": "Gateway certificate identity is unrelated to the IPsec probe's RPF check."
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Integrated scenario",
+      "topic": "FortiManager install verification",
+      "question": "A FortiManager 7.6.8 install preview includes udp-not-quic allow, but the target FortiGate rejects the command or verification cannot read it. What is the best next action?",
+      "correct_index": 2,
+      "choices": [
+        {
+          "text": "Apply the same CLI workaround globally to every device in the ADOM.",
+          "feedback": "A global workaround can damage models that support the attribute and exceeds the evidence from the case."
+        },
+        {
+          "text": "Assume the failure is only caused by 2 GB RAM and replace the appliance.",
+          "feedback": "The Community thread includes reports beyond 2 GB models, so memory alone is not a reliable diagnosis."
+        },
+        {
+          "text": "Compare the exact model/firmware capability and scope any workaround to the affected device.",
+          "feedback": "Correct. The thread shows model/firmware capability and verification boundaries; keep any workaround device-scoped."
+        },
+        {
+          "text": "Disable verification for the entire policy package and retry the install.",
+          "feedback": "Disabling verification hides a mismatch instead of resolving whether the target supports the setting."
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Integrated scenario",
+      "topic": "FortiNAC-F SAML evidence",
+      "question": "A SAML ACS POST returns 302, the signature is verified, registration completes and CoA succeeds. Which conclusion is best supported?",
+      "correct_index": 0,
+      "choices": [
+        {
+          "text": "The IdP authentication and network-registration path succeeded; inspect the portal/SP URL if the browser still loops.",
+          "feedback": "Correct. The logged signature, registration and CoA evidence show the flow progressed; the reported redirect loop was tied to the SP URL/portal FQDN mismatch."
+        },
+        {
+          "text": "The SAML signature failed, so the IdP certificate must be replaced immediately.",
+          "feedback": "A verified signature contradicts the claim that signature validation failed."
+        },
+        {
+          "text": "The RADIUS server rejected the user, so the endpoint should remain isolated.",
+          "feedback": "CoA success contradicts a RADIUS rejection as the primary explanation in this evidence set."
+        },
+        {
+          "text": "The FortiNAC-F service never received the SAML response from the browser.",
+          "feedback": "The ACS POST and signature logs prove FortiNAC-F received and processed the response."
+        }
+      ]
+    }
+  ]
+}
