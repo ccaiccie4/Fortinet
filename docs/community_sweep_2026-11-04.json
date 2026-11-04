@@ -125,7 +125,7 @@
         }
       ],
       "selected_scenario": "https://community.fortinet.com/fortinac-f-57/fortinac-f-captive-portal-user-saml-sso-redirect-loop-caused-by-sp-url-portal-fqdn-mismatch-230903",
-      "notes": "The case exposes ACS 302, signature validation, registration completion, CoA success and HA re-test evidence."
+      "notes": "Direct scenario: failure is a generic ACS 302 to the portal start page, with no SAMLUtils processing, no SSO user and no CoA. After aligning SP URL and portal FQDN, the ACS POST is processed, signature validation and registration complete, CoA succeeds and the host moves to the production VLAN; repeat after HA failover."
     },
     {
       "product": "FortiAuthenticator",
