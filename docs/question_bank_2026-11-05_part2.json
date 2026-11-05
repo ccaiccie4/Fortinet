@@ -1,0 +1,631 @@
+{
+  "run_date": "2026-11-05",
+  "part": 2,
+  "questions": [
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "difficulty": "intermediate",
+      "question": "The LDAP connection test succeeds, but Add New does not display 'Loaded from Directory' for a user. What should be checked next?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "Import every LDAP group before importing the user",
+          "feedback": "The recent FortiNAC-F tip states that group import is not required merely to read the user; the user DN must be readable."
+        },
+        {
+          "text": "Change the host's access VLAN to the production VLAN",
+          "feedback": "VLAN placement is downstream of identity lookup and cannot make an LDAP user DN readable."
+        },
+        {
+          "text": "Confirm the exact user ID and read access to that user's DN",
+          "feedback": "Correct. A successful bind does not prove the service account can read the specific user DN or that the entered ID matches."
+        },
+        {
+          "text": "Disable periodic directory synchronization",
+          "feedback": "Synchronization is not the first boundary for an Add New lookup that fails to populate directory fields."
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "difficulty": "advanced",
+      "question": "A user record shows 'Loaded from Directory' and has a role, but the endpoint policy still sees an unknown user. What is the most likely missing relationship?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "The imported user has not been associated with the correct host record",
+          "feedback": "Correct. FortiNAC separates user and host objects; the host must be edited and the user explicitly associated."
+        },
+        {
+          "text": "The LDAP server is not acting as the DHCP relay",
+          "feedback": "LDAP supplies identity data; DHCP relay is not the relationship between a user and a FortiNAC host."
+        },
+        {
+          "text": "The user's directory group was not imported into FortiGate",
+          "feedback": "The tip notes group import is unnecessary for the user lookup; the missing link is usually the host association."
+        },
+        {
+          "text": "The FortiNAC-F switch profile is missing an IGMP querier",
+          "feedback": "IGMP snooping has no role in user-to-host identity association."
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "difficulty": "basic",
+      "question": "Is importing the entire LDAP group hierarchy required to manually read one user's directory record?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Yes; FortiNAC requires a complete group import before user lookup",
+          "feedback": "The Community procedure explicitly says the group does not need to be imported just to read the user."
+        },
+        {
+          "text": "No; FortiNAC must be able to read the user's DN",
+          "feedback": "Correct. The LDAP connection must exist and the user DN must be readable; group import is not the prerequisite for this task."
+        },
+        {
+          "text": "Only when the endpoint uses a static IPv4 address",
+          "feedback": "IP addressing does not determine whether a user DN can be read from LDAP."
+        },
+        {
+          "text": "Only when the user is assigned an administrator profile",
+          "feedback": "The procedure assigns a FortiNAC role after the user is loaded; it does not require an administrator profile for every user."
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiNAC-F",
+      "difficulty": "advanced",
+      "question": "A manually created user ID matches a directory user ID. What can a later directory synchronization do?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "Delete the matching host and all network adapters",
+          "feedback": "The documentation does not say a matching user ID deletes host adapters as part of ordinary synchronization."
+        },
+        {
+          "text": "Convert the directory user into a local-only identity",
+          "feedback": "A matching ID preserves the directory relationship; it does not automatically convert the user to local-only authentication."
+        },
+        {
+          "text": "Remove the user role and clear all group membership",
+          "feedback": "The documented behavior is directory data refresh, not automatic removal of role and group assignments."
+        },
+        {
+          "text": "Overwrite directory-owned user fields with the directory values",
+          "feedback": "Correct. FortiNAC matches by User ID and refreshes fields such as name and email from the directory; manual edits to those fields can be overwritten."
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "difficulty": "advanced",
+      "question": "On a FortiAuthenticator build before 8.0.4, an EAP-TTLS client has no separate OTP prompt and the RADIUS log reports a missing token. What legacy workaround is documented?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "Enter the LDAP password immediately followed by the current OTP",
+          "feedback": "Correct for the documented pre-8.0.4 behavior. The inner credential is submitted in one field because challenge-based EAP-TTLS 2FA is not supported in that release family."
+        },
+        {
+          "text": "Send the OTP as a second RADIUS username attribute",
+          "feedback": "The documented workaround is password-plus-OTP concatenation in the password field, not a second username attribute."
+        },
+        {
+          "text": "Disable the EAP-TTLS TLS tunnel and send PAP in clear text",
+          "feedback": "The TLS tunnel protects the inner authentication. Disabling it would weaken security and does not implement the supported workaround."
+        },
+        {
+          "text": "Move the FortiToken assignment to the FortiGate user object",
+          "feedback": "The token is assigned and validated by FortiAuthenticator in this design; moving it to FortiGate does not fix the missing EAP-TTLS challenge."
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "difficulty": "advanced",
+      "question": "A FortiAuthenticator 8.0.4 deployment is being migrated from the older EAP-TTLS concatenation workaround. What should the engineer do?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "Keep concatenation because EAP-TTLS never supports challenge-based 2FA",
+          "feedback": "That describes the older documentation boundary, but Fortinet's October 2026 update states support is available from 8.0.4."
+        },
+        {
+          "text": "Switch every user to EAP-MSCHAPv2 without testing clients",
+          "feedback": "Changing EAP methods alters the authentication protocol and client compatibility; it is not the documented 8.0.4 EAP-TTLS update."
+        },
+        {
+          "text": "Use the 8.0.4 challenge-based EAP-TTLS behavior and verify the matching policy",
+          "feedback": "Correct. The version update says not to use the legacy concatenation workaround on 8.0.4; validate the new policy flow and supported client versions."
+        },
+        {
+          "text": "Remove the FortiAuthenticator EAP server certificate",
+          "feedback": "The TLS server certificate remains part of EAP-TTLS; removing it would break server authentication rather than enable OTP challenge behavior."
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "difficulty": "intermediate",
+      "question": "FortiAuthenticator is configured as a RADIUS proxy to a remote server. Which statement about its local EAP settings is correct?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Local EAP settings always override the remote server's EAP policy",
+          "feedback": "The documentation says local EAP settings apply to sessions terminated by FortiAuthenticator, not sessions proxied to a remote RADIUS server."
+        },
+        {
+          "text": "Local EAP settings apply only when FortiAuthenticator terminates the EAP session",
+          "feedback": "Correct. If EAP is proxied, troubleshoot the remote RADIUS server's EAP configuration and trust path."
+        },
+        {
+          "text": "Local EAP settings are used only for MAC authentication bypass",
+          "feedback": "MAB is a separate authentication type; EAP termination/proxy behavior determines which EAP settings apply."
+        },
+        {
+          "text": "Local EAP settings are selected by the FortiGate firewall policy ID",
+          "feedback": "The RADIUS client and matching policy determine the authentication flow; the firewall policy ID does not select FAC EAP termination."
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiAuthenticator",
+      "difficulty": "advanced",
+      "question": "LDAP authentication succeeds in a standalone test, but IKEv2 EAP-TTLS still fails. Which evidence is most useful next?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "The user's workstation has a current DHCP lease",
+          "feedback": "A lease proves network addressing, not the EAP inner method or second-factor transaction."
+        },
+        {
+          "text": "The FortiGate's SD-WAN rule order",
+          "feedback": "SD-WAN path selection may affect reachability, but it does not prove the RADIUS policy and EAP exchange completed."
+        },
+        {
+          "text": "The FortiAuthenticator's DNS cache size",
+          "feedback": "DNS may affect server reachability, but the direct LDAP test already narrows the next investigation to the RADIUS/EAP flow."
+        },
+        {
+          "text": "Correlate EAP method, RADIUS policy, realm and token result for the same attempt",
+          "feedback": "Correct. A direct LDAP test does not prove that the supplicant used the expected inner method or submitted the second factor."
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "difficulty": "intermediate",
+      "question": "An SSH-key secret must use certificate-based authentication rather than a raw public key. Which secret field choice is required?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "Public key with certificate",
+          "feedback": "Correct. FortiPAM documents this option for FortiProduct (SSH Key) and Unix Account (SSH Key) templates."
+        },
+        {
+          "text": "Standard public key with a certificate file attached",
+          "feedback": "A standard public key does not select the certificate-based SSH mode; use the dedicated Public key with certificate option."
+        },
+        {
+          "text": "Certificate template with no private-key field",
+          "feedback": "The Certificate template stores a certificate artifact; it is not the SSH-key template's public-key authentication selector."
+        },
+        {
+          "text": "Associated secret with a password-only credential",
+          "feedback": "Associated secrets can supply launch credentials, but they do not change the SSH key's certificate authentication type."
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "difficulty": "advanced",
+      "question": "FortiPAM shows a valid SSH certificate in Secret Details, but the target rejects the launch. What does the display fail to prove?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "That FortiPAM stored any credential data",
+          "feedback": "The validity display proves that certificate metadata is present in the secret; the question is about target-side acceptance."
+        },
+        {
+          "text": "That the certificate has an expiration date",
+          "feedback": "The validity period is displayed, so expiry metadata is visible. The remaining issue is the target's trust and principal policy."
+        },
+        {
+          "text": "That the target SSH daemon trusts the CA and accepts the certificate principal",
+          "feedback": "Correct. FortiPAM's certificate status does not prove the target's trusted-CA configuration or authorized principal mapping."
+        },
+        {
+          "text": "That the secret can be opened in the FortiPAM UI",
+          "feedback": "The UI display proves the object can be viewed; it does not establish the target SSH server's trust decision."
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "difficulty": "basic",
+      "question": "Where are email notifications for expiring SSH certificates configured?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "In the secret's launcher command field",
+          "feedback": "Launcher settings control how the target session starts, not certificate expiry notifications."
+        },
+        {
+          "text": "In the Certificate tab of Email Alert Settings",
+          "feedback": "Correct. FortiPAM documents certificate expiry notifications in the Certificate tab of Email Alert Settings."
+        },
+        {
+          "text": "In the FortiPAM HA heartbeat settings",
+          "feedback": "HA heartbeat monitors appliance availability and is unrelated to certificate expiry email alerts."
+        },
+        {
+          "text": "In the target Unix account's password policy",
+          "feedback": "Password policy controls password generation/rotation; it does not configure certificate email notifications."
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiPAM",
+      "difficulty": "intermediate",
+      "question": "Which distinction matters when storing an SSH certificate in FortiPAM?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "Both secret types are identical and differ only by display name",
+          "feedback": "The templates have different semantics and fields; they should not be treated as interchangeable."
+        },
+        {
+          "text": "The Certificate template is required for every SSH key",
+          "feedback": "The SSH-key template has its own Public key with certificate option; the generic Certificate template stores a certificate artifact."
+        },
+        {
+          "text": "The SSH-key template cannot display certificate validity",
+          "feedback": "FortiPAM documents certificate details and validity status for SSH-key secrets using the certificate public-key option."
+        },
+        {
+          "text": "An SSH-key template uses the certificate as its authentication key; a Certificate template stores a certificate file",
+          "feedback": "Correct. Keep the SSH credential mode separate from a general certificate-file secret that may include private-key/passphrase fields."
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "difficulty": "intermediate",
+      "question": "LDAPS authentication fails only when Check Certificate is enabled. The LDAP server certificate is issued to ldap01.example.com, but the profile uses 10.20.30.40. What is the likely cause?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "FortiSIEM requires the LDAP server to use TCP/1812",
+          "feedback": "TCP/1812 is commonly associated with RADIUS, not the LDAP certificate name check."
+        },
+        {
+          "text": "The Base DN must contain the server's IP address",
+          "feedback": "Base DN identifies directory search scope; it does not resolve the TLS certificate identity mismatch."
+        },
+        {
+          "text": "The certificate CN/SAN does not match the host value in the profile",
+          "feedback": "Correct. FortiSIEM checks the certificate CN or SAN against the LDAP host/IP entered in the profile."
+        },
+        {
+          "text": "The user must be a System Admin before LDAP can bind",
+          "feedback": "Role assignment affects FortiSIEM authorization after authentication, not the TLS name check against the LDAP server."
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "difficulty": "advanced",
+      "question": "A SAML IdP authenticates a user, but FortiSIEM grants the wrong tenant role. What should be inspected?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "Exact user match and SAML organization/role mappings to FortiSIEM values",
+          "feedback": "Correct. FortiSIEM requires exact case-sensitive user matching and explicit mapping of IdP organization/role to FortiSIEM scope."
+        },
+        {
+          "text": "The Collector's syslog listener port",
+          "feedback": "Collector event ingestion does not determine the user's SAML role or organization mapping."
+        },
+        {
+          "text": "The event worker's ClickHouse shard placement",
+          "feedback": "Event storage placement is unrelated to SAML user authorization."
+        },
+        {
+          "text": "The supervisor's log retention policy",
+          "feedback": "Retention controls stored event history, not the identity provider's role and tenant mapping."
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "difficulty": "intermediate",
+      "question": "The external authentication profile's Test function succeeds, but the user still sees the wrong FortiSIEM pages. Which check is next?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Increase the external provider's LDAP connection timeout",
+          "feedback": "The Test already succeeds; the issue may be user binding or authorization rather than provider reachability."
+        },
+        {
+          "text": "Verify the CMDB user is bound to the profile and has the intended role/organization",
+          "feedback": "Correct. Profile connectivity does not prove the local user object maps to the correct role and tenant."
+        },
+        {
+          "text": "Rebuild the FortiSIEM event database",
+          "feedback": "The event database does not assign user roles or organization scope."
+        },
+        {
+          "text": "Change the user password format to include the domain twice",
+          "feedback": "Credential formatting may affect authentication, but the successful test and wrong page visibility point to authorization mapping."
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSIEM",
+      "difficulty": "advanced",
+      "question": "A user has two external authentication profiles. The first server is contacted successfully but rejects the credentials. What happens?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "FortiSIEM continues to the next profile as a credential fallback",
+          "feedback": "The documented behavior does not treat an authentication rejection as a simple fallback to another profile."
+        },
+        {
+          "text": "FortiSIEM disables the local user until an administrator resets it",
+          "feedback": "The profile sequence does not imply an automatic local account disable action."
+        },
+        {
+          "text": "FortiSIEM chooses the profile with the newest certificate",
+          "feedback": "Profile selection follows the configured sequence and connection/authentication result, not certificate age."
+        },
+        {
+          "text": "The authentication process ends after the contacted server rejects the user",
+          "feedback": "Correct. Multiple profiles are contacted sequentially until a connection succeeds; once a server is contacted and authentication fails, the process ends."
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "difficulty": "intermediate",
+      "question": "A threat feed exists in FortiManager but does not appear in FortiSASE after synchronization. What is the first configuration check?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "Whether the feed's URL uses a public IP address",
+          "feedback": "Reachability may matter after the feed is synchronized, but the documented sync prerequisite is profile association."
+        },
+        {
+          "text": "Whether every FortiGate in the ADOM is authorized in FortiAnalyzer",
+          "feedback": "FortiAnalyzer authorization is unrelated to FortiManager-to-FortiSASE feed synchronization."
+        },
+        {
+          "text": "Whether the feed is referenced by a Web Filter or DNS Filter profile",
+          "feedback": "Correct. Only external feeds associated with Web Filter or DNS Filter profiles are synchronized."
+        },
+        {
+          "text": "Whether the feed has been added to a FortiGate static route",
+          "feedback": "A static route does not bind the threat feed to a supported filter profile."
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "difficulty": "advanced",
+      "question": "An external feed requires HTTP Basic Authentication. FortiManager sync succeeds, but FortiSASE cannot download entries. What is the missing step?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Recreate the FortiManager ADOM with a new name",
+          "feedback": "ADOM naming does not transfer the Basic Authentication credentials."
+        },
+        {
+          "text": "Enter the feed username and password directly in FortiSASE",
+          "feedback": "Correct. Fortinet documents that Basic Authentication credentials configured in FortiManager are not synchronized."
+        },
+        {
+          "text": "Add the feed URL to the FortiGate DNS database",
+          "feedback": "DNS resolution does not supply the HTTP authentication credentials required by the feed server."
+        },
+        {
+          "text": "Disable SSL inspection for every SASE policy",
+          "feedback": "SSL inspection is not the documented missing credential step and broad disabling would be an unsafe workaround."
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "difficulty": "intermediate",
+      "question": "A feed card is visible in FortiSASE and contains the expected domains, but a test URL is allowed. What should be checked next?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "The remote category action, profile group and traffic policy binding",
+          "feedback": "Correct. Feed entries are data; enforcement requires the correct Web/DNS profile action and a policy that uses the profile."
+        },
+        {
+          "text": "The FortiManager administrator's password expiration date",
+          "feedback": "The feed has already synchronized and contains entries; the remaining issue is likely profile/action binding."
+        },
+        {
+          "text": "The user's wireless airtime weight",
+          "feedback": "Wireless scheduling has no role in a FortiSASE Web/DNS category decision."
+        },
+        {
+          "text": "The FortiGate's VIP ARP reply setting",
+          "feedback": "VIP ARP ownership is unrelated to SASE filter category enforcement."
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "FortiSASE",
+      "difficulty": "advanced",
+      "question": "Which feed-count statement matches the FortiSASE 26.1.107 documentation?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "A maximum of 21 external-host feeds, with no domain feeds",
+          "feedback": "The documented 21 limit applies to DNS Filter Domains and Web Filter FQDNs; external-host feeds are excluded."
+        },
+        {
+          "text": "A maximum of 20 feeds across all feed types",
+          "feedback": "That is not the stated limit for the DNS-domain/Web-FQDN synchronization workflow in this guide."
+        },
+        {
+          "text": "An unlimited number of feeds if FortiManager is the controller",
+          "feedback": "FortiManager central management does not remove the documented category ID limit."
+        },
+        {
+          "text": "Up to 21 DNS-domain and Web-FQDN feeds; external-host feeds are excluded",
+          "feedback": "Correct. The guide identifies category IDs 201–221 inclusive for the 21-feed limit and excludes external-host feeds from the count."
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "difficulty": "advanced",
+      "question": "Four IPsec overlays share two physical WAN links. The service uses bibandwidth but still evaluates each overlay independently. What setting changes the bandwidth reference to the shared physical link?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Set mode to manual and remove the health check",
+          "feedback": "That changes service eligibility logic and removes SLA input; it does not select underlay bandwidth."
+        },
+        {
+          "text": "Set bandwidth-type underlay in the SD-WAN service",
+          "feedback": "Correct. The default is overlay; underlay mode makes the load-balance service use shared physical underlay bandwidth."
+        },
+        {
+          "text": "Enable packet duplication on every overlay member",
+          "feedback": "Duplication sends copies of traffic; it is not the bandwidth accounting selector."
+        },
+        {
+          "text": "Set the health-check server to the ISP gateway",
+          "feedback": "The probe target affects health measurement, not whether the load-balance hash uses overlay or underlay capacity."
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "difficulty": "intermediate",
+      "question": "Which hash mode uses the member's available bandwidth in both incoming and outgoing directions?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "source-ip-based",
+          "feedback": "Source-IP hashing pins traffic from a source to a member; it does not compare bidirectional available bandwidth."
+        },
+        {
+          "text": "outbandwidth",
+          "feedback": "Outbandwidth selects using available outgoing bandwidth only."
+        },
+        {
+          "text": "bibandwidth",
+          "feedback": "Correct. Bibandwidth evaluates available bandwidth for both incoming and outgoing traffic."
+        },
+        {
+          "text": "round-robin",
+          "feedback": "Round-robin distributes traffic in circular order and does not use available bandwidth as its hash metric."
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "difficulty": "advanced",
+      "question": "A service has load-balance enabled and hash-mode bibandwidth, but the members still show overlay capacity. Which setting is missing?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "bandwidth-type underlay",
+          "feedback": "Correct. The default bandwidth-type is overlay; explicitly set underlay to use shared physical capacity."
+        },
+        {
+          "text": "update-static-route enable",
+          "feedback": "Static-route update controls route installation based on health-check state, not bandwidth accounting type."
+        },
+        {
+          "text": "set priority-members to all members",
+          "feedback": "The priority list determines eligible members; it does not change overlay versus underlay bandwidth measurement."
+        },
+        {
+          "text": "set mode to manual",
+          "feedback": "Manual mode changes SLA selection behavior and is not the underlay bandwidth selector."
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Secure SD-WAN",
+      "difficulty": "intermediate",
+      "question": "After setting bandwidth-type underlay, which command provides the documented service/member evidence?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "diagnose sys sdwan health-check",
+          "feedback": "Health-check output helps establish SLA state but does not show the selected service's bandwidth hash/member result."
+        },
+        {
+          "text": "get router info routing-table all",
+          "feedback": "The routing table shows route selection, not the service's bandwidth-type and per-member bibandwidth evidence."
+        },
+        {
+          "text": "diagnose firewall iprope list",
+          "feedback": "Policy lookup output is not the documented SD-WAN service bandwidth inspection."
+        },
+        {
+          "text": "diagnose sys sdwan service4",
+          "feedback": "Correct. The example uses this command to inspect service mode, member bandwidth values and selected members."
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Secure SD-WAN",
+      "difficulty": "advanced",
+      "question": "Two overlay members share the same best underlay bandwidth value and both appear selected. What should the engineer infer?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "FortiGate is splitting every packet across both tunnels",
+          "feedback": "The output does not establish per-packet striping; load balancing selects eligible members for session distribution."
+        },
+        {
+          "text": "Both members are eligible; tie-break/configuration order can determine preference",
+          "feedback": "Correct. The example notes configuration-order tie-break behavior when values are equal; inspect sessions and service selection rather than assuming packet striping."
+        },
+        {
+          "text": "The SLA health check has been disabled automatically",
+          "feedback": "Equal bandwidth values do not indicate that the health check is disabled."
+        },
+        {
+          "text": "Underlay bandwidth mode is not active on either member",
+          "feedback": "Both selected members can still reflect underlay bandwidth; equal values alone do not mean the setting failed."
+        }
+      ]
+    }
+  ]
+}
