@@ -10,19 +10,19 @@
       "answer": 2,
       "options": [
         {
-          "text": "Import every LDAP group before importing the user",
+          "text": "Import the user's LDAP group before creating the local account",
           "feedback": "The recent FortiNAC-F tip states that group import is not required merely to read the user; the user DN must be readable."
         },
         {
-          "text": "Change the host's access VLAN to the production VLAN",
+          "text": "Change the host's access VLAN to the production network",
           "feedback": "VLAN placement is downstream of identity lookup and cannot make an LDAP user DN readable."
         },
         {
-          "text": "Confirm the exact user ID and read access to that user's DN",
+          "text": "Check user ID and LDAP read permission on the DN",
           "feedback": "Correct. A successful bind does not prove the service account can read the specific user DN or that the entered ID matches."
         },
         {
-          "text": "Disable periodic directory synchronization",
+          "text": "Disable scheduled directory synchronization for that user",
           "feedback": "Synchronization is not the first boundary for an Add New lookup that fails to populate directory fields."
         }
       ]
@@ -35,11 +35,11 @@
       "answer": 0,
       "options": [
         {
-          "text": "The imported user has not been associated with the correct host record",
+          "text": "The imported user is not linked to the correct host record",
           "feedback": "Correct. FortiNAC separates user and host objects; the host must be edited and the user explicitly associated."
         },
         {
-          "text": "The LDAP server is not acting as the DHCP relay",
+          "text": "The LDAP server is not acting as the DHCP relay service",
           "feedback": "LDAP supplies identity data; DHCP relay is not the relationship between a user and a FortiNAC host."
         },
         {
@@ -135,19 +135,19 @@
       "answer": 2,
       "options": [
         {
-          "text": "Keep concatenation because EAP-TTLS never supports challenge-based 2FA",
+          "text": "Keep concatenation because EAP-TTLS still lacks OTP challenges",
           "feedback": "That describes the older documentation boundary, but Fortinet's October 2026 update states support is available from 8.0.4."
         },
         {
-          "text": "Switch every user to EAP-MSCHAPv2 without testing clients",
+          "text": "Move every user to EAP-MSCHAPv2 without testing client support",
           "feedback": "Changing EAP methods alters the authentication protocol and client compatibility; it is not the documented 8.0.4 EAP-TTLS update."
         },
         {
-          "text": "Use the 8.0.4 challenge-based EAP-TTLS behavior and verify the matching policy",
+          "text": "Use 8.0.4 challenge-based EAP-TTLS and verify policy support",
           "feedback": "Correct. The version update says not to use the legacy concatenation workaround on 8.0.4; validate the new policy flow and supported client versions."
         },
         {
-          "text": "Remove the FortiAuthenticator EAP server certificate",
+          "text": "Remove the FortiAuthenticator EAP server certificate from policy",
           "feedback": "The TLS server certificate remains part of EAP-TTLS; removing it would break server authentication rather than enable OTP challenge behavior."
         }
       ]
@@ -185,19 +185,19 @@
       "answer": 3,
       "options": [
         {
-          "text": "The user's workstation has a current DHCP lease",
+          "text": "The workstation's DHCP lease and local DNS resolver settings",
           "feedback": "A lease proves network addressing, not the EAP inner method or second-factor transaction."
         },
         {
-          "text": "The FortiGate's SD-WAN rule order",
+          "text": "The FortiGate SD-WAN rule order for the VPN destination",
           "feedback": "SD-WAN path selection may affect reachability, but it does not prove the RADIUS policy and EAP exchange completed."
         },
         {
-          "text": "The FortiAuthenticator's DNS cache size",
+          "text": "The FortiAuthenticator DNS cache and LDAP lookup timeout",
           "feedback": "DNS may affect server reachability, but the direct LDAP test already narrows the next investigation to the RADIUS/EAP flow."
         },
         {
-          "text": "Correlate EAP method, RADIUS policy, realm and token result for the same attempt",
+          "text": "Correlate EAP method, RADIUS policy, realm and token result",
           "feedback": "Correct. A direct LDAP test does not prove that the supplicant used the expected inner method or submitted the second factor."
         }
       ]
@@ -210,19 +210,19 @@
       "answer": 0,
       "options": [
         {
-          "text": "Public key with certificate",
+          "text": "Select Public key with certificate in the SSH-key secret template",
           "feedback": "Correct. FortiPAM documents this option for FortiProduct (SSH Key) and Unix Account (SSH Key) templates."
         },
         {
-          "text": "Standard public key with a certificate file attached",
+          "text": "Use a standard public key and attach a separate certificate file",
           "feedback": "A standard public key does not select the certificate-based SSH mode; use the dedicated Public key with certificate option."
         },
         {
-          "text": "Certificate template with no private-key field",
+          "text": "Choose a Certificate template without any private-key material",
           "feedback": "The Certificate template stores a certificate artifact; it is not the SSH-key template's public-key authentication selector."
         },
         {
-          "text": "Associated secret with a password-only credential",
+          "text": "Use an associated secret with a password-only SSH credential",
           "feedback": "Associated secrets can supply launch credentials, but they do not change the SSH key's certificate authentication type."
         }
       ]
@@ -235,15 +235,15 @@
       "answer": 2,
       "options": [
         {
-          "text": "That FortiPAM stored any credential data",
+          "text": "That FortiPAM stored a credential for the configured SSH account",
           "feedback": "The validity display proves that certificate metadata is present in the secret; the question is about target-side acceptance."
         },
         {
-          "text": "That the certificate has an expiration date",
+          "text": "That the certificate includes a valid expiration date",
           "feedback": "The validity period is displayed, so expiry metadata is visible. The remaining issue is the target's trust and principal policy."
         },
         {
-          "text": "That the target SSH daemon trusts the CA and accepts the certificate principal",
+          "text": "That the target trusts the CA and accepts the certificate principal",
           "feedback": "Correct. FortiPAM's certificate status does not prove the target's trusted-CA configuration or authorized principal mapping."
         },
         {
@@ -260,7 +260,7 @@
       "answer": 1,
       "options": [
         {
-          "text": "In the secret's launcher command field",
+          "text": "In the secret's launcher command and connection settings",
           "feedback": "Launcher settings control how the target session starts, not certificate expiry notifications."
         },
         {
@@ -268,11 +268,11 @@
           "feedback": "Correct. FortiPAM documents certificate expiry notifications in the Certificate tab of Email Alert Settings."
         },
         {
-          "text": "In the FortiPAM HA heartbeat settings",
+          "text": "In FortiPAM's HA heartbeat and failover configuration",
           "feedback": "HA heartbeat monitors appliance availability and is unrelated to certificate expiry email alerts."
         },
         {
-          "text": "In the target Unix account's password policy",
+          "text": "In the target Unix account's password and login policy",
           "feedback": "Password policy controls password generation/rotation; it does not configure certificate email notifications."
         }
       ]
@@ -285,19 +285,19 @@
       "answer": 3,
       "options": [
         {
-          "text": "Both secret types are identical and differ only by display name",
+          "text": "Both secret types store identical key material; only the label differs",
           "feedback": "The templates have different semantics and fields; they should not be treated as interchangeable."
         },
         {
-          "text": "The Certificate template is required for every SSH key",
+          "text": "The Certificate template is required for all SSH key secrets",
           "feedback": "The SSH-key template has its own Public key with certificate option; the generic Certificate template stores a certificate artifact."
         },
         {
-          "text": "The SSH-key template cannot display certificate validity",
+          "text": "The SSH-key template hides certificate validity from Secret Details",
           "feedback": "FortiPAM documents certificate details and validity status for SSH-key secrets using the certificate public-key option."
         },
         {
-          "text": "An SSH-key template uses the certificate as its authentication key; a Certificate template stores a certificate file",
+          "text": "SSH-key stores a login key; Certificate stores a certificate file",
           "feedback": "Correct. Keep the SSH credential mode separate from a general certificate-file secret that may include private-key/passphrase fields."
         }
       ]
@@ -310,15 +310,15 @@
       "answer": 2,
       "options": [
         {
-          "text": "FortiSIEM requires the LDAP server to use TCP/1812",
+          "text": "FortiSIEM requires LDAP servers to listen on TCP port 1812",
           "feedback": "TCP/1812 is commonly associated with RADIUS, not the LDAP certificate name check."
         },
         {
-          "text": "The Base DN must contain the server's IP address",
+          "text": "The Base DN must include the LDAP server's certificate hostname",
           "feedback": "Base DN identifies directory search scope; it does not resolve the TLS certificate identity mismatch."
         },
         {
-          "text": "The certificate CN/SAN does not match the host value in the profile",
+          "text": "The profile hostname does not match the certificate CN/SAN",
           "feedback": "Correct. FortiSIEM checks the certificate CN or SAN against the LDAP host/IP entered in the profile."
         },
         {
@@ -339,15 +339,15 @@
           "feedback": "Correct. FortiSIEM requires exact case-sensitive user matching and explicit mapping of IdP organization/role to FortiSIEM scope."
         },
         {
-          "text": "The Collector's syslog listener port",
+          "text": "The Collector's syslog listener and event forwarding configuration",
           "feedback": "Collector event ingestion does not determine the user's SAML role or organization mapping."
         },
         {
-          "text": "The event worker's ClickHouse shard placement",
+          "text": "The event worker's ClickHouse shard and storage placement",
           "feedback": "Event storage placement is unrelated to SAML user authorization."
         },
         {
-          "text": "The supervisor's log retention policy",
+          "text": "The Supervisor's log retention and tenant partition settings",
           "feedback": "Retention controls stored event history, not the identity provider's role and tenant mapping."
         }
       ]
@@ -360,19 +360,19 @@
       "answer": 1,
       "options": [
         {
-          "text": "Increase the external provider's LDAP connection timeout",
+          "text": "Increase the provider's LDAP timeout and connection retry interval",
           "feedback": "The Test already succeeds; the issue may be user binding or authorization rather than provider reachability."
         },
         {
-          "text": "Verify the CMDB user is bound to the profile and has the intended role/organization",
+          "text": "Bind the CMDB user to the profile, role and organization",
           "feedback": "Correct. Profile connectivity does not prove the local user object maps to the correct role and tenant."
         },
         {
-          "text": "Rebuild the FortiSIEM event database",
+          "text": "Rebuild the FortiSIEM event database and query cache",
           "feedback": "The event database does not assign user roles or organization scope."
         },
         {
-          "text": "Change the user password format to include the domain twice",
+          "text": "Change the username to include the domain suffix twice",
           "feedback": "Credential formatting may affect authentication, but the successful test and wrong page visibility point to authorization mapping."
         }
       ]
@@ -410,19 +410,19 @@
       "answer": 2,
       "options": [
         {
-          "text": "Whether the feed's URL uses a public IP address",
+          "text": "Check whether the feed URL uses a public address",
           "feedback": "Reachability may matter after the feed is synchronized, but the documented sync prerequisite is profile association."
         },
         {
-          "text": "Whether every FortiGate in the ADOM is authorized in FortiAnalyzer",
+          "text": "Confirm every FortiGate in the ADOM is authorized in FortiAnalyzer",
           "feedback": "FortiAnalyzer authorization is unrelated to FortiManager-to-FortiSASE feed synchronization."
         },
         {
-          "text": "Whether the feed is referenced by a Web Filter or DNS Filter profile",
+          "text": "Confirm a Web Filter or DNS Filter profile references the feed",
           "feedback": "Correct. Only external feeds associated with Web Filter or DNS Filter profiles are synchronized."
         },
         {
-          "text": "Whether the feed has been added to a FortiGate static route",
+          "text": "Check whether the feed URL is present in a static route",
           "feedback": "A static route does not bind the threat feed to a supported filter profile."
         }
       ]
@@ -464,15 +464,15 @@
           "feedback": "Correct. Feed entries are data; enforcement requires the correct Web/DNS profile action and a policy that uses the profile."
         },
         {
-          "text": "The FortiManager administrator's password expiration date",
+          "text": "The FortiManager administrator's password expiry and account status",
           "feedback": "The feed has already synchronized and contains entries; the remaining issue is likely profile/action binding."
         },
         {
-          "text": "The user's wireless airtime weight",
+          "text": "The user's wireless airtime weight and SSID assignment",
           "feedback": "Wireless scheduling has no role in a FortiSASE Web/DNS category decision."
         },
         {
-          "text": "The FortiGate's VIP ARP reply setting",
+          "text": "The FortiGate VIP ARP reply and external interface mapping",
           "feedback": "VIP ARP ownership is unrelated to SASE filter category enforcement."
         }
       ]
