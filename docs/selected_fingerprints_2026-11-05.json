@@ -1,0 +1,209 @@
+{
+  "run_date": "2026-11-05",
+  "inventory_path": "docs/exclusion_inventory_2026-11-05-07-58.json",
+  "inventory_sha": "9198f73d64397e6b1e62c12f84d59627668e9783",
+  "inventory_record_count": 168,
+  "selection_completed_after_inventory_readback": true,
+  "selection_count": 12,
+  "semantic_exclusion_result": "PASS: none of the 12 selected mechanism/workflow fingerprints matches the 168 published lessons in the 2026-10-06 through 2026-11-04 inventory; status-only candidate artifacts from 2026-10-26 and 2026-10-27 were separately checked.",
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Static virtual IPs: DNAT mapping, port forwarding and ARP ownership",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/510402/static-virtual-ips",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/510402/static-virtual-ips"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortigate-static-vip-dnat-extip-mappedip-port-forward-arp-reply",
+      "workflow_transaction_fingerprint": "WAN packet to external VIP -> DNAT extip/port mapping -> firewall policy references VIP -> route to mapped server -> reply path/NAT",
+      "failure_class": "VIP ARP ownership steals traffic, wrong extintf/port mapping, VIP not referenced by policy, or central-NAT configuration location mismatch",
+      "evidence_pattern": "VIP configuration, packet sniffer before/after DNAT, policy hit counter and server-side reply; VIP object existence alone does not prove a matching policy",
+      "remediation_path": "validate extip/extintf/mappedip/portforward and ARP reply, reference VIP in the correct policy, account for central NAT UI location and remove unused VIPs",
+      "question_fingerprint": "vip-config-vs-arp-ownership-vs-policy-match-and-dnat-result",
+      "diagram_topology_layout_fingerprint": "internet-client-to-wan-vip-arp-and-dnat-to-policy-to-private-server"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Normalized interfaces with per-device and per-platform mapping",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/145448/creating-normalized-interfaces",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortimanager/7.4.10/administration-guide/267078/per-device-and-per-platform-dynamic-mapping",
+        "https://docs.fortinet.com/document/fortimanager/7.6.0/administration-guide/80387/configuring-normalized-interface-per-device-mapping-rules"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortimanager-normalized-interface-per-device-per-platform-resolution",
+      "workflow_transaction_fingerprint": "ADOM normalized-interface object -> platform mapping and device/VDOM mapping -> shared policy reference -> install-time resolution -> target CLI interface/zone",
+      "failure_class": "missing/default mapping, wrong device/VDOM binding, or interface-name mismatch at installation",
+      "evidence_pattern": "normalized-interface mapping table plus install preview/generated target interface; policy reference alone does not prove target interface resolved",
+      "remediation_path": "check ADOM, default mapping, model/platform mapping and per-device override; preview install before commit",
+      "question_fingerprint": "per-platform-default-vs-per-device-override-resolution",
+      "diagram_topology_layout_fingerprint": "shared-policy-logical-interface-to-platform-map-and-device-override-to-physical-zone"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiGate onboarding through Security Fabric authorization",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/latest/administration-guide/13897/adding-a-fortigate-using-security-fabric-authorization",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/712303/configuring-fortianalyzer"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortianalyzer-fortigate-security-fabric-authorization-address-port-approval",
+      "workflow_transaction_fingerprint": "FAZ Fabric Authorization address/port -> FortiGate Logging & Analytics connector -> unauthorized state -> administrator credential approval -> authorized Device Manager entry -> separate log transport",
+      "failure_class": "authorization endpoint/port mismatch, connector disabled, credential rejection, or authorization completed without log transport",
+      "evidence_pattern": "FortiGate connector status and FAZ authorized-device state prove trust enrollment; log receipt and Analytics indexing are separate later boundaries",
+      "remediation_path": "verify authorization address/port, connector enablement, reachability, certificate/API settings and approval; then separately test OFTP/log ingestion",
+      "question_fingerprint": "fabric-trust-authorization-vs-log-ingestion-boundary",
+      "diagram_topology_layout_fingerprint": "fortigate-connector-to-faz-authorization-endpoint-to-admin-approval-to-device-manager"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "IGMP snooping, proxy, querier and static multicast membership",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173274/configuring-igmp-snooping-settings",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173274/configuring-igmp-snooping-settings"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortiswitch-vlan-group-port-igmp-report-learning-querier-aging-static-membership",
+      "workflow_transaction_fingerprint": "host IGMP report -> per-VLAN/group snooping entry -> mRouter/querier refresh -> multicast forwarding to listener ports -> aging/leave",
+      "failure_class": "missing querier, stale group entry, wrong mRouter port, unknown-multicast flood policy, or IGMP version mismatch",
+      "evidence_pattern": "learned group/port table, querier state, mRouter role and age timer; VLAN membership alone does not prove listener learning",
+      "remediation_path": "confirm IGMP reports reach switch, enable valid querier when needed, tune aging above query interval, inspect unknown-multicast behavior and IGMP version",
+      "question_fingerprint": "learned-membership-vs-static-group-vs-unknown-multicast-decision",
+      "diagram_topology_layout_fingerprint": "multicast-source-to-vlan-switch-snooping-table-querier-mrouter-to-listener-ports"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Airtime fairness using per-SSID downlink weights",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.4.5/fortiwifi-and-fortiap-configuration-guide/794313/airtime-fairness",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/651750/advanced-ssid-options",
+        "https://docs.fortinet.com/document/fortiap/7.4.5/fortiwifi-and-fortiap-configuration-guide/794313/airtime-fairness"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortiap-ssid-atf-weight-downlink-airtime-scheduler",
+      "workflow_transaction_fingerprint": "SSID/VAP atf-weight assignment -> AP downlink airtime scheduler -> weighted airtime allocation among VAPs -> client throughput outcome",
+      "failure_class": "expecting uplink fairness, applying weight to wrong SSID/radio, or interpreting throughput as a strict byte-rate guarantee",
+      "evidence_pattern": "VAP/profile atf-weight and controlled downlink airtime/throughput comparison; client RSSI or aggregate throughput alone does not prove scheduler weighting",
+      "remediation_path": "enable Advanced Wireless Features, configure intended VAP weight and radio support, compare simultaneous downlink load under controlled RF conditions",
+      "question_fingerprint": "airtime-share-vs-bandwidth-cap-and-uplink-limitation",
+      "diagram_topology_layout_fingerprint": "ethernet-downlink-queues-to-ap-airtime-scheduler-to-weighted-ssid-vaps-to-clients"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Guest self-registration with sponsor approval and expiring accounts",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-control-manager/687558/guest-self-registration",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/828107/add-a-guest-self-registration-profile",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/210953/approve-or-deny-a-request"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortinac-captive-portal-guest-request-sponsor-approval-template-account-duration",
+      "workflow_transaction_fingerprint": "guest isolation redirect -> self-registration request -> sponsor/request-pool approval -> template account creation -> credential delivery -> login -> production access",
+      "failure_class": "request expiry, sponsor profile/email misconfiguration, template/account-duration mismatch, or approval bypass setting",
+      "evidence_pattern": "pending request, sponsor action, guest account/template/expiry and post-login host/VLAN state; approval alone does not prove production access",
+      "remediation_path": "validate sponsor administrator profile and email, portal sponsor routing, GuestSelfRegistration template, account duration and downstream access policy",
+      "question_fingerprint": "approval-transaction-vs-account-creation-vs-network-release",
+      "diagram_topology_layout_fingerprint": "isolated-guest-to-portal-request-to-sponsor-approval-to-template-account-to-production-vlan"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Manual LDAP user import and explicit host association",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/769497/user-accounts",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/769497/user-accounts"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-how-to-import-an-ldap-user-to-fortinac-manually-and-assign-it-to-a-host-230465",
+      "feature_mechanism_fingerprint": "fortinac-f-directory-user-lookup-by-userid-role-assignment-host-association",
+      "workflow_transaction_fingerprint": "LDAP connection and user-DN read -> User Accounts Add New/Loaded from Directory -> assign role -> associate user with host record -> policy identity context",
+      "failure_class": "directory read succeeds but user record/role/host relationship is incomplete or User ID does not match directory identity",
+      "evidence_pattern": "Loaded from Directory, user record fields/role, and host association; successful LDAP bind alone does not prove user is linked to endpoint",
+      "remediation_path": "confirm LDAP user DN readability, import user without requiring group import, assign appropriate role and explicitly associate correct host",
+      "question_fingerprint": "directory-read-vs-user-record-vs-host-association",
+      "diagram_topology_layout_fingerprint": "ldap-directory-to-fortinac-user-record-to-role-to-host-association-to-access-policy"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "EAP-TTLS with FortiToken two-factor password-plus-OTP concatenation",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/125951/extensible-authentication-protocol",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/504431",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/125951/extensible-authentication-protocol"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/resolved-eappassworderror-with-ikev2-eap-ttls-and-fortiauthenticator-2fa-230861",
+      "feature_mechanism_fingerprint": "fortiauthenticator-eap-ttls-pap-2fa-password-otp-concatenation-no-challenge-prompt",
+      "workflow_transaction_fingerprint": "IKEv2 EAP client -> EAP-TTLS TLS tunnel -> inner PAP credential -> LDAP password+OTP validation -> RADIUS accept/reject",
+      "failure_class": "client sends only LDAP password because no separate OTP prompt exists, or EAP method/identity source/realm mismatch",
+      "evidence_pattern": "EAP method and RADIUS policy, FAC authentication test, and Access-Accept/Reject correlated to same attempt; direct LDAP test does not prove OTP submission",
+      "remediation_path": "verify version-specific EAP-TTLS behavior, EAP certificate/policy/realm/token assignment and OTP entry mode; distinguish FortiAuthenticator 8.0.4 behavior change",
+      "question_fingerprint": "challenge-based-2fa-vs-password-otp-concatenation-and-version-boundary",
+      "diagram_topology_layout_fingerprint": "forticlient-ikev2-eap-ttls-tls-inner-pap-fac-ldap-and-fortitoken"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Certificate-based SSH authentication for SSH-key secrets and expiry alerts",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortipam-ssh-secret-public-key-certificate-authentication-validity-expiry-alert",
+      "workflow_transaction_fingerprint": "SSH-key secret template -> select public-key-with-certificate -> store credential/certificate validity -> launcher uses secret -> expiry status/email alert lifecycle",
+      "failure_class": "wrong SSH-key template/type, expired or not-yet-valid certificate, target trust mismatch, or alert configuration missing",
+      "evidence_pattern": "secret public-key type and certificate details/validity status plus launcher result and expiry notification; secret existence does not prove target accepts certificate",
+      "remediation_path": "verify SSH-key template, selected certificate public key, validity window, target-side trust and Certificate email-alert settings",
+      "question_fingerprint": "standard-public-key-vs-certificate-authentication-expiry-control",
+      "diagram_topology_layout_fingerprint": "fortipam-secret-template-to-certificate-bound-key-to-launcher-to-target-ssh-auth-and-expiry-alert"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "External authentication profiles and organization-scoped user authentication",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/344292/external-authentication-settings",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/external-systems-configuration-guide/83340/setting-up-external-authentication",
+        "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/344292/external-authentication-settings"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortisiem-external-auth-profile-ldap-ldaps-radius-organization-role-binding",
+      "workflow_transaction_fingerprint": "external auth profile -> protocol/server/certificate settings -> test credentials -> bind profile to CMDB user and organization -> login -> role/tenant authorization",
+      "failure_class": "profile connection/TLS name validation, incorrect organization binding, or authentication success without correct FortiSIEM role",
+      "evidence_pattern": "profile test and user profile binding followed by login/role/organization visibility; successful LDAP bind does not prove correct FortiSIEM authorization",
+      "remediation_path": "validate protocol, host/port, certificate CN/SAN and Base DN, select correct organization, bind profile to user and verify role",
+      "question_fingerprint": "authentication-profile-connectivity-vs-user-binding-vs-role-scope",
+      "diagram_topology_layout_fingerprint": "ldap-radius-or-okta-provider-to-fortisiem-auth-profile-to-user-organization-to-role"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "External threat feeds synchronized from FortiManager into Web Filter and DNS Filter",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/mature-administration-guide/435183/configuring-external-feeds-with-web-filter-and-dns-filter-profiles",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortisase/latest/mature-administration-guide/853055",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/mature-administration-guide/435183/configuring-external-feeds-with-web-filter-and-dns-filter-profiles"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "fortisase-external-feed-fqdn-domain-host-sync-profile-reference-category-limit-basic-auth-separation",
+      "workflow_transaction_fingerprint": "FortiManager threat feed -> Web/DNS profile reference -> central-management sync -> FortiSASE feed import/refresh -> profile category or traffic policy enforcement",
+      "failure_class": "feed not referenced by supported profile, unsupported category range/limit, credentials not synchronized, or sync/refresh stale",
+      "evidence_pattern": "FortiManager profile reference, FortiSASE feed entry list and central-management sync log; feed card alone does not prove active policy enforcement",
+      "remediation_path": "reference feed from Web/DNS profile before sync, configure HTTP basic-auth credentials directly in FortiSASE, respect 21 DNS/Web category feed limit and verify sync details",
+      "question_fingerprint": "feed-object-exists-vs-profile-reference-vs-fortisase-sync-and-enforcement",
+      "diagram_topology_layout_fingerprint": "external-feed-source-to-fortimanager-web-dns-profile-to-sync-job-to-fortisase-feed-cache-to-policy"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Underlay-bandwidth-aware load balancing across overlay members",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/102595/sd-wan-underlay-bandwidth-steers-traffic",
+      "supporting_docs": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/102595/sd-wan-underlay-bandwidth-steers-traffic"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "sdwan-load-balance-hash-inbandwidth-outbandwidth-bibandwidth-bandwidth-type-underlay",
+      "workflow_transaction_fingerprint": "underlay/overlay members and estimated bandwidth -> load-balance SD-WAN service -> directional bandwidth hash -> eligible member selection -> session forwarding",
+      "failure_class": "service still uses overlay bandwidth by default, missing member estimates, wrong hash direction or ties mistaken for per-packet striping",
+      "evidence_pattern": "diagnose sys sdwan service output with hash mode, bandwidth-type, member available-bandwidth values and selected members; tunnel up alone does not prove capacity-based selection",
+      "remediation_path": "configure member bandwidth estimates, enable service load balancing, choose inbandwidth/outbandwidth/bibandwidth and set bandwidth-type underlay; verify selection with controlled traffic",
+      "question_fingerprint": "underlay-shared-capacity-vs-overlay-capacity-and-directional-hash",
+      "diagram_topology_layout_fingerprint": "two-physical-underlays-to-multiple-ipsec-overlays-to-bandwidth-hash-service-to-selected-overlay"
+    }
+  ]
+}
