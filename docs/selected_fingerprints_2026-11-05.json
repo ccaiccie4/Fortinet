@@ -124,19 +124,19 @@
     },
     {
       "product": "FortiAuthenticator",
-      "lesson_subject": "EAP-TTLS with FortiToken two-factor password-plus-OTP concatenation",
+      "lesson_subject": "EAP-TTLS two-factor authentication: challenge-flow and FortiAuthenticator 8.0.4 compatibility boundary",
       "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/125951/extensible-authentication-protocol",
       "supporting_docs": [
         "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/504431",
         "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/125951/extensible-authentication-protocol"
       ],
       "scenario_community_url": "https://community.fortinet.com/support-forum-92/resolved-eappassworderror-with-ikev2-eap-ttls-and-fortiauthenticator-2fa-230861",
-      "feature_mechanism_fingerprint": "fortiauthenticator-eap-ttls-pap-2fa-password-otp-concatenation-no-challenge-prompt",
-      "workflow_transaction_fingerprint": "IKEv2 EAP client -> EAP-TTLS TLS tunnel -> inner PAP credential -> LDAP password+OTP validation -> RADIUS accept/reject",
-      "failure_class": "client sends only LDAP password because no separate OTP prompt exists, or EAP method/identity source/realm mismatch",
-      "evidence_pattern": "EAP method and RADIUS policy, FAC authentication test, and Access-Accept/Reject correlated to same attempt; direct LDAP test does not prove OTP submission",
-      "remediation_path": "verify version-specific EAP-TTLS behavior, EAP certificate/policy/realm/token assignment and OTP entry mode; distinguish FortiAuthenticator 8.0.4 behavior change",
-      "question_fingerprint": "challenge-based-2fa-vs-password-otp-concatenation-and-version-boundary",
+      "feature_mechanism_fingerprint": "fortiauthenticator-eap-ttls-inner-auth-2fa-challenge-support-version-8-0-4",
+      "workflow_transaction_fingerprint": "IKEv2 EAP client -> EAP-TTLS TLS tunnel -> inner credential -> RADIUS policy/realm -> password+OTP concatenation on legacy builds or challenge-based OTP on 8.0.4+ -> RADIUS result",
+      "failure_class": "version-specific OTP flow mismatch, EAP method/policy/realm mismatch, or TLS certificate trust failure",
+      "evidence_pattern": "correlated FortiAuthenticator RADIUS log and client EAP error plus exact FAC/FortiOS/FortiClient versions; a direct LDAP test does not prove the EAP inner factor flow",
+      "remediation_path": "identify exact build; for pre-8.0.4 use documented concatenation behavior; from 8.0.4 follow challenge-based EAP-TTLS policy behavior; validate client and FortiOS minimum versions",
+      "question_fingerprint": "legacy-password-otp-concatenation-vs-8-0-4-challenge-based-eap-ttls",
       "diagram_topology_layout_fingerprint": "forticlient-ikev2-eap-ttls-tls-inner-pap-fac-ldap-and-fortitoken"
     },
     {
