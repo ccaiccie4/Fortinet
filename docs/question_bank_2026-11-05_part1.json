@@ -1,0 +1,631 @@
+{
+  "run_date": "2026-11-05",
+  "part": 1,
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "difficulty": "intermediate",
+      "question": "A VIP receives TCP/443 on WAN, but the private server sees nothing and the intended policy counter stays at zero. What should be checked first?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "The server's application listener and TLS certificate",
+          "feedback": "Those matter after traffic reaches the server. A zero policy counter indicates the flow has not matched the expected forwarding policy yet."
+        },
+        {
+          "text": "The FortiGate's global DNS cache and resolver order",
+          "feedback": "DNS resolution is not the first boundary when the packet already targets the configured external VIP address."
+        },
+        {
+          "text": "The VIP interface binding and destination object in the policy",
+          "feedback": "Correct. Confirm extintf matches ingress and the firewall policy destination references this VIP; then inspect service and source matching."
+        },
+        {
+          "text": "The FortiGate HA heartbeat priority and session pickup",
+          "feedback": "HA state can affect forwarding, but the first evidence is a zero policy hit on a specific VIP flow."
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "difficulty": "advanced",
+      "question": "Ping to the FortiGate WAN address stops after an unused VIP is created for that same address. ARP reply is enabled. Which behavior best explains this?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "The VIP makes the address local and can capture ICMP for DNAT",
+          "feedback": "Correct. With ARP reply enabled, FortiGate treats the VIP as a local address; an unused VIP can affect routing and may forward traffic to its mapped address."
+        },
+        {
+          "text": "The VIP automatically disables the WAN interface's ICMP responder",
+          "feedback": "The VIP does not globally disable ICMP response. Its local-address and translation behavior is the relevant boundary."
+        },
+        {
+          "text": "The VIP forces all replies through the default route",
+          "feedback": "The documented side effect is the opposite: the configured VIP may prevent routing-table forwarding for that address."
+        },
+        {
+          "text": "The VIP changes the upstream router's ARP cache timer",
+          "feedback": "The FortiGate's ARP reply behavior changes ownership on the local segment; it does not set the upstream router's timer."
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "difficulty": "intermediate",
+      "question": "A public service listens on TCP/8443 internally but must be reached as TCP/443 externally. Which VIP fields express that translation?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "Set extip to the private address and mappedip to the public address",
+          "feedback": "That reverses the address direction. The client targets extip; FortiGate translates it to mappedip."
+        },
+        {
+          "text": "Set service to HTTPS and enable source NAT in the VIP",
+          "feedback": "Service matching belongs to the firewall policy. The VIP needs explicit port-forward mapping for this translation."
+        },
+        {
+          "text": "Set extport to 8443 and mappedport to 443",
+          "feedback": "Those values reverse the required mapping. External 443 must map to internal 8443."
+        },
+        {
+          "text": "Enable port forwarding and map extport 443 to mappedport 8443",
+          "feedback": "Correct. Use the external port clients target and the mapped port the internal service actually listens on."
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "difficulty": "basic",
+      "question": "Central NAT is enabled and an engineer cannot find the normal Virtual IPs page. Where should DNAT VIPs be managed?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Policy & Objects > IP Pools",
+          "feedback": "IP pools are used for source NAT address allocation, not the central DNAT object page."
+        },
+        {
+          "text": "Policy & Objects > DNAT & Virtual IPs",
+          "feedback": "Correct. Fortinet documents that central NAT moves DNAT configuration to this page."
+        },
+        {
+          "text": "Network > Static Routes",
+          "feedback": "Static routes determine next hops after policy processing; they do not define the VIP translation object."
+        },
+        {
+          "text": "Security Fabric > Fabric Connectors",
+          "feedback": "Fabric connectors manage integrations such as logging and analytics, not the DNAT object store."
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiGate",
+      "difficulty": "advanced",
+      "question": "Which observation most directly proves that a VIP translated the destination from the public endpoint to the private server?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "A packet capture shows the destination change across WAN and server VLAN",
+          "feedback": "Correct. Comparing both sides of the FortiGate demonstrates the actual DNAT result, while the policy counter confirms admission separately."
+        },
+        {
+          "text": "The VIP object appears in the configuration backup",
+          "feedback": "Configuration presence proves intent, not that the live packet matched the object or was translated."
+        },
+        {
+          "text": "The server responds to a ping from its own VLAN",
+          "feedback": "That proves local server reachability, not that inbound WAN traffic traversed the VIP and policy."
+        },
+        {
+          "text": "The WAN interface reports carrier and full duplex",
+          "feedback": "Physical link state does not establish VIP matching, DNAT translation or policy admission."
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "difficulty": "intermediate",
+      "question": "One policy package must use logical interface VOICE, mapped to port3 on one FortiGate and a zone on another. Which feature fits?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "A separate policy package for every model",
+          "feedback": "Separate packages can work, but they duplicate policy logic and do not use FortiManager's normalized-interface abstraction."
+        },
+        {
+          "text": "A CLI template that renames the physical interfaces",
+          "feedback": "Renaming interfaces changes the device configuration and is not the normalized-interface mapping mechanism."
+        },
+        {
+          "text": "A normalized interface with per-device and platform mappings",
+          "feedback": "Correct. The policy references one logical name while FortiManager resolves the target interface or zone during installation."
+        },
+        {
+          "text": "An SD-WAN service rule with member priority",
+          "feedback": "SD-WAN services select traffic paths on a FortiGate; they do not resolve FortiManager policy interface names."
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "difficulty": "advanced",
+      "question": "Creating a normalized interface with a physical per-platform interface name fails with 'dynamic-interface default mapping has been used'. What is the documented next step?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Delete the device's default route and retry the install",
+          "feedback": "Routing configuration is unrelated to the normalized-interface default mapping guard."
+        },
+        {
+          "text": "Remove the default per-platform mapping rule from the default normalized interface",
+          "feedback": "Correct. FortiManager documents this prerequisite when a physical interface name is used in a per-platform mapping rule."
+        },
+        {
+          "text": "Convert the policy package to workflow mode and approve it",
+          "feedback": "Workflow mode controls change approvals; it does not resolve the normalized-interface default-map conflict."
+        },
+        {
+          "text": "Create a new ADOM and import all devices again",
+          "feedback": "A new ADOM is unnecessary. Fix the specific default mapping rule in the existing ADOM."
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "difficulty": "intermediate",
+      "question": "A CLI script modifies a policy object's dynamic_mapping data. Where should that script be run?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "On the FortiGate local CLI after policy installation",
+          "feedback": "That bypasses FortiManager's policy database and can create configuration drift."
+        },
+        {
+          "text": "In the Device Database for each managed device",
+          "feedback": "The dynamic mapping belongs to the policy object; the guide distinguishes policy-package execution from Device Database execution."
+        },
+        {
+          "text": "On the FortiAnalyzer supervisor through JSON API",
+          "feedback": "FortiAnalyzer is not the policy-object execution target for FortiManager dynamic mappings."
+        },
+        {
+          "text": "Against the policy package in FortiManager",
+          "feedback": "Correct. The dynamic mapping CLI script must run on a policy package rather than the Device Database."
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiManager",
+      "difficulty": "advanced",
+      "question": "A normalized interface has a correct platform mapping, but one FortiGate still installs the wrong zone. What is the most likely cause?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "A per-device mapping overrides the platform default for that device",
+          "feedback": "Correct. Inspect the device/VDOM-specific mapping before changing the platform-wide rule."
+        },
+        {
+          "text": "The ADOM database always prefers the first physical port",
+          "feedback": "FortiManager does not use a universal first-port rule; it resolves configured mapping objects."
+        },
+        {
+          "text": "The FortiGate policy service rewrites interface names after install",
+          "feedback": "Service objects do not rewrite interface names. The generated policy should reflect the mapping selected by FortiManager."
+        },
+        {
+          "text": "The firewall session table has cached an earlier zone",
+          "feedback": "Session state cannot explain an incorrect interface name in the installed policy configuration."
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "difficulty": "intermediate",
+      "question": "The FortiGate Logging & Analytics connector shows Unauthorized even though the FortiAnalyzer IP is reachable. What is the next correct action?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "Rebuild the FortiAnalyzer ADOM and restart Analytics",
+          "feedback": "ADOM and Analytics state are downstream of Fabric authorization; rebuilding them will not approve the FortiGate."
+        },
+        {
+          "text": "Enable every log type on the FortiGate",
+          "feedback": "Log-type selection controls data upload after authorization. It does not complete the trust-enrollment step."
+        },
+        {
+          "text": "Verify the Fabric Authorization address/port, then authorize and approve",
+          "feedback": "Correct. Configure the endpoint on FortiAnalyzer, then use the FortiGate connector's Authorize flow and approve with administrator credentials."
+        },
+        {
+          "text": "Change the FortiGate interface MTU to 1500",
+          "feedback": "MTU may affect transport, but the explicit Unauthorized state points to the authorization transaction."
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "difficulty": "advanced",
+      "question": "A FortiGate is authorized in Device Manager but its logs are absent. Which boundary should be tested next?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "Repeat the Fabric authorization approval until logs appear",
+          "feedback": "The device is already authorized. Repeating approval will not repair the separate log-transport or ingestion path."
+        },
+        {
+          "text": "Log upload settings, OFTP reachability and device/ADOM log state",
+          "feedback": "Correct. Authorization proves trust enrollment; log delivery, reception and Analytics indexing must be verified independently."
+        },
+        {
+          "text": "The FortiGate's administrator password complexity",
+          "feedback": "The administrator credential was sufficient to authorize the device; password complexity is not the log-ingestion path."
+        },
+        {
+          "text": "The Security Fabric topology display refresh interval",
+          "feedback": "Topology refresh affects display, not whether the device uploads and FortiAnalyzer indexes logs."
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "difficulty": "basic",
+      "question": "What does a FortiGate appearing as an authorized device in FortiAnalyzer Device Manager prove?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "All configured log types have been inserted into Analytics",
+          "feedback": "Authorization does not prove log receipt or database insertion; inspect the log pipeline separately."
+        },
+        {
+          "text": "Every FortiGate policy is synchronized with FortiAnalyzer",
+          "feedback": "FortiAnalyzer authorization is not policy-package installation or configuration synchronization."
+        },
+        {
+          "text": "The FortiGate has a working default route to the Internet",
+          "feedback": "The authorization relationship proves neither general Internet routing nor application reachability."
+        },
+        {
+          "text": "The Fabric trust-enrollment step completed successfully",
+          "feedback": "Correct. It establishes the authorized-device relationship, not the later log transport and query path."
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiAnalyzer",
+      "difficulty": "advanced",
+      "question": "The authorization request never appears in FortiAnalyzer, while the FortiGate connector is enabled. Which check has the highest value?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "Confirm the configured authorization address and port are reachable from the FortiGate",
+          "feedback": "Correct. A wrong endpoint or port can prevent the request from reaching the authorization service before administrator approval is possible."
+        },
+        {
+          "text": "Increase the Analytics database retention period",
+          "feedback": "Retention controls stored data age, not the arrival of an authorization request."
+        },
+        {
+          "text": "Create a report dataset for the FortiGate serial number",
+          "feedback": "Datasets query logs and cannot authorize a device that has not completed the connector transaction."
+        },
+        {
+          "text": "Change the FortiGate hostname to match its ADOM name",
+          "feedback": "A hostname convention may help administration, but the authorization endpoint and connector path are the first boundary."
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "difficulty": "intermediate",
+      "question": "A receiver sends IGMPv3 reports, but the FortiSwitch querier is configured for IGMPv2 and the group is not learned. What is the likely issue?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "The multicast source must use a public IP address",
+          "feedback": "The source address class is not the key issue; the snooping process must understand the host's IGMP report version."
+        },
+        {
+          "text": "The querier/report version mismatch prevents membership learning",
+          "feedback": "Correct. Match the configured querier version to the host reports before changing VLAN membership or flood behavior."
+        },
+        {
+          "text": "The switch requires a static route to every multicast receiver",
+          "feedback": "IGMP snooping is a Layer-2 membership-learning function and does not require a unicast static route per receiver."
+        },
+        {
+          "text": "The receiver must send a DHCP renewal before joining multicast",
+          "feedback": "DHCP state is separate from IGMP membership reporting; a DHCP renewal does not create the group entry."
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "difficulty": "advanced",
+      "question": "Unknown multicast flooding is disabled, no group entry exists, and no mRouter port is learned. What happens to an unregistered multicast stream?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "It is flooded to all access ports by default",
+          "feedback": "That describes the enabled flood-unknown-multicast behavior, not the documented default."
+        },
+        {
+          "text": "It is converted into broadcast traffic by the querier",
+          "feedback": "The querier sends membership queries; it does not convert unknown multicast into broadcast."
+        },
+        {
+          "text": "It is not forwarded to ordinary listener ports",
+          "feedback": "Correct. With unknown-multicast flooding disabled, unregistered multicast is forwarded only to mRouter ports; with none known, it can be discarded."
+        },
+        {
+          "text": "It is routed to the FortiGate management interface",
+          "feedback": "The snooping decision is per VLAN and does not send unknown streams to a management interface by default."
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "difficulty": "intermediate",
+      "question": "Why must the IGMP snooping aging-time be greater than the query-interval?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "To prevent a learned listener entry expiring before a query refresh arrives",
+          "feedback": "Correct. Membership state must remain alive long enough for the next expected query/report cycle."
+        },
+        {
+          "text": "To ensure multicast packets have a lower TTL than unicast packets",
+          "feedback": "TTL is a packet forwarding field and is unrelated to the snooping table aging timer."
+        },
+        {
+          "text": "To force the FortiGate to become the only querier",
+          "feedback": "The timer relationship does not elect a specific querier; it preserves membership between query cycles."
+        },
+        {
+          "text": "To make unknown multicast flood only during the aging window",
+          "feedback": "Unknown-multicast flooding is a separate forwarding policy and is not controlled by the age/query relationship."
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiSwitch",
+      "difficulty": "advanced",
+      "question": "Which command provides direct evidence that the switch learned a multicast group and listener ports?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "get switch trunk",
+          "feedback": "This shows trunk state, not the per-VLAN IGMP membership table."
+        },
+        {
+          "text": "diagnose switch-controller switch-info",
+          "feedback": "General switch-controller information does not replace the snooping group table."
+        },
+        {
+          "text": "show system interface",
+          "feedback": "Interface configuration shows VLAN and addressing, not dynamically learned IGMP listeners."
+        },
+        {
+          "text": "get switch igmp-snooping group",
+          "feedback": "Correct. The group table shows learned multicast membership and related port state; it does not prove the source is transmitting the expected group."
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "difficulty": "intermediate",
+      "question": "A scanner has poor uplink throughput after airtime fairness is enabled. Which statement best explains why ATF may not help?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "ATF applies only to 6 GHz radios and not to 2.4 or 5 GHz",
+          "feedback": "That is incorrect. Fortinet documents 2.4 GHz and 5 GHz support for this feature."
+        },
+        {
+          "text": "ATF schedules AP-to-client downlink data, not client-to-AP uplink",
+          "feedback": "Correct. The AP controls downlink airtime; uplink-heavy traffic requires a different RF or traffic-control approach."
+        },
+        {
+          "text": "ATF is limited to WPA3 Enterprise and excludes PSK networks",
+          "feedback": "ATF is not tied to authentication type; the guide lists Open, PSK and Enterprise use cases."
+        },
+        {
+          "text": "ATF only controls beacon and management frame airtime",
+          "feedback": "The feature applies to data and not control/management frames, so this reverses the documented scope."
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "difficulty": "basic",
+      "question": "Two SSIDs have airtime weights 80 and 20. What should an engineer expect under comparable simultaneous downlink demand?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "The first SSID receives four times the guaranteed Mbps rate",
+          "feedback": "ATF allocates airtime share, not a fixed Mbps reservation; RF rates and retries affect throughput."
+        },
+        {
+          "text": "The first SSID can transmit only when the second is idle",
+          "feedback": "The weights do not create strict time-exclusive scheduling; they establish relative airtime allocation under demand."
+        },
+        {
+          "text": "The first SSID receives roughly four times the scheduled data airtime",
+          "feedback": "Correct. The 80/20 example is a relative airtime weight, not a byte-rate or per-client guarantee."
+        },
+        {
+          "text": "The second SSID is blocked whenever the first SSID has traffic",
+          "feedback": "A 20-percent weight does not disable the lower-weight VAP; it still receives its configured share."
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "difficulty": "advanced",
+      "question": "Which AP-side command most directly shows configured and applied airtime fairness weights?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "cw_diag -c atf",
+          "feedback": "Correct. The output reports radio ATF state and configured/applied weights for each WLAN."
+        },
+        {
+          "text": "cw_diag -c station",
+          "feedback": "Station diagnostics can show client state, but this is not the documented ATF weight verification command."
+        },
+        {
+          "text": "diagnose wireless-controller wlac -c vap",
+          "feedback": "This can expose controller/VAP information, but the guide identifies cw_diag -c atf for ATF weights."
+        },
+        {
+          "text": "get wireless-controller status",
+          "feedback": "General controller status does not directly show the applied per-VAP airtime weights."
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiAP/Wireless",
+      "difficulty": "intermediate",
+      "question": "ATF is enabled on a radio, but the profile uses vap-all disable and omits the target SSID from the vaps list. What is the likely result?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "The SSID inherits the default 80-percent weight",
+          "feedback": "The default weight does not add an omitted VAP to a radio whose VAP list is explicitly restricted."
+        },
+        {
+          "text": "The AP automatically moves the SSID to another radio",
+          "feedback": "The profile does not promise automatic reassignment of an omitted VAP to another radio."
+        },
+        {
+          "text": "The controller disables all client authentication",
+          "feedback": "VAP selection and ATF membership do not disable the SSID's authentication configuration."
+        },
+        {
+          "text": "The omitted SSID is not part of that radio's ATF VAP set",
+          "feedback": "Correct. With vap-all disabled, the profile must explicitly include the VAPs to be scheduled by that radio."
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "difficulty": "intermediate",
+      "question": "A guest sees the waiting page after requesting access, but the request expires before approval. What is the first timing check?",
+      "answer": 1,
+      "options": [
+        {
+          "text": "The guest template's account duration",
+          "feedback": "Account duration controls an approved account's lifetime, not the pending request timeout."
+        },
+        {
+          "text": "The portal's pending-request timeout, defaulting to 20 minutes",
+          "feedback": "Correct. FortiNAC documents a default request expiry of 20 minutes when a sponsor/request pool does not respond."
+        },
+        {
+          "text": "The switch's MAC address aging timer",
+          "feedback": "Switch MAC aging can affect endpoint location, but it does not control the FortiNAC portal request expiry."
+        },
+        {
+          "text": "The guest's DHCP lease renewal interval",
+          "feedback": "DHCP lease timing is independent of the sponsor request state machine."
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "difficulty": "intermediate",
+      "question": "A sponsor says no registration email arrived. Which prerequisite should be verified before changing VLAN enforcement?",
+      "answer": 0,
+      "options": [
+        {
+          "text": "The sponsor is an administrator with the guest self-registration profile and a valid email",
+          "feedback": "Correct. The sponsor needs a FortiNAC administrator identity/profile and email for the request notification path."
+        },
+        {
+          "text": "The guest endpoint has a static IP address",
+          "feedback": "A static address is not required for the sponsor email transaction and will not fix an invalid sponsor profile."
+        },
+        {
+          "text": "The guest template uses a permanent account duration",
+          "feedback": "Account duration affects the created account after approval; it does not determine whether the sponsor receives the request."
+        },
+        {
+          "text": "The production VLAN has a DHCP relay helper",
+          "feedback": "That is a downstream network service dependency, not a prerequisite for sponsor notification."
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "difficulty": "advanced",
+      "question": "The sponsor approves a guest request and credentials are delivered, but the endpoint remains isolated. Which boundary is next?",
+      "answer": 2,
+      "options": [
+        {
+          "text": "Recreate the sponsor's administrator account",
+          "feedback": "The sponsor already approved the request; account recreation is not the first post-approval check."
+        },
+        {
+          "text": "Change the LDAP bind account password",
+          "feedback": "The guest account may be locally created from a template; a directory bind change does not explain a post-login release failure."
+        },
+        {
+          "text": "Verify guest account creation, guest login and switch/AP reconfiguration",
+          "feedback": "Correct. Approval, account creation, credential delivery, login and network release are distinct transitions."
+        },
+        {
+          "text": "Increase the pending-request timeout to one hour",
+          "feedback": "The request is already approved; changing the pending timeout does not repair the network release path."
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC",
+      "difficulty": "basic",
+      "question": "Where is the expiry duration for a self-registered guest account defined?",
+      "answer": 3,
+      "options": [
+        {
+          "text": "In the sponsor administrator's email profile",
+          "feedback": "Email profile controls notification delivery, not the guest account lifetime."
+        },
+        {
+          "text": "In the switch port's authentication timer",
+          "feedback": "Port authentication timers can trigger reauthentication but do not define the guest account expiry date."
+        },
+        {
+          "text": "In the captive portal's pending-request timeout",
+          "feedback": "That timeout expires an unanswered request; it is not the account duration after approval."
+        },
+        {
+          "text": "In the self-registered guest template's Account Duration",
+          "feedback": "Correct. The template's account duration determines when the created guest account expires."
+        }
+      ]
+    }
+  ]
+}
