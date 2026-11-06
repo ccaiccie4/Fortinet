@@ -236,8 +236,8 @@
           "correct": false
         },
         {
-          "text": "The administrator profile lacks the IPS Templates permission.",
-          "feedback": "FortiManager exposes the menu to an IPS-restricted administrator when the relevant permission is granted.",
+          "text": "The administrator profile lacks the IPS Templates menu access.",
+          "feedback": "FortiManager exposes the IPS Templates menu to a full administrator or a restricted IPS administrator profile; check the profile's feature access.",
           "correct": true
         }
       ]
@@ -352,8 +352,8 @@
           "correct": false
         },
         {
-          "text": "Authorize EMS, create connector, enable playbook, then add source.",
-          "feedback": "The documented pipeline needs an authorized EMS device, connector, sequence playbook, and enabled EMS data source.",
+          "text": "Create connector, enable playbook, add source, authorize EMS.",
+          "feedback": "The connector creates the sequence playbook; enable it, add the connector as an Asset Identity source, and authorize EMS in Device Manager.",
           "correct": true
         }
       ]
@@ -362,12 +362,12 @@
       "id": 13,
       "product": "FortiSwitch",
       "topic": "Flow export",
-      "prompt": "What is the documented default packet sample rate for FortiSwitch flow export?",
+      "prompt": "For perimeter or device-ingress sampling, what is the default ratio?",
       "correctIndex": 0,
       "options": [
         {
-          "text": "The default sample rate is one packet in 512.",
-          "feedback": "FortiSwitch flow export uses a default rate of one sampled packet per 512 packets.",
+          "text": "The default ratio is one sampled packet per 512 packets.",
+          "feedback": "For perimeter/device-ingress mode, FortiSwitch defaults to one out of 512 packets; local port sampling instead uses packets per second.",
           "correct": true
         },
         {
