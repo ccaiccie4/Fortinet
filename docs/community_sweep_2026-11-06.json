@@ -1,284 +1,83 @@
 {
-  "schema_version": "2.0",
-  "generated_at_local": "2026-11-06T08:01:31-08:00",
-  "window": {
-    "start": "2026-10-07",
-    "end": "2026-11-06",
-    "timezone": "America/Los_Angeles"
-  },
-  "search_method": "Broad product-area searches of Fortinet Community, Fortinet KB/TAC/support discussions and recent technical/troubleshooting tips. Community material is used only as scenario evidence, never as the primary feature source. Dates and scope are recorded; out-of-window and mismatched candidates are not promoted.",
-  "products": [
+  "schema_version": "1.0",
+  "run_date": "2026-11-06",
+  "window_start": "2026-10-07",
+  "window_end": "2026-11-06",
+  "search_scope": "Fortinet Community product areas, technical tips, troubleshooting tips, KB/TAC/support results; Community material is scenario-only and never used as a primary lesson source.",
+  "searches": [
     {
       "product": "FortiGate",
-      "queries": [
-        "FortiGate 3G4G WWAN IPv6 HA out-of-sync",
-        "FortiGate DNS over TLS proxy-mode and flow-mode inspection",
-        "FortiOS 7.6.8 IPSEngine conserve mode"
-      ],
-      "recent_findings": [
-        {
-          "title": "FortiGate 3G4G models show out of sync warning in HA due to different WWAN IPv6 addresses",
-          "url": "https://community.fortinet.com/fortigate-3/fortigate-3g4g-models-show-out-of-sync-warning-in-ha-due-to-different-wwan-ipv6-addresses-230843",
-          "date": "2026-10-26",
-          "used_as_scenario": true
-        },
-        {
-          "title": "DNS over TLS broken in proxy mode / DNS filter decoder port 853",
-          "url": "https://community.fortinet.com/fortigate-3",
-          "date": "2026-10-22",
-          "used_as_scenario": false,
-          "reason": "DoT inspection was rejected as the FortiGate lesson because the selected FortiSwitch lesson already teaches DoT transport; avoiding a same-report mechanism collision."
-        },
-        {
-          "title": "FortiGate enters conserve mode after upgrading to FortiOS 7.6.8 (IPSEngine 7.01200)",
-          "url": "https://community.fortinet.com/",
-          "date": "2026-11-06",
-          "used_as_scenario": false,
-          "reason": "Recent but unrelated to the selected HA checksum lesson."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortigate-3 FortiGate technical tip troubleshooting October 2026; HA session pickup failover",
+      "status": "No recent directly matched session-pickup/FGCP failover scenario verified."
     },
     {
       "product": "FortiManager",
-      "queries": [
-        "FortiManager ADOM DB integrity errors 7.6.7 SQLite WAL corruption",
-        "FortiManager 7.6.10 recovery command",
-        "FortiManager recent troubleshooting tips"
-      ],
-      "recent_findings": [
-        {
-          "title": "FortiManager ADOM DB integrity errors after upgrade to 7.6.x",
-          "url": "https://community.fortinet.com/fortimanager-27/fortimanager-adom-db-integrity-errors-after-upgrade-to-7-6-x-229968",
-          "date": "Updated 2026-11-03",
-          "used_as_scenario": true,
-          "notes": "Community page identifies SQLite 3.50.4 WAL corruption in 7.6.7 and reports a recovery command in 7.6.10. A search-index snippet showed a conflicting 7.6.9 reference; the current article body says 7.6.10. Verify installed build and official CLI availability before executing."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortimanager-27 FortiManager technical tip troubleshooting October 2026; IPS template assignment",
+      "status": "No recent directly matched IPS-template assignment scenario verified."
     },
     {
       "product": "FortiAnalyzer",
-      "queries": [
-        "FortiAnalyzer Node2Shell event handler report 2026",
-        "FortiAnalyzer FortiMQ connector automated blocking",
-        "FortiAnalyzer recent hcache and log troubleshooting"
-      ],
-      "recent_findings": [
-        {
-          "title": "Using FortiAnalyzer to detect activities related to Node2Shell RCE | CVE-2026-111497",
-          "url": "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116",
-          "date": "2026-11-05",
-          "used_as_scenario": true,
-          "notes": "Imports an ADOM-appropriate event/alert handler and report. It raises detection/alerts; it does not automatically block indicators."
-        },
-        {
-          "title": "Using FortiAnalyzer to detect PHP2Shell RCE vulnerabilities",
-          "url": "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-php2shell-rce-vulnerabilities-230874",
-          "date": "Last week",
-          "used_as_scenario": false,
-          "reason": "Additional current detection template, but Node2Shell chosen as the concrete example."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortianalyzer-6 FortiAnalyzer technical tip troubleshooting October 2026; Asset Identity Center",
+      "status": "No recent directly matched Asset Identity Center source-selection scenario verified."
     },
     {
       "product": "FortiSwitch",
-      "queries": [
-        "FortiSwitch 8.0 DNS over TLS CA validation",
-        "FortiSwitch SCP backup after 7.6.7 upgrade",
-        "FortiSwitch current technical tips"
-      ],
-      "recent_findings": [
-        {
-          "title": "SCP Not Working After Upgrade / Error 501",
-          "url": "https://community.fortinet.com/fortiswitch-36",
-          "date": "2026-11-06 search sweep",
-          "used_as_scenario": false,
-          "reason": "Candidate protocol-removal scenario was not independently resolved to a verified article body and current official release-note page; selected documented 8.0.0 DoT feature instead."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortiswitch-36 FortiSwitch technical tip troubleshooting October 2026; NetFlow IPFIX export",
+      "status": "No recent directly matched flow-export/collector scenario verified."
     },
     {
       "product": "FortiAP/Wireless",
-      "queries": [
-        "FortiAP Wi-Fi 7 MLO K-series",
-        "FortiAP RADSec certificate validation FortiEdge Cloud",
-        "FAP-231G high client count performance"
-      ],
-      "recent_findings": [
-        {
-          "title": "FortiEdge Cloud RADSec certificate upload/validation issue",
-          "url": "https://community.fortinet.com/fortiedgecloud",
-          "date": "2026-11-06",
-          "used_as_scenario": false,
-          "reason": "Different RADSec certificate mechanism; not a scenario for MLO."
-        },
-        {
-          "title": "FAP-231G performance issues with 30+ clients",
-          "url": "https://community.fortinet.com/fortiap-5",
-          "date": "October 2026 search sweep",
-          "used_as_scenario": false,
-          "reason": "Capacity/performance scenario does not expose MLO-specific behavior."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortiap-5 FortiAP technical tip troubleshooting October 2026; RADIUS dynamic VLAN pooling",
+      "status": "No recent directly matched dynamic-VLAN precedence scenario verified."
     },
     {
       "product": "FortiNAC",
-      "queries": [
-        "FortiNAC PEAP MSCHAPv2 Windows KB5127648",
-        "FortiNAC local RADIUS EAP troubleshooting",
-        "FortiNAC recent technical tips"
-      ],
-      "recent_findings": [
-        {
-          "title": "Troubleshooting Tip: RADIUS (802.1X PEAP) authentication failures on Windows hosts",
-          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-radius-802-1x-peap-authentication-failures-on-windows-hosts-230556",
-          "date": "Published 2026-10-14; updated within 30-day window",
-          "used_as_scenario": true,
-          "notes": "KB5127648 changes cached NTLMv1 SSO behavior; Event ID 12014; manual credentials and EAP-TLS are unaffected."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortinac-28 FortiNAC technical tip troubleshooting October 2026; agent server discovery DNS SRV",
+      "status": "No recent directly matched agent server discovery scenario verified."
     },
     {
       "product": "FortiNAC-F",
-      "queries": [
-        "FortiNAC-F Intune poll Vendor OUI invalid MAC",
-        "FortiNAC-F Microsoft NAC-API on-demand registration",
-        "FortiNAC-F recent MDM tips"
-      ],
-      "recent_findings": [
-        {
-          "title": "The Intune poll does not register all of the devices",
-          "url": "https://community.fortinet.com/fortinac-f-57/the-intune-poll-does-not-register-all-of-the-devices-230904",
-          "date": "Last week",
-          "used_as_scenario": true,
-          "notes": "Community category is FortiNAC-F but the article Scope field says FortiNAC; the MDM poll/OUI behavior is shared and this scope mismatch is disclosed."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortinac-f-57 FortiNAC-F technical tip troubleshooting October 2026; SNMPv3 Engine ID cache",
+      "status": "No recent directly matched SNMPv3 Engine ID cache scenario verified. Recent Winbind/DNS tips were inspected and rejected as a lesson scenario because the Winbind domain-join mechanism was already taught on 2026-10-25 and is unrelated to this lesson."
     },
     {
       "product": "FortiAuthenticator",
-      "queries": [
-        "FortiAuthenticator 8.0.2 HA heartbeat interface management interface",
-        "FortiAuthenticator recent LDAP/MAU technical tips",
-        "FortiAuthenticator EAP and RADIUS issues"
-      ],
-      "recent_findings": [
-        {
-          "title": "FortiAuthenticator remote user sync rules - LDAP",
-          "url": "https://community.fortinet.com/fortiauthenticator-8",
-          "date": "2026-10-18/19 search sweep",
-          "used_as_scenario": false,
-          "reason": "LDAP notification issue is unrelated to selected HA interface separation."
-        },
-        {
-          "title": "Monthly Active Users enforcement",
-          "url": "https://community.fortinet.com/fortiauthenticator-8",
-          "date": "Q3 2026",
-          "used_as_scenario": false,
-          "reason": "Outside the rolling 30-day window and unrelated to HA interface separation."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortiauthenticator-8 FortiAuthenticator technical tip troubleshooting October 2026; SmartConnect EAP-TLS MAC Device CN",
+      "status": "No recent directly matched SmartConnect EAP-TLS endpoint-binding scenario verified."
     },
     {
       "product": "FortiPAM",
-      "queries": [
-        "FortiPAM 1.9.0 RADIUS Message-Authenticator",
-        "FortiPAM recent passkey and authentication issues",
-        "FortiPAM technical tip secret access"
-      ],
-      "recent_findings": [
-        {
-          "title": "Recent passkey/AD password change and push-notification discussions",
-          "url": "https://community.fortinet.com/fortipam-52",
-          "date": "October/November 2026 search sweep",
-          "used_as_scenario": false,
-          "reason": "No directly matched recent scenario for RADIUS Message-Authenticator was verified."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortipam-52 FortiPAM technical tip troubleshooting October 2026; Access Authentication reauthentication",
+      "status": "No recent directly matched secret Access Authentication scenario verified."
     },
     {
       "product": "FortiSIEM",
-      "queries": [
-        "FortiSIEM Collector HA VRRP load balancer",
-        "FortiSIEM recent Supervisor database replica stale CMDB",
-        "FortiSIEM Collector failure troubleshooting"
-      ],
-      "recent_findings": [
-        {
-          "title": "FortiSIEM HA Supervisor node shows outdated CMDB because database replica is not streaming",
-          "url": "https://community.fortinet.com/fortisiem-34",
-          "date": "2026-11-06",
-          "used_as_scenario": false,
-          "reason": "Supervisor PostgreSQL replica failure is a different HA tier from the selected Collector VIP/job redistribution lesson."
-        }
-      ]
+      "query": "site:community.fortinet.com FortiSIEM technical tip troubleshooting October 2026; Manager registration incident forwarding",
+      "status": "No recent directly matched FortiSIEM Manager registration or raw-event retrieval scenario verified."
     },
     {
       "product": "FortiSASE",
-      "queries": [
-        "FortiSASE simplified pre-logon machine certificate PKI",
-        "FortiSASE 25.4.b pre-logon tunnel direct PoP",
-        "FortiSASE current endpoint tunnel support threads"
-      ],
-      "recent_findings": [
-        {
-          "title": "Can't get the PKI based pre-logon working from FortiSASE",
-          "url": "https://community.fortinet.com/support-forum-92/can-t-get-the-pki-based-pre-logon-working-from-fortisase-230695",
-          "date": "2026-10-20",
-          "used_as_scenario": true,
-          "notes": "PoP reports connection success then terminates; FortiClient never shows connected; support case open and no root cause posted at review."
-        },
-        {
-          "title": "FortiSASE IPsec Multi-Connect tunnel not establishing",
-          "url": "https://community.fortinet.com/support-forum-92/index7.html",
-          "date": "2026-10-18",
-          "used_as_scenario": false,
-          "reason": "Multi-connect behavior was already covered in the prior 30-day report."
-        }
-      ]
+      "query": "site:community.fortinet.com/fortisase-58 FortiSASE technical tip troubleshooting October 2026; Entra ID SAML agent-based tunnel",
+      "status": "No recent directly matched agent-based Entra ID SAML scenario verified."
     },
     {
       "product": "Secure SD-WAN",
-      "queries": [
-        "FortiCloud OaaS recent troubleshooting",
-        "FortiGate SD-WAN OaaS transaction rollback",
-        "Fortinet Secure SD-WAN community October 2026"
-      ],
-      "recent_findings": [
-        {
-          "title": "No directly matched OaaS troubleshooting tip verified within the 30-day window",
-          "url": null,
-          "date": null,
-          "used_as_scenario": false,
-          "notes": "Older OaaS material was outside the rolling window; OaaS is selected from current FortiOS 8.0 and OaaS Admin/Deployment documentation."
-        }
-      ]
+      "query": "site:community.fortinet.com Fortinet Secure SD-WAN technical tip troubleshooting October 2026; PIM multicast steering",
+      "status": "No recent directly matched PIM multicast SD-WAN steering scenario verified."
     }
   ],
-  "rejected_candidate_topics": [
+  "recent_candidates_rejected": [
     {
-      "product": "FortiGate",
-      "subject": "DNS over TLS inspection in proxy/flow mode",
-      "reason": "Rejected to avoid duplicating the selected FortiSwitch DNS-over-TLS transport mechanism within the same report."
+      "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-checking-dns-when-winbind-reports-wbc-err-winbind-not-available-230552",
+      "date": "2026-10-14",
+      "reason": "Winbind DNS/domain-controller discovery; overlaps the 2026-10-25 Winbind domain-join workflow and is not an SNMPv3 Engine ID scenario."
     },
     {
-      "product": "FortiAuthenticator",
-      "subject": "EAP-TEAP chained machine/user authentication",
-      "reason": "Rejected because the prior 2026-11-05 lesson covered EAP-TTLS; both are tunneled EAP method workflows and the HA interface feature is more semantically distinct."
-    },
-    {
-      "product": "FortiPAM",
-      "subject": "JIT privilege via secret checkout/check-in PowerShell over WinRM",
-      "reason": "Rejected because recent FortiPAM lessons already covered secret checkout locks and scheduled PowerShell jobs; selected RADIUS attribute-integrity feature instead."
-    },
-    {
-      "product": "FortiSIEM",
-      "subject": "Automated Case Management",
-      "reason": "Rejected because prior 2026-11-04 automation-policy lesson covered incident/case creation; selected Collector-tier HA, which is a different subsystem."
-    },
-    {
-      "product": "Secure SD-WAN",
-      "subject": "ADVPN 2.0 path discovery alone",
-      "reason": "Rejected because prior 2026-10-29 report covered ADVPN 2.0 edge discovery and shortcut path management; selected OaaS controller transaction/rollback, explicitly separated from ADVPN data-plane shortcuts."
+      "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "date": "2026-10-02",
+      "reason": "Outside the rolling 30-day window and overlaps the previously taught Winbind domain-join mechanism."
     }
-  ]
+  ],
+  "direct_scenario_sources_used": 0,
+  "note": "The sweep found no directly matched recent scenario for today's selected mechanisms. The report therefore uses primary Fortinet administration/configuration/release documentation for lessons and clearly labels the Community scenario gap instead of fabricating TAC cases."
 }

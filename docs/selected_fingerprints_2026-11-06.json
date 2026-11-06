@@ -1,259 +1,547 @@
 {
-  "schema_version": "2.0",
-  "generated_at_local": "2026-11-06T08:01:31-08:00",
-  "source_inventory_path": "docs/exclusion_inventory_2026-11-06-08-01.json",
-  "source_inventory_record_count": 180,
-  "selected_count": 12,
-  "semantic_uniqueness_passed": true,
-  "selected": [
+  "schema_version": "3.0",
+  "generated_at_local": "2026-11-06T09:20:12-08:00",
+  "pre_generation_inventory_path": "docs/exclusion_inventory_2026-11-06-09-20.json",
+  "pre_generation_inventory_sha": "2b8ede12e5fe7802b2114c8ccc903389f192a8b5",
+  "pre_generation_inventory_record_count": 180,
+  "selected_topic_count": 12,
+  "selected_topics_semantically_unique": true,
+  "semantic_rule": "Reject substantially equivalent mechanisms or workflows even when the URL differs. Compare feature, transaction, failure, evidence, remediation, question, and diagram fingerprints.",
+  "candidate_only_artifacts_checked": [
+    "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
+    "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-27.html"
+  ],
+  "candidate_topics_excluded": [
+    {
+      "date": "2026-10-26",
+      "product": "FortiGate",
+      "subject": "Encrypted DNS handling and policy behavior",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiGate",
+      "subject": "DHCP Option 82 address assignment",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-26",
+      "product": "FortiManager",
+      "subject": "Firmware templates",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiManager",
+      "subject": "Post-install CLI scripts",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiAnalyzer",
+      "subject": "Log aggregation",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiSwitch",
+      "subject": "STP root guard and BPDU guard",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiAP",
+      "subject": "Wi-Fi 7 multi-link operation",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiNAC",
+      "subject": "Security incidents",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiNAC-F",
+      "subject": "RADIUS-only network device integration",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiAuthenticator",
+      "subject": "CSV import side effects on RADIUS attributes",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiPAM",
+      "subject": "Secret Gateway chaining",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiSIEM",
+      "subject": "Custom performance monitors",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "FortiSASE",
+      "subject": "API-based CASB data protection",
+      "status": "excluded candidate-only artifact"
+    },
+    {
+      "date": "2026-10-27",
+      "product": "Secure SD-WAN",
+      "subject": "SD-WAN zone migration",
+      "status": "excluded candidate-only artifact"
+    }
+  ],
+  "topics": [
     {
       "product": "FortiGate",
-      "lesson_subject": "FGCP HA checksum mismatch caused by per-member dynamic WWAN IPv6 addresses",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/63913/check-ha-synchronization-status",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/63913/check-ha-synchronization-status",
-        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/451737/troubleshooting"
+      "lesson_subject": "FGCP session pickup: synchronized session-table state, protocol coverage, inspection boundaries, and heartbeat capacity",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/955521/session-pickup",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/601315/session-synchronization-and-failover",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/350211/heartbeat-bandwidth-requirements"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortigate-3/fortigate-3g4g-models-show-out-of-sync-warning-in-ha-due-to-different-wwan-ipv6-addresses-230843",
-      "feature_mechanism_fingerprint": "FGCP configuration checksum comparison incorrectly treats modem-learned, per-member WWAN IPv6 addresses as static synchronized configuration; the distinct dynamic address is not a data-plane HA failure.",
-      "workflow_transaction_fingerprint": "Each LTE modem independently learns a provider IPv6 address; HA checksum engine includes the dynamic address in its configuration comparison; member checksums diverge and GUI/CLI reports out-of-sync although heartbeat and policy sync remain operational.",
-      "failure_class": "False-positive HA configuration drift caused by dynamic cellular IPv6 state being included in checksum eligibility.",
-      "evidence_pattern": "get system ha status shows Configuration Status out-of-sync and different checksum dumps; HBDEV/MONDEV statistics remain healthy; member WWAN IPv6 addresses differ; traffic and new configuration synchronization continue.",
-      "remediation_path": "Do not run diagnose ha checksum recalculate on affected devices because it can temporarily overwrite the peer WWAN IPv6 address. Verify firmware parity, heartbeat counters, traffic and ordinary config propagation; treat the mismatch as the documented exception and upgrade when the vendor fix is available (Community article says FortiOS 8.0.3+; schedule may change).",
-      "question_fingerprint": "Distinguish a dynamic WWAN IPv6 checksum exception from a real HA sync failure and select the safe non-destructive response.",
-      "diagram_topology_layout_fingerprint": "Two FGCP peers each with a separate LTE modem and unique dynamic IPv6 address; shared heartbeat link; checksum comparison path highlighted as false mismatch while forwarding paths remain healthy.",
-      "semantic_uniqueness_review": "No prior FortiGate record teaches dynamic WWAN IPv6 in HA checksums. Nearest prior IPv6 lessons concern ND proxy/SLAAC; they are different packet/neighbor mechanisms. No prior record covers per-member modem-learned IPv6 state in FGCP checksum eligibility."
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FGCP primary-to-secondary session-table replication; TCP session pickup; optional connectionless UDP/ICMP synchronization; multicast route TTL synchronization; proxy-flow inspection limitation",
+      "workflow_transaction_fingerprint": "new session enters primary session table -> session state is copied over HA heartbeat/session-sync path -> failover elects new primary -> synchronized entry continues from last known state; cluster-terminated sessions restart independently",
+      "failure_class": "active sessions reset or are not inspected after HA failover; heartbeat bandwidth saturation delays full table sync",
+      "evidence_pattern": "config system ha session-pickup; diagnose sys ha status; diagnose sys session list; heartbeat interface throughput and session table parity; compare proxy versus flow-based policy path",
+      "remediation_path": "enable session-pickup only after capacity review; separately decide connectionless synchronization; move sync traffic to dedicated session-sync interfaces when supported; keep proxy-inspected expectations out of continuity claims; validate failover by protocol and policy mode",
+      "question_fingerprint": "distinguish synchronized transit sessions from cluster-terminated VPN/management sessions and identify why a flow-based session can resume without continuing inspection",
+      "diagram_topology_layout_fingerprint": "two-node FGCP primary/secondary with HA1/HA2 sync arrow, client/server transit path, separate cluster-terminated VPN endpoint path, failover promotion",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-25",
+            "subject": "FortiGate — Hybrid post-quantum IKEv2 key exchanges: IKE_INTERMEDIATE and CHILD_SA rekey boundaries",
+            "score": 0.05952380952380952
+          },
+          {
+            "date": "2026-10-21",
+            "subject": "FortiGate — SCTP multihoming across virtual clusters",
+            "score": 0.058823529411764705
+          },
+          {
+            "date": "2026-10-16",
+            "subject": "FortiGate — SLAAC + stateless DHCPv6",
+            "score": 0.05263157894736842
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiManager",
-      "lesson_subject": "SQLite WAL corruption in ADOM databases after 7.6.7 upgrade: integrity diagnostics and recovery boundaries",
-      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/upgrade-guide/738080/checking-fortimanager-databases",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortimanager/7.6.6/upgrade-guide/738080/checking-fortimanager-databases",
-        "https://docs.fortinet.com/document/fortimanager/7.6.6/upgrade-guide/621448/backing-up-configuration-files-and-databases",
-        "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/984634/updating-the-system-firmware"
+      "lesson_subject": "IPS provisioning templates: global versus VDOM-scoped objects and target-aware assignment",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/70784/intrusion-prevention-templates",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.2.0/new-features/263208/ips-template-combines-configuration-for-global-ips-global-and-per-vdom-system-ips-ips-settings"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-adom-db-integrity-errors-after-upgrade-to-7-6-x-229968",
-      "feature_mechanism_fingerprint": "SQLite write-ahead-log corruption physically malforms per-ADOM databases; integrity checks distinguish corruption from policy-package inconsistency; full system backup and database restoration are separate from ADOM revision rollback.",
-      "workflow_transaction_fingerprint": "FortiManager 7.6.7 upgrade introduces SQLite 3.50.4 WAL bug; ADOM integrity_check reports missing index rows or malformed database; Policy & Objects load and policy pushes fail; recovery requires a known-good pre-upgrade backup/clean upgrade or the Community-reported 7.6.10 recovery command, followed by repeat integrity checks.",
-      "failure_class": "Persistent ADOM SQLite database corruption after firmware upgrade, causing UI load failures, index errors and policy deployment failures.",
-      "evidence_pattern": "diagnose pm2 check-integrity all reports pragma integrity_check failures such as database disk image is malformed or row missing from index; diagnose cdb check adom-integrity reports sqlite3_backup_step rc=11; Policy & Objects returns Response with errors.",
-      "remediation_path": "Before any repair, export and verify a system backup; ensure only one administrator is logged in, no objects are locked and all ADOMs are unlocked in workspace mode. Use official integrity checks to localize failure. The Community article reports diagnose cdb upgrade check recover-corrupted-adomdb in 7.6.10, but the exact recovery command/version was not independently found in the official CLI reference during this run; verify with the installed build and Fortinet Support before use. The official documented diagnose pm2 db-recover global applies to the global database only and requires offline mode/reboot.",
-      "question_fingerprint": "Identify physical SQLite/WAL corruption from exact integrity output and avoid misusing global-database recovery against an ADOM database.",
-      "diagram_topology_layout_fingerprint": "Upgrade pipeline feeding SQLite WAL and ADOM database; integrity-check branch; backup verification gate; separate restore/ADOM recovery path; post-recovery recheck.",
-      "semantic_uniqueness_review": "Prior records cover ADOM revisions, policy package diffs, workspace mode and revision restore. They do not cover SQLite WAL corruption, pragma integrity_check, row/index corruption or physical ADOM database recovery. This is a different failure class and transaction."
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "IPS template packages IPS Global global settings plus VDOM-scoped System IPS and IPS Settings; assignment to device or device group; root/mgmt target copies only IPS Global",
+      "workflow_transaction_fingerprint": "create template in ADOM -> configure selected IPS object scopes -> assign template to device/device group -> FortiManager maps applicable global and VDOM objects to device database -> install/verify target-specific configuration",
+      "failure_class": "expected VDOM IPS settings absent after assignment to root/mgmt VDOM; incorrect assumptions that one template copies every object to every VDOM",
+      "evidence_pattern": "template assignment list; device/VDOM target; install preview/diff; resulting IPS Global, System IPS, and IPS Settings values on target",
+      "remediation_path": "separate global and VDOM intent; assign to explicit device groups/VDOMs; verify target VDOM; inspect install preview and device-side configuration; do not infer VDOM object deployment from template assignment alone",
+      "question_fingerprint": "identify why a root or mgmt VDOM receives only IPS Global and choose the correct target-aware verification",
+      "diagram_topology_layout_fingerprint": "FortiManager ADOM template branching into global IPS object and two VDOM object sets, with root/mgmt branch receiving global-only",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-11-05",
+            "subject": "Normalized interfaces with per-device and per-platform mapping",
+            "score": 0.15384615384615385
+          },
+          {
+            "date": "2026-10-21",
+            "subject": "FortiManager — Retrieve versus policy-package authority",
+            "score": 0.14925373134328357
+          },
+          {
+            "date": "2026-11-04",
+            "subject": "Zero-touch provisioning with model devices, auto-link and pre-run templates",
+            "score": 0.14285714285714285
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiAnalyzer",
-      "lesson_subject": "FortiMQ connector: ADOM-scoped blocked-indicator delivery to FortiGate Cloud Fabric Feeds",
-      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
-        "https://docs.fortinet.com/document/fortianalyzer/latest/administration-guide/477080/blocking-indicators"
+      "lesson_subject": "Asset Identity Center: endpoint and end-user identity assembly from Fabric data sources",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/184956/configuring-endpoint-and-end-user-data-sources",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/333097/endpoint-vulnerability-dashboard",
+        "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/731405/managing-adoms"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116",
-      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 FortiMQ connector publishes IP, URL, domain and MAC block indicators to a cloud broker; FortiGate retrieves the feed and policy/profile enforcement remains a separate FortiGate configuration step.",
-      "workflow_transaction_fingerprint": "An analyst blocks an indicator in an ADOM; block_indicator playbook sends it through the enabled FortiMQ connector; FortiGate on the same FortiCare account consumes Cloud-based Fabric Feed synchronization; the indicator appears in external feeds and a referencing policy/profile denies matching traffic.",
-      "failure_class": "Indicator marked blocked in analytics but not enforced at the firewall due connector, FortiCare account, ADOM scope, cloud feed synchronization or policy-reference mismatch.",
-      "evidence_pattern": "FortiMQ connector is enabled and healthy; Block action tooltip names FortiMQ; indicator status and block_indicator playbook execution are visible; FortiGate external feed contains the indicator; a matching test session is denied only when a policy/profile references the feed.",
-      "remediation_path": "Enable FortiMQ in the target Fabric/FortiGate ADOM; confirm FortiAnalyzer and FortiGate share the same FortiCare account; enable Cloud-based Fabric Feed synchronization on FortiGate; verify correct ADOM membership and feed references in policy/profile. Remember FortiMQ is ADOM-specific and takes priority over FortiManager connector when both are active. The Node2Shell community event handler raises alerts/reports; it does not itself block indicators.",
-      "question_fingerprint": "Trace the indicator from ADOM to FortiMQ to FortiGate feed and distinguish detection/alerting from actual enforcement.",
-      "diagram_topology_layout_fingerprint": "Event/log source to FortiAnalyzer ADOM indicator store; block_indicator playbook to FortiMQ cloud; FortiGate feed consumer; separate policy enforcement node; alternate FortiManager connector path shown as fallback.",
-      "semantic_uniqueness_review": "Prior FortiAnalyzer lessons cover log fetch, event handlers, automation playbooks and report generation. They do not cover FortiMQ's cloud indicator transaction, ADOM-specific scoping, same-FortiCare requirement or FortiGate Fabric Feed consumption."
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "per-ADOM Asset Identity Center source selection combines identity clues from FortiGate, FortiClient, FortiMail, FortiWeb, FortiNAC logs and EMS connectors; device-specific source rules override all-device rules; subnet/domain/connector inclusion and exclusion filters",
+      "workflow_transaction_fingerprint": "Fabric ADOM receives supported telemetry -> data-source rules decide which device/subnet/domain/EMS connector may contribute -> identity and endpoint records are normalized into Asset Identity List -> AD enrichment can add directory context -> dashboards and queries consume the resulting identity view",
+      "failure_class": "missing, duplicated, or misleading endpoint/user identity because a source is disabled, excluded, or shadowed by a higher-priority device-specific rule",
+      "evidence_pattern": "Asset Identity List source details; per-ADOM Data Sources dialog; source status and device/subnet/domain filters; EMS connector authorization and playbook run; compare source log records to resulting asset/identity rows",
+      "remediation_path": "validate Fabric ADOM scope; inspect source enablement and device-specific precedence; add EMS connector as authorized device and enable the sequence playbook when vulnerability data is required; exclude only the noisy device/subnet; verify identity rows after source ingestion",
+      "question_fingerprint": "trace an endpoint missing from Asset Identity Center to the per-ADOM source-selection and device-rule precedence rather than log storage",
+      "diagram_topology_layout_fingerprint": "five telemetry source lanes converging through per-ADOM source filters into endpoint and identity normalization, then asset list and dashboard",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-10",
+            "subject": "IOC historical rescan, TIDB package lifecycle, and alert provenance",
+            "score": 0.07407407407407407
+          },
+          {
+            "date": "2026-10-30",
+            "subject": "Log Fetching between analyzers: approval, ADOM synchronization, transfer, and database rebuild",
+            "score": 0.06790123456790123
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "FortiAnalyzer — Event handlers: OR rules, correlation sequences, and Analytics-only input",
+            "score": 0.06666666666666667
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiSwitch",
-      "lesson_subject": "FortiSwitchOS 8.0 DNS over TLS with optional CA validation and cache-memory semantics",
-      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
-        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/500379/config-system",
-        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/35890/what-s-new-in-fortiswitchos-8-0-0"
+      "lesson_subject": "FortiSwitch flow export: packet sampling, flow-key granularity, templates, and collector delivery",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortilink-guide/173268/configuring-flow-tracking-and-export",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.4.8/fortiswitchos-administration-guide/774769/flow-export"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiSwitchOS 8.0.0 changes the switch's own system DNS client from cleartext UDP/TCP 53 to DNS over TLS on TCP 853; an optional configured server CA enables certificate-chain validation before the TLS session is established.",
-      "workflow_transaction_fingerprint": "The switch selects primary/secondary DNS server and protocol dot; TCP/853 TLS handshake validates the DNS server certificate only when server-ca-cert is configured; DNS query/response travels inside TLS; local switch functions such as email alerts and URL blocking consume the resolved answer.",
-      "failure_class": "Encrypted DNS connection failure or false sense of server authentication because DoT is enabled without supported upstream service or without a trusted CA certificate.",
-      "evidence_pattern": "config system dns shows protocol dot, primary/secondary servers and server-ca-cert; packet capture shows TCP/853 rather than UDP/TCP 53; certificate validation behavior differs when server-ca-cert is absent; dns-cache-limit is measured in KB (default 512) rather than entries.",
-      "remediation_path": "Confirm the upstream resolver supports DoT on TCP/853; import the correct issuing CA and set server-ca-cert; test DNS resolution and certificate trust separately; verify source-ip and route to resolver; monitor cache size and TTL. Do not assume encryption alone authenticates the resolver when no CA certificate is configured.",
-      "question_fingerprint": "Distinguish encrypted transport from authenticated resolver identity and interpret the 8.0.0 dns-cache-limit unit change.",
-      "diagram_topology_layout_fingerprint": "FortiSwitch management/system DNS client to TCP/853 TLS channel, optional CA trust validation gate, upstream resolver, returned answer to local switch services; cleartext 53 shown as alternate.",
-      "semantic_uniqueness_review": "No prior FortiSwitch lesson covers system DNS transport or CA validation. The rejected FortiGate DoT inspection candidate is not selected in this report, so this remains the only DoT lesson and does not duplicate a FortiGate transit-inspection topic."
+      "feature_mechanism_fingerprint": "port/trunk packet sampler feeds switch flow cache; configurable sample mode/rate, flow level, NetFlow v1/v5/v9 or IPFIX format, active/inactive protocol timers, templates and one or more collectors using UDP/TCP/SCTP",
+      "workflow_transaction_fingerprint": "enable packet sampling on selected ports -> switch aggregates sampled packet tuples into concurrent flow records -> timeout/FIN/RST or table pressure expires records -> exporter emits template plus flowsets to configured collector -> collector decodes fields according to template",
+      "failure_class": "collector sees packets but no decoded flows, incomplete fields, unsupported L2 records, or silent export loss caused by wrong sampling mode/format/collector transport",
+      "evidence_pattern": "diagnose switch-controller flow-collector status; switch flow-tracking statistics and raw records; collector packet capture; template-export-period; Incompatible Type counter",
+      "remediation_path": "confirm model support and sampling on ingress/egress ports; choose a supported NetFlow/IPFIX format and flow level; match collector IP/port/transport; ensure templates refresh; account for model flow limits and unsupported L2 records in NetFlow v1/v5",
+      "question_fingerprint": "diagnose a collector that receives export packets but cannot decode records by separating template/format mismatch from sampler and transport faults",
+      "diagram_topology_layout_fingerprint": "managed FortiSwitch ports feeding sampler and flow cache, template/flowset exporter, two collectors, separate control path for template refresh",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-23",
+            "subject": "FortiSwitch — Dynamic MAC movement telemetry through L2MAC SNMP traps",
+            "score": 0.07142857142857142
+          },
+          {
+            "date": "2026-10-10",
+            "subject": "FortiSwitchOS 8.0 inter-switch STP cost selection",
+            "score": 0.05714285714285714
+          },
+          {
+            "date": "2026-10-25",
+            "subject": "FortiSwitch — Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs",
+            "score": 0.05319148936170213
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
-      "product": "FortiAP/Wireless",
-      "lesson_subject": "Wi-Fi 7 Multi-Link Operation on FortiAP K-series: VAP security, radio mapping and standalone behavior",
-      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/677212/configuring-wi-fi-7-multi-link-operation",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/677212/configuring-wi-fi-7-multi-link-operation",
-        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/180088/support-wi-fi-7-mlo-on-fortiap-k-series-models",
-        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/210704/support-mlo-on-standalone-vaps"
+      "product": "FortiAP",
+      "lesson_subject": "Dynamic wireless VLAN assignment with RADIUS precedence and FortiAP-group VLAN-pool fallback",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/376326/configuring-dynamic-user-vlan-assignment",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/579078/support-dvlan-assignments-from-radius-and-vlan-pooling-together"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "802.11be Multi-Link Operation creates one multi-link device relationship across supported 2.4/5/6 GHz radios and channels; one VAP/SSID and its security profile are applied to selected radios, with model-specific radio limitations.",
-      "workflow_transaction_fingerprint": "Configure a VAP with WPA3-SAE, WPA3 Enterprise Only or OWE and enable mlo; map that VAP to the desired radios in a WTP profile; an MLO-capable client associates with multiple link IDs; in standalone mode, bridge traffic and local authentication allow the AP to continue without the controller.",
-      "failure_class": "MLO option absent or client falls back to a single link because of unsupported AP/radio/firmware, incompatible security settings, incorrect WTP radio mapping or client capability.",
-      "evidence_pattern": "diagnose wpa wpad mld reports num_links and link_id values; FortiAP vcfg shows mlo=enabled; sta output shows the client on multiple radio interfaces; a single link does not prove MLO association.",
-      "remediation_path": "Verify K-series model and radio support, FAP 7.6.3+ and FortiOS 7.6.5 CLI or 8.0.0 GUI support; use supported WPA3/OWE security and SAE H2E-only; apply VAP to intended WTP radios; confirm client MLO capability; for standalone mode enable bridge, local-standalone and local-authentication.",
-      "question_fingerprint": "Diagnose why a K-series SSID advertises but does not establish multiple links and interpret num_links correctly.",
-      "diagram_topology_layout_fingerprint": "One MLD client linked concurrently to three AP radio nodes (2.4/5/6 GHz), all sharing a VAP/security profile; optional FortiGate controller and standalone local-auth path.",
-      "semantic_uniqueness_review": "Prior wireless records cover SAE_EXT AKM24, MPSK, roaming, airtime fairness, CAPWAP and RF behavior. MLO is the 802.11be multi-link association mechanism, not an AKM/security-suite or roaming feature."
+      "feature_mechanism_fingerprint": "FortiOS 8.0 permits simultaneous Dynamic VLAN and VLAN pooling; RADIUS Access-Accept Tunnel-Private-Group-ID wins; if absent, local pool chooses VLAN by FortiAP group; VLAN interface, DHCP, and policy must exist for each assigned VLAN",
+      "workflow_transaction_fingerprint": "client associates to enterprise SSID -> RADIUS authenticates -> Access-Accept returns optional Tunnel-Type/Tunnel-Medium-Type/Tunnel-Private-Group-ID -> controller selects RADIUS VLAN or FortiAP-group pool fallback -> client receives VLAN and DHCP/policy path",
+      "failure_class": "authenticated client lands in default/pool VLAN rather than intended user VLAN because attribute absent/malformed or local VLAN plumbing is incomplete",
+      "evidence_pattern": "RADIUS Access-Accept attributes; diagnose wireless-controller wlac -d sta online vlan_id and group; VLAN interface/DHCP lease; SSID dynamic-vlan and vlan-pooling configuration",
+      "remediation_path": "validate the three standard RADIUS tunnel attributes and VLAN ID; create VLAN interfaces, DHCP scopes and firewall policies; verify AP group membership and pool mapping; test one user with and without Tunnel-Private-Group-ID",
+      "question_fingerprint": "determine precedence when a user receives a RADIUS VLAN while the AP belongs to a configured VLAN pool",
+      "diagram_topology_layout_fingerprint": "wireless client to AP/controller to RADIUS branch, explicit RADIUS VLAN path above FortiAP-group pool fallback, then VLAN interface/DHCP/policy",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiNAC",
-      "lesson_subject": "Local RADIUS PEAP-MSCHAPv2 failures after Windows KB5127648 changes cached NTLMv1 SSO behavior",
-      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server"
+      "lesson_subject": "FortiNAC agent server discovery: DNS SRV/TXT resolution, certificate target matching, and agent-specific fallback",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/257361/agent-server-discovery",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/223210/implementation",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/594507/agent-packages"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-radius-802-1x-peap-authentication-failures-on-windows-hosts-230556",
-      "feature_mechanism_fingerprint": "FortiNAC local RADIUS terminates the PEAP outer TLS tunnel and uses MSCHAPv2/Winbind for AD user authentication; the October 2026 Windows update changes cached NTLMv1 SSO credential behavior without changing FortiNAC RADIUS server operation.",
-      "workflow_transaction_fingerprint": "Windows supplicant sends 802.1X EAP through switch/AP NAS to FortiNAC RADIUS; PEAP establishes outer TLS; inner MSCHAPv2 uses cached Windows logon credentials through Winbind/AD; KB5127648 changes BlockNtlmv1SSO default behavior and cached SSO fails while manually entered credentials still work.",
-      "failure_class": "Endpoint-side cached credential/NTLMv1 SSO policy regression, not a FortiNAC RADIUS protocol or switch authorization failure.",
-      "evidence_pattern": "Windows OneX Event ID 12014 reports Held State Timeout; failures occur only with Automatically use my Windows logon name and password; manual credentials succeed; EAP-TLS clients are unaffected.",
-      "remediation_path": "Verify KB5127648 and BlockNtlmv1SSO at HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\MSV1_0. Community article documents Audit mode DWORD value 0 as a temporary compatibility workaround and uninstall as a confirmed rollback; centrally manage with GPO. Prefer migration to EAP-TLS rather than permanently weakening NTLMv1 SSO protections.",
-      "question_fingerprint": "Separate PEAP outer TLS, inner MSCHAPv2, Winbind/AD and Windows cached SSO policy to locate the actual failure boundary.",
-      "diagram_topology_layout_fingerprint": "Windows supplicant to wired/wireless NAS to FortiNAC local RADIUS; PEAP outer TLS wraps inner MSCHAPv2/Winbind-to-AD; Windows cached credential policy highlighted as failing endpoint boundary.",
-      "semantic_uniqueness_review": "Prior FortiNAC records cover EAP session correlation and local-vs-external RADIUS; a prior FortiNAC-F record covers Winbind domain join. This lesson focuses on Windows endpoint cached NTLMv1 SSO behavior after KB5127648, not RADIUS session correlation or FortiNAC domain join."
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "agent-type-specific discovery of FortiNAC Application Server using DNS SRV/TXT records, registry/preferences/config files, lastConnectedServer and HomeServer; certificate target name must match discovered server identity; Persistent Agent uses TCP/4568 and TCP/80 for upgrades",
+      "workflow_transaction_fingerprint": "agent starts -> reads configured registry/preferences or DNS service records -> builds ordered server candidate list -> resolves host and validates TLS certificate target -> connects to Application Server -> persists lastConnectedServer and optionally restricts roaming",
+      "failure_class": "agent scan or registration fails despite portal reachability because SRV/TXT record, alias, candidate order, port, or certificate target is inconsistent",
+      "evidence_pattern": "nslookup/dig SRV and TXT records; agent configuration/lastConnectedServer; DNS answer and certificate SAN/CN; TCP 4568/80 reachability; agent/server logs",
+      "remediation_path": "verify agent-specific discovery path; publish correct SRV/TXT records in production DNS; ensure DNS alias matches certificate target; confirm TCP 4568 and upgrade TCP 80; clear stale lastConnectedServer or roaming pin only after correcting DNS",
+      "question_fingerprint": "separate successful captive-portal download from failed post-download agent-to-Application-Server discovery and certificate validation",
+      "diagram_topology_layout_fingerprint": "four agent types with separate discovery inputs converging on DNS resolution and certificate validation before Application Server connection",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-10",
+            "subject": "F — EAP-TLS endpoint trust certificate target and unknown-CA failures",
+            "score": 0.08333333333333333
+          },
+          {
+            "date": "2026-10-30",
+            "subject": "Registered-host Network Access Policy first-match evaluation and catch-all ordering",
+            "score": 0.06962025316455696
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "FortiNAC 9.4 RADIUS group ingestion: Fortinet-Group-Name parsing, profile-scoped group identity, and membership reconciliation",
+            "score": 0.05853658536585366
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiNAC-F",
-      "lesson_subject": "Microsoft Intune NAC-API on-demand registration: MAC-to-DeviceID lookup and Vendor OUI validation",
-      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/199295/microsoft-intune",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/199295/microsoft-intune"
+      "lesson_subject": "FortiNAC-F SNMPv3 Engine ID cache: credential validation after device replacement or IP reuse",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/285900",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/release-notes/403885",
+        "https://docs.fortinet.com/document/fortinac-f/latest/release-notes"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/the-intune-poll-does-not-register-all-of-the-devices-230904",
-      "feature_mechanism_fingerprint": "FortiNAC-F's Microsoft NAC-API integration replaces full Intune asset-list retrieval with per-host lookup; MAC address resolves an Intune Device ID, then Graph/MDM data is retrieved; valid-MAC/OUI registration is a separate host-admission gate.",
-      "workflow_transaction_fingerprint": "Host discovery creates a pending/rogue record; MDM poll calls Microsoft NAC-API for a single MAC/DeviceID; application permissions allow daemon/background access; returned compliance and host metadata are applied only after MAC passes the Vendor OUI validity check.",
-      "failure_class": "Intune device is found by the poller but not registered because the endpoint MAC is rejected as invalid by a stale Vendor OUI database; delegated permissions can also force inefficient full-list polling and prevent on-demand lookup.",
-      "evidence_pattern": "MSInTuneServer debug log shows device discovered but absent from Host View; validmac -mac <MAC_ADDRESS> returns Invalid; after Auto Definition Sync, validmac returns Vendor OUI and manufacturer; new MDM poll registers the host.",
-      "remediation_path": "Use Microsoft NAC-API with Application Permissions rather than delegated permissions; configure API secret or certificate authentication and required Graph/NAC-API permissions; update Vendor OUI through Agent Update Settings and Auto Definition Sync; rerun validmac and Intune poll. Community article scope labels the shared workflow FortiNAC, while the primary feature guide is FortiNAC-F 7.6.0; the scope mismatch is disclosed.",
-      "question_fingerprint": "Trace a device discovered by Intune but missing from Host View through NAC-API lookup and the independent MAC/OUI registration gate.",
-      "diagram_topology_layout_fingerprint": "Endpoint MAC to FortiNAC-F poller; NAC-API single-host DeviceID lookup; Microsoft Graph Intune data response; parallel Vendor OUI validity gate; registered host record only after both branches pass.",
-      "semantic_uniqueness_review": "Prior FortiNAC-F records cover LDAP host association, directory synchronization, NetFlow, SAML and HA. None covers Microsoft Intune NAC-API per-host retrieval or the Vendor OUI validity gate."
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F stores SNMPv3 authoritative engine ID discovered for a network device; USM authentication/privacy parameters are evaluated against the engine ID; Clear Cached Engine ID forces discovery of the replacement device's engine ID",
+      "workflow_transaction_fingerprint": "device discovery/poll stores engine ID for management IP -> SNMPv3 requests use cached engine identity and configured user/auth/privacy credentials -> replacement at same IP presents a different engine ID -> request fails until cache is cleared and engine discovery is repeated",
+      "failure_class": "SNMPv3 polling or discovery fails after switch/router replacement or IP reuse even though credentials and IP connectivity are correct",
+      "evidence_pattern": "Network Inventory > device Properties > Credentials; Validate Credentials result; SNMPv3 auth/privacy settings; engine ID cache clear action; ClearEngineID -ip <device IP address>; poll success timestamp",
+      "remediation_path": "confirm the device was replaced or IP reused; validate SNMPv3 username/auth/privacy credentials; clear cached engine ID in device properties or run ClearEngineID from the FortiNAC-F server CLI; rediscover and poll before changing credentials",
+      "question_fingerprint": "recognize stale SNMPv3 engine ID after same-IP hardware replacement instead of resetting auth/priv passwords",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F credential store with cached engine ID pointing to old switch, IP reused by replacement switch with new engine ID, cache-clear/re-discovery loop",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-30",
+            "subject": "Upgrade migration from Legacy RADIUS Proxy to Virtual Proxy Server in FortiNAC-F 7.4+",
+            "score": 0.10071942446043165
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "FortiNAC-F — NetFlow sessions stop populating after FortiNAC-F 7.6.7",
+            "score": 0.0759493670886076
+          },
+          {
+            "date": "2026-11-04",
+            "subject": "User SAML SSO for captive portal with attribute-based group assignment",
+            "score": 0.07042253521126761
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiAuthenticator",
-      "lesson_subject": "FortiAuthenticator 8.0.2 HA control-plane separation with dedicated management and heartbeat interfaces",
-      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281",
-        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability"
+      "lesson_subject": "SmartConnect EAP-TLS endpoint binding: certificate CN as MAC Device and RADIUS MAC-to-CN verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/563028/fortiauthenticator-8-0-0",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/563028/fortiauthenticator-8-0-0"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.2 adds a dedicated Heartbeat Interface separate from the renamed Management interface/Management IP; the management plane handles administrator reachability while heartbeat carries HA synchronization and health monitoring.",
-      "workflow_transaction_fingerprint": "Configure cluster management IP and management access on the management interface; select a separate heartbeat interface on each node; peers exchange heartbeat/sync messages over the dedicated network; standby declares peer out-of-service after configured missed-heartbeat threshold and takes over in active-passive cluster mode.",
-      "failure_class": "HA control-plane coupling or false failover caused by management-network reachability being conflated with heartbeat health, or heartbeat path/threshold misconfiguration.",
-      "evidence_pattern": "System > Administration > High Availability shows Management interface/IP and Heartbeat Interface; heartbeat interval default 1000 ms and lost threshold default 6000 ms; verify each network independently and observe member role/failover state.",
-      "remediation_path": "Use separate reachable management and heartbeat networks; ensure heartbeat L2/L3 requirements and firewall rules are met; set interval/threshold deliberately; verify node-specific management default gateway where needed; test failover under controlled conditions and confirm management remains reachable independently.",
-      "question_fingerprint": "Distinguish administrator access loss from heartbeat loss after management and heartbeat interfaces are decoupled.",
-      "diagram_topology_layout_fingerprint": "Two FortiAuthenticator nodes with separate management subnet and heartbeat/sync subnet; admin workstation reaches management IPs while peer heartbeat arrows cross isolated heartbeat network; active/standby role transition.",
-      "semantic_uniqueness_review": "Prior FortiAuthenticator records cover FIDO2, OAuth, SAML certificate rotation, RADIUS/TACACS policy, LDAP and EAP. No prior record covers HA management/heartbeat interface separation. Other products' HA lessons concern different components and failure planes."
+      "feature_mechanism_fingerprint": "Smart Connect profile chooses client-certificate subject CN from user account attribute or registered MAC Device; EAP-TLS RADIUS policy can require endpoint MAC from RADIUS client to equal certificate subject CN; portal device tracking/management controls enrollment and replacement",
+      "workflow_transaction_fingerprint": "user registers/selects a MAC device in portal -> SmartConnect provisions EAP-TLS client certificate with CN bound to selected MAC -> supplicant presents certificate in EAP-TLS -> RADIUS policy validates certificate and compares request MAC to CN -> access accepted only when identity binding matches",
+      "failure_class": "valid certificate is rejected or wrong device is accepted because CN source, device registration, RADIUS client MAC attribute, or verification toggle is inconsistent",
+      "evidence_pattern": "Smart Connect profile Client certificate CN setting; certificate subject CN; RADIUS Access-Request Calling-Station-Id; EAP-TLS policy Verify MAC address in CN; RADIUS accept/reject logs",
+      "remediation_path": "enable device tracking/management as intended; choose MAC Device CN; ensure portal user has registered MAC; enable RADIUS MAC-to-CN verification; normalize MAC formatting and confirm the RADIUS client sends the correct endpoint MAC",
+      "question_fingerprint": "distinguish certificate-chain validity from endpoint identity binding when EAP-TLS certificate is trusted but MAC/CN comparison fails",
+      "diagram_topology_layout_fingerprint": "portal device registration feeding certificate enrollment, EAP-TLS supplicant to RADIUS policy, certificate CN and Calling-Station-Id comparison gate",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-10",
+            "subject": "Per-profile OCSP certificate validation: hard fail versus soft fail",
+            "score": 0.11206896551724138
+          },
+          {
+            "date": "2026-10-23",
+            "subject": "FortiAuthenticator — FIDO2 user-verification policy and authenticator behavior",
+            "score": 0.1038961038961039
+          },
+          {
+            "date": "2026-10-30",
+            "subject": "RADIUS policy selection: request attributes, top-down precedence, and local EAP versus proxy",
+            "score": 0.10067114093959731
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiPAM",
-      "lesson_subject": "FortiPAM 1.9.0 RADIUS Message-Authenticator integrity enforcement",
-      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
-        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
-        "https://docs.fortinet.com/document/fortipam/latest/release-notes/359701/what-s-new"
+      "lesson_subject": "FortiPAM Access Authentication: per-secret step-up reauthentication and time-bounded access",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiPAM 1.9.0 adds RADIUS Message-Authenticator attribute generation and response validation; require-message-authenticator defaults enabled and makes the response attribute mandatory.",
-      "workflow_transaction_fingerprint": "FortiPAM builds a RADIUS authentication request including Message-Authenticator; remote RADIUS server validates the shared-secret-based integrity value and returns a response; FortiPAM validates response Message-Authenticator before accepting remote authentication.",
-      "failure_class": "RADIUS authentication rejection when the remote server omits or incorrectly calculates Message-Authenticator, or when shared secrets/packet attributes do not match.",
-      "evidence_pattern": "FortiPAM RADIUS server configuration shows require-message-authenticator enabled; packet capture shows attribute 80 in request/response; authentication succeeds with compliant server and fails when response attribute is absent or invalid.",
-      "remediation_path": "Keep require-message-authenticator enabled with a RADIUS server that supports the attribute; verify shared secret and packet construction on both sides; use set require-message-authenticator disable only as a temporary interoperability workaround when the server cannot provide the attribute, documenting the integrity reduction and restoring enforcement after server remediation.",
-      "question_fingerprint": "Explain why Message-Authenticator is an integrity/authenticity check rather than encryption and choose the safe response to a server that omits attribute 80.",
-      "diagram_topology_layout_fingerprint": "FortiPAM remote-auth client sends RADIUS request with attribute 80 to RADIUS server; response returns attribute 80; FortiPAM validation gate either accepts or rejects before admin login.",
-      "semantic_uniqueness_review": "Prior FortiPAM records cover secret creation, checkout locks, TOTP, session recording, gateway chaining, SSH certificate authentication and scheduled jobs. None covers RADIUS attribute 80 generation or response integrity enforcement."
+      "feature_mechanism_fingerprint": "secret-level Access Authentication requires user authentication before secret access; remote authentication server selection; configurable validity duration 0-180 minutes with default 60; duration 0 gives immediate-use short-lived authorization; owner bypass is separately controlled",
+      "workflow_transaction_fingerprint": "user opens secret -> FortiPAM evaluates inherited folder/secret settings -> if Access Authentication required, user completes configured authentication -> FortiPAM grants time-bounded access window -> secret operations are enabled only while authorization is valid",
+      "failure_class": "user can see secret metadata but cannot edit/launch until reauthentication; authentication window expires or owner bypass creates unintended exception",
+      "evidence_pattern": "secret Settings > Access Authentication; selected remote server; duration and bypass fields; Access Authentication Status remaining time; user/session audit logs",
+      "remediation_path": "confirm folder inheritance and secret override; validate remote authentication server; choose a duration matching risk; keep owner bypass disabled unless explicitly approved; test expiration and 0-minute single-use behavior",
+      "question_fingerprint": "distinguish approval-to-launch from step-up Access Authentication and select the correct control for expiring authorization",
+      "diagram_topology_layout_fingerprint": "user request enters folder policy inheritance then secret-level step-up authentication, timed authorization gate, secret launch and expiry loop",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-10",
+            "subject": "One-time external secret invitation with time-bound access",
+            "score": 0.104
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "Over-the-shoulder live recording: secret-level recording, global live stream, SSH event/video correlation, and replay lifecycle",
+            "score": 0.09134615384615384
+          },
+          {
+            "date": "2026-10-30",
+            "subject": "Approval revocation as a live session-control action",
+            "score": 0.09090909090909091
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiSIEM",
-      "lesson_subject": "FortiSIEM Collector High Availability: VRRP leader/follower failover and Supervisor job redistribution",
-      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/841876",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/841876",
-        "https://docs.fortinet.com/document/fortisiem/7.5.1/fortisiem-reference-architecture-using-clickhouse/600045/collector-architectures",
-        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/807994"
+      "lesson_subject": "FortiSIEM Manager multi-instance control plane: registration, telemetry cadence, incident actions, and raw-event retrieval",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/455348/fortisiem-manager",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortisiem/6.5.0/release-notes"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "Collector HA is a data-collection tier feature separate from Supervisor active-passive HA; a Leader owns a virtual IP via VRRP (on-prem/AWS) or a cloud load balancer fronts Collectors (Azure/GCP), while Supervisor/App Server redistributes event-pull and performance-monitoring jobs.",
-      "workflow_transaction_fingerprint": "Log sources send to a stable VIP; Leader Collector receives logs; Supervisor distributes polling/monitoring jobs among members; on Leader failure the highest-priority Follower takes VIP and jobs are redistributed; on Follower failure App Server moves its jobs to other members.",
-      "failure_class": "Collector host or process failure causes log loss or polling-job interruption; VRRP or load-balancer health checks may not detect an application process failure when the OS remains reachable.",
-      "evidence_pattern": "Cluster Config shows HA group, Leader/Follower, VRRP or load balancer and VIP; logs continue to arrive at new Leader; job redistribution occurs when App Server misses task request for 10 minutes; process-down may not trigger VRRP failover.",
-      "remediation_path": "Keep VIP and Collectors on the same network for VRRP; set priorities and verify failover; use application-aware load-balancer health checks where supported; monitor Collector processes and App Server job queues; account for the documented 10-minute redistribution window and test leader and follower failures separately.",
-      "question_fingerprint": "Distinguish Collector-tier VRRP failover from Supervisor HA and identify why a process failure may not trigger a VIP move.",
-      "diagram_topology_layout_fingerprint": "Multiple log sources target a VIP; Leader/Follower Collectors share VRRP or load-balancer front end; Supervisor/App Server distributes pull/monitor jobs; failure arrow moves VIP and jobs to healthy peers.",
-      "semantic_uniqueness_review": "The prior 2026-11-02 FortiSIEM lesson covers Supervisor active-passive HA and primary-only audit/video persistence. This lesson covers the separate Collector data-ingestion tier, VRRP VIP ownership and job redistribution, not Supervisor database replication."
+      "feature_mechanism_fingerprint": "separate licensed Manager VM registers FortiSIEM 6.5+ instances; registration creates bidirectional HTTP(S) REST channel; incidents near-real-time, health every minute, license hourly; Manager stores incidents/license/one day health in local PostgreSQL but not raw events",
+      "workflow_transaction_fingerprint": "instance registers to Manager -> secure two-way REST channel forwards incident/status/rule changes and periodic health/license -> central operator changes incident or rule state -> Manager propagates action with logged-in user context -> raw triggering events are fetched on demand from originating instance",
+      "failure_class": "central console shows incident but cannot retrieve triggering events or apply actions because registration/channel/instance reachability or version order is wrong",
+      "evidence_pattern": "Manager instance registration status; REST/HTTP(S) connectivity; health timestamp cadence; PostgreSQL incident/license records; triggering-event request to originating instance; upgrade sequencing",
+      "remediation_path": "install separately licensed Manager VM; register supported 6.5+ instances; validate bidirectional HTTP(S) and REST access; upgrade Manager before instances; troubleshoot raw-event retrieval at source instance rather than expecting Manager to store raw events",
+      "question_fingerprint": "identify why an incident appears centrally while raw triggering events are unavailable: Manager stores incident metadata but fetches raw events from the source instance on demand",
+      "diagram_topology_layout_fingerprint": "three FortiSIEM instances sending incident/health/license lanes to separate Manager PostgreSQL store, with on-demand raw-event pullback to selected source",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-30",
+            "subject": "Rule execution modes: streaming, scheduled, and scheduled-via-SQL evidence boundaries",
+            "score": 0.10303030303030303
+          },
+          {
+            "date": "2026-10-16",
+            "subject": "FortiSIEM — Events versus performance metrics",
+            "score": 0.10256410256410256
+          },
+          {
+            "date": "2026-11-02",
+            "subject": "Windows Event Forwarding (WEF): source-initiated subscription, centralized agent collection, and original-host attribution",
+            "score": 0.06862745098039216
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "FortiSASE",
-      "lesson_subject": "Simplified pre-logon tunnel: direct FortiSASE PoP machine-certificate authentication and post-login transition",
-      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/106079/pre-logon-tunnel",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/106079/pre-logon-tunnel",
-        "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/106079/pre-logon-tunnel",
-        "https://docs.fortinet.com/document/fortisase/latest/secure-private-access-architecture-guide/269831/additional-configurations"
-      ],
-      "scenario_community_url": "https://community.fortinet.com/support-forum-92/can-t-get-the-pki-based-pre-logon-working-from-fortisase-230695",
-      "feature_mechanism_fingerprint": "FortiSASE 25.4.b simplified pre-logon uses a Windows machine certificate to establish a tunnel directly to the nearest FortiSASE Security PoP, replacing the earlier customer-managed FortiGate SSL/IPsec gateway path for new configurations.",
-      "workflow_transaction_fingerprint": "At boot, FortiClient selects a machine certificate matching both configured CN and Issuer (logical AND), validates against imported CA, connects to FortiSASE PoP and reaches AD destinations; after user login the pre-logon tunnel disconnects and the endpoint either autoconnects to Cloud Security tunnel or waits for manual tunnel selection.",
-      "failure_class": "Machine-certificate pre-logon session is established at PoP but immediately terminated or never appears connected due certificate selection/trust, destination policy, profile transition or IPsec parameter mismatch.",
-      "evidence_pattern": "Community report describes PoP showing connection success followed by termination while FortiClient never shows connected; multiple chains with/without intermediate CA did not resolve it and support case remained open. Configuration evidence includes CA, server cert, CN+Issuer AND matching, allowed destinations and endpoint profile toggle.",
-      "remediation_path": "Verify machine cert is staged before shipment, CA chain is imported, CN and Issuer filters both match the intended certificate, at least one FQDN/subnet destination is configured, endpoint profile enables pre-logon and global connection settings match. Compare inherited IPsec IKEv2 proposals/DPD/NAT-T with endpoint logs. Do not claim a confirmed root cause for the October 20 community case; it was unresolved at review.",
-      "question_fingerprint": "Trace a pre-logon tunnel that appears at the PoP but terminates on the endpoint, focusing on machine certificate matching and post-login transition.",
-      "diagram_topology_layout_fingerprint": "Windows boot and machine certificate -> FortiSASE Security PoP -> allowed AD destination; user logon triggers disconnect and transition to separate user Cloud Security tunnel.",
-      "semantic_uniqueness_review": "Prior FortiSASE lessons cover concurrent IKEv2 multi-connect, branch on-ramp and security posture tags. They do not cover pre-user machine-certificate authentication, direct PoP tunnel establishment or the 25.4.b legacy-to-simplified transition."
-    },
-    {
-      "product": "Secure SD-WAN",
-      "lesson_subject": "FortiCloud Overlay-as-a-Service orchestration: per-device entitlement, FGFM transactions, rollback and ADVPN topology",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
-      "primary_urls": [
-        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
-        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/526937/overlay-as-a-service",
-        "https://docs.fortinet.com/document/overlay-as-a-service/latest/administration-guide",
-        "https://docs.fortinet.com/document/overlay-as-a-service/latest/deployment-guide"
+      "lesson_subject": "FortiSASE agent-based Entra ID SAML SSO: claims, certificates, group limits, and stable egress identity",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-agent-based-tunnel-using-oauth/548829/configuring-fortisase-with-entra-id-sso-in-forticlient-agent-based-mode",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/204753/example-creating-a-secure-internet-access-agent-tunnel-policy-with-entra-id-sso-authentication",
+        "https://docs.fortinet.com/document/fortisase/latest/administration-guide/463787/configuring-fortisase-with-entra-id-sso-saml-configuration-fields"
       ],
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiCloud OaaS is a subscription-based overlay provisioning controller for a single region and geo-redundant dual hub; an on-box OaaS agent uses the FGFM management tunnel to validate, compare and apply orchestrated FortiOS configuration as a transaction, rolling back the whole change set if any step fails.",
-      "workflow_transaction_fingerprint": "Each FortiGate used by OaaS requires SWOS entitlement; FortiCloud portal builds hub/spoke topology; agent receives desired configuration over FGFM, validates and compares it, commits the FortiOS configuration transaction, or rolls back all orchestrated changes on failure; ADVPN hub informs spokes about better paths and shortcuts form directly between spokes.",
-      "failure_class": "Overlay provisioning task fails or is rolled back because of missing/expired SWOS entitlement, FGFM management tunnel failure, unsupported FortiOS version, UDP 500/4500/NAT-T reachability, or configuration conflict.",
-      "evidence_pattern": "System > FortiGuard license information shows Licensed/Expires Soon/Expired/Not Licensed; diagnose test update info lists SWOS; get oaas status reports Account, Site, Configuration version, Configuration sync status, Target version, Task ID and Error; verify IPsec tunnels, BGP routes, SLA and spoke-to-spoke ADVPN separately.",
-      "remediation_path": "Apply SWOS entitlement to every OaaS FortiGate; verify FortiOS 7.4.4+ and per-spoke license; confirm FGFM tunnel and UDP 500/4500 NAT-T reachability; inspect get oaas status and task error; validate IPsec/BGP/SD-WAN policy after commit. Distinguish the FortiCloud transaction/rollback workflow from FortiManager template installation and from ADVPN shortcut path discovery.",
-      "question_fingerprint": "Determine whether an OaaS task failure is entitlement, FGFM control-plane, config transaction or ADVPN data-plane and interpret get oaas status correctly.",
-      "diagram_topology_layout_fingerprint": "FortiCloud OaaS portal/controller to hub and spokes over FGFM management tunnels; on-box agent validates and commits/rolls back; separate hub/spoke ADVPN shortcuts show data-plane topology.",
-      "semantic_uniqueness_review": "Prior Secure SD-WAN records cover FortiManager overlay templates and ADVPN 2.0 edge discovery/path management. OaaS uses a FortiCloud subscription/controller, FGFM agent transaction and rollback; the lesson explicitly separates orchestration control plane from the already-covered ADVPN shortcut mechanics."
-    }
-  ],
-  "rejected_candidate_topics": [
-    {
-      "product": "FortiGate",
-      "subject": "DNS over TLS inspection in proxy/flow mode",
-      "reason": "Rejected to avoid duplicating the selected FortiSwitch DNS-over-TLS transport mechanism within the same report."
-    },
-    {
-      "product": "FortiAuthenticator",
-      "subject": "EAP-TEAP chained machine/user authentication",
-      "reason": "Rejected because the prior 2026-11-05 lesson covered EAP-TTLS; both are tunneled EAP method workflows and the HA interface feature is more semantically distinct."
-    },
-    {
-      "product": "FortiPAM",
-      "subject": "JIT privilege via secret checkout/check-in PowerShell over WinRM",
-      "reason": "Rejected because recent FortiPAM lessons already covered secret checkout locks and scheduled PowerShell jobs; selected RADIUS attribute-integrity feature instead."
-    },
-    {
-      "product": "FortiSIEM",
-      "subject": "Automated Case Management",
-      "reason": "Rejected because prior 2026-11-04 automation-policy lesson covered incident/case creation; selected Collector-tier HA, which is a different subsystem."
+      "feature_mechanism_fingerprint": "Entra ID IdP issues SAML assertion to FortiSASE SP for FortiClient agent-based tunnel; username/group claim mapping, IdP signing cert, SP certificate, digest selection, optional group matching; group membership retrieval limit of 150; IdP transaction requires stable public source IP",
+      "workflow_transaction_fingerprint": "FortiClient SAML login -> redirect to Entra ID -> user/MFA authentication -> signed assertion returned to FortiSASE ACS -> certificate/digest and claims validated -> group mapping and VPN authorization -> tunnel established",
+      "failure_class": "SAML assertion rejected, user authenticates but group policy mismatch occurs, or redirect fails when client traffic egress IP changes mid-transaction",
+      "evidence_pattern": "SAML Entity ID/ACS/SLS values; IdP certificate and digest; username/group claim mapping; group assertion count; FortiClient SAML login trace; client public IP stability across IdP redirect",
+      "remediation_path": "copy exact SP entity/ACS/SLS values; map username and group claims; use a stable custom SP certificate where practical; filter Entra group claims to 150 or fewer; ensure all IdP traffic uses one stable public IP during login",
+      "question_fingerprint": "diagnose SAML login that authenticates at Entra but fails at FortiSASE because source IP changes during redirect or group claim exceeds 150",
+      "diagram_topology_layout_fingerprint": "FortiClient to Entra IdP redirect and signed assertion return to FortiSASE SP, with certificate/claim/group validation and stable-egress constraint",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-10-27",
+            "subject": "FortiSASE — SCIM provisioning: entitlement, identity lifecycle, and delete caveats",
+            "score": 0.08536585365853659
+          },
+          {
+            "date": "2026-11-02",
+            "subject": "Agentless explicit proxy and SIA tunnel mutual exclusion: port 9443, SNI rewrite, and domain-fronting 403",
+            "score": 0.06666666666666667
+          },
+          {
+            "date": "2026-11-01",
+            "subject": "FortiClient Multi-Connect: concurrent IKEv2 tunnels and Windows DNS priority",
+            "score": 0.05555555555555555
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     },
     {
       "product": "Secure SD-WAN",
-      "subject": "ADVPN 2.0 path discovery alone",
-      "reason": "Rejected because prior 2026-10-29 report covered ADVPN 2.0 edge discovery and shortcut path management; selected OaaS controller transaction/rollback, explicitly separated from ADVPN data-plane shortcuts."
+      "lesson_subject": "SD-WAN multicast steering: PIM rendezvous-point control traffic and SLA-driven overlay failover",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/243964/use-sd-wan-rules-to-steer-multicast-traffic",
+      "primary_supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.6.0/new-features/474779/allow-sd-wan-rules-to-steer-ipv6-multicast-traffic"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "SD-WAN service rules classify PIM protocol 103 and steer IPv4/IPv6 multicast; pim-use-sdwan makes PIM RP-neighbor checks and control packets use SD-WAN; SLA member failover moves multicast stream; ADVPN shortcuts are unsupported and must be disabled for the multicast service",
+      "workflow_transaction_fingerprint": "receiver joins multicast group -> PIM-SM control traffic reaches RP through selected overlay member -> SLA monitors hub/RP path -> failed member removes multicast path and SD-WAN selects alternate member -> stream continues and returns to preferred member after SLA recovery",
+      "failure_class": "unicast SLA passes but multicast joins or stream fail because PIM control traffic bypasses SD-WAN, wrong protocol rule, RP reachability, or ADVPN shortcut remains enabled",
+      "evidence_pattern": "diagnose sys sdwan health-check; PIM sparse-mode neighbor table; multicast route/group state; service rule protocol 103; pim-use-sdwan; shortcut disable; packet capture on both overlay members",
+      "remediation_path": "enable multicast routing and PIM on relevant interfaces; configure RP; enable pim-use-sdwan; add protocol 103 SD-WAN service with SLA and priority members; disable shortcut for that service; verify PIM neighbor and stream failover separately",
+      "question_fingerprint": "explain why a healthy unicast SLA does not prove multicast control-plane path selection and identify the required PIM/SD-WAN integration",
+      "diagram_topology_layout_fingerprint": "multicast source and RP behind dual-hub, two overlay members to spoke receiver, PIM control-plane path through SD-WAN selector and SLA failover",
+      "semantic_exclusion_check": {
+        "status": "PASS",
+        "compared_against_180_prior_published_lesson_records": true,
+        "closest_prior_matches": [
+          {
+            "date": "2026-11-04",
+            "subject": "SD-WAN traffic shaping and QoS profiles with advanced shaping groups",
+            "score": 0.12857142857142856
+          },
+          {
+            "date": "2026-11-01",
+            "subject": "Monthly traffic-volume quota steering: billing counters, overage values, and SLA member selection",
+            "score": 0.11538461538461539
+          },
+          {
+            "date": "2026-11-02",
+            "subject": "Remote-health-check BGP route suppression when every hub-to-spoke overlay is dead: MED failover across dual hubs",
+            "score": 0.11214953271028037
+          }
+        ],
+        "reason": "The selected mechanism, transaction, failure boundary, evidence, remediation, question angle, and diagram topology are materially different; source URLs alone were not used as the uniqueness test."
+      }
     }
   ]
 }
