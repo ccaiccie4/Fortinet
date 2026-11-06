@@ -1,0 +1,187 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-06T08:01:31-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "methodology": "For every mandatory product, current Administration/Configuration/New Features/architecture/release-specific documentation was searched. Primary lesson selection is based on Fortinet documentation; Community sources are used only to ground scenario behavior.",
+  "products": [
+    {
+      "product": "FortiGate",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/63913/check-ha-synchronization-status",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/451737/troubleshooting"
+      ],
+      "feature_focus": "FGCP HA configuration checksum diagnostics and dynamic interface state; compare Configuration Status, checksum dump and HBDEV/MONDEV counters.",
+      "new_features_checked": [
+        "FortiOS 8.0.0 Administration Guide",
+        "FortiOS 8.0.0 New Features Guide",
+        "FortiOS 8.0.0 HA troubleshooting"
+      ],
+      "limitations": "The specific WWAN IPv6 checksum bug/fix schedule is described by Community; no official release-note entry for the 8.0.3 fix was independently found."
+    },
+    {
+      "product": "FortiManager",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/upgrade-guide/738080/checking-fortimanager-databases",
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/upgrade-guide/621448/backing-up-configuration-files-and-databases",
+        "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/984634/updating-the-system-firmware"
+      ],
+      "feature_focus": "SQLite database integrity checks, workspace preconditions, backup/restore and backup-file checksum verification.",
+      "new_features_checked": [
+        "FortiManager 7.6.6 Upgrade Guide",
+        "FortiManager 7.6.7 Administration Guide",
+        "FortiManager 7.6.x release/upgrade documentation"
+      ],
+      "limitations": "Official docs cover check-integrity, backup and global DB recovery. The new ADOM recovery command and 7.6.10 SQLite fix are reported in a Community article; the official 7.6.10 CLI/release-note reference was not independently found."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://docs.fortinet.com/document/fortianalyzer/latest/administration-guide/477080/blocking-indicators"
+      ],
+      "feature_focus": "FortiMQ connector lifecycle, ADOM scope, block_indicator playbook, same-FortiCare prerequisite, FortiGate Cloud-based Fabric Feed consumption and policy enforcement.",
+      "new_features_checked": [
+        "FortiAnalyzer 8.0.0 New Features Guide",
+        "FortiAnalyzer 8.0 Administration Guide",
+        "FortiGate 8.0 Cloud-based Fabric Feed documentation"
+      ],
+      "limitations": "Community Node2Shell detection templates are alpha event handlers/reports; they raise detections and do not themselves enforce blocks."
+    },
+    {
+      "product": "FortiSwitch",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/500379/config-system",
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/35890/what-s-new-in-fortiswitchos-8-0-0"
+      ],
+      "feature_focus": "FortiSwitchOS 8.0.0 DNS-over-TLS on TCP/853, optional server CA validation, system DNS client scope and cache memory units.",
+      "new_features_checked": [
+        "FortiSwitchOS 8.0.0 Administration Guide",
+        "FortiSwitchOS 8.0.0 CLI Reference",
+        "FortiSwitchOS 8.0.0 Release Notes"
+      ],
+      "limitations": "No directly matched recent DoT troubleshooting article was found; a recent SCP-removal candidate was not selected because an authoritative 7.6.7 release-note reference was not independently verified."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/677212/configuring-wi-fi-7-multi-link-operation",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/180088/support-wi-fi-7-mlo-on-fortiap-k-series-models",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/210704/support-mlo-on-standalone-vaps",
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/307228"
+      ],
+      "feature_focus": "802.11be MLO, K-series model/radio matrix, VAP security prerequisites, WTP profile mapping, standalone operation and MLD diagnostics.",
+      "new_features_checked": [
+        "FortiAP/FortiWiFi 8.0.0 Configuration Guide",
+        "FortiOS 8.0.0 New Features Guide",
+        "FortiAP 7.6.3/7.6.5 release-specific configuration docs"
+      ],
+      "limitations": "No recent MLO-specific Community scenario was verified; current wireless support discussions concerned other mechanisms."
+    },
+    {
+      "product": "FortiNAC",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/450544/local-radius-server"
+      ],
+      "feature_focus": "Local RADIUS, PEAP/MSCHAPv2, Winbind domain membership, server certificate, EAP method selection and TLS protocol/cipher controls.",
+      "new_features_checked": [
+        "FortiNAC 9.4.0 Administration Guide",
+        "Local RADIUS and 802.1X configuration",
+        "Certificate management"
+      ],
+      "limitations": "The Windows KB5127648 failure is endpoint-side behavior described in the Community scenario; it is not a FortiNAC code defect."
+    },
+    {
+      "product": "FortiNAC-F",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/199295/microsoft-intune"
+      ],
+      "feature_focus": "Microsoft NAC-API single-host lookup, DeviceID, application permissions, certificate/secret authentication, on-demand registration and random MAC handling.",
+      "new_features_checked": [
+        "FortiNAC-F 7.6.0 MDM/OT Security Integration Guide",
+        "Microsoft Intune integration",
+        "NAC-API and On-Demand Registration Workflow"
+      ],
+      "limitations": "The recent Community Intune OUI article is categorized under FortiNAC-F but its Scope field says FortiNAC; this is disclosed as shared product behavior."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability"
+      ],
+      "feature_focus": "8.0.2 dedicated Heartbeat Interface, renamed Management interface/Management IP/Management access, cluster and load-balancing modes, heartbeat interval and lost threshold.",
+      "new_features_checked": [
+        "FortiAuthenticator 8.0.2 Administration Guide and New Features",
+        "FortiAuthenticator 8.0.3 High Availability chapter",
+        "HA and load-balancing licensing notes"
+      ],
+      "limitations": "No recent Community scenario directly matching HA interface separation was verified."
+    },
+    {
+      "product": "FortiPAM",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+        "https://docs.fortinet.com/document/fortipam/latest/release-notes/359701/what-s-new"
+      ],
+      "feature_focus": "RADIUS Message-Authenticator generation and response validation, default require-message-authenticator setting and controlled compatibility exception.",
+      "new_features_checked": [
+        "FortiPAM 1.9.0 Administration Guide",
+        "FortiPAM 1.9.0 Release Notes",
+        "RADIUS server configuration CLI"
+      ],
+      "limitations": "No recent Community scenario directly matching FortiPAM RADIUS attribute 80 was verified."
+    },
+    {
+      "product": "FortiSIEM",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/841876",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/fortisiem-reference-architecture-using-clickhouse/600045/collector-architectures",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/807994",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/534877/whats-new-in-7-2-0"
+      ],
+      "feature_focus": "Collector HA via VRRP or cloud load balancer, Leader/Follower, VIP ownership, Supervisor job redistribution and process-level failover boundaries.",
+      "new_features_checked": [
+        "FortiSIEM 7.5.1 User Guide",
+        "FortiSIEM Reference Architecture using ClickHouse",
+        "What's New in 7.2.0 and 7.3.1"
+      ],
+      "limitations": "A recent Supervisor PostgreSQL replica incident was found but is a different HA tier; no directly matched Collector-HA Community scenario was verified."
+    },
+    {
+      "product": "FortiSASE",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/106079/pre-logon-tunnel",
+        "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/106079/pre-logon-tunnel",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/13465/new-features",
+        "https://docs.fortinet.com/document/fortisase/latest/secure-private-access-architecture-guide/269831/additional-configurations"
+      ],
+      "feature_focus": "25.4.b simplified direct-PoP pre-logon, machine certificate CN+Issuer matching, CA trust, allowed destinations, endpoint-profile transition and IPsec inheritance.",
+      "new_features_checked": [
+        "FortiSASE 26.1.107 Feature Administration Guide",
+        "FortiSASE 7.4.0 Administration Guide",
+        "FortiSASE Secure Private Access Architecture Guide"
+      ],
+      "limitations": "The October 20 Community support case remains unresolved; no root cause is inferred."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "current_docs": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/526937/overlay-as-a-service",
+        "https://docs.fortinet.com/document/overlay-as-a-service/latest/administration-guide",
+        "https://docs.fortinet.com/document/overlay-as-a-service/latest/deployment-guide"
+      ],
+      "feature_focus": "OaaS subscription entitlement, single-region dual-hub topology, per-spoke license, FGFM management tunnel, agent validation/compare/transaction/rollback and ADVPN shortcut data plane.",
+      "new_features_checked": [
+        "FortiOS 8.0.0 Administration Guide",
+        "FortiOS 8.0.0 SD-WAN New Features",
+        "OaaS Administration Guide",
+        "OaaS Deployment Guide",
+        "SD-WAN Architecture for Enterprise"
+      ],
+      "limitations": "No directly matched recent OaaS Community troubleshooting scenario was verified. The report distinguishes OaaS orchestration from previously taught FortiManager overlay templates and ADVPN path discovery."
+    }
+  ]
+}
