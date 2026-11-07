@@ -17,8 +17,8 @@
 <li><strong>Examination:</strong> PASS. Exactly 50 graded MCQs, four choices each and 200 substantive choice-specific feedback entries. Correct answer positions are balanced 13/13/12/12; choice-length difference is at most two words.</li>
 <li><strong>Community sweep:</strong> PARTIAL coverage by design. All 12 product areas were searched; directly matched recent scenarios were verified for FortiNAC and FortiSIEM only. Ten products had no recent scenario directly matching the selected feature; unrelated or older findings were not promoted as matching scenarios.</li>
 <li><strong>Administration-guide access:</strong> PARTIAL. Official indexed content was available for the selected primary topics; most Fortinet Document Library HTML opens returned HTTP 403. The FortiNAC-F integration PDF was directly opened and inspected. All source URLs are preserved.</li>
-<li><strong>GitHub report/index read-back:</strong> PENDING until the final commit/read-back stage. The pre-generation inventory, research files, lesson bank, question bank and diagram assets are already published.</li>
-<li><strong>GitHub Pages:</strong> PENDING verification of the dated URL and site root.</li>
+<li><strong>GitHub report/index read-back:</strong> SUCCESS. The dated report, index, exclusion inventory, selected fingerprints, research sweeps, lesson bank, question bank, diagram manifest and all 24 diagram assets were read back from GitHub.</li>
+<li><strong>GitHub Pages:</strong> FAILED verification in this run. The dated Pages URL and site root were inaccessible through web verification; a direct HTTP check also failed because the verification environment could not resolve the Pages host. GitHub main-branch publication and read-back remain successful. Retry after DNS/deployment access recovers.</li>
 <li><strong>Email:</strong> Not attempted; email/notifications are disabled for this run.</li>
 </ul>
 <p><strong>Remediation:</strong> retry Pages verification after deployment/access recovers; repeat the Community searches for the ten products without a directly matched recent scenario; retry direct Document Library page opens when HTTP 403 clears. No lesson, diagram or question is withheld because of these gaps.</p></section>
@@ -413,8 +413,9 @@ end</code></pre>
        const feedback=label.querySelector('.feedback');
        feedback.hidden=false;
        label.classList.remove('correct','incorrect','selected');
+       label.querySelector('.correct-flag').hidden=false;
        if(correct) label.classList.add('correct');
-       if(input.checked){label.classList.add('selected');if(correct)points++;}
+       if(input.checked){label.classList.add('selected');if(correct)points++;else label.classList.add('incorrect');}
      });
    });
    score.textContent='Score: '+points+' / '+qs.length+' ('+Math.round(points*100/qs.length)+'%). Answered: '+answered+' / '+qs.length+'. Correct answers and feedback for every option are shown below each question.';
