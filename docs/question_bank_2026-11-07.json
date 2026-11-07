@@ -1,0 +1,1548 @@
+{
+  "schema_version": "3.0",
+  "run_date": "2026-11-07",
+  "grading": "One point per question; exactly one correct option; each option contains specific explanatory feedback.",
+  "question_count": 50,
+  "answer_position_counts": [
+    13,
+    13,
+    12,
+    12
+  ],
+  "validation": {
+    "question_count": 50,
+    "all_have_four_options": true,
+    "all_have_feedback": true,
+    "unique_fingerprints": true,
+    "answer_position_counts": [
+      13,
+      13,
+      12,
+      12
+    ],
+    "max_choice_word_delta": 3,
+    "choice_length_violations": [
+      {
+        "id": "Q01",
+        "min": 5,
+        "max": 8,
+        "delta": 3
+      },
+      {
+        "id": "Q43",
+        "min": 5,
+        "max": 8,
+        "delta": 3
+      },
+      {
+        "id": "Q46",
+        "min": 6,
+        "max": 9,
+        "delta": 3
+      }
+    ],
+    "unique_question_ids": true
+  },
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "lesson_id": "L01",
+      "prompt": "Two application FQDNs share one ZTNA port, but requests reach the wrong backend. What should be inspected first?",
+      "question_fingerprint": "FortiGate|Two application FQDNs share one ZTNA port, but requests reach the wrong ",
+      "options": [
+        {
+          "text": "Create a second VIP on the same port",
+          "correct": false,
+          "feedback": "A second listener is not the first diagnostic step and may create another port conflict without correcting the host mapping."
+        },
+        {
+          "text": "Increase the EMS polling interval first",
+          "correct": false,
+          "feedback": "EMS polling affects posture-tag freshness, not which virtual host receives a request."
+        },
+        {
+          "text": "Inspect the Host header and virtual-host mapping",
+          "correct": true,
+          "feedback": "The shared listener can serve several applications; the Host value selects the matching virtual host before path and real-server selection."
+        },
+        {
+          "text": "Change the backend health-check schedule",
+          "correct": false,
+          "feedback": "Health checks do not select the virtual host or path used by the incoming HTTPS request."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "lesson_id": "L01",
+      "prompt": "A ZTNA port uses 0.0.0.0 and is bound to wan1. Which behavior should the engineer expect?",
+      "question_fingerprint": "FortiGate|A ZTNA port uses 0.0.0.0 and is bound to wan1. Which behavior should the",
+      "options": [
+        {
+          "text": "The listener follows wan1 interface addresses",
+          "correct": true,
+          "feedback": "With a specific interface selected, 0.0.0.0 lets the gateway use that interface's primary and secondary IPv4 addresses."
+        },
+        {
+          "text": "The listener binds every interface address",
+          "correct": false,
+          "feedback": "That is the meaning of an Any-interface listener, not a port tied to wan1."
+        },
+        {
+          "text": "The listener ignores the selected certificate",
+          "correct": false,
+          "feedback": "The external address choice does not remove the listener's TLS certificate configuration."
+        },
+        {
+          "text": "The listener bypasses management port checks",
+          "correct": false,
+          "feedback": "The address and port must still avoid conflicts with management access on the selected interface."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "lesson_id": "L01",
+      "prompt": "The backend mapping is correct, but the ZTNA policy denies a compliant endpoint after an EMS tag change. Which check is most relevant?",
+      "question_fingerprint": "FortiGate|The backend mapping is correct, but the ZTNA policy denies a compliant e",
+      "options": [
+        {
+          "text": "Rebuild the access-proxy VIP object",
+          "correct": false,
+          "feedback": "The VIP controls the listener; recreating it does not refresh endpoint posture tags."
+        },
+        {
+          "text": "Change the virtual host certificate chain",
+          "correct": false,
+          "feedback": "A certificate-chain issue affects TLS validation, not the dynamic posture-tag match."
+        },
+        {
+          "text": "Increase the backend connection timeout",
+          "correct": false,
+          "feedback": "A timeout affects an established proxy connection, not policy authorization before forwarding."
+        },
+        {
+          "text": "Check synchronized EMS posture tags and policy",
+          "correct": true,
+          "feedback": "The gateway must receive the tag from the EMS connector and the policy must reference the current tag or tag group."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "lesson_id": "L01",
+      "prompt": "A path rule for /api also captures requests to /api-v2. What configuration detail explains this?",
+      "question_fingerprint": "FortiGate|A path rule for /api also captures requests to /api-v2. What configurati",
+      "options": [
+        {
+          "text": "Create separate external listener objects",
+          "correct": false,
+          "feedback": "Separate listeners are unnecessary when the host and path mappings can be made unambiguous."
+        },
+        {
+          "text": "Use distinct path patterns or exact matches",
+          "correct": true,
+          "feedback": "The GUI's default path match is substring-based, so a short path can also match longer paths containing that string."
+        },
+        {
+          "text": "Disable TLS inspection on the client",
+          "correct": false,
+          "feedback": "Client-side TLS inspection does not change FortiGate's URL path matching behavior."
+        },
+        {
+          "text": "Change the application service port",
+          "correct": false,
+          "feedback": "Changing a backend port does not correct an overly broad path pattern."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q05",
+      "product": "FortiGate",
+      "lesson_id": "L01",
+      "prompt": "Client-side TLS succeeds, but FortiGate rejects the backend HTTPS connection after an upgrade. What should be checked?",
+      "question_fingerprint": "FortiGate|Client-side TLS succeeds, but FortiGate rejects the backend HTTPS connec",
+      "options": [
+        {
+          "text": "Replace the client-facing ZTNA certificate",
+          "correct": false,
+          "feedback": "The client certificate is presented at the listener and does not repair the backend server's certificate."
+        },
+        {
+          "text": "Verify the backend certificate and name",
+          "correct": true,
+          "feedback": "Real-server certificate verification is enabled by default starting in FortiOS 7.6.4, so validate the backend chain and name."
+        },
+        {
+          "text": "Increase the external listener timeout",
+          "correct": false,
+          "feedback": "A listener timeout does not make an invalid backend certificate trusted."
+        },
+        {
+          "text": "Disable the EMS connector temporarily",
+          "correct": false,
+          "feedback": "EMS posture synchronization is separate from TLS validation to the real server."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "lesson_id": "L02",
+      "prompt": "A multi-device preview API request returns status code zero and a task number. What is the next step?",
+      "question_fingerprint": "FortiManager|A multi-device preview API request returns status code zero and a task n",
+      "options": [
+        {
+          "text": "Submit a separate install request immediately",
+          "correct": false,
+          "feedback": "The task identifier is for preview processing, not authorization to install the candidate configuration."
+        },
+        {
+          "text": "Treat the task number as preview text",
+          "correct": false,
+          "feedback": "The task number identifies work; it does not contain the per-device install preview."
+        },
+        {
+          "text": "Repeat the request with a new ADOM",
+          "correct": false,
+          "feedback": "Changing ADOM without evidence can target the wrong objects and does not retrieve the existing result."
+        },
+        {
+          "text": "Retrieve the preview result using its endpoint",
+          "correct": true,
+          "feedback": "The submission response confirms task acceptance; the separate preview-result endpoint returns the per-device preview text."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "lesson_id": "L02",
+      "prompt": "The preview result contains output for one VDOM but says no preview result for the second. Which check comes first?",
+      "question_fingerprint": "FortiManager|The preview result contains output for one VDOM but says no preview resu",
+      "options": [
+        {
+          "text": "Resolve the device and VDOM OIDs",
+          "correct": true,
+          "feedback": "The API scope is an ADOM plus device OID and VDOM OID pairs; stale identifiers can leave one target without a result."
+        },
+        {
+          "text": "Increase the preview task timeout only",
+          "correct": false,
+          "feedback": "A longer wait cannot correct a wrong device or VDOM identifier in the scope."
+        },
+        {
+          "text": "Switch the target to a global ADOM",
+          "correct": false,
+          "feedback": "Changing ADOM scope without validating object ownership can make the target selection less accurate."
+        },
+        {
+          "text": "Install the package to refresh identifiers",
+          "correct": false,
+          "feedback": "Installation is a separate operation and should not be used to repair a preview scope."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "lesson_id": "L02",
+      "prompt": "One device's preview contains validation errors while the task itself completed successfully. What is the safe action?",
+      "question_fingerprint": "FortiManager|One device's preview contains validation errors while the task itself co",
+      "options": [
+        {
+          "text": "Install both devices and compare runtime state",
+          "correct": false,
+          "feedback": "Installing first defeats the purpose of previewing candidate changes before deployment."
+        },
+        {
+          "text": "Ignore the warning if task status is zero",
+          "correct": false,
+          "feedback": "Task success means the preview request ran, not that each device's candidate configuration is valid."
+        },
+        {
+          "text": "Hold installation and inspect that device's preview",
+          "correct": true,
+          "feedback": "A completed task can still contain per-device warnings or errors; the preview is a review gate, not an install result."
+        },
+        {
+          "text": "Rebuild the ADOM database before reviewing",
+          "correct": false,
+          "feedback": "Database rebuild is not justified until the per-device preview identifies an actual database fault."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q09",
+      "product": "FortiManager",
+      "lesson_id": "L02",
+      "prompt": "An automation pipeline must decide whether a package change will alter a device before deployment. Which artifact answers that question most directly?",
+      "question_fingerprint": "FortiManager|An automation pipeline must decide whether a package change will alter a",
+      "options": [
+        {
+          "text": "Use package diff for revision rollback",
+          "correct": false,
+          "feedback": "Package diff compares policy-package state and is not the same as a per-device install preview."
+        },
+        {
+          "text": "Use device revision to inspect traffic",
+          "correct": false,
+          "feedback": "Device revisions preserve configuration state; they do not describe a candidate install's device-specific effect."
+        },
+        {
+          "text": "Use policy lookup to check log forwarding",
+          "correct": false,
+          "feedback": "Policy lookup answers policy-match questions rather than the install preview transaction."
+        },
+        {
+          "text": "Use preview for candidate install effects",
+          "correct": true,
+          "feedback": "Install Preview describes the candidate operation and its per-device impact before a separate install is issued."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "lesson_id": "L03",
+      "prompt": "The Triage Agent recommends endpoint quarantine, but the Next Steps pane reports that the connector is not configured. What is true?",
+      "question_fingerprint": "FortiAnalyzer|The Triage Agent recommends endpoint quarantine, but the Next Steps pane",
+      "options": [
+        {
+          "text": "The agent already quarantined the endpoint",
+          "correct": false,
+          "feedback": "A recommendation is not evidence that an enforcement connector executed the quarantine."
+        },
+        {
+          "text": "Connector configuration and analyst confirmation are required",
+          "correct": true,
+          "feedback": "The agent can recommend an action, but the connector must exist and an authorized analyst must select the action."
+        },
+        {
+          "text": "The alert is automatically suppressed after analysis",
+          "correct": false,
+          "feedback": "Suppression is a separate selectable action and is not implied by completing triage."
+        },
+        {
+          "text": "The endpoint risk score triggers quarantine alone",
+          "correct": false,
+          "feedback": "Risk context informs analysis; it does not independently execute a connector action."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "lesson_id": "L03",
+      "prompt": "The initial false-positive assessment conflicts with the raw events shown in the triggering-log step. What should the analyst do?",
+      "question_fingerprint": "FortiAnalyzer|The initial false-positive assessment conflicts with the raw events show",
+      "options": [
+        {
+          "text": "Trust the initial false-positive assessment",
+          "correct": false,
+          "feedback": "The agent reevaluates hypotheses as evidence arrives, so the initial assessment is not the final conclusion."
+        },
+        {
+          "text": "Raise the confidence threshold for all alerts",
+          "correct": false,
+          "feedback": "Changing a global threshold does not resolve a contradiction in the evidence for this alert."
+        },
+        {
+          "text": "Inspect triggering logs and original event context",
+          "correct": true,
+          "feedback": "The triggering logs are source evidence; the analyst should reconcile them before accepting the agent's initial hypothesis."
+        },
+        {
+          "text": "Create an incident before checking the logs",
+          "correct": false,
+          "feedback": "Incident creation may be useful later, but it does not replace validating the event evidence."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "lesson_id": "L03",
+      "prompt": "An alert is enriched with a high-risk entity, but the IP was reassigned yesterday. Which evidence should be validated?",
+      "question_fingerprint": "FortiAnalyzer|An alert is enriched with a high-risk entity, but the IP was reassigned ",
+      "options": [
+        {
+          "text": "Verify the endpoint-to-entity identity association",
+          "correct": true,
+          "feedback": "Asset Identity Center context is useful only when the entity mapping refers to the endpoint that generated the alert."
+        },
+        {
+          "text": "Increase the alert correlation time window",
+          "correct": false,
+          "feedback": "A wider correlation window can add more alerts but does not correct a stale IP-to-asset association."
+        },
+        {
+          "text": "Replace the triggering log parser immediately",
+          "correct": false,
+          "feedback": "Parser changes are not justified until the identity mapping and raw event fields are checked."
+        },
+        {
+          "text": "Disable related-alert enrichment for this case",
+          "correct": false,
+          "feedback": "Removing context hides potentially useful evidence without correcting the incorrect entity association."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q13",
+      "product": "FortiAnalyzer",
+      "lesson_id": "L03",
+      "prompt": "The agent returns low confidence and reports incomplete event context. What is the best next investigation?",
+      "question_fingerprint": "FortiAnalyzer|The agent returns low confidence and reports incomplete event context. W",
+      "options": [
+        {
+          "text": "Check log ingestion and entity enrichment completeness",
+          "correct": true,
+          "feedback": "Missing triggering logs or stale entity data weakens the reasoning; restore evidence quality before taking action."
+        },
+        {
+          "text": "Raise confidence manually in the alert",
+          "correct": false,
+          "feedback": "A manually changed confidence value would not add the missing event or endpoint evidence."
+        },
+        {
+          "text": "Suppress the alert and close the incident",
+          "correct": false,
+          "feedback": "Suppression would hide an unresolved investigation rather than improve the underlying evidence."
+        },
+        {
+          "text": "Run the connector action without review",
+          "correct": false,
+          "feedback": "Low confidence and incomplete context are reasons to pause, not to execute an irreversible response."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "lesson_id": "L04",
+      "prompt": "The FortiGate packet capture sees mirrored frames on VLAN 4092, but the recording server receives none. Where should troubleshooting move next?",
+      "question_fingerprint": "FortiSwitch|The FortiGate packet capture sees mirrored frames on VLAN 4092, but the ",
+      "options": [
+        {
+          "text": "Change source ingress ports on the switch",
+          "correct": false,
+          "feedback": "The source copy is already visible on VLAN 4092, so changing the source list is not the first step."
+        },
+        {
+          "text": "Increase the RSPAN VLAN priority value",
+          "correct": false,
+          "feedback": "Priority does not explain why a copy visible at the FortiGate fails to reach the recording interface."
+        },
+        {
+          "text": "Trace forwarding beyond the FortiGate capture",
+          "correct": true,
+          "feedback": "The switch mirror copy reached the FortiGate; the remaining fault is in the downstream VLAN, destination-port or collector path."
+        },
+        {
+          "text": "Disable the mirror policer on all switches",
+          "correct": false,
+          "feedback": "A policer may affect volume, but first trace the forwarding path after the successful FortiGate capture."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "lesson_id": "L04",
+      "prompt": "An ERSPAN session is configured, but no packets arrive at the remote collector. Which prerequisite is decisive?",
+      "question_fingerprint": "FortiSwitch|An ERSPAN session is configured, but no packets arrive at the remote col",
+      "options": [
+        {
+          "text": "Enable local SPAN on the source port",
+          "correct": false,
+          "feedback": "Local SPAN is a different mirror mode and cannot be combined with ERSPAN in the managed guide."
+        },
+        {
+          "text": "Specify and ping the IPv4 collector",
+          "correct": true,
+          "feedback": "ERSPAN requires a destination IP and IPv4 reachability; if the collector IP is absent, the switch does not mirror the traffic."
+        },
+        {
+          "text": "Change RSPAN to use VLAN 4092",
+          "correct": false,
+          "feedback": "RSPAN is a Layer-2 transport mode and does not establish the routed GRE path required by ERSPAN."
+        },
+        {
+          "text": "Increase the mirror session count",
+          "correct": false,
+          "feedback": "Adding sessions does not fix an unspecified or unreachable ERSPAN destination."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "lesson_id": "L04",
+      "prompt": "FortiLink automatically selects an ISL as the RSPAN destination, and that same ISL was added as a mirror source. What should change?",
+      "question_fingerprint": "FortiSwitch|FortiLink automatically selects an ISL as the RSPAN destination, and tha",
+      "options": [
+        {
+          "text": "Make the ISL the local destination port",
+          "correct": false,
+          "feedback": "The controller already uses the ISL for remote mirroring; configuring it as another destination does not resolve the overlap."
+        },
+        {
+          "text": "Disable FortiLink discovery for that switch",
+          "correct": false,
+          "feedback": "Discovery is not the cause of the source/destination port conflict."
+        },
+        {
+          "text": "Move all source ports into one trunk",
+          "correct": false,
+          "feedback": "A trunk can add destination restrictions and does not remove the ISL conflict."
+        },
+        {
+          "text": "Exclude the auto-selected ISL from sources",
+          "correct": true,
+          "feedback": "FortiLink may use an ISL toward the FortiGate as the mirror destination; sourcing that same port can create a conflict."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q17",
+      "product": "FortiSwitch",
+      "lesson_id": "L04",
+      "prompt": "Mirrored packets disappear during high-volume captures while normal forwarding remains healthy. What should be examined?",
+      "question_fingerprint": "FortiSwitch|Mirrored packets disappear during high-volume captures while normal forw",
+      "options": [
+        {
+          "text": "Increase the collector's disk queue size",
+          "correct": false,
+          "feedback": "Collector storage does not explain a packet copy dropped before it leaves the switch."
+        },
+        {
+          "text": "Change the source ports to egress only",
+          "correct": false,
+          "feedback": "Direction changes may alter the captured set but do not establish whether the policer is limiting copies."
+        },
+        {
+          "text": "Review the mirror policer and model support",
+          "correct": true,
+          "feedback": "RSPAN/ERSPAN mirroring is rate-limited by a controller policer, and policer support varies by model."
+        },
+        {
+          "text": "Disable packet switching on every destination",
+          "correct": false,
+          "feedback": "Destination switching affects local port behavior, not the controller's remote-mirror policer."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "lesson_id": "L05",
+      "prompt": "A Bonjour profile is configured on the FortiAP profile, but one AP continues advertising an older service set. What is the likely cause?",
+      "question_fingerprint": "FortiAP/Wireless|A Bonjour profile is configured on the FortiAP profile, but one AP conti",
+      "options": [
+        {
+          "text": "Increase the FortiAP radio transmit power",
+          "correct": false,
+          "feedback": "Transmit power affects RF coverage and does not override the Bonjour profile hierarchy."
+        },
+        {
+          "text": "Remove the device-level override or update it",
+          "correct": true,
+          "feedback": "Fortinet documents that a Bonjour profile applied at device level takes precedence over the AP-profile setting."
+        },
+        {
+          "text": "Change the SSID security mode to WPA3",
+          "correct": false,
+          "feedback": "Security mode does not determine which Bonjour profile is applied to the AP."
+        },
+        {
+          "text": "Rebuild the client DHCP lease database",
+          "correct": false,
+          "feedback": "DHCP leases do not control the AP's Bonjour profile precedence."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "lesson_id": "L05",
+      "prompt": "AirPlay discovery crosses floors even though source and destination VLANs are mapped correctly. What is missing?",
+      "question_fingerprint": "FortiAP/Wireless|AirPlay discovery crosses floors even though source and destination VLAN",
+      "options": [
+        {
+          "text": "Place both floors into one AP group",
+          "correct": false,
+          "feedback": "One shared group defines one location boundary and cannot isolate the floors from each other."
+        },
+        {
+          "text": "Use a different VLAN number per SSID only",
+          "correct": false,
+          "feedback": "VLAN separation alone does not provide the AP-group location isolation described by micro-location."
+        },
+        {
+          "text": "Disable Bonjour service advertisements on both floors",
+          "correct": false,
+          "feedback": "Disabling all advertisements removes the service rather than scoping its discovery."
+        },
+        {
+          "text": "Enable micro-location and separate AP groups",
+          "correct": true,
+          "feedback": "Micro-location scopes mDNS to the FortiAP group, which must represent each intended physical location."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "lesson_id": "L05",
+      "prompt": "The AP diagnostic shows one gateway in oper state and another in cap state. Which AP is currently serving Bonjour?",
+      "question_fingerprint": "FortiAP/Wireless|The AP diagnostic shows one gateway in oper state and another in cap sta",
+      "options": [
+        {
+          "text": "The oper AP is the current gateway",
+          "correct": true,
+          "feedback": "The oper state identifies the active Bonjour gateway; cap indicates a backup AP waiting to take over."
+        },
+        {
+          "text": "The cap AP is currently forwarding service traffic",
+          "correct": false,
+          "feedback": "Cap identifies a backup role rather than the active gateway."
+        },
+        {
+          "text": "The hold AP is the elected primary gateway",
+          "correct": false,
+          "feedback": "Hold is not the active forwarding state; the operational role is shown as oper."
+        },
+        {
+          "text": "The highest RSSI client selects the gateway",
+          "correct": false,
+          "feedback": "The documented election is based on the AP base MAC address, not client RSSI."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q21",
+      "product": "FortiAP/Wireless",
+      "lesson_id": "L05",
+      "prompt": "Clients can discover a printer through Bonjour, but printing fails after discovery. Which boundary should be tested next?",
+      "question_fingerprint": "FortiAP/Wireless|Clients can discover a printer through Bonjour, but printing fails after",
+      "options": [
+        {
+          "text": "Change the Bonjour policy to all services",
+          "correct": false,
+          "feedback": "Advertising more service types does not repair the printer's unicast address or service port."
+        },
+        {
+          "text": "Test unicast reachability after discovery succeeds",
+          "correct": true,
+          "feedback": "Bonjour discovery advertises a service; the client's subsequent unicast connection to the printer is a separate data path."
+        },
+        {
+          "text": "Increase the AP beacon interval for clients",
+          "correct": false,
+          "feedback": "Beacon timing affects WLAN discovery and association, not the printer's post-discovery TCP path."
+        },
+        {
+          "text": "Disable IGMP snooping on every VLAN",
+          "correct": false,
+          "feedback": "IGMP snooping is not the first check once the Bonjour service is already discoverable."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "lesson_id": "L06",
+      "prompt": "PEAP fails only for Windows clients using cached SSO credentials after KB5127648; manual entry works. What evidence is most useful?",
+      "question_fingerprint": "FortiNAC|PEAP fails only for Windows clients using cached SSO credentials after K",
+      "options": [
+        {
+          "text": "Rotate every FortiNAC RADIUS shared secret",
+          "correct": false,
+          "feedback": "A shared-secret mismatch would affect the NAS/RADIUS exchange more broadly, not only cached credentials on updated Windows clients."
+        },
+        {
+          "text": "Change the endpoint to EAP-TLS immediately",
+          "correct": false,
+          "feedback": "Certificate authentication is reported as unaffected; changing methods is not needed to confirm the documented cached-credential issue."
+        },
+        {
+          "text": "Correlate Event 12014 and cached credential behavior",
+          "correct": true,
+          "feedback": "The recent scenario links KB5127648 to Event 12014 and cached PEAP credentials; manual entry success isolates the endpoint SSO path."
+        },
+        {
+          "text": "Disable Activity Monitoring to clear rejects",
+          "correct": false,
+          "feedback": "Activity Monitoring records failures and does not cause the Windows supplicant's cached-credential behavior."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "lesson_id": "L06",
+      "prompt": "All authentication methods fail only for endpoints behind one access switch. Which comparison should come first?",
+      "question_fingerprint": "FortiNAC|All authentication methods fail only for endpoints behind one access swi",
+      "options": [
+        {
+          "text": "Check NAS source address and shared secret",
+          "correct": true,
+          "feedback": "A single-NAS failure pattern points toward the RADIUS client identity, shared secret or path from that switch."
+        },
+        {
+          "text": "Change the Windows registry on every client",
+          "correct": false,
+          "feedback": "A global endpoint registry change is not supported by a failure isolated to one NAS."
+        },
+        {
+          "text": "Increase the Activity export retention period",
+          "correct": false,
+          "feedback": "Retention affects stored evidence, not whether a RADIUS request is accepted."
+        },
+        {
+          "text": "Switch all endpoints from MAB to PEAP",
+          "correct": false,
+          "feedback": "Changing authentication methods would obscure a shared NAS/RADIUS client problem."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "lesson_id": "L06",
+      "prompt": "EAP-TLS clients succeed while cached PEAP-MS-CHAPv2 clients fail after a Windows update. What does this suggest?",
+      "question_fingerprint": "FortiNAC|EAP-TLS clients succeed while cached PEAP-MS-CHAPv2 clients fail after a",
+      "options": [
+        {
+          "text": "Change the FortiNAC policy rank first",
+          "correct": false,
+          "feedback": "Policy rank is not the first suspect when only one endpoint authentication method and credential path fail."
+        },
+        {
+          "text": "Rebuild the RADIUS client group mapping",
+          "correct": false,
+          "feedback": "Client-group mapping would usually affect a broader set of requests from the same NAS."
+        },
+        {
+          "text": "Disable EAP-TLS certificate validation temporarily",
+          "correct": false,
+          "feedback": "EAP-TLS is already succeeding; weakening its certificate checks is unrelated and unsafe."
+        },
+        {
+          "text": "Compare supplicant method and cached credential path",
+          "correct": true,
+          "feedback": "The method-specific pattern aligns with the documented Windows cached-credential regression, not a universal RADIUS outage."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC",
+      "lesson_id": "L06",
+      "prompt": "An exported failed-authentication record shows Access-Reject. What can it establish by itself?",
+      "question_fingerprint": "FortiNAC|An exported failed-authentication record shows Access-Reject. What can i",
+      "options": [
+        {
+          "text": "Treat the exported reject as root cause",
+          "correct": false,
+          "feedback": "Access-Reject is an outcome code, not a complete explanation of the failed authentication."
+        },
+        {
+          "text": "Disable the RADIUS server and re-enable it",
+          "correct": false,
+          "feedback": "Restarting the service discards diagnostic context and is not justified by one exported reject."
+        },
+        {
+          "text": "Change the access VLAN before retesting",
+          "correct": false,
+          "feedback": "VLAN enforcement follows authentication policy and does not explain the reject by itself."
+        },
+        {
+          "text": "Correlate rejects with endpoint and NAS evidence",
+          "correct": true,
+          "feedback": "The export establishes the observed RADIUS outcome; root cause requires correlating endpoint, authenticator and identity-source evidence."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "lesson_id": "L07",
+      "prompt": "The Mist Service Connector test succeeds, but no APs appear in FortiNAC-F inventory. What should be checked?",
+      "question_fingerprint": "FortiNAC-F|The Mist Service Connector test succeeds, but no APs appear in FortiNAC-",
+      "options": [
+        {
+          "text": "Select a managed site and run Poll",
+          "correct": true,
+          "feedback": "Test Connection verifies API access; a selected site and subsequent Service Connector poll create the virtual controller and AP inventory."
+        },
+        {
+          "text": "Rotate the token and restart FortiNAC",
+          "correct": false,
+          "feedback": "The successful test argues against an immediate credential failure; inventory creation still requires a selected site and poll."
+        },
+        {
+          "text": "Enable switch discovery without credentials",
+          "correct": false,
+          "feedback": "AP discovery is separate from switch discovery, and switch discovery has its own credential requirements."
+        },
+        {
+          "text": "Change the inventory container to default",
+          "correct": false,
+          "feedback": "The container affects where objects appear, but it does not replace site selection and polling."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "lesson_id": "L07",
+      "prompt": "AP inventory is created correctly, but managed switches are missing. Which prerequisites apply?",
+      "question_fingerprint": "FortiNAC-F|AP inventory is created correctly, but managed switches are missing. Whi",
+      "options": [
+        {
+          "text": "Increase the RADIUS accounting port timeout",
+          "correct": false,
+          "feedback": "RADIUS accounting does not provide the API-based switch inventory read."
+        },
+        {
+          "text": "Enable CoA on every switch interface",
+          "correct": false,
+          "feedback": "CoA is used for endpoint disconnect/enforcement, not to discover switch inventory."
+        },
+        {
+          "text": "Provide both SNMP and CLI credentials",
+          "correct": true,
+          "feedback": "The integration guide states both SNMP and CLI credentials are required for switch discovery and management on supported versions."
+        },
+        {
+          "text": "Set the API poll interval to one minute",
+          "correct": false,
+          "feedback": "More frequent API polling cannot replace missing SNMP and CLI access credentials."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "lesson_id": "L07",
+      "prompt": "The connector begins failing after several sites are polled more frequently. What limit should be considered?",
+      "question_fingerprint": "FortiNAC-F|The connector begins failing after several sites are polled more frequen",
+      "options": [
+        {
+          "text": "Increase polling to refresh every AP",
+          "correct": false,
+          "feedback": "More frequent polling increases API consumption and can worsen rate limiting."
+        },
+        {
+          "text": "Reduce polling to stay within the API budget",
+          "correct": true,
+          "feedback": "The integration guide notes a 5,000-call-per-hour cloud API limit, so poll frequency must be planned across discovery tasks."
+        },
+        {
+          "text": "Disable the API token permission checks",
+          "correct": false,
+          "feedback": "The API token must have full permissions; disabling checks is not a supported rate-limit remedy."
+        },
+        {
+          "text": "Create a separate connector for every AP",
+          "correct": false,
+          "feedback": "Per-AP connectors can multiply calls and do not reduce the organization's API limit."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q29",
+      "product": "FortiNAC-F",
+      "lesson_id": "L07",
+      "prompt": "A site still has AP objects created by the legacy CloudAPITool integration. How should migration proceed?",
+      "question_fingerprint": "FortiNAC-F|A site still has AP objects created by the legacy CloudAPITool integrati",
+      "options": [
+        {
+          "text": "Migrate one site manually before polling",
+          "correct": true,
+          "feedback": "The legacy integration is not automatically migrated; remove that site's old AP objects, select the site in the new connector and poll."
+        },
+        {
+          "text": "Assume the legacy devices migrate automatically",
+          "correct": false,
+          "feedback": "The guide explicitly says legacy CloudAPITool integrations are not automatically migrated."
+        },
+        {
+          "text": "Keep duplicate AP records until enforcement",
+          "correct": false,
+          "feedback": "Duplicate old and new inventory objects can make policy and location evidence ambiguous."
+        },
+        {
+          "text": "Replace the API domain with the RADIUS server",
+          "correct": false,
+          "feedback": "The API domain is the cloud Device Management endpoint, not the RADIUS server address."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "lesson_id": "L08",
+      "prompt": "A TEAP exchange shows successful machine authentication followed by failed user authentication. What is the session result?",
+      "question_fingerprint": "FortiAuthenticator|A TEAP exchange shows successful machine authentication followed by fail",
+      "options": [
+        {
+          "text": "Accept the session after machine success",
+          "correct": false,
+          "feedback": "Machine success alone does not satisfy the documented chained authentication requirement."
+        },
+        {
+          "text": "Skip user authentication when EAP-TLS is used",
+          "correct": false,
+          "feedback": "EAP-TLS can be used for an inner method, but it does not remove the requirement for both identities."
+        },
+        {
+          "text": "Start a second RADIUS session for the user",
+          "correct": false,
+          "feedback": "TEAP chains both identities within one authentication session rather than treating them as unrelated sessions."
+        },
+        {
+          "text": "Reject the session because both phases must pass",
+          "correct": true,
+          "feedback": "FortiAuthenticator's TEAP support requires both machine and user authentication to succeed in the same session."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "lesson_id": "L08",
+      "prompt": "The machine phase uses EAP-TLS but fails certificate validation before the user phase begins. What should be checked?",
+      "question_fingerprint": "FortiAuthenticator|The machine phase uses EAP-TLS but fails certificate validation before t",
+      "options": [
+        {
+          "text": "Change the user password and retry TEAP",
+          "correct": false,
+          "feedback": "The user phase has not yet been reached, so changing the user's password does not address machine certificate validation."
+        },
+        {
+          "text": "Validate the trusted CA and certificate chain",
+          "correct": true,
+          "feedback": "The EAP-TLS phase depends on certificate trust and validity; inspect the presented chain before changing user credentials."
+        },
+        {
+          "text": "Move the NAS into another client group",
+          "correct": false,
+          "feedback": "Client-group scope is not the cause of a certificate-chain failure within the selected TEAP phase."
+        },
+        {
+          "text": "Disable machine authentication for this policy",
+          "correct": false,
+          "feedback": "Removing the machine phase weakens the intended two-identity admission condition rather than fixing trust."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "lesson_id": "L08",
+      "prompt": "An Auth Profile is configured correctly, but the RADIUS policy still uses the previous authentication behavior. What is missing?",
+      "question_fingerprint": "FortiAuthenticator|An Auth Profile is configured correctly, but the RADIUS policy still use",
+      "options": [
+        {
+          "text": "Create a second profile with the same name",
+          "correct": false,
+          "feedback": "A duplicate profile does not change which profile the RADIUS policy references."
+        },
+        {
+          "text": "Change the client group without policy edits",
+          "correct": false,
+          "feedback": "Client groups scope which clients use a policy; they do not automatically replace its Authentication Profile."
+        },
+        {
+          "text": "Bind the profile to the matching RADIUS policy",
+          "correct": true,
+          "feedback": "FortiAuthenticator 8.0.2 moved authentication settings into profiles; the policy must select the intended profile."
+        },
+        {
+          "text": "Restart the RADIUS service to refresh policy",
+          "correct": false,
+          "feedback": "A service restart does not correct an incorrect profile reference in the policy."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q33",
+      "product": "FortiAuthenticator",
+      "lesson_id": "L08",
+      "prompt": "An enterprise has hundreds of RADIUS clients and wants one policy to cover a defined subset. What should be used?",
+      "question_fingerprint": "FortiAuthenticator|An enterprise has hundreds of RADIUS clients and wants one policy to cov",
+      "options": [
+        {
+          "text": "Create one policy for each switch port",
+          "correct": false,
+          "feedback": "Per-port policies scale poorly and do not use the new client-group abstraction."
+        },
+        {
+          "text": "Use the shared secret as a group identifier",
+          "correct": false,
+          "feedback": "The shared secret authenticates the client; it is not the policy grouping object."
+        },
+        {
+          "text": "Group the clients and select that group",
+          "correct": true,
+          "feedback": "FortiAuthenticator 8.0.2 supports client groups so policies can reference a group instead of selecting every client individually."
+        },
+        {
+          "text": "Place all clients into the default profile",
+          "correct": false,
+          "feedback": "An authentication profile defines methods and sources, not which NAS clients belong to the policy."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "lesson_id": "L09",
+      "prompt": "A launcher works on FortiClient 7.x but ignores its configured privilege combination for a non-SSMS application. What explains this?",
+      "question_fingerprint": "FortiPAM|A launcher works on FortiClient 7.x but ignores its configured privilege",
+      "options": [
+        {
+          "text": "Recreate the secret using a different password",
+          "correct": false,
+          "feedback": "The secret credential is separate from the local process token selected by the launcher."
+        },
+        {
+          "text": "Set every launcher to run as SYSTEM",
+          "correct": false,
+          "feedback": "The 7.x legacy behavior is not changed by selecting a new privilege combination in FortiPAM."
+        },
+        {
+          "text": "Disable application filtering on the endpoint",
+          "correct": false,
+          "feedback": "Application filtering does not enable a FortiClient version to honor the 8.0 launcher privilege flag."
+        },
+        {
+          "text": "Upgrade FortiClient to honor the privilege flag",
+          "correct": true,
+          "feedback": "The launcher Privilege flag is supported only by FortiClient 8.0+; 7.x uses legacy hardcoded process behavior."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "lesson_id": "L09",
+      "prompt": "An application requires SYSTEM, but its initialization script must read the signed-in user's profile. Which setting fits?",
+      "question_fingerprint": "FortiPAM|An application requires SYSTEM, but its initialization script must read ",
+      "options": [
+        {
+          "text": "Run the application as SYSTEM, scripts as USER",
+          "correct": true,
+          "feedback": "The split setting elevates the target application while preserving the user's profile for init and cleanup commands."
+        },
+        {
+          "text": "Run both the application and scripts as USER",
+          "correct": false,
+          "feedback": "The application would not receive the SYSTEM token it requires."
+        },
+        {
+          "text": "Run both the application and scripts as SYSTEM",
+          "correct": false,
+          "feedback": "The initialization script would lose the interactive user's profile context."
+        },
+        {
+          "text": "Run the application as USER, scripts as SYSTEM",
+          "correct": false,
+          "feedback": "This reverses the required identities for the application and its initialization script."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "lesson_id": "L09",
+      "prompt": "A cleanup command needs local machine privileges, but the launched client should remain in the user's desktop session. Which setting applies?",
+      "question_fingerprint": "FortiPAM|A cleanup command needs local machine privileges, but the launched clien",
+      "options": [
+        {
+          "text": "Run init/clean under USER, app under SYSTEM",
+          "correct": false,
+          "feedback": "That combination gives the application SYSTEM rather than the requested user desktop context."
+        },
+        {
+          "text": "Run init/clean under SYSTEM, app under USER",
+          "correct": true,
+          "feedback": "This option gives the setup/cleanup commands SYSTEM while leaving the target application in the user's context."
+        },
+        {
+          "text": "Run both under SYSTEM to simplify permissions",
+          "correct": false,
+          "feedback": "The application would no longer run in the user's interactive session."
+        },
+        {
+          "text": "Run both under USER to preserve the profile",
+          "correct": false,
+          "feedback": "The cleanup command would not receive the local SYSTEM privileges it requires."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q37",
+      "product": "FortiPAM",
+      "lesson_id": "L09",
+      "prompt": "Task Manager confirms the launched process is SYSTEM, but the remote database login fails. What should be examined next?",
+      "question_fingerprint": "FortiPAM|Task Manager confirms the launched process is SYSTEM, but the remote dat",
+      "options": [
+        {
+          "text": "Change the local process token to SYSTEM",
+          "correct": false,
+          "feedback": "The process already runs as SYSTEM, so changing that setting does not address remote authentication."
+        },
+        {
+          "text": "Inspect the remote secret and target authorization",
+          "correct": true,
+          "feedback": "Task Manager proves the local process token; it does not prove the stored remote credential or target-side permissions."
+        },
+        {
+          "text": "Reinstall FortiClient and clear the user profile",
+          "correct": false,
+          "feedback": "The local process identity is already confirmed; reinstalling is not the next evidence-based step."
+        },
+        {
+          "text": "Disable session recording for the launcher",
+          "correct": false,
+          "feedback": "Recording is not the cause of a rejected credential at the remote database."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "lesson_id": "L10",
+      "prompt": "The Linux Agent exits with SIGSEGV, but systemd continues to report the service active and does not restart it. What is the documented setting to inspect?",
+      "question_fingerprint": "FortiSIEM|The Linux Agent exits with SIGSEGV, but systemd continues to report the ",
+      "options": [
+        {
+          "text": "Set RemainAfterExit=no and reload systemd",
+          "correct": true,
+          "feedback": "The Community scenario identifies RemainAfterExit=yes as the reason the unit remains active after the main process exits."
+        },
+        {
+          "text": "Increase the Supervisor registration timeout",
+          "correct": false,
+          "feedback": "Registration timeout does not explain why systemd considers a crashed process active."
+        },
+        {
+          "text": "Change the Collector port to TCP 514",
+          "correct": false,
+          "feedback": "The agent-to-Collector event path is separate from systemd process-state handling."
+        },
+        {
+          "text": "Disable rsyslog before restarting the agent",
+          "correct": false,
+          "feedback": "The Linux Agent guide requires rsyslog; disabling it would remove a prerequisite rather than fix service supervision."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "lesson_id": "L10",
+      "prompt": "The service restarts after correcting the unit, but no new events appear in FortiSIEM. Which test separates the next stages?",
+      "question_fingerprint": "FortiSIEM|The service restarts after correcting the unit, but no new events appear",
+      "options": [
+        {
+          "text": "Increase the systemd restart delay only",
+          "correct": false,
+          "feedback": "The process is now restarting; a delay does not prove registration or event forwarding."
+        },
+        {
+          "text": "Reinstall the agent before checking HTTPS",
+          "correct": false,
+          "feedback": "A reinstall is premature until the outbound Supervisor and Collector channels are tested."
+        },
+        {
+          "text": "Disable the monitoring template update channel",
+          "correct": false,
+          "feedback": "The template channel is required for current monitoring configuration and is not a fix for missing events."
+        },
+        {
+          "text": "Check Supervisor registration and Collector forwarding separately",
+          "correct": true,
+          "feedback": "The agent registers and receives templates from the Supervisor, then forwards events to Collectors; each channel needs independent verification."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "lesson_id": "L10",
+      "prompt": "A Linux Agent installation fails on a host where rsyslog is stopped. What is the first corrective action?",
+      "question_fingerprint": "FortiSIEM|A Linux Agent installation fails on a host where rsyslog is stopped. Wha",
+      "options": [
+        {
+          "text": "Change the Collector address to the Supervisor",
+          "correct": false,
+          "feedback": "Changing destinations does not satisfy the host's local package and logging prerequisites."
+        },
+        {
+          "text": "Disable auditd and logrotate on the host",
+          "correct": false,
+          "feedback": "Those components are listed among required packages for supported Linux distributions."
+        },
+        {
+          "text": "Start rsyslog and install required packages",
+          "correct": true,
+          "feedback": "The FortiSIEM Linux Agent installation guide lists rsyslog and OS-specific packages as prerequisites."
+        },
+        {
+          "text": "Increase the agent's memory allocation",
+          "correct": false,
+          "feedback": "The documented baseline is modest; a missing prerequisite service is the immediate issue."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSIEM",
+      "lesson_id": "L10",
+      "prompt": "The agent is registered to the Supervisor, but monitoring templates never update. Which channel should be investigated?",
+      "question_fingerprint": "FortiSIEM|The agent is registered to the Supervisor, but monitoring templates neve",
+      "options": [
+        {
+          "text": "Check Supervisor registration and template delivery",
+          "correct": true,
+          "feedback": "Template updates are delivered from the Supervisor over the agent's outbound HTTPS control channel."
+        },
+        {
+          "text": "Check the Collector event index first",
+          "correct": false,
+          "feedback": "The Collector receives events; it is not the source of monitoring-template updates."
+        },
+        {
+          "text": "Restart the host to refresh the template",
+          "correct": false,
+          "feedback": "A reboot does not identify whether the Supervisor control channel is delivering templates."
+        },
+        {
+          "text": "Change the RADIUS policy on the Supervisor",
+          "correct": false,
+          "feedback": "RADIUS policy is unrelated to FortiSIEM agent template delivery."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSIEM",
+      "lesson_id": "L10",
+      "prompt": "The process is alive and templates are current, but the Collector shows no new events. Where should the investigation move?",
+      "question_fingerprint": "FortiSIEM|The process is alive and templates are current, but the Collector shows ",
+      "options": [
+        {
+          "text": "Recreate the Supervisor device record",
+          "correct": false,
+          "feedback": "The existing registration is healthy, so rebuilding it is not the first step."
+        },
+        {
+          "text": "Trace the agent-to-Collector event channel",
+          "correct": true,
+          "feedback": "Supervisor registration can be healthy while the separate event-forwarding channel is blocked or misdirected."
+        },
+        {
+          "text": "Increase the agent heartbeat interval",
+          "correct": false,
+          "feedback": "Heartbeat timing does not prove the event channel is delivering records."
+        },
+        {
+          "text": "Disable the Linux audit subsystem",
+          "correct": false,
+          "feedback": "Audit data may be one source of events; disabling it would reduce telemetry rather than fix forwarding."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "lesson_id": "L11",
+      "prompt": "A new domain-joined laptop is off-network and has never cached a user's AD credentials. Which connection enables the first login?",
+      "question_fingerprint": "FortiSASE|A new domain-joined laptop is off-network and has never cached a user's ",
+      "options": [
+        {
+          "text": "Enter cached user credentials manually",
+          "correct": false,
+          "feedback": "The scenario states there are no cached credentials yet, which is why pre-logon connectivity is needed."
+        },
+        {
+          "text": "Use the user SAML tunnel before login",
+          "correct": false,
+          "feedback": "The normal user tunnel requires the user authentication context that is not yet available."
+        },
+        {
+          "text": "Use a machine-certificate pre-logon tunnel",
+          "correct": true,
+          "feedback": "Pre-logon uses the machine certificate to reach AD before the user has logged into Windows."
+        },
+        {
+          "text": "Join the laptop to a public Wi-Fi portal",
+          "correct": false,
+          "feedback": "Internet access alone does not create the private path to the corporate AD domain controller."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "lesson_id": "L11",
+      "prompt": "After the user completes the first Windows login, what should happen to the pre-logon tunnel?",
+      "question_fingerprint": "FortiSASE|After the user completes the first Windows login, what should happen to ",
+      "options": [
+        {
+          "text": "The pre-logon tunnel becomes the user tunnel",
+          "correct": false,
+          "feedback": "The machine-authenticated tunnel is not simply converted into the user's authenticated session."
+        },
+        {
+          "text": "The machine certificate remains the user identity",
+          "correct": false,
+          "feedback": "The machine certificate establishes pre-logon connectivity; the user tunnel has its own authentication state."
+        },
+        {
+          "text": "The endpoint must keep both tunnels active",
+          "correct": false,
+          "feedback": "The architecture describes pre-logon teardown after login, not permanent dual-tunnel operation."
+        },
+        {
+          "text": "The pre-logon tunnel disconnects after login",
+          "correct": true,
+          "feedback": "The documented sequence tears down the temporary machine tunnel after the user signs in, then uses the user tunnel."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q45",
+      "product": "FortiSASE",
+      "lesson_id": "L11",
+      "prompt": "A Windows endpoint repeatedly prompts for SAML credentials despite successful pre-logon domain login. What should be checked?",
+      "question_fingerprint": "FortiSASE|A Windows endpoint repeatedly prompts for SAML credentials despite succe",
+      "options": [
+        {
+          "text": "Increase the FortiSASE tunnel idle timeout",
+          "correct": false,
+          "feedback": "Idle timeout does not make the IdP issue a persistent SAML session."
+        },
+        {
+          "text": "Replace the machine certificate with a user cert",
+          "correct": false,
+          "feedback": "The machine certificate solved pre-logon AD reachability; the repeated prompt is in the later user SAML flow."
+        },
+        {
+          "text": "Disable SAML and force password caching locally",
+          "correct": false,
+          "feedback": "This changes the authentication design and does not address the documented IdP persistence dependency."
+        },
+        {
+          "text": "Configure persistent sessions at the IdP",
+          "correct": true,
+          "feedback": "FortiClient's SAML remember-password behavior depends on IdP persistent sessions; pre-logon success does not provide SAML persistence."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Q46",
+      "product": "FortiSASE",
+      "lesson_id": "L11",
+      "prompt": "An engineer wants OAuth autoconnect on a macOS endpoint using a non-Entra IdP. Is this supported by the cited architecture?",
+      "question_fingerprint": "FortiSASE|An engineer wants OAuth autoconnect on a macOS endpoint using a non-Entr",
+      "options": [
+        {
+          "text": "Enable OAuth for every IdP and endpoint type",
+          "correct": false,
+          "feedback": "The documented OAuth scope is narrower than all IdPs and endpoint platforms."
+        },
+        {
+          "text": "Use OAuth for macOS IPsec tunnels only",
+          "correct": false,
+          "feedback": "The cited limitation specifies Windows and SSL-based tunnels, not macOS IPsec."
+        },
+        {
+          "text": "Limit OAuth to Entra ID on Windows SSL tunnels",
+          "correct": true,
+          "feedback": "The guide limits OAuth tunnel support to Entra ID, Windows endpoints and SSL-based tunnels."
+        },
+        {
+          "text": "Replace SAML with certificate-only machine auth",
+          "correct": false,
+          "feedback": "Machine certificate pre-logon is a separate state and does not expand OAuth user-tunnel support."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "lesson_id": "L12",
+      "prompt": "A new spoke receives an unexpected tunnel address before BGP forms. Which object should be inspected first?",
+      "question_fingerprint": "Secure SD-WAN|A new spoke receives an unexpected tunnel address before BGP forms. Whic",
+      "options": [
+        {
+          "text": "Change the BGP keepalive timer on both peers",
+          "correct": false,
+          "feedback": "BGP timers do not correct an unexpected address allocated before the adjacency is formed."
+        },
+        {
+          "text": "Inspect the overlay-tunnel IPAM pool binding",
+          "correct": true,
+          "feedback": "The orchestrator uses overlay-tunnel-block-ipam to allocate the tunnel address from the configured IPAM pool."
+        },
+        {
+          "text": "Increase the SD-WAN SLA latency threshold",
+          "correct": false,
+          "feedback": "SLA thresholds steer traffic after paths exist and do not assign overlay interface addresses."
+        },
+        {
+          "text": "Rebuild the IPsec phase-one proposal list",
+          "correct": false,
+          "feedback": "A proposal mismatch affects IKE negotiation, not the source of the configured tunnel IP."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "lesson_id": "L12",
+      "prompt": "The Fabric Overlay Orchestrator configuration is unavailable on a FortiGate using VDOM mode. What should be checked?",
+      "question_fingerprint": "Secure SD-WAN|The Fabric Overlay Orchestrator configuration is unavailable on a FortiG",
+      "options": [
+        {
+          "text": "Check VDOM mode and Fabric root role",
+          "correct": true,
+          "feedback": "The documented orchestrator workflow requires the correct Fabric root/hub role and does not work when VDOM mode is enabled."
+        },
+        {
+          "text": "Change the spoke BGP router ID first",
+          "correct": false,
+          "feedback": "BGP router IDs do not control whether the orchestrator feature is available."
+        },
+        {
+          "text": "Disable IPsec auto-negotiate on all spokes",
+          "correct": false,
+          "feedback": "Tunnel negotiation settings do not remove the documented VDOM-mode limitation."
+        },
+        {
+          "text": "Move the hub into a different SD-WAN zone",
+          "correct": false,
+          "feedback": "An SD-WAN zone change does not satisfy the Fabric topology or VDOM prerequisites."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Q49",
+      "product": "Secure SD-WAN",
+      "lesson_id": "L12",
+      "prompt": "IKE is up but the expected BGP adjacency is absent on a new spoke. Which generated state should be verified before changing BGP policy?",
+      "question_fingerprint": "Secure SD-WAN|IKE is up but the expected BGP adjacency is absent on a new spoke. Which",
+      "options": [
+        {
+          "text": "Change BGP route-map local preference first",
+          "correct": false,
+          "feedback": "Route-map preference affects route selection after the BGP session is established."
+        },
+        {
+          "text": "Verify IPAM loopback and tunnel addresses first",
+          "correct": true,
+          "feedback": "The orchestrator allocates the routing identities from IPAM pools; wrong addresses can make downstream routing appear broken."
+        },
+        {
+          "text": "Increase the IPsec DPD retry count",
+          "correct": false,
+          "feedback": "DPD affects peer liveness, not the overlay interface address assignment."
+        },
+        {
+          "text": "Change the SLA probe protocol to TCP",
+          "correct": false,
+          "feedback": "SLA probe type does not correct the loopback or tunnel address used by BGP."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Q50",
+      "product": "Secure SD-WAN",
+      "lesson_id": "L12",
+      "prompt": "An interface is excluded from IPAM conflict detection after ipam-conflicts is enabled. How should that setting be interpreted?",
+      "question_fingerprint": "Secure SD-WAN|An interface is excluded from IPAM conflict detection after ipam-conflic",
+      "options": [
+        {
+          "text": "Review whether the interface is excluded from conflict checks",
+          "correct": true,
+          "feedback": "The enable setting tells IPAM to ignore that interface for conflict detection; it should not be used to hide a real duplicate."
+        },
+        {
+          "text": "Disable IPAM on the Security Fabric root",
+          "correct": false,
+          "feedback": "The setting is interface-specific and does not mean the entire root IPAM service is disabled."
+        },
+        {
+          "text": "Create a larger tunnel subnet for every spoke",
+          "correct": false,
+          "feedback": "A larger pool does not explain why a particular interface is excluded from conflict checks."
+        },
+        {
+          "text": "Change the loopback address to a public range",
+          "correct": false,
+          "feedback": "Address scope changes do not clarify the interface's conflict-detection participation."
+        }
+      ],
+      "correct_index": 0
+    }
+  ]
+}
