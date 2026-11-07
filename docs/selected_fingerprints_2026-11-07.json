@@ -1,0 +1,321 @@
+{
+  "schema_version": "3.0",
+  "run_date": "2026-11-07",
+  "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-07-08-00.json",
+  "exclusion_inventory_sha": "a8efa6b74a2679068e9792a75328f77c69974631",
+  "prior_record_count": 192,
+  "published_report_record_count": 180,
+  "candidate_only_record_count": 12,
+  "topic_count": 12,
+  "required_products": [
+    "FortiGate",
+    "FortiManager",
+    "FortiAnalyzer",
+    "FortiSwitch",
+    "FortiAP/Wireless",
+    "FortiNAC",
+    "FortiNAC-F",
+    "FortiAuthenticator",
+    "FortiPAM",
+    "FortiSIEM",
+    "FortiSASE",
+    "Secure SD-WAN"
+  ],
+  "all_required_products_covered": true,
+  "semantic_uniqueness_review": {
+    "status": "PASS",
+    "reviewed_against_all_prior_records": true,
+    "method": "Mechanism/workflow/failure/evidence/remediation/question/diagram fingerprints were compared against the 192-record rolling exclusion inventory. URL novelty alone was not accepted as proof of uniqueness.",
+    "manual_review_notes": "Closest prior subjects and explicit differences are recorded per product. FortiAnalyzer's use of Asset Identity Center is only an evidence input, not a repeat of the prior identity-assembly lesson. FortiSwitch packet mirroring is not flow export. FortiAuthenticator TEAP is not EAP-TTLS or SmartConnect EAP-TLS. FortiSASE pre-logon machine authentication is not user SAML SSO or Multi-Connect."
+  },
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "FortiOS 8.0 ZTNA port abstraction: one external HTTPS listener mapped to multiple virtual hosts and backend real servers",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/194961/basic-ztna-configuration",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/317228/zero-trust-network-access"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 separates the ZTNA access-proxy listener (port/VIP, certificate, interface and external address/port) from ZTNA server objects; host/virtual-host and optional URL-path matching map one listener to multiple real servers; ZTNA policy then applies EMS posture tags and optional user authentication.",
+      "workflow_transaction_fingerprint": "client DNS/HTTPS -> shared ZTNA port and certificate -> Host header/virtual-host match -> optional path/API-gateway match -> real-server IP/FQDN -> ZTNA policy posture/user checks -> backend proxy session",
+      "failure_class": "listener port conflict; host/path mismatch; wrong backend mapping; EMS tag or certificate mismatch",
+      "evidence_pattern": "show firewall vip type access-proxy; show firewall access-proxy-virtual-host; show ztna web-proxy; diagnose firewall dynamic list; compare Host header, path, presented certificate, policy logs and backend reachability",
+      "remediation_path": "separate listener from server objects; ensure external DNS and certificate cover each host; use unique host/path mappings; verify real-server address/port and certificate validation; verify EMS connector and synchronized posture tags before changing policy",
+      "question_fingerprint": "Two FQDNs resolve to one ZTNA listener but reach the wrong backend; determine whether the fault is listener, virtual-host, path or real-server mapping",
+      "diagram_topology_layout_fingerprint": "remote client -> shared HTTPS listener -> virtual-host switch -> path/API-gateway branches -> distinct internal real servers, with posture/user policy gate before forwarding",
+      "nearest_prior_topics": [
+        "2026-11-03: Security posture tags for Secure Private Access",
+        "2026-11-06: FortiSASE agent-based Entra ID SAML SSO"
+      ],
+      "semantic_difference": "Those prior lessons covered FortiSASE endpoint posture/SAML identity. This lesson covers FortiGate FortiOS 8.0 listener/server object decoupling and L7 host/path routing; no prior report taught this port-to-multi-server mapping mechanism.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager JSON-RPC multi-device install preview: asynchronous task submission and per-device result retrieval",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.0/new-features/301818/api-enhancement-to-support-install-preview-in-the-response-for-multiple-devices",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/153046/installing-policy-packages-and-device-settings",
+        "https://docs.fortinet.com/document/fortimanager/7.6.0/new-features/657291/7-6-0"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager 7.6 JSON-RPC exec API accepts one ADOM and a scope array of device OID/VDOM OID pairs for /securityconsole/install/preview; returns a task identifier; /securityconsole/preview/result retrieves per-device preview output without performing installation.",
+      "workflow_transaction_fingerprint": "authenticated JSON-RPC session -> exec preview request with ADOM/scope[] -> task creation -> result endpoint with same scope -> per-device name/OID/preview text -> external approval -> separate install operation",
+      "failure_class": "stale or wrong OID/VDOM scope; wrong ADOM; task accepted but preview result absent; API session expired; preview confused with installation",
+      "evidence_pattern": "status.code=0 and task ID in submission response; /securityconsole/preview/result returns per-device name/OID/result; 'No preview result' is distinct from successful configuration installation; compare GUI Install Preview and Policy Package Diff",
+      "remediation_path": "resolve current device and VDOM OIDs in the intended ADOM; submit all intended scope pairs; retain session; retrieve preview result separately; treat preview as validation evidence only and require a separate install request",
+      "question_fingerprint": "An API preview task is accepted for two VDOMs but one result is absent; identify the correct interpretation and next validation step",
+      "diagram_topology_layout_fingerprint": "automation client -> FortiManager JSON-RPC session -> preview task queue -> two device/VDOM preview workers -> result endpoint -> human approval -> separate install path",
+      "nearest_prior_topics": [
+        "2026-10-21: Retrieve versus policy-package authority",
+        "2026-10-30: ADOM revision diff and restore",
+        "2026-11-03: Workflow mode as an ADOM change transaction"
+      ],
+      "semantic_difference": "Prior lessons addressed configuration authority, revision snapshots and approval transactions. This lesson is specifically the JSON-RPC asynchronous multi-device preview API and its task/result boundary; it does not teach revision restore or workflow approval.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAI alert triage agent: iterative evidence enrichment, confidence assessment and analyst-controlled response",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/186618/alert-triage-agent",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/131939/fortiai-alert-triage-agent",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/541468/using-fortiai"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 FortiAI Triage Agent iteratively enriches a selected alert with alert details/false-positive assessment, triggering logs, Asset Identity Center endpoint risk, related alerts sharing entities, triage hypotheses and confidence; it proposes next steps and exposes configured connector actions for analyst selection.",
+      "workflow_transaction_fingerprint": "alert selected -> alert-type and false-positive assessment -> triggering-log retrieval -> endpoint/entity enrichment -> related-alert context -> hypothesis re-evaluation and confidence -> suggested next steps -> analyst chooses incident/suppression/indicator/quarantine connector action",
+      "failure_class": "FortiAI license or RBAC absent; connector action unavailable; incomplete log/entity context; stale identity association; recommendation mistaken for automatic remediation",
+      "evidence_pattern": "Alert Details pane; Triage Agent step panes; triggering logs; Asset Identity Center entity details; related-alert timeline; confidence level; missing-connector tooltip; exported PDF",
+      "remediation_path": "verify FortiAI license and administrator permissions; configure required connectors; validate alert source logs and endpoint identity association; review each evidence pane and confidence before manually invoking an action",
+      "question_fingerprint": "Triage Agent recommends quarantine but the connector is not configured; distinguish evidence generation from action execution",
+      "diagram_topology_layout_fingerprint": "alert -> parallel evidence sources (triggering logs, asset identity, related alerts) -> iterative triage engine -> confidence/evidence pane -> analyst approval -> incident or connector action",
+      "nearest_prior_topics": [
+        "2026-10-23: Incident-driven on-demand playbooks and report eligibility",
+        "2026-11-04: Alert-handler automation stitches from FortiAnalyzer into FortiGate actions",
+        "2026-11-06: Asset Identity Center"
+      ],
+      "semantic_difference": "The prior lessons cover playbook execution, alert-handler automation and identity data assembly. This lesson focuses on the separate agentic evidence-enrichment and analyst-decision sequence; Asset Identity Center is one input, not the feature being taught.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch packet mirroring modes: local SPAN, FortiLink RSPAN VLAN 4092 and GRE-based ERSPAN",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortilink-guide/173278/configuring-fortiswitch-port-mirroring",
+      "additional_primary_urls": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/e9d8cb3d-d629-11f0-8b43-d2943efe5b2f/FortiSwitchOS-7.6.5-FortiLink_Guide--Feb06.pdf",
+        "https://docs.fortinet.com/document/fortiswitch/7.6.2/fortiswitchos-administration-guide/428704/mirror"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch copies selected ingress/egress packets to a destination port (SPAN, no encapsulation), transports RSPAN copies in VLAN 4092 toward FortiGate, or encapsulates ERSPAN copies in Ethernet/IPv4/GRE to a reachable IPv4 collector; FortiLink can auto-select ISL destination and applies a policer for RSPAN/ERSPAN.",
+      "workflow_transaction_fingerprint": "source-port and direction selection -> mirror engine copy -> local destination OR VLAN 4092 over ISL to FortiGate capture OR GRE/IPv4 to remote ERSPAN collector",
+      "failure_class": "source/destination overlap; ERSPAN collector unreachable or unspecified; ISL destination conflicts; RSPAN storm-control/policer loss; unsupported model/session combination",
+      "evidence_pattern": "config switch-controller managed-switch ... config mirror; diagnose switch-controller switch-info mirror status; FortiGate packet capture on rspan VLAN; IPv4 ping to ERSPAN collector; traffic-policy policer counters",
+      "remediation_path": "choose a valid dedicated destination; exclude auto-selected ISL ports from source list; verify collector IPv4 reachability and FortiGate policy; confirm model/session support and policer capacity; distinguish mirror copy from forwarding path",
+      "question_fingerprint": "RSPAN packets appear on FortiGate VLAN 4092 but not at a downstream capture host; identify the next hop and destination/transport boundary",
+      "diagram_topology_layout_fingerprint": "source switch ports -> mirror engine -> three mutually distinct paths: local SPAN destination, RSPAN VLAN4092/ISL/FortiGate capture, ERSPAN GRE/IPv4 collector",
+      "nearest_prior_topics": [
+        "2026-11-06: FortiSwitch flow export",
+        "2026-10-25: Ingress/prelookup/egress ACL pipeline"
+      ],
+      "semantic_difference": "Flow export samples/exports flow records and ACLs filter packets. This lesson copies full packets through SPAN/RSPAN/ERSPAN and explains their encapsulation and destination path; neither mechanism is reused.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiAP Bonjour profiles and micro-location: VLAN service advertisement with AP-group-scoped mDNS isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/876617/connectivity-profiles-entry",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/fortiap/8.0.0"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Bonjour profile policy maps service advertisements from a source VLAN to a destination VLAN; micro-location confines mDNS to a FortiAP-group-defined location; FortiAPs elect the AP with highest base MAC as operating gateway and retain other APs as backup/hold; device-level profile overrides profile-level assignment.",
+      "workflow_transaction_fingerprint": "service mDNS announcement on source VLAN -> Bonjour profile service/VLAN policy -> micro-location/AP group scope -> elected operating gateway -> permitted discovery on destination VLAN",
+      "failure_class": "profile precedence mismatch; incorrect from/to VLAN; AP group does not match physical location; gateway election not operational; mDNS leaks across locations",
+      "evidence_pattern": "cw_diag -c bonjour shows VLAN mappings and oper/cap/hold election state; diagnose wireless-controller wlac -c bjprof shows controller profile; bjallow shows service allowance",
+      "remediation_path": "correct source/destination VLAN and service list; apply the profile at the intended device/profile scope; define AP groups as locations; verify gateway election and per-location service discovery",
+      "question_fingerprint": "AirPlay/printer discovery crosses floors despite VLAN mapping; determine whether micro-location and AP group scoping are correctly applied",
+      "diagram_topology_layout_fingerprint": "two AP groups representing separate locations, each with an elected Bonjour gateway; source VLAN -> service policy -> destination VLAN, with no cross-location mDNS path",
+      "nearest_prior_topics": [
+        "2026-10-30: Wireless client load balancing",
+        "2026-11-04: Captive portal security and external portal transaction flow",
+        "2026-11-06: Dynamic wireless VLAN assignment"
+      ],
+      "semantic_difference": "Prior wireless lessons covered client distribution, captive-portal authentication and RADIUS VLAN selection. This lesson covers mDNS/Bonjour service discovery, gateway election and AP-group location isolation.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 RADIUS Activity: 802.1X/MAB pass-fail telemetry and failed-authentication export",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/270902/activity",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-radius-802-1x-peap-authentication-failures-on-windows-hosts-230556",
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 RADIUS Activity provides an operational dashboard for 802.1X and MAC-authentication-bypass pass/fail outcomes and permits export of failed authentication records; it is an observation layer over the RADIUS transaction, not a replacement for the supplicant, directory or authenticator.",
+      "workflow_transaction_fingerprint": "endpoint supplicant -> switch/AP RADIUS Access-Request -> FortiNAC RADIUS processing and directory/credential check -> Access-Accept/Reject -> Activity event, filter and failed-event export",
+      "failure_class": "endpoint PEAP cached-credential rejection after Windows KB5127648; distinguish supplicant/OS behavior from FortiNAC RADIUS secret, directory or policy failure",
+      "evidence_pattern": "Network > RADIUS > Activity pass/fail counts and exported rejects; Access-Reject details; Windows Event ID 12014 OneX Held State Timeout; manual credential entry succeeds while cached SSO fails",
+      "remediation_path": "use Activity to identify reject scope and export evidence; correlate endpoint Event ID/update and supplicant mode; for the documented Windows case set BlockNtlmv1SSO to Audit value 0 or remove the update per change control; avoid changing NAC policy without server-side evidence",
+      "question_fingerprint": "PEAP failures begin after a Windows update only for cached SSO credentials; determine which telemetry and endpoint test isolate the fault",
+      "diagram_topology_layout_fingerprint": "Windows supplicant -> wired/wireless authenticator -> FortiNAC RADIUS/Winbind -> Accept/Reject; Activity dashboard and failure export branch from RADIUS outcome",
+      "nearest_prior_topics": [
+        "2026-11-03: FortiNAC 9.4 RADIUS group ingestion",
+        "2026-11-01: 802.1X EAP session correlation"
+      ],
+      "semantic_difference": "RADIUS group ingestion and EAP-session correlation concern attribute/policy state. This lesson is the 9.4 operational activity dashboard and failed-event export, using a new Windows supplicant regression as the scenario.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F Mist Service Connector: API-based site discovery, virtual-controller inventory and manual migration from CloudAPITool",
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/63149b63-75e0-11ef-8355-fa163e15d75b/FortiNAC-F-7.6.0-Juniper_Mist_Cloud_Integration_Guide.pdf",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/403885/whats-new-in-fortinac-f-7-6-0"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F Service Connector uses the Mist Device Management API with API domain, port 443, organization ID and full-permission token; selected sites create a virtual controller and AP inventory on the next poll; optional switch discovery requires SNMP and CLI credentials; RADIUS, L2/L3 polling and CoA provide visibility/enforcement; legacy CloudAPITool inventory is not automatically migrated.",
+      "workflow_transaction_fingerprint": "API token/domain/org ID -> Test Connection -> select managed sites -> Service Connector poll -> virtual controller/AP objects -> optional switch discovery -> RADIUS endpoint event -> logical-network/policy VLAN assignment and UDP/3799 disconnect",
+      "failure_class": "wrong regional API domain/token/organization ID; missing SNMP+CLI credentials; polling exceeds 5000 API calls/hour; old CloudAPITool devices remain; RADIUS source IP/shared secret/CoA timestamp mismatch",
+      "evidence_pattern": "Test Connection result; managed-site list; poll creates virtual controller and APs; connector DeviceManagementAPI debug; inventory container; RADIUS source IP; UDP 3799 CoA; VLAN and isolation validation",
+      "remediation_path": "use the correct regional API domain and full-permission token; test before site selection; migrate one site at a time by removing legacy APs then polling the new connector; tune poll interval below API rate limit; add both SNMP and CLI credentials for switch discovery; align RADIUS secrets and CoA settings",
+      "question_fingerprint": "Mist API test succeeds but APs are absent and switches are not discovered; identify the site-poll and separate SNMP/CLI prerequisites",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F Service Connector -> cloud Device Management API -> selected site virtual controller -> AP/switch inventory; RADIUS/CoA path to access device and VLAN enforcement",
+      "nearest_prior_topics": [
+        "2026-11-01: FortiNAC Manager global-object synchronization",
+        "2026-11-06: FortiNAC-F SNMPv3 Engine ID cache",
+        "2026-10-27: FortiNAC-F NetFlow sessions"
+      ],
+      "semantic_difference": "The prior topics cover manager object identity, SNMPv3 credential caching and NetFlow telemetry. This lesson covers a cloud API connector, site polling, inventory creation and manual legacy integration migration.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator EAP-TEAP: chained machine and user authentication inside one RADIUS session",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281/fortiauthenticator-8-0-2",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.2 RADIUS supports TEAP, chaining machine and user authentication in one session; both must succeed; each inner authentication can use EAP-MSCHAPv2 or EAP-TLS; Auth Profiles bind authentication type, identity sources and factors to a RADIUS policy; client groups can scope policy selection.",
+      "workflow_transaction_fingerprint": "supplicant -> AP/switch authenticator -> RADIUS -> TEAP outer tunnel -> machine inner authentication -> user inner authentication -> both successful -> Access-Accept",
+      "failure_class": "machine phase fails; user phase fails; incompatible inner EAP method; server/client certificate trust failure; wrong authentication profile or RADIUS client group",
+      "evidence_pattern": "RADIUS transaction shows TEAP and phase outcome; Authentication > RADIUS Service > Auth Profiles; policy profile binding; client group membership; certificate validity and trust; separate machine/user test results",
+      "remediation_path": "create an Auth Profile with intended identity sources/factors; bind it to the correct RADIUS policy and client group; verify both inner methods independently; validate certificate trust for EAP-TLS; require both machine and user success",
+      "question_fingerprint": "Machine authentication succeeds but the user phase fails; determine whether the chained TEAP session should be accepted and which profile evidence to inspect",
+      "diagram_topology_layout_fingerprint": "endpoint -> AP/switch -> FortiAuthenticator RADIUS -> TEAP tunnel containing machine-auth and user-auth stages -> AND gate -> Access-Accept/Reject",
+      "nearest_prior_topics": [
+        "2026-11-05: EAP-TTLS two-factor authentication",
+        "2026-11-06: SmartConnect EAP-TLS endpoint binding"
+      ],
+      "semantic_difference": "EAP-TTLS two-factor and SmartConnect EAP-TLS binding do not chain machine and user identity inside a single TEAP transaction. This lesson teaches TEAP's two-stage AND condition and Auth Profile binding.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 launcher privilege: independent USER/SYSTEM execution contexts for application and init/clean commands",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/649950/creating-a-launcher",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 launcher Privilege selects four combinations: launch secret under USER or SYSTEM and run init/clean commands under USER or SYSTEM; FortiClient 8.0+ honors the flag, while FortiClient 7.x uses legacy hardcoded behavior (SSMS as SYSTEM, other processes as USER).",
+      "workflow_transaction_fingerprint": "secret authorization -> FortiClient launcher receives privilege flag -> init command runs under selected identity -> target application process starts under selected identity -> clean command runs under selected identity -> session audit/recording",
+      "failure_class": "application requires SYSTEM but runs as USER; init/clean requires SYSTEM but app requires USER; unsupported FortiClient version silently follows legacy mapping",
+      "evidence_pattern": "Secret Settings > Launchers Privilege selection; FortiClient version; Task Manager Details User name for process; init/clean command result and launcher logs",
+      "remediation_path": "select the correct one of four privilege combinations; standardize on FortiClient 8.0+ where per-launcher control is required; verify process owner in Task Manager and test init/clean independently",
+      "question_fingerprint": "An application launches only when elevated but its initialization script needs the user's profile; choose the privilege combination that separates the two contexts",
+      "diagram_topology_layout_fingerprint": "FortiPAM secret/launcher policy -> FortiClient -> split USER/SYSTEM execution selectors -> init command, target application and clean command",
+      "nearest_prior_topics": [
+        "2026-11-06: FortiPAM Access Authentication",
+        "2026-11-03: Over-the-shoulder live recording",
+        "2026-10-28: Windows Application Filter"
+      ],
+      "semantic_difference": "Those topics cover step-up authorization, session recording and application filtering. This lesson is the Windows process-token and command execution context selected by the launcher privilege flag.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Linux Agent service supervision: HTTPS registration/event flow and systemd restart behavior after SIGSEGV",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/linux-agent-installation-guide/201446/fortisiem-linux-agent",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.0/linux-agent-installation-guide/201446/fortisiem-linux-agent"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/fortisiem-linux-agent-disconnects-randomly-with-sigsegv-error-and-will-not-restart-230688",
+      "feature_mechanism_fingerprint": "FortiSIEM Linux Agent registers outbound over HTTPS to the Supervisor, periodically receives monitoring-template updates, and forwards events to Collectors; systemd service state controls process restart, and RemainAfterExit=yes can leave a crashed SIGSEGV process reported active instead of restarted.",
+      "workflow_transaction_fingerprint": "systemd starts phLinuxAgent -> agent HTTPS registration to Supervisor -> monitoring-template update -> event forwarding to Collector; SIGSEGV exit -> systemd unit state evaluation -> restart only if unit semantics permit",
+      "failure_class": "agent process exits with signal 11 but systemd RemainAfterExit=yes masks the stopped process and prevents automatic restart",
+      "evidence_pattern": "systemctl status fortisiem-linux-agent.service; journalctl/dmesg SIGSEGV; service unit RemainAfterExit; Supervisor registration status; Collector event freshness; rsyslog/package prerequisites",
+      "remediation_path": "set RemainAfterExit=no in the service unit as documented in the scenario; systemctl daemon-reload; restart the service; separately investigate the underlying segmentation fault and verify Supervisor/Collector connectivity",
+      "question_fingerprint": "Linux Agent logs SIGSEGV but systemd still reports the unit active; identify the unit directive that prevents restart",
+      "diagram_topology_layout_fingerprint": "Linux host systemd supervisor -> phLinuxAgent -> HTTPS Supervisor registration/template channel -> Collector event channel; crash path loops through systemd restart decision",
+      "nearest_prior_topics": [
+        "2026-10-10: Windows Agent file-integrity monitoring",
+        "2026-10-30: Rule execution modes",
+        "2026-11-06: FortiSIEM Manager multi-instance control plane"
+      ],
+      "semantic_difference": "Prior lessons covered Windows endpoint FIM, rule execution and manager-to-manager control. This lesson covers Linux agent process supervision, systemd state semantics and crash recovery.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE pre-logon connectivity: machine-certificate tunnel to Active Directory before first Windows domain login",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/secure-private-access-architecture-guide/269831/additional-configurations",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/secure-private-access-architecture-guide/891466"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Pre-logon connectivity establishes a machine-certificate-authenticated tunnel at Windows boot so a never-logged-in domain-joined endpoint can reach AD; after interactive login the pre-logon tunnel disconnects, and the endpoint transitions to user tunnel/autoconnect; subsequent logins can use cached AD credentials. SAML password persistence requires IdP persistent sessions; OAuth tunnel support is limited to Entra ID/Windows/SSL.",
+      "workflow_transaction_fingerprint": "Windows boot -> FortiClient pre-logon profile -> machine certificate authentication -> gateway tunnel -> AD domain controller reachability -> first interactive domain login -> pre-logon disconnect -> user tunnel autoconnect -> cached credentials for later logins",
+      "failure_class": "missing/expired machine certificate; unsupported FortiClient profile/version; AD not reachable through pre-logon tunnel; confusion between machine pre-logon and user tunnel; IdP does not support persistent SAML sessions",
+      "evidence_pattern": "pre-logon tunnel establishment before user sign-in; machine certificate chain; FortiClient logs; AD DC reachability; tunnel disconnect after login; subsequent cached login; IdP persistent-session capability",
+      "remediation_path": "stage supported FortiClient and machine certificates before device shipment; validate gateway and AD routes while pre-logon is active; confirm the tunnel transitions after user login; configure OAuth/SAML persistence only within documented platform limits",
+      "question_fingerprint": "A new domain-joined laptop cannot perform its first interactive login off-network because no cached credentials exist; select the correct machine-authenticated pre-logon path",
+      "diagram_topology_layout_fingerprint": "booted Windows endpoint -> machine certificate -> temporary pre-logon tunnel -> AD DC -> user login -> pre-logon teardown -> user-authenticated FortiSASE tunnel",
+      "nearest_prior_topics": [
+        "2026-11-06: FortiSASE agent-based Entra ID SAML SSO",
+        "2026-11-01: FortiClient Multi-Connect",
+        "2026-10-21: Branch On-ramp IKEv2 mode config and BGP"
+      ],
+      "semantic_difference": "Prior lessons cover user SAML SSO, concurrent user tunnels and branch-device BGP. This lesson covers machine identity and temporary connectivity before the first Windows domain login.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Secure SD-WAN Fabric Overlay Orchestrator IPAM integration: deterministic hub/spoke loopback and tunnel address allocation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/405060",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/best-practices/149364/ipam",
+        "https://docs.fortinet.com/document/fortiwebmanager/8.0.0/administration-guide/60223/fabric-overlay-orchestrator"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 Fabric Overlay Orchestrator consumes IPAM-managed firewall-address pools for hub/spoke loopback addresses and overlay tunnel subnets; system fabric-vpn references loopback-address-block-ipam and overlay-tunnel-block-ipam; interface ipam-conflicts controls whether an interface is ignored during IPAM conflict detection.",
+      "workflow_transaction_fingerprint": "enable IPAM on Security Fabric root/hub -> require subnet-size match -> configure Fabric Overlay Orchestrator and IPAM pools -> apply spoke configuration -> IPAM allocates unique loopback/tunnel addresses -> IPsec/BGP overlay forms -> topology displays assigned addresses",
+      "failure_class": "missing/wrong IPAM pool; subnet-size mismatch; duplicate/conflicting interface address; wrong Security Fabric root/role; VDOM mode unsupported; stale manual address",
+      "evidence_pattern": "show system fabric-vpn; show firewall address <IPAM pool>; show system interface <loopback/tunnel>; Network > IPAM allocations; Fabric Overlay Orchestrator topology; IPsec/BGP neighbor state",
+      "remediation_path": "enable IPAM on root hub and require subnet-size match; create correct loopback and tunnel pools; bind each pool to fabric-vpn; set ipam-conflicts intentionally; confirm root/downstream topology and non-VDOM support; inspect every allocated address before troubleshooting BGP",
+      "question_fingerprint": "Two spokes receive an unexpected or conflicting tunnel address; trace the IPAM pool reference and per-interface conflict behavior",
+      "diagram_topology_layout_fingerprint": "Security Fabric root/hub owns IPAM pools -> hub loopback and tunnel allocation -> two downstream spokes each receive unique loopback and tunnel addresses -> IPsec/BGP overlay",
+      "nearest_prior_topics": [
+        "2026-10-29: SD-WAN overlay templates",
+        "2026-10-29: ADVPN 2.0 edge discovery and path management",
+        "2026-11-05: Underlay-bandwidth-aware load balancing"
+      ],
+      "semantic_difference": "Prior lessons cover template-based overlay configuration, ADVPN shortcut discovery and bandwidth-based path selection. This lesson covers centralized IP address allocation for Fabric Overlay Orchestrator interfaces before tunnel/BGP formation.",
+      "semantic_uniqueness_status": "PASS",
+      "candidate_rejected_if_mechanism_equivalent": true
+    }
+  ]
+}
