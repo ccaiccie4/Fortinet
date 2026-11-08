@@ -1,0 +1,1241 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-11-08",
+  "diagram_count": 12,
+  "editable_drawio_count": 12,
+  "standalone_svg_count": 12,
+  "assets": [
+    {
+      "product": "FortiGate",
+      "title": "Transparent conditional DNS forwarding",
+      "topology": "QNAME zone match selects local answer, zone forwarder, or original resolver.",
+      "svg": "assets/2026-11-08/FortiGate.svg",
+      "drawio": "assets/2026-11-08/FortiGate.drawio",
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Branch client\nDNS query",
+          "x": 30,
+          "y": 250,
+          "w": 190,
+          "h": 90
+        },
+        {
+          "id": "proxy",
+          "label": "FortiGate\nproxy policy +\nDNS filter",
+          "x": 285,
+          "y": 250,
+          "w": 210,
+          "h": 100
+        },
+        {
+          "id": "match",
+          "label": "QNAME matches\nDNS database zone?",
+          "x": 560,
+          "y": 250,
+          "w": 210,
+          "h": 110,
+          "type": "decision"
+        },
+        {
+          "id": "local",
+          "label": "Local DNS entry\nanswer",
+          "x": 880,
+          "y": 55,
+          "w": 220,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "forward",
+          "label": "Zone-specific\nforwarder",
+          "x": 880,
+          "y": 245,
+          "w": 220,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "original",
+          "label": "Original resolver\nunmatched domain",
+          "x": 880,
+          "y": 435,
+          "w": 220,
+          "h": 90,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "client",
+          "to": "proxy",
+          "label": "UDP/TCP 53"
+        },
+        {
+          "from": "proxy",
+          "to": "match",
+          "label": "inspect QNAME"
+        },
+        {
+          "from": "match",
+          "to": "local",
+          "label": "local record exists"
+        },
+        {
+          "from": "match",
+          "to": "forward",
+          "label": "zone match; no local answer"
+        },
+        {
+          "from": "match",
+          "to": "original",
+          "label": "no zone match"
+        },
+        {
+          "from": "local",
+          "to": "client",
+          "label": "DNS response",
+          "dash": true
+        },
+        {
+          "from": "forward",
+          "to": "client",
+          "label": "forwarded response",
+          "dash": true
+        },
+        {
+          "from": "original",
+          "to": "client",
+          "label": "original-path response",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "title": "Per-policy workspace locking",
+      "topology": "Individual policy ownership and policy-sequence ownership are separate lock scopes.",
+      "svg": "assets/2026-11-08/FortiManager.svg",
+      "drawio": "assets/2026-11-08/FortiManager.drawio",
+      "nodes": [
+        {
+          "id": "a",
+          "label": "Administrator A\nlocks policy P",
+          "x": 30,
+          "y": 80,
+          "w": 210,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "b",
+          "label": "Administrator B\nedits other rules",
+          "x": 30,
+          "y": 420,
+          "w": 210,
+          "h": 90
+        },
+        {
+          "id": "pkg",
+          "label": "Shared ADOM\npolicy package",
+          "x": 360,
+          "y": 245,
+          "w": 220,
+          "h": 110
+        },
+        {
+          "id": "lock",
+          "label": "Per-policy lock\nowner + timestamp",
+          "x": 680,
+          "y": 90,
+          "w": 210,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "seq",
+          "label": "Sequence lock\ninsert / reorder",
+          "x": 680,
+          "y": 400,
+          "w": 210,
+          "h": 100,
+          "type": "warn"
+        },
+        {
+          "id": "block",
+          "label": "Policy Block member\nindividual lock excluded",
+          "x": 970,
+          "y": 245,
+          "w": 200,
+          "h": 110,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "a",
+          "to": "pkg",
+          "label": "edit P"
+        },
+        {
+          "from": "pkg",
+          "to": "lock",
+          "label": "lock P"
+        },
+        {
+          "from": "b",
+          "to": "pkg",
+          "label": "other policy"
+        },
+        {
+          "from": "pkg",
+          "to": "seq",
+          "label": "add / reorder"
+        },
+        {
+          "from": "pkg",
+          "to": "block",
+          "label": "block membership"
+        },
+        {
+          "from": "lock",
+          "to": "a",
+          "label": "save / release",
+          "dash": true
+        },
+        {
+          "from": "seq",
+          "to": "b",
+          "label": "order protected",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "title": "Cloud archive offload",
+      "topology": "The object-storage path is separate from local Analytics indexing.",
+      "svg": "assets/2026-11-08/FortiAnalyzer.svg",
+      "drawio": "assets/2026-11-08/FortiAnalyzer.drawio",
+      "nodes": [
+        {
+          "id": "faz",
+          "label": "FortiAnalyzer\nlog ingestion",
+          "x": 30,
+          "y": 250,
+          "w": 200,
+          "h": 100
+        },
+        {
+          "id": "analytics",
+          "label": "Analytics SQL\nlocal query path",
+          "x": 330,
+          "y": 65,
+          "w": 210,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "archive",
+          "label": "Local log files\nArchive storage",
+          "x": 330,
+          "y": 410,
+          "w": 210,
+          "h": 90
+        },
+        {
+          "id": "gate",
+          "label": "License + storage\nconnector + CA trust",
+          "x": 650,
+          "y": 245,
+          "w": 230,
+          "h": 110,
+          "type": "warn"
+        },
+        {
+          "id": "cloud",
+          "label": "S3 / Azure Blob /\nGoogle bucket",
+          "x": 970,
+          "y": 245,
+          "w": 200,
+          "h": 110,
+          "type": "good"
+        }
+      ],
+      "edges": [
+        {
+          "from": "faz",
+          "to": "analytics",
+          "label": "index"
+        },
+        {
+          "from": "faz",
+          "to": "archive",
+          "label": "roll log files"
+        },
+        {
+          "from": "archive",
+          "to": "gate",
+          "label": "upload selected logs"
+        },
+        {
+          "from": "gate",
+          "to": "cloud",
+          "label": "authenticated TLS upload"
+        },
+        {
+          "from": "analytics",
+          "to": "faz",
+          "label": "local query",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "title": "Dual-signed image verification",
+      "topology": "File transfer is not the same as firmware trust validation.",
+      "svg": "assets/2026-11-08/FortiSwitch.svg",
+      "drawio": "assets/2026-11-08/FortiSwitch.drawio",
+      "nodes": [
+        {
+          "id": "controller",
+          "label": "FortiGate\nswitch controller",
+          "x": 30,
+          "y": 250,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "image",
+          "label": "Approved image\nintake",
+          "x": 300,
+          "y": 250,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "verify",
+          "label": "Signature and\nintegrity check",
+          "x": 565,
+          "y": 250,
+          "w": 210,
+          "h": 100,
+          "type": "warn"
+        },
+        {
+          "id": "bios",
+          "label": "Model / BIOS\nverification support",
+          "x": 820,
+          "y": 55,
+          "w": 210,
+          "h": 100
+        },
+        {
+          "id": "install",
+          "label": "Install image\nand reboot",
+          "x": 980,
+          "y": 250,
+          "w": 190,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "stop",
+          "label": "Stop and investigate\nunverified warning",
+          "x": 820,
+          "y": 445,
+          "w": 210,
+          "h": 100,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "controller",
+          "to": "image",
+          "label": "stage firmware"
+        },
+        {
+          "from": "image",
+          "to": "verify",
+          "label": "validate"
+        },
+        {
+          "from": "verify",
+          "to": "bios",
+          "label": "check capability"
+        },
+        {
+          "from": "bios",
+          "to": "install",
+          "label": "supported + trusted"
+        },
+        {
+          "from": "verify",
+          "to": "stop",
+          "label": "signature fails"
+        },
+        {
+          "from": "bios",
+          "to": "stop",
+          "label": "BIOS unsupported"
+        }
+      ]
+    },
+    {
+      "product": "FortiAP",
+      "title": "Wi-Fi 7 Multi-Link Operation",
+      "topology": "One logical MLD can negotiate several radio links when model, security and profile permit.",
+      "svg": "assets/2026-11-08/FortiAP.svg",
+      "drawio": "assets/2026-11-08/FortiAP.drawio",
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Wi-Fi 7 client\nMLD",
+          "x": 30,
+          "y": 250,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "vap",
+          "label": "One logical SSID\nMLO VAP",
+          "x": 285,
+          "y": 250,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "r24",
+          "label": "2.4 GHz\nlink ID 0",
+          "x": 570,
+          "y": 45,
+          "w": 180,
+          "h": 85,
+          "type": "good"
+        },
+        {
+          "id": "r5",
+          "label": "5 GHz\nlink ID 1",
+          "x": 570,
+          "y": 245,
+          "w": 180,
+          "h": 85,
+          "type": "good"
+        },
+        {
+          "id": "r6",
+          "label": "6 GHz\nlink ID 2",
+          "x": 570,
+          "y": 445,
+          "w": 180,
+          "h": 85,
+          "type": "good"
+        },
+        {
+          "id": "ap",
+          "label": "FortiAP-K radios\nWTP profile",
+          "x": 860,
+          "y": 245,
+          "w": 210,
+          "h": 100
+        },
+        {
+          "id": "auth",
+          "label": "WPA3 / H2E\nor local auth",
+          "x": 860,
+          "y": 445,
+          "w": 210,
+          "h": 90,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "client",
+          "to": "vap",
+          "label": "associate"
+        },
+        {
+          "from": "vap",
+          "to": "ap",
+          "label": "VAP applied to radios"
+        },
+        {
+          "from": "ap",
+          "to": "r24",
+          "label": "supported band"
+        },
+        {
+          "from": "ap",
+          "to": "r5",
+          "label": "supported band"
+        },
+        {
+          "from": "ap",
+          "to": "r6",
+          "label": "supported band"
+        },
+        {
+          "from": "auth",
+          "to": "vap",
+          "label": "security prerequisite"
+        },
+        {
+          "from": "r24",
+          "to": "client",
+          "label": "MLD link",
+          "dash": true
+        },
+        {
+          "from": "r5",
+          "to": "client",
+          "label": "MLD link",
+          "dash": true
+        },
+        {
+          "from": "r6",
+          "to": "client",
+          "label": "MLD link",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "title": "API/HTTPS SMS Gateway",
+      "topology": "Notification generation, provider acceptance and carrier delivery are separate evidence points.",
+      "svg": "assets/2026-11-08/FortiNAC.svg",
+      "drawio": "assets/2026-11-08/FortiNAC.drawio",
+      "nodes": [
+        {
+          "id": "event",
+          "label": "FortiNAC event /\nguest workflow",
+          "x": 30,
+          "y": 110,
+          "w": 200,
+          "h": 95
+        },
+        {
+          "id": "ldap",
+          "label": "LDAP sponsor\ngroup mapping",
+          "x": 30,
+          "y": 415,
+          "w": 200,
+          "h": 95
+        },
+        {
+          "id": "recipient",
+          "label": "Recipient and\nnotification decision",
+          "x": 330,
+          "y": 255,
+          "w": 210,
+          "h": 100
+        },
+        {
+          "id": "connector",
+          "label": "Email/SMS\nservice connector",
+          "x": 620,
+          "y": 255,
+          "w": 210,
+          "h": 100
+        },
+        {
+          "id": "provider",
+          "label": "HTTPS SMS\nprovider API",
+          "x": 900,
+          "y": 255,
+          "w": 180,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "carrier",
+          "label": "Carrier network\nand handset",
+          "x": 1080,
+          "y": 455,
+          "w": 110,
+          "h": 90,
+          "type": "good"
+        }
+      ],
+      "edges": [
+        {
+          "from": "event",
+          "to": "recipient",
+          "label": "notify"
+        },
+        {
+          "from": "ldap",
+          "to": "recipient",
+          "label": "sponsor eligibility"
+        },
+        {
+          "from": "recipient",
+          "to": "connector",
+          "label": "dispatch"
+        },
+        {
+          "from": "connector",
+          "to": "provider",
+          "label": "HTTPS request"
+        },
+        {
+          "from": "provider",
+          "to": "carrier",
+          "label": "accepted message"
+        },
+        {
+          "from": "provider",
+          "to": "connector",
+          "label": "API status",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "title": "FortiLink credential planes",
+      "topology": "REST API, SSH/CLI, SNMPv3 and RADIUS are independent channels.",
+      "svg": "assets/2026-11-08/FortiNAC-F.svg",
+      "drawio": "assets/2026-11-08/FortiNAC-F.drawio",
+      "nodes": [
+        {
+          "id": "nac",
+          "label": "FortiNAC-F\nmanagement",
+          "x": 25,
+          "y": 245,
+          "w": 190,
+          "h": 110
+        },
+        {
+          "id": "api",
+          "label": "REST API token\ninventory + VLAN",
+          "x": 300,
+          "y": 40,
+          "w": 210,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "cli",
+          "label": "SSH / CLI\nswitch discovery",
+          "x": 300,
+          "y": 190,
+          "w": 210,
+          "h": 90
+        },
+        {
+          "id": "snmp",
+          "label": "SNMPv3\nmonitor + traps",
+          "x": 300,
+          "y": 340,
+          "w": 210,
+          "h": 90
+        },
+        {
+          "id": "radius",
+          "label": "RADIUS\nendpoint auth / CoA",
+          "x": 300,
+          "y": 490,
+          "w": 210,
+          "h": 90,
+          "type": "warn"
+        },
+        {
+          "id": "fg",
+          "label": "FortiGate\nFortiLink control",
+          "x": 650,
+          "y": 185,
+          "w": 210,
+          "h": 110
+        },
+        {
+          "id": "fabric",
+          "label": "FortiSwitch /\nFortiAP inventory",
+          "x": 970,
+          "y": 130,
+          "w": 200,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "endpoint",
+          "label": "Endpoint access\nVLAN enforcement",
+          "x": 970,
+          "y": 440,
+          "w": 200,
+          "h": 100,
+          "type": "good"
+        }
+      ],
+      "edges": [
+        {
+          "from": "nac",
+          "to": "api",
+          "label": "token"
+        },
+        {
+          "from": "nac",
+          "to": "cli",
+          "label": "SSH"
+        },
+        {
+          "from": "nac",
+          "to": "snmp",
+          "label": "SNMPv3"
+        },
+        {
+          "from": "nac",
+          "to": "radius",
+          "label": "RADIUS"
+        },
+        {
+          "from": "api",
+          "to": "fg",
+          "label": "REST API"
+        },
+        {
+          "from": "cli",
+          "to": "fg",
+          "label": "CLI"
+        },
+        {
+          "from": "snmp",
+          "to": "fg",
+          "label": "SNMP"
+        },
+        {
+          "from": "radius",
+          "to": "endpoint",
+          "label": "Access-Request / CoA"
+        },
+        {
+          "from": "fg",
+          "to": "fabric",
+          "label": "inventory + VLAN"
+        }
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "title": "Intune SCEP and Entra ID EAP-TLS",
+      "topology": "Certificate issuance and RADIUS authorization are linked but separate stages.",
+      "svg": "assets/2026-11-08/FortiAuthenticator.svg",
+      "drawio": "assets/2026-11-08/FortiAuthenticator.drawio",
+      "nodes": [
+        {
+          "id": "intune",
+          "label": "Microsoft Intune\nSCEP request",
+          "x": 25,
+          "y": 70,
+          "w": 190,
+          "h": 90
+        },
+        {
+          "id": "oauth",
+          "label": "Azure Directory\nOAuth / Tenant ID",
+          "x": 300,
+          "y": 70,
+          "w": 200,
+          "h": 90
+        },
+        {
+          "id": "ca",
+          "label": "FortiAuthenticator\nSCEP + local CA",
+          "x": 590,
+          "y": 70,
+          "w": 210,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "cert",
+          "label": "Client certificate\nsubject / UPN",
+          "x": 900,
+          "y": 70,
+          "w": 200,
+          "h": 90
+        },
+        {
+          "id": "client",
+          "label": "Supplicant\nEAP-TLS",
+          "x": 25,
+          "y": 425,
+          "w": 190,
+          "h": 90
+        },
+        {
+          "id": "radius",
+          "label": "FAC RADIUS\nEAP policy",
+          "x": 300,
+          "y": 425,
+          "w": 200,
+          "h": 90
+        },
+        {
+          "id": "binding",
+          "label": "Remote SAML user\ncertificate binding",
+          "x": 590,
+          "y": 425,
+          "w": 210,
+          "h": 90,
+          "type": "warn"
+        },
+        {
+          "id": "attrs",
+          "label": "SAML group\nRADIUS attributes",
+          "x": 900,
+          "y": 425,
+          "w": 200,
+          "h": 90,
+          "type": "good"
+        }
+      ],
+      "edges": [
+        {
+          "from": "intune",
+          "to": "oauth",
+          "label": "challenge generation"
+        },
+        {
+          "from": "oauth",
+          "to": "ca",
+          "label": "Graph authorization"
+        },
+        {
+          "from": "ca",
+          "to": "cert",
+          "label": "issue certificate"
+        },
+        {
+          "from": "cert",
+          "to": "client",
+          "label": "install"
+        },
+        {
+          "from": "client",
+          "to": "radius",
+          "label": "EAP-TLS"
+        },
+        {
+          "from": "radius",
+          "to": "binding",
+          "label": "map certificate"
+        },
+        {
+          "from": "binding",
+          "to": "attrs",
+          "label": "group / policy"
+        },
+        {
+          "from": "attrs",
+          "to": "radius",
+          "label": "Access-Accept attrs",
+          "dash": true
+        }
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "title": "Agentless web launcher lifecycle",
+      "topology": "Browser tab-sharing consent is part of the recording path.",
+      "svg": "assets/2026-11-08/FortiPAM.svg",
+      "drawio": "assets/2026-11-08/FortiPAM.drawio",
+      "nodes": [
+        {
+          "id": "user",
+          "label": "Privileged user\nbrowser",
+          "x": 25,
+          "y": 245,
+          "w": 180,
+          "h": 95
+        },
+        {
+          "id": "mode",
+          "label": "Mode selector\nFortiClient / extension /\nagentless",
+          "x": 280,
+          "y": 245,
+          "w": 210,
+          "h": 110
+        },
+        {
+          "id": "consent",
+          "label": "Chrome / Edge\nAllow tab sharing",
+          "x": 570,
+          "y": 245,
+          "w": 200,
+          "h": 100,
+          "type": "warn"
+        },
+        {
+          "id": "launcher",
+          "label": "Web SSH / RDP /\nVNC / SFTP",
+          "x": 850,
+          "y": 245,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "target",
+          "label": "Privileged target\nservice",
+          "x": 1080,
+          "y": 245,
+          "w": 110,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "record",
+          "label": "Stop sharing\nclose + upload video",
+          "x": 850,
+          "y": 455,
+          "w": 180,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "unsupported",
+          "label": "Firefox / Web Browsing\nunsupported",
+          "x": 570,
+          "y": 55,
+          "w": 200,
+          "h": 90,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "user",
+          "to": "mode",
+          "label": "launch secret"
+        },
+        {
+          "from": "mode",
+          "to": "consent",
+          "label": "agentless"
+        },
+        {
+          "from": "consent",
+          "to": "launcher",
+          "label": "permission granted"
+        },
+        {
+          "from": "launcher",
+          "to": "target",
+          "label": "proxied session"
+        },
+        {
+          "from": "launcher",
+          "to": "record",
+          "label": "capture"
+        },
+        {
+          "from": "unsupported",
+          "to": "mode",
+          "label": "not supported"
+        }
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "title": "AWS Security Hub regional ingestion",
+      "topology": "Each AWS region must have Security Hub enabled and appear in the FortiSIEM credential.",
+      "svg": "assets/2026-11-08/FortiSIEM.svg",
+      "drawio": "assets/2026-11-08/FortiSIEM.drawio",
+      "nodes": [
+        {
+          "id": "r1",
+          "label": "AWS region A\nSecurity Hub enabled",
+          "x": 25,
+          "y": 55,
+          "w": 220,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "r2",
+          "label": "AWS region B\nSecurity Hub enabled",
+          "x": 25,
+          "y": 245,
+          "w": 220,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "rn",
+          "label": "AWS region N\nSecurity Hub enabled",
+          "x": 25,
+          "y": 435,
+          "w": 220,
+          "h": 90,
+          "type": "good"
+        },
+        {
+          "id": "cred",
+          "label": "AWS SDK credential\nkey + region list",
+          "x": 350,
+          "y": 245,
+          "w": 220,
+          "h": 110,
+          "type": "warn"
+        },
+        {
+          "id": "siem",
+          "label": "FortiSIEM\nAWS Scan discovery",
+          "x": 670,
+          "y": 245,
+          "w": 220,
+          "h": 110
+        },
+        {
+          "id": "data",
+          "label": "CMDB + AWS Sechub\nevents / rules / reports",
+          "x": 980,
+          "y": 245,
+          "w": 200,
+          "h": 110,
+          "type": "good"
+        }
+      ],
+      "edges": [
+        {
+          "from": "r1",
+          "to": "cred",
+          "label": "regional findings"
+        },
+        {
+          "from": "r2",
+          "to": "cred",
+          "label": "regional findings"
+        },
+        {
+          "from": "rn",
+          "to": "cred",
+          "label": "regional findings"
+        },
+        {
+          "from": "cred",
+          "to": "siem",
+          "label": "Security Hub SDK"
+        },
+        {
+          "from": "siem",
+          "to": "data",
+          "label": "discover + ingest"
+        }
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "title": "Inline-CASB SaaS tenant restriction",
+      "topology": "Deep inspection exposes HTTP; the provider validates the inserted tenant header.",
+      "svg": "assets/2026-11-08/FortiSASE.svg",
+      "drawio": "assets/2026-11-08/FortiSASE.drawio",
+      "nodes": [
+        {
+          "id": "endpoint",
+          "label": "Remote endpoint\nagent / SWG",
+          "x": 25,
+          "y": 245,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "tls",
+          "label": "SSL deep inspection\ntrusted CA",
+          "x": 285,
+          "y": 245,
+          "w": 200,
+          "h": 100,
+          "type": "warn"
+        },
+        {
+          "id": "decoder",
+          "label": "IPS application\ndecoder",
+          "x": 565,
+          "y": 245,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "category",
+          "label": "Category action /\nper-app override",
+          "x": 835,
+          "y": 70,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "header",
+          "label": "Web Filter Inline-CASB\nHTTP header insertion",
+          "x": 835,
+          "y": 410,
+          "w": 210,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "saas",
+          "label": "SaaS provider\ntenant decision",
+          "x": 1080,
+          "y": 245,
+          "w": 110,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "logs",
+          "label": "Inline-CASB logs\nChange Headers",
+          "x": 565,
+          "y": 520,
+          "w": 190,
+          "h": 75
+        }
+      ],
+      "edges": [
+        {
+          "from": "endpoint",
+          "to": "tls",
+          "label": "HTTPS"
+        },
+        {
+          "from": "tls",
+          "to": "decoder",
+          "label": "decrypted HTTP"
+        },
+        {
+          "from": "decoder",
+          "to": "category",
+          "label": "application ID"
+        },
+        {
+          "from": "decoder",
+          "to": "header",
+          "label": "matching request"
+        },
+        {
+          "from": "category",
+          "to": "saas",
+          "label": "allow / monitor"
+        },
+        {
+          "from": "header",
+          "to": "saas",
+          "label": "tenant header"
+        },
+        {
+          "from": "header",
+          "to": "logs",
+          "label": "evidence"
+        }
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "title": "SD-WAN Setup Wizard dependency chain",
+      "topology": "The wizard creates SD-WAN objects; a default route is a separate required step.",
+      "svg": "assets/2026-11-08/Secure SD-WAN.svg",
+      "drawio": "assets/2026-11-08/Secure SD-WAN.drawio",
+      "nodes": [
+        {
+          "id": "license",
+          "label": "Underlay + Application\nMonitoring licenses",
+          "x": 20,
+          "y": 245,
+          "w": 210,
+          "h": 100,
+          "type": "warn"
+        },
+        {
+          "id": "interfaces",
+          "label": "Select up to two\nunderlay interfaces",
+          "x": 280,
+          "y": 245,
+          "w": 190,
+          "h": 100
+        },
+        {
+          "id": "zone",
+          "label": "SD-WAN zone\nand members",
+          "x": 520,
+          "y": 245,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "sla",
+          "label": "Performance SLA\nprobe target",
+          "x": 760,
+          "y": 70,
+          "w": 180,
+          "h": 100,
+          "type": "good"
+        },
+        {
+          "id": "rule",
+          "label": "Service rule\nstrategy / priority",
+          "x": 760,
+          "y": 410,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "apply",
+          "label": "Review and Apply\nwizard objects",
+          "x": 990,
+          "y": 245,
+          "w": 180,
+          "h": 100
+        },
+        {
+          "id": "route",
+          "label": "Manual default route\nto SD-WAN zone",
+          "x": 990,
+          "y": 475,
+          "w": 180,
+          "h": 90,
+          "type": "warn"
+        }
+      ],
+      "edges": [
+        {
+          "from": "license",
+          "to": "interfaces",
+          "label": "licensed"
+        },
+        {
+          "from": "interfaces",
+          "to": "zone",
+          "label": "create members"
+        },
+        {
+          "from": "zone",
+          "to": "sla",
+          "label": "measure links"
+        },
+        {
+          "from": "zone",
+          "to": "rule",
+          "label": "steer traffic"
+        },
+        {
+          "from": "sla",
+          "to": "apply",
+          "label": "SLA settings"
+        },
+        {
+          "from": "rule",
+          "to": "apply",
+          "label": "service rule"
+        },
+        {
+          "from": "apply",
+          "to": "route",
+          "label": "separate route step"
+        }
+      ]
+    }
+  ]
+}
