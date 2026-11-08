@@ -8,179 +8,52 @@
   "choice_feedback_count": 200,
   "correct_answer_distribution": {
     "A": 13,
-    "B": 13,
+    "B": 12,
     "C": 12,
-    "D": 12
+    "D": 13
   },
-  "max_choice_word_length_difference": 6,
+  "max_choice_word_length_difference": 3,
   "validation": {
     "exactly_50": true,
     "four_choices_each": true,
     "feedback_for_all_200_choices": true,
     "unique_question_ids": true,
     "answer_distribution_balanced": true,
-    "choice_length_issues": [
-      {
-        "id": "Q04",
-        "lengths": [
-          5,
-          6,
-          6,
-          8
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q11",
-        "lengths": [
-          4,
-          4,
-          8,
-          5
-        ],
-        "diff": 4
-      },
-      {
-        "id": "Q12",
-        "lengths": [
-          9,
-          6,
-          8,
-          8
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q20",
-        "lengths": [
-          5,
-          6,
-          6,
-          8
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q28",
-        "lengths": [
-          7,
-          7,
-          7,
-          10
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q30",
-        "lengths": [
-          5,
-          8,
-          5,
-          7
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q33",
-        "lengths": [
-          8,
-          5,
-          5,
-          4
-        ],
-        "diff": 4
-      },
-      {
-        "id": "Q34",
-        "lengths": [
-          7,
-          7,
-          8,
-          5
-        ],
-        "diff": 3
-      },
+    "max_choice_length_difference_at_most_2": false,
+    "no_meta_feedback_errors": true,
+    "length_issues": [
       {
         "id": "Q38",
+        "diff": 3,
         "lengths": [
           8,
-          11,
+          10,
           7,
           9
-        ],
-        "diff": 4
-      },
-      {
-        "id": "Q40",
-        "lengths": [
-          7,
-          7,
-          8,
-          11
-        ],
-        "diff": 4
-      },
-      {
-        "id": "Q41",
-        "lengths": [
-          9,
-          8,
-          7,
-          6
-        ],
-        "diff": 3
+        ]
       },
       {
         "id": "Q45",
+        "diff": 3,
         "lengths": [
-          9,
+          8,
           7,
-          5,
-          4
-        ],
-        "diff": 5
-      },
-      {
-        "id": "Q46",
-        "lengths": [
-          5,
-          8,
-          5,
+          6,
           5
-        ],
-        "diff": 3
-      },
-      {
-        "id": "Q47",
-        "lengths": [
-          5,
-          5,
-          9,
-          6
-        ],
-        "diff": 4
-      },
-      {
-        "id": "Q49",
-        "lengths": [
-          8,
-          8,
-          5,
-          5
-        ],
-        "diff": 3
+        ]
       },
       {
         "id": "Q50",
+        "diff": 3,
         "lengths": [
-          5,
-          11,
+          6,
+          8,
           7,
-          7
-        ],
-        "diff": 6
+          5
+        ]
       }
-    ]
+    ],
+    "meta_feedback_errors": []
   },
   "questions": [
     {
@@ -258,7 +131,7 @@
           "feedback": "A VIP is not required for this DNS interception path."
         }
       ],
-      "correct_index": 2,
+      "correct_index": 1,
       "points": 1
     },
     {
@@ -280,7 +153,7 @@
           "feedback": "IPv6 forwarder and source-address settings are documented for conditional forwarding."
         },
         {
-          "text": "FortiGate model has 2 GB RAM or less.",
+          "text": "Model has 2 GB RAM or less.",
           "feedback": "Correct. Fortinet excludes models with 2 GB RAM or less from this proxy-related feature."
         }
       ],
@@ -324,19 +197,19 @@
           "feedback": "Read-only database state is not implied by this restriction."
         },
         {
-          "text": "The Policy Block membership prevents individual locking.",
-          "feedback": "Correct. The guide explicitly excludes policies used by Policy Blocks from individual policy locking."
-        },
-        {
           "text": "The policy package must be upgraded first.",
           "feedback": "Policy package version is not the stated reason that the lock is unavailable."
+        },
+        {
+          "text": "The Policy Block membership prevents individual locking.",
+          "feedback": "Correct. The guide explicitly excludes policies used by Policy Blocks from individual policy locking."
         },
         {
           "text": "The FortiGate has rejected the pending installation.",
           "feedback": "This is a FortiManager workspace restriction, not a device installation rejection."
         }
       ],
-      "correct_index": 1,
+      "correct_index": 2,
       "points": 1
     },
     {
@@ -450,19 +323,19 @@
       "question": "Where is the remote bucket or container path bound to the storage connector?",
       "choices": [
         {
-          "text": "FortiSoC event-handler rule settings.",
+          "text": "FortiSoC event-handler rule settings page.",
           "feedback": "Event handlers evaluate Analytics logs and do not define cloud object destinations."
         },
         {
-          "text": "Device Manager's log-fetch schedule.",
+          "text": "Device Manager log-fetch schedule page.",
           "feedback": "Log Fetch schedules retrieve logs from another Analyzer; they do not configure cloud upload."
         },
         {
-          "text": "System Settings > Advanced > Device Log Settings.",
+          "text": "Advanced Device Log Settings page.",
           "feedback": "Correct. Device Log Settings enables upload, selects the Fabric Connector and accepts the remote path."
         },
         {
-          "text": "FortiGate's Security Fabric authorization page.",
+          "text": "FortiGate Security Fabric authorization page.",
           "feedback": "FortiGate authorization is unrelated to FortiAnalyzer's cloud storage destination."
         }
       ],
@@ -476,11 +349,11 @@
       "question": "An object appears in the cloud bucket. What can the engineer safely conclude?",
       "choices": [
         {
-          "text": "All Analytics SQL queries now execute in the bucket.",
+          "text": "All Analytics SQL queries now run in S3.",
           "feedback": "Cloud object upload does not move the Analytics SQL query engine into object storage."
         },
         {
-          "text": "Local archive retention is automatically disabled.",
+          "text": "Local archive retention is automatically disabled by upload.",
           "feedback": "The upload setting does not by itself disable local retention."
         },
         {
@@ -684,15 +557,15 @@
       "question": "A standalone MLO AP must continue authenticating clients without its FortiGate controller. Which configuration model is required?",
       "choices": [
         {
-          "text": "Tunnel-mode VAP with controller-only authentication.",
+          "text": "Tunnel-mode VAP with controller-only authentication path.",
           "feedback": "Controller-dependent tunnel authentication does not satisfy the standalone requirement."
         },
         {
-          "text": "Proxy ARP with central RADIUS accounting.",
+          "text": "Proxy ARP with central RADIUS accounting enabled.",
           "feedback": "Proxy ARP and accounting do not provide local AP authentication."
         },
         {
-          "text": "Mesh root role with CAPWAP discovery.",
+          "text": "Mesh root role with CAPWAP discovery enabled.",
           "feedback": "Mesh root role and CAPWAP discovery are separate wireless functions."
         },
         {
@@ -819,7 +692,7 @@
         },
         {
           "text": "REST API token scope and OS-specific transport.",
-          "feedback": "Correct conceptually, but this question's correct option is A? Review: the symptom is VLAN control, so the REST API token path is the relevant plane. This option is not correct."
+          "feedback": "Correct. FortiLink VLAN control uses the REST API token; the other credential planes have separate duties."
         },
         {
           "text": "RADIUS shared secret and EAP method.",
@@ -830,7 +703,7 @@
           "feedback": "CLI is required for discovery, but REST API token is the VLAN control mechanism."
         }
       ],
-      "correct_index": 0,
+      "correct_index": 1,
       "points": 1
     },
     {
@@ -840,23 +713,23 @@
       "question": "After adding the REST API token, managed FortiSwitches disappear from Network Inventory. Which credential should be restored first?",
       "choices": [
         {
-          "text": "RADIUS user password on the endpoint.",
+          "text": "FortiGate System Administrator SSH/CLI account credentials.",
+          "feedback": "Correct. FortiNAC-F still requires the System Administrator CLI account for managed FortiSwitch discovery."
+        },
+        {
+          "text": "Endpoint RADIUS user password.",
           "feedback": "Endpoint RADIUS credentials do not discover managed FortiSwitch objects."
         },
         {
-          "text": "REST token's trusted-host entry only.",
+          "text": "REST API token Trusted Host restriction.",
           "feedback": "The token may be valid for API operations, but it does not replace CLI discovery."
         },
         {
-          "text": "SNMPv3 trap destination on the switch.",
+          "text": "Switch SNMPv3 trap destination and polling.",
           "feedback": "SNMP supports monitoring and notifications, but the integration guide specifically requires CLI credentials for managed-switch discovery."
-        },
-        {
-          "text": "FortiGate System Administrator SSH/CLI credentials.",
-          "feedback": "Correct. FortiNAC-F still requires the System Administrator CLI account for FortiSwitch discovery."
         }
       ],
-      "correct_index": 1,
+      "correct_index": 0,
       "points": 1
     },
     {
@@ -904,7 +777,7 @@
           "feedback": "SNMPv3 cannot replace REST API VLAN control."
         },
         {
-          "text": "Do not apply it; the command is removed in 8.0.",
+          "text": "Do not use it; FortiOS 8.0 removed it.",
           "feedback": "Correct. The updated Community article states that FortiOS 8.0 removes the command and query-parameter method."
         }
       ],
@@ -944,7 +817,7 @@
       "question": "The InTune challenge-password option is missing from a SCEP enrollment request. What prerequisite is most likely absent?",
       "choices": [
         {
-          "text": "A FortiGate SD-WAN Underlay license.",
+          "text": "A FortiGate SD-WAN Underlay license is enabled.",
           "feedback": "SD-WAN licensing is unrelated to SCEP challenge generation."
         },
         {
@@ -952,11 +825,11 @@
           "feedback": "Correct. The Intune option requires an Azure Directory OAuth server with a non-empty Tenant ID."
         },
         {
-          "text": "A FortiNAC sponsor LDAP group.",
+          "text": "A FortiNAC sponsor LDAP group is configured.",
           "feedback": "Sponsor LDAP groups do not provide the OAuth connection used for Intune SCEP."
         },
         {
-          "text": "A FortiPAM browser extension on the client.",
+          "text": "A FortiPAM browser extension is installed locally.",
           "feedback": "FortiPAM's browser extension has no role in certificate enrollment."
         }
       ],
@@ -1022,11 +895,11 @@
       "question": "A SCEP request remains unavailable to clients even though the request object exists. Which service boundary should be checked?",
       "choices": [
         {
-          "text": "SCEP enabled and HTTP access on serving interface.",
+          "text": "SCEP service and interface HTTP access.",
           "feedback": "Correct. FortiAuthenticator requires SCEP enabled and HTTP access enabled on interfaces serving SCEP clients."
         },
         {
-          "text": "FortiGate switch-controller firmware signature mode.",
+          "text": "FortiGate switch-controller image signature mode.",
           "feedback": "Firmware signature verification does not expose the SCEP endpoint."
         },
         {
@@ -1060,11 +933,11 @@
           "feedback": "Correct. Web SSH is supported in agentless mode with Chrome or Edge."
         },
         {
-          "text": "Any Firefox-based Web RDP launcher.",
+          "text": "Firefox Web RDP launcher with agentless mode.",
           "feedback": "Firefox is not supported for agentless mode."
         }
       ],
-      "correct_index": 1,
+      "correct_index": 2,
       "points": 1
     },
     {
@@ -1090,7 +963,7 @@
           "feedback": "Correct. Stop sharing closes the session and uploads the recording."
         }
       ],
-      "correct_index": 2,
+      "correct_index": 3,
       "points": 1
     },
     {
@@ -1156,11 +1029,11 @@
           "feedback": "Parser changes are premature when the service may not be enabled in the missing region."
         },
         {
-          "text": "Enable Security Hub in eu-west-1 and include it in the credential.",
+          "text": "Enable Security Hub in eu-west-1; add that region to credential.",
           "feedback": "Correct. Security Hub is region-scoped and each intended region must be enabled and listed."
         },
         {
-          "text": "Change the FortiSIEM Windows Agent restart policy.",
+          "text": "Change FortiSIEM Windows Agent restart policy setting.",
           "feedback": "Windows Agent supervision is unrelated to AWS Security Hub collection."
         },
         {
@@ -1216,7 +1089,7 @@
           "feedback": "Region-code validation may be part of successful connection setup."
         },
         {
-          "text": "That Security Hub is enabled and contains findings in every region.",
+          "text": "That Security Hub is enabled and has regional findings.",
           "feedback": "Correct. Connectivity does not prove regional service enablement or that findings exist to be collected."
         }
       ],
@@ -1230,7 +1103,7 @@
       "question": "An AWS CloudTrail record shows AccessDenied for a Security Hub API call. What is the best next action?",
       "choices": [
         {
-          "text": "Identify the denied action and refine the IAM policy.",
+          "text": "Identify denied action and refine the IAM policy.",
           "feedback": "Correct. Use the denied action as evidence and grant only the required least-privilege permission."
         },
         {
@@ -1242,7 +1115,7 @@
           "feedback": "Disabling the service removes the source rather than fixing access."
         },
         {
-          "text": "Increase the FortiSIEM event retention period.",
+          "text": "Increase the FortiSIEM event retention policy setting.",
           "feedback": "Retention does not resolve an API authorization denial."
         }
       ],
@@ -1334,19 +1207,19 @@
       "question": "Where should an engineer confirm the header that Inline-CASB inserted?",
       "choices": [
         {
-          "text": "Web Filter with Inline-CASB log details and Change Headers.",
+          "text": "Inline-CASB log details and the Change Headers field.",
           "feedback": "Correct. The documented verification uses Inline-CASB logs and the Change Headers field in log details."
         },
         {
-          "text": "FortiGate BGP neighbor state and route table.",
+          "text": "FortiGate BGP neighbor state and routing table.",
           "feedback": "BGP state does not show HTTP header insertion."
         },
         {
-          "text": "FortiPAM session video archive index.",
+          "text": "FortiPAM session video archive index view.",
           "feedback": "FortiPAM video storage is unrelated to FortiSASE traffic inspection."
         },
         {
-          "text": "FortiSwitch PoE guard-band utilization.",
+          "text": "FortiSwitch PoE guard-band utilization dashboard.",
           "feedback": "PoE utilization is unrelated to SaaS HTTP request modification."
         }
       ],
@@ -1364,15 +1237,15 @@
           "feedback": "FortiAnalyzer storage licensing does not enable the FortiGate SD-WAN wizard."
         },
         {
-          "text": "FortiGate valid SD-WAN Underlay and Application Monitoring licenses.",
+          "text": "Both SD-WAN Underlay and Application Monitoring licenses.",
           "feedback": "Correct. Fortinet requires both SD-WAN Underlay and Application Monitoring licenses."
         },
         {
-          "text": "FortiNAC-F FortiLink REST API token.",
+          "text": "FortiNAC-F FortiLink REST API token field.",
           "feedback": "FortiNAC-F API tokens do not control SD-WAN wizard visibility."
         },
         {
-          "text": "FortiManager ADOM workspace sequence lock.",
+          "text": "FortiManager ADOM workspace sequence lock status.",
           "feedback": "FortiManager sequence locks do not affect the FortiGate wizard."
         }
       ],
@@ -1390,15 +1263,15 @@
           "feedback": "The wizard's route requirement is separate from licensing once the objects are created."
         },
         {
-          "text": "The FortiSwitch dual-signed image check.",
+          "text": "The FortiSwitch image signature check.",
           "feedback": "Firmware signature validation is unrelated to IP routing."
         },
         {
-          "text": "The FortiGate default static route to the SD-WAN interface.",
+          "text": "A default route to the SD-WAN zone.",
           "feedback": "Correct. The guide explicitly requires adding the default static route after the wizard completes."
         },
         {
-          "text": "The FortiAnalyzer cloud storage remote path.",
+          "text": "The FortiAnalyzer cloud storage path.",
           "feedback": "Cloud storage configuration does not change FortiGate forwarding."
         }
       ],
@@ -1446,11 +1319,11 @@
           "feedback": "DNS zone names do not affect SD-WAN member cost."
         },
         {
-          "text": "The FortiAP radio channel width.",
+          "text": "The FortiAP radio channel width setting.",
           "feedback": "Wireless channel width is unrelated to WAN path selection."
         },
         {
-          "text": "The FortiNAC sponsor group priority.",
+          "text": "The FortiNAC sponsor group priority value.",
           "feedback": "Sponsor group priority does not affect SD-WAN selection."
         }
       ],
@@ -1464,11 +1337,11 @@
       "question": "The wizard review screen shows a healthy SLA. What additional evidence is needed before declaring the branch operational?",
       "choices": [
         {
-          "text": "A FortiPAM agentless recording upload.",
+          "text": "A FortiPAM agentless recording upload event.",
           "feedback": "Privileged-session recording is unrelated to SD-WAN forwarding."
         },
         {
-          "text": "A route-table default route and test session using the SD-WAN zone.",
+          "text": "A default route plus an SD-WAN test session.",
           "feedback": "Correct. Verify the separate default route and then confirm a real session selects the intended member."
         },
         {
@@ -1476,7 +1349,7 @@
           "feedback": "AWS discovery does not prove FortiGate route installation."
         },
         {
-          "text": "A FortiAuthenticator SCEP request in Approved state.",
+          "text": "A FortiAuthenticator SCEP approval record.",
           "feedback": "SCEP enrollment is unrelated to SD-WAN route selection."
         }
       ],
