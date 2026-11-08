@@ -8,52 +8,20 @@
   "choice_feedback_count": 200,
   "correct_answer_distribution": {
     "A": 13,
-    "B": 12,
+    "B": 13,
     "C": 12,
-    "D": 13
+    "D": 12
   },
-  "max_choice_word_length_difference": 3,
+  "max_choice_word_length_difference": 2,
   "validation": {
     "exactly_50": true,
     "four_choices_each": true,
     "feedback_for_all_200_choices": true,
     "unique_question_ids": true,
     "answer_distribution_balanced": true,
-    "max_choice_length_difference_at_most_2": false,
+    "max_choice_length_difference_at_most_2": true,
     "no_meta_feedback_errors": true,
-    "length_issues": [
-      {
-        "id": "Q38",
-        "diff": 3,
-        "lengths": [
-          8,
-          10,
-          7,
-          9
-        ]
-      },
-      {
-        "id": "Q45",
-        "diff": 3,
-        "lengths": [
-          8,
-          7,
-          6,
-          5
-        ]
-      },
-      {
-        "id": "Q50",
-        "diff": 3,
-        "lengths": [
-          6,
-          8,
-          7,
-          5
-        ]
-      }
-    ],
-    "meta_feedback_errors": []
+    "length_issues": []
   },
   "questions": [
     {
@@ -951,19 +919,19 @@
           "feedback": "Target SSH process termination is not the browser recording lifecycle control."
         },
         {
+          "text": "Select Stop sharing in the browser header.",
+          "feedback": "Correct. Stop sharing closes the session and uploads the recording."
+        },
+        {
           "text": "Delete the secret after disconnecting.",
           "feedback": "Deleting the secret is unnecessary and destructive."
         },
         {
           "text": "Wait for the FortiClient agent heartbeat.",
           "feedback": "Agentless mode does not require FortiClient."
-        },
-        {
-          "text": "Select Stop sharing in the browser header.",
-          "feedback": "Correct. Stop sharing closes the session and uploads the recording."
         }
       ],
-      "correct_index": 3,
+      "correct_index": 1,
       "points": 1
     },
     {
@@ -1029,11 +997,11 @@
           "feedback": "Parser changes are premature when the service may not be enabled in the missing region."
         },
         {
-          "text": "Enable Security Hub in eu-west-1; add that region to credential.",
+          "text": "Enable Security Hub in eu-west-1 and list the region.",
           "feedback": "Correct. Security Hub is region-scoped and each intended region must be enabled and listed."
         },
         {
-          "text": "Change FortiSIEM Windows Agent restart policy setting.",
+          "text": "Change the FortiSIEM Windows Agent restart policy.",
           "feedback": "Windows Agent supervision is unrelated to AWS Security Hub collection."
         },
         {
@@ -1219,7 +1187,7 @@
           "feedback": "FortiPAM video storage is unrelated to FortiSASE traffic inspection."
         },
         {
-          "text": "FortiSwitch PoE guard-band utilization dashboard.",
+          "text": "FortiSwitch PoE guard-band utilization dashboard status view.",
           "feedback": "PoE utilization is unrelated to SaaS HTTP request modification."
         }
       ],
@@ -1337,7 +1305,7 @@
       "question": "The wizard review screen shows a healthy SLA. What additional evidence is needed before declaring the branch operational?",
       "choices": [
         {
-          "text": "A FortiPAM agentless recording upload event.",
+          "text": "A FortiPAM agentless recording upload event log.",
           "feedback": "Privileged-session recording is unrelated to SD-WAN forwarding."
         },
         {
@@ -1349,7 +1317,7 @@
           "feedback": "AWS discovery does not prove FortiGate route installation."
         },
         {
-          "text": "A FortiAuthenticator SCEP approval record.",
+          "text": "A FortiAuthenticator SCEP approval record entry status.",
           "feedback": "SCEP enrollment is unrelated to SD-WAN route selection."
         }
       ],
