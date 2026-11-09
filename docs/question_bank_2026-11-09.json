@@ -1,0 +1,1656 @@
+{
+  "schema_version": "2.0",
+  "run_date": "2026-11-09",
+  "question_count": 50,
+  "graded": true,
+  "choice_count": 4,
+  "feedback_count": 200,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "max_choice_word_count_difference": 9,
+  "unique_ids": true,
+  "questions": [
+    {
+      "id": "FNS-20261109-01",
+      "product": "FortiGate",
+      "prompt": "The branch reaches the TCP listener, but TLS never completes. Which layer should be checked first?",
+      "choices": [
+        {
+          "text": "Validate the peer certificate chain and configured identity.",
+          "correct": true,
+          "feedback": "The TLS handshake must establish peer trust before IKE can proceed."
+        },
+        {
+          "text": "Inspect the remote subnet route and policy hit counter.",
+          "feedback": "Those checks matter after an SA exists; they cannot repair TLS trust.",
+          "correct": false
+        },
+        {
+          "text": "Change Phase 2 selectors to include the client LAN.",
+          "feedback": "Selectors are negotiated after IKE transport authentication, not before TLS.",
+          "correct": false
+        },
+        {
+          "text": "Increase the DPD retry count on both peers.",
+          "feedback": "DPD monitors an established peer and does not fix a failed TLS handshake.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-02",
+      "product": "FortiGate",
+      "prompt": "Both peers show an established Phase 2 SA, but branch users cannot reach the server. What is the best next check?",
+      "choices": [
+        {
+          "text": "Enable the TCP listener again on both VDOMs.",
+          "feedback": "The transport already completed and is unlikely to explain a post-SA data-path failure.",
+          "correct": false
+        },
+        {
+          "text": "Inspect route lookup, firewall policy, NAT and return path.",
+          "correct": true,
+          "feedback": "An established SA proves negotiation; forwarding still depends on routing and policy."
+        },
+        {
+          "text": "Replace the TLS certificate with a wildcard certificate.",
+          "feedback": "Certificate trust was already sufficient to establish the tunnel.",
+          "correct": false
+        },
+        {
+          "text": "Change the IKE proposal to a stronger cipher suite.",
+          "feedback": "A stronger proposal will not repair missing routes or policy matches.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-03",
+      "product": "FortiGate",
+      "prompt": "Auto transport never falls back after UDP is blocked. Which configuration prerequisite is missing?",
+      "choices": [
+        {
+          "text": "Add a second Phase 2 selector for the TCP path.",
+          "feedback": "Selectors describe protected subnets, not transport listener availability.",
+          "correct": false
+        },
+        {
+          "text": "Create a separate firewall policy for UDP 4500.",
+          "feedback": "Firewall policy does not enable the IKE TCP/TLS service.",
+          "correct": false
+        },
+        {
+          "text": "Enable both TCP and TLS IKE services in the relevant VDOM.",
+          "correct": true,
+          "feedback": "Auto fallback requires the per-VDOM transport listeners to be available."
+        },
+        {
+          "text": "Change the remote gateway to a dynamic DNS name.",
+          "feedback": "Gateway naming does not activate the fallback transport.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-04",
+      "product": "FortiGate",
+      "prompt": "A team expects FortiClient to use the new FortiGate TLS 1.3 VPN-over-TCP mode. What should the design review say?",
+      "choices": [
+        {
+          "text": "Assume any TCP-encapsulated IPsec client supports the TLS mode.",
+          "feedback": "Generic TCP encapsulation support does not prove support for this TLS transport.",
+          "correct": false
+        },
+        {
+          "text": "Replace IKEv2 with SSL VPN for every endpoint.",
+          "feedback": "That changes the VPN architecture rather than validating the feature's client support.",
+          "correct": false
+        },
+        {
+          "text": "Disable certificate validation so all client versions can connect.",
+          "feedback": "Disabling validation weakens security and does not add protocol support.",
+          "correct": false
+        },
+        {
+          "text": "Treat this TLS mode as FortiGate-to-FortiGate unless client support is documented.",
+          "correct": true,
+          "feedback": "The new feature's support boundary must be checked separately from RFC8229 TCP support."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-05",
+      "product": "FortiManager",
+      "prompt": "An ADOM 7.4 to 7.6 upgrade fails with remote certificate invalid. The stored certificate lacks PEM delimiters. What is the targeted fix?",
+      "choices": [
+        {
+          "text": "Reissue every device certificate from a new enterprise CA.",
+          "feedback": "The failure is a malformed stored wrapper, not necessarily an expired or weak certificate.",
+          "correct": false
+        },
+        {
+          "text": "Restore the PEM begin/end wrapper without changing certificate bytes.",
+          "correct": true,
+          "feedback": "The parser requires standard PEM framing; the encoded certificate content must remain intact."
+        },
+        {
+          "text": "Upgrade all managed FortiGates before retrying the ADOM.",
+          "feedback": "Device firmware may need compatibility review, but it does not repair this object.",
+          "correct": false
+        },
+        {
+          "text": "Delete the remote certificate and recreate all SAML users.",
+          "feedback": "That risks breaking dependent SAML/PKI objects and is broader than required.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+        "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-06",
+      "product": "FortiManager",
+      "prompt": "Which statement correctly separates FortiManager firmware from ADOM version?",
+      "choices": [
+        {
+          "text": "ADOM version is the firmware version installed on the FortiManager appliance.",
+          "feedback": "The appliance firmware and per-ADOM schema are separate version dimensions.",
+          "correct": false
+        },
+        {
+          "text": "Every ADOM automatically upgrades when FortiManager firmware is upgraded.",
+          "feedback": "ADOM conversion has its own compatibility and readiness workflow.",
+          "correct": false
+        },
+        {
+          "text": "ADOM version selects the FortiOS syntax and object schema used by that domain.",
+          "correct": true,
+          "feedback": "The ADOM schema can differ from the appliance firmware version."
+        },
+        {
+          "text": "Device firmware determines the FortiManager GUI feature version.",
+          "feedback": "Device firmware constrains managed syntax but does not set the appliance GUI version.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+        "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-07",
+      "product": "FortiManager",
+      "prompt": "The readiness report is clean, but a device install preview later flags unsupported syntax. What does that tell you?",
+      "choices": [
+        {
+          "text": "The ADOM database must be corrupt because readiness passed.",
+          "feedback": "A clean preflight does not prove the later device-specific install is valid.",
+          "correct": false
+        },
+        {
+          "text": "Ignore the preview and install the package immediately.",
+          "feedback": "Install preview is intended to expose target-specific changes before production installation.",
+          "correct": false
+        },
+        {
+          "text": "Run the ADOM conversion again without changing anything.",
+          "feedback": "Repeating conversion does not resolve a device-specific syntax incompatibility.",
+          "correct": false
+        },
+        {
+          "text": "Check the target device firmware and rendered install syntax independently.",
+          "correct": true,
+          "feedback": "Readiness is a preflight check, not a guarantee every target accepts every command."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+        "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-08",
+      "product": "FortiManager",
+      "prompt": "Workspace mode is enabled. What should happen before ADOM schema conversion?",
+      "choices": [
+        {
+          "text": "Back up the manager and lock the workspace ADOM for the change.",
+          "correct": true,
+          "feedback": "The backup supports recovery and the lock prevents concurrent edits during conversion."
+        },
+        {
+          "text": "Allow concurrent editors to finish changes during conversion.",
+          "feedback": "Concurrent writes can make the migration state inconsistent.",
+          "correct": false
+        },
+        {
+          "text": "Upgrade all devices and then skip readiness.",
+          "feedback": "Readiness remains necessary to identify schema incompatibilities.",
+          "correct": false
+        },
+        {
+          "text": "Export the policy package and delete the ADOM database.",
+          "feedback": "Deleting the ADOM database is not a supported readiness remediation.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+        "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-09",
+      "product": "FortiAnalyzer",
+      "prompt": "An indicator is Blocked in FortiAnalyzer, but the FortiGate still permits traffic. Which missing stage is most likely?",
+      "choices": [
+        {
+          "text": "Repeat the incident search until the indicator appears twice.",
+          "feedback": "Duplicate searches do not populate the firewall's cloud feed or policy reference.",
+          "correct": false
+        },
+        {
+          "text": "Increase the FortiAnalyzer log retention period.",
+          "feedback": "Retention does not determine whether the FortiGate consumes the indicator.",
+          "correct": false
+        },
+        {
+          "text": "Verify the FortiGate feed is populated and referenced by the enforcement policy.",
+          "correct": true,
+          "feedback": "Indicator status alone does not attach the feed to a firewall policy."
+        },
+        {
+          "text": "Move the indicator into a different incident severity.",
+          "feedback": "Severity does not replace feed synchronization or policy enforcement.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-10",
+      "product": "FortiAnalyzer",
+      "prompt": "FortiMQ connector shows healthy, but one ADOM's firewall receives no indicators. What prerequisite deserves immediate review?",
+      "choices": [
+        {
+          "text": "Change the FortiGate's local admin password.",
+          "feedback": "Local administrator credentials are not the FortiCare account relationship.",
+          "correct": false
+        },
+        {
+          "text": "Create a second block_indicator playbook in every ADOM.",
+          "feedback": "A duplicate playbook does not correct account or source-ADOM scope.",
+          "correct": false
+        },
+        {
+          "text": "Disable all FortiGate security profiles temporarily.",
+          "feedback": "Security profiles are not the connector registration prerequisite.",
+          "correct": false
+        },
+        {
+          "text": "Confirm the FortiGate and FortiAnalyzer share the FortiCare account and ADOM scope.",
+          "correct": true,
+          "feedback": "Connector scope and account association determine which FortiGate can consume the feed."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-11",
+      "product": "FortiAnalyzer",
+      "prompt": "A block_indicator playbook completes successfully. What does that evidence establish?",
+      "choices": [
+        {
+          "text": "FortiAnalyzer submitted the indicator to FortiMQ, not that traffic is blocked.",
+          "correct": true,
+          "feedback": "The playbook result proves the submission step only."
+        },
+        {
+          "text": "It proves the FortiGate has retrieved the cloud feed.",
+          "feedback": "Feed retrieval is a separate downstream synchronization stage.",
+          "correct": false
+        },
+        {
+          "text": "It proves the firewall policy references the indicator.",
+          "feedback": "Policy reference and traffic matching require separate verification.",
+          "correct": false
+        },
+        {
+          "text": "It proves the indicator has been removed from all targets.",
+          "feedback": "A block operation cannot prove a later unblock or cleanup.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-12",
+      "product": "FortiAnalyzer",
+      "prompt": "An analyst unblocks an indicator. What is the most reliable closure check?",
+      "choices": [
+        {
+          "text": "Confirm only that the FortiAnalyzer incident is resolved.",
+          "feedback": "Incident closure does not prove feed or policy state changed.",
+          "correct": false
+        },
+        {
+          "text": "Confirm the source status changed, the feed updated and enforcement no longer matches.",
+          "correct": true,
+          "feedback": "The end-to-end path must reflect the unblock before the incident is closed."
+        },
+        {
+          "text": "Delete the external-feed object from every FortiGate.",
+          "feedback": "Deleting the object may remove unrelated indicators and is not the normal unblock path.",
+          "correct": false
+        },
+        {
+          "text": "Restart FortiAnalyzer to clear cached indicator state.",
+          "feedback": "A restart is not a substitute for verifying connector and feed synchronization.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-13",
+      "product": "FortiSwitch",
+      "prompt": "A port trusts both CoS and DSCP, but the DSCP map determines the queue. Is that expected?",
+      "choices": [
+        {
+          "text": "No; CoS always overrides DSCP on a managed port.",
+          "feedback": "That reverses the documented trust precedence.",
+          "correct": false
+        },
+        {
+          "text": "The switch randomly alternates between the two maps.",
+          "feedback": "Classification follows the configured trust behavior, not random selection.",
+          "correct": false
+        },
+        {
+          "text": "The egress scheduler rewrites the ingress trust choice.",
+          "feedback": "The scheduler services queues after classification; it does not choose the trust source.",
+          "correct": false
+        },
+        {
+          "text": "Yes; DSCP trust takes precedence when both trust sources are enabled.",
+          "correct": true,
+          "feedback": "The FortiSwitch QoS trust behavior gives DSCP precedence over CoS."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+        "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-14",
+      "product": "FortiSwitch",
+      "prompt": "Where should ordinary EF voice traffic be mapped when queue 7 is reserved?",
+      "choices": [
+        {
+          "text": "Use a dedicated data queue such as queue 5 and preserve queue 7.",
+          "correct": true,
+          "feedback": "Queue 7 is reserved for switch control and critical management traffic."
+        },
+        {
+          "text": "Map EF into queue 7 because it is the highest number.",
+          "feedback": "Queue 7 protection is more important than using the highest queue number for user data.",
+          "correct": false
+        },
+        {
+          "text": "Map EF to queue 0 and rely on the next hop.",
+          "feedback": "Queue 0 is the lowest queue and does not express the intended priority.",
+          "correct": false
+        },
+        {
+          "text": "Disable the switch control queue to free bandwidth.",
+          "feedback": "Disabling control protection can destabilize FortiLink and control protocols.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+        "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-15",
+      "product": "FortiSwitch",
+      "prompt": "Lower-priority queues starve whenever voice traffic is busy under strict scheduling. Which adjustment addresses the scheduler behavior?",
+      "choices": [
+        {
+          "text": "Increase the voice DSCP marking from EF to CS7.",
+          "feedback": "Changing the mark does not remove strict-priority starvation.",
+          "correct": false
+        },
+        {
+          "text": "Use weighted scheduling with deliberate weights for the required classes.",
+          "correct": true,
+          "feedback": "WRR allocates service across queues rather than always exhausting lower queues."
+        },
+        {
+          "text": "Move all user traffic into queue 7.",
+          "feedback": "Queue 7 is reserved and should not carry ordinary data.",
+          "correct": false
+        },
+        {
+          "text": "Increase the tail-drop threshold on every queue.",
+          "feedback": "Queue depth does not change strict scheduling's service order.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+        "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-16",
+      "product": "FortiSwitch",
+      "prompt": "A model accepts a QoS policy but ignores configured WRED or minimum-rate settings. What should be checked?",
+      "choices": [
+        {
+          "text": "The FortiGate's WAN Performance SLA settings.",
+          "feedback": "WAN SLA probes do not determine switch egress queue capabilities.",
+          "correct": false
+        },
+        {
+          "text": "The user's DSCP marking on the workstation only.",
+          "feedback": "Marking cannot enable a hardware feature the model does not support.",
+          "correct": false
+        },
+        {
+          "text": "The model's feature matrix and ASIC-specific QoS capabilities.",
+          "correct": true,
+          "feedback": "QoS parameters vary by switch model and hardware implementation."
+        },
+        {
+          "text": "The RADIUS shared secret on the switch.",
+          "feedback": "RADIUS authentication is unrelated to egress scheduler feature support.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+        "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-17",
+      "product": "FortiAP/Wireless",
+      "prompt": "A radio sniffer PCAP contains no frames from the affected client. What should be checked before declaring the client silent?",
+      "choices": [
+        {
+          "text": "Verify the radio channel, width and MAC/frame filters match the client.",
+          "correct": true,
+          "feedback": "The capture sees only frames on the configured channel and allowed filters."
+        },
+        {
+          "text": "Restart FortiAnalyzer to rebuild the wireless event database.",
+          "feedback": "FortiAnalyzer log indexing does not change what the radio captured.",
+          "correct": false
+        },
+        {
+          "text": "Change the AP's CAPWAP control port to UDP 5247.",
+          "feedback": "CAPWAP transport ports do not correct an over-the-air channel/filter mismatch.",
+          "correct": false
+        },
+        {
+          "text": "Increase the FortiGate firewall session TTL.",
+          "feedback": "Session timeout does not determine radio packet-sniffer visibility.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-18",
+      "product": "FortiAP/Wireless",
+      "prompt": "The AP joins the controller, but the problem is CAPWAP DTLS disconnects. Which capture point is appropriate?",
+      "choices": [
+        {
+          "text": "Place the 5 GHz radio into sniffer mode on the client channel.",
+          "feedback": "That captures 802.11 air frames, not the AP-controller transport.",
+          "correct": false
+        },
+        {
+          "text": "Capture only DHCP traffic from the wireless client.",
+          "feedback": "DHCP may show addressing but not the CAPWAP DTLS exchange.",
+          "correct": false
+        },
+        {
+          "text": "Capture the wired AP-to-controller CAPWAP control and data path.",
+          "correct": true,
+          "feedback": "A wired capture can show the DTLS/CAPWAP transport that an over-air sniffer cannot."
+        },
+        {
+          "text": "Inspect the AP's beacon interval and probe response rate.",
+          "feedback": "Those radio parameters do not explain a controller tunnel disconnect.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-19",
+      "product": "FortiAP/Wireless",
+      "prompt": "An operator needs to change the radio profile after capturing. What must happen first?",
+      "choices": [
+        {
+          "text": "Leave the capture running while applying the new profile.",
+          "feedback": "Changing radio mode can terminate the capture before it is saved.",
+          "correct": false
+        },
+        {
+          "text": "Stop the capture and save the streamed PCAP locally.",
+          "correct": true,
+          "feedback": "The browser-streamed capture is not stored persistently on FortiGate."
+        },
+        {
+          "text": "Export the FortiGate configuration instead of the packet capture.",
+          "feedback": "A configuration backup does not contain the streamed over-air frames.",
+          "correct": false
+        },
+        {
+          "text": "Restart the AP and expect the browser to retain the file.",
+          "feedback": "The browser stream is not a persistent FortiGate PCAP repository.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-20",
+      "product": "FortiAP/Wireless",
+      "prompt": "A single AP must capture 2.4 GHz and 6 GHz simultaneously. What design is supported?",
+      "choices": [
+        {
+          "text": "Use one radio with two channel widths configured together.",
+          "feedback": "A radio listens on one selected channel/width during a capture.",
+          "correct": false
+        },
+        {
+          "text": "Start two simultaneous captures from the same AP profile.",
+          "feedback": "The AP supports only one capture session at a time.",
+          "correct": false
+        },
+        {
+          "text": "Mirror the FortiGate LAN port into the AP radio.",
+          "feedback": "A wired mirror cannot make one radio receive two RF channels.",
+          "correct": false
+        },
+        {
+          "text": "Use separate AP radios/devices because one radio per AP can sniff at a time.",
+          "correct": true,
+          "feedback": "The capture consumes a radio and cannot monitor two channels simultaneously."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-21",
+      "product": "FortiNAC",
+      "prompt": "FortiNAC Winbind Join Domain fails against FreeIPA, while LDAP user lookup works. What is the correct interpretation?",
+      "choices": [
+        {
+          "text": "FreeIPA must be converted to RADIUS before LDAP can work.",
+          "feedback": "LDAP directory functions can operate without Winbind or a Samba AD join.",
+          "correct": false
+        },
+        {
+          "text": "Change the Kerberos realm to the FreeIPA NetBIOS name.",
+          "feedback": "Realm and NetBIOS are different fields, and changing them does not make FreeIPA an AD DC.",
+          "correct": false
+        },
+        {
+          "text": "Winbind performs a Samba AD join for MSCHAPv2; LDAP can still provide directory data.",
+          "correct": true,
+          "feedback": "The two integrations serve different purposes and FreeIPA is not an AD domain controller."
+        },
+        {
+          "text": "Disable LDAP and use Winbind for all identity functions.",
+          "feedback": "Winbind's role is limited to the MSCHAPv2 challenge path.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-22",
+      "product": "FortiNAC",
+      "prompt": "Which authentication design can avoid Winbind when the selected method does not require MSCHAPv2?",
+      "choices": [
+        {
+          "text": "Use PEAP/MSCHAPv2 but leave Winbind stopped.",
+          "feedback": "MSCHAPv2 requires the Winbind/ntlm_auth path in this design.",
+          "correct": false
+        },
+        {
+          "text": "Use EAP-TLS or EAP-TTLS/PAP with the configured LDAP directory.",
+          "correct": true,
+          "feedback": "Those methods can use the directory path without Winbind's challenge-response function."
+        },
+        {
+          "text": "Use MAC authentication bypass with no directory lookup.",
+          "feedback": "MAB does not validate the user's LDAP password.",
+          "correct": false
+        },
+        {
+          "text": "Enable only the FortiNAC guest portal and remove RADIUS.",
+          "feedback": "Portal configuration does not replace the EAP authentication method.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-23",
+      "product": "FortiNAC",
+      "prompt": "Which command sequence most directly verifies the Winbind domain trust and daemon?",
+      "choices": [
+        {
+          "text": "Run only nslookup on the domain controller hostname.",
+          "feedback": "DNS resolution is necessary but does not prove the domain trust works.",
+          "correct": false
+        },
+        {
+          "text": "Run only a RADIUS Access-Accept test from a switch.",
+          "feedback": "An Access-Accept may not isolate the Winbind trust or service state.",
+          "correct": false
+        },
+        {
+          "text": "Run only a FortiNAC database integrity check.",
+          "feedback": "Database integrity does not validate Samba domain membership.",
+          "correct": false
+        },
+        {
+          "text": "Run net ads testjoin -k, wbinfo -t and check Winbind service status.",
+          "correct": true,
+          "feedback": "Those commands test machine trust, trust secret and service process."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-24",
+      "product": "FortiNAC",
+      "prompt": "Which field is the short Windows domain name rather than the Kerberos DNS realm?",
+      "choices": [
+        {
+          "text": "Domain NetBIOS Name is the short workgroup; Kerberos Realm is DNS-style.",
+          "correct": true,
+          "feedback": "The fields represent separate identity namespaces and must not be swapped."
+        },
+        {
+          "text": "Kerberos Realm Name is always the short uppercase workgroup.",
+          "feedback": "The realm is normally a DNS-style name such as EXAMPLE.COM.",
+          "correct": false
+        },
+        {
+          "text": "Local NetBIOS Name is the user's UPN suffix.",
+          "feedback": "Local NetBIOS Name identifies the FortiNAC machine account.",
+          "correct": false
+        },
+        {
+          "text": "Domain Controller Hostname is the realm name.",
+          "feedback": "That field identifies one or more domain controllers.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-25",
+      "product": "FortiNAC-F",
+      "prompt": "An Intune connector uses delegated permissions, but on-demand compliance lookup is required. What should change?",
+      "choices": [
+        {
+          "text": "Increase the Graph polling frequency to every five minutes.",
+          "feedback": "More frequent full polling does not enable the NAC API.",
+          "correct": false
+        },
+        {
+          "text": "Use application permissions with the required Intune NAC-API permissions.",
+          "correct": true,
+          "feedback": "The NAC API single-device flow requires application-level permissions."
+        },
+        {
+          "text": "Disable the certificate and secret authentication methods.",
+          "feedback": "Authentication type does not change delegated permission capability.",
+          "correct": false
+        },
+        {
+          "text": "Move the connector to a different FortiNAC Manager node.",
+          "feedback": "Connector placement does not convert delegated permissions into application permissions.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-26",
+      "product": "FortiNAC-F",
+      "prompt": "Graph inventory polling works, but Compliance Retrieval Status returns Unauthorized. What is the best next check?",
+      "choices": [
+        {
+          "text": "Enable Remove Hosts Deleted from MDM Server.",
+          "feedback": "Deletion reconciliation does not grant compliance API authorization.",
+          "correct": false
+        },
+        {
+          "text": "Change the FortiNAC host role to Managed by MDM.",
+          "feedback": "Host role assignment does not repair an API authorization failure.",
+          "correct": false
+        },
+        {
+          "text": "Increase the FortiNAC GUI session timeout.",
+          "feedback": "GUI session timeout is unrelated to the Microsoft API permission.",
+          "correct": false
+        },
+        {
+          "text": "Verify the Entra application has permission to read Intune device compliance status.",
+          "correct": true,
+          "feedback": "Inventory access and compliance retrieval use distinct permissions."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-27",
+      "product": "FortiNAC-F",
+      "prompt": "On affected 7.6.7 systems, Intune hosts are removed after every poll despite remaining enrolled. What is the documented workaround?",
+      "choices": [
+        {
+          "text": "Disable Remove Hosts Deleted and Enable Network Details until upgrading to 7.6.8.",
+          "correct": true,
+          "feedback": "Those options avoid the affected reconciliation path until the fixed release."
+        },
+        {
+          "text": "Enable delegated permissions and shorten the poll interval.",
+          "feedback": "That changes authentication mode and can increase API load without fixing the defect.",
+          "correct": false
+        },
+        {
+          "text": "Delete the hosts manually and wait for the next poll.",
+          "feedback": "The next poll can repeat the erroneous deletion behavior.",
+          "correct": false
+        },
+        {
+          "text": "Disable all FortiNAC access policies during the upgrade.",
+          "feedback": "Access policies do not repair the MDM connector deletion logic.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-28",
+      "product": "FortiNAC-F",
+      "prompt": "An unknown host reaches the captive portal and needs a single-device Intune lookup. Which path is designed for that?",
+      "choices": [
+        {
+          "text": "A full Graph inventory export must finish before any host can register.",
+          "feedback": "That is the broad polling model rather than the on-demand single-device path.",
+          "correct": false
+        },
+        {
+          "text": "A RADIUS accounting Start packet contains the Intune compliance result.",
+          "feedback": "RADIUS accounting does not supply Intune device compliance data.",
+          "correct": false
+        },
+        {
+          "text": "On-demand registration through the Microsoft Intune NAC API.",
+          "correct": true,
+          "feedback": "The NAC API supports device-specific registration/compliance lookup when application permissions are used."
+        },
+        {
+          "text": "The FortiNAC Manager polls every host in every connector.",
+          "feedback": "Manager placement controls distribution, not the single-host API transaction.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-29",
+      "product": "FortiAuthenticator",
+      "prompt": "FortiAuthenticator Cloud reports 'peer did not return a certificate' after 8.0.x. Which side is missing a required identity?",
+      "choices": [
+        {
+          "text": "FortiAuthenticator must replace its RADIUS policy with EAP-TTLS.",
+          "feedback": "The failure occurs during TLS before RADIUS policy selection.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate must change its RADIUS shared secret only.",
+          "feedback": "A shared secret does not replace the TLS client certificate.",
+          "correct": false
+        },
+        {
+          "text": "The user must renew an EAP password on the endpoint.",
+          "feedback": "The TLS peer certificate is exchanged before user authentication.",
+          "correct": false
+        },
+        {
+          "text": "The RadSec client must present its client certificate to FortiAuthenticator.",
+          "correct": true,
+          "feedback": "The error identifies the mutual-TLS client-certificate requirement."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-30",
+      "product": "FortiAuthenticator",
+      "prompt": "TLS is established and the request reaches the RADIUS daemon, but the user receives Access-Reject. What should be investigated next?",
+      "choices": [
+        {
+          "text": "Replace the RadSec server certificate immediately.",
+          "feedback": "A completed TLS session suggests transport trust succeeded.",
+          "correct": false
+        },
+        {
+          "text": "Verify the RADIUS client source match and selected RADIUS policy.",
+          "correct": true,
+          "feedback": "After TLS termination, the ordinary RADIUS client/policy engine still decides the request."
+        },
+        {
+          "text": "Enable UDP/1812 on the same interface.",
+          "feedback": "RadSec uses the configured TLS port; the request already reached the daemon.",
+          "correct": false
+        },
+        {
+          "text": "Increase the maximum RadSec client count.",
+          "feedback": "A user-specific Access-Reject is not evidence of the 500-client limit.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-31",
+      "product": "FortiAuthenticator",
+      "prompt": "Which certificate field protects the RadSec TLS channel?",
+      "choices": [
+        {
+          "text": "Use the local CA certificate as the server certificate itself.",
+          "feedback": "A CA trust anchor and a server leaf certificate are different objects.",
+          "correct": false
+        },
+        {
+          "text": "Leave the certificate unset because the RADIUS shared secret encrypts TLS.",
+          "feedback": "The RADIUS shared secret does not provide TLS server identity.",
+          "correct": false
+        },
+        {
+          "text": "Select the RadSec Server Certificate, not the EAP Server Certificate.",
+          "correct": true,
+          "feedback": "FortiAuthenticator maintains separate server-certificate roles for RadSec and EAP."
+        },
+        {
+          "text": "Use a wildcard EAP certificate for every RadSec client.",
+          "feedback": "The guide's certificate roles and wildcard limitations still apply.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-32",
+      "product": "FortiAuthenticator",
+      "prompt": "A deployment needs 520 simultaneous RadSec clients on one FortiAuthenticator. What capacity issue must be addressed?",
+      "choices": [
+        {
+          "text": "The documented maximum is 500 simultaneous RadSec clients.",
+          "correct": true,
+          "feedback": "The planned count exceeds the stated concurrent-client capacity."
+        },
+        {
+          "text": "The default port 2083 must be changed to 1812.",
+          "feedback": "Changing the port does not raise the concurrent-client limit.",
+          "correct": false
+        },
+        {
+          "text": "Every client must use UDP instead of TLS.",
+          "feedback": "That removes the transport protection rather than addressing capacity.",
+          "correct": false
+        },
+        {
+          "text": "The EAP fragment size must be increased to 1500.",
+          "feedback": "EAP fragmentation does not increase RadSec session capacity.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-33",
+      "product": "FortiPAM",
+      "prompt": "A secret is checked out, but the user still lacks local administrator rights. What evidence should be checked first?",
+      "choices": [
+        {
+          "text": "Review the script result, WinRM reachability and target group membership.",
+          "correct": true,
+          "feedback": "Checkout can continue with a warning even when the elevation script fails."
+        },
+        {
+          "text": "Increase the secret's concurrent launch limit.",
+          "feedback": "Launch concurrency does not prove the remote PowerShell script succeeded.",
+          "correct": false
+        },
+        {
+          "text": "Change the RDP target from FQDN to IP only.",
+          "feedback": "Target naming does not repair WinRM or group modification rights.",
+          "correct": false
+        },
+        {
+          "text": "Disable check-in scripts until the user is elevated.",
+          "feedback": "Disabling de-elevation increases risk and does not fix checkout execution.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-34",
+      "product": "FortiPAM",
+      "prompt": "The check-in script removed group membership, but the open RDP session still has elevated rights. Why?",
+      "choices": [
+        {
+          "text": "FortiPAM must restart the appliance to clear cached group membership.",
+          "feedback": "The token belongs to the Windows session, not the FortiPAM appliance.",
+          "correct": false
+        },
+        {
+          "text": "The user should check out the secret again immediately.",
+          "feedback": "Another checkout would reapply privilege rather than refresh the token.",
+          "correct": false
+        },
+        {
+          "text": "The target must be removed from Active Directory.",
+          "feedback": "The group membership is already removed; the session token is stale.",
+          "correct": false
+        },
+        {
+          "text": "The existing Windows logon token must be refreshed by signing out and back in.",
+          "correct": true,
+          "feedback": "Windows group membership changes are reflected in a new logon token."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-35",
+      "product": "FortiPAM",
+      "prompt": "FortiPAM reports a checkout-script warning but allows the secret checkout. What should the operator conclude?",
+      "choices": [
+        {
+          "text": "The user definitely received administrator rights because checkout succeeded.",
+          "feedback": "Checkout state and script success are separate results.",
+          "correct": false
+        },
+        {
+          "text": "The Windows target is offline because every warning means WinRM failed.",
+          "feedback": "The warning can have script, credential or WinRM causes; confirm evidence.",
+          "correct": false
+        },
+        {
+          "text": "The secret workflow continued; target-side privilege elevation still needs verification.",
+          "correct": true,
+          "feedback": "FortiPAM documents that script failure does not block checkout/check-in."
+        },
+        {
+          "text": "The check-in script will automatically repair the checkout script.",
+          "feedback": "Check-in runs a separate removal script and does not prove elevation occurred.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-36",
+      "product": "FortiPAM",
+      "prompt": "Which account does FortiPAM try first when executing a JIT PowerShell script?",
+      "choices": [
+        {
+          "text": "The logged-in user's standard RDP account in every case.",
+          "feedback": "The script needs an account with rights to modify the target group.",
+          "correct": false
+        },
+        {
+          "text": "A privileged account defined on the target in the secret.",
+          "correct": true,
+          "feedback": "That is the documented first choice before the associated secret account."
+        },
+        {
+          "text": "The FortiPAM local administrator account on the appliance.",
+          "feedback": "The script executes remotely on the target using resolved target credentials.",
+          "correct": false
+        },
+        {
+          "text": "A domain controller's krbtgt account.",
+          "feedback": "The feature does not use the domain ticket-granting account as its script credential.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-37",
+      "product": "FortiSIEM",
+      "prompt": "A Supervisor's CMDB is stale, but PostgreSQL and FortiSIEM processes are running. What should be inspected?",
+      "choices": [
+        {
+          "text": "Only the FortiSIEM EventDB disk utilization.",
+          "feedback": "EventDB storage is separate from the PostgreSQL CMDB replication path.",
+          "correct": false
+        },
+        {
+          "text": "Patroni timeline, replica streaming state and PostgreSQL replication views.",
+          "correct": true,
+          "feedback": "A running replica can still be on an old timeline and no longer stream WAL."
+        },
+        {
+          "text": "Only the Supervisor GUI health widget.",
+          "feedback": "The community case shows the widget can report Normal while CMDB is stale.",
+          "correct": false
+        },
+        {
+          "text": "Only the number of active collectors.",
+          "feedback": "Collector connectivity does not prove CMDB WAL replication.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+        "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-38",
+      "product": "FortiSIEM",
+      "prompt": "Which node is safe to reinitialize when one replica diverges after failover?",
+      "choices": [
+        {
+          "text": "Only the affected replica, using a confirmed healthy current leader as source.",
+          "correct": true,
+          "feedback": "Reinit rebuilds the replica and must never target the leader."
+        },
+        {
+          "text": "Reinitialize the current DB leader so it adopts the replica timeline.",
+          "feedback": "The leader is authoritative; rebuilding it risks the healthy database copy.",
+          "correct": false
+        },
+        {
+          "text": "Reinitialize every Supervisor to align all timelines.",
+          "feedback": "A cluster-wide reinit is destructive and unnecessary for one divergent replica.",
+          "correct": false
+        },
+        {
+          "text": "Reinitialize the node with the lowest hostname.",
+          "feedback": "Hostname order has no relationship to the authoritative replication source.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+        "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-39",
+      "product": "FortiSIEM",
+      "prompt": "Which statement correctly separates CMDB and EventDB replication in the EventDB HA architecture?",
+      "choices": [
+        {
+          "text": "Both CMDB and EventDB are replicated only by etcd.",
+          "feedback": "etcd elects leaders; it is not the data replication engine for both stores.",
+          "correct": false
+        },
+        {
+          "text": "EventDB rsync repairs a stale PostgreSQL CMDB replica.",
+          "feedback": "Rsync of event files does not repair PostgreSQL WAL streaming.",
+          "correct": false
+        },
+        {
+          "text": "The Replication Leader is always the PostgreSQL DB Leader.",
+          "feedback": "The file replication leader and database leader are separate roles.",
+          "correct": false
+        },
+        {
+          "text": "PostgreSQL CMDB uses Patroni; local EventDB data uses rsync replication.",
+          "correct": true,
+          "feedback": "The architecture describes separate mechanisms for database and event files."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+        "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-40",
+      "product": "FortiSIEM",
+      "prompt": "`pg_stat_replication` on the leader shows no streaming row for a replica. What does that establish?",
+      "choices": [
+        {
+          "text": "That the replica's FortiSIEM service process is stopped.",
+          "feedback": "PostgreSQL can be running while its replication connection is absent.",
+          "correct": false
+        },
+        {
+          "text": "That the EventDB disk is full.",
+          "feedback": "EventDB capacity is a different subsystem from PostgreSQL replication.",
+          "correct": false
+        },
+        {
+          "text": "That replica is not currently streaming WAL from the queried leader.",
+          "correct": true,
+          "feedback": "The absence of a streaming row is direct replication-state evidence."
+        },
+        {
+          "text": "That the CMDB has already converged.",
+          "feedback": "No streaming row is evidence against convergence, not proof of it.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+        "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-41",
+      "product": "FortiSASE",
+      "prompt": "A user in the Philippines connects to Jakarta despite a Singapore-first regional rule. What is the strongest first hypothesis?",
+      "choices": [
+        {
+          "text": "The FortiClient endpoint's private RFC1918 address is mapped to Jakarta.",
+          "feedback": "Regional selection uses public location context, not the endpoint's private LAN address.",
+          "correct": false
+        },
+        {
+          "text": "The Singapore PoP is always disabled when Tokyo is configured.",
+          "feedback": "The priority list does not automatically disable the first entry.",
+          "correct": false
+        },
+        {
+          "text": "The recursive DNS resolver is geolocated in Indonesia and influences the location decision.",
+          "correct": true,
+          "feedback": "The turbo FQDN may resolve according to resolver egress and EDNS context."
+        },
+        {
+          "text": "The firewall policy at the user's home router rewrites the country field.",
+          "feedback": "The Community scenario points to resolver location, not a home firewall country field.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+        "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-42",
+      "product": "FortiSASE",
+      "prompt": "How long can on-prem regional-compliance failover typically take after gateway failure?",
+      "choices": [
+        {
+          "text": "Approximately three to eight minutes, including detection and DNS cache expiry.",
+          "correct": true,
+          "feedback": "Health checks take one to three minutes and the DNS TTL is 300 seconds."
+        },
+        {
+          "text": "It is immediate because FortiSASE uses BGP route withdrawal.",
+          "feedback": "The documented failover uses ICMP health checks and DNS record updates.",
+          "correct": false
+        },
+        {
+          "text": "It waits for the next daily MDM polling interval.",
+          "feedback": "MDM polling is unrelated to regional tunnel health checks.",
+          "correct": false
+        },
+        {
+          "text": "It takes exactly thirty seconds after the first failed ping.",
+          "feedback": "The documented timing includes detection and the 300-second DNS TTL.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+        "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-43",
+      "product": "FortiSASE",
+      "prompt": "A country matches a Regional compliance rule, but the primary tunnel fails. Where should the backup PoP be configured?",
+      "choices": [
+        {
+          "text": "Rely on automatic fallback to the geographically closest PoP.",
+          "feedback": "Automatic closest-PoP fallback applies when no regional rule is selected.",
+          "correct": false
+        },
+        {
+          "text": "Add the backup PoP explicitly to that rule's permitted-connection priority list.",
+          "correct": true,
+          "feedback": "A matched rule tries only the connections explicitly listed in its priority table."
+        },
+        {
+          "text": "Change the endpoint's SSO identity provider.",
+          "feedback": "SSO identity does not add an alternate tunnel target.",
+          "correct": false
+        },
+        {
+          "text": "Disable Regional access to FortiSASE for all countries.",
+          "feedback": "That removes the geofence gate rather than adding a permitted fallback.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+        "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-44",
+      "product": "FortiSASE",
+      "prompt": "Which gate runs before FortiSASE selects a Regional compliance rule?",
+      "choices": [
+        {
+          "text": "Permitted connection priority is evaluated before source country.",
+          "feedback": "Priority is applied only after a matching rule is selected.",
+          "correct": false
+        },
+        {
+          "text": "On-prem gateway ICMP health check chooses the user's country.",
+          "feedback": "Health checks assess gateway availability, not source-country eligibility.",
+          "correct": false
+        },
+        {
+          "text": "FortiClient SAML group membership determines the geofence rule.",
+          "feedback": "The rule selection is based on regional source matching, not SAML group membership.",
+          "correct": false
+        },
+        {
+          "text": "Regional access to FortiSASE allow/deny evaluation.",
+          "correct": true,
+          "feedback": "The source region must first be allowed to connect to FortiSASE."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+        "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-45",
+      "product": "Secure SD-WAN",
+      "prompt": "After upgrading to FortiOS 8.0, old speed-test retry/retry-pause commands are absent. What is expected?",
+      "choices": [
+        {
+          "text": "The schedule must be recreated as a Performance SLA probe.",
+          "feedback": "Speed-test scheduling and Performance SLA are separate mechanisms.",
+          "correct": false
+        },
+        {
+          "text": "The interface shaper now controls every speed-test packet.",
+          "feedback": "Speed-test traffic bypasses ordinary interface shaping for measurement.",
+          "correct": false
+        },
+        {
+          "text": "The speed test is disabled permanently after upgrade.",
+          "feedback": "The feature remains available with the updated configuration model.",
+          "correct": false
+        },
+        {
+          "text": "FortiGate and backend coordinate retry timing; the old explicit knobs were removed.",
+          "correct": true,
+          "feedback": "The 8.0 feature moves retry coordination into the backend interaction."
+        }
+      ],
+      "correct_index": 3,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-46",
+      "product": "Secure SD-WAN",
+      "prompt": "A speed-test packet capture shows throughput beyond the interface shaper's configured rate. Is that necessarily a fault?",
+      "choices": [
+        {
+          "text": "Yes; every packet must be subject to the same application shaper.",
+          "feedback": "The documented speed-test path is treated separately from ordinary application traffic.",
+          "correct": false
+        },
+        {
+          "text": "The DSCP marking must be wrong.",
+          "feedback": "DSCP marking does not explain the test's shaping bypass behavior.",
+          "correct": false
+        },
+        {
+          "text": "No; speed-test traffic bypasses the ordinary interface traffic shaper.",
+          "correct": true,
+          "feedback": "The test is intended to measure the path rather than be throttled by the shaper."
+        },
+        {
+          "text": "The WAN member must be removed from SD-WAN.",
+          "feedback": "A measurement packet exceeding the application shaper does not prove member failure.",
+          "correct": false
+        }
+      ],
+      "correct_index": 2,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-47",
+      "product": "Secure SD-WAN",
+      "prompt": "A speed-test result is consistently equal to the configured minimum. What should be compared?",
+      "choices": [
+        {
+          "text": "Raw measurement versus update-inbandwidth/outbandwidth minimum and maximum bounds.",
+          "correct": true,
+          "feedback": "The applied value may be clamped by the configured interface bounds."
+        },
+        {
+          "text": "Only the SLA latency threshold.",
+          "feedback": "Latency threshold does not explain bandwidth result clamping.",
+          "correct": false
+        },
+        {
+          "text": "Only the FortiGate license expiration date.",
+          "feedback": "Licensing is not the first explanation for a configured result floor.",
+          "correct": false
+        },
+        {
+          "text": "Only the peer's BGP local preference.",
+          "feedback": "BGP preference chooses paths; it does not clamp the reported bandwidth value.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-48",
+      "product": "Secure SD-WAN",
+      "prompt": "The scheduled test succeeds, but business applications still have high loss and latency. What should be examined separately?",
+      "choices": [
+        {
+          "text": "Repeat the speed test every minute until the issue disappears.",
+          "feedback": "More measurements do not replace SLA and policy-path diagnosis.",
+          "correct": false
+        },
+        {
+          "text": "Performance SLA state, SD-WAN rule selection and ordinary traffic shaping.",
+          "correct": true,
+          "feedback": "A bandwidth test does not prove latency/loss health or application steering."
+        },
+        {
+          "text": "Increase the speed-test minimum to match the circuit contract.",
+          "feedback": "A higher floor can hide low measured throughput rather than repair it.",
+          "correct": false
+        },
+        {
+          "text": "Disable all SD-WAN rules and use static routes.",
+          "feedback": "That removes the steering logic without identifying the failing service.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-49",
+      "product": "FortiAnalyzer + FortiGate",
+      "prompt": "FortiMQ connector is Active, but a FortiGate feed remains empty. Which sequence best isolates the gap?",
+      "choices": [
+        {
+          "text": "Check same FortiCare account, source ADOM, cloud-feed sync and feed update time.",
+          "correct": true,
+          "feedback": "These are separate prerequisites between connector health and firewall retrieval."
+        },
+        {
+          "text": "Rebuild the FortiGate firewall policy before checking the feed.",
+          "feedback": "A policy cannot match an indicator that has not arrived in the feed.",
+          "correct": false
+        },
+        {
+          "text": "Delete the FortiAnalyzer ADOM and recreate all devices.",
+          "feedback": "That is a destructive response to an unverified scope or sync issue.",
+          "correct": false
+        },
+        {
+          "text": "Change the indicator from IP to MAC without checking its type.",
+          "feedback": "Changing type can make the indicator less relevant to the traffic path.",
+          "correct": false
+        }
+      ],
+      "correct_index": 0,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    },
+    {
+      "id": "FNS-20261109-50",
+      "product": "FortiAuthenticator + FortiNAC",
+      "prompt": "Which statement best distinguishes RadSec from FortiNAC Winbind?",
+      "choices": [
+        {
+          "text": "Both mechanisms are interchangeable ways to encrypt LDAP traffic.",
+          "feedback": "Winbind is not a TLS transport for RADIUS and RadSec is not AD domain join.",
+          "correct": false
+        },
+        {
+          "text": "RadSec protects RADIUS transport with mutual TLS; Winbind validates AD MSCHAPv2 challenges.",
+          "correct": true,
+          "feedback": "They solve different layers: transport confidentiality/identity versus password challenge validation."
+        },
+        {
+          "text": "RadSec replaces the FortiNAC host registration policy engine.",
+          "feedback": "RadSec protects the RADIUS channel but does not replace NAC policy logic.",
+          "correct": false
+        },
+        {
+          "text": "Winbind distributes RADIUS accounting over TCP/2083.",
+          "feedback": "Winbind performs the MSCHAPv2 challenge path; RadSec uses TLS transport.",
+          "correct": false
+        }
+      ],
+      "correct_index": 1,
+      "source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+      ],
+      "feedback_mode": "per-choice"
+    }
+  ]
+}
