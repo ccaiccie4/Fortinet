@@ -1,0 +1,232 @@
+{
+  "schema_version": "3.0",
+  "generated_at_local": "2026-11-09T08:02:13-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "exclusion_inventory": "docs/exclusion_inventory_2026-11-09-08-02.json",
+  "exclusion_inventory_readback_sha": "94326d9e563ad4e854052f7381f71937a19fc184",
+  "discovery_before_topic_selection": true,
+  "selection_status": "12 topics selected only after read-back of 216-record inventory (204 published lessons plus 12 candidate-only exclusions).",
+  "semantic_uniqueness_rule": "Reject any same or substantially equivalent mechanism, workflow/transaction, failure class, evidence pattern, remediation path, question fingerprint or topology even if URL/title differs. Lexical similarity is only a screening aid; manual feature-boundary review is also recorded.",
+  "all_12_semantically_unique": true,
+  "topic_count": 12,
+  "semantic_comparison": [
+    {
+      "product": "FortiGate",
+      "max_token_jaccard": 0.069,
+      "closest_prior_subject": "Local-out routing: steering FortiGate-originated service traffic"
+    },
+    {
+      "product": "FortiManager",
+      "max_token_jaccard": 0.106,
+      "closest_prior_subject": "Firmware-template profile database: desired-version records, scheduled campaign state, hidden profiles, and safe ADOM-scoped cleanup"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "max_token_jaccard": 0.105,
+      "closest_prior_subject": "FortiGate onboarding through Security Fabric authorization"
+    },
+    {
+      "product": "FortiSwitch",
+      "max_token_jaccard": 0.073,
+      "closest_prior_subject": "FortiSwitch — Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "max_token_jaccard": 0.103,
+      "closest_prior_subject": "FortiAP/Wireless — Wi-Fi 7 SAE_EXT AKM24 selection and radio-profile compatibility"
+    },
+    {
+      "product": "FortiNAC",
+      "max_token_jaccard": 0.054,
+      "closest_prior_subject": "FortiNAC 9.4 RADIUS Activity: 802.1X/MAB pass-fail telemetry and failed-authentication export"
+    },
+    {
+      "product": "FortiNAC-F",
+      "max_token_jaccard": 0.099,
+      "closest_prior_subject": "FortiNAC-F Mist Service Connector: API-based site discovery, virtual-controller inventory and manual migration from CloudAPITool"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "max_token_jaccard": 0.118,
+      "closest_prior_subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity"
+    },
+    {
+      "product": "FortiPAM",
+      "max_token_jaccard": 0.091,
+      "closest_prior_subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout"
+    },
+    {
+      "product": "FortiSIEM",
+      "max_token_jaccard": 0.05,
+      "closest_prior_subject": "Offline OS repository synchronization and ordered Supervisor, Worker, and Collector upgrades"
+    },
+    {
+      "product": "FortiSASE",
+      "max_token_jaccard": 0.103,
+      "closest_prior_subject": "FortiSASE agent-based Entra ID SAML SSO: claims, certificates, group limits, and stable egress identity"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "max_token_jaccard": 0.067,
+      "closest_prior_subject": "Underlay-bandwidth-aware load balancing across overlay members"
+    }
+  ],
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "FortiOS 8.0 TLS 1.3 IPsec transport over TCP: per-VDOM enablement, Auto fallback, certificate trust and upgrade behavior",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250",
+      "feature_mechanism_fingerprint": "FortiOS 8.0 adds TLS 1.3 as an IPsec IKE/ESP TCP encapsulation transport; ike-tcp-service and ike-tls-service are per-VDOM gates; TLS mode is FortiGate-to-FortiGate.",
+      "workflow_transaction_fingerprint": "IKEv2 begins over UDP; with TCP/TLS services enabled and transport Auto, the initiator can retry over TCP/TLS; IKE and ESP are carried inside TLS; peer certificate validation precedes Phase 2 and normal firewall-policy traffic.",
+      "failure_class": "UDP blocked but fallback disabled; TLS listener disabled on one peer; untrusted or mismatched certificate; FortiClient incorrectly expected to use the new FortiGate-to-FortiGate TLS mode; post-upgrade static Auto tunnel conversion misunderstood.",
+      "evidence_pattern": "IKE gateway output identifies transport and peer; IKE debug shows TLS handshake/certificate result; packet capture shows TCP/TLS; established SA does not prove routes or firewall policies pass application traffic.",
+      "remediation_path": "Enable TCP/TLS services on both peers; use IKEv2 and Auto; import correct CA and use matching peer identity; validate listener/port, route and policy separately; review upgrade conversion; do not conflate RFC8229 TCP encapsulation with the new TLS mode.",
+      "question_fingerprint": "separate UDP negotiation, TCP fallback gates, TLS certificate validation and post-tunnel policy failure from their distinct evidence.",
+      "diagram_topology_layout_fingerprint": "two FortiGates, UDP-first path, TCP/TLS 1.3 fallback, mutual peer trust, IKE/ESP encapsulation and separate protected-data policy path."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager 8.0 ADOM upgrade readiness: syntax compatibility, database conversion and remote-certificate preflight",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084",
+      "feature_mechanism_fingerprint": "ADOM version is the FortiOS syntax/database schema version, not FortiManager firmware; readiness checks device configurations for unsupported syntax before ADOM object conversion and reports blockers without repairing them.",
+      "workflow_transaction_fingerprint": "Select same-version ADOMs; readiness evaluates device/VDOM syntax; exported report drives remediation; ADOM upgrade converts schema/objects; device resync and install preview validate the resulting target syntax.",
+      "failure_class": "Unsupported device firmware or syntax; malformed remote certificate PEM wrapper; mixed ADOM versions assumed compatible; workspace ADOM not locked; object conversion succeeds but later install exposes a device-specific syntax issue.",
+      "evidence_pattern": "Readiness report identifies exact incompatible objects; ADOM support matrix establishes version compatibility; Remote Certificate and Where Used reveal SAML/PKI dependencies; successful readiness does not guarantee install success.",
+      "remediation_path": "Back up FortiManager; verify lowest device firmware; lock workspace ADOM; run readiness; repair invalid syntax and PEM delimiters without changing certificate bytes; upgrade supported ADOM versions together; resync devices and run install preview before production install.",
+      "question_fingerprint": "distinguish FortiManager firmware, ADOM schema, managed-device firmware and malformed shared certificate data.",
+      "diagram_topology_layout_fingerprint": "FortiManager above multiple ADOM schema lanes; device/VDOM syntax checks feed readiness report; remediation gate precedes schema conversion and device resync/install."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer 8.0 FortiMQ connector: ADOM-scoped indicator delivery and Cloud Fabric Feed enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116",
+      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 FortiMQ connector is a disabled-by-default cloud connector that transmits blocked IP, URL, domain or MAC indicators through block_indicator playbook; FortiGate retrieves them as Cloud-based Fabric Feeds; connector scope follows source ADOM.",
+      "workflow_transaction_fingerprint": "Logs reach FortiAnalyzer; analyst blocks an indicator; playbook posts to FortiMQ; FortiGate syncs cloud feed; feed object is referenced by a firewall/security profile; unblock reverses indicator state.",
+      "failure_class": "Connector disabled; FortiGate and FortiAnalyzer not under same FortiCare account; feed sync disabled; ADOM mismatch; indicator submission mistaken for enforcement; existing FortiManager connector assumed to supersede FortiMQ.",
+      "evidence_pattern": "Active connector proves API health; playbook run proves submission; FortiGate feed contents/last-update prove retrieval; policy/profile reference and traffic test prove enforcement.",
+      "remediation_path": "Enable connector in the correct Fabric/FortiGate ADOM; confirm same FortiCare account and FortiGate cloud-feed sync; validate indicator type and scope; inspect playbook; confirm feed population and policy reference; disable FortiMQ only when deliberately using the FortiManager path.",
+      "question_fingerprint": "separate connector health, ADOM scope, indicator submission, feed retrieval and actual policy enforcement.",
+      "diagram_topology_layout_fingerprint": "FortiGate logs to FortiAnalyzer ADOM; analyst indicator to playbook to FortiMQ cloud; FortiGate feed sync to external-feed object to policy."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch egress QoS: CoS/DSCP trust maps, eight queues, scheduler weights and congestion drops",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603",
+      "feature_mechanism_fingerprint": "FortiSwitch maps ingress 802.1p CoS or IP DSCP into one of eight egress queues; trust selection determines classification; strict, round-robin and weighted scheduling govern service; tail-drop and model-dependent RED/WRED control congestion.",
+      "workflow_transaction_fingerprint": "Ingress trust selects CoS or DSCP map; classification selects queue; optional ACL remarking changes markings; egress policy selects scheduling and rate/drop behavior; policy binds to ports; scheduler transmits or drops under congestion.",
+      "failure_class": "Wrong trust map selects default queue; both CoS and DSCP trust cause DSCP precedence; queue 7 oversubscribed by data; strict scheduling starves lower queues; model lacks configured min-rate/WRED/ECN options.",
+      "evidence_pattern": "dot1p/dscp maps and port QoS policy show intent; switch QoS counters show queue occupancy/drop behavior; compare ingress markings and selected queue under controlled congestion; CPU internal queues are not identical to port queue counters.",
+      "remediation_path": "Choose one trust source per port; map DSCP/CoS intentionally; reserve queue 7 for control; use WRR where starvation is unacceptable; verify model feature matrix; inspect per-port queue counters before tuning.",
+      "question_fingerprint": "trace voice/data packet classification to egress queue and scheduler while distinguishing port queue 7 from CPU control queues.",
+      "diagram_topology_layout_fingerprint": "ingress CoS/DSCP trust -> eight egress queues -> strict/RR/WRR scheduler -> tail-drop/WRED/ECN congestion branch -> egress."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiAP 8.0 wireless packet sniffer: radio-channel capture, frame filters and browser-streamed PCAP",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A FortiAP profile places one radio in packet-sniffer mode; captures over-the-air management, control and data frames on a selected channel/channel width with optional station-MAC and frame-type filters; FortiGate GUI streams capture to browser and does not persist PCAP on FortiGate.",
+      "workflow_transaction_fingerprint": "Select radio in WTP profile; configure sniffer mode/channel/width/buffer/MAC/frame filters; apply profile; start one AP capture; packets stream to browser; stop and save PCAP locally; analyze 802.11 management/control/data frames.",
+      "failure_class": "Wrong radio/channel/width misses frames; filter excludes target; one AP capture already running; operator changes radio mode before exporting temporary capture; browser stream mistaken for FortiGate-stored PCAP.",
+      "evidence_pattern": "Profile shows capture settings; AP status confirms radio mode; live stream and saved PCAP expose beacon/probe/control/data, retries, rate and RSSI; no frames proves only that the configured radio/filter/channel did not observe them.",
+      "remediation_path": "Match channel and width to affected BSS; use separate APs for simultaneous band captures; begin with broad filters; run one capture at a time; save PCAP before changing radio mode; use separate CAPWAP capture when controller transport is suspect.",
+      "question_fingerprint": "choose over-the-air radio capture versus CAPWAP transport capture and identify where the PCAP is stored.",
+      "diagram_topology_layout_fingerprint": "FortiAP radio/channel/filter boundary -> live browser stream -> local PCAP analyzer; separate CAPWAP control/data path."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC Winbind and Kerberos domain join: AD-only MSCHAPv2 boundary, keytab and LDAP separation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "feature_mechanism_fingerprint": "FortiNAC Winbind is used for MSCHAPv2 challenge-response via ntlm_auth and requires a Samba Active Directory domain join; NetBIOS workgroup and Kerberos DNS realm are distinct fields; LDAP can still provide directory, group and portal/admin authentication without Winbind when MSCHAPv2 is not required.",
+      "workflow_transaction_fingerprint": "FortiNAC resolves AD SRV/A records and DC hostnames; NTP-synchronized appliance performs Samba ADS join using credentials or keytab; Winbind/ntlm_auth validates MSCHAPv2 challenge; separate LDAP directory queries provide user/group attributes and portal/admin identity.",
+      "failure_class": "Non-AD LDAP/Kerberos server such as FreeIPA is incorrectly used as Samba AD domain controller; NetBIOS name confused with DNS realm; missing SRV records or NTP drift breaks Kerberos; domain join shown as Joined but trust secret/Winbind service fails.",
+      "evidence_pattern": "net ads testjoin -k and wbinfo -t verify domain trust; service winbind status shows daemon; nslookup SRV _ldap/_kerberos validates discovery; wbinfo -a tests plaintext/challenge response; LDAP bind success does not prove MSCHAPv2 Winbind operation.",
+      "remediation_path": "Use Winbind only for AD-backed MSCHAPv2; use LDAP alone for non-AD directories and EAP methods that do not require MSCHAPv2; separate uppercase NetBIOS workgroup from DNS Kerberos realm; verify SRV/A records, ports and NTP; join domain before enabling Winbind; use keytab when supported.",
+      "question_fingerprint": "distinguish LDAP directory authentication from Samba AD join/Winbind MSCHAPv2 and identify why FreeIPA cannot satisfy Join Domain.",
+      "diagram_topology_layout_fingerprint": "FortiNAC -> DNS/NTP -> AD DC and Kerberos/Samba join -> Winbind ntlm_auth branch for MSCHAPv2; independent LDAP branch for directory/group lookups."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F Microsoft Intune MDM connector: application permissions, NAC-API compliance lookup and poll reconciliation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220",
+      "feature_mechanism_fingerprint": "FortiNAC-F Intune connector uses Microsoft Graph plus Intune NAC API; application permissions support daemon operation and on-demand single-device compliance lookup; delegated permissions cannot use NAC API and require broad asset polling; connector options govern compliance, MAC resolution and deletion reconciliation.",
+      "workflow_transaction_fingerprint": "Register Entra application and grant application-level permissions/certificate or secret; connector calls login/Graph endpoints; unknown host triggers NAC-API lookup; scheduled poll updates managed-host/compliance state and optionally resolves physical MAC; policy consumes MDM attributes.",
+      "failure_class": "Delegated permissions prevent NAC-API lookup; missing app permission yields Unauthorized; removal reconciliation deletes still-enrolled hosts after affected poll; randomized MAC prevents lookup; excessive compliance/Network Details queries cause load/throttling.",
+      "evidence_pattern": "Test Connection proves endpoint/auth only; Last Successful Poll proves retrieval; MSInTuneServer debug shows deleteHosts count; host record/serial lookup/compliance state proves identity join; Entra app permissions prove API authorization.",
+      "remediation_path": "Use application permissions and supported certificate/secret auth; grant compliance retrieval permission; validate NAC-API version and URLs; tune poll interval to device count; use serial lookup for randomized MAC; on affected 7.6.7 disable Remove Hosts Deleted and Enable Network Details until fixed in 7.6.8.",
+      "question_fingerprint": "distinguish Graph full-inventory poll from single-device NAC-API lookup and identify why delegated permissions or deletion reconciliation causes rogue hosts.",
+      "diagram_topology_layout_fingerprint": "Entra app registration -> FortiNAC-F MDM connector -> Graph inventory and NAC-API compliance branches -> host database/policy with deletion reconciliation."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator RadSec server: mutual-TLS client identity, RADIUS daemon handoff and certificate-chain diagnostics",
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102",
+      "feature_mechanism_fingerprint": "FortiAuthenticator RadSec terminates TLS for RADIUS authentication/accounting, presents a configured RadSec Server Certificate, requires a valid client certificate signed by configured Local/Trusted CA, then hands decrypted requests to normal RADIUS daemon; default port 2083 and maximum 500 simultaneous clients.",
+      "workflow_transaction_fingerprint": "RADIUS client opens TLS to FAC:2083; server certificate is validated; client certificate is requested and checked against Local/Trusted CA; TLS tunnel established; RADIUS request enters client/policy selection; response returns inside TLS.",
+      "failure_class": "Client certificate absent/untrusted; wrong RadSec server certificate; FQDN/SAN mismatch; interface service or port disabled; RADIUS client/policy mismatch after TLS succeeds; concurrent client limit reached.",
+      "evidence_pattern": "FAC RADIUS-over-TLS logscan shows peer-certificate error; TLS handshake separates transport auth from RADIUS policy; RADIUS daemon logs show decrypted request processing; connection test alone does not prove user authentication.",
+      "remediation_path": "Assign dedicated server certificate in RADIUS General; enable RadSec service on interface/port; configure client certificate signed by FAC Local/Trusted CA; validate FQDN/SAN and trust anchor; verify RADIUS client/policy separately; monitor client count.",
+      "question_fingerprint": "differentiate server certificate validation, mandatory client certificate and subsequent RADIUS policy rejection.",
+      "diagram_topology_layout_fingerprint": "RADIUS client <-> FortiAuthenticator mutual TLS certificates -> TLS termination -> RADIUS daemon/client/policy -> encrypted response."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 JIT privilege via secret checkout/check-in: WinRM PowerShell elevation and de-elevation",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 attaches PowerShell checkout/check-in scripts to a secret; resolves privileged target account; connects over WinRM; adds user to elevated group at checkout and removes at check-in; script failure warns but does not block checkout/check-in.",
+      "workflow_transaction_fingerprint": "User checks out secret; FortiPAM resolves target admin credential; WinRM executes Add-LocalGroupMember/Add-ADGroupMember; user signs out/in to refresh token; work proceeds; check-in executes removal script; user signs out/in again.",
+      "failure_class": "WinRM disabled/unreachable; privileged credential lacks rights; script/identity variable incorrect; script failure while checkout continues; token not refreshed after membership change; check-in skipped.",
+      "evidence_pattern": "Secret activity shows script result; WinRM service/listener prove reachability; local/AD group membership proves privilege; current logon token may not reflect membership until new logon; checkout alone does not prove elevation.",
+      "remediation_path": "Enable WinRM and verify service; test scripts; ensure privileged account has minimum group rights; inspect activity logs and membership; force sign-out/in after both transitions; monitor overdue checkouts and failed check-ins.",
+      "question_fingerprint": "distinguish script execution from token refresh and explain why checkout may succeed while JIT elevation failed.",
+      "diagram_topology_layout_fingerprint": "FortiPAM checkout -> credential resolver -> WinRM PowerShell add-group -> new logon token -> check-in remove-group -> refreshed least-privilege token."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Supervisor HA CMDB replication: Patroni timeline divergence, stale PostgreSQL replicas and safe reinitialization",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115",
+      "feature_mechanism_fingerprint": "FortiSIEM Supervisor HA uses PostgreSQL Patroni for CMDB replication and etcd for leader election; failover changes timeline; replica on incompatible timeline can remain running/read-only but stop streaming and leave CMDB stale.",
+      "workflow_transaction_fingerprint": "Leader writes CMDB WAL; Patroni streams WAL to replicas; failover elects new leader and advances timeline; valid replicas follow; divergent replica stops applying WAL; detect via Patroni/pg_stat_replication/history; reinitialize only affected replica from healthy leader.",
+      "failure_class": "Replica running but not streaming after timeline change; health replication widget appears Normal; stale CMDB shows deleted devices/collectors; rebuilding from wrong node or without healthy leader risks data loss.",
+      "evidence_pattern": "patronictl list shows role/state/TL/lag; patronictl history shows timeline; pg_stat_replication shows streaming; pg_is_in_recovery identifies replica; compare ph_device counts and phshowVersion.sh; WAL timeline errors show divergence.",
+      "remediation_path": "Confirm healthy leader and streaming replica with lag 0; inspect timeline/history; run patronictl reinit only on affected replica, never leader; monitor same timeline/streaming/lag 0; restart phxctl services; if reinit fails collect Patroni/PostgreSQL logs and stop retrying.",
+      "question_fingerprint": "distinguish running from streaming replica and identify safe target/preconditions for Patroni reinit.",
+      "diagram_topology_layout_fingerprint": "three Supervisor nodes with PostgreSQL Patroni leader/WAL stream; failover timeline branch; stale replica isolated and reinitialized from healthy leader."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE regional compliance geofencing: DNS-based source location, ordered tunnel selection and health-check failover",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910",
+      "feature_mechanism_fingerprint": "FortiSASE determines remote-user country/region from public-IP/DNS location context, applies Regional access allow/deny, selects matching Regional compliance rule and ordered on-prem/PoP connections; on-prem gateways are ICMP health-checked every 1-2 minutes and DNS failover uses 300-second TTL.",
+      "workflow_transaction_fingerprint": "FortiClient resolves turbo FQDN via recursive DNS; FortiSASE determines region; geofencing gate runs; regional rule selects ordered connections; FortiClient attempts priority list; failed on-prem gateway health check updates DNS to next target; endpoint retries after cache expiry.",
+      "failure_class": "Recursive resolver is outside user's country; eDNS client-subnet absent; regional-access gate blocks before rule; fallback PoP omitted; on-prem gateway blocks ICMP; DNS cache delays failover.",
+      "evidence_pattern": "nslookup turbo FQDN shows PoP hostname; nslookup whoami.akamai.com identifies recursive resolver egress; TXT eDNS query reveals client subnet; ICMP and 300-second TTL explain 3-8 minute failover; portal configuration success does not prove resolver-based location.",
+      "remediation_path": "Use in-country recursive resolver and eDNS client-subnet; compare resolver egress to endpoint; check Regional access before rule; order permitted connections and include fallback PoP; permit ICMP to on-prem gateway; allow for DNS TTL.",
+      "question_fingerprint": "distinguish endpoint public IP from recursive resolver location and explain unexpected PoP selection despite a valid regional rule.",
+      "diagram_topology_layout_fingerprint": "remote endpoint -> recursive DNS/eDNS location -> geofencing gate -> regional priority list -> PoP/on-prem tunnel candidates with ICMP/DNS failover."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiOS 8.0 SD-WAN speed-test scheduling: backend coordination and interface bandwidth-bound result shaping",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 coordinates scheduled SD-WAN speed tests between FortiGate and backend; explicit retry/retry-pause settings removed; test traffic bypasses interface shaping but uses update-inbandwidth/outbandwidth min/max values; result-to-interface-shaping settings moved to interface configuration.",
+      "workflow_transaction_fingerprint": "Configure system speed-test-schedule per interface with bounds; FortiGate/backend coordinate test timing; test measures bandwidth; min/max clamp results; interface consumes updated bandwidth values for shaping.",
+      "failure_class": "Obsolete retry commands carried forward; operator expects interface shaper to govern speed-test packets; result settings left in old location; min/max bounds mistaken for measured values.",
+      "evidence_pattern": "show system speed-test-schedule displays interface schedule/bounds; 8.0 CLI no longer exposes retry/retry-pause; compare raw and bounded results and interface shaping settings; completed test does not prove application traffic shaping.",
+      "remediation_path": "Use 8.0 interface-based settings; remove retry/retry-pause assumptions; set min/max bounds intentionally; verify backend coordination and per-interface schedule; test speed-test traffic separately from ordinary shaped traffic.",
+      "question_fingerprint": "distinguish backend retry coordination, bypassed interface shaping and min/max result clamping.",
+      "diagram_topology_layout_fingerprint": "interface schedule -> backend coordination -> speed-test measurement -> min/max clamp -> shaping consumer; test packets bypass interface shaper."
+    }
+  ]
+}
