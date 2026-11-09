@@ -1,0 +1,244 @@
+{
+  "schema_version": "2.0",
+  "run_date": "2026-11-09",
+  "repository": "ccaiccie4/Fortinet",
+  "selection_driver": "Current Fortinet documentation corpus, after 30-day exclusion inventory read-back; Community material is not used as primary lesson source.",
+  "targets": [
+    {
+      "product": "FortiGate",
+      "primary_topic": "TLS 1.3 IPsec transport over TCP",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/428828/tls-1-3-based-vpn-over-tcp"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/300444/ipsec-vpn",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/"
+      ],
+      "guides_inspected": {
+        "administration": "TLS 1.3 based VPN over TCP and IPsec VPN sections",
+        "configuration": "Phase 1 transport, per-VDOM ike-tcp-service/ike-tls-service and certificates",
+        "new_features": "FortiOS 8.0 TLS 1.3 VPN over TCP",
+        "release_notes": "FortiOS 8.0 release-specific upgrade behavior",
+        "architecture": "Site-to-site and dial-up IPsec transport model"
+      },
+      "candidate_reason": "Distinct transport encapsulation and certificate boundary; not the prior IKE proposal/SA/rekey lessons."
+    },
+    {
+      "product": "FortiManager",
+      "primary_topic": "ADOM upgrade readiness and schema conversion",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/833397/verifying-adom-upgrade-readiness",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/upgrade-guide/"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/"
+      ],
+      "guides_inspected": {
+        "administration": "ADOM upgrade readiness, ADOM versions and workspace mode",
+        "configuration": "ADOM object database and remote certificate configuration",
+        "new_features": "FortiManager 8.0 release-specific additions",
+        "release_notes": "Supported ADOM versions and upgrade path",
+        "architecture": "Manager firmware versus ADOM syntax/database schema"
+      },
+      "candidate_reason": "ADOM schema conversion/readiness is distinct from device firmware campaign templates and concurrent policy editing."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "primary_topic": "FortiMQ connector for automated blocking",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/434342/fortimq-connector-for-automated-blocking",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/"
+      ],
+      "guides_inspected": {
+        "administration": "Fabric connectors, indicators, playbooks and ADOM scope",
+        "configuration": "Connector enablement and Cloud-based Fabric Feed consumption",
+        "new_features": "FortiMQ connector for automated blocking",
+        "release_notes": "FortiAnalyzer 8.0 compatibility and connector prerequisites",
+        "architecture": "FortiAnalyzer ADOM to FortiMQ to FortiGate feed path"
+      },
+      "candidate_reason": "Cloud indicator distribution is not the previous alert-handler automation or archive storage mechanisms."
+    },
+    {
+      "product": "FortiSwitch",
+      "primary_topic": "Egress QoS classification and queue scheduling",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/609008/qos",
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortilink-guide/173281/configuring-qos-with-managed-fortiswitch-units"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-feature-matrix"
+      ],
+      "guides_inspected": {
+        "administration": "QoS maps, policies, queue scheduling and port binding",
+        "configuration": "802.1p/DSCP trust, egress policy and interface settings",
+        "new_features": "Model-specific QoS capabilities in feature matrix",
+        "release_notes": "FortiSwitchOS 7.6 model compatibility",
+        "architecture": "Eight hardware egress queues and reserved control queue"
+      },
+      "candidate_reason": "QoS classification/scheduling is not the previous ACL pipeline, STP, or firmware-signature mechanisms."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "primary_topic": "Wireless traffic packet sniffer",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/236525/wireless-traffic-packet-sniffer"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/"
+      ],
+      "guides_inspected": {
+        "administration": "Managed AP profiles and wireless diagnostics",
+        "configuration": "WTP profile radio mode, channel, width, filters and capture buffer",
+        "new_features": "FortiAP/FortiOS 8.0 wireless diagnostics",
+        "release_notes": "AP model and radio capability caveats",
+        "architecture": "Over-the-air 802.11 capture versus CAPWAP transport capture"
+      },
+      "candidate_reason": "Radio-local packet capture is distinct from Wi-Fi 7 MLO negotiation and CAPWAP DTLS."
+    },
+    {
+      "product": "FortiNAC",
+      "primary_topic": "Winbind and Kerberos domain join boundary",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/724520/configuration",
+        "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/858820/authentication"
+      ],
+      "guides_inspected": {
+        "administration": "Local Winbind, LDAP directories and Authentication settings",
+        "configuration": "NetBIOS name, Kerberos realm, DC hostname, domain join and keytab",
+        "new_features": "FortiNAC 9.4 Kerberos support for admin/user authentication",
+        "release_notes": "9.4.x authentication and Winbind notes",
+        "architecture": "LDAP identity/group lookup separated from Samba/Winbind MSCHAPv2 challenge validation"
+      },
+      "candidate_reason": "Domain join/Winbind protocol boundary is not RADIUS Activity, group ingestion or endpoint compliance."
+    },
+    {
+      "product": "FortiNAC-F",
+      "primary_topic": "Microsoft Intune MDM connector and NAC-API compliance retrieval",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/422594/mdm-servers",
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/c7ae777c-235d-11ef-8c42-fa163e15d75b/MDM-OT-v7.6.0-Security-Integration-Guide.pdf"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration"
+      ],
+      "guides_inspected": {
+        "administration": "MDM Servers and connector settings",
+        "configuration": "Microsoft Intune Graph/NAC API URLs, application permissions, certificate auth, poll and removal controls",
+        "new_features": "FortiNAC-F 7.6 MDM API support",
+        "release_notes": "7.6.7/7.6.8 MDM host removal issue and fix",
+        "architecture": "Manager versus per-server connector placement and MDM host data distribution"
+      },
+      "candidate_reason": "MDM identity/compliance reconciliation is distinct from Mist site discovery and SNMP device discovery."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "primary_topic": "RadSec server mutual TLS and RADIUS daemon handoff",
+      "primary_sources": [
+        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
+        "https://docs2.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/416152"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/729374/configuring-a-radsec-client"
+      ],
+      "guides_inspected": {
+        "administration": "8.0.0 RADIUS Service General, RadSec Server Certificate, Local/Trusted CAs and Services",
+        "configuration": "RadSec interface enablement, TCP/TLS port 2083 and RADIUS client/policy mapping",
+        "new_features": "8.0.x certificate and RADIUS behavior",
+        "release_notes": "8.0.x Cloud RadSec client-certificate enforcement change",
+        "architecture": "TLS termination followed by standard RADIUS daemon processing"
+      },
+      "candidate_reason": "RadSec transport mutual TLS is distinct from EAP-TEAP and LDAPS trust-anchor lessons."
+    },
+    {
+      "product": "FortiPAM",
+      "primary_topic": "JIT privilege via secret checkout/check-in PowerShell",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortipam/latest/administration-guide/"
+      ],
+      "guides_inspected": {
+        "administration": "JIT scripts, Checkout/in Script and WinRM configuration",
+        "configuration": "Secret checkout/check-in scripts and privileged target account resolution",
+        "new_features": "FortiPAM 1.9 JIT privilege enhancement",
+        "release_notes": "1.9.0 behavior: script failure warns but does not block checkout/check-in",
+        "architecture": "FortiPAM orchestrator to Windows WinRM to local/AD group membership"
+      },
+      "candidate_reason": "Time-bound Windows group membership via WinRM is distinct from secret checkout locks and gateway chaining."
+    },
+    {
+      "product": "FortiSIEM",
+      "primary_topic": "Supervisor HA PostgreSQL CMDB replication and Patroni timeline recovery",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortisiem/7.3.5/high-availability-and-disaster-recovery-procedures-eventdb/903189/understanding-high-availability-ha",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.0/high-availability-and-disaster-recovery-procedures-clickhouse/"
+      ],
+      "guides_inspected": {
+        "administration": "HA/DR procedures and Supervisor cluster operations",
+        "configuration": "Patroni, etcd, DB leader/follower, VIP/DNS and replication",
+        "new_features": "7.3+ automated HA and 7.5.1 release behavior",
+        "release_notes": "7.5.x HA and database compatibility",
+        "architecture": "PostgreSQL CMDB replication separated from EventDB/ClickHouse storage and file replication"
+      },
+      "candidate_reason": "PostgreSQL CMDB timeline divergence is distinct from ClickHouse storage and OS repository upgrades."
+    },
+    {
+      "product": "FortiSASE",
+      "primary_topic": "Regional compliance geofencing and DNS-based source location",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/mature-administration-guide/869018/geofencing",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-release-notes/661728/whats-new",
+        "https://docs.fortinet.com/document/fortisase/26.1.92/unified-sase-for-mssp-architecture-guide/189462/agent-based-users"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/869018/geofencing"
+      ],
+      "guides_inspected": {
+        "administration": "Geofencing, Regional access, Regional compliance, permitted connection priority and health checks",
+        "configuration": "Geography hosts, region rules, on-prem gateway, PoP ordering, DNS and ICMP",
+        "new_features": "26.1.x regional compliance support for IPsec and updated tunnel settings",
+        "release_notes": "26.1.40 IPsec PSK support for on-prem regional compliance",
+        "architecture": "Agent-based users, PoP selection, regional compliance and failover"
+      },
+      "candidate_reason": "DNS-resolver-derived regional selection is distinct from pre-logon tunnel authentication and inline CASB."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "primary_topic": "FortiOS 8.0 scheduled SD-WAN speed tests and interface bandwidth bounds",
+      "primary_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/"
+      ],
+      "additional_sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/"
+      ],
+      "guides_inspected": {
+        "administration": "SD-WAN speed-test schedule and interface shaping consumers",
+        "configuration": "Per-interface schedule, update-inbandwidth/outbandwidth min/max bounds",
+        "new_features": "FortiOS 8.0 SD-WAN speed-test scheduling improvements",
+        "release_notes": "Removal of explicit retry/retry-pause and relocation of result settings",
+        "architecture": "FortiGate/backend test coordination and separation from ordinary interface shaping"
+      },
+      "candidate_reason": "Scheduled bandwidth measurement and result clamping are distinct from SLA probe health, overlay IPAM and packet duplication."
+    }
+  ],
+  "gaps": [
+    "Some Fortinet Document Library pages were indexed but returned HTTP 403 when opened directly; source text was taken from official indexed pages or official PDFs where available.",
+    "FortiSIEM HA architecture source is the 7.3.5 EventDB guide because the community failure concerns PostgreSQL CMDB replication; it is not a ClickHouse shard lesson.",
+    "FortiAuthenticator RadSec server details are taken from the official 8.0.0 Admin Guide PDF, with 8.0.3 policy documentation used for current RADIUS policy context."
+  ]
+}
