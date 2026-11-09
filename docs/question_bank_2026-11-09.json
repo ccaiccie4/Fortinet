@@ -3,7 +3,7 @@
   "run_date": "2026-11-09",
   "question_count": 50,
   "graded": true,
-  "choice_count": 4,
+  "choice_count": 200,
   "feedback_count": 200,
   "correct_answer_distribution": {
     "A": 13,
@@ -11,7 +11,7 @@
     "C": 12,
     "D": 12
   },
-  "max_choice_word_count_difference": 2,
+  "max_choice_word_count_difference": 3,
   "unique_ids": true,
   "questions": [
     {
@@ -673,396 +673,392 @@
     {
       "id": "FNS-20261109-21",
       "product": "FortiNAC",
-      "prompt": "FortiNAC Winbind Join Domain fails against FreeIPA, while LDAP user lookup works. What is the correct interpretation?",
+      "prompt": "An enrolled Intune laptop reaches the captive portal but remains an unknown host. Which setting is the first check?",
+      "correct_index": 2,
       "choices": [
         {
-          "text": "FreeIPA must be converted to RADIUS before LDAP can work here.",
-          "feedback": "LDAP directory functions can operate without Winbind or a Samba AD join.",
-          "correct": false
+          "text": "Enable application inventory updates so unknown hosts become registered.",
+          "correct": false,
+          "feedback": "Application inventory is retrieved for hosts already present in the FortiNAC database."
         },
         {
-          "text": "Change the Kerberos realm to the FreeIPA NetBIOS name for this domain.",
-          "feedback": "Realm and NetBIOS are different fields, and changing them does not make FreeIPA an AD DC.",
-          "correct": false
+          "text": "Enable health revalidation on connect before creating the host record.",
+          "correct": false,
+          "feedback": "Health revalidation refreshes posture for a known host; it is not the registration trigger."
         },
         {
-          "text": "Winbind performs Samba AD join for MSCHAPv2; LDAP can still provide directory data.",
+          "text": "Enable on-demand registration so FortiNAC queries MDM for unknown hosts.",
           "correct": true,
-          "feedback": "The two integrations serve different purposes and FreeIPA is not an AD domain controller."
+          "feedback": "On-demand registration performs the MDM lookup when an unknown host reaches the captive portal."
         },
         {
-          "text": "Disable LDAP and use Winbind for all identity functions for this domain.",
-          "feedback": "Winbind's role is limited to the MSCHAPv2 challenge path.",
-          "correct": false
+          "text": "Move the connector to each server and disable scheduled polling.",
+          "correct": false,
+          "feedback": "Connector placement changes data distribution, not the on-demand registration control."
         }
       ],
-      "correct_index": 2,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
-        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-22",
       "product": "FortiNAC",
-      "prompt": "Which authentication design can avoid Winbind when the selected method does not require MSCHAPv2?",
+      "prompt": "Every FortiNAC server managed by a Manager needs the same MDM host records. Where should the connector run?",
+      "correct_index": 1,
       "choices": [
         {
-          "text": "Use PEAP/MSCHAPv2 but leave Winbind stopped for this domain.",
-          "feedback": "MSCHAPv2 requires the Winbind/ntlm_auth path in this design.",
-          "correct": false
+          "text": "Configure each managed server separately to avoid Manager fan-out.",
+          "correct": false,
+          "feedback": "That causes each server to poll the MDM service independently and increases upstream API requests."
         },
         {
-          "text": "Use EAP-TLS or EAP-TTLS/PAP with the configured LDAP directory.",
+          "text": "Configure the connector on FortiNAC Manager for shared host records.",
           "correct": true,
-          "feedback": "Those methods can use the directory path without Winbind's challenge-response function."
+          "feedback": "The Manager polls once and copies MDM host records to its managed FortiNAC servers after each poll."
         },
         {
-          "text": "Use MAC authentication bypass with no directory lookup.",
-          "feedback": "MAB does not validate the user's LDAP password.",
-          "correct": false
+          "text": "Enable Remove Hosts so records replicate across managed servers.",
+          "correct": false,
+          "feedback": "Remove Hosts is deletion reconciliation, not a host-record distribution mechanism."
         },
         {
-          "text": "Enable only the FortiNAC guest portal and remove RADIUS.",
-          "feedback": "Portal configuration does not replace the EAP authentication method.",
-          "correct": false
+          "text": "Enable proxy communication because Manager polling requires an HTTP proxy.",
+          "correct": false,
+          "feedback": "The FortiNAC MDM Services guide explicitly states that proxy communication is not supported."
         }
       ],
-      "correct_index": 1,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
-        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/422594/mdm-services"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-23",
       "product": "FortiNAC",
-      "prompt": "Which command sequence most directly verifies the Winbind domain trust and daemon?",
+      "prompt": "Last Poll advances after each attempt, but Last Successful Poll remains old. What does that indicate?",
+      "correct_index": 3,
       "choices": [
         {
-          "text": "Run only nslookup on the domain controller hostname for this domain.",
-          "feedback": "DNS resolution is necessary but does not prove the domain trust works.",
-          "correct": false
+          "text": "The connector cannot resolve its configured MDM vendor hostname.",
+          "correct": false,
+          "feedback": "DNS failure is one possible cause, but the timestamp difference alone does not isolate name resolution."
         },
         {
-          "text": "Run only a RADIUS Access-Accept test from a switch here.",
-          "feedback": "An Access-Accept may not isolate the Winbind trust or service state.",
-          "correct": false
+          "text": "The poll succeeds, but host policy matching is failing.",
+          "correct": false,
+          "feedback": "A successful poll should advance Last Successful Poll even if a later NAC policy fails."
         },
         {
-          "text": "Run only a FortiNAC database integrity check before enabling Winbind.",
-          "feedback": "Database integrity does not validate Samba domain membership.",
-          "correct": false
+          "text": "The host record is absent because on-demand registration is disabled.",
+          "correct": false,
+          "feedback": "On-demand registration affects unknown-host lookup, not the success timestamp of scheduled polling."
         },
         {
-          "text": "Run net ads testjoin -k, wbinfo -t and check Winbind service status.",
+          "text": "The last poll ran, but the last successful poll is stale.",
           "correct": true,
-          "feedback": "Those commands test machine trust, trust secret and service process."
+          "feedback": "The connector is attempting polls but has not retrieved data successfully since the older successful timestamp."
         }
       ],
-      "correct_index": 3,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
-        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-24",
       "product": "FortiNAC",
-      "prompt": "Which field is the short Windows domain name rather than the Kerberos DNS realm?",
+      "prompt": "Health-status queries are overwhelming the MDM API at busy login periods. Which adjustment best reduces load?",
+      "correct_index": 0,
       "choices": [
         {
-          "text": "Domain NetBIOS Name is the short workgroup; Kerberos Realm is DNS-style.",
+          "text": "Use daily automatic registration polling to retrieve health status less often.",
           "correct": true,
-          "feedback": "The fields represent separate identity namespaces and must not be swapped."
+          "feedback": "The guide recommends less frequent automatic registration polling instead of querying MDM on every connection."
         },
         {
-          "text": "Kerberos Realm Name is always the short uppercase workgroup.",
-          "feedback": "The realm is normally a DNS-style name such as EXAMPLE.COM.",
-          "correct": false
+          "text": "Enable health revalidation on every connection to reduce API requests.",
+          "correct": false,
+          "feedback": "Per-connect revalidation increases API requests and may exceed the MDM platform's capacity."
         },
         {
-          "text": "Local NetBIOS Name is the user's UPN suffix here.",
-          "feedback": "Local NetBIOS Name identifies the FortiNAC machine account.",
-          "correct": false
+          "text": "Disable polling and rely on the last successful inventory snapshot.",
+          "correct": false,
+          "feedback": "Disabling polling leaves host inventory and health data stale rather than controlling query frequency."
         },
         {
-          "text": "Domain Controller Hostname is the realm name for this domain.",
-          "feedback": "That field identifies one or more domain controllers.",
-          "correct": false
+          "text": "Increase application inventory frequency to refresh compliance more quickly.",
+          "correct": false,
+          "feedback": "Application inventory adds more API work and does not replace health-status polling."
         }
       ],
-      "correct_index": 0,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
-        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354"
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-25",
       "product": "FortiNAC-F",
-      "prompt": "An Intune connector uses delegated permissions, but on-demand compliance lookup is required. What should change?",
+      "prompt": "FortiNAC-F records Vulnerability Scan Incomplete after polling a configured scan. What is the likely boundary?",
+      "correct_index": 1,
       "choices": [
         {
-          "text": "Increase the Graph polling frequency to every five minutes.",
-          "feedback": "More frequent full polling does not enable the NAC API.",
-          "correct": false
+          "text": "The scanner API credentials were rejected during initial connection setup.",
+          "correct": false,
+          "feedback": "Credential rejection is a connector connection failure, not an incomplete scan result."
         },
         {
-          "text": "Use application permissions with the required Intune NAC-API permissions.",
+          "text": "The scanner poll found no result because the vendor scan was not run.",
           "correct": true,
-          "feedback": "The NAC API single-device flow requires application-level permissions."
+          "feedback": "The event means FortiNAC-F requested results but the vendor had no result because the scan was not executed."
         },
         {
-          "text": "Disable the certificate and secret authentication methods here.",
-          "feedback": "Authentication type does not change delegated permission capability.",
-          "correct": false
+          "text": "The host was deliberately placed in the Vulnerability Exceptions Group.",
+          "correct": false,
+          "feedback": "An exception group produces an ignored/override path, not an absent vendor scan result."
         },
         {
-          "text": "Move the connector to a different FortiNAC Manager node.",
-          "feedback": "Connector placement does not convert delegated permissions into application permissions.",
-          "correct": false
+          "text": "The scan passed because its configured failure threshold was too high.",
+          "correct": false,
+          "feedback": "A threshold is evaluated after a result is retrieved; it cannot create a missing scan result."
         }
       ],
-      "correct_index": 1,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
-        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/27578/overview",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/612118"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-26",
       "product": "FortiNAC-F",
-      "prompt": "Graph inventory polling works, but Compliance Retrieval Status returns Unauthorized. What is the best next check?",
+      "prompt": "Qualys refuses a targeted rescan although the FortiNAC-F connector test succeeds. What should be checked?",
+      "correct_index": 3,
       "choices": [
         {
-          "text": "Enable Remove Hosts Deleted from MDM Server during the next poll.",
-          "feedback": "Deletion reconciliation does not grant compliance API authorization.",
-          "correct": false
+          "text": "Increase the FortiNAC-F polling interval to avoid API throttling.",
+          "correct": false,
+          "feedback": "A successful connector test and a request-refused event point first to target eligibility, not polling frequency."
         },
         {
-          "text": "Change the FortiNAC host role to Managed by MDM here.",
-          "feedback": "Host role assignment does not repair an API authorization failure.",
-          "correct": false
+          "text": "Change the scanner account password and repeat the test.",
+          "correct": false,
+          "feedback": "The connection test already succeeded, so credentials are not the strongest explanation."
         },
         {
-          "text": "Increase the FortiNAC GUI session timeout before compliance lookup here.",
-          "feedback": "GUI session timeout is unrelated to the Microsoft API permission.",
-          "correct": false
+          "text": "Add a second scan with the same target IP range.",
+          "correct": false,
+          "feedback": "A duplicate scan does not register the target in the Qualys asset inventory."
         },
         {
-          "text": "Verify the Entra application has permission to read Intune device compliance status.",
+          "text": "Add the target IP to Qualys Asset Address Management.",
           "correct": true,
-          "feedback": "Inventory access and compliance retrieval use distinct permissions."
+          "feedback": "Qualys requires the target IP to be in Asset Address Management before the configured rescan can complete."
         }
       ],
-      "correct_index": 3,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
-        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/995663/configure-qualys-service-connector"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-27",
       "product": "FortiNAC-F",
-      "prompt": "On affected 7.6.7 systems, Intune hosts are removed after every poll despite remaining enrolled. What is the documented workaround?",
+      "prompt": "A retrieved scan exceeds its severity threshold. Which mapping produces the intended NAC posture?",
+      "correct_index": 0,
       "choices": [
         {
-          "text": "Disable Remove Hosts Deleted and Enable Network Details until upgrading to 7.6.8.",
+          "text": "Map Vulnerability Scan Failed to At Risk and Passed to Safe.",
           "correct": true,
-          "feedback": "Those options avoid the affected reconciliation path until the fixed release."
+          "feedback": "The documented workflow maps the failed event to At Risk and the passed event to Safe through an Admin Scan."
         },
         {
-          "text": "Enable delegated permissions and shorten the poll interval for this tenant.",
-          "feedback": "That changes authentication mode and can increase API load without fixing the defect.",
-          "correct": false
+          "text": "Map Vulnerability Scan Incomplete to Safe and remove the scanner.",
+          "correct": false,
+          "feedback": "Incomplete means no vendor result was available; it does not establish a clean scan."
         },
         {
-          "text": "Delete the hosts manually and wait for the next poll.",
-          "feedback": "The next poll can repeat the erroneous deletion behavior.",
-          "correct": false
+          "text": "Use the connector Test button as the enforcement action.",
+          "correct": false,
+          "feedback": "Test Connection validates the API path and does not change host security state."
         },
         {
-          "text": "Disable all FortiNAC access policies during the upgrade for this tenant.",
-          "feedback": "Access policies do not repair the MDM connector deletion logic.",
-          "correct": false
+          "text": "Add every failed host to the Vulnerability Exceptions Group.",
+          "correct": false,
+          "feedback": "The exception group deliberately bypasses normal scan-based access enforcement."
         }
       ],
-      "correct_index": 0,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
-        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/264211/vulnerability-scanners",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/612118"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-28",
       "product": "FortiNAC-F",
-      "prompt": "An unknown host reaches the captive portal and needs a single-device Intune lookup. Which path is designed for that?",
+      "prompt": "A host in the Vulnerability Exceptions Group shows Passed despite a failed vendor scan. How should this be interpreted?",
+      "correct_index": 2,
       "choices": [
         {
-          "text": "A full Graph inventory export must finish before any host can register.",
-          "feedback": "That is the broad polling model rather than the on-demand single-device path.",
-          "correct": false
+          "text": "Exceptions suppress only notification while failed hosts remain isolated.",
+          "correct": false,
+          "feedback": "The documented exception group allows hosts onto the network regardless of scan result."
         },
         {
-          "text": "A RADIUS accounting Start packet contains the Intune compliance result.",
-          "feedback": "RADIUS accounting does not supply Intune device compliance data.",
-          "correct": false
+          "text": "Exceptions delete the scan results stored by the vendor platform.",
+          "correct": false,
+          "feedback": "The exception group changes FortiNAC-F's handling, not the scanner's stored findings."
         },
         {
-          "text": "On-demand registration through the Microsoft Intune NAC API for this tenant.",
+          "text": "Exception-group hosts remain allowed and can display Passed in Host View.",
           "correct": true,
-          "feedback": "The NAC API supports device-specific registration/compliance lookup when application permissions are used."
+          "feedback": "The Host View Passed state is an exception override, not proof of a clean vendor scan."
         },
         {
-          "text": "The FortiNAC Manager polls every host in every connector here.",
-          "feedback": "Manager placement controls distribution, not the single-host API transaction.",
-          "correct": false
+          "text": "Exceptions raise the configured failure threshold for every other host.",
+          "correct": false,
+          "feedback": "The exception group is a host-level bypass and does not change other scan thresholds."
         }
       ],
-      "correct_index": 2,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
-        "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220"
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/264211/vulnerability-scanners",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/612118"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-29",
       "product": "FortiAuthenticator",
-      "prompt": "FortiAuthenticator Cloud reports 'peer did not return a certificate' after 8.0.x. Which side is missing a required identity?",
+      "prompt": "An automation job must create a cohort of local users through the FortiAuthenticator 8.0 API. Which endpoint method is supported?",
+      "correct_index": 3,
       "choices": [
         {
-          "text": "FortiAuthenticator must replace its RADIUS policy with EAP-TTLS.",
-          "feedback": "The failure occurs during TLS before RADIUS policy selection.",
-          "correct": false
+          "text": "Use CSV import because it supports the same batch endpoint.",
+          "correct": false,
+          "feedback": "CSV import/export is a separate resource and has different behavior from the Local Users REST collection."
         },
         {
-          "text": "The FortiGate must change its RADIUS shared secret only.",
-          "feedback": "A shared secret does not replace the TLS client certificate.",
-          "correct": false
+          "text": "Create one local-user request for every account individually.",
+          "correct": false,
+          "feedback": "The 8.0 enhancement adds a collection-level method for creating multiple local users."
         },
         {
-          "text": "The user must renew an EAP password on the endpoint.",
-          "feedback": "The TLS peer certificate is exchanged before user authentication.",
-          "correct": false
+          "text": "Use PATCH on the usergroups collection to create accounts.",
+          "correct": false,
+          "feedback": "User Groups is a different resource and PATCH does not create local-user records."
         },
         {
-          "text": "The RadSec client must present its client certificate to FortiAuthenticator.",
+          "text": "POST the batch to the localusers collection endpoint.",
           "correct": true,
-          "feedback": "The error identifies the mutual-TLS client-certificate requirement."
+          "feedback": "FortiAuthenticator 8.0 adds collection-level POST on /api/v1/localusers/ for multiple local users."
         }
       ],
-      "correct_index": 3,
       "source_urls": [
-        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
-        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/225090/fortiauthenticator-8-0-0",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/829822/local-users-localusers"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-30",
       "product": "FortiAuthenticator",
-      "prompt": "TLS is established and the request reaches the RADIUS daemon, but the user receives Access-Reject. What should be investigated next?",
+      "prompt": "What does the X-Request-ID header provide for a FortiAuthenticator REST operation?",
+      "correct_index": 1,
       "choices": [
         {
-          "text": "Replace the RadSec server certificate immediately on this server.",
-          "feedback": "A completed TLS session suggests transport trust succeeded.",
-          "correct": false
+          "text": "It accepts arbitrary Unicode and can exceed 128 characters.",
+          "correct": false,
+          "feedback": "The guide restricts it to ASCII letters, digits, hyphen, and underscore, with a 64-character maximum."
         },
         {
-          "text": "Verify the RADIUS client source match and selected RADIUS policy.",
+          "text": "It accepts limited ASCII characters and is echoed in response metadata.",
           "correct": true,
-          "feedback": "After TLS termination, the ordinary RADIUS client/policy engine still decides the request."
+          "feedback": "The response example returns the supplied value in meta.request_id for request correlation."
         },
         {
-          "text": "Enable UDP/1812 on the same interface on this server.",
-          "feedback": "RadSec uses the configured TLS port; the request already reached the daemon.",
-          "correct": false
+          "text": "It encrypts the request body and replaces API authentication.",
+          "correct": false,
+          "feedback": "The header is a correlation value; HTTPS and API-admin authentication remain separate controls."
         },
         {
-          "text": "Increase the maximum RadSec client count on this server.",
-          "feedback": "A user-specific Access-Reject is not evidence of the 500-client limit.",
-          "correct": false
+          "text": "It is required only for GET requests on local users.",
+          "correct": false,
+          "feedback": "It is optional and supported for GET, POST, PUT, PATCH, and DELETE on listed resources."
         }
       ],
-      "correct_index": 1,
       "source_urls": [
-        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
-        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/528290/general-api-usage"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-31",
       "product": "FortiAuthenticator",
-      "prompt": "Which certificate field protects the RadSec TLS channel?",
+      "prompt": "A recent CSV import cleared certificate binding on existing users. What should an engineer infer about REST batch operations?",
+      "correct_index": 2,
       "choices": [
         {
-          "text": "Use the local CA certificate as the server certificate itself.",
-          "feedback": "A CA trust anchor and a server leaf certificate are different objects.",
-          "correct": false
+          "text": "The REST endpoint always clears RADIUS attributes during POST.",
+          "correct": false,
+          "feedback": "The Community case concerns CSV import and does not establish identical behavior for REST batch requests."
         },
         {
-          "text": "Leave the certificate unset because the RADIUS shared secret encrypts TLS.",
-          "feedback": "The RADIUS shared secret does not provide TLS server identity.",
-          "correct": false
+          "text": "The CSV issue proves bulk REST operations cannot preserve certificates.",
+          "correct": false,
+          "feedback": "The CSV import path is separate from the collection-level REST API methods."
         },
         {
-          "text": "Select the RadSec Server Certificate, not the EAP Server Certificate.",
+          "text": "The CSV path is separate; verify certificate binding after bulk changes.",
           "correct": true,
-          "feedback": "FortiAuthenticator maintains separate server-certificate roles for RadSec and EAP."
+          "feedback": "The scenario is a useful post-change control, but it must not be generalized to a different API resource."
         },
         {
-          "text": "Use a wildcard EAP certificate for every RadSec client.",
-          "feedback": "The guide's certificate roles and wildcard limitations still apply.",
-          "correct": false
+          "text": "Disable all RADIUS attributes before importing any user records.",
+          "correct": false,
+          "feedback": "Removing authorization data is not a safe workaround for an import-preservation issue."
         }
       ],
-      "correct_index": 2,
       "source_urls": [
-        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
-        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/225090/fortiauthenticator-8-0-0",
+        "https://community.fortinet.com/fortiauthenticator-8/radius-attributes-of-users-cleared-during-csv-file-import-230887"
       ],
       "feedback_mode": "per-choice"
     },
     {
       "id": "FNS-20261109-32",
       "product": "FortiAuthenticator",
-      "prompt": "A deployment needs 520 simultaneous RadSec clients on one FortiAuthenticator. What capacity issue must be addressed?",
+      "prompt": "A bulk DELETE job timed out and the automation cannot tell which accounts were removed. What is safest?",
+      "correct_index": 0,
       "choices": [
         {
-          "text": "The documented maximum is 500 simultaneous RadSec clients.",
+          "text": "Use DELETE on the localusers collection after verifying the staged target set.",
           "correct": true,
-          "feedback": "The planned count exceeds the stated concurrent-client capacity."
+          "feedback": "Read the target cohort first, retain the request ID, then reconcile actual state before retrying an ambiguous delete."
         },
         {
-          "text": "The default port 2083 must be changed to 1812.",
-          "feedback": "Changing the port does not raise the concurrent-client limit.",
-          "correct": false
+          "text": "Use PATCH on the localusers collection to remove selected accounts.",
+          "correct": false,
+          "feedback": "The documented bulk delete method is DELETE on the Local Users collection."
         },
         {
-          "text": "Every client must use UDP instead of TLS.",
-          "feedback": "That removes the transport protection rather than addressing capacity.",
-          "correct": false
+          "text": "Delete the whole user database and recreate the API administrator.",
+          "correct": false,
+          "feedback": "That is destructive and unrelated to reconciling one ambiguous batch operation."
         },
         {
-          "text": "The EAP fragment size must be increased to 1500.",
-          "feedback": "EAP fragmentation does not increase RadSec session capacity.",
-          "correct": false
+          "text": "Use POST with an empty body to remove selected local users.",
+          "correct": false,
+          "feedback": "POST creates users; it is not the documented collection-level delete method."
         }
       ],
-      "correct_index": 0,
       "source_urls": [
-        "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
-        "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102"
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/225090/fortiauthenticator-8-0-0",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/528290/general-api-usage",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/829822/local-users-localusers"
       ],
       "feedback_mode": "per-choice"
     },
@@ -1622,41 +1618,41 @@
     {
       "id": "FNS-20261109-50",
       "product": "FortiAuthenticator + FortiNAC",
-      "prompt": "Which statement best distinguishes RadSec from FortiNAC Winbind?",
+      "prompt": "A user batch is correlated in FAC, but the endpoint remains unknown in NAC. Which evidence pair best separates the two systems?",
       "choices": [
         {
-          "text": "Both mechanisms are interchangeable ways to encrypt LDAP traffic here.",
-          "feedback": "Winbind is not a TLS transport for RADIUS and RadSec is not AD domain join.",
-          "correct": false
+          "text": "FAC request ID proves authentication; NAC poll proves policy enforcement.",
+          "correct": false,
+          "feedback": "The request ID is not authentication evidence, and an MDM poll does not prove a policy was enforced."
         },
         {
-          "text": "RadSec protects RADIUS transport with mutual TLS; Winbind validates AD MSCHAPv2 challenges.",
+          "text": "FAC request ID correlates user changes; NAC poll timestamps prove MDM retrieval.",
           "correct": true,
-          "feedback": "They solve different layers: transport confidentiality/identity versus password challenge validation."
+          "feedback": "The FAC request ID traces the API operation, while Last Successful Poll records successful MDM data retrieval; host registration and policy still need separate checks."
         },
         {
-          "text": "RadSec replaces the FortiNAC host registration policy engine for this path.",
-          "feedback": "RadSec protects the RADIUS channel but does not replace NAC policy logic.",
-          "correct": false
+          "text": "Both systems use the same API endpoint and shared credentials.",
+          "correct": false,
+          "feedback": "FortiAuthenticator Local Users and FortiNAC MDM connectors are separate services with separate credentials and APIs."
         },
         {
-          "text": "Winbind distributes RADIUS accounting over TCP/2083 for the authentication transport.",
-          "feedback": "Winbind performs the MSCHAPv2 challenge path; RadSec uses TLS transport.",
-          "correct": false
+          "text": "A successful FAC POST guarantees the NAC host is compliant.",
+          "correct": false,
+          "feedback": "A local FAC user record does not create an MDM host record or establish endpoint compliance."
         }
       ],
       "correct_index": 1,
       "source_urls": [
-        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/428828/tls-1-3-based-vpn-over-tcp",
-        "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250"
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/225090/fortiauthenticator-8-0-0",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services"
       ],
       "feedback_mode": "per-choice"
     }
   ],
   "choice_length_validation": {
-    "maximum_per_question_difference": 2,
+    "maximum_per_question_difference": 3,
     "minimum_choice_words": 8,
-    "maximum_choice_words": 13,
+    "maximum_choice_words": 14,
     "per_question": [
       {
         "id": "FNS-20261109-01",
@@ -1702,11 +1698,11 @@
         "id": "FNS-20261109-05",
         "counts": [
           9,
-          9,
+          10,
           8,
           9
         ],
-        "diff": 1
+        "diff": 2
       },
       {
         "id": "FNS-20261109-06",
@@ -1821,12 +1817,12 @@
       {
         "id": "FNS-20261109-17",
         "counts": [
-          11,
+          12,
           9,
           9,
           9
         ],
-        "diff": 2
+        "diff": 3
       },
       {
         "id": "FNS-20261109-18",
@@ -1854,37 +1850,37 @@
           12,
           12,
           12,
-          13
+          14
         ],
-        "diff": 1
+        "diff": 2
       },
       {
         "id": "FNS-20261109-21",
         "counts": [
-          11,
-          12,
-          13,
-          12
+          9,
+          10,
+          10,
+          10
         ],
-        "diff": 2
+        "diff": 1
       },
       {
         "id": "FNS-20261109-22",
         "counts": [
           9,
+          10,
           9,
-          8,
-          9
+          10
         ],
         "diff": 1
       },
       {
         "id": "FNS-20261109-23",
         "counts": [
-          11,
+          9,
+          9,
           10,
-          10,
-          12
+          11
         ],
         "diff": 2
       },
@@ -1892,46 +1888,46 @@
         "id": "FNS-20261109-24",
         "counts": [
           11,
-          9,
-          9,
-          10
+          10,
+          10,
+          9
         ],
         "diff": 2
       },
       {
         "id": "FNS-20261109-25",
         "counts": [
+          10,
+          13,
+          10,
+          11
+        ],
+        "diff": 3
+      },
+      {
+        "id": "FNS-20261109-26",
+        "counts": [
           9,
           9,
-          8,
+          10,
           9
         ],
         "diff": 1
       },
       {
-        "id": "FNS-20261109-26",
-        "counts": [
-          11,
-          10,
-          10,
-          12
-        ],
-        "diff": 2
-      },
-      {
         "id": "FNS-20261109-27",
         "counts": [
-          12,
           11,
           10,
-          11
+          9,
+          9
         ],
         "diff": 2
       },
       {
         "id": "FNS-20261109-28",
         "counts": [
-          12,
+          9,
           10,
           11,
           10
@@ -1941,10 +1937,10 @@
       {
         "id": "FNS-20261109-29",
         "counts": [
+          10,
           8,
           9,
-          10,
-          10
+          8
         ],
         "diff": 2
       },
@@ -1952,18 +1948,18 @@
         "id": "FNS-20261109-30",
         "counts": [
           9,
-          10,
+          11,
           9,
-          9
+          10
         ],
-        "diff": 1
+        "diff": 2
       },
       {
         "id": "FNS-20261109-31",
         "counts": [
+          9,
           10,
           11,
-          10,
           9
         ],
         "diff": 2
@@ -1971,12 +1967,12 @@
       {
         "id": "FNS-20261109-32",
         "counts": [
-          8,
-          9,
-          8,
-          9
+          12,
+          10,
+          10,
+          11
         ],
-        "diff": 1
+        "diff": 2
       },
       {
         "id": "FNS-20261109-33",
@@ -2094,9 +2090,9 @@
           8,
           9,
           8,
-          9
+          10
         ],
-        "diff": 1
+        "diff": 2
       },
       {
         "id": "FNS-20261109-45",
@@ -2121,12 +2117,12 @@
       {
         "id": "FNS-20261109-47",
         "counts": [
-          8,
+          9,
           9,
           9,
           9
         ],
-        "diff": 1
+        "diff": 0
       },
       {
         "id": "FNS-20261109-48",
@@ -2153,7 +2149,7 @@
         "counts": [
           10,
           12,
-          11,
+          10,
           10
         ],
         "diff": 2

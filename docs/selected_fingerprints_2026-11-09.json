@@ -5,72 +5,18 @@
   "exclusion_inventory": "docs/exclusion_inventory_2026-11-09-08-02.json",
   "exclusion_inventory_readback_sha": "94326d9e563ad4e854052f7381f71937a19fc184",
   "discovery_before_topic_selection": true,
-  "selection_status": "12 topics selected only after read-back of 216-record inventory (204 published lessons plus 12 candidate-only exclusions).",
+  "selection_status": "12 topics retained after a second semantic review. Three initially selected candidates were rejected for mechanism/workflow equivalence or same-run collision and replaced before diagram and exam generation.",
   "semantic_uniqueness_rule": "Reject any same or substantially equivalent mechanism, workflow/transaction, failure class, evidence pattern, remediation path, question fingerprint or topology even if URL/title differs. Lexical similarity is only a screening aid; manual feature-boundary review is also recorded.",
   "all_12_semantically_unique": true,
   "topic_count": 12,
-  "semantic_comparison": [
-    {
-      "product": "FortiGate",
-      "max_token_jaccard": 0.069,
-      "closest_prior_subject": "Local-out routing: steering FortiGate-originated service traffic"
-    },
-    {
-      "product": "FortiManager",
-      "max_token_jaccard": 0.106,
-      "closest_prior_subject": "Firmware-template profile database: desired-version records, scheduled campaign state, hidden profiles, and safe ADOM-scoped cleanup"
-    },
-    {
-      "product": "FortiAnalyzer",
-      "max_token_jaccard": 0.105,
-      "closest_prior_subject": "FortiGate onboarding through Security Fabric authorization"
-    },
-    {
-      "product": "FortiSwitch",
-      "max_token_jaccard": 0.073,
-      "closest_prior_subject": "FortiSwitch — Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs"
-    },
-    {
-      "product": "FortiAP/Wireless",
-      "max_token_jaccard": 0.103,
-      "closest_prior_subject": "FortiAP/Wireless — Wi-Fi 7 SAE_EXT AKM24 selection and radio-profile compatibility"
-    },
-    {
-      "product": "FortiNAC",
-      "max_token_jaccard": 0.054,
-      "closest_prior_subject": "FortiNAC 9.4 RADIUS Activity: 802.1X/MAB pass-fail telemetry and failed-authentication export"
-    },
-    {
-      "product": "FortiNAC-F",
-      "max_token_jaccard": 0.099,
-      "closest_prior_subject": "FortiNAC-F Mist Service Connector: API-based site discovery, virtual-controller inventory and manual migration from CloudAPITool"
-    },
-    {
-      "product": "FortiAuthenticator",
-      "max_token_jaccard": 0.118,
-      "closest_prior_subject": "Secure remote LDAP: LDAPS/StartTLS trust anchors, CRL validation depth, and optional mutual-TLS client identity"
-    },
-    {
-      "product": "FortiPAM",
-      "max_token_jaccard": 0.091,
-      "closest_prior_subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout"
-    },
-    {
-      "product": "FortiSIEM",
-      "max_token_jaccard": 0.05,
-      "closest_prior_subject": "Offline OS repository synchronization and ordered Supervisor, Worker, and Collector upgrades"
-    },
-    {
-      "product": "FortiSASE",
-      "max_token_jaccard": 0.103,
-      "closest_prior_subject": "FortiSASE agent-based Entra ID SAML SSO: claims, certificates, group limits, and stable egress identity"
-    },
-    {
-      "product": "Secure SD-WAN",
-      "max_token_jaccard": 0.067,
-      "closest_prior_subject": "Underlay-bandwidth-aware load balancing across overlay members"
-    }
-  ],
+  "semantic_comparison": {
+    "historical_inventory_records": 216,
+    "published_lesson_records": 204,
+    "candidate_only_exclusions": 12,
+    "historical_reports_inspected": 24,
+    "comparisons": "Each final topic compared on feature mechanism, transaction/workflow, failure class, evidence pattern, remediation, question angle and diagram topology; URL novelty alone was not accepted.",
+    "same_run_uniqueness": "No two final topics share a substantially equivalent feature or transaction fingerprint."
+  },
   "topics": [
     {
       "product": "FortiGate",
@@ -138,43 +84,40 @@
       "diagram_topology_layout_fingerprint": "FortiAP radio/channel/filter boundary -> live browser stream -> local PCAP analyzer; separate CAPWAP control/data path."
     },
     {
-      "product": "FortiNAC",
-      "lesson_subject": "FortiNAC Winbind and Kerberos domain join: AD-only MSCHAPv2 boundary, keytab and LDAP separation",
-      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
-      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
-      "feature_mechanism_fingerprint": "FortiNAC Winbind is used for MSCHAPv2 challenge-response via ntlm_auth and requires a Samba Active Directory domain join; NetBIOS workgroup and Kerberos DNS realm are distinct fields; LDAP can still provide directory, group and portal/admin authentication without Winbind when MSCHAPv2 is not required.",
-      "workflow_transaction_fingerprint": "FortiNAC resolves AD SRV/A records and DC hostnames; NTP-synchronized appliance performs Samba ADS join using credentials or keytab; Winbind/ntlm_auth validates MSCHAPv2 challenge; separate LDAP directory queries provide user/group attributes and portal/admin identity.",
-      "failure_class": "Non-AD LDAP/Kerberos server such as FreeIPA is incorrectly used as Samba AD domain controller; NetBIOS name confused with DNS realm; missing SRV records or NTP drift breaks Kerberos; domain join shown as Joined but trust secret/Winbind service fails.",
-      "evidence_pattern": "net ads testjoin -k and wbinfo -t verify domain trust; service winbind status shows daemon; nslookup SRV _ldap/_kerberos validates discovery; wbinfo -a tests plaintext/challenge response; LDAP bind success does not prove MSCHAPv2 Winbind operation.",
-      "remediation_path": "Use Winbind only for AD-backed MSCHAPv2; use LDAP alone for non-AD directories and EAP methods that do not require MSCHAPv2; separate uppercase NetBIOS workgroup from DNS Kerberos realm; verify SRV/A records, ports and NTP; join domain before enabling Winbind; use keytab when supported.",
-      "question_fingerprint": "distinguish LDAP directory authentication from Samba AD join/Winbind MSCHAPv2 and identify why FreeIPA cannot satisfy Join Domain.",
-      "diagram_topology_layout_fingerprint": "FortiNAC -> DNS/NTP -> AD DC and Kerberos/Samba join -> Winbind ntlm_auth branch for MSCHAPv2; independent LDAP branch for directory/group lookups."
+      "lesson_subject": "FortiNAC 9.4 MDM service connectors: host registration, health state and polling fan-out",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/422594/mdm-services",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 MDM Service Connector uses vendor API inventory and health data to register/refresh hosts; optional on-demand registration, automatic inventory polling, application inventory, health revalidation, deletion reconciliation and Manager fan-out are distinct controls.",
+      "workflow_transaction_fingerprint": "Unknown host reaches captive portal -> on-demand MDM lookup -> host registration; scheduled poll -> API authentication -> host inventory/health update -> host database -> NAC policy; FortiNAC Manager may poll once and distribute records to managed servers.",
+      "failure_class": "Stale Last Successful Poll; delegated/application permission mismatch; unsupported proxy path; host identity mismatch; on-demand registration disabled; aggressive health/application polling throttles MDM; Remove Hosts deletes still-needed host records.",
+      "evidence_pattern": "Last Poll versus Last Successful Poll; Test Connection; Poll Now; service-connector audit log; MDM-managed host record and health fields; Manager propagation to the server controlling the port. A successful connection test does not prove host registration or policy enforcement.",
+      "remediation_path": "Use application permissions where supported; validate Request URL, application ID, secret/certificate and vendor API permissions; account for no-proxy constraint; enable on-demand registration for unknown hosts; use measured poll intervals; test Remove Hosts in staging; place connector on Manager for shared fan-out or individual servers for selective scope.",
+      "question_fingerprint": "distinguish unknown-host on-demand registration, inventory polling, per-connect health revalidation, application inventory and Manager fan-out; interpret Last Poll versus Last Successful Poll.",
+      "diagram_topology_layout_fingerprint": "Endpoint/captive portal with on-demand lookup branch; MDM API and scheduled inventory poll; host database/health state; optional Manager fan-out; NAC policy boundary."
     },
     {
-      "product": "FortiNAC-F",
-      "lesson_subject": "FortiNAC-F Microsoft Intune MDM connector: application permissions, NAC-API compliance lookup and poll reconciliation",
-      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/mdm-ot-security-integration/64140/step-3-complete-service-connector-configuration",
-      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220",
-      "feature_mechanism_fingerprint": "FortiNAC-F Intune connector uses Microsoft Graph plus Intune NAC API; application permissions support daemon operation and on-demand single-device compliance lookup; delegated permissions cannot use NAC API and require broad asset polling; connector options govern compliance, MAC resolution and deletion reconciliation.",
-      "workflow_transaction_fingerprint": "Register Entra application and grant application-level permissions/certificate or secret; connector calls login/Graph endpoints; unknown host triggers NAC-API lookup; scheduled poll updates managed-host/compliance state and optionally resolves physical MAC; policy consumes MDM attributes.",
-      "failure_class": "Delegated permissions prevent NAC-API lookup; missing app permission yields Unauthorized; removal reconciliation deletes still-enrolled hosts after affected poll; randomized MAC prevents lookup; excessive compliance/Network Details queries cause load/throttling.",
-      "evidence_pattern": "Test Connection proves endpoint/auth only; Last Successful Poll proves retrieval; MSInTuneServer debug shows deleteHosts count; host record/serial lookup/compliance state proves identity join; Entra app permissions prove API authorization.",
-      "remediation_path": "Use application permissions and supported certificate/secret auth; grant compliance retrieval permission; validate NAC-API version and URLs; tune poll interval to device count; use serial lookup for randomized MAC; on affected 7.6.7 disable Remove Hosts Deleted and Enable Network Details until fixed in 7.6.8.",
-      "question_fingerprint": "distinguish Graph full-inventory poll from single-device NAC-API lookup and identify why delegated permissions or deletion reconciliation causes rogue hosts.",
-      "diagram_topology_layout_fingerprint": "Entra app registration -> FortiNAC-F MDM connector -> Graph inventory and NAC-API compliance branches -> host database/policy with deletion reconciliation."
+      "lesson_subject": "FortiNAC-F 7.6.3 vulnerability-scanner integration: scan thresholds to network enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/vulnerability-scanner-guide/27578/overview",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6.3 service connectors poll Tenable or Qualys for completed vulnerability scan results; per-scan severity thresholds drive host pass/fail events and optional Host Security actions.",
+      "workflow_transaction_fingerprint": "Scanner executes scan -> FortiNAC-F connector polls vendor API -> completed results are matched to target host -> threshold evaluation -> Vulnerability Scan Passed/Failed or integration event -> alarm mapping/Admin Scan -> At Risk/Safe and remediation portal; exception group bypasses normal access enforcement.",
+      "failure_class": "Scanner not run; target IP absent from Qualys Asset Address Management; API connection failure; concurrent/periodic API limit; threshold misconfigured; scan result skipped/incomplete; exception group masks failure in Host View.",
+      "evidence_pattern": "Test Connection proves API path only; Poll and vendor scan history prove result availability; Last Vulnerability Scan/Status/Details/Source show processed host result; distinct events identify incomplete, skipped, refused, connection, and rate-limit boundaries.",
+      "remediation_path": "Validate vendor URL and credentials; run the scan at the vendor; include Qualys target IP in Asset Address Management; poll after completion; tune repetition rate to API limits; validate thresholds and alarm mappings; inspect exception group before treating Passed as a clean scan.",
+      "question_fingerprint": "differentiate connector health from scan execution/result ingestion; interpret Qualys asset refusal and API limits; map failed/passed events to At Risk/Safe; identify exception-group override.",
+      "diagram_topology_layout_fingerprint": "Tenable/Qualys scanner -> FortiNAC-F API connector/poll -> scan threshold evaluation -> events/alarm mapping -> host risk/remediation; exception bypass branch."
     },
     {
-      "product": "FortiAuthenticator",
-      "lesson_subject": "FortiAuthenticator RadSec server: mutual-TLS client identity, RADIUS daemon handoff and certificate-chain diagnostics",
-      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/35a38c4b-85b5-11ef-a114-426f1170d998/FortiAuthenticator-8.0.0-Administration_Guide.pdf",
-      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102",
-      "feature_mechanism_fingerprint": "FortiAuthenticator RadSec terminates TLS for RADIUS authentication/accounting, presents a configured RadSec Server Certificate, requires a valid client certificate signed by configured Local/Trusted CA, then hands decrypted requests to normal RADIUS daemon; default port 2083 and maximum 500 simultaneous clients.",
-      "workflow_transaction_fingerprint": "RADIUS client opens TLS to FAC:2083; server certificate is validated; client certificate is requested and checked against Local/Trusted CA; TLS tunnel established; RADIUS request enters client/policy selection; response returns inside TLS.",
-      "failure_class": "Client certificate absent/untrusted; wrong RadSec server certificate; FQDN/SAN mismatch; interface service or port disabled; RADIUS client/policy mismatch after TLS succeeds; concurrent client limit reached.",
-      "evidence_pattern": "FAC RADIUS-over-TLS logscan shows peer-certificate error; TLS handshake separates transport auth from RADIUS policy; RADIUS daemon logs show decrypted request processing; connection test alone does not prove user authentication.",
-      "remediation_path": "Assign dedicated server certificate in RADIUS General; enable RadSec service on interface/port; configure client certificate signed by FAC Local/Trusted CA; validate FQDN/SAN and trust anchor; verify RADIUS client/policy separately; monitor client count.",
-      "question_fingerprint": "differentiate server certificate validation, mandatory client certificate and subsequent RADIUS policy rejection.",
-      "diagram_topology_layout_fingerprint": "RADIUS client <-> FortiAuthenticator mutual TLS certificates -> TLS termination -> RADIUS daemon/client/policy -> encrypted response."
+      "lesson_subject": "FortiAuthenticator 8.0 REST API bulk local-user operations and request correlation",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/rest-api-solution-guide/225090/fortiauthenticator-8-0-0",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/radius-attributes-of-users-cleared-during-csv-file-import-230887",
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0 REST API adds collection-level POST/DELETE for multiple local users, a users listing field, custom1/custom2/custom3 filters, expanded CSV filters and optional X-Request-ID correlation across read/write operations.",
+      "workflow_transaction_fingerprint": "Automation authenticates with dedicated API admin/key over HTTPS -> submits localusers collection request with unique X-Request-ID -> FAC processes request -> response metadata echoes request_id -> GET/filter read-after-write verifies cohort -> downstream RADIUS/group/certificate bindings are validated separately.",
+      "failure_class": "Ambiguous timeout followed by unsafe duplicate POST/DELETE; malformed/oversized request ID; API key or API-admin permission failure; bulk user operation succeeds but attributes/group bindings are wrong; separate CSV import clears RADIUS certificate binding.",
+      "evidence_pattern": "HTTP response and meta.request_id; GET /localusers/ objects filtered by custom fields; API/server log correlation; Local Users record, group and RADIUS attribute/certificate-binding checks; Access-Accept confirms downstream authorization. Request ID is correlation, not idempotency or authentication.",
+      "remediation_path": "Use dedicated API admin and TLS certificate validation; assign a unique <=64-character ASCII request ID; use version-matched batch schema; export/record target cohort; read after write before retry; verify user state, group, RADIUS attributes and certificate binding; treat CSV import as a separate operation.",
+      "question_fingerprint": "select collection-level POST/DELETE; identify X-Request-ID constraints and echoed response metadata; distinguish CSV import defect from REST batch behavior; verify user state and downstream RADIUS authorization.",
+      "diagram_topology_layout_fingerprint": "Automation client -> API admin/key and HTTPS -> localusers collection batch operation -> response meta/request ID and server logs; GET custom-field read-after-write -> separate RADIUS/group validation."
     },
     {
       "product": "FortiPAM",
@@ -227,6 +170,38 @@
       "remediation_path": "Use 8.0 interface-based settings; remove retry/retry-pause assumptions; set min/max bounds intentionally; verify backend coordination and per-interface schedule; test speed-test traffic separately from ordinary shaped traffic.",
       "question_fingerprint": "distinguish backend retry coordination, bypassed interface shaping and min/max result clamping.",
       "diagram_topology_layout_fingerprint": "interface schedule -> backend coordination -> speed-test measurement -> min/max clamp -> shaping consumer; test packets bypass interface shaper."
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "product": "FortiNAC",
+      "subject": "Winbind and Kerberos domain join",
+      "historical_match": {
+        "date": "2026-10-25",
+        "product": "FortiNAC-F",
+        "subject": "Winbind MSCHAPv2 AD domain join versus non-AD LDAP/Kerberos directories"
+      },
+      "reason": "Same Samba/Winbind AD join, Kerberos/DNS and non-AD directory boundary; URL and product label differ but the underlying mechanism is equivalent."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "RadSec server mutual TLS and RADIUS processing",
+      "historical_match": {
+        "date": "2026-10-29",
+        "product": "FortiAP/Wireless",
+        "subject": "RadSec for WPA2/WPA3-Enterprise: RADIUS-over-TLS transport and certificate trust"
+      },
+      "reason": "Same RadSec TLS transport, certificate trust and RADIUS processing boundary; rejected despite server/client perspective differences."
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Microsoft Intune MDM connector and NAC-API compliance retrieval",
+      "historical_match": {
+        "date": "2026-11-09",
+        "product": "FortiNAC",
+        "subject": "FortiNAC 9.4 MDM service connectors"
+      },
+      "reason": "Same-run MDM inventory and compliance connector workflow; replaced with third-party vulnerability-scanner integration."
     }
   ]
 }

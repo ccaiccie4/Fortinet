@@ -65,35 +65,36 @@
     {
       "product": "FortiNAC",
       "searches": [
-        "FortiNAC Winbind Kerberos FreeIPA domain join October 2026",
-        "FortiNAC product-area technical tips Winbind authentication"
+        "FortiNAC 9.4 MDM Services Intune application permissions on-demand registration polling",
+        "FortiNAC MDM Service Connector recent troubleshooting and technical tips"
       ],
-      "matched_scenario_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
-      "scenario_age": "October 2, 2026; 38 days, just outside strict 30-day window",
-      "use": "Direct scenario establishes that Samba Winbind Join Domain is an Active Directory join and cannot join FreeIPA/OpenLDAP; LDAP-only functions remain separate.",
+      "matched_scenario_url": null,
+      "scenario_age": null,
+      "use": "No directly matched Community case for the selected MDM host-registration workflow was verified in the strict October 10–November 8 window. Older Intune host-deletion and FortiLink host-visibility reports were outside the window and were not promoted.",
       "direct_recent_match": false
     },
     {
       "product": "FortiNAC-F",
       "searches": [
-        "FortiNAC-F Intune MDM host deletion after poll",
-        "FortiNAC-F recent MDM service connector technical tips"
+        "FortiNAC-F 7.6.3 Tenable Qualys vulnerability scanner service connector",
+        "FortiNAC-F vulnerability scan incomplete Qualys API limit Asset Address Management troubleshooting"
       ],
-      "matched_scenario_url": "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220",
-      "scenario_age": "September 28, 2026; 42 days, outside strict 30-day window",
-      "use": "Direct MDM reconciliation scenario; affected 7.6.7 host deletion is resolved in 7.6.8.",
+      "matched_scenario_url": null,
+      "scenario_age": null,
+      "use": "No directly matched recent vulnerability-scanner integration case was verified. The recent FortiNAC-F FortiLink REST API/host-visibility case concerns device modeling and VLAN enforcement, not scanner-result ingestion, so it was rejected as unrelated.",
       "direct_recent_match": false
     },
     {
       "product": "FortiAuthenticator",
       "searches": [
-        "FortiAuthenticator RadSec peer did not return a certificate 8.0.x",
-        "FortiAuthenticator recent certificate and RADIUS technical tips"
+        "FortiAuthenticator 8.0 REST API bulk localusers POST DELETE X-Request-ID",
+        "FortiAuthenticator recent bulk local user CSV import RADIUS attributes certificate binding"
       ],
-      "matched_scenario_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102",
-      "scenario_age": "approximately 3 months",
-      "use": "Direct mutual-TLS scenario: FortiAuthenticator Cloud 8.0.x requires the client certificate from the FortiGate; peer-certificate error is transport-layer, not RADIUS policy.",
-      "direct_recent_match": false
+      "matched_scenario_url": "https://community.fortinet.com/fortiauthenticator-8/radius-attributes-of-users-cleared-during-csv-file-import-230887",
+      "scenario_age": "October 27, 2026; within 30 days",
+      "use": "Related bulk-user lifecycle scenario only: the Community report concerns CSV import with Keep existing user accounts and loss of some RADIUS certificate-binding attributes. It is not evidence of a defect in the REST collection POST/DELETE endpoint; it motivates post-change attribute verification.",
+      "direct_recent_match": false,
+      "related_recent_scenario_url": "https://community.fortinet.com/fortiauthenticator-8/radius-attributes-of-users-cleared-during-csv-file-import-230887"
     },
     {
       "product": "FortiPAM",
@@ -142,10 +143,17 @@
   ],
   "coverage_summary": {
     "product_areas_searched": 12,
-    "direct_recent_scenarios_within_30_days": 3,
-    "matched_but_older_or_outside_30_days": 5,
-    "no_directly_matched_scenario": 4,
-    "unrelated_items_rejected": true,
-    "primary_lesson_sources_are_community": false
+    "direct_recent_scenarios_for_selected_lessons": 3,
+    "related_recent_scenarios_for_selected_lessons": 1,
+    "no_directly_matched_recent_scenario": 8,
+    "older_or_unrelated_findings_rejected": true,
+    "primary_lesson_sources_are_community": false,
+    "strict_window": "2026-10-10 through 2026-11-08",
+    "direct_matches": [
+      "FortiManager ADOM upgrade remote-certificate preflight",
+      "FortiSIEM Supervisor CMDB replica not streaming",
+      "FortiSASE regional-compliance resolver/geolocation behavior"
+    ],
+    "related_match": "FortiAuthenticator CSV local-user import attribute-preservation case; separate from REST API endpoint."
   }
 }
