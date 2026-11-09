@@ -1,0 +1,151 @@
+{
+  "schema_version": "2.0",
+  "run_date": "2026-11-09",
+  "repository": "ccaiccie4/Fortinet",
+  "scope": "Broad product-area sweep for the 12 mandatory targets; recent means within the current 30-day window where possible. Community/KB/TAC sources are scenario material only and never primary lesson sources.",
+  "targets": [
+    {
+      "product": "FortiGate",
+      "searches": [
+        "FortiGate 8.0 TLS 1.3 VPN over TCP IKE TLS fallback",
+        "FortiGate recent troubleshooting tips site:community.fortinet.com"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortigate-3/technical-tip-steps-to-verify-traffic-flow-and-fallback-mechanism-for-site-to-site-ipsec-tunnel-to-use-tls-1-3-based-vpn-over-tcp-229250",
+      "scenario_age": "approximately 3 months; outside strict 30-day window",
+      "use": "Scenario material for UDP-first negotiation, TCP/TLS fallback and transport evidence; not the primary feature source.",
+      "recent_sweep_findings": [
+        "Other current FortiGate items included proxy-inspection 400 errors and 7.4.13 GUI SSL errors; not directly equivalent to the selected TLS transport lesson."
+      ],
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiManager",
+      "searches": [
+        "FortiManager ADOM upgrade remote certificate invalid October November 2026",
+        "FortiManager product community technical tips recent"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortimanager-27/fortimanager-adom-upgrade-from-7-4-to-7-6-fails-with-remote-certificate-invalid-error-231084",
+      "scenario_age": "5 days",
+      "use": "Direct ADOM-upgrade scenario: malformed PEM wrapper in a shared remote certificate blocks ADOM conversion.",
+      "direct_recent_match": true
+    },
+    {
+      "product": "FortiAnalyzer",
+      "searches": [
+        "FortiAnalyzer FortiMQ connector automated blocking",
+        "FortiAnalyzer November 2026 Node2Shell FortiAnalyzer detection"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortianalyzer-6/using-fortianalyzer-to-detect-activities-related-to-the-node2shell-remote-code-execution-cve-2026-111497-231116",
+      "scenario_age": "4 days",
+      "use": "Adjacent incident scenario for extracting/triaging an indicator; the Community article does not itself troubleshoot the FortiMQ connector.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiSwitch",
+      "searches": [
+        "FortiSwitch QoS egress queues DSCP CoS recent technical tip",
+        "FortiSwitch control traffic queue 7"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-qos-queue-for-control-traffic-on-fortiswitch-113603",
+      "scenario_age": "originally 2022; materially updated April 24, 2026",
+      "use": "Scenario note clarifies port queue 7 versus internal CPU queue accounting and why control-plane traffic must be protected.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "searches": [
+        "FortiAP wireless traffic packet sniffer 8.0",
+        "FortiAP wireless packet capture troubleshooting recent"
+      ],
+      "matched_scenario_url": null,
+      "scenario_age": null,
+      "use": "No directly matched recent Community packet-sniffer scenario verified. Product-area sweep surfaced AP join/DTLS, VLAN DHCP, 5/6 GHz and BLE items, but none was promoted as a packet-sniffer failure scenario.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiNAC",
+      "searches": [
+        "FortiNAC Winbind Kerberos FreeIPA domain join October 2026",
+        "FortiNAC product-area technical tips Winbind authentication"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "scenario_age": "October 2, 2026; 38 days, just outside strict 30-day window",
+      "use": "Direct scenario establishes that Samba Winbind Join Domain is an Active Directory join and cannot join FreeIPA/OpenLDAP; LDAP-only functions remain separate.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiNAC-F",
+      "searches": [
+        "FortiNAC-F Intune MDM host deletion after poll",
+        "FortiNAC-F recent MDM service connector technical tips"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortinac-28/technical-tip-fortinac-f-v7-6-7-deletes-microsoft-intune-hosts-after-mdm-poll-230220",
+      "scenario_age": "September 28, 2026; 42 days, outside strict 30-day window",
+      "use": "Direct MDM reconciliation scenario; affected 7.6.7 host deletion is resolved in 7.6.8.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiAuthenticator",
+      "searches": [
+        "FortiAuthenticator RadSec peer did not return a certificate 8.0.x",
+        "FortiAuthenticator recent certificate and RADIUS technical tips"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-radius-connectivity-fails-displaying-error-peer-did-not-return-a-certificate-after-the-upgrade-of-fortiauthenticator-cloud-229102",
+      "scenario_age": "approximately 3 months",
+      "use": "Direct mutual-TLS scenario: FortiAuthenticator Cloud 8.0.x requires the client certificate from the FortiGate; peer-certificate error is transport-layer, not RADIUS policy.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiPAM",
+      "searches": [
+        "FortiPAM 1.9 JIT privilege PowerShell WinRM checkout checkin",
+        "FortiPAM recent product-area troubleshooting"
+      ],
+      "matched_scenario_url": null,
+      "scenario_age": null,
+      "use": "No directly matched recent troubleshooting scenario verified. Community 1.9 deep-dive article discusses JIT feature but is not used as the primary lesson source; unrelated HTTP 400 launcher reports were rejected.",
+      "direct_recent_match": false
+    },
+    {
+      "product": "FortiSIEM",
+      "searches": [
+        "FortiSIEM HA Supervisor CMDB replica not streaming Patroni",
+        "FortiSIEM November 2026 HA PostgreSQL replication troubleshooting"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortisiem-34/fortisiem-ha-supervisor-node-shows-outdated-cmdb-because-the-database-replica-is-not-streaming-231115",
+      "scenario_age": "4 days",
+      "use": "Direct scenario: CMDB replica process is running but no longer streaming after a Patroni timeline change; Health Replication widget can still show Normal.",
+      "direct_recent_match": true
+    },
+    {
+      "product": "FortiSASE",
+      "searches": [
+        "FortiSASE regional compliance DNS resolver geolocation troubleshooting",
+        "FortiSASE recent regional compliance technical tips"
+      ],
+      "matched_scenario_url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-regional-compliance-is-not-working-229910",
+      "scenario_age": "last month",
+      "use": "Direct scenario: recursive DNS resolver egress location and EDNS client subnet influence PoP selection; endpoint public IP alone does not explain the result.",
+      "direct_recent_match": true
+    },
+    {
+      "product": "Secure SD-WAN",
+      "searches": [
+        "FortiOS 8.0 SD-WAN speed test scheduling improvements",
+        "Fortinet Secure SD-WAN community troubleshooting October November 2026"
+      ],
+      "matched_scenario_url": null,
+      "scenario_age": null,
+      "use": "No directly matched recent speed-test scheduling scenario verified. The community sweep surfaced SPA BGP, IPsec, link-health and PoP issues; these were not conflated with the selected speed-test feature.",
+      "direct_recent_match": false
+    }
+  ],
+  "coverage_summary": {
+    "product_areas_searched": 12,
+    "direct_recent_scenarios_within_30_days": 3,
+    "matched_but_older_or_outside_30_days": 5,
+    "no_directly_matched_scenario": 4,
+    "unrelated_items_rejected": true,
+    "primary_lesson_sources_are_community": false
+  }
+}
