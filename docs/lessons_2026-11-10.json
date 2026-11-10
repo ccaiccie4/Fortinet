@@ -1,0 +1,462 @@
+{
+  "run_date": "2026-11-10",
+  "lesson_count": 12,
+  "lessons": [
+    {
+      "id": "fortigate-smart-relay",
+      "product": "FortiGate",
+      "subject": "DHCP smart relay on interfaces with a secondary IP",
+      "primaryUrl": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/621898/dhcp-smart-relay-on-interfaces-with-a-secondary-ip",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community scenario for smart relay was verified. A much older multiple-relay tip exists, but it is not treated as evidence for the smart-relay fallback behavior.",
+      "mechanism": "Per-client unanswered-request counter switches relay source identity from the primary interface address to configured secondary-interface relay addresses, then cycles back.",
+      "workflow": "Client DHCPDISCOVER/DHCPREQUEST -> relay using primary IP -> three unanswered requests -> relay using secondary IP -> three unanswered requests -> restart primary phase.",
+      "failure": "DHCP server scope or relay-source mismatch; missing route to relay; secondary relay address not configured; no response across both source identities.",
+      "evidence": "dhcprelay debug shows transaction ID, request reception, Option 82 insertion, route lookup, forwarding source/target, DHCPOFFER and DHCPACK; the source address change proves fallback was entered.",
+      "remediation": "Confirm interface primary/secondary addresses, primary and secip relay targets, route reachability, DHCP scopes for the relay identities, and Option 82 policy; use packet capture plus dhcprelay debug.",
+      "questionFingerprint": "three-unanswered-request threshold; relay source identity; DHCP debug evidence; primary-secondary-primary cycle.",
+      "diagramFingerprint": "single FortiGate interface with primary/secondary addresses, one or two relay targets, and a client-to-server request/offer return path.",
+      "sections": [
+        [
+          "Purpose and packet mechanics",
+          "DHCP smart relay addresses a subtle problem in multi-subnet access networks: the relay can reach a DHCP server, yet the server may not select the intended scope because the request arrives with the relay identity associated with the interface's primary address. FortiGate normally relays using the primary interface address. With smart relay enabled, FortiGate counts unanswered DHCP requests for a client on that interface. After three unanswered requests on the primary identity, it forwards subsequent requests to the relay IPs configured under the interface's secondary IP and uses the secondary IP as the source. If three requests in that phase are also unanswered, FortiGate returns to the primary identity and restarts the cycle. The primary and secondary relay targets can be identical or different. This is not round-robin load balancing and does not mean every request is sent to every server; it is a retry-driven source-identity fallback."
+        ],
+        [
+          "Configuration and dependencies",
+          "The interface must have DHCP relay enabled, a primary address, secondary IP enabled, and a secondary-IP entry with its own relay target. A representative configuration is:<pre><code>config system interface\n edit \"port5\"\n  set dhcp-relay-service enable\n  set dhcp-smart-relay enable\n  set ip 5.2.2.1 255.255.255.0\n  set secondary-IP enable\n  set dhcp-relay-ip \"10.2.2.1\"\n  config secondaryip\n   edit 1\n    set ip 11.2.2.1 255.255.255.0\n    set secip-relay-ip \"10.2.2.1\"\n   next\n  end\n next\nend</code></pre>Ensure the FortiGate has a route to each relay target and that the DHCP server has scopes or relay-agent handling appropriate to the address identity it receives. If smart relay is disabled, requests continue to use the primary interface address. Option 82 insertion may be visible in the debug; the server must be configured to accept or interpret that information consistently. The source documentation does not prescribe a universal scope design, so validate the server's actual scope-selection rules rather than assuming the secondary IP alone creates a new scope."
+        ],
+        [
+          "Verification: what the evidence proves",
+          "Enable a bounded diagnostic capture with <code>diagnose debug application dhcprelay -1</code>. Correlate messages by DHCP transaction ID. The useful sequence is receipt of DHCPDISCOVER, the relay's route lookup, forwarding to the configured server, and then a DHCPOFFER or DHCPACK. When fallback is active, the forwarding source changes from the primary interface address to the secondary address. A line showing “forwarding dhcp request” proves that FortiGate attempted the relay transmission; it does not prove that the server accepted the request or that the client installed a lease. A DHCPOFFER proves the server replied; a DHCPACK for the matching transaction is stronger evidence that the lease exchange completed. A route lookup failure points to routing, while repeated forwarding without an offer points toward server scope selection, ACLs, Option 82 policy, or return-path reachability."
+        ],
+        [
+          "Operational troubleshooting",
+          "Consider a campus VLAN whose clients remain in INIT-SELECTING: packet capture shows DHCPDISCOVER leaving the client, but the server has no matching scope for the primary relay address. First confirm the FortiGate receives the broadcast on the expected interface. Next inspect the relay debug for the primary source and the three unanswered attempts. If the source changes to the configured secondary address, smart relay is functioning; the remaining problem is likely server-side scope selection or reachability. If the source never changes, verify <code>dhcp-smart-relay</code>, secondary-IP enablement, the secondary address entry, and <code>secip-relay-ip</code>. Do not mask a missing route by repeatedly changing the relay source. Capture both directions on the server-facing interface and confirm that replies return to the correct FortiGate address. After the server responds, verify the client receives DHCPOFFER, DHCPREQUEST and DHCPACK for the same transaction."
+        ]
+      ],
+      "word_count": 568,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortigate-smart-relay.svg",
+        "drawio": "diagrams/2026-11-10/fortigate-smart-relay.drawio"
+      }
+    },
+    {
+      "id": "fortimanager-metadata",
+      "product": "FortiManager",
+      "subject": "ADOM-level metadata variables and mapping precedence",
+      "primaryUrl": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/478643",
+      "scenarioUrl": "https://community.fortinet.com/fortimanager-27/technical-tip-manage-metadata-variables-using-json-api-229189",
+      "sourceNote": "Community API tip dated July 31, 2026 (three months before this run): used only as an operational companion for variable CRUD and mappings, not as the primary feature definition.",
+      "mechanism": "Per-ADOM variable namespace with default, device-group, per-device and Global Database ADOM mapping scopes; per-device values override group values.",
+      "workflow": "Define variable -> choose default and eligible mapping scope -> map device/group -> reference $variable in a supported object/template field -> render/install device-specific value.",
+      "failure": "Variable resolves to default or blank; unsupported field; wrong ADOM scope; stale or missing device/group mapping; API deletion blocked by references.",
+      "evidence": "Metadata Variables list and Device Manager mapping view show configured values; rendered configuration/install preview proves the value actually resolved for a target device.",
+      "remediation": "Check ADOM, supported-field indicator, default, group membership, per-device override and rendered install preview; export/import mappings for controlled migration.",
+      "questionFingerprint": "mapping precedence; Global Database ADOM limitation; $variable substitution; API CRUD and reference-in-use deletion.",
+      "diagramFingerprint": "ADOM variable definition branching to default/group/device mappings, then converging into a rendered template/object for a managed device.",
+      "sections": [
+        [
+          "Purpose and object model",
+          "FortiManager metadata variables let one shared template or object represent site-specific values without cloning the object for every firewall. A variable is scoped to an ADOM, so the same name can have a different value in another ADOM. The variable definition contains a default value and, where supported, mappings. A default is used when no applicable mapping exists. In a normal ADOM, a mapping can target an individual device or a device group. A group mapping supplies a common value to its members; a more specific per-device mapping takes precedence for that device. The Global Database ADOM is different: it supports per-ADOM mapping, but per-device mapping is not available there. The effective value is therefore a scope-resolution result, not simply the text stored in the variable definition."
+        ],
+        [
+          "Where variables can be used",
+          "Fortinet documents metadata variables in eligible fields of scripts (except Tcl scripts), templates, firewall address objects, IP pools, VIPs, FortiAP SSIDs, FortiSwitch VLAN configurations, EMS connectors, normalized interfaces, firewall address groups and virtual wire pairs. The variable icon identifies supported fields. In an eligible text field, the syntax is <code>$variable_name</code>; typing <code>$</code> opens the available variable picker. Do not assume that every free-text field expands variables. A variable that exists in Policy &amp; Objects but is referenced in an unsupported field can remain literal or fail validation. Password variables are designed for sensitive provisioning values: the value is obscured when editing and can be used in provisioning templates without exposing it in the GUI. Variable values can be multiline and support up to 32,768 characters."
+        ],
+        [
+          "Configuration and lifecycle",
+          "Create the variable under Policy &amp; Objects &gt; Advanced &gt; Metadata Variables. Set a meaningful default, enable only the mapping scope you intend to use, and add mappings for the target device or group. Device Manager provides a direct mapping editor: select a device or group, open Edit Variable Mapping, and set the mapping value. The mapping is per-ADOM; do not try to share a variable across ADOM boundaries as though it were a global object. FortiManager supports import and export of variables as JSON or CSV, including selected mapping values. The Community JSON API example shows GET, ADD, UPDATE and DELETE operations on <code>/pm/config/adom/{ADOM}/obj/fmg/variable</code>; its version note identifies the <code>type</code> field for normal/password variables in FortiManager 7.6.4 and later. Treat API CRUD as an automation interface, not a substitute for confirming the rendered device configuration."
+        ],
+        [
+          "Verification and troubleshooting",
+          "Start with the variable definition: correct ADOM, exact name, type, default and mapping scopes. Then inspect the target device's mapping and its device-group membership. If the device has a direct mapping, verify that it is not unintentionally overriding the group value. Finally, inspect the rendered template or install preview. The mapping table proves configuration exists; the rendered configuration proves the intended value was substituted for that target. If a delete API call reports that the variable is “used,” search for references in objects/templates before retrying deletion. For a blank CLI template after an ADOM upgrade, verify the ADOM version, supported template field and metadata-variable location; a variable definition alone does not prove that the template field is eligible or that a mapping was imported."
+        ]
+      ],
+      "word_count": 510,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortimanager-metadata.svg",
+        "drawio": "diagrams/2026-11-10/fortimanager-metadata.drawio"
+      }
+    },
+    {
+      "id": "fortianalyzer-aggregation",
+      "product": "FortiAnalyzer",
+      "subject": "Scheduled log aggregation between FortiAnalyzer units",
+      "primaryUrl": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/420493/modes",
+      "scenarioUrl": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-log-aggregation-223370",
+      "sourceNote": "Community configuration tip dated February 10, 2026; it directly demonstrates the FAZ-to-FAZ aggregation workflow, but is not a recent-30-day scenario.",
+      "mechanism": "Daily scheduled FAZ-to-FAZ delta transfer over rsync/SSH; client retains received logs and sends only records not already on the receiving analyzer.",
+      "workflow": "Client collects device logs -> scheduled aggregation time -> authenticate to receiving FAZ as Super_User -> transfer unseen log data -> receiving FAZ indexes/displays it.",
+      "failure": "Receiver not accepting aggregation; wrong Super_User credentials; unsupported syslog/CEF destination; schedule or route failure; expecting real-time forwarding semantics.",
+      "evidence": "get system log-forward shows IDs; execute log-aggregation <id> triggers a test; destination Log View shows transferred records; these do not prove real-time freshness.",
+      "remediation": "Enable accept-aggregation and disk quota on receiver, verify client credentials/server IP/time, trigger one aggregation manually and compare destination records.",
+      "questionFingerprint": "forwarding versus aggregation; server accept flag; daily schedule and dedup; manual execute command.",
+      "diagramFingerprint": "FAZ client ingesting multiple devices, scheduled batch/delta transfer to FAZ receiver, with separate receiver acceptance/authentication gate.",
+      "sections": [
+        [
+          "Two different forwarding contracts",
+          "FortiAnalyzer supports forwarding mode and aggregation mode. Forwarding is the default: logs are sent in real time or near real time as they arrive, with a documented maximum delay of about five minutes. It can be configured in the GUI or CLI and supports FortiAnalyzer, syslog and CEF destinations, plus options such as filters, masking, metadata synchronization and compression depending on destination. Aggregation is not a slower setting on the same generic output pipeline. It is a distinct FAZ-to-FAZ workflow: the client stores logs as it receives them and sends collected data at a configured time each day. The client avoids duplicate transfer by sending only logs that are not already present on the receiving FortiAnalyzer. Aggregation does not target syslog or CEF servers and is configured only through the CLI."
+        ],
+        [
+          "Receiver and client configuration",
+          "The receiving FortiAnalyzer must accept aggregation and can be given an aggregation disk quota:<pre><code>config system log-forward-service\n set accept-aggregation enable\n set aggregation-disk-quota &lt;quota&gt;\nend</code></pre>On the client, create or edit a log-forward ID and set aggregation mode, receiver identity/address, Super_User credentials and the daily hour:<pre><code>config system log-forward\n edit 1\n  set mode aggregation\n  set server-name \"FAZ-DR\"\n  set server-ip 10.20.30.40\n  set agg-user \"aggregation-admin\"\n  set agg-password &lt;secret&gt;\n  set agg-time 11\n next\nend</code></pre>The receiver-side account must have the Super_User profile required by the documented workflow. The client and receiver need IP reachability for the rsync/SSH-based transfer. Aggregation does not provide the same field filtering, masking, metadata synchronization, compression or port customization as ordinary forwarding. The log delay can be up to one day, and the daily transfer can create a bandwidth peak; size the schedule and receiving storage accordingly."
+        ],
+        [
+          "Verification and evidence boundaries",
+          "Use <code>get system log-forward</code> to see which log-forward IDs are allocated; aggregation configurations are not shown in the normal GUI forwarding table. To test without waiting for the scheduled hour, run <code>execute log-aggregation &lt;id&gt;</code> on the client. The Community technical tip demonstrates this command and then checks the receiver under Log View &gt; Logs. A successful command invocation proves that the client attempted the selected aggregation job; it does not prove every expected device log was ingested or that the receiver's archive policy retains it indefinitely. Compare a known time window and representative device IDs on both analyzers. Also check receiver acceptance, account authentication and disk quota. A missing GUI entry on the client is not evidence that aggregation is absent, because the feature is CLI-only."
+        ],
+        [
+          "Operational use and failure isolation",
+          "Aggregation is useful when a central analyzer collects branch logs continuously but a secondary analyzer or DR site should receive a scheduled copy. If the receiver is not accepting aggregation, the client can be correctly configured yet fail at the service boundary. If credentials are wrong, routing may work while authentication fails. If the destination is syslog or CEF, aggregation is the wrong mode. If operators expect near-real-time data, the daily schedule is the wrong contract. During troubleshooting, separate three questions: did the client collect the original device logs, did the scheduled/manual aggregation job transfer them, and did the receiver index them into the expected ADOM/log view? Each needs different evidence. Do not switch to forwarding merely to make the GUI show an entry without checking the bandwidth, filtering and retention implications."
+        ]
+      ],
+      "word_count": 525,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortianalyzer-aggregation.svg",
+        "drawio": "diagrams/2026-11-10/fortianalyzer-aggregation.drawio"
+      }
+    },
+    {
+      "id": "fortiswitch-ra-guard",
+      "product": "FortiSwitch",
+      "subject": "IPv6 Router Advertisement Guard: policy criteria and port/VLAN binding",
+      "primaryUrl": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortiswitchos-administration-guide/61029/ipv6-router-advertisement-guard",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched Community RA-Guard troubleshooting scenario was verified in the sweep. The lesson uses the FortiSwitchOS Administration Guide as the primary feature source.",
+      "mechanism": "Ingress ICMPv6 Router Advertisements are evaluated against device role, M/O flags, hop-limit range, router preference, source ACL and advertised-prefix list before forwarding.",
+      "workflow": "Define IPv6 source ACL/prefix list -> build RA-guard policy -> bind policy to interface and VLAN -> inspect permitted/dropped RA traffic.",
+      "failure": "Unauthorized host emits RA; legitimate router RA mismatches policy; policy exists but is not bound to the active port/VLAN; wrong ACL/prefix list causes silent drops.",
+      "evidence": "get switch raguard-policy and interface configuration prove policy objects/bindings; packet capture of ICMPv6 type 134 proves actual RA ingress/egress behavior.",
+      "remediation": "Classify trusted router-facing ports, allow only intended link-local sources and prefixes, bind correct policy per VLAN, then test legitimate and rogue RA frames.",
+      "questionFingerprint": "host versus router role; M/O and hop-limit criteria; ACL versus prefix-list; policy binding versus object creation.",
+      "diagramFingerprint": "IPv6 access VLAN with rogue host and authorized router; RA guard on switch ingress evaluates source, flags, hop limit, preference and prefix before forwarding.",
+      "sections": [
+        [
+          "Threat model and evaluation",
+          "IPv6 Router Advertisements (RAs) are ICMPv6 messages by which routers advertise default-router information and prefix/configuration parameters to neighboring hosts. A rogue RA on an access VLAN can redirect hosts toward an unauthorized router or advertise incorrect IPv6 configuration. FortiSwitch RA Guard evaluates each RA against a policy before forwarding it. The documented criteria include the Managed (M) and Other (O) flags, minimum and maximum hop limit, maximum router preference, allowed source IPv6 address, allowed advertised prefix, and whether the device is treated as a host or router. If the device role is host, all RAs are dropped. If it is router, the remaining criteria are evaluated. This makes the role assignment a security boundary: apply router-role policies only where a legitimate router is expected."
+        ],
+        [
+          "Build the policy objects",
+          "Source matching and prefix matching are separate controls. An IPv6 access list can permit specific source addresses; when no rule matches, the RA is dropped. An IPv6 prefix list can constrain the prefix carried in the RA's Prefix Information option; again, no match means drop. The RA-guard policy then references these lists and defines flag, hop-limit and preference constraints:<pre><code>config switch raguard-policy\n edit \"RA-TRUSTED\"\n  set device-role router\n  set managed-flag On\n  set other-flag On\n  set min-hop-limit 5\n  set max-hop-limit 100\n  set max-router-preference medium\n  set match-src-addr \"RA-SOURCES\"\n  set match-prefix \"RA-PREFIXES\"\n next\nend</code></pre>Apply the policy to the actual interface and VLAN. A policy object that is not bound to the ingress port/VLAN does not protect that traffic. The FortiSwitch feature matrix should be checked for model support before rollout."
+        ],
+        [
+          "Apply and verify",
+          "The interface binding is configured under <code>config switch interface</code>, then <code>config raguard</code>, with a policy name and VLAN list. Different VLANs can use different policies. Use <code>get switch raguard-policy</code> to list policy objects and inspect the interface configuration to verify the binding. These commands prove configuration presence, not packet enforcement. Capture ICMPv6 Router Advertisement traffic (ICMPv6 type 134) on the affected VLAN and test one authorized router plus one unauthorized host/router. A legitimate RA disappearing after enabling the policy usually means the role, source ACL, hop limit, router preference or advertised prefix does not match. A rogue RA still appearing on the host side means the policy may be bound to the wrong port/VLAN, the traffic may be entering through another path, or the device/model may not support the feature."
+        ],
+        [
+          "Operational design",
+          "Use a least-privilege pattern: access ports are host-facing; only known router-facing trunks or routed access ports receive a router policy. Avoid a broad source ACL that permits every link-local address. Validate both the source IPv6 address and the advertised prefix; one does not substitute for the other. M and O flags should reflect the intended address-configuration service, not be enabled indiscriminately. Router preference is a control-plane input that can influence default-router selection, so cap it to the expected value. When multiple VLANs share a trunk, apply the policy to the correct VLAN list rather than assuming the native VLAN is the only one protected. A controlled maintenance test should confirm that the authorized router continues to advertise and that a rogue RA is dropped before production enforcement is enabled across all access ports."
+        ]
+      ],
+      "word_count": 516,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortiswitch-ra-guard.svg",
+        "drawio": "diagrams/2026-11-10/fortiswitch-ra-guard.drawio"
+      }
+    },
+    {
+      "id": "fortiap-roaming",
+      "product": "FortiAP/Wireless",
+      "subject": "802.11k and 802.11v assisted roaming: neighbor knowledge, steering and capacity trade-offs",
+      "primaryUrl": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/651750",
+      "scenarioUrl": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-error-while-adding-8-ssids-per-client-serving-radios-in-fortiap-profile-error-at-most-7-vaps-can-be-configured-182072",
+      "sourceNote": "Community troubleshooting tip dated September 16, 2024; it documents a capacity side effect involving background scanning and 802.11k/v, not a recent-30-day incident.",
+      "mechanism": "802.11k supplies neighboring-AP information to clients; Fortinet's 802.11v assisted-roaming control encourages movement from congested APs; these settings interact with radio background scanning and SSID capacity.",
+      "workflow": "SSID advertises roaming capabilities -> client receives neighbor/site information -> client evaluates candidate APs -> AP/controller may encourage transition from congested coverage -> client reassociates.",
+      "failure": "Client does not roam despite feature enabled; AP profile triggers background scanning and reduces available VAP count; unsupported client or mismatched SSID security prevents expected behavior.",
+      "evidence": "SSID configuration proves advertised capability; over-the-air action-frame capture and client roam logs prove negotiation and reassociation; AP profile shows scan/VAP constraints.",
+      "remediation": "Validate client support, SSID-level 802.11k/v/11r settings, radio profile and background-scan mode; test with representative clients and measure roam interruption.",
+      "questionFingerprint": "neighbor report versus transition assistance; client decision boundary; 802.11r distinction; seven/eight VAP background-scan constraint.",
+      "diagramFingerprint": "three overlapping AP cells with neighbor-report information, a congested AP steering prompt and a roaming client reassociating to a less-loaded AP.",
+      "sections": [
+        [
+          "What 802.11k contributes",
+          "Assisted roaming is a client/AP coordination feature, not a guarantee that every client will move to the strongest radio. With 802.11k enabled, an AP can provide a client with information about neighboring APs and a site report. The client can use that information to narrow the scan/search process instead of discovering every channel from scratch. The client still evaluates the candidates and decides whether to roam. A neighbor report therefore improves the information available to the station; it does not force a reassociation or guarantee that the next AP has spare airtime. The FortiAP/FortiWiFi 8.0 SSID Advanced Options page exposes 802.11k through the SSID's <code>80211k</code> setting."
+        ],
+        [
+          "What 802.11v contributes",
+          "Fortinet exposes 802.11v assisted roaming as a separate SSID option. The Fortinet configuration guide describes it as helping clients choose a less congested AP when another AP has better RSSI; the guide also describes the Fortinet implementation as actively sending deauthentication frames to clients that attempt to connect to a congested AP when a better AP is available. Do not treat this setting as equivalent to 802.11r Fast BSS Transition. 802.11r is the separate fast-transition mechanism that reduces authentication delay during a roam when the client and security design support it. A site can enable 802.11k, 802.11v and 802.11r independently; test client compatibility and actual over-the-air behavior instead of assuming the three settings are interchangeable."
+        ],
+        [
+          "Configuration and radio interactions",
+          "The settings are per SSID in the FortiAP/FortiWiFi configuration guide. A representative CLI fragment is:<pre><code>config wireless-controller vap\n edit \"CORP\"\n  set 80211k enable\n  set 80211v enable\n  set fast-bss-transition enable\n next\nend</code></pre>Use the exact syntax exposed by the running FortiOS build and verify the SSID profile after installation. Roaming assistance can interact with background scanning. A Community troubleshooting tip documents a FortiAP profile limit of seven client-serving SSIDs when background scanning is enabled versus eight when it is not; it recommends disabling dedicated scanning and, in that specific scenario, 802.11k/v or voice-enterprise options to regain the eighth VAP. That is a capacity workaround, not a universal best practice: disabling roaming assistance can worsen mobility. Check the AP model, radio profile, scan mode, SSID count and client support together."
+        ],
+        [
+          "Verification and tuning",
+          "Capture management/action frames over the air when possible and correlate them with client roam logs, RSSI, retry rate and AP association events. Seeing 802.11k enabled in the SSID configuration proves only that the feature is configured; it does not prove a client requested or consumed a neighbor report. Seeing an 802.11v setting does not prove the client accepted a transition suggestion. A roam event proves reassociation but not that application sessions survived without interruption. Test voice, video and roaming clients while walking between cells; record roam time, packet loss and authentication delay. If the eighth SSID fails to install, inspect the VAP count and background-scan settings before changing unrelated security settings. Tune in a representative AP group, then roll out only after confirming that the mobility benefit is worth any scan/capacity trade-off."
+        ]
+      ],
+      "word_count": 481,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortiap-roaming.svg",
+        "drawio": "diagrams/2026-11-10/fortiap-roaming.drawio"
+      }
+    },
+    {
+      "id": "fortinac-autoreg",
+      "product": "FortiNAC",
+      "subject": "Per-SSID 802.1X auto-registration using RADIUS Attribute 30",
+      "primaryUrl": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/875108/ssid-configuration",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community troubleshooting scenario for the Attribute 30 auto-registration path was verified.",
+      "mechanism": "After successful 802.1X RADIUS authentication, FortiNAC uses the SSID value in RADIUS Attribute 30 to register the host to the authenticated user before network-policy evaluation.",
+      "workflow": "Wireless station associates -> AP/controller sends RADIUS Access-Request with Called-Station-ID/SSID -> RADIUS accepts -> FortiNAC links host to user -> network access policy selects VLAN/role.",
+      "failure": "Attribute 30 absent or does not contain the SSID; auto-registration disabled on that SSID; RADIUS success occurs but host-user association is not created.",
+      "evidence": "RADIUS request attributes prove the SSID context; FortiNAC host record and associated user prove registration; Access-Accept alone proves authentication only.",
+      "remediation": "Enable Dot1x Auto Registration on the correct SSID, verify Attribute 30 format and SSID value from the controller/AP, then inspect host-user association before policy enforcement.",
+      "questionFingerprint": "Attribute 30 requirement; registration-before-policy order; Access-Accept versus host registration; SSID-level scope.",
+      "diagramFingerprint": "Wireless client through AP/controller to FortiNAC RADIUS, with Attribute 30 carrying SSID and host-user registration feeding policy/VLAN selection.",
+      "sections": [
+        [
+          "Registration is a separate transaction step",
+          "FortiNAC 9.4 exposes Dot1x Auto Registration as an enable/disable option on each modeled SSID. It is disabled by default. When enabled, a host can be registered automatically based on the user's successful 802.1X authentication with the RADIUS server. The important order is that, after successful 802.1X authentication, FortiNAC registers the host to the authenticated user before the network policy is determined. This makes the user-host association available to the policy decision. It does not replace 802.1X authentication and does not mean that every successful Access-Accept automatically creates a host record: the request must carry the SSID context required by the feature."
+        ],
+        [
+          "RADIUS attribute contract",
+          "Fortinet documents two explicit requirements: FortiNAC version 8.5.2 or higher, and a RADIUS request from the controller/access point containing RADIUS Attribute 30 with the SSID value. Attribute 30 is the Called-Station-Id attribute; wireless implementations often encode BSSID and SSID in a vendor/device-specific string format. The FortiNAC requirement is that the SSID value be present so the request can be associated with the modeled SSID. Verify the actual wire value rather than assuming the controller's GUI name is what FortiNAC receives. A configuration fragment is conceptually:<pre><code>SSID: CORP-WIFI\nRADIUS authentication: enabled\nDot1x Auto Registration: enabled\nAccess Enforcement: Enforce\nAccess Value: CORP-ROLE</code></pre>The SSID may inherit network-access policy from its parent wireless device or use custom settings. Local RADIUS and RADIUS Proxy modes affect where authentication is processed and which reply attributes are sent, but they do not remove the Attribute 30 prerequisite for this auto-registration path."
+        ],
+        [
+          "How registration feeds policy",
+          "After authentication, FortiNAC associates the host with the authenticated user, then evaluates the applicable network access policy. The SSID's host-state handling distinguishes Default, Dead End, Registration, Quarantine and Authentication states. In Enforce mode, an Access Value must identify the VLAN/role to apply; Bypass uses the device's default VLAN/role; Deny rejects access. The policy engine can therefore act on a host-user relationship that was not present before the RADIUS transaction. If the RADIUS request is accepted but the SSID context is missing, FortiNAC may authenticate the user without creating the expected registration association. Treat those as separate checkpoints."
+        ],
+        [
+          "Troubleshooting and evidence",
+          "Capture or inspect the RADIUS Access-Request and confirm Attribute 30 includes the expected SSID string. Check that the modeled device and SSID are the objects actually receiving the request, and that Dot1x Auto Registration is enabled on that SSID rather than on a similarly named logical network. Then inspect the FortiNAC host record and confirm the authenticated user association before examining the final VLAN/role decision. A RADIUS Access-Accept proves the authentication server accepted the credentials; it does not prove FortiNAC registered the host. A policy result showing the default VLAN may indicate that registration did not occur or that no policy matched. If Attribute 30 is absent, correct the controller/AP RADIUS attribute configuration first; changing VLAN policy cannot repair missing SSID identity in the request."
+        ]
+      ],
+      "word_count": 468,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortinac-autoreg.svg",
+        "drawio": "diagrams/2026-11-10/fortinac-autoreg.drawio"
+      }
+    },
+    {
+      "id": "fortinac-f-ha",
+      "product": "FortiNAC-F",
+      "subject": "N+1 CA failover: secondary-originated health checks and promotion control",
+      "primaryUrl": "https://docs.fortinet.com/document/fortinac-f/7.6.0/n-1-failover-group-and-load-balancing/447124/what-is-n-1-high-availability",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community N+1 CA failover incident was verified. FortiNAC-F 7.6.3 release notes and the N+1 reference guide are the primary sources.",
+      "mechanism": "One standby secondary CA can protect multiple primary CAs; the secondary performs direct and indirect health checks and promotes only when both paths fail.",
+      "workflow": "FortiNAC-M defines N+1 group -> secondary remains Standby -> direct check to primary -> indirect check via another primary if needed -> promotion -> manual Resume Control after primary recovery.",
+      "failure": "False promotion from one failed path; mismatched firmware prevents primary membership; independent IP/backup IP misconfiguration; recovered primary remains Standby until manual control resume.",
+      "evidence": "CA Management states Standby/Promotion In Progress/Promoted; FailoverConsole getFailoverGroup shows group membership; health-check path results prove decision inputs.",
+      "remediation": "Match firmware, verify primary/secondary role and backup IP, validate direct and indirect reachability from the secondary, tune supported ICMP/TCP health-check intervals and manually resume control after recovery.",
+      "questionFingerprint": "direct plus indirect check; secondary performs checks not Manager; 7.6.3 ICMP/TCP check refinement; manual Resume Control.",
+      "diagramFingerprint": "FortiNAC-M managing two primary CAs and one standby secondary; direct and indirect health-check paths; secondary promotion and manual primary resumption.",
+      "sections": [
+        [
+          "N+1 is a CA service redundancy model",
+          "FortiNAC-F 7.6 introduced N+1 failover groups in which one secondary Control Appliance (CA) can protect one or more primary CAs. FortiNAC-M manages the group and displays the CA roles/status, but the health checks are performed by the secondary CA, not by FortiNAC-M. The secondary remains in Standby until it decides a primary has failed. The documented N+1 design allows multiple primary CAs to share a standby; the configuration guide states a maximum of five primary servers for one secondary. The primary and secondary firmware versions must match: the secondary ignores a primary with a mismatched firmware version. This is not an active-active load-balancing design; the secondary is a standby resource that is promoted to take over a failed primary."
+        ],
+        [
+          "Direct and indirect health-check logic",
+          "The secondary first tries to connect directly to the primary CA. If that check fails, it attempts an indirect check through another primary CA, asking that peer to check the target primary. Only when both direct and indirect checks fail does the secondary decide that the primary connection has failed and start promotion. This protects against a partial network partition: the secondary may be unable to reach Primary A directly while Primary B can still reach A, in which case the indirect check passes and failover is not triggered. FortiNAC-F 7.6.3 refines the health-check model: the secondary automatically checks the primary before promotion, and the documented custom check types are ICMP and TCP on a specific port; RADIUS and TCP echo checks were removed. The release notes also add CLI controls for health-check intervals."
+        ],
+        [
+          "Configuration and address ownership",
+          "The N+1 configuration is performed on the CAs using the FailoverConsole CLI, not as a normal service on FortiNAC-M. The 7.6.3 CLI reference documents commands such as <code>RunClient FailoverConsole setFailoverGroup</code>, <code>getFailoverGroup</code>, <code>forceFailover</code> and <code>forceResumeControl</code>. The final CA in the group definition is the secondary. Backup IP can be Shared, Independent or None; 7.6.3 adds independent Port 1 IP configuration for each primary so the secondary can be accessed using that primary's independent service address after takeover. The secondary ignores a primary with mismatched firmware. Confirm the group membership, serial numbers, management IPs and address mode before testing failover. The documented failover process takes about five minutes, but hardware and network stability can change the observed duration."
+        ],
+        [
+          "Promotion, recovery and evidence",
+          "In FortiNAC-M CA Management, Standby means the secondary is ready but not currently running for a primary; Promotion In Progress means it is attempting takeover; Promoted means it is running for a primary. When a failed primary returns, it does not automatically reclaim control: the primary remains Standby while the secondary remains Promoted until an administrator uses Resume Control. This prevents an unplanned automatic failback. Use <code>RunClient FailoverConsole getFailoverGroup</code> to verify group membership and the CA Management status to see role transitions. A green Manager-to-CA connection alone does not prove that the secondary's direct and indirect health checks are succeeding. Test from the secondary's perspective and confirm the specific ICMP/TCP health-check path. After recovery, manually resume control and verify the primary is Running and the secondary returns to Standby."
+        ]
+      ],
+      "word_count": 501,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortinac-f-ha.svg",
+        "drawio": "diagrams/2026-11-10/fortinac-f-ha.drawio"
+      }
+    },
+    {
+      "id": "fortiauthenticator-saml-sp",
+      "product": "FortiAuthenticator",
+      "subject": "SAML IdP per-service-provider authorization using LDAP group filters",
+      "primaryUrl": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/563028/fortiauthenticator-8-0-0",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community per-SP SAML authorization scenario was verified.",
+      "mechanism": "FortiAuthenticator evaluates each SAML service provider's remote LDAP group filter and suppresses IdP-initiated portal entries for users who are not authorized for that SP.",
+      "workflow": "User authenticates to IdP -> user/group source resolves -> SP-specific LDAP filter evaluates -> authorized SPs appear in portal -> selected SP receives assertion -> SP validates assertion.",
+      "failure": "User authenticates but sees no SP; group subtype or DN/filter is wrong; user retrieval returns no member; operator confuses SAML authentication with per-SP authorization.",
+      "evidence": "SP group-filter configuration and IdP portal visibility prove policy evaluation; authorization-denial system/GUI logs prove the filter denied access.",
+      "remediation": "Validate remote LDAP group subtype, DN/list/filter, user retrieval attribute, SP group filter and authorization-failure logs; test with users both inside and outside the group.",
+      "questionFingerprint": "LDAP directory group versus list versus advanced LDAP filter; portal hiding; authentication versus SP authorization.",
+      "diagramFingerprint": "Browser to FortiAuthenticator IdP, LDAP group lookup, per-SP authorization gate, then assertion to only an authorized service provider.",
+      "sections": [
+        [
+          "Authentication and authorization are separate",
+          "FortiAuthenticator can act as a SAML Identity Provider for service providers such as SaaS applications. In an IdP-initiated flow, the user first authenticates to the FortiAuthenticator portal and is then shown a list of participating SPs. FortiAuthenticator 8.0 adds per-SAML-SP authorization: a user can be authenticated to the IdP yet still be unauthorized for a particular service provider. The IdP portal hides an SP when the logged-in user fails that SP's configured group filter. This is a second decision after user authentication, not a different password method. The feature is especially useful when a single IdP portal serves multiple applications with different access groups."
+        ],
+        [
+          "LDAP group-filter model",
+          "The 8.0 Administration Guide changes the remote LDAP group-filter Subtype (previously labeled User retrieval) and documents three modes: LDAP directory group, List of users, and LDAP filter (advanced). LDAP directory group maps to a group object at a specified Distinguished Name. List of users provides an explicit user list. LDAP filter performs a custom query against the remote LDAP server and returns the member users. Selecting Set Group Filter imports the distinguished name of the selected LDAP group only; it does not prove that the filter is appropriate for every SP. Configure the group filter under Authentication &gt; User Management &gt; User Groups, then associate the relevant group filter with the SAML SP authorization configuration. Keep group membership and user lookup attributes consistent with the directory schema."
+        ],
+        [
+          "Portal behavior and audit evidence",
+          "In an IdP-initiated login, the browser reaches the IdP portal, authenticates, and receives the list of SPs for which the user is authorized. The user selects an SP; FortiAuthenticator generates the SAML assertion and sends the browser to that SP. If the group filter fails, the SP is hidden from the portal and FortiAuthenticator can display the SAML IdP Unauthorized SP replacement message. FortiAuthenticator 8.0 logs add/edit/delete operations for SP group filters and logs when SP access is denied because a group filter failed. These logs are important: successful IdP authentication does not prove that the user passed each SP's authorization filter. Likewise, a missing portal tile does not by itself prove that the SP is down."
+        ],
+        [
+          "Troubleshooting and scope boundaries",
+          "When a user reports that one application disappeared while other SAML applications still work, first verify that the user can authenticate to the IdP. Then inspect the SP-specific group filter, its subtype, the selected LDAP DN or advanced filter, and the returned user membership. Test one authorized and one unauthorized account. Review the system and GUI debug logs for the group filter used to construct the portal list and for the SP authorization denial. Check that the SP is configured for IdP-initiated assertion response if it should appear in the portal. This feature is explicitly about per-SP authorization in the IdP-initiated portal; do not assume that hiding a portal tile replaces authorization checks in every SP-initiated flow or on the SP itself. Validate both initiation paths where the application supports them."
+        ]
+      ],
+      "word_count": 477,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortiauthenticator-saml-sp.svg",
+        "drawio": "diagrams/2026-11-10/fortiauthenticator-saml-sp.drawio"
+      }
+    },
+    {
+      "id": "fortipam-approval",
+      "product": "FortiPAM",
+      "subject": "Secret approval profiles, tiered review, time-bounded launch and revocation",
+      "primaryUrl": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/650881/approval-flow",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community approval-flow incident was verified.",
+      "mechanism": "A secret/job request is gated by an approval profile with up to three tiers; tier thresholds, approvers, request window and launch behavior determine when the secret can be used.",
+      "workflow": "Secret enables approval -> requester submits Launcher or Job request -> tiered approvers review -> approval grants a bounded access window -> launch occurs only if configured/started -> revocation can terminate an active session.",
+      "failure": "Approval profile not attached; request option absent; wrong request type; approved request not launched because Start Upon Approval is disabled; remote group email suppressed by Trust Time.",
+      "evidence": "My Request List and Approval List show request/status; Launcher Status timer shows remaining access; approval audit comments and session termination prove revocation behavior.",
+      "remediation": "Verify secret-level approval requirement, selected profile, tier quorum, approver membership, time window, Start Upon Approval and remote-group Trust Time; test revocation with a nonproduction secret.",
+      "questionFingerprint": "three approval tiers; launcher versus job request; Start Upon Approval default; revoke-after-launch terminates session.",
+      "diagramFingerprint": "Requester -> FortiPAM request queue -> three-tier approval gate -> time-bounded secret launcher/job -> active session with revocation kill path.",
+      "sections": [
+        [
+          "Approval is an access workflow, not a secret permission",
+          "FortiPAM secrets do not require approval by default. To require review before a secret is launched, enable Requires Approval to Launch Secret on the secret and attach an approval profile. A separate Requires Approval to Launch Job control applies to jobs. The approval profile defines up to three tiers. Each tier identifies the number of approvals required and the users or user groups that can review the request. This creates a quorum-based workflow: a request can be routed through successive tiers rather than being granted merely because one reviewer clicked Approve. The profile can also constrain the maximum request duration and collect custom fields. The secret's normal access permissions still determine who can see/request it; approval adds a separate gate before launch."
+        ],
+        [
+          "Request transaction and timing",
+          "A requester can open a secret and select Request, or start from Secrets &gt; My Requests List. The request type is Launcher or Job. A Launcher request selects secrets with Requires Approval to Launch Secret enabled; a Job request is tied to a job whose secret has Requires Approval to Launch Job enabled. The requester specifies a start/end window or duration, comments and any required custom fields. Start Upon Approval is disabled by default. When enabled, the approver can allow the secret to launch automatically after approval and set a duration; the default duration is 30 minutes and the minimum is one minute. The approval profile can set a maximum request duration from 1 to 1,440 minutes. The approver's timezone is used by default, with an option to display the requestor's timezone."
+        ],
+        [
+          "Tier review, notification and revocation",
+          "Requests appear in My Request List and the approvers' Approval List. Approvers can approve or deny and add comments visible to the requester. Email notification is sent to reviewers when the request reaches their tier. For remote user groups, Remote Group Email can require a Trust Time: the user must have logged in to FortiPAM within the configured number of days to receive the notification. A value of zero removes that recent-login requirement. An approver can revoke approval; if the requester has already launched the secret, revocation immediately terminates the active secret session and resets the request so it must be approved again. This is a strong control: approval is not an irrevocable token that survives a later policy decision."
+        ],
+        [
+          "Verification and troubleshooting",
+          "If Request does not appear, inspect the secret settings for Requires Approval to Launch Secret/Job and confirm an approval profile is selected. If the request exists but is not progressing, inspect its tier, required approval count, approver user/group membership and notification eligibility. The Approval List shows request type, requester, creation/start/expiration times and duration; the requester list shows the corresponding status. After approval, the Launcher Status timer shows the remaining access time. For Job requests, inspect logs for script output. If an approved request does not launch automatically, check Start Upon Approval; approval alone does not imply immediate execution when that option is disabled. Test revocation against a lab secret and confirm the active session terminates and the request resets."
+        ]
+      ],
+      "word_count": 492,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortipam-approval.svg",
+        "drawio": "diagrams/2026-11-10/fortipam-approval.drawio"
+      }
+    },
+    {
+      "id": "fortisiem-aggregation",
+      "product": "FortiSIEM",
+      "subject": "Event aggregation, Group By attributes and threshold-based incident rules",
+      "primaryUrl": "https://docs.fortinet.com/document/fortisiem/7.4.2/user-guide/903877/creating-rules",
+      "scenarioUrl": null,
+      "sourceNote": "No directly matched recent Community event-aggregation rule troubleshooting scenario was verified.",
+      "mechanism": "Rule subpatterns filter normalized event attributes, group matching events by selected keys, apply aggregate functions/thresholds and populate incident attributes.",
+      "workflow": "Events normalized -> subpattern filters -> Group By partitions events -> aggregate expression threshold evaluates -> incident attributes populated -> incident created/cleared.",
+      "failure": "Wrong event attributes or parser; grouping key too broad/narrow; threshold never met; scheduled-rule engine limitation; incident attributes not mapped.",
+      "evidence": "Historical search proves matching events exist; rule test/incident proves rule fired; incident attributes show which group values were carried forward.",
+      "remediation": "Validate normalized fields, choose correct Group By keys, test aggregate expression with historical data, check ClickHouse/non-ClickHouse subpattern limits, and define incident attributes.",
+      "questionFingerprint": "group-by partitioning; COUNT versus COUNT DISTINCT; scheduled rule subpattern limit; incident attribute mapping.",
+      "diagramFingerprint": "normalized event stream split by filter, grouped by source/destination attributes, aggregate threshold gate, incident output and clear-condition loop.",
+      "sections": [
+        [
+          "From individual events to a behavioral incident",
+          "FortiSIEM rules can trigger on one event, but many operational detections need a count or distinct-value threshold across a set of matching events. Rule conditions are built from subpatterns containing event-attribute filters and aggregation functions. A subpattern defines which events are eligible; Group By attributes partition the matching events into independent groups; aggregate conditions apply a function such as COUNT or COUNT DISTINCT to each group and compare the result with an operator/value threshold. For example, ten matching events can trigger a rule without grouping, while one source contacting 100 distinct destination IPs requires grouping by Source IP and evaluating COUNT(DISTINCT Destination IP) >= 100. The grouping keys define the behavioral unit being measured."
+        ],
+        [
+          "Build the rule deliberately",
+          "Create the rule under RESOURCES &gt; Rules. Define the general rule identity, then build the condition subpatterns. Filters use normalized event attributes and values, similar to structured searches. Group By should include the attributes that define the actor or transaction cohort you want to measure. Aggregate Conditions are built with the Expression Builder: choose the function, operator and threshold. Define the incident attributes in the incident step, usually using the same group keys so the incident records the source or entity that crossed the threshold. FortiSIEM requires at least one incident definition before the rule can be saved. Exceptions and clear conditions are separate rule components; a noisy pattern can be filtered with exceptions, while clear conditions define when an existing incident should be cleared."
+        ],
+        [
+          "Engine and scheduling constraints",
+          "Subpatterns let a rule express multiple event patterns and relationships. FortiSIEM 7.4 documentation notes an important engine boundary: for Scheduled Rules on non-ClickHouse environments, only one subpattern is allowed. In ClickHouse environments, a scheduled rule can use FOLLOWED_BY and NOT_FOLLOWED_BY functions for subpatterns when Multiple Subpatterns is enabled. Do not copy a multi-subpattern rule into a non-ClickHouse scheduled environment and assume the same sequence semantics will execute. Check the deployment's data engine and rule type before designing the condition. Also avoid using attributes that the release notes identify as unavailable for incident attributes in 7.4.0; use supported event/group fields for the incident record."
+        ],
+        [
+          "Operational verification",
+          "For a scan-detection example, filter connection events, group by Source IP and Destination Port, and trigger when COUNT(DISTINCT Destination IP) exceeds the chosen threshold. Grouping only by Source IP may combine multiple services and create a broader signal; adding Destination Port narrows the behavior. Before enabling the rule, run a historical search with the same filter and grouping logic. Confirm that the normalized events contain the expected Source IP, Destination IP and Destination Port values; raw logs that parse incorrectly cannot satisfy the intended expression. After deployment, verify an incident is created and that its attributes identify the correct source and port. A historical search proves the events exist; it does not prove the rule schedule, threshold or incident mapping is correct. Inspect exceptions and clear conditions when incidents are suppressed or remain open unexpectedly."
+        ]
+      ],
+      "word_count": 476,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortisiem-aggregation.svg",
+        "drawio": "diagrams/2026-11-10/fortisiem-aggregation.drawio"
+      }
+    },
+    {
+      "id": "fortisase-dem",
+      "product": "FortiSASE",
+      "subject": "Digital Experience Monitoring: PoP-to-SaaS health and endpoint-to-PoP TCP latency",
+      "primaryUrl": "https://docs.fortinet.com/document/fortisase/latest/administration-guide/407866/digital-experience-monitoring",
+      "scenarioUrl": "https://community.fortinet.com/fortisase-58/troubleshooting-tip-zoom-and-teams-are-missing-on-the-digital-experience-monitoring-dashboard-217896",
+      "sourceNote": "Community troubleshooting tip dated November 11, 2025; it identifies a Feature-versus-Mature release channel issue affecting the SaaS application list, not a recent-30-day case.",
+      "mechanism": "DEM separates first-mile PoP-to-SaaS application health checks from managed-endpoint underlay TCP latency to the FortiSASE PoP.",
+      "workflow": "PoP health checks SaaS endpoint -> time-series metrics/drilldown; DEM agent reports endpoint-to-PoP TCP latency when endpoint is managed/online and steering bypass preserves underlay path.",
+      "failure": "SaaS application absent from catalogue; endpoint agent offline/unmanaged; tunnel captures the measurement path; subscription/trial gate; chart not yet populated.",
+      "evidence": "DEM dashboard history proves PoP-to-SaaS measurement; endpoint detail Network Metrics proves endpoint-to-PoP TCP latency; neither alone proves SaaS application-layer transaction success.",
+      "remediation": "Check release channel/application catalogue, subscription/trial, endpoint invitation/agent status, FQDN bypass to Turbo URL, and allow up to one day for data population.",
+      "questionFingerprint": "first-mile versus endpoint underlay; managed/online agent prerequisite; Turbo URL steering bypass; 24-hour population delay and beta caveat.",
+      "diagramFingerprint": "remote endpoint with DEM agent -> underlay TCP path -> FortiSASE PoP -> SaaS app; separate metric lanes for endpoint-to-PoP and PoP-to-SaaS.",
+      "sections": [
+        [
+          "Two measurement segments",
+          "FortiSASE Digital Experience Monitoring is designed to help isolate remote-user connectivity problems to common SaaS applications. The Network &gt; Digital Experience Monitoring page displays SaaS applications and health-check metrics for the first-mile path from the FortiSASE PoPs provisioned for the instance to those SaaS applications. Historical views can be filtered to one hour, one day, one week or two weeks, and an application can be drilled down into charts and tables and exported as CSV or JSON. This view helps determine whether traffic is passing through a PoP with good connectivity to the SaaS destination. It is not the same as measuring the user's local network to the PoP."
+        ],
+        [
+          "Endpoint-to-PoP underlay latency",
+          "FortiSASE also documents endpoint TCP-latency metrics for managed endpoints. The endpoint must have an active management connection through an invitation code, and the DEM agent must be installed with status Online. For tunnel-connected Windows endpoints, the guide instructs administrators to create an FQDN steering-bypass destination using the FortiSASE instance's Turbo URL. The Turbo URL can be obtained from the Base URL in Access &amp; Authentication &gt; SSO (the menu label differs between mature/feature interface versions). The bypass ensures the measurement is taken over the underlay path to the PoP rather than being obscured by the security tunnel. The chart can take up to one day to populate after enabling the feature. The TCP-latency endpoint view is documented as beta and is not enabled by default on new instances."
+        ],
+        [
+          "Prerequisites and subscription",
+          "The general DEM dashboard requires an Advanced or Comprehensive remote-users FortiSASE subscription. Standard or Not-for-Resale subscriptions can opt into a free 90-day DEM trial for up to ten endpoints. Endpoint measurements require endpoint management, invitation-code registration and an Online DEM agent. If the SaaS application list is missing an expected application, check the FortiSASE release channel and application catalogue before assuming the application is not in use. A Community troubleshooting tip documents Zoom and Teams missing from the Mature version dashboard and appearing after moving to the Feature version. That older article is a version/catalogue scenario, not evidence that every missing application is fixed by changing release channel."
+        ],
+        [
+          "Troubleshooting and interpretation",
+          "Start by deciding which segment is failing. If the PoP-to-SaaS dashboard is poor across multiple endpoints, investigate the PoP's first-mile path to the SaaS destination. If only one user has poor endpoint-to-PoP latency, inspect the user's local underlay, endpoint management status, agent status and steering bypass. If the endpoint chart is empty, confirm the endpoint is managed and Online, the Turbo URL bypass is configured for tunnel-connected Windows devices, and sufficient time has elapsed. A good endpoint-to-PoP TCP latency does not prove the SaaS application is healthy; a good PoP-to-SaaS metric does not prove the user's Wi-Fi or ISP path is healthy. Use both views to isolate the segment rather than treating a single green metric as end-to-end application proof."
+        ]
+      ],
+      "word_count": 462,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/fortisase-dem.svg",
+        "drawio": "diagrams/2026-11-10/fortisase-dem.drawio"
+      }
+    },
+    {
+      "id": "sdwan-bgp-tags",
+      "product": "Secure SD-WAN",
+      "subject": "BGP community-to-route-tag translation for dynamic SD-WAN destinations",
+      "primaryUrl": "https://docs.fortinet.com/document/fortigate/7.4.5/administration-guide/672387/using-bgp-tags-with-sd-wan-rules",
+      "scenarioUrl": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-use-bgp-and-sd-wan-for-advertising-routes-and-path-selection-in-fortigate-92773",
+      "sourceNote": "Community path-selection example is historical (FortiOS 6 era); used only as a scenario companion. The primary lesson follows the current 7.4.5 administration-guide configuration and 8.0 guide index.",
+      "mechanism": "Inbound BGP community is matched by a route map and translated into a local route tag; an SD-WAN route-tag address object/rule matches the dynamic BGP prefixes.",
+      "workflow": "Neighbor advertises prefix+community -> inbound community-list/route-map assigns route-tag -> route-tag address object matches learned prefix -> SD-WAN service selects eligible members.",
+      "failure": "Route map applied outbound instead of inbound; community mismatch; route tag not assigned; route-tag object missing; SD-WAN rule order or destination match incorrect.",
+      "evidence": "get router info bgp network shows community and RouteTag; diagnose sys sdwan service shows selected members; diagnose firewall proute list shows the matched service.",
+      "remediation": "Verify received community, attach route-map-in to the correct neighbor, confirm route tag, create the route-tag address object and inspect SD-WAN service/proute output.",
+      "questionFingerprint": "BGP community versus local route tag; route-map-in direction; 7.4+ route-tag address object; BGP table versus SD-WAN service evidence.",
+      "diagramFingerprint": "BGP neighbor advertises changing prefixes with community; inbound route-map assigns local tag; route-tag address object feeds SD-WAN service and member selection.",
+      "sections": [
+        [
+          "Why tag dynamic prefixes",
+          "A branch or data-center prefix set may change frequently. Hard-coding every prefix into an SD-WAN rule creates operational churn and can leave stale destinations behind. FortiOS can use BGP-learned routes as dynamic SD-WAN destinations by translating a BGP community into a local route tag. The BGP community is carried with the route by the neighbor; the route tag is a FortiGate routing attribute used locally for policy and SD-WAN matching. They are related but not the same attribute. The inbound route map matches the received community and applies <code>set-route-tag</code>. SD-WAN then uses that tag to identify the learned prefix set without requiring every prefix to be enumerated in the rule."
+        ],
+        [
+          "Configuration chain",
+          "First define a community list that matches the value advertised by the neighbor. Then create a route map rule that matches that community and sets a route tag. Apply that route map inbound on the BGP neighbor; applying <code>set-route-tag</code> outbound does not tag the routes learned from that peer. In FortiOS 7.4.5, the route tag is represented by a firewall address object of type <code>route-tag</code>, which is then referenced as the SD-WAN rule destination:<pre><code>config router community-list\n edit \"DC-COMM\"\n  config rule\n   edit 1\n    set action permit\n    set match \"30:5\"\n   next\n  end\n next\nend\nconfig router route-map\n edit \"COMM-TO-TAG\"\n  config rule\n   edit 1\n    set match-community \"DC-COMM\"\n    set set-route-tag 15\n   next\n  end\n next\nend\nconfig router bgp\n config neighbor\n  edit \"10.100.20.2\"\n   set remote-as 65020\n   set route-map-in \"COMM-TO-TAG\"\n  next\n end\nend\nconfig firewall address\n edit \"DC-TAG-15\"\n  set type route-tag\n  set route-tag 15\n next\nend\nconfig system sdwan\n config service\n  edit 10\n   set name \"DC-OVERLAY\"\n   set dst \"DC-TAG-15\"\n   set priority-members 2 1\n  next\n end\nend</code></pre>"
+        ],
+        [
+          "Evidence and failure isolation",
+          "Use <code>get router info bgp network</code> to inspect received prefixes, their BGP community and the RouteTag column. If the community is present but RouteTag is zero or absent, inspect the inbound route map and its match rule. If the route tag is present but the SD-WAN rule does not match, verify the route-tag address object and service destination, then inspect rule order and the service diagnostic. <code>diagnose sys sdwan service</code> shows service matching and selected members; <code>diagnose firewall proute list</code> shows policy-route entries tied to SD-WAN services. A BGP route appearing in the routing table proves reachability information exists; it does not prove the intended SD-WAN rule matched or that the desired member was selected."
+        ],
+        [
+          "Operational design",
+          "Use a distinct community/tag pair for each policy class, document the mapping, and keep the inbound route-map attached to the intended neighbor or peer group. Confirm the neighbor actually sends the expected community; do not assume a local prefix-list or outbound route map can manufacture the received tag. For IPv4 and IPv6, the FortiOS documentation supports route tags, but test both address families on the target release. If the design is upgraded from an older FortiOS release, review the SD-WAN rule syntax: FortiOS 7.4 replaces the older route-tag field in SD-WAN settings with route-tag address objects. After the change, validate the BGP table, route-tag object and SD-WAN service selection in that order. This isolates routing-policy errors from path-health or member-selection errors."
+        ]
+      ],
+      "word_count": 509,
+      "diagram": {
+        "svg": "diagrams/2026-11-10/sdwan-bgp-tags.svg",
+        "drawio": "diagrams/2026-11-10/sdwan-bgp-tags.drawio"
+      }
+    }
+  ]
+}

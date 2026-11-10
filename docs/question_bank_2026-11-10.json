@@ -1,0 +1,1462 @@
+{
+  "run_date": "2026-11-10",
+  "question_count": 50,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "topic": "DHCP smart relay",
+      "stem": "A client sends three DHCPDISCOVER messages without an offer. Which behavior should smart relay enter next?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "FortiGate forwards using the secondary IP relay targets and the secondary address as source.",
+          "feedback": "The unanswered-request threshold has been reached; the source identity changes for the next relay phase.",
+          "correct": true
+        },
+        {
+          "text": "FortiGate broadcasts the same request to every primary and secondary relay simultaneously.",
+          "feedback": "That describes parallel relay fan-out, not smart relay's sequential source-identity fallback.",
+          "correct": false
+        },
+        {
+          "text": "FortiGate disables DHCP relay until an administrator clears the client counter.",
+          "feedback": "Smart relay is an automatic retry mechanism; it does not require a manual reset after the threshold.",
+          "correct": false
+        },
+        {
+          "text": "FortiGate changes the client VLAN and restarts DHCP with a new subnet.",
+          "feedback": "The feature changes relay source identity and target, not the access VLAN or client subnet.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "topic": "DHCP smart relay",
+      "stem": "A debug trace shows requests forwarded from the secondary interface address, but no DHCPOFFER arrives. What is proven?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "The DHCP server selected the correct scope and reserved a lease for the client.",
+          "feedback": "A server offer or acknowledgement is needed to prove the server processed the request.",
+          "correct": false
+        },
+        {
+          "text": "The secondary fallback path was entered and FortiGate attempted to forward the request.",
+          "feedback": "The changed source proves the retry phase; it does not prove the DHCP server accepted the scope request.",
+          "correct": true
+        },
+        {
+          "text": "The client received an address and completed the DHCP four-message exchange.",
+          "feedback": "Forwarding is not the same as receiving an offer and acknowledgement at the client.",
+          "correct": false
+        },
+        {
+          "text": "The secondary relay address has no route because the source address changed.",
+          "feedback": "The trace proves a forwarding attempt; inspect route lookup and return traffic before diagnosing reachability.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "topic": "DHCP smart relay",
+      "stem": "Which command is the documented application-level diagnostic for the relay transaction sequence?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "diagnose debug application dnsproxy -1",
+          "feedback": "DNS proxy diagnostics do not expose the DHCP relay transaction path.",
+          "correct": false
+        },
+        {
+          "text": "diagnose debug application wad -1",
+          "feedback": "WAD is the web proxy daemon, not the DHCP relay process.",
+          "correct": false
+        },
+        {
+          "text": "diagnose debug application dhcprelay -1",
+          "feedback": "The dhcprelay application debug exposes transaction IDs, request receipt, relay source and forwarding decisions.",
+          "correct": true
+        },
+        {
+          "text": "diagnose debug application ike -1",
+          "feedback": "IKE debugging concerns IPsec negotiation rather than DHCP relay.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "topic": "DHCP smart relay",
+      "stem": "After three unanswered requests in the secondary phase, what should the documented state machine do?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Continue using the secondary source indefinitely until a DHCPACK arrives.",
+          "feedback": "The guide explicitly describes returning to the primary phase after three unanswered secondary requests.",
+          "correct": false
+        },
+        {
+          "text": "Send the request to both relay identities in a single packet.",
+          "feedback": "The feature does not define simultaneous primary/secondary relay fan-out.",
+          "correct": false
+        },
+        {
+          "text": "Delete the secondary IP configuration and disable smart relay.",
+          "feedback": "No configuration is removed; the retry sequence restarts with the primary identity.",
+          "correct": false
+        },
+        {
+          "text": "Return to the primary relay identity and restart the unanswered-request sequence.",
+          "feedback": "The documented fallback cycles back to primary after another three unanswered requests.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiManager",
+      "topic": "metadata mapping precedence",
+      "stem": "A device belongs to a group with value SITE-A but has a direct mapping SITE-B. Which value should the device receive?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "The per-device value SITE-B overrides the device-group mapping.",
+          "feedback": "FortiManager applies the more specific per-device mapping when one exists.",
+          "correct": true
+        },
+        {
+          "text": "The group value SITE-A always wins over any device-specific value.",
+          "feedback": "That reverses the documented precedence of a device-specific mapping.",
+          "correct": false
+        },
+        {
+          "text": "The ADOM default is used whenever both group and device mappings exist.",
+          "feedback": "The default is fallback when an applicable mapping is unavailable, not a higher-priority value.",
+          "correct": false
+        },
+        {
+          "text": "The variable is undefined because group and device mappings conflict.",
+          "feedback": "The mappings are designed to coexist; the direct device value is the specific override.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "topic": "metadata mapping scope",
+      "stem": "Which mapping scope is unavailable in the Global Database ADOM?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "Default values are unavailable in the Global Database ADOM.",
+          "feedback": "Default values are part of the variable definition and are not excluded by that limitation.",
+          "correct": false
+        },
+        {
+          "text": "Per-device mapping is unavailable in the Global Database ADOM.",
+          "feedback": "The guide distinguishes Global Database per-ADOM mapping from ordinary ADOM per-device mapping.",
+          "correct": true
+        },
+        {
+          "text": "Per-ADOM mapping is unavailable in the Global Database ADOM.",
+          "feedback": "The guide specifically makes per-ADOM mapping available in the Global Database ADOM.",
+          "correct": false
+        },
+        {
+          "text": "Variable import and export are unavailable in every ADOM.",
+          "feedback": "The guide documents JSON and CSV import/export of metadata variables.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "topic": "variable substitution",
+      "stem": "A template contains $site_subnet but install preview still shows the literal token. What should be checked first?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "Increase the variable value length beyond 32768 characters.",
+          "feedback": "The documented maximum is 32768 characters; length does not explain literal substitution.",
+          "correct": false
+        },
+        {
+          "text": "Convert the variable into a firewall address object before template rendering.",
+          "feedback": "Variables can be used in supported objects and templates; conversion is not the first diagnostic step.",
+          "correct": false
+        },
+        {
+          "text": "Confirm the field supports metadata variables and the target has an applicable mapping.",
+          "feedback": "Variable expansion is field-specific and mapping-dependent; a variable definition alone is insufficient.",
+          "correct": true
+        },
+        {
+          "text": "Disable the ADOM database and recreate the managed device.",
+          "feedback": "That is destructive and unrelated to checking field eligibility and mapping resolution.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "topic": "metadata variable API",
+      "stem": "A DELETE request returns a reference-in-use error. What is the safest next action?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Repeat DELETE with a different request ID until it succeeds.",
+          "feedback": "A new request ID does not remove the underlying reference dependency.",
+          "correct": false
+        },
+        {
+          "text": "Change the variable type from normal to password and retry.",
+          "feedback": "Changing type does not resolve an object or template reference.",
+          "correct": false
+        },
+        {
+          "text": "Delete the entire ADOM to clear the metadata reference.",
+          "feedback": "Deleting the ADOM is disproportionate and not the documented remediation.",
+          "correct": false
+        },
+        {
+          "text": "Find objects or templates referencing the variable, remove dependencies, then retry deletion.",
+          "feedback": "The API tip notes that a used variable must be checked for references before deletion.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiAnalyzer",
+      "topic": "aggregation versus forwarding",
+      "stem": "A DR FortiAnalyzer must receive a once-daily incremental copy from a collector. Which mode fits?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Aggregation mode between the two FortiAnalyzer units.",
+          "feedback": "Aggregation is designed for scheduled FAZ-to-FAZ transfer and avoids retransmitting logs already present.",
+          "correct": true
+        },
+        {
+          "text": "Forwarding mode to a CEF destination with a daily schedule.",
+          "feedback": "Forwarding and CEF are different destination/transfer semantics; aggregation is FAZ-to-FAZ only.",
+          "correct": false
+        },
+        {
+          "text": "Syslog output with a local archive retention rule.",
+          "feedback": "Syslog output does not provide the FAZ aggregation transaction or deduplication behavior.",
+          "correct": false
+        },
+        {
+          "text": "Event-handler automation that exports only incident records.",
+          "feedback": "Event handlers automate responses; they do not replicate the collected log archive.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "topic": "aggregation receiver",
+      "stem": "Which receiver-side setting must be enabled before a client can aggregate logs to it?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "set log-forward enable under config system global.",
+          "feedback": "That is not the documented aggregation acceptance control.",
+          "correct": false
+        },
+        {
+          "text": "set accept-aggregation enable under config system log-forward-service.",
+          "feedback": "The receiver must explicitly accept aggregation before the client transfer can complete.",
+          "correct": true
+        },
+        {
+          "text": "set mode aggregation under config system log-forward on the receiver.",
+          "feedback": "The mode is configured on the client; the receiver enables the aggregation service.",
+          "correct": false
+        },
+        {
+          "text": "set reliable enable under config system syslog.",
+          "feedback": "Reliable syslog is not the FAZ aggregation service.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "topic": "aggregation verification",
+      "stem": "Which command can trigger an immediate aggregation test without waiting for the daily hour?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "execute log-forward flush <id>",
+          "feedback": "That is not the documented aggregation test command.",
+          "correct": false
+        },
+        {
+          "text": "diagnose test application oftpd 99",
+          "feedback": "Restarting a service does not prove or initiate the intended aggregation job.",
+          "correct": false
+        },
+        {
+          "text": "execute log-aggregation <id>",
+          "feedback": "The command runs the selected client log-forward aggregation ID immediately.",
+          "correct": true
+        },
+        {
+          "text": "execute log backup all",
+          "feedback": "A local backup is not the same as client-to-server aggregation.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "topic": "aggregation semantics",
+      "stem": "Which statement correctly describes duplicate handling in aggregation mode?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "The receiver accepts every log again and relies on a report filter to hide duplicates.",
+          "feedback": "Deduplication is part of the aggregation transfer behavior, not merely a report filter.",
+          "correct": false
+        },
+        {
+          "text": "The client sends only logs that match a configured log filter.",
+          "feedback": "Aggregation mode does not support log filters.",
+          "correct": false
+        },
+        {
+          "text": "The client deletes local logs immediately after sending them.",
+          "feedback": "The mode forwards collected logs; it does not define immediate local deletion.",
+          "correct": false
+        },
+        {
+          "text": "The client sends logs not already present on the receiving FortiAnalyzer.",
+          "feedback": "The guide describes incremental transfer to avoid duplicating records already on the server.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "topic": "RA Guard device role",
+      "stem": "A host-facing access port emits an IPv6 Router Advertisement. What should a host-role RA-guard policy do?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Drop all RAs received from the host-role device.",
+          "feedback": "The guide states that if the device is a host, all RA messages are dropped.",
+          "correct": true
+        },
+        {
+          "text": "Forward the RA if the M flag is set.",
+          "feedback": "The host-role rule drops all RAs before treating the host as a router.",
+          "correct": false
+        },
+        {
+          "text": "Forward the RA only when its router preference is high.",
+          "feedback": "A host should not be advertising router information regardless of preference.",
+          "correct": false
+        },
+        {
+          "text": "Convert the RA into a DHCPv6 relay request.",
+          "feedback": "RA Guard filters RAs; it does not translate them into DHCPv6 messages.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "topic": "RA Guard criteria",
+      "stem": "Which object constrains the IPv6 prefix advertised inside an RA?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "An IPv6 access list matching the source link-local address.",
+          "feedback": "The access list constrains source addresses, not the advertised prefix.",
+          "correct": false
+        },
+        {
+          "text": "An IPv6 prefix list referenced by the RA-guard policy.",
+          "feedback": "The prefix list checks the prefix in the RA Prefix Information option.",
+          "correct": true
+        },
+        {
+          "text": "A DHCP snooping binding database.",
+          "feedback": "DHCP snooping bindings track address leases and are not the RA prefix policy object.",
+          "correct": false
+        },
+        {
+          "text": "An SD-WAN route-tag address object.",
+          "feedback": "Route-tag objects are unrelated to IPv6 RA inspection.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "topic": "RA Guard source policy",
+      "stem": "A legitimate router's RA is dropped even though its prefix is correct. Which policy input is worth checking next?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "The FortiSwitch PoE budget and LLDP power allocation.",
+          "feedback": "Power allocation does not affect RA Guard policy matching.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate DHCP relay server list.",
+          "feedback": "DHCP relay is a different control plane from IPv6 RA filtering.",
+          "correct": false
+        },
+        {
+          "text": "The source IPv6 access list, hop-limit range, flags and router preference.",
+          "feedback": "RA Guard evaluates multiple criteria; a correct prefix alone is not sufficient.",
+          "correct": true
+        },
+        {
+          "text": "The FortiSwitch MCLAG priority and ICL state.",
+          "feedback": "MCLAG split-brain settings do not determine RA policy criteria.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "topic": "RA Guard binding",
+      "stem": "The RA-guard policy exists and is correct, but rogue RAs still reach clients. What configuration gap is most likely?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "The IPv6 prefix list is stored in the wrong ADOM.",
+          "feedback": "FortiSwitch RA Guard is not managed through FortiManager ADOM metadata scope.",
+          "correct": false
+        },
+        {
+          "text": "The switch has not received an sFlow collector template.",
+          "feedback": "sFlow is telemetry export and does not activate RA Guard.",
+          "correct": false
+        },
+        {
+          "text": "The router has not sent a DHCPACK for the host.",
+          "feedback": "RA Guard enforcement does not depend on DHCP lease acknowledgement.",
+          "correct": false
+        },
+        {
+          "text": "The policy is not bound to the ingress interface and VLAN carrying the rogue RA.",
+          "feedback": "A policy object does not enforce until it is applied to the relevant port/VLAN.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP",
+      "topic": "802.11k function",
+      "stem": "What is the primary role of 802.11k assisted roaming in the FortiAP SSID options?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Provide neighboring-AP information so the client can evaluate roam candidates more efficiently.",
+          "feedback": "802.11k supplies neighbor/site information; the client still makes the roam decision.",
+          "correct": true
+        },
+        {
+          "text": "Force the client to reassociate to the AP with the lowest channel utilization.",
+          "feedback": "That describes steering pressure, not the neighbor-information function of 802.11k.",
+          "correct": false
+        },
+        {
+          "text": "Encrypt the backhaul between a mesh root and leaf AP.",
+          "feedback": "Mesh backhaul protection is unrelated to 802.11k neighbor reports.",
+          "correct": false
+        },
+        {
+          "text": "Replace RADIUS authentication with cached PMK material.",
+          "feedback": "802.11k does not replace the authentication method.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP",
+      "topic": "802.11v function",
+      "stem": "A client remains on a congested AP while a nearby AP has better RSSI. Which setting is intended to assist?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "802.11k alone, because neighbor information forces a roam.",
+          "feedback": "Neighbor information assists client choice but does not force reassociation.",
+          "correct": false
+        },
+        {
+          "text": "802.11v assisted roaming, subject to client behavior and the Fortinet implementation.",
+          "feedback": "Fortinet documents 802.11v as helping clients move from congested APs when a better AP is available.",
+          "correct": true
+        },
+        {
+          "text": "802.11r, because Fast BSS Transition chooses the least-congested AP.",
+          "feedback": "802.11r reduces transition authentication delay; it is not the steering decision mechanism.",
+          "correct": false
+        },
+        {
+          "text": "WIDS rogue AP detection, because it measures RSSI for all clients.",
+          "feedback": "WIDS is intrusion detection and does not provide the documented assisted-roaming function.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP",
+      "topic": "802.11r distinction",
+      "stem": "Which statement best distinguishes 802.11r from 802.11k neighbor assistance?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "802.11r chooses the best AP, while 802.11k encrypts the reassociation frame.",
+          "feedback": "That reverses their functions and assigns an encryption role to 802.11k.",
+          "correct": false
+        },
+        {
+          "text": "802.11r is the RADIUS attribute carrying the SSID to FortiNAC.",
+          "feedback": "RADIUS Attribute 30 is a separate identity-context requirement for FortiNAC auto-registration.",
+          "correct": false
+        },
+        {
+          "text": "802.11r accelerates transition authentication; 802.11k supplies neighboring-AP information.",
+          "feedback": "The protocols address different stages of roaming and can be configured separately.",
+          "correct": true
+        },
+        {
+          "text": "802.11r controls radio background scan intervals, while 802.11k controls channel power.",
+          "feedback": "Those are not the documented functions of the roaming protocols.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP",
+      "topic": "SSID capacity interaction",
+      "stem": "A profile rejects an eighth SSID while background scanning is enabled. What trade-off should be evaluated?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Increase the RADIUS server's maximum concurrent authentications.",
+          "feedback": "The reported limit is a FortiAP profile VAP capacity constraint, not a RADIUS session limit.",
+          "correct": false
+        },
+        {
+          "text": "Convert the SSID to a FortiNAC registration VLAN.",
+          "feedback": "VLAN role does not change the FortiAP per-radio VAP limit.",
+          "correct": false
+        },
+        {
+          "text": "Enable MLO on the radio to increase the VAP count automatically.",
+          "feedback": "Multi-Link Operation does not override the documented background-scan VAP constraint.",
+          "correct": false
+        },
+        {
+          "text": "The documented seven-VAP limit with scanning versus eight when scanning is disabled.",
+          "feedback": "The Community tip describes this capacity interaction; disabling roaming assistance may remove mobility benefits.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "topic": "auto-registration attribute",
+      "stem": "Which RADIUS attribute must carry the SSID value for FortiNAC per-SSID Dot1x Auto Registration?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Attribute 30, Called-Station-Id, with the SSID value included.",
+          "feedback": "The FortiNAC guide explicitly requires RADIUS Attribute 30 to include the SSID value.",
+          "correct": true
+        },
+        {
+          "text": "Attribute 1, User-Name, containing the employee's login name.",
+          "feedback": "User-Name identifies the authenticated identity, not the SSID context required by the feature.",
+          "correct": false
+        },
+        {
+          "text": "Attribute 8, Framed-IP-Address, containing the assigned client address.",
+          "feedback": "The assigned IP address is not the SSID identifier used by auto-registration.",
+          "correct": false
+        },
+        {
+          "text": "Attribute 26, Vendor-Specific, containing the FortiAP serial number.",
+          "feedback": "The documented requirement is Attribute 30 with the SSID value.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "topic": "registration order",
+      "stem": "After successful 802.1X authentication, when does FortiNAC perform the automatic host-user registration?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "Only after the host receives its final production VLAN.",
+          "feedback": "That would place registration after the policy decision, contrary to the documented order.",
+          "correct": false
+        },
+        {
+          "text": "Before the network access policy is determined.",
+          "feedback": "The guide specifies that host registration to the authenticated user occurs before policy determination.",
+          "correct": true
+        },
+        {
+          "text": "Before the RADIUS Access-Request reaches the authentication server.",
+          "feedback": "The feature depends on successful 802.1X authentication first.",
+          "correct": false
+        },
+        {
+          "text": "Only after the endpoint completes a compliance scan.",
+          "feedback": "Compliance scanning is a separate host-state/policy input.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "topic": "evidence boundary",
+      "stem": "A RADIUS Access-Accept is observed, but the endpoint remains unregistered. What evidence should be checked next?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "The FortiSwitch PoE power consumption for the AP port.",
+          "feedback": "PoE telemetry does not prove RADIUS SSID context or host registration.",
+          "correct": false
+        },
+        {
+          "text": "The FortiAnalyzer aggregation schedule for the wireless logs.",
+          "feedback": "Log forwarding does not create the host-user association.",
+          "correct": false
+        },
+        {
+          "text": "The request's Attribute 30 SSID value and the FortiNAC host-user association.",
+          "feedback": "Authentication success does not prove that the SSID auto-registration step occurred.",
+          "correct": true
+        },
+        {
+          "text": "The FortiGate BGP route tag for the wireless subnet.",
+          "feedback": "Route tags affect SD-WAN route matching, not FortiNAC registration.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "topic": "SSID scope",
+      "stem": "Dot1x Auto Registration is enabled on one SSID, but not another. What should be expected?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Every SSID on the controller inherits the setting automatically.",
+          "feedback": "The guide describes the setting per SSID, not as a controller-wide default.",
+          "correct": false
+        },
+        {
+          "text": "All RADIUS users are registered regardless of SSID value.",
+          "feedback": "The feature requires the SSID value in Attribute 30.",
+          "correct": false
+        },
+        {
+          "text": "The setting applies only to wired switch ports.",
+          "feedback": "The source feature is explicitly part of SSID configuration.",
+          "correct": false
+        },
+        {
+          "text": "Only requests mapped to the enabled SSID and carrying its Attribute 30 value use the feature.",
+          "feedback": "The setting is per SSID, and the request must identify the corresponding SSID.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "topic": "N+1 health checks",
+      "stem": "In FortiNAC-F N+1 failover, who performs the primary CA health checks?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "The secondary CA performs direct and indirect checks; FortiNAC-M manages the group.",
+          "feedback": "The guide states that health checks are performed by the secondary, not the Manager.",
+          "correct": true
+        },
+        {
+          "text": "FortiNAC-M performs every health check and commands promotion.",
+          "feedback": "FortiNAC-M manages group visibility, but the secondary makes the health-check decision.",
+          "correct": false
+        },
+        {
+          "text": "Each primary checks itself and votes with the Manager.",
+          "feedback": "The documented direct/indirect checks originate from the secondary CA.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate gateway performs the checks and triggers the CA promotion.",
+          "feedback": "The 7.6.3 refinement removes the need for gateway-check logic.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "topic": "direct and indirect checks",
+      "stem": "The secondary cannot reach Primary A directly, but Primary B can reach A and reports it healthy. What should happen?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "The secondary must promote immediately after any direct-check failure.",
+          "feedback": "Promotion requires both direct and indirect checks to fail.",
+          "correct": false
+        },
+        {
+          "text": "Failover should not be triggered because the indirect health check succeeds.",
+          "feedback": "The indirect check prevents a false promotion caused by one failed network path.",
+          "correct": true
+        },
+        {
+          "text": "Primary B should be promoted instead of the standby secondary.",
+          "feedback": "Primary B is used as an indirect checker, not as the standby takeover node.",
+          "correct": false
+        },
+        {
+          "text": "The Manager should remove Primary A from the N+1 group automatically.",
+          "feedback": "A successful indirect check is evidence that the primary remains reachable.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "topic": "7.6.3 health check types",
+      "stem": "Which health-check types remain in the FortiNAC-F 7.6.3 refinement?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "RADIUS and TCP echo only.",
+          "feedback": "Those are the two check types the 7.6.3 refinement removes.",
+          "correct": false
+        },
+        {
+          "text": "HTTP and DNS application checks.",
+          "feedback": "The release note identifies ICMP and TCP on a specific port, not HTTP/DNS.",
+          "correct": false
+        },
+        {
+          "text": "ICMP and TCP on a specific port.",
+          "feedback": "The 7.6.3 release notes state that RADIUS and TCP echo were removed from the custom check types.",
+          "correct": true
+        },
+        {
+          "text": "SNMP polling and LDAP bind checks.",
+          "feedback": "Those are not the retained N+1 health-check types.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "topic": "recovery control",
+      "stem": "A failed primary returns online after the secondary is promoted. What restores the original role arrangement?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Wait for automatic preemption as soon as the primary pings.",
+          "feedback": "The documented recovery process requires manual reactivation of the primary.",
+          "correct": false
+        },
+        {
+          "text": "Delete and recreate the N+1 group to force the primary active.",
+          "feedback": "Recreating the group is not the documented recovery action.",
+          "correct": false
+        },
+        {
+          "text": "Reboot the Manager so it elects the original primary.",
+          "feedback": "The Manager does not perform the health-check election.",
+          "correct": false
+        },
+        {
+          "text": "Manually use Resume Control on the primary/secondary workflow and verify statuses.",
+          "feedback": "The guide states the recovered primary remains Standby until an administrator resumes control.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "topic": "per-SP authorization",
+      "stem": "A user authenticates to the IdP but one application tile is hidden. What is the first policy object to inspect?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "The SAML service provider's remote LDAP group filter and subtype.",
+          "feedback": "Per-SP authorization hides applications when the user fails that SP's group filter.",
+          "correct": true
+        },
+        {
+          "text": "The user's password policy and local password expiry.",
+          "feedback": "Successful IdP authentication already occurred; the failure is per-SP authorization.",
+          "correct": false
+        },
+        {
+          "text": "The SP's TLS cipher preference and server certificate chain.",
+          "feedback": "Those may affect assertion transport/trust, but do not explain a group-filtered portal tile.",
+          "correct": false
+        },
+        {
+          "text": "The FortiAuthenticator REST API local-user endpoint.",
+          "feedback": "Local-user CRUD is separate from SAML SP authorization.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "topic": "LDAP filter subtype",
+      "stem": "Which subtype performs a custom LDAP query that returns the member users?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "LDAP directory group.",
+          "feedback": "That maps to a group object at a specified distinguished name.",
+          "correct": false
+        },
+        {
+          "text": "LDAP filter (advanced).",
+          "feedback": "The guide defines this subtype as a custom filter query against the remote LDAP server.",
+          "correct": true
+        },
+        {
+          "text": "List of users.",
+          "feedback": "That is an explicit user-list source, not a dynamic LDAP query.",
+          "correct": false
+        },
+        {
+          "text": "Global Authorization.",
+          "feedback": "That is the renamed column for user-source authorization, not a filter subtype.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "topic": "IdP portal behavior",
+      "stem": "What does FortiAuthenticator do when a user fails a particular SP group filter in the IdP-initiated portal?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "It disables the user's entire SAML account across every service provider.",
+          "feedback": "The filter is per SP, so other authorized applications can remain available.",
+          "correct": false
+        },
+        {
+          "text": "It sends an empty assertion to the SP and lets the SP decide.",
+          "feedback": "The documented portal behavior is to hide the unauthorized SP.",
+          "correct": false
+        },
+        {
+          "text": "It hides that SP from the portal and can log the authorization denial.",
+          "feedback": "The 8.0 feature hides unauthorized SPs and records filter-denial events.",
+          "correct": true
+        },
+        {
+          "text": "It changes the user's LDAP group membership automatically.",
+          "feedback": "The feature evaluates membership; it does not rewrite the directory.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "topic": "authentication versus authorization",
+      "stem": "Which statement correctly separates IdP authentication from per-SP authorization?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Successful IdP login automatically authorizes every configured SP.",
+          "feedback": "Per-SP authorization exists specifically to restrict individual service providers.",
+          "correct": false
+        },
+        {
+          "text": "The SP group filter validates the user's password against LDAP.",
+          "feedback": "The password is part of authentication; the filter determines group-based SP access.",
+          "correct": false
+        },
+        {
+          "text": "A hidden SP proves the SAML signing certificate is expired.",
+          "feedback": "A hidden tile can result from group-filter denial, not necessarily certificate failure.",
+          "correct": false
+        },
+        {
+          "text": "Successful IdP login proves identity authentication, while each SP group filter makes a separate access decision.",
+          "feedback": "The 8.0 enhancement adds an authorization check after the user authenticates to the IdP.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "topic": "approval tiers",
+      "stem": "What is the maximum number of approval tiers supported by a FortiPAM approval profile?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Three tiers, each with its own required approvals and reviewer users/groups.",
+          "feedback": "The FortiPAM 1.9 guide documents up to three approval tiers.",
+          "correct": true
+        },
+        {
+          "text": "One tier with an unlimited number of parallel reviewers.",
+          "feedback": "The product supports multiple sequential tiers, up to three.",
+          "correct": false
+        },
+        {
+          "text": "Five tiers, each requiring one administrator approval.",
+          "feedback": "The documented maximum is three tiers, not five.",
+          "correct": false
+        },
+        {
+          "text": "Two tiers that can only contain local users.",
+          "feedback": "Each tier can include users and user groups; the limit is three.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "topic": "Start Upon Approval",
+      "stem": "A request is approved but no launcher starts automatically. Which setting explains this?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "The approver has not changed the request timezone.",
+          "feedback": "Timezone display does not control whether a secret launches automatically.",
+          "correct": false
+        },
+        {
+          "text": "Start Upon Approval is disabled, which is the default.",
+          "feedback": "Approval and automatic launch are separate; the default does not auto-start the secret.",
+          "correct": true
+        },
+        {
+          "text": "The secret's password verification interval has expired.",
+          "feedback": "Password verification is a separate secret-maintenance workflow.",
+          "correct": false
+        },
+        {
+          "text": "The request type was Launcher rather than Job.",
+          "feedback": "Both Launcher and Job requests can use approval; Start Upon Approval controls automatic launch.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "topic": "revocation semantics",
+      "stem": "An approver revokes an approval after the requester has launched the secret. What happens?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "The session continues until the originally approved end time.",
+          "feedback": "Revocation is immediate and terminates an already launched session.",
+          "correct": false
+        },
+        {
+          "text": "Only future requests are denied; the current request remains approved.",
+          "feedback": "The current approval is revoked and the request must be approved again.",
+          "correct": false
+        },
+        {
+          "text": "The active secret session is immediately terminated and the request resets.",
+          "feedback": "The approval guide explicitly describes session termination and request reset after revocation.",
+          "correct": true
+        },
+        {
+          "text": "The secret password is automatically rotated before the session ends.",
+          "feedback": "Revocation terminates access; it does not define a password-change action.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "topic": "request type",
+      "stem": "Which request type is tied to a job whose secret has Requires Approval to Launch Job enabled?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Launcher request; the requester manually selects an unrelated secret.",
+          "feedback": "Launcher requests select secrets; Job requests bind to the job's associated secret.",
+          "correct": false
+        },
+        {
+          "text": "Session recording request; the secret is selected from the audit log.",
+          "feedback": "Session recording is a secret setting, not an approval request type.",
+          "correct": false
+        },
+        {
+          "text": "Password verification request; the password changer creates the request.",
+          "feedback": "Password verification is separate from the approval workflow.",
+          "correct": false
+        },
+        {
+          "text": "Job request; the job's associated secret is selected automatically.",
+          "feedback": "The Make a Request guide distinguishes Launcher and Job requests and their secret linkage.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "topic": "Group By",
+      "stem": "A rule should count distinct destination IPs separately for each source. Which Group By key is essential?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Source IP, so each source has an independent aggregate bucket.",
+          "feedback": "Grouping by source separates one host's behavior from every other host.",
+          "correct": true
+        },
+        {
+          "text": "Event Receive Time only, so all sources share one time bucket.",
+          "feedback": "That groups by time rather than actor and can combine unrelated sources.",
+          "correct": false
+        },
+        {
+          "text": "Destination IP, so each destination is counted as a separate source.",
+          "feedback": "That reverses the intended actor/destination relationship.",
+          "correct": false
+        },
+        {
+          "text": "Incident Status, so open incidents are counted separately.",
+          "feedback": "Incident status is not the source identity used for the event aggregation.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "topic": "aggregate function",
+      "stem": "Which expression detects at least 100 distinct destination IPs from the same source?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "COUNT(Destination IP) >= 100 with no grouping.",
+          "feedback": "That can count repeated events and combine multiple source hosts.",
+          "correct": false
+        },
+        {
+          "text": "COUNT(DISTINCT Destination IP) >= 100 grouped by Source IP.",
+          "feedback": "Distinct count avoids counting repeated connections to the same destination as new destinations.",
+          "correct": true
+        },
+        {
+          "text": "SUM(Destination IP) >= 100 grouped by destination port.",
+          "feedback": "IP addresses are not summed as a meaningful scan threshold.",
+          "correct": false
+        },
+        {
+          "text": "MAX(Destination IP) >= 100 grouped by Event Type.",
+          "feedback": "A maximum value does not measure the number of distinct destinations.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "topic": "scheduled rule engine",
+      "stem": "A scheduled rule on a non-ClickHouse deployment needs two subpatterns with FOLLOWED_BY. What limitation applies?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "All scheduled rules support unlimited subpatterns on every engine.",
+          "feedback": "The multiple-subpattern sequence behavior is engine-dependent.",
+          "correct": false
+        },
+        {
+          "text": "FOLLOWED_BY is supported only by streaming rules on non-ClickHouse.",
+          "feedback": "The documented exception specifically allows ClickHouse scheduled rules with Multiple Subpatterns.",
+          "correct": false
+        },
+        {
+          "text": "Non-ClickHouse scheduled rules allow only one subpattern.",
+          "feedback": "The 7.4 guide documents the one-subpattern limit for scheduled rules in non-ClickHouse environments.",
+          "correct": true
+        },
+        {
+          "text": "The rule must be converted into an event handler in FortiAnalyzer.",
+          "feedback": "That is a different product and does not change FortiSIEM engine limits.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "topic": "incident attributes",
+      "stem": "A rule fires but the incident does not identify the source host. What should be reviewed?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Increase the aggregate threshold so the source is included automatically.",
+          "feedback": "Threshold changes do not populate missing incident attributes.",
+          "correct": false
+        },
+        {
+          "text": "Change the event parser to emit the incident ID as Source IP.",
+          "feedback": "That would corrupt event semantics and does not map the grouped value.",
+          "correct": false
+        },
+        {
+          "text": "Disable the clear condition so the source stays visible.",
+          "feedback": "Clear conditions do not populate incident fields.",
+          "correct": false
+        },
+        {
+          "text": "Map the subpattern's Group By source attribute into the incident attributes.",
+          "feedback": "The incident definition should carry the group values that identify the triggering cohort.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "topic": "DEM first mile",
+      "stem": "Which path does the main FortiSASE DEM SaaS application dashboard measure?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "The first-mile path from provisioned FortiSASE PoPs to the SaaS applications.",
+          "feedback": "The main dashboard reports health-check metrics between PoPs and SaaS endpoints.",
+          "correct": true
+        },
+        {
+          "text": "The user's Wi-Fi radio to the local access switch.",
+          "feedback": "That is a local LAN segment, not the PoP-to-SaaS measurement.",
+          "correct": false
+        },
+        {
+          "text": "The endpoint's TCP path to the PoP underlay only.",
+          "feedback": "That is the separate managed-endpoint Network Metrics view.",
+          "correct": false
+        },
+        {
+          "text": "The SaaS application's internal database query time.",
+          "feedback": "The documented metric is network health to the application, not its internal transaction latency.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "topic": "endpoint DEM prerequisites",
+      "stem": "Which endpoint state is required for the documented TCP latency chart?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "The endpoint is unmanaged but has a browser session to the portal.",
+          "feedback": "A browser login does not substitute for endpoint management and the DEM agent.",
+          "correct": false
+        },
+        {
+          "text": "The endpoint is managed through an invitation code and its DEM agent is Online.",
+          "feedback": "The guide lists an active management connection and Online DEM agent as prerequisites.",
+          "correct": true
+        },
+        {
+          "text": "The endpoint is offline but has a cached certificate.",
+          "feedback": "The agent must be Online to provide endpoint metrics.",
+          "correct": false
+        },
+        {
+          "text": "The endpoint has a FortiGate DHCP lease but no DEM agent.",
+          "feedback": "A DHCP lease does not provide the endpoint measurement agent.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "topic": "underlay steering bypass",
+      "stem": "Why add an FQDN steering bypass for the FortiSASE Turbo URL on tunnel-connected Windows endpoints?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "To bypass all security inspection for every SaaS application.",
+          "feedback": "The documented bypass is specific to the Turbo URL measurement path.",
+          "correct": false
+        },
+        {
+          "text": "To force the endpoint to use a different SaaS application catalogue.",
+          "feedback": "The bypass affects measurement routing, not application discovery.",
+          "correct": false
+        },
+        {
+          "text": "To keep the TCP latency measurement on the underlay path to the PoP.",
+          "feedback": "The bypass prevents the tunnel from obscuring the intended underlay measurement.",
+          "correct": true
+        },
+        {
+          "text": "To make the DEM agent report only the tunnel's encrypted packet size.",
+          "feedback": "The purpose is to measure underlay TCP latency, not packet size.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "topic": "application catalogue",
+      "stem": "Zoom and Teams are missing from a DEM dashboard in the Mature version. What does the cited Community tip identify?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "A local firewall policy is blocking the endpoint's DNS queries.",
+          "feedback": "The cited case was resolved by moving to the Feature version, not a local policy change.",
+          "correct": false
+        },
+        {
+          "text": "The DEM agent must be reinstalled on every endpoint.",
+          "feedback": "The issue was application visibility in the dashboard, not agent installation.",
+          "correct": false
+        },
+        {
+          "text": "The PoP health-check history must be cleared before applications appear.",
+          "feedback": "The tip identifies version channel, not stale metric history.",
+          "correct": false
+        },
+        {
+          "text": "The Feature version displays them after an upgrade from the Mature version.",
+          "feedback": "The 2025 tip documents a release-channel application-list difference.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "topic": "community versus route tag",
+      "stem": "What is the relationship between a BGP community and a FortiGate route tag?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "The route map matches the received community and assigns a local route tag for SD-WAN matching.",
+          "feedback": "The community is carried with BGP; the FortiGate route tag is local metadata set by policy.",
+          "correct": true
+        },
+        {
+          "text": "The route tag is a standard BGP path attribute advertised unchanged to every peer.",
+          "feedback": "The documentation distinguishes local route tags from BGP communities.",
+          "correct": false
+        },
+        {
+          "text": "The BGP community is inserted by the SD-WAN service after path selection.",
+          "feedback": "The community arrives with the BGP route; the inbound route map translates it.",
+          "correct": false
+        },
+        {
+          "text": "The route tag is the same as an IPv4 destination prefix.",
+          "feedback": "A route tag labels a set of learned routes; it is not a prefix.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "topic": "route-map direction",
+      "stem": "A BGP community is received correctly but the learned route has no tag. Which attachment is most important?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "Attach the route map outbound on the neighbor only.",
+          "feedback": "An outbound route map does not tag the routes learned from that peer.",
+          "correct": false
+        },
+        {
+          "text": "Attach the community-matching route map inbound on the neighbor.",
+          "feedback": "The route map must process received routes to assign the local route tag.",
+          "correct": true
+        },
+        {
+          "text": "Attach the route map to the SD-WAN service instead of BGP.",
+          "feedback": "The tag is assigned during BGP route processing before SD-WAN matches it.",
+          "correct": false
+        },
+        {
+          "text": "Attach the route map to a firewall policy after NAT.",
+          "feedback": "Firewall policy evaluation does not assign the BGP route tag.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "topic": "route-tag address object",
+      "stem": "In FortiOS 7.4.5, how is a tagged BGP destination referenced by an SD-WAN service?",
+      "correctIndex": 2,
+      "options": [
+        {
+          "text": "Create a normal subnet address for every learned prefix manually.",
+          "feedback": "The purpose is to avoid hard-coding dynamic prefixes one by one.",
+          "correct": false
+        },
+        {
+          "text": "Use the BGP community string directly as an IP address object.",
+          "feedback": "A community is not a destination subnet and is translated to a route tag.",
+          "correct": false
+        },
+        {
+          "text": "Create a firewall address object of type route-tag and use it as the service destination.",
+          "feedback": "The 7.4.5 guide documents route-tag address objects for SD-WAN destination matching.",
+          "correct": true
+        },
+        {
+          "text": "Create an ISDB custom application signature for the route tag.",
+          "feedback": "ISDB application matching is unrelated to BGP route-tag destination objects.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "topic": "route-tag verification",
+      "stem": "Which pair of checks best separates tag assignment from SD-WAN member selection?",
+      "correctIndex": 3,
+      "options": [
+        {
+          "text": "Check only the firewall policy hit counter and assume the route tag matched.",
+          "feedback": "A policy hit does not prove the intended SD-WAN rule or member selection.",
+          "correct": false
+        },
+        {
+          "text": "Check only the BGP neighbor state and assume every prefix is tagged.",
+          "feedback": "An established neighbor does not prove route-map matching or tag assignment.",
+          "correct": false
+        },
+        {
+          "text": "Check only interface link status and assume the dynamic destination is correct.",
+          "feedback": "Link state does not prove the BGP tag or service destination match.",
+          "correct": false
+        },
+        {
+          "text": "Inspect the BGP table's RouteTag field, then inspect the SD-WAN service's selected members.",
+          "feedback": "The BGP table proves tag assignment; the SD-WAN service diagnostic proves rule/member selection.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Cross-product",
+      "topic": "configuration versus runtime evidence",
+      "stem": "A FortiManager variable is mapped and a FortiAnalyzer aggregation job is configured. Which evidence proves each runtime outcome?",
+      "correctIndex": 0,
+      "options": [
+        {
+          "text": "Rendered install preview proves variable resolution; destination Log View proves transferred logs were indexed.",
+          "feedback": "The two checks validate different runtime stages rather than relying on configuration presence alone.",
+          "correct": true
+        },
+        {
+          "text": "The variable list and log-forward ID list prove both outcomes completely.",
+          "feedback": "Those views prove configuration objects exist, not that values rendered or logs arrived.",
+          "correct": false
+        },
+        {
+          "text": "The FortiManager device online flag and FortiAnalyzer disk quota prove both outcomes.",
+          "feedback": "Device reachability and quota are prerequisites, not end-to-end success evidence.",
+          "correct": false
+        },
+        {
+          "text": "A single ping to both appliances proves both workflows completed.",
+          "feedback": "ICMP reachability does not validate template substitution or log transfer/indexing.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Cross-product",
+      "topic": "authentication versus authorization",
+      "stem": "A user passes 802.1X but is not auto-registered in FortiNAC; another user authenticates to FortiAuthenticator but cannot see an SP. What is common?",
+      "correctIndex": 1,
+      "options": [
+        {
+          "text": "Both failures are caused by an expired TLS certificate on the access point.",
+          "feedback": "The two symptoms involve distinct post-authentication policy inputs.",
+          "correct": false
+        },
+        {
+          "text": "Authentication succeeded, but a separate context/authorization step still needs verification.",
+          "feedback": "Both workflows have a post-authentication decision that can fail independently of credential validation.",
+          "correct": true
+        },
+        {
+          "text": "Both products require the same RADIUS Attribute 30 value for every SAML SP.",
+          "feedback": "Attribute 30 is the FortiNAC SSID requirement, not a universal SAML authorization input.",
+          "correct": false
+        },
+        {
+          "text": "Successful authentication guarantees every downstream access decision.",
+          "feedback": "Both examples demonstrate that authentication and authorization/registration are separate.",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}
