@@ -1,0 +1,296 @@
+{
+  "schema_version": "1.0",
+  "created_at_local": "2026-11-11T07:55:12-08:00",
+  "inventory_source": "docs/exclusion_inventory_2026-11-11-07-55.json (216 lesson records from actual published HTML; status-only and candidate-only artifacts separated)",
+  "community_sweep_window": "2026-10-12 through 2026-11-11",
+  "products_searched": [
+    "FortiGate",
+    "FortiManager",
+    "FortiAnalyzer",
+    "FortiSwitch",
+    "FortiAP/Wireless",
+    "FortiNAC",
+    "FortiNAC-F",
+    "FortiAuthenticator",
+    "FortiPAM",
+    "FortiSIEM",
+    "FortiSASE",
+    "Secure SD-WAN"
+  ],
+  "selected_count": 12,
+  "semantic_uniqueness_passed": 12,
+  "records": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "IPv6 PIM-SM Bootstrap Router (BSR) and dynamic Rendezvous Point discovery",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/128977/ipv6-multicast-routing-bsr-support-new",
+      "new_features_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/128977/ipv6-multicast-routing-enhancement-with-bsr-support-added",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "PIM6 BSR candidate election and BSR advertisement carry candidate-RP set; routers learn RP-to-group mappings dynamically; optional static RP and per-VRF global settings remain distinct.",
+      "workflow_transaction_fingerprint": "Receiver joins IPv6 group; PIM-SM routers use BSR-distributed RP mapping for shared-tree registration and later source-tree transition; candidate priority/hash and group ACL constrain mapping.",
+      "failure_class": "No RP mapping, wrong RP/group scope, BSR not elected/reachable, or VRF-scoped control-plane mismatch.",
+      "evidence_pattern": "PIM6 BSR router, RP mapping, RP hash, multicast route and MLD group outputs; verify control-plane mapping separately from receiver membership and data-plane forwarding.",
+      "remediation_path": "Enable multicast routing and PIM6 on participating interfaces; configure BSR interface/candidate and candidate-RP group/priority; verify BSR and RP mappings per VRF; use static RP only as an intentional fallback.",
+      "question_fingerprint": "Distinguish receiver MLD membership from BSR election and RP mapping; infer which control-plane object is missing.",
+      "diagram_topology_layout_fingerprint": "Three-router IPv6 multicast topology: two BSR/RP candidates, one receiver edge; BSR advertisements, RP-set mapping, shared tree and receiver branch.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Earlier multicast TTL and IPv4/IPv6 group forwarding lessons do not cover PIM6 BSR election or dynamic RP discovery."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Local certificate template validity, managed-device renewal and expiry notifications",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/549422/certificate-templates",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/344863/managing-certificates-templates",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/824249/renewing-local-certificates",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/997919/local-certificates-lifecycle-management-set-validity-and-renew-and-expiry-notification-alerts"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Per-ADOM FortiManager local CA signs device-generated CSRs; Local certificate templates define validity; Certificate Operations renews selected device certificates; expiry notification identifies managed-device certificates within 30 days.",
+      "workflow_transaction_fingerprint": "Create Local template -> device generates CSR during VPN topology install -> FortiManager CA signs -> certificate and CA public certificate installed -> later renew selected device certificates from Certificate Operations.",
+      "failure_class": "Expired/near-expiry device certificate, wrong template type, missing Feature Visibility, or mismatch between device certificate and CA trust.",
+      "evidence_pattern": "Template Type/Validity, certificate operations device list/expiry dates, notification count and per-device certificate details; these prove inventory/renewal state but not successful peer trust until the installed chain is verified.",
+      "remediation_path": "Enable Certificate feature visibility; use Local template when FortiManager-managed validity/renewal is required; confirm correct ADOM and device selection; renew, then verify the installed certificate chain and VPN authentication.",
+      "question_fingerprint": "Identify Local versus External template capability, 30-day notification boundary, and CSR signing sequence.",
+      "diagram_topology_layout_fingerprint": "FortiManager per-ADOM CA, certificate template, FortiGate CSR, signed leaf/CA certificate install, expiry alert and renewal loop.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiManager lessons cover ADOM/workspace and install workflows; certificate lifecycle automation is not in the 216 lesson inventory."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Machine-learning anomaly detection: historical training, artifact validation and live inference",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/150557/machine-learning-for-anomaly-detection",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/cli-reference/136469/mlflow",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/cli-reference/962327/mlflow",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/372054/machine-learning-for-anomaly-detection"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "mlflow builds model artifacts from historical logs for login-anomaly, traffic-download-anomaly and traffic-upload-anomaly; model training/testing and artifact deployment are separate from scheduled inference.",
+      "workflow_transaction_fingerprint": "Enable global mlflow -> enable a model -> train on configured historical days -> test on held-out days/sensitivity -> deploy artifact -> inference evaluates tracked assets at model-specific interval -> predefined alert handler surfaces deviations.",
+      "failure_class": "No artifacts, insufficient or unrepresentative history, model never deployed, asset cap/exclusion, training/test failure, or inference cadence too slow.",
+      "evidence_pattern": "diagnose mlflow config/training-status/list-artifacts/show-assets/test-result/infer-result; alert handler details; distinguish trained artifact from deployed artifact and generated alert.",
+      "remediation_path": "Confirm model status and data history; train/test with adequate assets; inspect excluded assets and sensitivity; deploy validated artifact; choose model-specific inference interval; verify alerts in All Alerts.",
+      "question_fingerprint": "Distinguish model, asset and artifact; identify whether training, validation, deployment or inference is the failed stage.",
+      "diagram_topology_layout_fingerprint": "Historical logs -> model/asset selection -> training artifact -> held-out test -> deployment -> periodic inference -> anomaly alert.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiAnalyzer lessons cover event handlers, FortiAI alert triage, log ingestion and archive; none covers mlflow behavioral baselines/artifact lifecycle."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Per-application OpenSSL security levels and compatibility override from tunnel mode",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/453005/configuring-openssl",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/35890/what-s-new-in-fortiswitchos-8-0-0"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/backing-up-the-full-fortiswitch-configuration-to-an-sftp-ftp-tftp-server-231156",
+      "scenario_date": "2026-11-09",
+      "feature_mechanism_fingerprint": "FortiSwitchOS 8.0 defaults OpenSSL security level to 2 (previously 0); CLI can set 0-5 globally via default or per application daemon; tunnel-mode compatible overrides level to 0 on the switch where applied, strict uses configured per-app level.",
+      "workflow_transaction_fingerprint": "A FortiSwitch application daemon initiates/accepts TLS or SSH using OpenSSL policy; negotiated protocol/cipher/certificate strength is constrained by effective security level; tunnel-mode compatibility may override that policy.",
+      "failure_class": "After upgrade, legacy peer certificate/cipher/protocol rejected; one daemon fails while other switch services work; apparent per-app setting overridden by tunnel-mode.",
+      "evidence_pattern": "get configuration under config system security app-security; inspect switch-controller tunnel-mode; correlate daemon-specific TLS handshake/logs; successful SSH/HTTPS from one service does not prove every daemon uses same policy.",
+      "remediation_path": "Identify failing application and peer requirements; use strict mode for configured per-app levels; set a narrow per-app exception only when justified; avoid lowering default globally; retest handshake and revert temporary exception.",
+      "question_fingerprint": "Determine effective OpenSSL level when tunnel-mode=compatible and identify why per-application TLS behavior differs.",
+      "diagram_topology_layout_fingerprint": "Admin CLI -> global/per-daemon OpenSSL security-level policy -> application TLS/SSH client/server -> remote peer; separate tunnel-mode override branch.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Signed firmware-image verification is an artifact-integrity feature, not runtime OpenSSL protocol/cipher policy. The recent Community backup-transfer article is only an operational scenario companion, not the primary lesson."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "IPsec offload for encrypted CAPWAP data channels",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/746425/data-channel-security-clear-text-dtls-and-ipsec-vpn",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/491459/support-ipsec-traffic-offloading-from-the-fortiap"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "CAPWAP control channel is always DTLS-encrypted; client-data channel can be clear-text, DTLS, IPsec or IPsec with serial-number binding; ipsec-offload controls FortiAP-side IPsec traffic offload and defaults enabled for IPsec policies.",
+      "workflow_transaction_fingerprint": "FortiAP joins FortiGate -> CAPWAP control channel established -> WTP profile selects data-channel security -> IPsec data tunnel carries client packets -> FortiAP performs offload when enabled.",
+      "failure_class": "CAPWAP control is up but data channel fails/underperforms; wrong DTLS policy; IPsec negotiation/serial-number binding issue; AP CPU bottleneck.",
+      "evidence_pattern": "WTP profile dtls-policy and ipsec-offload, CAPWAP control state, IPsec SA/packet counters and throughput/CPU; control-channel health alone does not prove data-channel encryption or offload.",
+      "remediation_path": "Verify supported AP/FortiOS model and profile; select ipsec-vpn or ipsec-vpn-sn; verify tunnel and traffic counters; confirm AP-side offload; compare AP CPU and throughput; do not weaken control-channel DTLS.",
+      "question_fingerprint": "Distinguish control-channel DTLS from data-channel IPsec and identify the device doing the offload.",
+      "diagram_topology_layout_fingerprint": "Wireless clients -> FortiAP -> CAPWAP control DTLS plus separate IPsec data channel -> FortiGate; AP-side offload callout.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior wireless lessons cover MLO, roaming, RadSec, packet capture and VAP/VLAN behaviors; none covers CAPWAP data-channel IPsec offload."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Windows AV compliance through the Windows Security-Center provider",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/429565/vendor-severity-levels"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 adds a Windows AV category choice named Security-Center alongside the prior Defender-specific check; endpoint AV status/signature freshness becomes a compliance input.",
+      "workflow_transaction_fingerprint": "Windows endpoint agent/host data reports AV state -> FortiNAC evaluates Windows AV category against host profile/compliance policy -> host state and access action follow configured policy.",
+      "failure_class": "Defender-specific check gives false noncompliance for endpoints protected by another Windows Security Center-registered AV provider, or endpoint AV definitions are stale.",
+      "evidence_pattern": "Host/agent-reported Windows AV category and definition freshness compared with host-profile requirement; the release note does not document the Windows API or exact agent polling interval, so do not infer those from the setting name.",
+      "remediation_path": "Use Security-Center for endpoints whose active AV provider is registered with Windows Security Center; validate agent reporting and host profile; compare endpoint provider state and FortiNAC host compliance before changing enforcement.",
+      "question_fingerprint": "Choose Defender-specific versus Security-Center compliance source and identify what evidence is documented versus unspecified.",
+      "diagram_topology_layout_fingerprint": "Windows endpoint AV provider -> Windows Security Center -> FortiNAC endpoint/agent observation -> host profile compliance decision -> access state.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiNAC lessons cover MDM, patch-management and RADIUS identity; AV-provider compliance source is a distinct endpoint posture input."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "KEA DHCP for isolated hosts and PXE boot option delivery",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/dhcp-attributes",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/dhcp-attributes/346805/example-pxe-boot",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/release-notes/403885"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6 replaces legacy ISC DHCP with KEA DHCP for internal isolated-host address assignment; custom DHCP options are configured through supported GUI attributes rather than direct root edits to dhcp.conf.",
+      "workflow_transaction_fingerprint": "Isolated host broadcasts DHCP Discover -> KEA scope on isolation interface offers address and options -> client receives next-server/boot-file-name/TFTP details -> client fetches network boot program from TFTP server.",
+      "failure_class": "Lease succeeds but PXE boot fails because boot server/filename options are missing, inconsistent, or file/TFTP/firewall reachability is wrong.",
+      "evidence_pattern": "DHCP lease/address and scope; configured Next Server, Boot File Name, tftp-server-name and boot-file-name; KEA config and lease file; successful DHCP ACK does not prove TFTP reachability or NBP execution.",
+      "remediation_path": "Use GUI DHCP attributes; configure both Advanced Next Server/Boot File Name and standard options when clients require both; verify BIOS PXE, TFTP file permissions, isolation-to-TFTP firewall policy and actual transfer.",
+      "question_fingerprint": "Distinguish DHCP address assignment from PXE option delivery and TFTP retrieval; identify why a host has an address but cannot boot.",
+      "diagram_topology_layout_fingerprint": "Isolated endpoint -> KEA DHCP on FortiNAC-F -> lease plus PXE options -> TFTP file server -> boot program execution; firewall path annotated.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiNAC-F topics cover NetFlow, HA, host learning and vulnerability scanners; no KEA internal DHCP/PXE workflow in published lessons."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "OTP-only push notification mode and FortiClient-compatible fallback",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/749421/general",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/563028/fortiauthenticator-8-0-0"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "User Account Policies define OTP-Only Push mode: None, Normal or FortiClient-compatible; when an OTP-only account lacks push capability, Normal rejects while FortiClient-compatible ignores that push trigger to allow manual username+OTP retry.",
+      "workflow_transaction_fingerprint": "RADIUS/remote auth request identifies OTP-only user -> push trigger is processed per account policy and account push capability -> push accepted or rejected/ignored -> FortiClient manual OTP retry path only in compatible mode.",
+      "failure_class": "OTP-only login fails for users without push support; push delivery outage; client expects manual OTP fallback but policy mode rejects instead.",
+      "evidence_pattern": "User Account Policies > General selected mode, account push capability, RADIUS challenge/reject/timeout behavior and subsequent manual OTP request; no push notification is not itself proof of invalid OTP.",
+      "remediation_path": "Select Normal when unsupported push should fail closed; choose FortiClient-compatible only for supported clients requiring manual OTP fallback; verify account token/push registration and capture the complete challenge sequence.",
+      "question_fingerprint": "Predict whether an OTP-only user without push capability is rejected or allowed to retry manually under each mode.",
+      "diagram_topology_layout_fingerprint": "Authentication request -> OTP-only policy mode -> push-capable branch; unsupported-push branch -> reject or ignore -> manual OTP retry.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiAuthenticator lessons cover SAML, RADIUS attributes, FSSO, OAuth and certificate authorities; OTP-only push fallback is not present."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Per-interface TCP Segmentation Offload (TSO) and Generic Segmentation Offload (GSO)",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/327103/tcp-segmentation-offload-tso-and-generic-segmentation-offload-gso",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 enables TSO and GSO by default on system interfaces; kernel/NIC defers segmentation of large transmit buffers into wire-sized TCP segments; CLI controls each interface independently.",
+      "workflow_transaction_fingerprint": "Application creates large TCP payload -> stack queues GSO/TSO buffer -> NIC/kernel segments for wire MTU -> peer receives ordinary TCP segments; capture point may see pre-segmentation super-packets.",
+      "failure_class": "CPU overhead or throughput regression when offload disabled; packet capture appears to show oversized packets; per-interface asymmetry causes different results on separate paths.",
+      "evidence_pattern": "Per-interface `get`/configuration for tso/gso, CPU/throughput counters, capture location and on-wire packet sizes; host-side capture may show offload artifacts that are not present on the wire.",
+      "remediation_path": "Check interface-specific TSO/GSO settings; compare a capture at the sender and an external tap; temporarily disable one feature on a test interface only if diagnosing a suspected offload issue; restore defaults after test.",
+      "question_fingerprint": "Distinguish host-stack super-packet capture from on-wire segmentation and identify the correct per-interface control.",
+      "diagram_topology_layout_fingerprint": "FortiPAM application/TCP stack -> GSO/TSO large buffer -> NIC/kernel segmentation -> physical link -> peer; capture before and after segmentation.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "No prior FortiPAM lesson covers packet segmentation/offload or packet-capture interpretation."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "OAuth 2.0 Client Credentials grant for public REST API tokens",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/548346/api-token",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/release-notes/385743/whats-new-in-7-5-1"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM 7.5.1 API tokens support OAuth 2.0 Client Credentials grant; Client ID and Client Secret obtain a short-lived Bearer access token; token privileges inherit the creating user's role and organization scope; revoke invalidates in-use access token immediately.",
+      "workflow_transaction_fingerprint": "Authorized org user creates API token -> client posts grant_type=client_credentials, client_id and client_secret to token endpoint -> access_token/expires_in returned -> REST calls use Bearer token -> reissue on expiry while secret valid or reset secret/revoke token.",
+      "failure_class": "Token creation permission missing, wrong organization context, insufficient inherited role privileges, expired secret/access token or revoked token.",
+      "evidence_pattern": "API token table (owner/org/client ID/secret expiry/status), OAuth token response, HTTP authorization result and target API authorization; successful token issuance does not prove requested endpoint privilege.",
+      "remediation_path": "Grant OAuth Tokens permission to intended role; create token while logged in to target organization; protect client secret; request new access token on expiry; reset secret or revoke compromised token; verify role and org scope.",
+      "question_fingerprint": "Differentiate access-token expiry, client-secret expiry, organization scope and inherited role privilege.",
+      "diagram_topology_layout_fingerprint": "FortiSIEM org-scoped user/role -> API token client credentials -> OAuth token endpoint -> Bearer token -> REST API authorization -> resource.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiSIEM lessons cover collectors, parsers, event correlation, CMDB and AWS ingestion; OAuth client-credentials API token lifecycle is distinct."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Secure Browser extension profiles, user assignment and browser-side data controls",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/administration-guide/397486/secure-browser",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortisase/latest/administration-guide/370324/secure-browser-profiles"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Managed Chrome/Edge Secure Browser extension enforces client-side dynamic page inspection and FortiGuard category/domain rules without relying solely on network DPI; profiles map users/groups using IdP attributes (email required) and define sensitive-input, download and site-specific overrides.",
+      "workflow_transaction_fingerprint": "User signs in to browser extension -> IdP attributes matched to Secure Browser assignment rule -> profile applies dynamic inspection/category/domain overrides -> browser action (sensitive input/download) is allowed, warned or blocked.",
+      "failure_class": "Extension unavailable/disabled in private browsing, user not assigned due to missing email claim, feature not enabled on tenant, or URL override precedence produces unexpected action.",
+      "evidence_pattern": "Tenant feature availability, extension installation/state, IdP email/group attributes, assigned profile, category rule and URL domain group override; network DPI logs alone do not prove browser-side control.",
+      "remediation_path": "Confirm select-availability enablement; install supported Chrome/Edge extension; ensure email claim and group mapping; validate profile assignment and rule precedence; enable extension in private mode only if that mode is allowed.",
+      "question_fingerprint": "Trace profile assignment and distinguish dynamic page inspection from category lookups and URL domain overrides.",
+      "diagram_topology_layout_fingerprint": "IdP attributes -> user assignment rule -> Secure Browser profile -> dynamic page inspection/category rule -> URL override -> browser action.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior FortiSASE lessons cover CASB, DEM, PoP selection, posture tags and tunnel steering; browser-extension enforcement is a distinct endpoint control plane."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Graceful BGP shutdown for planned SD-WAN edge maintenance",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/86434/graceful-bgp-shutdown-new",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/86434"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 implements RFC 8326 graceful BGP shutdown: initiator marks routes with GSHUT community and signals shutdown; receiver lowers local preference for affected routes; persistent shutdown/graceful-soft controls and delay support orderly drain.",
+      "workflow_transaction_fingerprint": "Maintenance operator initiates graceful shutdown on edge neighbor -> route advertisements carry GSHUT community -> peer applies lower local preference and selects alternate path -> delay allows traffic drain before session closure.",
+      "failure_class": "Peer does not recognize/propagate GSHUT community, local-preference policy does not match, alternate path absent, or shutdown delay expires before traffic drains.",
+      "evidence_pattern": "Neighbor state, advertised/received communities, route-map/policy local preference, best-path change and traffic counters; BGP session down alone does not prove traffic drained.",
+      "remediation_path": "Configure matching initiator and receiver behavior; preserve community through route policy; verify alternate route and SD-WAN member/overlay health; observe traffic shift before completing shutdown.",
+      "question_fingerprint": "Distinguish graceful shutdown from graceful restart and determine why the peer did not de-prefer the maintenance path.",
+      "diagram_topology_layout_fingerprint": "SD-WAN edge A (initiator) -> BGP GSHUT community -> edge B (receiver) lowers local preference -> alternate overlay/underlay path takes traffic -> maintenance shutdown.",
+      "semantic_uniqueness": "PASS",
+      "nearest_inventory_comparison": "Prior BGP lessons cover neighbor transport, community-to-route-tag translation and route selection; none covers RFC 8326 GSHUT drain behavior."
+    }
+  ],
+  "candidate_rejections": [
+    {
+      "product": "FortiAnalyzer",
+      "candidate": "FortiMQ connector for automated blocking",
+      "reason": "Rejected: same connector/Cloud Fabric Feed enforcement mechanism already taught in the November 4 report."
+    },
+    {
+      "product": "FortiManager",
+      "candidate": "FortiManager 8.0 selective-approval workflow sessions",
+      "reason": "Rejected in favor of certificate lifecycle: concurrency/workspace semantics are adjacent to the November 8 per-policy workspace locking lesson."
+    },
+    {
+      "product": "FortiSASE",
+      "candidate": "BGP-loopback SPA hub external-feed/FSSO support",
+      "reason": "Rejected: SPA hub BGP loopback/re-advertisement workflow is adjacent to the October 23 endpoint-to-endpoint SPA hub lesson."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "candidate": "FSSO exclusion of AD computer accounts",
+      "reason": "Rejected in favor of OTP-only push fallback because prior reports already covered FSSO filters and remote LDAP group mapping."
+    },
+    {
+      "product": "FortiSwitch",
+      "candidate": "Signed configuration backup verification",
+      "reason": "Rejected in favor of per-application OpenSSL policy because prior report covered dual-signed firmware image verification and the signature-trust mechanism was too adjacent."
+    }
+  ],
+  "community_sweep_summary": {
+    "direct_recent_scenario_matches": 1,
+    "records": [
+      {
+        "product": "FortiSwitch",
+        "url": "https://community.fortinet.com/fortiswitch-36/backing-up-the-full-fortiswitch-configuration-to-an-sftp-ftp-tftp-server-231156",
+        "published": "2026-11-09",
+        "use": "Scenario only: external config backup transfer and restore path; it does not describe the new OpenSSL security-level feature."
+      }
+    ],
+    "no_directly_matched_recent_scenario_products": [
+      "FortiGate",
+      "FortiManager",
+      "FortiAnalyzer",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiNAC-F",
+      "FortiAuthenticator",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ],
+    "note": "The full Community sweep covered all twelve product areas. Recent results that did not match the selected feature were not misrepresented as scenario evidence."
+  }
+}
