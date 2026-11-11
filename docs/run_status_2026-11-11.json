@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-11-11",
+  "run_status": "PARTIAL",
+  "local_run_time": "2026-11-11 07:55 PST",
+  "stages": [
+    {
+      "stage": "Historical 30-day inspection",
+      "status": "SUCCESS",
+      "detail": "22 published report artifacts inspected; 216 actual lesson records plus separate status-only/candidate-only records. Inventory committed and read back before selection."
+    },
+    {
+      "stage": "Community sweep",
+      "status": "PARTIAL",
+      "detail": "All 12 product areas searched. One directly matched recent scenario companion found (FortiSwitch, Nov 9); no direct matching scenario verified for the other eleven selected mechanisms."
+    },
+    {
+      "stage": "Administration-guide sweep",
+      "status": "PARTIAL",
+      "detail": "Official primary sources located for all 12 lessons. Eight representative direct Document Library opens returned HTTP 403; indexed official excerpts were used."
+    },
+    {
+      "stage": "Semantic uniqueness",
+      "status": "SUCCESS",
+      "detail": "12/12 topics passed comparison against 216 published lesson records; adjacent candidates were rejected before generation."
+    },
+    {
+      "stage": "Lesson generation",
+      "status": "SUCCESS",
+      "detail": "12 substantive lessons, 9,107 focused words."
+    },
+    {
+      "stage": "Examination generation",
+      "status": "SUCCESS",
+      "detail": "Exactly 50 MCQs, 200 substantive per-choice explanations; answer distribution A13/B13/C12/D12; maximum choice-length spread 2."
+    },
+    {
+      "stage": "Diagram generation",
+      "status": "SUCCESS",
+      "detail": "12 standalone SVG plus 12 editable draw.io files; all 24 independently read back."
+    },
+    {
+      "stage": "GitHub report publication/read-back",
+      "status": "SUCCESS",
+      "detail": "Dated HTML report written and read back (133,941 bytes)."
+    },
+    {
+      "stage": "GitHub index update/read-back",
+      "status": "PENDING"
+    },
+    {
+      "stage": "GitHub Pages verification",
+      "status": "PENDING"
+    },
+    {
+      "stage": "Email delivery",
+      "status": "NOT_ATTEMPTED",
+      "detail": "Email is disabled."
+    },
+    {
+      "stage": "Scheduler continuity",
+      "status": "PRESERVED",
+      "detail": "No pause, disable, delete or reschedule operation performed."
+    }
+  ],
+  "remediation": [
+    "Continue Community scenario discovery for the eleven unmatched product areas in the next run; do not substitute unrelated articles.",
+    "Retry direct Fortinet Document Library retrieval for the eight HTTP 403 pages using a documentation-capable session.",
+    "Complete index read-back and GitHub Pages verification; if Pages remains unavailable, retain the repository report as the authoritative artifact."
+  ]
+}
