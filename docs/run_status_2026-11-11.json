@@ -46,11 +46,13 @@
     },
     {
       "stage": "GitHub index update/read-back",
-      "status": "PENDING"
+      "status": "SUCCESS",
+      "detail": "docs/index.html updated and raw GitHub content read-back confirmed the November 11 summary and dated report link."
     },
     {
       "stage": "GitHub Pages verification",
-      "status": "PENDING"
+      "status": "FAILED",
+      "detail": "Both the dated Pages report URL and Pages index URL were inaccessible to the available web verification fetcher; GitHub connector only supports linked GitHub URLs. Repository report/index remain verified."
     },
     {
       "stage": "Email delivery",
@@ -64,6 +66,7 @@
     }
   ],
   "remediation": [
+    "Retry GitHub Pages deployment and verify the dated report and index URLs after the Pages build is available.",
     "Continue Community scenario discovery for the eleven unmatched product areas in the next run; do not substitute unrelated articles.",
     "Retry direct Fortinet Document Library retrieval for the eight HTTP 403 pages using a documentation-capable session.",
     "Complete index read-back and GitHub Pages verification; if Pages remains unavailable, retain the repository report as the authoritative artifact."
