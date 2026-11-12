@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "date": "2026-11-12",
-  "generated_at_local": "2026-11-12T08:24:26-08:00",
+  "generated_at_local": "2026-11-12T08:53:51-08:00",
   "overall_status": "PARTIAL",
   "stages": {
     "pre_generation_inventory": {
@@ -27,20 +27,22 @@
     "community_sweep": {
       "status": "PARTIAL",
       "product_areas_searched": 12,
-      "direct_recent_scenario_matches": 1,
-      "recent_but_unrelated_results": 3,
+      "recent_product_area_results": 22,
+      "product_areas_with_recent_results": 10,
+      "product_areas_without_recent_results": 2,
+      "direct_recent_scenario_matches": 0,
       "older_relevant_scenario_companions": 4,
-      "older_or_unrelated_results": 1,
-      "no_direct_scenario_result": 3,
       "path": "docs/community_sweep_2026-11-12.json",
-      "notes": "Only FortiAnalyzer post-reboot Device Manager status was a directly matched recent scenario. Other recent results were not paired when their mechanism differed from the lesson."
+      "notes": "Article-level date checks corrected the earlier FortiAnalyzer false positive: its Device Manager article is 2026-10-05, outside the strict window. Twenty-two newer posts across ten areas were reviewed, but none matched the selected lesson mechanisms. FortiSIEM and Secure SD-WAN had no fresh product-area result."
     },
     "administration_guide_sweep": {
       "status": "PARTIAL",
-      "products": 12,
       "primary_sources_located": 12,
+      "direct_page_open_attempts": 12,
+      "direct_page_open_403": 12,
+      "direct_page_open_success": 0,
       "path": "docs/admin_guide_sweep_2026-11-12.json",
-      "notes": "Several direct Fortinet Document Library page opens returned HTTP 403; indexed official documentation text and accessible release/guide material were used. The report does not claim full direct-page inspection for blocked sources."
+      "notes": "All twelve exact selected Fortinet Document Library URLs returned HTTP 403 to the current fetcher. Official indexed content and accessible official release/guide material remain the basis for the lessons; full direct-page inspection is still outstanding."
     },
     "lessons": {
       "status": "PASS",
@@ -129,9 +131,51 @@
     "index": "docs/index.html"
   },
   "remediation": [
-    "Retry direct Fortinet Document Library access through a documentation-capable session for pages that returned HTTP 403; indexed official content remains linked in the report.",
-    "Continue searching Community for fresh, directly matched troubleshooting scenarios for the eleven products without a verified recent companion.",
-    "Retry the dated GitHub Pages report and index URLs after the deployment workflow completes. If the build fails, inspect the Pages workflow logs and preserve the repository HTML/index as the verified fallback."
+    "Retry the twelve Fortinet Document Library pages through an authenticated/documentation-capable session and refresh the administration-guide sweep.",
+    "Continue the Community sweep for directly matched scenarios; do not attach unrelated recent articles to the selected lesson mechanisms.",
+    "Retry public GitHub Pages URL verification even though the build and deploy workflow jobs completed successfully."
   ],
-  "publication_finalized": true
+  "publication_finalized": true,
+  "independent_verification": {
+    "verified_at_local": "2026-11-12T08:53:51-08:00",
+    "historical_inventory_records": 258,
+    "historical_report_artifacts_inspected": 23,
+    "inventory_required_field_coverage": {
+      "product": 258,
+      "lesson_subject": 258,
+      "primary_url": 258,
+      "scenario_community_url": 258,
+      "feature_mechanism_fingerprint": 258,
+      "workflow_transaction_fingerprint": 258,
+      "failure_class": 258,
+      "evidence_pattern": 258,
+      "remediation_path": 258,
+      "question_fingerprint": 258,
+      "diagram_topology_layout_fingerprint": 258
+    },
+    "selected_topics": 12,
+    "selected_topics_semantically_unique": 12,
+    "lesson_count": 12,
+    "lesson_word_total": 7425,
+    "lesson_word_min": 515,
+    "lesson_word_max": 771,
+    "graded_questions": 50,
+    "answer_choices": 200,
+    "per_choice_feedback": 200,
+    "diagrams": {
+      "svg": 12,
+      "drawio": 12,
+      "read_back_claimed_by_manifest": 24
+    },
+    "github_pages_workflow_run": 43262238263,
+    "github_pages_jobs": {
+      "build": "success",
+      "report_build_status": "success",
+      "deploy": "success"
+    },
+    "public_pages_report_url": "not accessible to current web fetcher",
+    "public_pages_index_url": "not accessible to current web fetcher",
+    "email_attempted": false,
+    "scheduler_modified": false
+  }
 }
