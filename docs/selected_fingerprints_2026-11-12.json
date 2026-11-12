@@ -1,0 +1,222 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-12T08:24:26-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-12-08-24.json",
+  "inventory_blob_sha": "bbb19164eee25c9029ba7331c1f719c8e864d54f",
+  "selection_gate": "All 12 candidate mechanisms were compared against the 258-record pre-generation inventory. Candidates were rejected where their transaction, failure class, evidence or remediation path substantially repeated a prior lesson. Similar broad product families were not treated as duplicates when the underlying mechanism was materially different; rationale is recorded per lesson.",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "subject": "Exact Data Matching (EDM) for DLP: external data feeds, column-to-type mapping and conjunctive/disjunctive match logic",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/870195/exact-data-matching",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "indexed CSV/TXT data records -> EDM template maps columns to built-in data types -> All-fields and Any-fields match groups -> DLP sensor/profile -> firewall policy action",
+      "workflow_fingerprint": "refresh external data feed or upload file; parse up to 32 columns; match content in inspected traffic; apply allow/log/block/quarantine action; encrypted protocols require deep inspection and client trust of inspection CA",
+      "failure_class": "stale or malformed data feed; invalid column/type mapping; deep-inspection gap; flow-mode versus proxy-mode capability mismatch",
+      "evidence_pattern": "external-resource status/refresh; EDM template View Entries; DLP logs showing matched data types; packet/content inspection boundary",
+      "remediation_path": "validate feed encoding and column indices; use All/Any logic deliberately; check platform limits and refresh; ensure policy/profile binding and deep inspection; verify current inspection mode",
+      "question_fingerprint": "distinguish exact record match logic from regex/dictionary scanning and determine why a compound identity record does or does not trigger",
+      "diagram_fingerprint": "source CSV/feed -> EDM column map -> All/Any match evaluator -> DLP sensor/profile -> policy decision",
+      "uniqueness_rationale": "No FortiGate EDM/exact-data-match mechanism appears in the 30-day inventory. Prior FortiSASE CASB/DLP lessons use API-based SaaS content controls, not FortiGate indexed record matching."
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Remote GUI access to a managed FortiGate: role-gated proxy path over TCP/8082",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/327992/remotely-access-a-managed-fortigate",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-possible-causes-for-the-error-reason-error-reading-from-remote-server-while-taking-remote-access-to-fortigate-from-fortimanager-229498",
+      "mechanism_fingerprint": "FortiManager Remote GUI Access admin-profile capability + Device Manager action + FortiManager HTTP proxy listener + FGFM management tunnel to managed FortiGate + separate FortiGate administrator authentication",
+      "workflow_fingerprint": "user authenticates to FortiManager; role permission gates Remote Access; browser opens FortiManager address/port 8082; FortiManager proxies GUI session through management relationship; user authenticates to FortiGate; port can be changed",
+      "failure_class": "proxy 502/invalid upstream response; permission missing; FGFM tunnel down; custom admin-sport or expired server certificate; SSL inspection or trusthost blocks",
+      "evidence_pattern": "admin profile Remote GUI Access; FGFM TCP/541 state; TCP/8082 capture on workstation/FortiManager/FortiGate; FortiGate HTTPS certificate validity",
+      "remediation_path": "enable role permission; confirm FGFM up; allow bidirectional port 8082; bypass deep inspection; validate FortiGate admin-server-cert and trusthost; normalize custom admin-sport where affected",
+      "question_fingerprint": "separate permission failure, browser-to-proxy reachability, FGFM control tunnel and FortiGate upstream GUI failure",
+      "diagram_fingerprint": "administrator browser -> FortiManager 8082 proxy -> FGFM control relationship -> FortiGate HTTPS GUI",
+      "uniqueness_rationale": "No prior lesson covers FortiManager's Remote GUI proxy path or the separate TCP/8082 and FGFM control-plane dependencies."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Device Manager Up/Down state: OFTP connectivity, last-log freshness and upload-mode thresholds",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/781928/device-manager",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+      "mechanism_fingerprint": "Device Manager status derives from OFTP connectivity where supported and/or last log receive age; separate thresholds for near-real-time and scheduled upload; UI status is a derived health signal rather than a packet-level acknowledgement",
+      "workflow_fingerprint": "authorize device/VDOM -> receive OFTP/log traffic -> update Last Log Time and rate -> evaluate mode-specific no-log timer -> render Up/Down and chart; post-reboot UI reconciliation may lag behind actual log receipt",
+      "failure_class": "false Down state during post-reboot convergence; genuinely stale logs; OFTP unreachable; scheduled-upload threshold misapplied",
+      "evidence_pattern": "FortiGate execute log fortianalyzer test-connectivity/get log fortianalyzer setting status; FortiAnalyzer oftpd 3; diagnose fortilogd lograte; Last Log Time and configured thresholds",
+      "remediation_path": "distinguish expected 10-15 minute reboot convergence from >30-minute failure; confirm registered/up and increasing receive counters; inspect registration, port 514, OFTP and fortilogd; adjust only the correct threshold",
+      "question_fingerprint": "interpret conflicting device status, connection state, last-log timestamp and receive counters without treating one UI field as proof of end-to-end logging",
+      "diagram_fingerprint": "FortiGate log producer -> OFTP/receive pipeline -> timestamp/rate counters -> threshold evaluator -> Device Manager status",
+      "uniqueness_rationale": "No prior lesson teaches Device Manager's derived status state machine or the difference between OFTP state, last-log freshness and scheduled-upload thresholds."
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "MACsec on FortiSwitch: dynamic CAK, RADIUS-derived key material and MKA secure-channel lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/110404/mac-security",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "port security-mode macsec + port-level profile + PAE supplicant/authenticator; RADIUS MSK derives CAK; MKA negotiates SAK and secure association; GCM-AES data protection",
+      "workflow_fingerprint": "configure profile/cipher/replay window/traffic policy -> bind profile and PAE mode to physical port -> authenticate dynamic CAK -> establish secure channel -> rekey SAK on timer -> count protected traffic",
+      "failure_class": "MKA/RADIUS authentication failure; profile mismatch; unsupported cipher/model; control packets dropped under congestion; MACsec overhead causes oversubscription",
+      "evidence_pattern": "show switch macsec profile; diagnose switch macsec status <port>; diagnose switch macsec statistics <port>; RADIUS/EAP outcome; interface counters and drops",
+      "remediation_path": "verify supported model/cipher; align PAE roles and RADIUS trust; ensure security-mode macsec and port profile; prioritize MKA control traffic; shape for 32-byte MACsec overhead; shut port before changing active profile",
+      "question_fingerprint": "differentiate CAK derivation/authentication failure from SAK/secure-channel failure and from congestion-induced session drops",
+      "diagram_fingerprint": "RADIUS -> PAE supplicant/authenticator -> MSK/CAK -> MKA -> SAK -> MACsec protected Ethernet link",
+      "uniqueness_rationale": "The 30-day inventory contains no MACsec, CAK, MKA or secure-channel lifecycle lesson."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "FortiAP LoRaWAN gateway profiles: Basics Station versus UDP Packet Forwarder, CUPS provisioning and TC/LNS traffic",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/517373/lorawan-profiles",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "FortiAP supported model dual-roles as Wi-Fi AP and LoRaWAN gateway; lw-profile chooses Basics Station or UDP Packet Forwarder; CUPS supplies configuration/certificates/firmware; TC/LNS carries LoRaWAN data",
+      "workflow_fingerprint": "define lw-profile and protocol -> configure CUPS and/or TC endpoint, ports and API keys -> bind profile to WTP profile -> FortiGate pushes profile to AP -> AP registers to CUPS and forwards sensor packets to TC/LNS",
+      "failure_class": "unsupported AP model; profile not bound to WTP profile; CUPS registration/authentication failure; TC/LNS endpoint or API key mismatch; configuration push not applied",
+      "evidence_pattern": "cw_diag -c lw-config output including EUI, CUPS server/port and TC server/port; profile binding and AP firmware/model support",
+      "remediation_path": "verify model support; validate protocol and separate CUPS versus TC settings; check FQDN resolution, TCP reachability and API keys; bind lw-profile to correct WTP profile; verify pushed config on AP",
+      "question_fingerprint": "identify whether failure lies in gateway profile binding, CUPS bootstrap/control, or TC/LNS data-plane delivery",
+      "diagram_fingerprint": "FortiGate WTP profile -> FortiAP LoRaWAN gateway -> CUPS provisioning/control plane and TC/LNS packet-forwarding plane",
+      "uniqueness_rationale": "No prior report covers LoRaWAN, Basics Station, CUPS or LoRaWAN Network Server forwarding. Earlier wireless topics are Wi-Fi association, CAPWAP, roaming and radio behavior."
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Role assignment precedence and inheritance: users, hosts, groups, captive portal and device profiler",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/245839/assigning-roles",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "user/host/device/port entities carry roles; multiple role sources evaluated by rank in Roles view; group assignment, captive portal, user-to-host inheritance and device profiler can update role",
+      "workflow_fingerprint": "host/user/device is discovered or registered -> role candidates arise from portal, group, inheritance, profiler or manual assignment -> ordered role list selects first matching role -> role drives policy/access classification",
+      "failure_class": "unexpected role due to higher-ranked matching group; role not recalculated after group removal; host inherits user role only under defined conditions; local/global role ranking misunderstanding",
+      "evidence_pattern": "Roles view ordering; user and host Properties; group membership; portal role field; device profiler match; role and policy outcome on host record",
+      "remediation_path": "inspect every role source and rank; explicitly set portal role where required; understand inherited role propagation; remove/adjust higher-ranked group mappings; manually correct stale host role after group removal",
+      "question_fingerprint": "resolve conflicting user, group, portal and profiler role assignments by applying precedence and inheritance rules",
+      "diagram_fingerprint": "identity/device sources -> role candidate generation -> ranked precedence list -> effective host role -> access policy",
+      "uniqueness_rationale": "Prior NAC lessons cover RADIUS group ingestion, captive portal SAML attributes, 802.1X registration and AV compliance, but not the global role-precedence and inheritance evaluator."
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "FortiNAC-F 7.6.3 Secure Boot and file-integrity verification: signed firmware trust and runtime protection",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/release-notes/590876/whats-new-in-fortinac-f-7-6-3",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-upgrade-fortinac-f-through-the-cli-142527",
+      "mechanism_fingerprint": "cryptographically signed GA firmware verified against Fortinet and external authority signatures; boot-critical files hashed at boot/runtime; unsigned upgrade paths blocked by default after signed build",
+      "workflow_fingerprint": "firmware image selected -> signature verification -> trusted boot chain -> boot-critical hashes checked -> runtime file integrity monitoring; air-gapped validation does not require internet",
+      "failure_class": "unsigned/interim firmware rejected; modified or missing boot-critical file; untrusted downgrade path; mistaken assumption that online connectivity is required for signature validation",
+      "evidence_pattern": "upgrade output 'Verifying the integrity of the firmware image'; signature validation success/failure; runtime integrity event/log; firmware build and boot result",
+      "remediation_path": "use signed GA image from trusted distribution; verify provenance and supported upgrade path; use documented prechecked procedure only for controlled interim testing with risk acceptance; plan downgrade with confirmation",
+      "question_fingerprint": "distinguish image signature rejection from post-boot file-integrity violation and determine what a prechecked interim install bypasses",
+      "diagram_fingerprint": "signed firmware + trust anchors -> boot verification -> boot-critical file hashes -> runtime integrity enforcement -> audit/reboot decision",
+      "uniqueness_rationale": "No prior report covers FortiNAC-F signed firmware, boot-time hash verification or runtime integrity enforcement. Prior N+1/MDM/DHCP lessons are separate mechanisms."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Certificate private-key lifecycle: delete generated user private key after first download",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/396299/policies",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "global Certificate Management > Policies > General flag controls deletion of FortiAuthenticator-generated user private key after PKCS#12 Export Key Cert download",
+      "workflow_fingerprint": "FAC generates user certificate/private key -> administrator or user exports PKCS#12 from End Entities > Users -> download event triggers deletion when option enabled -> later re-export is no longer possible; server certificate and CA lifecycle remain distinct",
+      "failure_class": "operator expects repeatable key export but key was intentionally deleted; insecure key retention when policy disabled; mistaken assumption that deleting certificate also revokes already distributed copies",
+      "evidence_pattern": "policy setting state; end-entity certificate status/expiry; Export Key Cert availability; controlled test issuance/download and subsequent export behavior",
+      "remediation_path": "decide whether one-time key delivery is required; preserve private key securely at enrollment if re-export is needed; keep deletion enabled where redownload is unnecessary; revoke/reissue rather than attempting to recover deleted private key",
+      "question_fingerprint": "distinguish certificate revocation, private-key deletion from FAC, and endpoint-held PKCS#12 copies",
+      "diagram_fingerprint": "FAC CA/key generation -> user certificate store -> PKCS#12 download -> conditional server-side private-key deletion -> endpoint-held key",
+      "uniqueness_rationale": "No prior report covers the one-time private-key deletion control. Previous FAC topics cover SAML, FIDO2, OTP push, SCEP/EAP-TLS and REST API operations."
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Single secret to multiple approved target hosts using Multiple Target Address template field",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/latest/administration-guide/904961/creating-secret-templates",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "secret template uses exclusive Multiple Target Address field instead of Target Address or URL; target stores allowlist of IP/range/CIDR/FQDN/wildcard FQDN; launcher prompts for approved destination",
+      "workflow_fingerprint": "create template field -> create target using template -> populate approved destination allowlist -> link secret -> user launches RDP/PuTTY or supported launcher -> destination picker validates requested host against allowlist",
+      "failure_class": "template contains mutually exclusive Target Address/URL fields; target destination absent from allowlist; wildcard/CIDR too broad; launcher or version does not support multiple target field",
+      "evidence_pattern": "template field type; target allowlist entries; launcher destination prompt/autosuggestions; launch target selected and resolved address",
+      "remediation_path": "use FortiPAM 1.9+; remove standard Target Address/URL field; define least-privilege allowlist; verify DNS/IP resolution and supported launcher; test allowed and denied destinations",
+      "question_fingerprint": "identify why a shared credential can reach only destinations explicitly permitted by a template-bound target allowlist",
+      "diagram_fingerprint": "secret template -> target allowlist -> secret credential -> launcher destination selection -> policy check -> target session",
+      "uniqueness_rationale": "Prior FortiPAM reports cover JIT elevation, approval workflow, web launcher and TSO/GSO, not reusable credentials scoped to multiple approved destinations."
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Headless Windows Agent 7.5: local configuration and direct Collector ingestion without Supervisor registration",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/windows-agent-7-5-x-installation-guide/547950/fortisiem-windows-agent",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "Windows Agent deployment_type=Headless; local exported JSON monitor template; direct Collector endpoint; no Supervisor registration/Agent license; device license and EPS/GB-day consumption",
+      "workflow_fingerprint": "create Collector-side htpasswd identity -> install agent with Collector IP/port, org fields and DEPLOYMENT_TYPE=Headless -> export Windows Agent template containing EventLog/user-defined files -> copy as fsm_agent_config.json -> agent sends Windows Security and user-defined events to Collector",
+      "failure_class": "agent pointed to Supervisor instead of Collector; Collector not IPv4-only; TLS 1.2 disabled; incorrect password/username; unsupported monitor sources; event license accounting misunderstood",
+      "evidence_pattern": "Windows Agent service/logs; Collector httpd/ingest logs; template JSON; device licensing and EPS/GB-day usage; event arrival in FortiSIEM",
+      "remediation_path": "use Collector IP/FQDN and port, enable TLS 1.2, provision htpasswd credentials, use only supported EventLog/user-defined sources, place exported template at documented path, verify Collector receipt",
+      "question_fingerprint": "distinguish headless local deployment from registered Supervisor-managed agents and identify Collector-side authentication/configuration boundary",
+      "diagram_fingerprint": "locally configured Windows endpoint -> authenticated HTTPS Collector -> FortiSIEM Collector -> Supervisor/Worker analytics",
+      "uniqueness_rationale": "No prior inventory entry covers Headless Windows Agent, local JSON template or the direct Collector registration bypass."
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/786337/configuration-workflow",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortisase-ztna-agnet-based-agent-less-issue-222561",
+      "mechanism_fingerprint": "browser bookmark portal authenticates proxy user through SSO; FortiSASE Security PoP proxies agentless request through SPA hub to HTTPS private application behind FortiGate",
+      "workflow_fingerprint": "enable proxy and proxy SSO -> configure user groups and Private Access security profile -> configure SPA hub -> create private web application and bookmark -> geofence -> user authenticates and opens bookmark; traffic bypasses standard SIA tunnel/proxy flow",
+      "failure_class": "proxy SSO/deep inspection prerequisites missing; endpoint agent/proxy user conflicts with agentless bookmark; SPA hub policy blocks PoP source; private DNS access type wrong; application not HTTPS or not behind hub",
+      "evidence_pattern": "proxy SSO authentication, bookmark portal access, private app URL/host resolution, SPA BGP route and FortiGate policy logs, security PoP source IP",
+      "remediation_path": "verify subscription and prerequisites; use separate agentless session context; configure HTTPS app behind FortiGate; align DNS Access Type with SPA routing design; permit PoP source at hub; configure geofencing and Private Access profile",
+      "question_fingerprint": "distinguish proxy authentication, bookmark authorization, SPA routing and private application reachability in an agentless flow",
+      "diagram_fingerprint": "browser -> FortiSASE bookmark/SSO -> Security PoP -> SPA hub FortiGate -> HTTPS private application",
+      "uniqueness_rationale": "Prior SASE topics cover agent pre-logon, posture tags, browser isolation, DEM, CASB and regional failover; none covers agentless bookmark-based ZTNA transaction flow."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "Per-packet distribution across aggregate static IPsec tunnels in SD-WAN",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/625774/per-packet-distribution-and-tunnel-aggregation",
+      "scenario_community_url": null,
+      "mechanism_fingerprint": "multiple static IPsec phase1 interfaces marked aggregate-member -> ipsec-aggregate interface -> aggregate added as SD-WAN member -> per-packet load-balancing across member tunnels",
+      "workflow_fingerprint": "build parallel IPsec interfaces over separate WAN underlays at both peers -> enable aggregate-member and compatible crypto/network-device settings -> create matching aggregate interface -> add aggregate to SD-WAN -> route traffic through aggregate and observe distribution",
+      "failure_class": "one member tunnel not established; peer member mismatch; aggregate not added to SD-WAN; per-packet reordering/fragmentation/MTU or overhead issues; asymmetric underlay reachability",
+      "evidence_pattern": "IPsec SA state for each member; aggregate interface status; SD-WAN member health; per-member packet counters; packet sequence and latency observations",
+      "remediation_path": "verify each Phase1 and underlay path independently; align member definitions and proposals; confirm aggregate interface and SD-WAN membership; test MTU and application sensitivity to packet reordering; use documented packet distribution behavior",
+      "question_fingerprint": "distinguish per-packet tunnel aggregation from SD-WAN session-based member selection and from BGP graceful shutdown",
+      "diagram_fingerprint": "WAN1+WAN2 -> parallel static IPsec members -> ipsec-aggregate -> SD-WAN service -> remote aggregate -> LAN",
+      "uniqueness_rationale": "No prior report covers per-packet distribution over an aggregate of static IPsec tunnel interfaces; earlier SD-WAN lessons address BGP tags, graceful shutdown, SLA, ADVPN and underlay probes."
+    }
+  ],
+  "cross_topic_uniqueness_checks": [
+    {
+      "pair": [
+        "FortiGate EDM",
+        "FortiSASE API-based CASB/DLP"
+      ],
+      "result": "Distinct: FortiGate indexed local/external records with column-to-data-type match groups versus FortiSASE API-based SaaS content/tenant controls."
+    },
+    {
+      "pair": [
+        "FortiNAC role precedence",
+        "FortiNAC-F SAML/MDM group assignment"
+      ],
+      "result": "Distinct: ranked role resolution/inheritance across entity types versus external identity/MDM attribute ingestion."
+    },
+    {
+      "pair": [
+        "FortiNAC-F signed firmware",
+        "FortiManager remote GUI proxy"
+      ],
+      "result": "Distinct trust/integrity control versus management-plane HTTP proxy."
+    },
+    {
+      "pair": [
+        "FortiSIEM headless agent",
+        "FortiAnalyzer log aggregation"
+      ],
+      "result": "Distinct endpoint agent deployment and Collector ingestion versus appliance-to-appliance log aggregation."
+    },
+    {
+      "pair": [
+        "FortiSASE agentless ZTNA",
+        "FortiSASE secure browser/agent pre-logon"
+      ],
+      "result": "Distinct bookmark portal proxy-SSO transaction without endpoint proxy configuration versus browser control or agent-based pre-logon."
+    },
+    {
+      "pair": [
+        "Secure SD-WAN aggregate IPsec",
+        "FortiSwitch MCLAG"
+      ],
+      "result": "Distinct L3 IPsec tunnel packet distribution versus L2 multichassis link aggregation."
+    }
+  ],
+  "result": "12 candidate mechanisms selected; no substantial semantic duplicates identified in the current 30-day exclusion inventory."
+}
