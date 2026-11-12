@@ -7,9 +7,9 @@
   "per_choice_feedback": true,
   "answer_distribution": {
     "A": 13,
-    "B": 12,
+    "B": 13,
     "C": 12,
-    "D": 13
+    "D": 12
   },
   "questions": [
     {
@@ -1584,7 +1584,7 @@
       "id": 50,
       "product": "Secure SD-WAN",
       "prompt": "A per-packet aggregate performs worse when one ISP has much higher latency. Why?",
-      "correct_answer": "D",
+      "correct_answer": "B",
       "choices": [
         {
           "letter": "A",
@@ -1594,9 +1594,9 @@
         },
         {
           "letter": "B",
-          "text": "The second tunnel removes IPsec encryption from alternating packets.",
-          "correct": false,
-          "feedback": "Every aggregate member remains an IPsec tunnel; encryption is not alternated off."
+          "text": "Packets can arrive out of order and trigger retransmissions on latency-sensitive flows.",
+          "correct": true,
+          "feedback": "Per-packet distribution exposes one stream to the delay variation of both paths."
         },
         {
           "letter": "C",
@@ -1606,9 +1606,9 @@
         },
         {
           "letter": "D",
-          "text": "Packets can arrive out of order and trigger retransmissions on latency-sensitive flows.",
-          "correct": true,
-          "feedback": "Per-packet distribution exposes one stream to the delay variation of both paths."
+          "text": "The second tunnel removes IPsec encryption from alternating packets.",
+          "correct": false,
+          "feedback": "Every aggregate member remains an IPsec tunnel; encryption is not alternated off."
         }
       ]
     }
