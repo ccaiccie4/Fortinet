@@ -1,0 +1,1616 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-11-12",
+  "question_count": 50,
+  "choices_per_question": 4,
+  "graded": true,
+  "per_choice_feedback": true,
+  "answer_distribution": {
+    "A": 13,
+    "B": 12,
+    "C": 12,
+    "D": 13
+  },
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "prompt": "An EDM rule must match a US SSN and either the first name or email from the same indexed record. Which template logic expresses that requirement?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Put all three columns in Any fields and require one match.",
+          "correct": false,
+          "feedback": "This permits a lone name or email to trigger, which is weaker than intended."
+        },
+        {
+          "letter": "B",
+          "text": "Place SSN in All fields and name/email in Any fields.",
+          "correct": true,
+          "feedback": "The All group enforces the SSN; the Any group accepts either secondary identifier."
+        },
+        {
+          "letter": "C",
+          "text": "Put all three columns in All fields and require every value.",
+          "correct": false,
+          "feedback": "This rejects records where the SSN and only one secondary field are present."
+        },
+        {
+          "letter": "D",
+          "text": "Create three independent DLP profiles and rely on policy order.",
+          "correct": false,
+          "feedback": "Separate profiles do not express the required same-record conjunctive/disjunctive match."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "prompt": "The EDM source is a locally uploaded CSV. The source file changed, but new records never trigger. What should be done?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Increase the firewall policy session TTL so entries refresh.",
+          "correct": false,
+          "feedback": "Session TTL does not refresh the EDM source or rebuild its indexed records."
+        },
+        {
+          "letter": "B",
+          "text": "Change the DLP action from block to quarantine and back.",
+          "correct": false,
+          "feedback": "Changing the action does not import the modified local data set."
+        },
+        {
+          "letter": "C",
+          "text": "Restart the FortiGate so it rereads every uploaded file.",
+          "correct": false,
+          "feedback": "A reboot is not the documented synchronization method for a local EDM upload."
+        },
+        {
+          "letter": "D",
+          "text": "Use Update file to replace the local snapshot with the new CSV.",
+          "correct": true,
+          "feedback": "Local uploads are not periodically synchronized; the administrator must update the file manually."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "prompt": "HTTPS uploads reach the policy, but a known test record produces no EDM log. Which prerequisite is most important?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Apply deep inspection and ensure clients trust the inspection CA.",
+          "correct": true,
+          "feedback": "Encrypted HTTPS content must be decrypted before the DLP engine can inspect the matching fields."
+        },
+        {
+          "letter": "B",
+          "text": "Enable only certificate inspection and trust the public website CA.",
+          "correct": false,
+          "feedback": "Certificate inspection does not expose the HTTPS payload for EDM matching."
+        },
+        {
+          "letter": "C",
+          "text": "Move the EDM template to the firewall address object list.",
+          "correct": false,
+          "feedback": "Address objects select traffic; they do not enable payload decryption or DLP inspection."
+        },
+        {
+          "letter": "D",
+          "text": "Set the policy to accept all traffic before the DLP profile.",
+          "correct": false,
+          "feedback": "An accept action without the DLP profile does not create an inspection path."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "prompt": "The EDM GUI lists a row as Valid, but a test value never matches its mapped type. What is the best interpretation?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The firewall has confirmed the record matched at least once.",
+          "correct": false,
+          "feedback": "The entry list is not a match log and does not prove traffic matched."
+        },
+        {
+          "letter": "B",
+          "text": "The policy is automatically blocking the value before logging it.",
+          "correct": false,
+          "feedback": "A block action still produces DLP evidence when the inspected message matches."
+        },
+        {
+          "letter": "C",
+          "text": "The GUI does not validate every row value against its column data type.",
+          "correct": true,
+          "feedback": "A displayed Valid label is not proof that the value is usable for matching."
+        },
+        {
+          "letter": "D",
+          "text": "The EDM source is refreshed only after a policy reinstall.",
+          "correct": false,
+          "feedback": "Refresh and data-type validation are separate from reinstalling the firewall policy."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "product": "FortiGate",
+      "prompt": "A DLP log shows the EDM match, but the upload was allowed. Which object should be checked next?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Check the DLP profile rule action and the firewall policy binding.",
+          "correct": true,
+          "feedback": "The match proves detection; enforcement depends on the selected action and policy attachment."
+        },
+        {
+          "letter": "B",
+          "text": "Change the external resource refresh interval to one minute.",
+          "correct": false,
+          "feedback": "The source already matched; refreshing it does not change the profile's enforcement action."
+        },
+        {
+          "letter": "C",
+          "text": "Replace the SSN data type with a generic keyword.",
+          "correct": false,
+          "feedback": "Changing the type may reduce accuracy and does not explain an allow action."
+        },
+        {
+          "letter": "D",
+          "text": "Disable deep inspection because the match already occurred.",
+          "correct": false,
+          "feedback": "Removing inspection can stop encrypted content from being evaluated on later sessions."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "prompt": "Remote Access returns a 502 after a FortiGate changes to a custom HTTPS admin port. What should be investigated first?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Increase the ADOM database size and restart the policy install daemon.",
+          "correct": false,
+          "feedback": "ADOM storage does not determine the FortiManager GUI proxy's upstream HTTPS listener."
+        },
+        {
+          "letter": "B",
+          "text": "Check the upstream FortiGate certificate and custom admin-sport compatibility.",
+          "correct": true,
+          "feedback": "The proxy must complete the upstream GUI transaction; a valid FGFM tunnel alone is insufficient."
+        },
+        {
+          "letter": "C",
+          "text": "Reauthorize every managed device and regenerate its serial number.",
+          "correct": false,
+          "feedback": "Device authorization does not correct an upstream GUI port or certificate mismatch."
+        },
+        {
+          "letter": "D",
+          "text": "Disable the FortiGate administrator password and retry the redirect.",
+          "correct": false,
+          "feedback": "The FortiGate still authenticates the administrator; removing credentials is not a proxy fix."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "prompt": "The FGFM tunnel is established, but an operator's browser cannot open Remote Access. Which path remains unproven?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The FortiGate's IPsec phase-two selector is negotiated.",
+          "correct": false,
+          "feedback": "Remote GUI proxying does not depend on a branch IPsec selector negotiation."
+        },
+        {
+          "letter": "B",
+          "text": "The ADOM's policy package checksum matches the FortiGate.",
+          "correct": false,
+          "feedback": "Policy-package synchronization is separate from the browser's proxy connection."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiGate has learned every VLAN through LLDP.",
+          "correct": false,
+          "feedback": "Layer-two neighbor discovery is unrelated to the Remote Access HTTP proxy leg."
+        },
+        {
+          "letter": "D",
+          "text": "The workstation-to-FortiManager TCP/8082 proxy connection.",
+          "correct": true,
+          "feedback": "FGFM verifies the management relationship, not the browser's access to the proxy listener."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "prompt": "One administrator sees no Remote Access action while another can use it. What is the likely cause?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The managed FortiGate is in a different ADOM from the operator.",
+          "correct": false,
+          "feedback": "ADOM placement alone does not grant or remove the explicit proxy capability."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiGate is using a dynamic IP address instead of a static one.",
+          "correct": false,
+          "feedback": "Dynamic addressing does not explain a role-specific missing action in Device Manager."
+        },
+        {
+          "letter": "C",
+          "text": "The first administrator's assigned admin profile lacks the proxy capability.",
+          "correct": true,
+          "feedback": "The system proxy can be enabled globally while role-based permission still denies individual users."
+        },
+        {
+          "letter": "D",
+          "text": "The operator's browser does not support the FGFM protocol.",
+          "correct": false,
+          "feedback": "The browser connects to the FortiManager proxy; it does not implement FGFM."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "product": "FortiManager",
+      "prompt": "A customer uses FortiManager Cloud and asks for the same GUI Remote Access workflow. What is the supported distinction?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "GUI Remote Access is unsupported on FortiManager Cloud; SSH is separate.",
+          "correct": true,
+          "feedback": "The Cloud limitation is specific to GUI proxy access and should not be generalized to SSH."
+        },
+        {
+          "letter": "B",
+          "text": "Enable TCP/8082 on every Cloud tenant and the GUI proxy appears.",
+          "correct": false,
+          "feedback": "Opening a port cannot add a feature that FortiManager Cloud does not support."
+        },
+        {
+          "letter": "C",
+          "text": "Replace FGFM with SNMP polling to proxy the FortiGate GUI.",
+          "correct": false,
+          "feedback": "SNMP polling cannot carry an interactive HTTPS administration session."
+        },
+        {
+          "letter": "D",
+          "text": "Use the FortiAnalyzer report viewer as a browser proxy.",
+          "correct": false,
+          "feedback": "FortiAnalyzer reporting is not a FortiManager managed-device GUI proxy."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "prompt": "After a FortiAnalyzer reboot, Device Manager shows Down for 12 minutes while FortiGate says registered/up and receive counters rise. What is the best action?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Immediately increase the no-log threshold to 24 hours.",
+          "correct": false,
+          "feedback": "A temporary post-reboot lag does not justify hiding genuine logging outages."
+        },
+        {
+          "letter": "B",
+          "text": "Delete and re-add the FortiGate in Device Manager.",
+          "correct": false,
+          "feedback": "Re-registration is unnecessary when OFTP and receive counters already show recovery."
+        },
+        {
+          "letter": "C",
+          "text": "Disable OFTP and force scheduled upload for every device.",
+          "correct": false,
+          "feedback": "Changing logging mode introduces a different threshold and does not fix UI convergence."
+        },
+        {
+          "letter": "D",
+          "text": "Allow the documented status convergence window, then refresh and recheck.",
+          "correct": true,
+          "feedback": "The Community scenario describes a 10–15 minute UI lag while logs can already be arriving."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "prompt": "A device uploads logs every four hours on a scheduled schedule. Which default no-log threshold applies?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The near-real-time threshold of 15 minutes applies to all modes.",
+          "correct": false,
+          "feedback": "The guide explicitly separates near-real-time and scheduled-upload no-log timers."
+        },
+        {
+          "letter": "B",
+          "text": "The scheduled-upload threshold defaults to six hours.",
+          "correct": true,
+          "feedback": "FortiAnalyzer maintains a separate threshold for scheduled uploads rather than using 15 minutes."
+        },
+        {
+          "letter": "C",
+          "text": "The threshold is based only on the device's HA role.",
+          "correct": false,
+          "feedback": "HA membership is displayed separately and does not replace the upload-mode timer."
+        },
+        {
+          "letter": "D",
+          "text": "The status is always Up while the device is authorized.",
+          "correct": false,
+          "feedback": "Authorization does not prove recent log receipt or an active OFTP connection."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "prompt": "Which evidence most directly shows that FortiAnalyzer's OFTP receiver currently sees a FortiGate?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The FortiGate policy hit count increases on the WAN interface.",
+          "correct": false,
+          "feedback": "Policy hits show traffic forwarding, not delivery to the FortiAnalyzer log receiver."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiAnalyzer serial number appears in the inventory table.",
+          "correct": false,
+          "feedback": "A serial number is static inventory data and does not prove current connectivity."
+        },
+        {
+          "letter": "C",
+          "text": "The oftpd device listing together with increasing fortilogd receive rate.",
+          "correct": true,
+          "feedback": "The listing identifies the session and the rising rate confirms incoming log traffic."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiGate displays a valid FortiAnalyzer address in its configuration.",
+          "correct": false,
+          "feedback": "A configured destination does not prove a session or successful log receipt."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "product": "FortiAnalyzer",
+      "prompt": "A near-real-time device remains Down after 35 minutes, and no receive counters increase. What should be checked?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Change the scheduled-upload threshold even though the device is real-time.",
+          "correct": false,
+          "feedback": "The wrong timer will not repair the missing near-real-time log stream."
+        },
+        {
+          "letter": "B",
+          "text": "Verify authorization, port 514 reachability and the fortilogd service.",
+          "correct": true,
+          "feedback": "The delay is beyond the observed convergence window and receiver-side evidence is absent."
+        },
+        {
+          "letter": "C",
+          "text": "Assume the GUI cache is stale because every reboot causes that.",
+          "correct": false,
+          "feedback": "A persistent outage with no receive counters requires network and service investigation."
+        },
+        {
+          "letter": "D",
+          "text": "Delete the ADOM and recreate it with the same name.",
+          "correct": false,
+          "feedback": "An ADOM rebuild is not the first diagnostic step for missing device traffic."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "prompt": "In dynamic-CAK MACsec, which sequence establishes the data-encryption key?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "LLDP creates the SAK, then DHCP supplies the CAK to the port.",
+          "correct": false,
+          "feedback": "LLDP and DHCP are not the documented dynamic-CAK key derivation sequence."
+        },
+        {
+          "letter": "B",
+          "text": "The PAE encrypts traffic with the RADIUS password before MKA starts.",
+          "correct": false,
+          "feedback": "The RADIUS password is not used directly as the MACsec traffic key."
+        },
+        {
+          "letter": "C",
+          "text": "RADIUS supplies MSK, CAK is derived, then MKA negotiates the SAK.",
+          "correct": true,
+          "feedback": "The CAK supports key agreement; the SAK is the key used to protect frames."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiSwitch derives the SAK from its management IP address.",
+          "correct": false,
+          "feedback": "The management address is not a source of MACsec session key material."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "prompt": "A port is configured as a MACsec supplicant. What does that PAE role do?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It requests authentication from RADIUS before the interface is allowed.",
+          "correct": true,
+          "feedback": "The supplicant initiates the access request; the authenticator enforces the result."
+        },
+        {
+          "letter": "B",
+          "text": "It acts as the RADIUS server and generates the MSK locally.",
+          "correct": false,
+          "feedback": "The RADIUS server generates the MSK; the switch PAE participates in authentication."
+        },
+        {
+          "letter": "C",
+          "text": "It bypasses RADIUS and uses the static PSK from the profile.",
+          "correct": false,
+          "feedback": "PSK mode uses PAE none; dynamic CAK uses supplicant or authenticator roles."
+        },
+        {
+          "letter": "D",
+          "text": "It disables MKA and sends all frames in clear text.",
+          "correct": false,
+          "feedback": "Dynamic-CAK mode uses MKA to establish the secure association after authentication."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "prompt": "RADIUS returns Access-Accept, but the Ethernet link never becomes MACsec-secure. Which layer should be checked?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Change the switch management VLAN and clear the MAC address table.",
+          "correct": false,
+          "feedback": "A management VLAN change does not establish the MACsec secure association."
+        },
+        {
+          "letter": "B",
+          "text": "Increase the LLDP transmit interval to force key renegotiation.",
+          "correct": false,
+          "feedback": "LLDP timing is not the control for MKA peer or SAK installation."
+        },
+        {
+          "letter": "C",
+          "text": "Remove the MACsec profile and rely on the RADIUS server alone.",
+          "correct": false,
+          "feedback": "RADIUS authentication supplies key material but does not replace the MACsec profile."
+        },
+        {
+          "letter": "D",
+          "text": "Inspect MKA peer state, CAK agreement and SAK installation.",
+          "correct": true,
+          "feedback": "Access-Accept proves authentication; it does not prove the MKA secure channel completed."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "product": "FortiSwitch",
+      "prompt": "A newly purchased FSR-108F supports MACsec in FortiSwitchOS 8.0. Which cipher limitation matters?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The listed FSR-108F family supports only GCM-AES-128.",
+          "correct": true,
+          "feedback": "The release notes specify this platform limitation; do not assume other ciphers work."
+        },
+        {
+          "letter": "B",
+          "text": "Only AES-256-GCM is supported on the listed FSR models.",
+          "correct": false,
+          "feedback": "That reverses the documented cipher limitation for the newly supported FSR models."
+        },
+        {
+          "letter": "C",
+          "text": "MACsec is supported only in PSK mode on these FSR models.",
+          "correct": false,
+          "feedback": "The release notes include both static PSK and dynamic-CAK support."
+        },
+        {
+          "letter": "D",
+          "text": "The platform requires XPN with a 50-byte confidentiality offset.",
+          "correct": false,
+          "feedback": "XPN and nonzero confidentiality offsets are not the documented requirement here."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "prompt": "A FortiAP LoRaWAN gateway uses Basics Station. Which server handles configuration, certificates and firmware updates?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The TC/LNS endpoint handles all firmware and certificate provisioning.",
+          "correct": false,
+          "feedback": "That assigns the CUPS control-plane role to the traffic-controller endpoint."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiGate CAPWAP controller provides LoRaWAN sensor payload routing.",
+          "correct": false,
+          "feedback": "CAPWAP manages the AP; the configured TC/LNS endpoint handles LoRaWAN data."
+        },
+        {
+          "letter": "C",
+          "text": "The CUPS server handles provisioning and configuration updates.",
+          "correct": true,
+          "feedback": "CUPS is the control/provisioning endpoint; TC/LNS handles LoRaWAN data traffic."
+        },
+        {
+          "letter": "D",
+          "text": "The Wi-Fi DHCP server distributes the LoRaWAN gateway API key.",
+          "correct": false,
+          "feedback": "DHCP does not replace the configured CUPS or TC authentication relationship."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "prompt": "CUPS registration succeeds, but no sensor payload reaches the LoRaWAN network server. What should be checked next?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Rebuild the FortiGate wireless SSID and change its WPA mode.",
+          "correct": false,
+          "feedback": "Wi-Fi SSID authentication does not repair the separate LoRaWAN data endpoint."
+        },
+        {
+          "letter": "B",
+          "text": "Verify the TC/LNS address, port, API key and selected gateway protocol.",
+          "correct": true,
+          "feedback": "CUPS proves provisioning reachability; the TC/LNS path carries sensor data separately."
+        },
+        {
+          "letter": "C",
+          "text": "Change the WTP profile name without changing the LoRaWAN profile.",
+          "correct": false,
+          "feedback": "A profile name change does not correct the TC endpoint or credentials."
+        },
+        {
+          "letter": "D",
+          "text": "Disable the CUPS server because it has already registered successfully.",
+          "correct": false,
+          "feedback": "CUPS remains the configuration/update service and should not be removed."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "prompt": "The LoRaWAN profile exists on FortiGate, but the AP reports no LoRaWAN configuration. What is the likely omission?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The AP's client VLAN lacks an IPv6 default route.",
+          "correct": false,
+          "feedback": "A client VLAN route does not explain an absent pushed LoRaWAN profile."
+        },
+        {
+          "letter": "B",
+          "text": "The network server has not created a Wi-Fi SSID for sensors.",
+          "correct": false,
+          "feedback": "LoRaWAN profile delivery is separate from WLAN SSID creation."
+        },
+        {
+          "letter": "C",
+          "text": "The AP must first join a mesh root before receiving all profiles.",
+          "correct": false,
+          "feedback": "Mesh root status is not a prerequisite in the documented LoRaWAN profile workflow."
+        },
+        {
+          "letter": "D",
+          "text": "The LoRaWAN profile was not assigned to the AP's WTP profile.",
+          "correct": true,
+          "feedback": "FortiGate pushes the LoRaWAN settings through the WTP profile binding."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "product": "FortiAP/Wireless",
+      "prompt": "What does `cw_diag -c lw-config` prove when it displays EUI and CUPS/TC endpoints?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It proves every sensor has joined and transmitted an uplink.",
+          "correct": false,
+          "feedback": "Sensor association and payload delivery require separate server-side and radio evidence."
+        },
+        {
+          "letter": "B",
+          "text": "It proves the AP has received the LoRaWAN configuration values.",
+          "correct": true,
+          "feedback": "The output verifies pushed configuration, not successful CUPS registration or payload forwarding."
+        },
+        {
+          "letter": "C",
+          "text": "It proves the LNS accepted the API key and stored every packet.",
+          "correct": false,
+          "feedback": "The command displays local configuration, not remote LNS authentication or storage."
+        },
+        {
+          "letter": "D",
+          "text": "It proves the Wi-Fi clients are using the LoRaWAN gateway radio.",
+          "correct": false,
+          "feedback": "Wi-Fi client association is separate from the AP's LoRaWAN gateway function."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "prompt": "Two groups match a host and assign different roles. How does FortiNAC resolve the conflict?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The newest group membership always wins regardless of role ranking.",
+          "correct": false,
+          "feedback": "The documentation specifies role order, not membership timestamp, as the precedence rule."
+        },
+        {
+          "letter": "B",
+          "text": "The role with the longest name is selected to avoid ambiguity.",
+          "correct": false,
+          "feedback": "Role names do not determine precedence; the Roles view order does."
+        },
+        {
+          "letter": "C",
+          "text": "FortiNAC merges both roles into a combined policy automatically.",
+          "correct": false,
+          "feedback": "The feature selects an effective role rather than combining multiple roles."
+        },
+        {
+          "letter": "D",
+          "text": "The first matching role in the ordered Roles view takes precedence.",
+          "correct": true,
+          "feedback": "The role list is ranked; the first matching role wins when multiple methods match."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "prompt": "A user changes from Student to Faculty, but a host explicitly assigned Gaming remains Gaming. Why?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The host has its own role and is not inheriting the user's previous role.",
+          "correct": true,
+          "feedback": "FortiNAC updates inherited hosts; a distinct host-specific role is preserved."
+        },
+        {
+          "letter": "B",
+          "text": "Directory synchronization never changes any host role after registration.",
+          "correct": false,
+          "feedback": "Hosts that inherit the user's role can change when the user's role changes."
+        },
+        {
+          "letter": "C",
+          "text": "The Gaming role is always higher than Faculty in every deployment.",
+          "correct": false,
+          "feedback": "The example is about inheritance state, not a universal fixed rank for Gaming."
+        },
+        {
+          "letter": "D",
+          "text": "The host is no longer associated with the user's account.",
+          "correct": false,
+          "feedback": "A registered host can remain associated while retaining its explicitly assigned role."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "prompt": "A host is removed from a group that assigned its role, but the old role remains. What is expected?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The role should reset automatically after the next DHCP lease.",
+          "correct": false,
+          "feedback": "DHCP lease renewal is not the documented role-reset mechanism."
+        },
+        {
+          "letter": "B",
+          "text": "The host must be deleted and rediscovered to remove every group role.",
+          "correct": false,
+          "feedback": "Deleting the host is unnecessary; the documented remediation is a manual role change."
+        },
+        {
+          "letter": "C",
+          "text": "The role may remain and must be changed manually if a reset is desired.",
+          "correct": true,
+          "feedback": "FortiNAC documents that group removal does not automatically clear the assigned host role."
+        },
+        {
+          "letter": "D",
+          "text": "The directory server must send a RADIUS CoA for role removal.",
+          "correct": false,
+          "feedback": "RADIUS CoA is not the documented mechanism for clearing this persistent role."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC",
+      "prompt": "A device is managed in Inventory and its role should place it in a VLAN. What else is required?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A corresponding Network Device Role mapping must define the VLAN or CLI action.",
+          "correct": true,
+          "feedback": "Inventory-managed devices need a Network Device Role to translate the role into enforcement."
+        },
+        {
+          "letter": "B",
+          "text": "Only a user group is required because all roles directly configure VLANs.",
+          "correct": false,
+          "feedback": "Roles and network-device mappings are separate configuration objects."
+        },
+        {
+          "letter": "C",
+          "text": "A captive portal bookmark must be assigned to the switch.",
+          "correct": false,
+          "feedback": "Portal pages do not substitute for a Network Device Role mapping."
+        },
+        {
+          "letter": "D",
+          "text": "The host must inherit a user role before the switch can change VLANs.",
+          "correct": false,
+          "feedback": "Inventory devices use the Network Device Role mapping, not user inheritance."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "prompt": "A FortiNAC-F 7.6.3 system rejects an unsigned interim image before installation. What does that indicate?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The runtime file-integrity monitor found a modified system file.",
+          "correct": false,
+          "feedback": "An image signature rejection occurs during image validation, before the new image is installed."
+        },
+        {
+          "letter": "B",
+          "text": "The signed-build upgrade guard rejected an image without trusted signatures.",
+          "correct": true,
+          "feedback": "The signature check protects the upgrade path and rejects unsigned images by default."
+        },
+        {
+          "letter": "C",
+          "text": "The appliance has lost its Internet connection to FortiGuard.",
+          "correct": false,
+          "feedback": "FortiNAC-F performs signature verification locally and supports air-gapped environments."
+        },
+        {
+          "letter": "D",
+          "text": "The HA peer is holding the firmware lock on the secondary node.",
+          "correct": false,
+          "feedback": "The message concerns image authenticity, not necessarily HA ownership or synchronization."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "prompt": "The NAC-F appliance is air-gapped. Can signed firmware verification still operate?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "No; each boot requires a live FortiGuard cloud signature lookup.",
+          "correct": false,
+          "feedback": "The feature is explicitly designed to operate in air-gapped environments."
+        },
+        {
+          "letter": "B",
+          "text": "Only if the administrator disables runtime file checks before boot.",
+          "correct": false,
+          "feedback": "Disabling integrity checks is not a documented prerequisite for offline verification."
+        },
+        {
+          "letter": "C",
+          "text": "Only after importing a new public key from the Internet every hour.",
+          "correct": false,
+          "feedback": "The local trust material supports verification without hourly online key retrieval."
+        },
+        {
+          "letter": "D",
+          "text": "Yes; the documented integrity and signature checks are self-contained.",
+          "correct": true,
+          "feedback": "The release notes state that verification works without Internet access."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "prompt": "A firmware upload passes signature validation, but a boot-critical file hash later differs. Which control detected this?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The firmware download checksum alone detected the runtime change.",
+          "correct": false,
+          "feedback": "A package checksum does not monitor files after the system is installed."
+        },
+        {
+          "letter": "B",
+          "text": "The RADIUS server rejected the FortiNAC-F administrator.",
+          "correct": false,
+          "feedback": "RADIUS authentication does not validate boot-critical file hashes."
+        },
+        {
+          "letter": "C",
+          "text": "The boot/runtime file-integrity verification detected the installed-file mismatch.",
+          "correct": true,
+          "feedback": "Image signature validation and installed-file hashing are separate integrity checks."
+        },
+        {
+          "letter": "D",
+          "text": "The HA health check failed because the peer uses another version.",
+          "correct": false,
+          "feedback": "HA version mismatch is separate from the runtime integrity check."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "product": "FortiNAC-F",
+      "prompt": "A rollback to a pre-7.6.3 unsigned build is required. What does Fortinet document?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The downgrade is possible with user confirmation, but returns to an unsigned build.",
+          "correct": true,
+          "feedback": "The controlled downgrade path exists, but it changes the software trust posture."
+        },
+        {
+          "letter": "B",
+          "text": "All downgrades are permanently blocked once a signed build is installed.",
+          "correct": false,
+          "feedback": "The release notes explicitly allow downgrade to pre-7.6.3 unsigned builds with confirmation."
+        },
+        {
+          "letter": "C",
+          "text": "The downgrade automatically retains signed-image enforcement on the old build.",
+          "correct": false,
+          "feedback": "A pre-7.6.3 unsigned build does not provide the same signed-build protection."
+        },
+        {
+          "letter": "D",
+          "text": "The administrator must enable Internet-based verification on every boot.",
+          "correct": false,
+          "feedback": "The local verification model does not require an Internet connection."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "prompt": "The default certificate policy is unchanged. What happens after a user PKCS#12 export?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "FortiAuthenticator revokes the user certificate and disables EAP-TLS.",
+          "correct": false,
+          "feedback": "Private-key deletion is not certificate revocation; the certificate can remain active."
+        },
+        {
+          "letter": "B",
+          "text": "The endpoint's private key is deleted when the browser closes.",
+          "correct": false,
+          "feedback": "The policy affects the server-side generated key, not the downloaded endpoint copy."
+        },
+        {
+          "letter": "C",
+          "text": "The certificate is moved into the Trusted CA store automatically.",
+          "correct": false,
+          "feedback": "The export action does not change the certificate's issuer or trust-store location."
+        },
+        {
+          "letter": "D",
+          "text": "FortiAuthenticator deletes its generated user private key after download.",
+          "correct": true,
+          "feedback": "The default one-time delivery policy removes the server-side generated key after export."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "prompt": "A user certificate remains Active after the FAC private key was deleted. Is that contradictory?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Yes; a certificate cannot remain active without a server-side private key.",
+          "correct": false,
+          "feedback": "The endpoint can hold the corresponding private key after it is downloaded."
+        },
+        {
+          "letter": "B",
+          "text": "No; key deletion removes the server copy but does not revoke the certificate.",
+          "correct": true,
+          "feedback": "Certificate status and private-key custody are separate lifecycle controls."
+        },
+        {
+          "letter": "C",
+          "text": "Yes; the certificate must be deleted whenever a key is exported.",
+          "correct": false,
+          "feedback": "The documented setting deletes the private key, not the certificate object."
+        },
+        {
+          "letter": "D",
+          "text": "No; deleting the key automatically changes the certificate to Revoked.",
+          "correct": false,
+          "feedback": "Revocation is a separate action and is not triggered by this policy setting."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "prompt": "A deployment needs repeatable PKCS#12 exports for a staged endpoint rollout. What should be planned?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Disable certificate expiration so the key can be downloaded again.",
+          "correct": false,
+          "feedback": "Certificate expiry does not restore a private key deleted after the first export."
+        },
+        {
+          "letter": "B",
+          "text": "Change the certificate's subject name and keep the same deleted key.",
+          "correct": false,
+          "feedback": "Changing a subject does not recreate the missing private-key material."
+        },
+        {
+          "letter": "C",
+          "text": "Use a controlled key-retention process or issue a new certificate/key pair.",
+          "correct": true,
+          "feedback": "With deletion enabled, the original server-side key is not available for another export."
+        },
+        {
+          "letter": "D",
+          "text": "Revoke the certificate and export its private key from the revocation list.",
+          "correct": false,
+          "feedback": "A revocation list contains status information, not recoverable private keys."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "product": "FortiAuthenticator",
+      "prompt": "The browser reports a successful PKCS#12 download. What additional check proves the endpoint is ready for EAP-TLS?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Confirm the FAC policy page still displays the default deletion setting.",
+          "correct": false,
+          "feedback": "The policy state does not prove the endpoint imported the package."
+        },
+        {
+          "letter": "B",
+          "text": "Verify the certificate and private key were imported into the intended endpoint store.",
+          "correct": true,
+          "feedback": "A successful download proves transfer, not endpoint installation or correct certificate binding."
+        },
+        {
+          "letter": "C",
+          "text": "Check only that the user's certificate serial number appears in FAC.",
+          "correct": false,
+          "feedback": "The server-side certificate record does not prove the endpoint has its private key."
+        },
+        {
+          "letter": "D",
+          "text": "Restart the RADIUS server and assume the endpoint enrollment succeeded.",
+          "correct": false,
+          "feedback": "A service restart cannot validate local certificate-store contents."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "prompt": "A template needs one credential to launch against several approved servers. Which field type is required?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Add several ordinary Target Address fields to the same template.",
+          "correct": false,
+          "feedback": "The documented feature is a dedicated field type, not duplicated standard fields."
+        },
+        {
+          "letter": "B",
+          "text": "Use a URL field and store every server address in the password value.",
+          "correct": false,
+          "feedback": "Credential fields should not be overloaded to bypass the target model."
+        },
+        {
+          "letter": "C",
+          "text": "Use Multiple Target Address instead of the standard Service Address field.",
+          "correct": true,
+          "feedback": "The 1.9 feature replaces the standard address field with a multi-destination allowlist."
+        },
+        {
+          "letter": "D",
+          "text": "Create one secret per IP and link them to the same template.",
+          "correct": false,
+          "feedback": "That duplicates secrets rather than using the supported single-secret multi-target feature."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "prompt": "Which destination forms can the Multiple Target Address allowlist contain?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "IP ranges, CIDR networks, FQDNs and wildcard FQDNs.",
+          "correct": true,
+          "feedback": "The documented allowlist supports both address ranges and DNS-based destination patterns."
+        },
+        {
+          "letter": "B",
+          "text": "Only literal IPv4 addresses and TCP port numbers.",
+          "correct": false,
+          "feedback": "The feature supports ranges, CIDR and FQDN patterns as well."
+        },
+        {
+          "letter": "C",
+          "text": "Only DNS SRV records and URL paths with query strings.",
+          "correct": false,
+          "feedback": "SRV records and URL paths are not the documented allowlist types."
+        },
+        {
+          "letter": "D",
+          "text": "Only FortiGate address objects synchronized from FortiManager.",
+          "correct": false,
+          "feedback": "The field is configured in FortiPAM target templates, not imported as firewall objects."
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "prompt": "A user selects a server outside the target allowlist. What should the launch workflow do?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Allow the launch if the stored credential authenticates successfully.",
+          "correct": false,
+          "feedback": "Authentication success does not authorize a destination outside the allowlist."
+        },
+        {
+          "letter": "B",
+          "text": "Launch the session and log the mismatch after the connection ends.",
+          "correct": false,
+          "feedback": "The destination constraint should be applied before the privileged session is opened."
+        },
+        {
+          "letter": "C",
+          "text": "Automatically add the new address to the allowlist after the first login.",
+          "correct": false,
+          "feedback": "Auto-expanding the allowlist would defeat the administrator-defined destination boundary."
+        },
+        {
+          "letter": "D",
+          "text": "Reject or omit that destination because it is not an approved target.",
+          "correct": true,
+          "feedback": "The allowlist constrains destination selection; it is not merely a convenience label."
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "product": "FortiPAM",
+      "prompt": "An administrator cannot find Multiple Target Address on an older FortiPAM build. What version boundary matters?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The general feature requires FortiPAM 1.9.0 or later.",
+          "correct": true,
+          "feedback": "The release notes specify 1.9.0 as the requirement for single secret to multiple targets."
+        },
+        {
+          "letter": "B",
+          "text": "The feature is available in every 1.7 release if SSH is enabled.",
+          "correct": false,
+          "feedback": "SSH availability does not add the 1.9 multiple-target template field."
+        },
+        {
+          "letter": "C",
+          "text": "The feature requires FortiPAM 2.5 and a separate FortiSASE license.",
+          "correct": false,
+          "feedback": "The documented version boundary is 1.9.0 and does not depend on FortiSASE."
+        },
+        {
+          "letter": "D",
+          "text": "The feature is enabled only on FortiPAM Cloud and not appliances.",
+          "correct": false,
+          "feedback": "The release notes describe the 1.9 feature without that Cloud-only restriction."
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "prompt": "A restricted OT Windows endpoint must send logs without registering to the Supervisor. Which deployment fits?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Install a normal registered agent and set the Supervisor to offline mode.",
+          "correct": false,
+          "feedback": "The standard agent still relies on Supervisor registration and management."
+        },
+        {
+          "letter": "B",
+          "text": "Install a Linux osquery agent and forward Windows event logs over SNMP.",
+          "correct": false,
+          "feedback": "Linux osquery does not collect the Windows Security logs on this endpoint."
+        },
+        {
+          "letter": "C",
+          "text": "Use the Headless Windows Agent pointed directly at a Collector.",
+          "correct": true,
+          "feedback": "Headless mode uses local configuration and uploads to the Collector without Supervisor registration."
+        },
+        {
+          "letter": "D",
+          "text": "Send all Windows events directly to the FortiSIEM Supervisor over UDP/514.",
+          "correct": false,
+          "feedback": "The documented headless agent path uploads to a Collector, not directly to Supervisor."
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "prompt": "How is the Headless Windows Agent licensed?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It consumes no license because it is not registered to Supervisor.",
+          "correct": false,
+          "feedback": "The release notes explicitly state that it consumes a device license."
+        },
+        {
+          "letter": "B",
+          "text": "It consumes a device license, while events count toward EPS or GB/day.",
+          "correct": true,
+          "feedback": "No Agent license is required, but the endpoint and event volume remain licensed."
+        },
+        {
+          "letter": "C",
+          "text": "It consumes an Agent license but no device or event license.",
+          "correct": false,
+          "feedback": "That reverses the documented licensing model for headless deployment."
+        },
+        {
+          "letter": "D",
+          "text": "It consumes only a FortiClient EMS endpoint license.",
+          "correct": false,
+          "feedback": "FortiClient EMS licensing is unrelated to FortiSIEM agent licensing."
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "prompt": "Which data sources are supported by the documented Headless Windows Agent configuration?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Every registered-agent monitor type including WMI, osquery and discovery.",
+          "correct": false,
+          "feedback": "The headless feature has a narrower supported source set than registered agents."
+        },
+        {
+          "letter": "B",
+          "text": "Only Windows DNS and DHCP discovery application groups.",
+          "correct": false,
+          "feedback": "Those groups are not the documented headless source limitation."
+        },
+        {
+          "letter": "C",
+          "text": "Only packet captures from the endpoint network adapter.",
+          "correct": false,
+          "feedback": "Packet capture is not the documented headless Windows Agent source type."
+        },
+        {
+          "letter": "D",
+          "text": "Windows Security EventLog sources and user-defined log files.",
+          "correct": true,
+          "feedback": "The installation guide limits exported headless templates to EventLog and user-defined files."
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "product": "FortiSIEM",
+      "prompt": "A headless agent installs but cannot upload. Which Collector-side prerequisites matter?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable IPv6-only mode and point the agent to the Supervisor address.",
+          "correct": false,
+          "feedback": "The guide requires an IPv4-only Collector and Collector address for headless mode."
+        },
+        {
+          "letter": "B",
+          "text": "Use an IPv4-only Collector, TLS 1.2 and valid Collector credentials.",
+          "correct": true,
+          "feedback": "The agent uploads directly to the Collector and requires the documented TLS and IP conditions."
+        },
+        {
+          "letter": "C",
+          "text": "Disable HTTPS and rely on the endpoint's local Windows firewall.",
+          "correct": false,
+          "feedback": "The documented agent communication uses TLS 1.2 over HTTPS."
+        },
+        {
+          "letter": "D",
+          "text": "Create an Agent Admin user only in the Supervisor CMDB.",
+          "correct": false,
+          "feedback": "Headless upload uses Collector-side authentication rather than Supervisor registration credentials."
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "prompt": "Which combination is required before configuring agentless ZTNA bookmarks?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "FortiClient agent, EMS tags, a public SaaS URL and no proxy SSO.",
+          "correct": false,
+          "feedback": "That describes a different endpoint posture/agent model, not agentless bookmark access."
+        },
+        {
+          "letter": "B",
+          "text": "Only a browser bookmark and a public DNS record for the application.",
+          "correct": false,
+          "feedback": "The bookmark alone does not create the authenticated SPA path to a private app."
+        },
+        {
+          "letter": "C",
+          "text": "A FortiAnalyzer ADOM, a Collector and an HTTP syslog listener.",
+          "correct": false,
+          "feedback": "Those components belong to log analytics and do not provide FortiSASE private access."
+        },
+        {
+          "letter": "D",
+          "text": "Proxy, proxy SSO, licensed SPA hub and an HTTPS private application.",
+          "correct": true,
+          "feedback": "The workflow depends on proxy identity, SPA routing and a supported HTTPS application behind FortiGate."
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "prompt": "Does the agentless endpoint need a proxy PAC file and FortiSASE deep-inspection CA just to open its bookmark?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "No; the bookmark flow uses proxy SSO but does not configure the endpoint as a proxy.",
+          "correct": true,
+          "feedback": "Fortinet distinguishes proxy SSO configuration from endpoint proxy/PAC and CA requirements."
+        },
+        {
+          "letter": "B",
+          "text": "Yes; every agentless endpoint must install a PAC file and CA certificate.",
+          "correct": false,
+          "feedback": "The guide explicitly says endpoint proxy configuration and CA installation are not required."
+        },
+        {
+          "letter": "C",
+          "text": "Yes; otherwise the browser cannot resolve the SPA hub's BGP route.",
+          "correct": false,
+          "feedback": "BGP routing is handled by the SPA hub path, not by a browser PAC file."
+        },
+        {
+          "letter": "D",
+          "text": "No; the endpoint bypasses all authentication and opens the private app anonymously.",
+          "correct": false,
+          "feedback": "The user still authenticates through the configured proxy SSO provider."
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "prompt": "A private application is configured by FQDN behind a BGP-per-overlay SPA hub. What DNS setting matters?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Set the DNS rule to Public so the browser queries its home resolver.",
+          "correct": false,
+          "feedback": "A public DNS path may not resolve or reach the internal application namespace."
+        },
+        {
+          "letter": "B",
+          "text": "Disable DNS and hard-code the user's home IP as the application address.",
+          "correct": false,
+          "feedback": "The bookmark still needs the private application's name/address resolution."
+        },
+        {
+          "letter": "C",
+          "text": "Set the corresponding internal DNS rule's Access Type to Private.",
+          "correct": true,
+          "feedback": "The private DNS server must be reachable through the SPA path for FQDN application access."
+        },
+        {
+          "letter": "D",
+          "text": "Use only the FortiSASE implicit DNS rule for every internal domain.",
+          "correct": false,
+          "feedback": "Internal domains require the documented split/redirection rule and private access context."
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "product": "FortiSASE",
+      "prompt": "An endpoint has an active FortiClient agent/proxy session and cannot open an agentless bookmark. What is expected?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Agent and proxy users cannot access the agentless ZTNA bookmarks.",
+          "correct": true,
+          "feedback": "The feature deliberately separates the agentless bookmark flow from agent/proxy user sessions."
+        },
+        {
+          "letter": "B",
+          "text": "The bookmark should work only after the user disables SAML SSO.",
+          "correct": false,
+          "feedback": "The restriction is the endpoint session model, not a reason to disable SSO."
+        },
+        {
+          "letter": "C",
+          "text": "The endpoint must be moved to a different ADOM in FortiAnalyzer.",
+          "correct": false,
+          "feedback": "FortiAnalyzer ADOMs do not control FortiSASE bookmark eligibility."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiGate hub must be changed from BGP to static routing.",
+          "correct": false,
+          "feedback": "The documented agentless workflow supports the specified SPA BGP designs."
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "prompt": "Which interface should be added as the SD-WAN member in the aggregate static IPsec design?",
+      "correct_answer": "B",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Add each physical WAN port and remove the IPsec tunnel interfaces.",
+          "correct": false,
+          "feedback": "That bypasses the documented aggregate IPsec logical interface."
+        },
+        {
+          "letter": "B",
+          "text": "Add the logical ipsec-aggregate interface as one SD-WAN member.",
+          "correct": true,
+          "feedback": "The Fortinet example uses the aggregate interface, not each tunnel as separate members."
+        },
+        {
+          "letter": "C",
+          "text": "Add every Phase 1 tunnel as an independent SLA member only.",
+          "correct": false,
+          "feedback": "That creates ordinary path selection rather than the aggregate per-packet design."
+        },
+        {
+          "letter": "D",
+          "text": "Add the remote LAN interface as a local SD-WAN member.",
+          "correct": false,
+          "feedback": "The remote LAN is not a local interface that can represent the tunnel aggregate."
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "prompt": "What is the main traffic behavior difference between this aggregate and ordinary session-based SD-WAN steering?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The aggregate chooses a new BGP route for every Ethernet frame.",
+          "correct": false,
+          "feedback": "BGP route selection is not the documented per-packet tunnel aggregation mechanism."
+        },
+        {
+          "letter": "B",
+          "text": "The aggregate encrypts only the first packet and sends later packets clear.",
+          "correct": false,
+          "feedback": "MACsec/IPsec encryption behavior is not replaced by packet distribution."
+        },
+        {
+          "letter": "C",
+          "text": "Ordinary SD-WAN always fragments each session across every member.",
+          "correct": false,
+          "feedback": "Ordinary SD-WAN steering is not equivalent to per-packet aggregate distribution."
+        },
+        {
+          "letter": "D",
+          "text": "The aggregate can distribute packets from one stream across static IPsec members.",
+          "correct": true,
+          "feedback": "Per-packet distribution differs from selecting one SD-WAN member for a session."
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "prompt": "Which command displays the configured aggregate IPsec members and algorithm?",
+      "correct_answer": "C",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Use `diagnose wireless-controller wlac -c wtp` to list aggregate members.",
+          "correct": false,
+          "feedback": "That command concerns wireless access points, not IPsec tunnel aggregation."
+        },
+        {
+          "letter": "B",
+          "text": "Use `get router info bgp summary` to display all packet counters.",
+          "correct": false,
+          "feedback": "BGP summary does not show the IPsec aggregate's member list or algorithm."
+        },
+        {
+          "letter": "C",
+          "text": "Use `diagnose sys ipsec-aggregate list` on the FortiGate.",
+          "correct": true,
+          "feedback": "The documented command displays the aggregate name, algorithm, member count and run tally."
+        },
+        {
+          "letter": "D",
+          "text": "Use `diagnose switch macsec status` to inspect tunnel members.",
+          "correct": false,
+          "feedback": "MACsec status applies to Ethernet link encryption, not IPsec aggregation."
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "product": "Secure SD-WAN",
+      "prompt": "Both IPsec SAs are up, but only one aggregate member carries traffic. What should be checked?",
+      "correct_answer": "A",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Confirm aggregate membership and that routing uses the logical aggregate.",
+          "correct": true,
+          "feedback": "Established SAs do not prove that the aggregate is built or selected by SD-WAN."
+        },
+        {
+          "letter": "B",
+          "text": "Change the Phase 1 proposal to a weaker cipher on both peers.",
+          "correct": false,
+          "feedback": "A proposal change is not justified when both SAs are already established."
+        },
+        {
+          "letter": "C",
+          "text": "Disable the second WAN interface so the aggregate has one member.",
+          "correct": false,
+          "feedback": "Removing a member defeats the intended parallel tunnel distribution."
+        },
+        {
+          "letter": "D",
+          "text": "Increase the FortiAnalyzer scheduled-upload threshold to six hours.",
+          "correct": false,
+          "feedback": "Log upload timers do not affect IPsec aggregate forwarding."
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "product": "Secure SD-WAN",
+      "prompt": "A per-packet aggregate performs worse when one ISP has much higher latency. Why?",
+      "correct_answer": "D",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The aggregate automatically changes the remote gateway to the slowest ISP.",
+          "correct": false,
+          "feedback": "The documented mechanism distributes packets; it does not rewrite the peer gateway."
+        },
+        {
+          "letter": "B",
+          "text": "The second tunnel removes IPsec encryption from alternating packets.",
+          "correct": false,
+          "feedback": "Every aggregate member remains an IPsec tunnel; encryption is not alternated off."
+        },
+        {
+          "letter": "C",
+          "text": "The slow ISP prevents the RADIUS server from deriving a CAK.",
+          "correct": false,
+          "feedback": "RADIUS-derived CAK belongs to MACsec, not static IPsec tunnel aggregation."
+        },
+        {
+          "letter": "D",
+          "text": "Packets can arrive out of order and trigger retransmissions on latency-sensitive flows.",
+          "correct": true,
+          "feedback": "Per-packet distribution exposes one stream to the delay variation of both paths."
+        }
+      ]
+    }
+  ]
+}
