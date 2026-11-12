@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-11-12",
+  "generated_at_local": "2026-11-12T08:24:26-08:00",
+  "overall_status": "PARTIAL",
+  "stages": {
+    "pre_generation_inventory": {
+      "status": "PASS",
+      "path": "docs/exclusion_inventory_2026-11-12-08-24.json",
+      "records": 258,
+      "report_entries_inspected": 23,
+      "newly_direct_parsed_reports": 9,
+      "status_only_or_empty_reports": 3,
+      "unverified_report_paths": [
+        "2026-10-20",
+        "2026-10-22"
+      ],
+      "selection_started_after_inventory_readback": true
+    },
+    "semantic_uniqueness": {
+      "status": "PASS",
+      "selected_topics": 12,
+      "mandatory_products": 12,
+      "method": "Compare feature/mechanism, workflow/transaction, failure class, evidence pattern, remediation path, question fingerprint and diagram topology against the rolling inventory. Candidate-only historical records are retained conservatively.",
+      "notes": "Cross-product near-matches were reviewed manually; EDM exact-record matching was distinguished from FortiSASE API-based CASB/DLP; LoRaWAN from Wi-Fi association/roaming; MACsec from L2 MCLAG; agentless ZTNA from agent-based pre-logon/browser controls."
+    },
+    "community_sweep": {
+      "status": "PARTIAL",
+      "product_areas_searched": 12,
+      "direct_recent_scenario_matches": 1,
+      "recent_but_unrelated_results": 3,
+      "older_relevant_scenario_companions": 4,
+      "older_or_unrelated_results": 1,
+      "no_direct_scenario_result": 3,
+      "path": "docs/community_sweep_2026-11-12.json",
+      "notes": "Only FortiAnalyzer post-reboot Device Manager status was a directly matched recent scenario. Other recent results were not paired when their mechanism differed from the lesson."
+    },
+    "administration_guide_sweep": {
+      "status": "PARTIAL",
+      "products": 12,
+      "primary_sources_located": 12,
+      "path": "docs/admin_guide_sweep_2026-11-12.json",
+      "notes": "Several direct Fortinet Document Library page opens returned HTTP 403; indexed official documentation text and accessible release/guide material were used. The report does not claim full direct-page inspection for blocked sources."
+    },
+    "lessons": {
+      "status": "PASS",
+      "count": 12,
+      "total_focused_words": 7425,
+      "minimum_words": 515,
+      "maximum_words": 771,
+      "path": "docs/lessons_2026-11-12.json",
+      "notes": "All lessons explain feature purpose, object relationships, control/data flow, configuration or source-supported procedure, observables, failure boundaries and operational troubleshooting."
+    },
+    "examination": {
+      "status": "PASS",
+      "question_count": 50,
+      "choices_per_question": 4,
+      "choice_count": 200,
+      "per_choice_feedback_count": 200,
+      "answer_distribution": {
+        "A": 13,
+        "B": 13,
+        "C": 12,
+        "D": 12
+      },
+      "maximum_choice_word_spread": 4,
+      "empty_feedback_count": 0,
+      "path": "docs/question_bank_2026-11-12.json"
+    },
+    "diagrams": {
+      "status": "PASS",
+      "lesson_count": 12,
+      "svg_count": 12,
+      "editable_drawio_count": 12,
+      "asset_readbacks": 24,
+      "missing_assets": 0,
+      "manifest_path": "docs/diagram_manifest_2026-11-12.json",
+      "notes": "One duplicate create attempt for fortisiem-headless.svg returned 422 because the file already existed; the existing SVG was independently fetched and validated, so no asset was missing."
+    },
+    "report_publication": {
+      "status": "PASS",
+      "path": "docs/Fortinet_Daily_Study_Quiz_2026-11-12-08-24.html",
+      "initial_readback_passed": true,
+      "final_status_update_pending": true
+    },
+    "index_publication": {
+      "status": "PASS",
+      "path": "docs/index.html",
+      "latest_summary_readback_passed": true,
+      "latest_run_card_readback_passed": true,
+      "final_status_update_pending": true
+    },
+    "github_pages": {
+      "status": "PENDING_UNVERIFIED",
+      "workflow_run_id": 43261883581,
+      "workflow_url": "https://github.com/ccaiccie4/Fortinet/actions/runs/43261883581",
+      "workflow_status_at_validation": "pending",
+      "direct_report_url": "https://ccaiccie4.github.io/Fortinet/Fortinet_Daily_Study_Quiz_2026-11-12-08-24.html",
+      "direct_index_url": "https://ccaiccie4.github.io/Fortinet/",
+      "direct_url_fetch": "inaccessible to available web fetcher",
+      "notes": "Earlier workflow runs were cancelled by subsequent repository commits; the latest commit triggered a new Pages build. Direct URL access could not be verified."
+    },
+    "email": {
+      "status": "NOT_ATTEMPTED_DISABLED",
+      "notes": "Email and notifications are disabled in the run context."
+    },
+    "scheduler_continuity": {
+      "status": "UNCHANGED",
+      "notes": "No scheduler/list/update/disable action was taken. Daily 08:00 America/Los_Angeles recurrence remains untouched."
+    }
+  },
+  "deliverables": {
+    "inventory": "docs/exclusion_inventory_2026-11-12-08-24.json",
+    "selected_fingerprints": "docs/selected_fingerprints_2026-11-12.json",
+    "community_sweep": "docs/community_sweep_2026-11-12.json",
+    "admin_guide_sweep": "docs/admin_guide_sweep_2026-11-12.json",
+    "lessons": "docs/lessons_2026-11-12.json",
+    "questions": "docs/question_bank_2026-11-12.json",
+    "diagrams": "docs/assets/2026-11-12/",
+    "diagram_manifest": "docs/diagram_manifest_2026-11-12.json",
+    "report": "docs/Fortinet_Daily_Study_Quiz_2026-11-12-08-24.html",
+    "index": "docs/index.html"
+  },
+  "remediation": [
+    "Retry direct access to Fortinet Document Library pages through a documentation-capable session; indexed official content is linked in the report meanwhile.",
+    "Continue searching Community for fresh, directly matched troubleshooting scenarios for the eleven products without a verified recent companion.",
+    "Allow the latest GitHub Pages build to finish, then retry the published report and index URLs. If the build fails, inspect the Pages workflow log and preserve the repository HTML/index as the verified fallback."
+  ]
+}
