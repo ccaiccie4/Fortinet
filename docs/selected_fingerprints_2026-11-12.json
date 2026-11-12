@@ -22,7 +22,7 @@
     {
       "product": "FortiManager",
       "subject": "Remote GUI access to a managed FortiGate: role-gated proxy path over TCP/8082",
-      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/327992/remotely-access-a-managed-fortigate",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.1/administration-guide/327992/remotely-access-a-managed-fortigate",
       "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-possible-causes-for-the-error-reason-error-reading-from-remote-server-while-taking-remote-access-to-fortigate-from-fortimanager-229498",
       "mechanism_fingerprint": "FortiManager Remote GUI Access admin-profile capability + Device Manager action + FortiManager HTTP proxy listener + FGFM management tunnel to managed FortiGate + separate FortiGate administrator authentication",
       "workflow_fingerprint": "user authenticates to FortiManager; role permission gates Remote Access; browser opens FortiManager address/port 8082; FortiManager proxies GUI session through management relationship; user authenticates to FortiGate; port can be changed",
@@ -78,7 +78,7 @@
     {
       "product": "FortiNAC",
       "subject": "Role assignment precedence and inheritance: users, hosts, groups, captive portal and device profiler",
-      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/245839/assigning-roles",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/245839/assigning-roles",
       "scenario_community_url": null,
       "mechanism_fingerprint": "user/host/device/port entities carry roles; multiple role sources evaluated by rank in Roles view; group assignment, captive portal, user-to-host inheritance and device profiler can update role",
       "workflow_fingerprint": "host/user/device is discovered or registered -> role candidates arise from portal, group, inheritance, profiler or manual assignment -> ordered role list selects first matching role -> role drives policy/access classification",
@@ -106,7 +106,7 @@
     {
       "product": "FortiAuthenticator",
       "subject": "Certificate private-key lifecycle: delete generated user private key after first download",
-      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/396299/policies",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/administration-guide/396299/policies",
       "scenario_community_url": null,
       "mechanism_fingerprint": "global Certificate Management > Policies > General flag controls deletion of FortiAuthenticator-generated user private key after PKCS#12 Export Key Cert download",
       "workflow_fingerprint": "FAC generates user certificate/private key -> administrator or user exports PKCS#12 from End Entities > Users -> download event triggers deletion when option enabled -> later re-export is no longer possible; server certificate and CA lifecycle remain distinct",
@@ -134,7 +134,7 @@
     {
       "product": "FortiSIEM",
       "subject": "Headless Windows Agent 7.5: local configuration and direct Collector ingestion without Supervisor registration",
-      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/windows-agent-7-5-x-installation-guide/547950/fortisiem-windows-agent",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/windows-agent-7-5-x-installation-guide/547950/fortisiem-windows-agent-7-5-x",
       "scenario_community_url": null,
       "mechanism_fingerprint": "Windows Agent deployment_type=Headless; local exported JSON monitor template; direct Collector endpoint; no Supervisor registration/Agent license; device license and EPS/GB-day consumption",
       "workflow_fingerprint": "create Collector-side htpasswd identity -> install agent with Collector IP/port, org fields and DEPLOYMENT_TYPE=Headless -> export Windows Agent template containing EventLog/user-defined files -> copy as fsm_agent_config.json -> agent sends Windows Security and user-defined events to Collector",
