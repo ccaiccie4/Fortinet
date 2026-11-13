@@ -1,0 +1,327 @@
+{
+  "schema_version": "2.0",
+  "run_date": "2026-11-13",
+  "historical_inventory": "docs/exclusion_inventory_2026-11-13-07-57.json",
+  "semantic_uniqueness_review": "All 12 candidates were manually compared against historical product mechanisms, workflows, failure classes, evidence, remediation, question and diagram fingerprints before drafting.",
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "version": "FortiOS 8.0.0",
+      "title": "Central SNAT map selection with dynamic external IP-feed sources",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/421028/central-snat",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/135632652/config-firewall-central-snat-map"
+      ],
+      "scenario_community_url": null,
+      "summary": "Use a changing external IP list as a central SNAT source selector while keeping security-policy authorization and translation-rule selection separate.",
+      "content": "### Purpose and control boundary\nCentral SNAT moves source-address translation out of the per-firewall-policy NAT checkbox and into an ordered translation table. It is useful when many security policies should authorize traffic independently of which public address or IP pool is used for egress. FortiOS reads central SNAT maps from top to bottom and applies the first matching entry. The security policy is still evaluated first; central SNAT then selects translation behavior for an admitted session. A policy hit therefore proves that traffic was authorized, not that the intended central SNAT row matched.\n\n### Dynamic source membership\nFortiOS 8.0 allows an IP address external-feed connector to be used as the source address in a central SNAT map. The feed is represented by an address external-resource object. The map references that object in orig-addr or orig-addr6, so membership can change when the feed is refreshed without editing a static address group. The external-resource must be an address feed, not a URL/domain feed, and the IPv4 or IPv6 field must match the traffic family. A dual-stack design may need separate IPv4 and IPv6 objects or map entries.\n\n### Enable and configure deliberately\nCentral NAT is not enabled by default in ordinary profile-based NGFW mode. Enabling it changes the source of truth: the NAT option in IPv4 firewall policies is skipped and SNAT is performed through central-snat-map. Policy-based NGFW mode implicitly uses central NAT. Before changing an established firewall, inventory policy-level NAT and IP pools, enable central NAT in a maintenance window, then build explicit maps in the required order.\n\n<pre>config system settings\n    set central-nat enable\nend\nconfig system external-resource\n    edit \"Partner-Egress-Feed\"\n        set type address\n        set resource \"https://feeds.example.invalid/partner-egress.txt\"\n    next\nend\nconfig firewall central-snat-map\n    edit 10\n        set srcintf \"lan\"\n        set dstintf \"wan1\"\n        set orig-addr \"Partner-Egress-Feed\"\n        set dst-addr \"all\"\n        set nat enable\n        set nat-ippool \"Partner-Public-Pool\"\n    next\nend</pre>\n\n### Matching and evidence\nA central SNAT entry can constrain incoming/outgoing interfaces, original source and destination addresses, protocol, original source port and destination port, then select an IP pool and translated port behavior. The first matching row wins. A broad row placed above a narrow feed-backed row can shadow it even when the feed is healthy. Translation is not a substitute for routing: the selected egress interface and next hop still need to be reachable, and the security policy must permit the original flow.\n\nInspect the external-resource object and confirm its last refresh and parsed address family. Use diagnose firewall iprope list 10000d to inspect compiled central SNAT entries and confirm the expected feed object appears in the active map. Then generate a new session and inspect the session/NAT table for the translated source and selected pool. The iprope output proves the map is compiled; it does not prove a particular live session matched it. A session entry proves the translation selected for that flow; it does not prove the feed will remain current.\n\n### Operational failure pattern\nIf a partner reports that only some egress sources are translated, compare the original source address with the feed contents, then inspect row order and interface constraints. If the map is present but never matches, check address family and whether the feed contains prefixes or host entries in the format FortiOS accepts. If the policy accepts but the session keeps its original source, verify central NAT is enabled and that the intended map is above any broader matching row. Keep the feed URL reachable, monitor refresh age, and treat a stale feed as security-control drift rather than assuming a successful policy hit is sufficient.",
+      "diagram_nodes": [
+        "External IP feed",
+        "Address external-resource",
+        "Ordered central SNAT map",
+        "Firewall session translation",
+        "WAN egress / IP pool"
+      ],
+      "diagram_edges": [
+        "fetches and parses",
+        "referenced by orig-addr",
+        "first matching map selects pool",
+        "translated session exits"
+      ],
+      "word_count": 584
+    },
+    {
+      "product": "FortiManager",
+      "version": "FortiManager 7.6.5",
+      "title": "Script object types and execution-target boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/570971/run-a-script"
+      ],
+      "scenario_community_url": null,
+      "summary": "A FortiManager script is not just text: its language and Run Script on target determine which database or live device context can execute it.",
+      "content": "### Why target semantics matter\nFortiManager stores scripts inside an ADOM context (or the Global Database ADOM) and uses the script type and target to determine where the content is interpreted. The three script types are CLI, Tcl and Jinja. They are not interchangeable wrappers around the same execution engine. A script can be syntactically valid yet be unusable for the selected target because the interpreter and execution context do not match.\n\n### CLI scripts have three distinct targets\nA CLI script can run against the Device Database, a Policy Package or ADOM Database, or a remote FortiGate directly through its CLI. These targets have different operational meanings. Device Database execution changes the configuration model held by FortiManager; it is not the same as sending commands immediately to the appliance. Policy Package/ADOM Database execution changes the centrally managed object context. Direct remote execution sends CLI commands to the live FortiGate and can therefore create a device-side change outside the normal package installation transaction. Know which source of truth is being changed before clicking Run Script.\n\n### Tcl and Jinja are constrained\nFortiManager documents Tcl scripts as remote-FortiGate-direct-only. Jinja scripts run only on the ADOM Database. Only CLI scripts are supported in the Global Database ADOM, and Global Database scripts can target only the Policy Package or ADOM Database. These constraints are enforced by the Run Script on selection; they are not merely recommendations. A common design error is to create a Jinja template and then expect it to execute directly on a FortiGate, or to use Tcl against the ADOM database.\n\n### Validation has a boundary\nThe script editor can validate CLI syntax. Validate on change is available for CLI scripts and rechecks the script when it is edited. Validate device platform lets the administrator select the platform used for syntax validation. Advanced Device Filters can narrow device selection by platform, build, device, hostname or serial number. These checks reduce obvious mismatches, but a successful syntax check does not prove that a command is supported by every target build, that a variable resolves as intended, or that a live device will accept the operation in its current state.\n\n<pre>config system interface\n    edit \"port3\"\n        set alias \"Branch-Uplink\"\n    next\nend</pre>\n\n### Operational workflow\nCreate the script under Device Manager > Scripts (or Policy & Objects > Scripts in the Global Database ADOM). Select its type, then select Run Script on. Validate using the intended platform/build, choose a narrow device group or policy package, run it, and inspect execution history. For direct execution, compare live FortiGate configuration before and after. For database execution, compare the FortiManager database or package and then perform the normal install workflow if the change is intended for production.\n\n### Troubleshooting and safety\nIf the target selector does not offer the desired context, check script type and ADOM rather than assuming a GUI defect. If the script reports success but the live device is unchanged, it may have modified the Device Database or ADOM Database instead of the remote FortiGate. If validation passes but execution fails, inspect platform/build, device filters, permissions and the execution result. Keep scripts idempotent, avoid broad filters for destructive commands, and treat direct remote execution as a separate change path that requires its own audit and rollback plan.",
+      "diagram_nodes": [
+        "ADOM script object",
+        "Language / type gate",
+        "Target compatibility gate",
+        "Device DB / ADOM DB / live FortiGate",
+        "Execution history and diff"
+      ],
+      "diagram_edges": [
+        "stores script",
+        "CLI / Tcl / Jinja rules",
+        "restricts target choices",
+        "runs in selected context"
+      ],
+      "word_count": 543
+    },
+    {
+      "product": "FortiAnalyzer",
+      "version": "FortiAnalyzer 8.0.0",
+      "title": "Real-time log forwarding: filters, masking and reliable TCP buffering",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/420493/modes",
+        "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/430463/log-forwarding-to-socaas"
+      ],
+      "scenario_community_url": null,
+      "summary": "Forwarding mode exports incoming logs as they arrive; it differs from scheduled FAZ-to-FAZ aggregation and has its own filtering, buffering and receiver-authorization behavior.",
+      "content": "### Two modes, two transaction models\nFortiAnalyzer supports forwarding and aggregation. Forwarding is the default and sends logs in real time or near real time as the source receives them. Aggregation is a scheduled transfer between FortiAnalyzer units: the client stores logs and later sends records not already present on the server. Aggregation is CLI-only, requires the receiving FortiAnalyzer to accept aggregation, and does not support syslog or CEF destinations. Do not troubleshoot forwarding as though it were aggregation; the server prerequisites and delay model are different.\n\n### Forwarding is configured on the source\nThe client creates a Log Forwarding entry under System Settings > Advanced > Log Forwarding. Destination type can be FortiAnalyzer, Syslog, Syslog Pack, Common Event Format (CEF), or an output plugin. For plugin forwarding, an output profile must exist first. Syslog/CEF types expose a server port; FortiAnalyzer destinations use the FortiAnalyzer protocol and do not expose the same port setting. Sending frequency is available for FortiAnalyzer destinations and can be real time, every minute or every five minutes (the documented default).\n\n### Reliable transport and buffering\nReliable Connection uses TCP instead of UDP. When the connection drops, logs are buffered and automatically forwarded when connectivity returns; Fortinet documents a 12 GB buffer limit. RELP is not supported. UDP avoids the TCP connection but does not provide the same retransmission and backlog behavior. TCP is therefore safer for a syslog/CEF receiver that supports it, but it is not infinite storage: a prolonged outage can fill the buffer, after which the sender cannot preserve all backlog.\n\n### Filtering is part of the data pipeline\nDevice Filters select which managed devices are forwarded. Log Filters can use All or Any conditions. Exclusions can remove device types, log types or selected fields. Masking replaces selected field values before the remote system receives them and uses a data-mask key. This is a privacy and data-minimization control, not a transport-encryption feature. When IP address fields are filtered with Equal to or Not equal to, wildcard and subnet values are not supported. For a subnet such as 172.10.0.0/16, use a regex with Contain/Not contain semantics rather than assuming CIDR matching works in an equality field.\n\n### Receiver-side state\nWhen forwarding to another FortiAnalyzer, devices whose logs are forwarded are added on the receiver as unauthorized devices. The receiver must authorize them before its normal device-management workflows treat them as trusted. A sender showing a configured destination does not prove the receiver has accepted or indexed the data. Check the forwarding entry, connection state, source backlog, receiver device authorization and timestamps of arriving logs.\n\n<pre>config system log-forward\n    edit 1\n        set mode forwarding\n        set fwd-server-type syslog\n        set server-addr \"192.0.2.50\"\n        set fwd-reliable enable\n    next\nend</pre>\n\n### Operational diagnosis\nIf the remote SIEM is missing only certain events, inspect device filters, All/Any logic, exclusions and masking before changing network rules. If logs arrive in bursts after an outage, inspect TCP buffering and receiver indexing delay. If logs never arrive, verify destination type, port, route, TLS trust (where enabled) and receiver status. Use get system log-forward to inspect configured forwarding IDs, then compare sender state with receiver timestamps. A successful TCP connection proves transport establishment, not that the filter admits every desired event or that the remote parser recognizes each field.",
+      "diagram_nodes": [
+        "Incoming FAZ logs",
+        "Forwarding profile / filters",
+        "TCP buffer or UDP sender",
+        "Remote FAZ / syslog / CEF",
+        "Receiver authorization / indexing"
+      ],
+      "diagram_edges": [
+        "arrive at source",
+        "filter, exclude and mask",
+        "transport and buffer",
+        "authorize and index"
+      ],
+      "word_count": 543
+    },
+    {
+      "product": "FortiSwitch",
+      "version": "FortiSwitchOS 7.6.3",
+      "title": "LACP aggregator selection, fallback and per-flow member hashing",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.3/fortiswitchos-administration-guide/352388/link-aggregation-groups",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/7.6.2/fortiswitchos-cli-reference/511852"
+      ],
+      "scenario_community_url": null,
+      "summary": "A trunk can be up while traffic is uneven or a peer is silently operating in fallback; understand aggregator choice separately from per-flow member selection.",
+      "content": "### What a FortiSwitch trunk represents\nA link aggregation group combines physical ports into one logical interface. FortiSwitch supports standard LACP in active and passive modes, plus static aggregation and Fortinet trunk mode. Active LACP sends control PDUs; passive LACP responds when the peer initiates. Static mode ignores and does not send LACP control messages. Fortinet trunk mode uses heartbeat packets to determine member availability. These modes are not interchangeable: static aggregation can appear configured while the far end has a different bundle definition, and passive/passive peers may never initiate negotiation.\n\n### Aggregator selection is not member hashing\nIf LACP trunk members negotiate different speeds, FortiSwitch groups ports with the same negotiated speed into separate aggregators. Only one aggregator is used by the trunk. The aggregator-mode setting decides which group wins: bandwidth selects the aggregator with the greatest total bandwidth (the documented default), while count selects the aggregator with the most ports. This is a control-plane decision about which speed group is active. After an aggregator is selected, port-selection-criteria chooses a member for each flow using source/destination IP or MAC fields. A four-member bundle does not guarantee every single TCP flow uses all four links.\n\n### Hash entropy matters\nIf many clients connect to one server, a source-only or destination-only hash can concentrate traffic on a small subset of members. A source-and-destination IP or MAC tuple generally provides more variation when the workload has diverse endpoints. Hash selection is per flow to preserve packet ordering; a single large flow remains constrained by one physical member. Aggregate throughput can be high across many flows while one transfer is limited to one member's capacity.\n\n### LACP fallback is a bootstrapping feature\nStarting in FortiSwitchOS 7.4.0, a selected fallback port can remain up when no LACP PDUs arrive, allowing a non-LACP peer (for example, a PXE environment) to reach the network. In fallback, the selected port is up and other members are blocked. When LACP PDUs return, the trunk transitions back to LACP. The delay is 90 seconds with slow LACP and 30 seconds with fast LACP. Do not mistake fallback for a healthy negotiated bundle.\n\n### Important constraints\nFallback cannot be combined with min_bundle or max_bundle, cannot be used in an MCLAG split-brain state, and should not be configured on both switches of an MCLAG pair. The LACP peer-consistency check reports a mismatch if both MCLAG switches use fallback. Member withdrawal behavior also matters: when control packets are lost, the trunk can block or forward on a withdrawn member depending on configuration. That choice changes the risk between blackholing and forwarding on a link whose control-plane status is uncertain.\n\n<pre>config switch trunk\n    edit \"uplink-lag\"\n        set mode lacp-active\n        set lacp-speed fast\n        set aggregator-mode bandwidth\n        set port-selection-criteria src-dst-ip\n        set members \"port1\" \"port2\" \"port3\" \"port4\"\n    next\nend</pre>\n\n### Verification\nCheck trunk membership, negotiated speed, actor/partner LACP state and per-port counters. A logical trunk up state proves some aggregation is active; it does not prove all intended members joined the selected aggregator or that traffic is balanced. Compare member counters during multiple independent flows. If one member carries everything, check hash inputs and traffic diversity before changing LACP timers. If the peer appears online only during fallback, investigate why LACP PDUs are absent rather than accepting fallback as normal operation.",
+      "diagram_nodes": [
+        "LACP peer PDUs",
+        "Speed-group aggregators",
+        "Aggregator-mode selector",
+        "Flow hash tuple",
+        "Selected physical member"
+      ],
+      "diagram_edges": [
+        "negotiates members",
+        "groups by speed",
+        "chooses one group",
+        "hashes each flow"
+      ],
+      "word_count": 544
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "version": "FortiAP/FortiWiFi 7.6.1",
+      "title": "SSID VLAN pools: AP-group mapping versus client load balancing",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/376326/configuring-dynamic-user-vlan-assignment",
+        "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/153336/vlan-assignment-by-fortiap-group"
+      ],
+      "scenario_community_url": null,
+      "summary": "A single tunneled SSID can distribute associated clients across multiple VLANs, or map VLANs by FortiAP group, without multiplying SSIDs.",
+      "content": "### Why pool VLANs\nA VLAN pool lets one SSID represent multiple client subnets. This can reduce the need to create many nearly identical SSIDs and can distribute a large wireless population across smaller broadcast domains. FortiGate automatically creates a zone associated with the SSID interface when load-balancing VLANs are configured; the zone name is based on the SSID interface followed by .zone. Each VLAN still needs its own network interface, addressing, DHCP options and firewall-policy treatment. A pool is a selection mechanism, not an automatic replacement for the L3 and security design of each subnet.\n\n### Two different purposes share the pool object\nFortiAP group assignment maps an AP group to a specific VLAN. It is useful when floors, buildings or sections should use the same SSID but separate subnets by AP location. Each AP belongs to one FortiAP group. Load-balancing pools instead distribute new clients among multiple VLANs. Fortinet documents round-robin selection as choosing the least-busy VLAN (the one with the smallest client count). Hash selection chooses a VLAN based on a hash of the current SSID client count and number of VLAN entries; the GUI describes the result as a consistent VLAN choice for a specific device. Do not confuse location-based segmentation with client-population balancing.\n\n### Mode and method constraints\nVLAN-pool load balancing is available only for tunnel-mode SSIDs. FortiAP dynamic user VLAN documentation states that RADIUS-based VLAN assignment and VLAN pooling cannot be used simultaneously for the same SSID. If a deployment requires RADIUS attributes to assign a user's VLAN at authentication, use that mechanism rather than assuming the pool will be layered on top. If the pool contains no valid VLAN ID, FortiGate falls back to the SSID's static VLAN ID setting. This fallback can make a broken pool look like a working SSID while all clients land in one subnet.\n\n<pre>config wireless-controller vap\n    edit \"Staff-WiFi\"\n        set vlan-pooling round-robin\n        config vlan-pool\n            edit 101\n            next\n            edit 102\n            next\n            edit 103\n            next\n        end\n    next\nend</pre>\n\n### Build the downstream network first\nCreate the VLAN interfaces and DHCP scopes for every pool member, verify that the AP-to-FortiGate tunnel can carry the VLANs, and apply the intended policy controls to each subnet. If the SSID uses FortiAP group mapping, ensure group names match the pool entries and AP membership is correct. If the SSID uses load balancing, confirm the selected method is supported in the traffic mode and that the pool has valid VLAN IDs.\n\n### Verification and troubleshooting\nInspect the VAP's VLAN-pooling mode and entries, then check the automatically generated SSID zone and member VLAN interfaces. Associate a test client and inspect which VLAN it receives, its DHCP lease, gateway and firewall policy. Repeat with multiple clients to observe distribution. A client receiving an address proves DHCP worked on the selected VLAN; it does not prove every pool member is valid or that the intended balancing method is active. If all clients land in the static VLAN, inspect invalid pool entries and AP-group references. If a RADIUS-assigned VLAN is expected, verify VLAN pooling is not also enabled for that SSID.",
+      "diagram_nodes": [
+        "Wireless client association",
+        "SSID VAP VLAN pool",
+        "AP-group / round-robin / hash selector",
+        "SSID zone and VLAN interfaces",
+        "Per-VLAN DHCP and policy"
+      ],
+      "diagram_edges": [
+        "associates to SSID",
+        "selects VLAN",
+        "maps into zone",
+        "client receives subnet"
+      ],
+      "word_count": 512
+    },
+    {
+      "product": "FortiNAC",
+      "version": "FortiNAC 9.4.7",
+      "title": "LDAP Organizational Unit mapping into User/Host Profiles and FSSO",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/659283/fortinac"
+      ],
+      "scenario_community_url": null,
+      "summary": "FortiNAC 9.4 adds OU mapping to User/Host Profiles and includes OU context in FSSO updates sent to FortiGate alongside user groups and device tags.",
+      "content": "### What changed in 9.4\nFortiNAC 9.4 adds User Organizational Unit (OU) LDAP mapping in User/Host Profiles. Fortinet states that FortiNAC sends the OU to FortiGate through FSSO communication alongside the FortiGate Device Tag and User Group. The value is that directory placement can become part of identity context, rather than relying only on a user name or broad security group. Two users may belong to the same AD group but reside in different administrative OUs that represent different trust boundaries or support organizations.\n\n### Keep the identity pipeline separate from enforcement\nThe conceptual flow is directory lookup/synchronization, FortiNAC user record and User/Host Profile mapping, then FSSO identity publication to FortiGate. The OU is directory metadata. It is not itself a VLAN, RADIUS tunnel attribute or firewall policy. FortiNAC network access policies and FSSO publication are separate decision points: a profile can classify identity context, while FortiGate consumes FSSO information to apply firewall policy. Do not assume that adding an OU criterion automatically changes a switch port's VLAN.\n\n### Why OU mapping is operationally useful\nGroup membership is often coarse and stable, while OU structure may reflect organizational ownership, delegated administration or a more precise placement hierarchy. OU mapping can preserve that context as users move between organizational containers. It also introduces a dependency on directory synchronization and consistent OU data. If an OU is renamed or a user is moved, the old context may remain visible until directory information is refreshed and the FSSO update is sent.\n\n### Design the match carefully\nIdentify the exact LDAP OU value FortiNAC receives and how the User/Host Profile expresses the mapping. Avoid using a display name or broad substring that can match multiple directory branches. If nested OUs are present, decide whether the intended policy should match the leaf OU, a parent OU or a normalized attribute. Keep profile rules understandable so a user does not unexpectedly match a broad profile before the intended OU-specific profile.\n\n### Verification chain\nInspect the remote LDAP user record and confirm the expected OU is populated. Next inspect the FortiNAC User/Host Profile mapping and resulting user context. Then verify the FSSO connection and confirm FortiGate receives the expected user, group and device-tag/OU information. Finally check which FortiGate identity-based policy matches. Each stage proves something different: LDAP data proves directory visibility; FortiNAC profile data proves mapping; FSSO state proves publication; FortiGate policy logs prove enforcement. A successful LDAP bind alone does not prove the OU is mapped or sent.\n\n### Troubleshooting pattern\nIf a user authenticates but FortiGate applies the broad group policy, compare the OU at the directory, FortiNAC and FortiGate stages. If the LDAP record is correct but FortiNAC is stale, investigate the synchronization rule and refresh cycle. If FortiNAC has the OU but FortiGate does not, inspect FSSO connectivity and user update events rather than editing firewall policies blindly. If FortiGate sees the attribute but the wrong rule wins, check the identity source and policy order. The release note identifies the enhancement but does not specify every LDAP polling interval or nested-OU normalization behavior.",
+      "diagram_nodes": [
+        "LDAP directory user / OU",
+        "FortiNAC User/Host Profile mapping",
+        "FSSO identity update",
+        "FortiGate user/group/device-tag context",
+        "Identity-based firewall policy"
+      ],
+      "diagram_edges": [
+        "syncs user attributes",
+        "maps OU",
+        "publishes context",
+        "selects policy"
+      ],
+      "word_count": 510
+    },
+    {
+      "product": "FortiNAC-F",
+      "version": "FortiNAC-F 7.6.0",
+      "title": "IP-phone voice VLAN provisioning with Local RADIUS attributes",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/ip-phone-integration/65140/appendix",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/659283/fortinac"
+      ],
+      "scenario_community_url": null,
+      "summary": "FortiNAC-F returns separate data and tagged voice VLAN attributes for profiled IP phones through Local RADIUS, with optional MAC-notification-driven revalidation.",
+      "content": "### Use case and prerequisite\nMany access ports carry a workstation and an IP phone. The phone needs a tagged voice VLAN while the workstation behind it remains in the data VLAN. FortiNAC-F can dynamically provision the voice VLAN through RADIUS, but the documented integration requires the Local RADIUS option for the standard workflow. Build the network access policy first: the User/Host Profile must identify the IP phone (Device Type = IP Phone is the simplest documented match), the Logical Network must represent the voice VLAN, and the Network Access Configuration must assign the data VLAN's logical network.\n\n### RADIUS response construction\nIn Network > Inventory, select the switch model and open Model Configuration. Enable RADIUS authentication for the device and select Local. Configure logical-network access values for host states. For the tagged voice VLAN, create a custom RADIUS Attribute Group and return the standard tunnel attributes: Tunnel-Medium-Type = IEEE-802, Tunnel-Type = VLAN, and Tunnel-Private-Group-Id = %ACCESS_VALUE%. Fortinet's IP-phone integration example also adds Cisco-AVPair = device-traffic-class=voice so a Cisco phone/switch can distinguish the voice service. The data VLAN remains represented by its own logical network and RFC VLAN attribute group.\n\n### Transaction flow\nThe phone connects to the switch; the switch sends a RADIUS Access-Request; FortiNAC evaluates the host profile and network access policy; Local RADIUS returns Access-Accept with VLAN attributes; and the switch interprets the tunnel attributes to place the phone in the tagged voice VLAN. The workstation behind the phone can continue using the data VLAN. A policy match without the correct attribute group is not enough: the RADIUS response must contain the expected VLAN ID and voice-class value, and the switch must support the returned attributes.\n\n### Real-time refresh\nFortiNAC can process IP-phone MAC notification traps to update connectivity information and revalidate phones when they connect or disconnect. The integration guide cautions that some phones generate frequent notification traps; each trap requires processing and can create unnecessary work. Enable MAC Notification Trap Processing only when real-time voice provisioning/revalidation is needed. It is not a generic performance enhancement to turn on for every switch.\n\n### Configuration and verification\nCreate the phone profile, voice logical network and policy; map the correct RADIUS attribute group to the logical network; verify the switch model uses Local RADIUS and that the shared secret matches on the switch and FortiNAC. Capture a RADIUS exchange during a test phone connection. Inspect the Access-Accept for Tunnel-Type VLAN, Tunnel-Private-Group-Id and Cisco-AVPair. Then inspect the switch port's voice VLAN and the phone's DHCP lease. A phone obtaining an address proves some VLAN and DHCP path worked; it does not prove the tagged voice VLAN was assigned if the phone fell back to the native/data VLAN.\n\n### Failure isolation\nIf the phone receives the data VLAN but not voice, verify the host profile and policy match first, then the Access Value and custom attribute group, then the RADIUS response, and finally switch interpretation. If the Access-Accept has no VLAN attributes, confirm Local RADIUS is selected and the logical network has the expected attribute group. If attributes are present but the phone stays untagged, validate switch vendor/model behavior and the voice-class attribute. If updates lag after a phone move, inspect MAC notification trap reception and avoid enabling trap processing indiscriminately on noisy phone models.",
+      "diagram_nodes": [
+        "IP phone / workstation",
+        "Access switch port",
+        "FortiNAC profile and policy",
+        "Local RADIUS Access-Accept",
+        "Tagged voice VLAN + data VLAN"
+      ],
+      "diagram_edges": [
+        "connects to port",
+        "sends Access-Request",
+        "selects profile and attributes",
+        "switch applies VLANs"
+      ],
+      "word_count": 545
+    },
+    {
+      "product": "FortiAuthenticator",
+      "version": "FortiAuthenticator 6.6.10",
+      "title": "Self-service password recovery with SMS or FortiToken verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.3/release-notes/568509/whats-new",
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.4/administration-guide/569230/ldap"
+      ],
+      "scenario_community_url": null,
+      "summary": "Password recovery is a separate pre-login transaction: portal policy exposes methods, user records or LDAP sync rules enroll recovery channels, and rate limiting protects the workflow.",
+      "content": "### Separate recovery from normal login MFA\nFortiAuthenticator 6.6.3 adds SMS and FortiToken verification as password-recovery methods in the user portal, with rate limiting in the enhanced reset workflow. This does not mean that every user who can log in with MFA automatically has a recovery channel. The administrator controls which methods are offered at the portal level, while the user record or remote LDAP synchronization rule determines which recovery methods are available to that user.\n\n### Portal-level control\nWhen Password Reset is enabled under the portal's Pre-Login Services, a Verification methods option determines which recovery methods can be used before authentication. The portal policy is the outer gate. If password reset is disabled or a method is not allowed by the portal, the end user will not be offered that method even if the user has a phone number or FortiToken. This prevents a user-specific enrollment from silently expanding the public pre-login surface.\n\n### User enrollment and LDAP sync\nThe user record includes Password Recovery Options for SMS and FortiToken. The remote LDAP sync rule also has corresponding Password recovery by SMS and Password recovery by FortiToken options, while email recovery is renamed Password recovery by email. The end user sees the available methods in the Account Info tab of the user portal. For remote LDAP accounts, the sync rule can populate recovery options, but the password update itself has directory dependencies. FortiAuthenticator documents remote LDAP password reset without the old password as an LDAPS-only operation and requires the LDAP bind account to have permission to reset the user's password. A domain join or secure LDAP setup is also required for the documented AD password-change workflows, depending on the path used.\n\n### Recovery transaction\nThe user selects Password Reset, chooses one of the permitted factors, receives an SMS or FortiToken challenge, completes verification, and proceeds to the password update. The verification factor establishes control of the enrolled channel; it does not prove that the downstream directory will accept the new password. For an AD-backed account, the directory's password policy and bind account rights still govern the final update. Rate limiting constrains repeated recovery attempts, so repeated resend requests may be throttled even when the phone or token is valid.\n\n### Operational configuration\nEnable Password Reset and the desired verification methods in Authentication > Portals > Portals. Configure SMS recovery or FortiToken recovery on each relevant user, or in the remote LDAP sync rule for synchronized users. Verify that the SMS provider is operational and that the user has a current mobile number; verify FortiToken assignment and activation before relying on token recovery. For remote LDAP password changes, test LDAPS trust and bind-account password-reset permissions in a controlled account before exposing the method broadly.\n\n### Troubleshooting evidence\nIf the user sees only email recovery, compare the portal's allowed methods with the user record and LDAP sync rule. If SMS is offered but not delivered, inspect the SMS gateway/provider path and phone number rather than changing LDAP permissions. If FortiToken verification succeeds but the password update fails, inspect LDAP/AD write permission, LDAPS connection and password policy. If attempts are temporarily blocked, respect the rate-limit window instead of repeatedly resending challenges. A successful SMS or token check proves the recovery factor; it does not prove the password update committed to the authoritative directory.",
+      "diagram_nodes": [
+        "User portal pre-login reset",
+        "Portal allowed-method policy",
+        "Per-user SMS / FortiToken enrollment",
+        "Factor verification and rate limit",
+        "Local / LDAP password update"
+      ],
+      "diagram_edges": [
+        "requests reset",
+        "filters allowed methods",
+        "delivers challenge",
+        "updates account"
+      ],
+      "word_count": 551
+    },
+    {
+      "product": "FortiPAM",
+      "version": "FortiPAM 1.9.0",
+      "title": "Native RDP TCP forwarding: compatibility path and security-control trade-offs",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0"
+      ],
+      "scenario_community_url": null,
+      "summary": "FortiPAM 1.9.0 can route native RDP launcher traffic through TCP forwarding for compatibility, but this changes the launcher path and removes several native RDP controls.",
+      "content": "### Why the option exists\nFortiPAM 1.9.0 adds a TCP Forwarding option when a secret has RDP Service enabled. Enabling it routes RDP traffic through TCP forwarding in a manner consistent with an Other clientType launcher. Fortinet documents three use cases: bypassing the certificate-revocation-check failure warning during native launch, connecting to a legacy or third-party RDP server that only supports plain-text RDP, and working around a native launch failure caused by a recent RDP protocol change. It is a compatibility path, not a general recommendation to weaken every RDP session.\n\n### Native and forwarded paths differ\nThe native RDP launcher exposes RDP-specific security settings. Best Effort uses NLA when the server supports it and otherwise uses standard RDP authentication over TLS. NLA forces CredSSP. TLS uses an encrypted RDP-over-TLS connection. The RDP option is standard RDP encryption without TLS and is documented for Web-RDP only. The native path can also expose Restricted Admin Mode, Auto TOTP and Block Clipboard controls. TCP forwarding changes the data path, so FortiPAM does not support RDP Security Level, RDP Restricted Admin Mode, RDP Auto TOTP or Block Clipboard for native RDP launchers when this option is enabled.\n\n### Security decision\nThe key question is whether the immediate compatibility requirement outweighs the loss of native launcher controls. If a certificate revocation check fails, first determine whether the target certificate chain, CRL/OCSP reachability and trust configuration are correct. TCP forwarding may allow a session to proceed, but it does not repair certificate trust or prove the remote endpoint is trustworthy. If Restricted Admin Mode or clipboard blocking is mandatory, keep TCP forwarding disabled and resolve the native RDP prerequisite instead. For a legacy endpoint that cannot negotiate the required native path, document the exception and limit who can use the secret.\n\n### Configuration workflow\nEdit the secret under Secrets > Secrets, enable RDP Service, then review TCP Forwarding. Confirm the target address, port and intended launcher type. Test with a dedicated low-privilege account and confirm the session reaches only the approved target. Record the reason for enabling forwarding, the controls no longer available, the target owner and the planned retirement date for the compatibility exception.\n\n### Verification and diagnosis\nVerify the secret's RDP Service and TCP Forwarding settings, then inspect the resulting session/launcher path. If native launch fails with a certificate revocation warning, verify certificate-chain trust and revocation-service reachability before using forwarding as a temporary workaround. If a third-party server accepts only legacy RDP, confirm the limitation is on the target side and that the TCP-forwarded path is approved. If a user expects Auto TOTP or clipboard blocking but cannot select them, check whether TCP Forwarding is enabled; the missing control is an intentional feature boundary, not necessarily a UI defect.\n\n### Operational guardrail\nTreat native RDP and TCP-forwarded RDP as separate security profiles. Use secret policy and folder permissions to restrict access to compatibility secrets. Review session recordings and logs, but do not assume a recording restores controls that the launcher no longer enforces. After the target is upgraded or its certificate issue is corrected, disable TCP Forwarding and re-test native security settings.",
+      "diagram_nodes": [
+        "FortiPAM RDP secret",
+        "Native RDP launcher",
+        "TCP forwarding option",
+        "Forwarded TCP tunnel",
+        "Target RDP service"
+      ],
+      "diagram_edges": [
+        "defines target and controls",
+        "selects path",
+        "wraps RDP stream",
+        "connects to target"
+      ],
+      "word_count": 518
+    },
+    {
+      "product": "FortiSIEM",
+      "version": "FortiSIEM 7.5.1",
+      "title": "Discovery orchestration: scan types, credential mapping and worker placement",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/47862/cmdb"
+      ],
+      "scenario_community_url": null,
+      "summary": "Discovery creates and enriches CMDB objects, while ongoing performance-monitoring jobs may run on a Collector or be distributed across Workers.",
+      "content": "### Discovery is a workflow, not just a ping sweep\nFortiSIEM discovers devices, applications and users by using credentials to query infrastructure components. A discovery entry defines scan type, root IP (for Smart Scan), include/exclude ranges, device types, name-resolution priority and optional behaviors. A successful ping is not a prerequisite for every discovery method, and a ping-only scan is a different task from collecting operating-system, hardware, software and configuration details.\n\n### Select the scan type based on topology\nRange Scan walks specified IP ranges and CIDR subnets sequentially. Smart Scan starts with a root device, learns the devices that root knows about, discovers those devices, and continues recursively until the learned-device list is exhausted. L2 Scan discovers only Layer 2 connectivity. AWS Scan and Azure Scan use the corresponding cloud SDK and require a cloud credential mapped to the relevant domain. Nozomi Scan uses the Nozomi REST API and requires the matching credential mapping. Choosing Smart Scan without a useful root IP produces incomplete topology discovery; choosing Range Scan for a cloud inventory does not replace the SDK-based scan.\n\n### Credentials are mapped to targets\nFortiSIEM uses IP-to-credential mapping to select credentials for discovered addresses and device types. A credential existing in the store is not enough: it must be applicable to the target address/domain and access method. Discovery can retrieve host name, OS, hardware details such as CPU and memory, software, processes, services and configuration. Name resolution can prioritize DNS, device configuration or SNMP/WMI when these disagree. Use include/exclude ranges and device-type filters to constrain scope, especially before a large Smart Scan.\n\n### Collector and Worker roles are different\nIf a discovery or Test Connectivity task is assigned to a Collector, that Collector performs the task, and the Supervisor assigns the performance-monitoring task to the same Collector. In an environment without a Collector, the Supervisor performs discovery and connectivity testing, then assigns ongoing performance monitoring to active Workers using weighted round robin. Some jobs, such as vCenter monitoring, carry more weight than simple SNMP CPU monitoring. Removing a Worker redistributes its jobs; adding a Worker assigns new jobs to it. Disabling and re-enabling performance monitoring from the GUI triggers a new global job distribution.\n\n### Useful options and cost controls\nDo not ping before discovery is useful for devices that ignore ICMP but still answer the configured management protocol. Ping-only discovery is for reachability status when detailed inventory is not required. Discover Routes can help Smart Scan learn neighbors, but the guide warns route collection can be expensive on BGP routers. Schedule broad scans off-peak, use include/exclude ranges and device-type filters, and avoid scanning every subnet with every credential.\n\n### Evidence and troubleshooting\nRun discovery on demand and inspect Results and Errors. Discovery History exposes Results, Errors and Changes, and reports can be exported to PDF or CSV. A completed scan proves the discovery job finished; it does not prove every device was successfully inventoried or that ongoing monitoring jobs are assigned to the Supervisor. Check credential tests, scan errors, CMDB records and Collector/Worker job placement separately. If a host is missing, check include/exclude logic, scan type, root IP, name-resolution source, credential mapping and whether a ping precheck prevented the protocol attempt.",
+      "diagram_nodes": [
+        "Discovery entry and credentials",
+        "Supervisor / Collector",
+        "Range or Smart Scan targets",
+        "CMDB inventory result",
+        "Active Worker monitoring jobs"
+      ],
+      "diagram_edges": [
+        "defines scope and credentials",
+        "assigns discovery task",
+        "collects device facts",
+        "distributes monitoring"
+      ],
+      "word_count": 533
+    },
+    {
+      "product": "FortiSASE",
+      "version": "FortiSASE 26.1.107",
+      "title": "External log forwarding: public/private paths, reliable TCP and TLS trust",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortisase/25.3.148/feature-administration-guide/774663/forwarding-logs-to-an-external-server"
+      ],
+      "scenario_community_url": null,
+      "summary": "FortiSASE exports Security PoP and endpoint events to two independent collectors; private reachability and TLS certificate trust are separate gates.",
+      "content": "### What is forwarded\nFortiSASE can forward logs to up to two independent external servers, including FortiAnalyzer, Syslog and Common Event Format (CEF) destinations. The log families are broader than traffic: traffic records describe Security PoP flows and HTTP/HTTPS request/response information; event logs include system and administrative events; user logs capture authentication; endpoint logs include tunnel, scan, malware, sandbox, removable-media and FortiClient events; UTM logs include antivirus, web filter/Inline-CASB, IPS, DLP, application control, DNS filter, SSL and file-filter events. The receiving SIEM should be designed around selected log families rather than assuming one generic event stream.\n\n### Public and private access are routing choices\nPublic means the collector is reachable over the internet. Private means it is behind a secure private access FortiGate hub. A private destination therefore depends on the SPA path and hub routing; entering a private IP does not make it reachable by itself. Fortinet documents an additional constraint: if the primary external server is Private, the secondary must be Public. This matters when designing redundancy. Two private collectors are not a valid primary/secondary combination under that documented rule.\n\n### Reliable connection and secure connection are distinct\nReliable Connection enables TCP instead of UDP for log forwarding. Secure Connection enables TLS and requires Reliable Connection. For TLS, FortiSASE must trust the remote syslog server's CA certificate; import the remote CA under Certificates/System Certificates. A TCP connection can succeed while TLS certificate validation fails, and a TLS connection can succeed while the receiver is parsing the wrong log format. Check these stages independently.\n\n### Configuration sequence\nUnder Analytics (or Operations, depending on release UI) > Settings, enable Log Forwarding to Self-Managed Service and create the external server. Select server type, Public or Private access type, address and port for Syslog/CEF, reliable connection and forwarding frequency. For secure syslog, enable Reliable Connection and Secure Connection, then import the correct remote CA certificate and verify supported cipher suites. The connection status changes from Connecting to Connected after configuration is submitted and the connection is established.\n\n### Evidence and limits\nConnected proves the forwarding endpoint is reachable at the configured transport/security layer; it does not prove all log types are selected, the remote receiver is parsing them, or timestamps are aligned. Validate with a controlled event from each required family and check arrival at the receiver. Confirm the remote listener is bound to the expected port, the certificate chain matches the configured FQDN and the private route uses the SPA hub. If logs are missing only for endpoints, verify the endpoint log category rather than assuming traffic-log selection includes it.\n\n### Operational design\nUse separate destinations when the security operations platform and long-term archive have different retention or availability requirements. Keep the secondary path public if the primary is private, as required by the documented design. Protect TLS CA changes through certificate-expiry monitoring and change control. A collector replacement or CA rollover should be tested with a small controlled event stream before broad log forwarding is re-enabled.",
+      "diagram_nodes": [
+        "FortiSASE Security PoP logs",
+        "External server profile",
+        "Public internet or SPA hub",
+        "TCP / TLS trust gate",
+        "FortiAnalyzer / Syslog / CEF"
+      ],
+      "diagram_edges": [
+        "selects log families",
+        "chooses route",
+        "establishes transport and trust",
+        "delivers records"
+      ],
+      "word_count": 496
+    },
+    {
+      "product": "Secure SD-WAN",
+      "version": "FortiOS 8.0.0",
+      "title": "Passive per-application SLA measurement from inspected live sessions",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "supporting_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/208103/passive-wan-health-measurement",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/580649/link-health-monitor"
+      ],
+      "scenario_community_url": null,
+      "summary": "Measure latency, jitter and loss of actual application sessions per WAN member, rather than relying only on generic probe-server health.",
+      "content": "### Why passive application measurement exists\nActive SLA probes measure reachability and performance to a detection server using ping, TCP echo, HTTP or DNS. That is useful for infrastructure health but can differ from the path quality experienced by a specific application. FortiOS 8.0 adds passive measurement that differentiates SLA information by Internet Service Database (ISDB) service or Application Control signature. Two applications can perform differently over the same WAN link, so a generic link metric can hide an application-specific problem.\n\n### Two layers of enablement\nFirst, the firewall policy must enable passive-wan-health-measurement, use an Application Control profile to identify applications, and disable hardware offload with auto-asic-offload disable. Second, the SD-WAN performance SLA must use passive or prefer-passive mode, and the SD-WAN service rule must identify the relevant ISDB service or application signature/group and enable passive-measurement. If any one of these pieces is missing, the rule may not collect the intended per-application statistics.\n\n### Session-to-metric flow\nAs TCP sessions pass through the firewall policy, FortiGate collects session information and derives latency, jitter and packet-loss measurements for participating SD-WAN members. When an SD-WAN rule references specific Internet Services or applications, SLA information is differentiated for those services/applications. The SLA metric for a rule can therefore reflect the average latency of the services in that rule, rather than the average of unrelated traffic. Subsequent SD-WAN decisions can use measured application quality to choose a preferred member.\n\n### Passive versus prefer-passive\nIn passive mode, live traffic is the measurement source and no active health-check probes are sent. This reduces probe traffic but leaves an idle link without a fresh measurement. Prefer-passive uses live traffic when available; if no live traffic flows through a member for three continuous minutes, FortiGate sends active probes to the configured health-check server. Prefer-passive therefore needs a configured server and link health monitor. Do not configure passive-only mode and then expect a probe result on an idle member.\n\n<pre>config firewall policy\n    edit 1\n        set passive-wan-health-measurement enable\n        set auto-asic-offload disable\n        set application-list \"default\"\n    next\nend\nconfig system sdwan\n    config health-check\n        edit \"Passive-App-SLA\"\n            set detect-mode prefer-passive\n            set server \"198.51.100.10\"\n            set members 1 2\n        next\n    end\n    config service\n        edit 1\n            set internet-service enable\n            set internet-service-name \"Example-App\"\n            set health-check \"Passive-App-SLA\"\n            set passive-measurement enable\n        next\n    end\nend</pre>\n\n### Verification\nUse diagnose sys link-monitor-passive admin list by-interface to inspect passive session information by interface. Confirm the firewall policy has passive measurement enabled and hardware offload disabled, the Application Control profile is identifying traffic, the health check is passive/prefer-passive, and the SD-WAN rule has the right ISDB/application signature and passive-measurement. Generate representative application traffic on both WAN members and compare per-rule SLA values. The diagnostic list proves passive session data is collected; it does not by itself prove the SD-WAN rule selected the desired path.\n\n### Failure isolation\nIf a ping SLA is green but users report poor performance in one SaaS application, compare per-application passive metrics with the generic probe. If there are no passive entries, check policy inspection and hardware offload first. If one application is not separated, verify the Application Control signature or ISDB identifier used by the rule. If an idle link has no measurement in passive mode, use prefer-passive or generate representative traffic. Enabling passive WAN measurement disables ASIC offload on the participating policy, so assess CPU and throughput impact before applying it broadly.",
+      "diagram_nodes": [
+        "Live TCP application sessions",
+        "Firewall policy inspection",
+        "Passive metrics collector",
+        "Per-app SLA by WAN member",
+        "SD-WAN service rule / member"
+      ],
+      "diagram_edges": [
+        "classifies traffic",
+        "captures session data",
+        "computes latency/jitter/loss",
+        "uses SLA for steering"
+      ],
+      "word_count": 553
+    }
+  ]
+}
