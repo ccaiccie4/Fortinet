@@ -1,0 +1,816 @@
+{
+  "generated_at": "2026-11-13T09:27:45-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-09-27.html",
+  "lessons": [
+    {
+      "id": "L01",
+      "product": "FortiGate",
+      "title": "NP7 link-scan cadence and FGCP recovery timing",
+      "version": "FortiOS 7.6.7 / NP7",
+      "summary": "Tune hardware link detection without confusing it with FGCP election, session pickup, or upstream convergence.",
+      "primary_sources": [
+        {
+          "title": "Changing the NP7 link scan interval to reduce HA failover delays",
+          "url": "https://docs.fortinet.com/document/fortigate/7.6.7/hyperscale-firewall-guide/147731/changing-the-np7-link-scan-interval-to-reduce-ha-failover-delays"
+        },
+        {
+          "title": "FortiOS 7.6.7 release notes",
+          "url": "https://docs.fortinet.com/document/fortigate/7.6.7/fortios-release-notes/743723"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>Purpose and boundary</h3>\n<p>On FortiGate platforms using NP7 processors, the NP7 link-scan interval controls how long the hardware waits between scans that determine whether a physical link has failed. Fortinet documents a default of 1000 milliseconds and a supported range of 50–1000 ms. A shorter interval can cause the FortiGate to recognize a link failure sooner and send gratuitous ARP (GARP) sooner after an FGCP failover. This is a narrow hardware-detection control, not a general-purpose HA timer. It does not change heartbeat cadence, election priority, monitored-interface membership, session pickup, routing-protocol convergence, or the upstream switch's ARP/FDB aging behavior.</p>\n<p>Think of failover as a sequence of separate clocks: physical link state changes; the NP7 scan notices it; FortiOS/FGCP processes the event and selects or activates the primary; the new forwarding path becomes usable; GARP updates neighboring devices; and switches/routers refresh their own forwarding state. The NP7 interval affects the detection portion of that chain. It cannot make an upstream device accept GARP sooner, and it cannot fix a cluster whose election or routing policy is the actual bottleneck.</p>\n<h3>Mechanics and configuration</h3>\n<p>If the link fails just after a scan, detection may wait almost one full interval. At the documented default, that component can approach one second. Reducing the value narrows the maximum wait for the next scan. It is therefore possible to reduce an observed failover delay, but the result depends on which stage dominated the original outage. Fortinet's example describes a cluster with a roughly two-second failover and says that lowering the NP7 interval may reduce the delay; it does not promise a fixed end-to-end improvement.</p>\n<pre><code>config system npu\n    set np-link-scan-interval 200\nend</code></pre>\n<p>The value above is illustrative. Stay within 50–1000 ms, verify that the exact FortiGate model uses NP7, and check the release-specific hardware guide before changing a production cluster. The 7.6.7 release notes show a spelling variant in one feature table; use the exact np-link-scan-interval command documented in the dedicated NP7 link-scan page. Do not copy this setting to a non-NP7 platform or assume NP7Lite behavior is identical.</p>\n<h3>Evidence: what each observation proves</h3>\n<ul>\n<li><code>show full-configuration system npu</code> proves the configured interval; it does not prove when a physical link was first detected.</li>\n<li><code>get system ha status</code> shows current cluster role and synchronization state; it does not isolate NP7 scan delay.</li>\n<li><code>diagnose sys ha history read</code> provides HA event timing and reason information. Compare it with the physical link event and packet-capture timestamps.</li>\n<li>A switch-side or SPAN capture showing GARP proves that the new unit announced the address. It does not prove that every upstream ARP cache, MAC table, or route has converged.</li>\n</ul>\n<h3>Operational troubleshooting</h3>\n<p>Suppose users report a short black hole after a WAN-facing monitored port drops. The HA history shows that the secondary became primary quickly, but the first GARP appears later. First separate role transition from GARP timing. If the link event itself is recognized late on an NP7 interface, the scan interval is a candidate. If the HA role changes promptly and GARP is also prompt, investigate the switch MAC table, upstream ARP behavior, routing adjacencies, or policy/session state instead. If the role transition is slow, review monitored-interface configuration, heartbeat reachability, cluster health, and election behavior; lowering NP7 scan cadence is unlikely to solve that stage.</p>\n<p>Change one variable at a time. Record the current value, test a controlled link failure on a maintenance pair, timestamp the physical link-down, HA role transition, GARP, and first successful application packet, then compare before and after. Keep a rollback value. A lower scan interval is not a substitute for redundant physical paths or a properly designed upstream topology. It is also not evidence that session synchronization or application recovery is instantaneous. Use it only when measurements identify NP7 link detection as the delay being optimized.</p>",
+      "diagram": {
+        "title": "NP7 link detection to FGCP recovery",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Physical link fails"
+          },
+          {
+            "id": "b",
+            "label": "NP7 link scan\n50–1000 ms"
+          },
+          {
+            "id": "c",
+            "label": "FortiOS interface\nstate changes"
+          },
+          {
+            "id": "d",
+            "label": "FGCP role / path\nactivation"
+          },
+          {
+            "id": "e",
+            "label": "GARP + upstream\nARP/FDB refresh"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 627
+    },
+    {
+      "id": "L02",
+      "product": "FortiManager",
+      "title": "FortiManager HA: heartbeat, VRRP and delta-sync backlog",
+      "version": "FortiManager 7.6.6",
+      "summary": "Separate role failover from configuration synchronization and understand the five-minute default detection window.",
+      "primary_sources": [
+        {
+          "title": "Configuring HA options",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/800686/configuring-ha-options"
+        },
+        {
+          "title": "FortiManager Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide"
+        }
+      ],
+      "scenario_sources": [
+        {
+          "title": "Technical Tip: File quota on FortiManager HA configuration",
+          "url": "https://community.fortinet.com/fortimanager-27/technical-tip-file-quota-on-fortimanager-ha-configuration-97361",
+          "date": "2026-04-24",
+          "recency": "Historical companion; outside the 30-day window"
+        }
+      ],
+      "body_html": "<h3>Purpose and topology</h3>\n<p>FortiManager HA protects the management plane, not the forwarding plane of managed FortiGates. A cluster has one primary and up to four backup units. The primary is the unit administrators normally use; configuration synchronization replicates module data to backups so a replacement primary can continue managing the same estate. A cluster is not healthy merely because both appliances answer ping: peer identity, heartbeat, module synchronization, and the failover mechanism must all be correct.</p>\n<p>FortiManager supports Manual and VRRP failover modes. Manual mode requires an administrator to promote a secondary when the primary fails. The new primary retains its own IP, and FortiGate registrations are automatically changed when the new primary is selected. In VRRP mode, the cluster uses a virtual IP and a monitored interface; when the primary's monitored interface is unreachable or down, a secondary can take the primary role and own the VIP. If the cluster sits behind NAT while using Manual mode, configure the management address for both primary and secondary so managed devices are told the correct public address. That management-address requirement is not needed for VRRP mode.</p>\n<h3>Heartbeat timing is not synchronization timing</h3>\n<p>The 7.6.6 guide documents a default heartbeat interval of 10 seconds and a default failover threshold of 30 consecutive missed heartbeats. The default detection window is therefore 10 × 30 = 300 seconds, or five minutes. This surprises administrators who expect a sub-second failover. Lowering the interval or threshold shortens detection, but an overloaded primary can miss heartbeat processing while still being operational; an aggressive threshold can create a false failover. The heartbeat interval is configured on the primary, not independently on each backup.</p>\n<p>The same page exposes Module Data Synchronized and Pending Module Data. Those counters describe replication progress, not device connectivity. The file quota is configured on the primary, defaults to 4096 MB, and ranges from 2048 to 20480 MB. If changes are generated faster than the secondary can receive them, the delta-sync queue can grow. A quota-exhaustion event can reset the queue and force synchronization to restart. Raising the quota may provide more headroom, but it does not fix a persistently undersized or lossy replication path.</p>\n<h3>Configuration and evidence</h3>\n<p>In System Settings &gt; HA, set the primary/secondary operation modes, add each peer IP and serial number, and use the same Cluster ID and Group Password on every member. The primary can list up to four backup peers. In VRRP mode, configure the VIP, VRRP interface, priority, and any monitored IPs. The device with the higher priority becomes primary when possible. Keep the peer addresses, routing, and management reachability unambiguous.</p>\n<pre><code>config system ha\n    set file-quota 8192\nend</code></pre>\n<p>The example changes the primary's file quota to 8192 MB; it is not a complete cluster configuration. Use the GUI for the mode-specific peer, heartbeat, VRRP, and monitored-interface fields, then verify the peer list and synchronization status. The HA page's Module Data Synchronized and Pending Module Data counters show whether the backup is caught up. The downloaded HA debug log shows peer and failover events. The Community file-quota tip describes the failure mode where a delta queue reaches quota and synchronization restarts; it is useful historical context, not a newly published scenario.</p>\n<h3>Field diagnosis</h3>\n<p>If the secondary remains in a synchronizing state, inspect pending bytes and the event log before forcing a full sync. Check whether the replication path is stable, whether large configuration changes are arriving faster than they can be transferred, and whether the configured quota is appropriate. If a cluster fails over after a busy period, compare missed-heartbeat timestamps with CPU and task load before reducing the threshold. A successful VRRP transition proves VIP ownership changed; it does not prove every module is synchronized or that FortiGate installations are immediately available.</p>\n<p>Test both failure types independently: primary appliance/interface loss and a synchronization backlog with both appliances still reachable. Confirm that the backup becomes primary only under the intended condition, that the management address remains reachable, and that the backup's module data is current enough for safe operations. Treat role failover and data synchronization as two separate acceptance criteria.</p>",
+      "diagram": {
+        "title": "FortiManager HA control and sync planes",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Primary FMG\nmanagement plane"
+          },
+          {
+            "id": "b",
+            "label": "Delta-sync queue\nfile quota"
+          },
+          {
+            "id": "c",
+            "label": "Secondary FMG\nreplica"
+          },
+          {
+            "id": "d",
+            "label": "Heartbeat / VRRP\nrole control"
+          },
+          {
+            "id": "e",
+            "label": "Shared management\nVIP (VRRP mode)"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "a"
+          ],
+          [
+            "d",
+            "c"
+          ],
+          [
+            "c",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 680
+    },
+    {
+      "id": "L03",
+      "product": "FortiAnalyzer",
+      "title": "Asset Identity Center: endpoint vulnerability enrichment",
+      "version": "FortiAnalyzer 8.0.0 / EMS connector",
+      "summary": "Understand why asset discovery, endpoint enrichment, and OT/IoT vulnerability licensing are separate data stages.",
+      "primary_sources": [
+        {
+          "title": "Asset List",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/658758"
+        },
+        {
+          "title": "Managed endpoint vulnerability dashboard 7.4.4",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/7.4.0/new-features/496780/managed-endpoint-vulnerability-dashboard-7-4-4"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>What the Asset Identity Center represents</h3>\n<p>FortiAnalyzer's Asset Identity Center is an enrichment and investigation view, not a replacement for the underlying log sources. The Asset List table combines endpoints and users observed in relevant logs. Its Top 10 Risky Assets widget ranks assets by risk score, while Top 10 Vulnerable Assets ranks by vulnerability count and deliberately excludes low-severity vulnerabilities. The table can be sorted by Risk Score or Vulnerabilities, filtered by time, and exported to CSV. The risk score is based on related alerts and vulnerabilities, so a high score is not simply a count of CVEs and a low displayed count is not proof that the endpoint is clean.</p>\n<p>The distinction between discovery and enrichment matters. FortiAnalyzer can detect an endpoint from MAC/IP observations even when FortiClient is absent, but the guide warns that information is then limited: endpoints are detected by MAC and displayed by IP rather than host name, user details may be unavailable, and OS version, avatar, and social-ID fields are not populated. VMware endpoint information requires a vSphere connector. Managed endpoint vulnerability data is retrieved when a playbook runs the Get Vulnerabilities action using a FortiClient EMS connector. EMS classification tags are surfaced when a playbook retrieves endpoint information through Get Endpoints.</p>\n<h3>Data flow and prerequisites</h3>\n<p>The practical pipeline is: logs establish that an endpoint exists and associate it with an address/user; a FortiClient EMS connector supplies managed-endpoint context; playbook actions retrieve endpoint and vulnerability records; Asset Identity Center displays the enriched asset, related alerts, and vulnerability references. In the 7.4.4 managed-endpoint vulnerability dashboard workflow, FortiAnalyzer uses a Fabric ADOM, an authorized EMS connector, and a playbook that updates asset, identity, and vulnerability information in sequence. The default workflow is scheduled daily, so a newly patched endpoint may not disappear from the view immediately.</p>\n<p>For OT/IoT assets, the Asset List exposes a separate OT/IoT Vulnerabilities count. Fortinet documents that viewing those vulnerability details requires a valid Industrial Security Service license. Do not treat the presence of an OT/IoT device record as proof that the OT vulnerability feed is licensed or populated. Likewise, the Top 10 Vulnerable Assets widget omits low-severity findings; the detailed table is the correct place to inspect the full severity distribution.</p>\n<h3>Operational setup</h3>\n<ol>\n<li>Use the intended Fabric ADOM and confirm that the FortiClient EMS connector is authorized and returning data.</li>\n<li>Confirm that the playbook includes Get Endpoints and Get Vulnerabilities actions and that its schedule has executed successfully.</li>\n<li>Open Fabric View &gt; Asset Identity Center &gt; Asset Identity List, select Asset, and set a time range that includes the last successful enrichment run.</li>\n<li>Inspect endpoint details, the Last Update field, vulnerability count, severity, NVD reference, associated users, and related alerts.</li>\n</ol>\n<p>When a vulnerability count is zero, determine whether the endpoint is unmanaged, the connector is missing, the playbook did not run, or the time filter excludes the update. A record with only MAC/IP and no OS/hostname is evidence of limited discovery context, not a vulnerability-scanner failure by itself. If only OT/IoT vulnerability detail is missing, verify the Industrial Security Service entitlement before rebuilding connectors.</p>\n<h3>What the evidence does and does not prove</h3>\n<p>Connector status proves that FortiAnalyzer can communicate with EMS; it does not prove that the Get Vulnerabilities action ran. A successful playbook execution proves the action completed; it does not prove every endpoint was matched to the correct asset identity. A Last Update timestamp proves when the record was refreshed, not that the source inventory is current. Click the vulnerability reference to validate the CVE in the NIST National Vulnerability Database, then use the related-alert pane to understand why the asset risk score changed.</p>\n<p>For scale, schedule enrichment with an interval appropriate to the endpoint population and connector limits. Treat the daily default as a freshness boundary. Use the Asset List for triage and prioritization, then validate remediation state in the authoritative endpoint or OT source before closing an incident.</p>",
+      "diagram": {
+        "title": "Asset and vulnerability enrichment pipeline",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "FortiGate / endpoint\nlogs"
+          },
+          {
+            "id": "b",
+            "label": "FortiClient EMS\nconnector"
+          },
+          {
+            "id": "c",
+            "label": "Playbook actions\nGet Endpoints / Vulns"
+          },
+          {
+            "id": "d",
+            "label": "Asset Identity\nCenter"
+          },
+          {
+            "id": "e",
+            "label": "Risk + CVE\ninvestigation"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "d"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 650
+    },
+    {
+      "id": "L04",
+      "product": "FortiSwitch",
+      "title": "PTPv2 clock architecture: transparent and boundary clocks",
+      "version": "FortiSwitchOS 8.0.0",
+      "summary": "Choose the correct IEEE 1588 clock mode, delay mechanism, VLAN policy, and verification evidence.",
+      "primary_sources": [
+        {
+          "title": "Precision Time Protocol",
+          "url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/123383/precision-time-protocol"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>Why PTP is different from NTP</h3>\n<p>IEEE 1588v2 Precision Time Protocol distributes precise time by exchanging timestamped packets and correcting for path delay and switch residence time. FortiSwitchOS supports PTP version 2 and documents use cases that need sub-microsecond to nanosecond accuracy, including telecom, audiovisual, and electric-power systems. It is not enough to enable PTP globally: the PTP domain, profile, clock mode, delay mechanism, transport, VLAN, and participating interfaces must agree across the path.</p>\n<p>FortiSwitch supports transparent clocks and boundary clocks. A transparent clock forwards PTP messages and updates the Sync message Correction Field (CF) to account for the time a packet spent inside the switch. It does not participate in the Best Master Clock Algorithm (BMCA) and does not pass a VLAN boundary. A boundary clock participates in BMCA, synchronizes itself to an upstream master, and distributes time downstream across multiple networks/VLANs. Boundary-clock support starts in FortiSwitchOS 7.4.3 on the documented FSR-424F-POE, FS-424E-Fiber, and FS-448E family platforms. Do not assume every FortiSwitch model supports every clock mode.</p>\n<h3>End-to-end versus peer-to-peer</h3>\n<p>In end-to-end (E2E) mode, the slave measures the path delay to the grandmaster using Delay_Req and Delay_Resp; the total residence time along the path is reflected in the Sync correction field. In peer-to-peer (P2P) mode, adjacent PTP ports measure their own link delay with PDelay_Req, PDelay_Resp, and, in two-step operation, PDelay_Resp_Follow_Up. The switch contributes both residence time and peer-link delay to the correction field. Announce establishes the clock hierarchy; Sync carries the master time; Follow_Up supplies the precise timestamp in two-step mode.</p>\n<p>FortiSwitchOS 8.0.0 adds Layer-3 PTP. For Layer-3 PTP, the profile mode must be one of <code>transparent-p2p</code>, <code>boundary-e2e</code>, or <code>boundary-p2p</code>, and transport must be <code>ipv4-UDP-mcast</code>. Layer-3 PTP on an SVI obtains its address from the virtual interface on the PTP VLAN; on an RVI it uses the RVI address. An interface without a Layer-3 address is excluded from Layer-3 PTP. PTP on RVIs supports boundary E2E and boundary P2P; transparent PTP is not supported on RVIs.</p>\n<h3>Configuration model</h3>\n<p>Configuration is split into a profile, global PTP settings, a policy, and interface application. The profile defines mode, domain, profile, announce/sync intervals, and transport. The policy defines boundary-clock port role selection, VLAN, and 802.1p priority. The interface then enables PTP and optionally selects a custom policy.</p>\n<pre><code>config system ptp profile\n    edit \"ptp-lab\"\n        set domain 1\n        set mode transparent-e2e\n        set transport l2-mcast\n    next\nend\n\nconfig switch ptp settings\n    set status enable\n    set profile \"ptp-lab\"\nend\n\nconfig system ptp interface-policy\n    edit \"ptp-vlan100\"\n        set vlan 100\n        set vlan-pri 7\n    next\nend\n\nconfig switch interface\n    edit \"port5\"\n        set ptp-status enable\n        set ptp-policy \"ptp-vlan100\"\n    next\nend</code></pre>\n<h3>Verification and failure isolation</h3>\n<p>Use <code>diagnose switch ptp port get-link-delay</code> to inspect per-port link-delay measurements. A numeric delay proves that a PTP link-delay exchange was learned; a dash does not identify the cause by itself. Capture Announce, Sync/Follow_Up, Delay_Req/Resp or PDelay messages to confirm the selected mode and transport. Compare the grandmaster, domain, and profile across all nodes. A clock can receive Sync while still having an incorrect delay model or VLAN path.</p>\n<p>Fortinet documents several important limitations. P2P mode is not interoperable with IGMP snooping, and PTP events are not logged to syslog in P2P mode. In E2E mode using IPv4 multicast with IGMP snooping, add a static IGMP group for the PTP multicast traffic. Ensure the PTP VLAN is allowed or native on all relevant ports; intermittent PDelay messages can occur when the VLAN is missing. A valid VLAN must belong to the interface policy, and congestion priority is only meaningful under congestion.</p>\n<p>When a downstream device drifts, do not immediately change the grandmaster. First confirm the clock mode and model support, then verify domain/profile, PTP VLAN membership, transport, and delay messages. For boundary clocks, inspect BMCA port roles and priorities. For transparent clocks, verify the correction field changes across the switch. The objective is to identify whether the missing element is master selection, packet delivery, link-delay measurement, or residence-time correction.</p>",
+      "diagram": {
+        "title": "PTPv2 timing through transparent and boundary clocks",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Grandmaster\nAnnounce / Sync"
+          },
+          {
+            "id": "b",
+            "label": "Transparent clock\nupdates correctionField"
+          },
+          {
+            "id": "c",
+            "label": "Slave clock\nE2E / P2P delay"
+          },
+          {
+            "id": "d",
+            "label": "Boundary clock\nBMCA + discipline"
+          },
+          {
+            "id": "e",
+            "label": "Downstream VLAN\nnew PTP segment"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "a",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 658
+    },
+    {
+      "id": "L05",
+      "product": "FortiAP/Wireless",
+      "title": "WPA3 Beacon Protection: integrity for wireless discovery frames",
+      "version": "FortiAP 8.0.0 / FAP 7.6.1+",
+      "summary": "Enable protected beacon integrity on supported Wi-Fi 6E/7 APs and verify the MIC over the air.",
+      "primary_sources": [
+        {
+          "title": "Enabling Beacon Protection",
+          "url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/463484/enabling-beacon-protection"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>Threat model and feature scope</h3>\n<p>Beacon frames are management frames that advertise an access point's presence, SSID, capabilities, and parameters used by clients during network discovery and connection establishment. If a client accepts a forged or modified beacon, the attacker can influence discovery and connection decisions even before normal user data is exchanged. Beacon Protection adds integrity protection to beacons on WPA3 SSIDs. It is not encryption for beacon contents, a replacement for WPA3 authentication, or a rogue-AP containment feature. Its job is to let a capable client verify that the protected beacon came from the legitimate AP and was not modified.</p>\n<p>Fortinet documents support on FortiAP Wi-Fi 6E and Wi-Fi 7 models running FAP 7.6.1 or later. The feature is disabled by default. The VAP must use WPA3, and the example explicitly enables Protected Management Frames (PMF). PMF is important because Beacon Protection is part of the protected-management-frame security model; do not enable the flag on a legacy WPA2-only SSID and assume clients receive the same protection.</p>\n<h3>Configuration and radio assignment</h3>\n<p>Enable the feature on the VAP, then make sure that VAP is assigned to the intended WTP profile radio. A VAP configured in the FortiGate database but not mapped to a radio does not protect any beacon emitted by an AP.</p>\n<pre><code>config wireless-controller vap\n    edit \"wpa3-sae-beacon\"\n        set ssid \"wpa3-sae-beacon\"\n        set security wpa3-only-enterprise\n        set pmf enable\n        set beacon-protection enable\n        set auth radius\n        set radius-server \"peap\"\n        set local-bridging enable\n        set schedule \"always\"\n    next\nend\n\nconfig wireless-controller wtp-profile\n    edit \"FAP441K-default\"\n        config radio-2\n            set vaps \"wpa3-sae-beacon\"\n        end\n    next\nend</code></pre>\n<p>The example uses WPA3 Enterprise and RADIUS, but the important controls for Beacon Protection are the WPA3 security mode, PMF, and <code>beacon-protection enable</code>. Validate the exact radio mapping for the AP model and the radio band on which the SSID is advertised.</p>\n<h3>Evidence and packet-level verification</h3>\n<p>On the AP, run <code>vcfg</code> and confirm the VAP reports <code>pmf=required</code> and <code>beacon_prot=enabled</code>. This proves that the AP's runtime VAP configuration includes the feature; it does not prove that every client supports it or that a packet on the air carries a valid MIC.</p>\n<p>Capture beacon frames over the air. Fortinet's example shows a Management MIC element (tag 76) with a 16-byte MIC, KeyID, and IPN, plus the Beacon Protection flag in the 11th octet of the Extended Capabilities element. Seeing the MIC element and flag proves the AP is transmitting the protected-beacon information. A client association test is still required to confirm that the client and AP negotiated the expected PMF/WPA3 behavior.</p>\n<h3>Operational caveats</h3>\n<p>Start with a test SSID and a known-capable Wi-Fi 6E/7 client. If an older client fails to associate after enabling Beacon Protection, separate a client capability mismatch from an AP configuration error: check the advertised WPA3/PMF requirements, confirm the VAP is assigned to the correct radio, and compare the beacon capture before and after. Do not troubleshoot this as a RADIUS problem unless the EAP exchange actually begins and fails.</p>\n<p>Beacon Protection is a discovery-frame integrity control. It does not prevent RF jamming, authenticate a user by itself, encrypt all management traffic, or stop a rogue AP from transmitting a similar SSID. Continue to use WPA3 authentication, PMF, WIDS/rogue-AP monitoring, and client posture controls as separate layers. A successful configuration should be validated with both runtime AP state and an over-the-air capture, not merely the FortiGate GUI checkbox.</p>",
+      "diagram": {
+        "title": "WPA3 beacon integrity verification",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "FortiAP WPA3 VAP\nPMF required"
+          },
+          {
+            "id": "b",
+            "label": "Beacon frame\nSSID + capabilities"
+          },
+          {
+            "id": "c",
+            "label": "Management MIC\ntag 76 / 16 bytes"
+          },
+          {
+            "id": "d",
+            "label": "Client verifies\nbeacon integrity"
+          },
+          {
+            "id": "e",
+            "label": "Association continues\nwith WPA3/PMF"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 558
+    },
+    {
+      "id": "L06",
+      "product": "FortiNAC",
+      "title": "FortiSwitch connection notifications: traps, syslog and L2 polling",
+      "version": "FortiNAC 9.4 / FortiOS 7.2+",
+      "summary": "Choose a notification source that matches the endpoint topology and understand why link traps can miss indirect hosts.",
+      "primary_sources": [
+        {
+          "title": "Connection Notification Methods",
+          "url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortiswitch-integration/98804/connection-notification-methods"
+        },
+        {
+          "title": "FortiNAC-F 7.6.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide"
+        }
+      ],
+      "scenario_sources": [
+        {
+          "title": "FortiNAC takes no action on endpoints behind a FortiLink-managed FortiSwitch",
+          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-takes-no-action-on-endpoints-behind-a-fortilink-managed-fortiswitch-and-the-fortigate-shows-a-blue-status-icon-229997",
+          "date": "2026-10-22",
+          "recency": "Within the 30-day window"
+        }
+      ],
+      "body_html": "<h3>Why notification choice changes what NAC can see</h3>\n<p>FortiNAC must learn when an endpoint connects, disconnects, or moves so it can update the host's switch, port, VLAN, SSID, and access-policy context. FortiSwitch integration supports several notification methods, but they are not interchangeable. SNMP MAC Notification Traps provide direct MAC Add/Delete/Move events from the switch. FortiGate syslog can forward MAC Add/Delete/Move events for FortiLink-managed switches. SNMP Link Traps report a port state change and cause FortiNAC to run an L2 poll to discover which endpoints are attached. The last method is less efficient and has important topology blind spots.</p>\n<p>Fortinet documents SNMP MAC Notification support for FortiNAC 9.2.7, 9.4.2, and FortiNAC-F 7.2.1 or later, with FortiOS 7.2 or later. The FortiSwitch must have a valid IP address; a link-local 169.x address is not sufficient. Syslog notification requires FortiNAC 8.6.2 or later and FortiOS 6.2.1 or later. The guide notes that AP connection events are not processed through this syslog method. SNMP Link Traps can be used when direct MAC notification is unavailable, but they trigger a poll rather than carrying the MAC move itself.</p>\n<h3>Mechanics and coverage</h3>\n<p>With SNMP MAC notifications, the switch sends a MAC event and FortiNAC can update the host location directly. With syslog, the FortiGate relays MAC Add/Delete/Move information for the managed switch. With link traps, FortiNAC learns that a port changed state, then polls the switch to discover the connected MAC addresses. That poll may not see a host behind an IP phone, hub, or unmanaged AP because the notification describes the uplink port rather than the endpoint's actual attachment. A wireless client may also require the appropriate wireless controller/AP integration rather than a wired-port poll.</p>\n<p>Do not confuse the notification plane with the FortiLink integration control plane. FortiNAC may need FortiGate REST API access to read FortiLink-managed switch inventory and interface state, while SNMP traps or syslog provide endpoint-change events. A working event source does not prove the device model is synchronized; a working REST API does not prove that MAC movement notifications are enabled.</p>\n<h3>Configuration and evidence</h3>\n<p>Select the notification method supported by the FortiNAC/FortiOS versions and topology. Configure SNMP trap destinations and credentials on the relevant switch, or configure FortiGate syslog forwarding for MAC Add/Delete/Move events. Verify the FortiNAC integration model and interface mapping. For FortiLink-managed switches, confirm the FortiGate REST API account can read the required VDOMs and that the FortiSwitch has a unique, routable management IP. Then perform a controlled endpoint move and watch the event path.</p>\n<ul>\n<li>A received SNMP MAC trap proves the switch emitted the event; it does not prove FortiNAC mapped the MAC to the correct host.</li>\n<li>A syslog MAC event proves FortiGate forwarding worked; it does not prove wireless AP events are included.</li>\n<li>An L2 poll result proves what the poll could see at that moment; it does not prove indirect endpoints were visible.</li>\n<li>A blue status icon or missing switch in the FortiGate/FortiNAC inventory points to an integration/model/REST API issue, not necessarily a notification failure.</li>\n</ul>\n<h3>Real-world troubleshooting</h3>\n<p>A recent Fortinet Community tip describes FortiNAC taking no action on endpoints behind a FortiLink-managed FortiSwitch while the FortiGate shows a blue status icon. Use that as a control-plane scenario: first verify FortiGate–FortiSwitch integration, API reachability, credentials, model, and interface synchronization. Only after the switch is visible and correctly modeled should you troubleshoot missing MAC notifications. If the switch is integrated but host location remains stale, check whether the selected method is supported, whether traps/syslog reach FortiNAC, and whether the endpoint is behind an indirect device that link-triggered L2 polling cannot discover.</p>\n<p>For larger networks, prefer direct MAC notification where supported because it avoids repeatedly polling an entire switch after every link event. Keep L2 polling as a fallback or validation mechanism, not the only source of endpoint movement in a topology with phones, APs, or downstream unmanaged switches.</p>",
+      "diagram": {
+        "title": "FortiNAC endpoint-location notification paths",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Endpoint moves\nMAC Add/Move/Delete"
+          },
+          {
+            "id": "b",
+            "label": "FortiSwitch /\nFortiLink switch"
+          },
+          {
+            "id": "c",
+            "label": "SNMP MAC trap\nor FortiGate syslog"
+          },
+          {
+            "id": "d",
+            "label": "FortiNAC host-location\nupdate"
+          },
+          {
+            "id": "e",
+            "label": "Link trap branch\ntriggers L2 poll"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "b",
+            "e"
+          ],
+          [
+            "e",
+            "d"
+          ]
+        ]
+      },
+      "word_count": 640
+    },
+    {
+      "id": "L07",
+      "product": "FortiNAC-F",
+      "title": "RADIUS CoA and dynamic ACL enforcement on FortiSwitch",
+      "version": "FortiNAC-F / FortiSwitchOS 7.6.0+",
+      "summary": "Use post-authentication CoA to change an active session's DACL, and diagnose NAKs, malformed rules, and stale ACL state.",
+      "primary_sources": [
+        {
+          "title": "FortiNAC-F 7.6.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/239599"
+        },
+        {
+          "title": "Dynamic access control lists",
+          "url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/922505/dynamic-access-control-lists"
+        },
+        {
+          "title": "FortiSwitch security policies",
+          "url": "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortilink-guide/756049/fortiswitch-security-policies"
+        }
+      ],
+      "scenario_sources": [
+        {
+          "title": "Technical Tip: CoA support and DACL application in FortiSwitch FortiLink scenarios",
+          "url": "https://community.fortinet.com/fortinac-f-57/technical-tip-coa-support-in-fortinac-v7-4-and-applying-dacls-in-fortiswitch-fortilink-scenario-173151",
+          "date": "2024-06-04",
+          "recency": "Historical companion; outside the 30-day window"
+        }
+      ],
+      "body_html": "<h3>Initial authentication versus changing an active session</h3>\n<p>A RADIUS Access-Accept assigns the initial network-access result when a client authenticates. Change of Authorization (CoA) is different: it lets the policy server change attributes on an already established session without waiting for the client to disconnect and reconnect. A Disconnect-Request terminates the session so the endpoint must authenticate again. FortiNAC-F can use policy state changes to trigger CoA or Disconnect behavior; FortiSwitchOS 7.6.0 adds CoA support for DACLs. This is a post-authentication enforcement workflow, not simply another VLAN attribute in the initial Access-Accept.</p>\n<p>FortiSwitch DACLs are disabled by default and apply to hardware only after successful 802.1X authentication. They can be used with port-based or MAC-based 802.1X, including open-auth monitor mode and static ACLs. IPv4 is supported; IPv6 is not. The two RADIUS attributes are Filter-Id, which references an ACL already defined on the switch, and NAS-Filter-Rule, which carries filter rules from the RADIUS server. Filter-Id fails as a whole if the named ACL cannot be found. A syntax error in a NAS-Filter-Rule causes the entire DACL to fail.</p>\n<h3>CoA behavior and important state rules</h3>\n<p>Starting with FortiSwitchOS 7.6.0, CoA can change DACL attributes for an authenticated session. If DACL is not enabled on the port, a CoA request returns a NAK with “service not available.” When CoA is active, FortiSwitch logs changes to session authorization attributes with event ID <code>LOG_ID_SWITCH_802_1X_COA_FILTER_AVP_CHANGE</code>. A subtle behavior matters during repeated policy changes: when a DACL was installed by CoA, a later CoA request that omits a DACL entry removes the previously installed DACL. If the DACL was installed by the original authentication request, a CoA without a DACL entry does not have that effect.</p>\n<p>For NAS-Filter-Rule, FortiSwitchOS 8.0 documents up to 45 entries per port and a maximum of 253 characters per attribute. A rule must be contained in a single NAS-Filter-Rule attribute; splitting one rule across multiple attributes is not supported. Do not include blank spaces. The format expresses an inbound permit/deny rule with protocol, source, destination, and optional TCP/UDP port or range. The DACL is directional: the word “in” applies the rule to traffic arriving from the authenticated client.</p>\n<h3>Configuration example</h3>\n<pre><code>config switch interface\n    edit \"port11\"\n        config port-security\n            set port-security-mode 802.1X\n            set dacl enable\n        end\n    next\nend</code></pre>\n<p>For a FortiLink-managed switch, the equivalent DACL enablement is applied through the managed-switch security policy. The RADIUS server must be configured to accept the CoA/Disconnect transaction, and FortiNAC-F must have the correct NAS, session, and client identity information. A typical NAS-Filter-Rule could permit a required application subnet while denying other inbound client traffic; validate the syntax and model-specific ACL limits before rollout.</p>\n<h3>Verification and troubleshooting</h3>\n<p>Capture the RADIUS CoA-Request or Disconnect-Request and the NAS response. A CoA-ACK proves the NAS accepted the request; it does not prove that the intended DACL entry was installed. A CoA-NAK with “service not available” points to DACL not enabled or not supported in the current port/security mode. A NAK caused by missing session identifiers points to incorrect Calling-Station-Id or Acct-Session-Id correlation. A successful response with no traffic change points to the DACL attribute syntax, the Filter-Id object name, port attachment, or IPv4-only limitation.</p>\n<p>Use the FortiSwitch DACL status command for the affected serial/port and inspect the switch syslog for the CoA filter-AVP change event. On a FortiGate-managed switch, use the controller-side DACL status command and confirm that the port has the expected 802.1X security policy. Test a client in each relevant state—normal, at-risk, and safe—and confirm the policy change produces the intended CoA, ACK, DACL state, and traffic outcome. The historical Community CoA/DACL tip is useful for vendor-interoperability context, but it is not a recent scenario.</p>",
+      "diagram": {
+        "title": "FortiNAC-F CoA and DACL state transition",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "FortiNAC-F policy\nstate changes"
+          },
+          {
+            "id": "b",
+            "label": "RADIUS CoA-Request\n/ Disconnect"
+          },
+          {
+            "id": "c",
+            "label": "FortiSwitch 802.1X\nactive session"
+          },
+          {
+            "id": "d",
+            "label": "DACL update\nFilter-Id / NAS-Filter-Rule"
+          },
+          {
+            "id": "e",
+            "label": "CoA-ACK / NAK\ntraffic result"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 607
+    },
+    {
+      "id": "L08",
+      "product": "FortiAuthenticator",
+      "title": "Per-policy OCSP verification for EAP-TLS certificates",
+      "version": "FortiAuthenticator 8.0.2",
+      "summary": "Choose strict or soft-fail revocation behavior for client certificates and account for the fixed three-second OCSP timeout.",
+      "primary_sources": [
+        {
+          "title": "FortiAuthenticator 8.0.2 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281/fortiauthenticator-8-0-2"
+        },
+        {
+          "title": "What's new in FortiAuthenticator 8.0.2",
+          "url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>Where OCSP fits in EAP-TLS</h3>\n<p>In EAP-TLS, the supplicant presents a client certificate during the RADIUS authentication exchange. FortiAuthenticator validates the certificate chain and applies the selected authentication profile. FortiAuthenticator 8.0.2 adds per-policy OCSP-based certificate verification for client credential certificates. OCSP is an online status check for a specific certificate serial/issuer; it is not the same as downloading and caching a Certificate Revocation List (CRL), and it is not a certificate enrollment protocol such as SCEP.</p>\n<p>The new option is available in Authentication &gt; RADIUS Service &gt; Auth Profiles when Client Credential is Certificates. The release notes describe three modes: Disable (default), Enable, and Enable-softfail. Disable means no OCSP verification is performed. Enable means certificates must pass OCSP verification. Enable-softfail means that if the OCSP server does not respond or times out, the certificate is accepted unless an explicit reject is received. The documented OCSP timeout is fixed at three seconds in 8.0.2; the release notes say future releases may make it configurable.</p>\n<h3>Transaction flow and failure semantics</h3>\n<p>The sequence is: the supplicant starts EAP; the RADIUS server requests and receives the client certificate; FortiAuthenticator validates the chain and certificate identity; the selected policy determines whether an OCSP check is performed; FortiAuthenticator queries the responder; and the result contributes to the RADIUS accept/reject decision. The OCSP responder is contacted by FortiAuthenticator, not by the wireless client. Therefore, routing, DNS, proxy/firewall rules, and TLS trust from the FortiAuthenticator service to the responder matter.</p>\n<p>Strict Enable is appropriate when the deployment requires online revocation confirmation and a missing response should not be treated as acceptable. Enable-softfail is an availability/security trade-off: a responder outage or timeout does not automatically reject the certificate, unless an explicit reject was received. That can preserve access during responder outages but means the policy is not fail-closed for a timeout. Document this decision with the network owner and test it before production.</p>\n<h3>Configuration and observability</h3>\n<p>Configure the mode on the authentication profile used by the EAP-TLS RADIUS policy, rather than assuming a global switch affects every policy. Keep separate profiles when different SSIDs, device populations, or certificate authorities require different revocation behavior. The exact option label in the GUI is unusually worded in the release notes; verify the Client Credential is set to Certificates and the OCSP mode appears in the Auth Profile.</p>\n<p>When diagnosing an authentication failure, correlate the RADIUS request ID, client certificate issuer/serial, OCSP request and response, responder latency, and final EAP result. A successful TLS connection to the responder proves reachability, not that the response is for the right issuer/serial. A good OCSP response proves the responder reports the certificate as good at that time; it does not prove the certificate subject maps to the correct user or that all authorization factors passed. A timeout under Enable-softfail can produce an accepted certificate; a timeout under strict Enable should be treated as a failure path.</p>\n<h3>Operational test matrix</h3>\n<ul>\n<li>Valid certificate with OCSP good: verify the expected EAP-TLS success.</li>\n<li>Revoked certificate with explicit reject: verify that the authentication is denied.</li>\n<li>Responder unreachable or slower than three seconds: compare strict Enable with Enable-softfail.</li>\n<li>Wrong issuer or missing responder information: inspect the certificate chain and OCSP target before changing policy.</li>\n</ul>\n<p>Do not confuse OCSP with the earlier certificate issuance or CRL configuration steps. SCEP may provision a certificate, and CRL distribution may provide a cached revocation list, but the 8.0.2 OCSP option is a runtime, per-policy check during EAP-TLS authentication. Record the selected mode and the expected outage behavior as part of the authentication design.</p>",
+      "diagram": {
+        "title": "EAP-TLS certificate status decision",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Supplicant presents\nclient certificate"
+          },
+          {
+            "id": "b",
+            "label": "FortiAuthenticator\nRADIUS Auth Profile"
+          },
+          {
+            "id": "c",
+            "label": "OCSP responder\nstatus / timeout"
+          },
+          {
+            "id": "d",
+            "label": "Strict / softfail\npolicy decision"
+          },
+          {
+            "id": "e",
+            "label": "RADIUS Access-Accept\nor Reject"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 585
+    },
+    {
+      "id": "L09",
+      "product": "FortiPAM",
+      "title": "SSH command filters: allow/deny semantics and owner bypass",
+      "version": "FortiPAM 1.9.0",
+      "summary": "Treat SSH filtering as a secret-scoped policy with command parsing, channel controls, and an explicit owner exception.",
+      "primary_sources": [
+        {
+          "title": "Creating an SSH filter",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/900399/creating-an-ssh-filter"
+        },
+        {
+          "title": "Creating a secret",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret"
+        },
+        {
+          "title": "Creating a policy",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/769846/creating-a-policy"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>What the filter actually controls</h3>\n<p>FortiPAM SSH filter profiles inspect shell commands entered through FortiPAM SSH launchers. The profile can be configured in Deny mode or Allow mode. In Deny mode, commands matching the configured patterns are blocked and other commands are not blocked by those patterns. In Allow mode (the GUI's restricted mode), commands matching the allow list can run and other commands are blocked. This is a significant semantic difference: a profile that was intended as an allow list but remains in Deny mode is not a default-deny command policy.</p>\n<p>Patterns can use Exact Match, Start with single word, or Regular Expression. FortiPAM parses command input: a command such as <code>ifconfig eth0 up</code> can be split into the command token and its parameters; a Start with single word pattern for <code>ifconfig</code> affects all commands beginning with that word, while Exact Match can distinguish a specific command/parameter string. FortiPAM also checks command separators such as semicolons and ampersands; each command in a compound input is evaluated. Regex patterns are checked after simple-pattern inspection. This makes pattern design and testing important for command chains, not just single commands.</p>\n<h3>Attachment and bypass scope</h3>\n<p>The filter profile is not effective merely because it exists. On the secret, enable SSH Service, enable SSH Filter, and select the intended SSH Filter Profile. The SSH Service toggle controls Web SSH, Web Telnet, Web SFTP, PuTTY, and WinSCP launchers. Other Channels controls can block X11 forwarding, SSH execution, port forwarding, tunnel forwarding, SFTP, SCP, and unknown channels; Fortinet notes that the Other Channels settings require a custom launcher. Log Activity can be enabled for those channels regardless of whether the channel is blocked.</p>\n<p>FortiPAM provides an explicit Bypass for owner option, disabled by default. If enabled, the secret owner can send commands that the SSH filter would otherwise prohibit. The secret policy can also enable <code>bypass-ssh-filter-for-owner</code>. Policy precedence matters: when the policy sets SSH Filter to Enable or Disable, the secret cannot change that setting; when the policy leaves it Not Set, the secret can customize the filter and owner bypass. A user who owns a secret may therefore have a different command outcome from a delegated user even when both launch the same target.</p>\n<h3>Configuration example</h3>\n<pre><code>config ssh-filter profile\n    edit \"allow-show\"\n        set restricted-mode enable\n        set shortcut-input enable\n        config shell-commands\n            edit 1\n                set pattern \"show.*\"\n                set log enable\n                set alert enable\n            next\n        end\n    next\nend\n\nconfig secret policy\n    edit \"default\"\n        set ssh-filter enable\n        set bypass-ssh-filter-for-owner disable\n    next\nend</code></pre>\n<p>Here <code>restricted-mode enable</code> is Allow mode. The example is illustrative; create and attach the profile in the GUI or verify the exact CLI schema for the installed FortiPAM build. Keep the owner bypass disabled unless the exception is explicitly required and audited.</p>\n<h3>Evidence and upgrade caveats</h3>\n<p>When a command passes unexpectedly, inspect the secret's SSH Filter toggle, selected profile, mode, policy inheritance, and owner-bypass setting before changing the pattern. The SSH Filter Log tab shows whether a command was allowed or blocked and can record unlisted commands. A command log proves the filter evaluated an input; it does not prove every SSH channel was blocked. Validate SFTP/SCP and port forwarding separately if those channels are in scope.</p>\n<p>Fortinet documents an upgrade caveat for profiles created on FortiPAM 1.3.0 or earlier: legacy entries using Action = Allow are not shown in the new pattern table and do not block other commands. The new Allow mode does block other commands. Audit legacy profiles after upgrade rather than assuming the GUI representation preserves the old security intent. Test single commands, parameters, command separators, regex patterns, owner and non-owner identities, and each launcher before using the profile as a privileged-access boundary.</p>",
+      "diagram": {
+        "title": "FortiPAM SSH filter decision path",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "User launches\nSSH secret"
+          },
+          {
+            "id": "b",
+            "label": "FortiPAM SSH\nproxy / launcher"
+          },
+          {
+            "id": "c",
+            "label": "SSH filter profile\nAllow or Deny patterns"
+          },
+          {
+            "id": "d",
+            "label": "Owner bypass\npolicy exception"
+          },
+          {
+            "id": "e",
+            "label": "Target SSH server\ncommand / audit"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 610
+    },
+    {
+      "id": "L10",
+      "product": "FortiSIEM",
+      "title": "Collector HA: VRRP VIP, job redistribution and process-health limits",
+      "version": "FortiSIEM 7.4.1",
+      "summary": "Separate log-ingest failover from event-pull and performance-monitoring job recovery.",
+      "primary_sources": [
+        {
+          "title": "Cluster Config",
+          "url": "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/841876/cluster-config"
+        },
+        {
+          "title": "FortiSIEM Collector HA notes",
+          "url": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/828499/what-is-new-in-7-3-0"
+        }
+      ],
+      "scenario_sources": [
+        {
+          "title": "FortiSIEM High Availability",
+          "url": "https://community.fortinet.com/fortisiem-216/fortisiem-high-availability-221062",
+          "date": "2025-12",
+          "recency": "Historical companion; outside the 30-day window"
+        }
+      ],
+      "body_html": "<h3>Collector HA protects two different data paths</h3>\n<p>A FortiSIEM Collector communicates with devices and cloud services to collect logs, performance metrics, configuration data, and other telemetry. Collector HA keeps those collection functions available when a Collector becomes unavailable, but the recovery path differs for push logs and scheduled pull/monitoring jobs. For on-premises and AWS/EC2 deployments, FortiSIEM uses VRRP with one Leader and one or more Followers and a virtual IP (VIP) owned by the Leader. Azure and GCP deployments use a load balancer in front of the Collectors instead.</p>\n<p>During normal operation, devices send logs to the VIP and the Leader receives them. The Supervisor distributes event-pulling and performance-monitoring jobs among all Collectors in the HA group. If the Leader goes down, the highest-priority Follower becomes Leader and owns the VIP; log senders continue using the same destination. The Supervisor redistributes jobs that were assigned to the failed Leader. If a Follower goes down, the App Server redistributes its jobs to other Collectors. When the failed Follower returns, it stays a Follower and jobs are redistributed among working Collectors.</p>\n<h3>VRRP is not process-health monitoring</h3>\n<p>Fortinet's Collector HA notes explicitly warn that if a process is down on a node, VRRP may not trigger failover. The same warning applies to a load-balancer design if the load-balancing algorithm does not detect the process failure. This is a critical diagnostic boundary: a Collector can still own the VIP at the network layer while the service that receives or processes logs is unhealthy. The Supervisor/App Server has a separate mechanism for event-pulling and performance-monitoring jobs: if the App Server does not receive a task request from a Collector within a 10-minute window, it redistributes the jobs.</p>\n<p>Therefore, do not infer collection health from a ping to the VIP. Verify the log path and the job scheduler independently. A syslog sender may be able to reach the VIP while the collector daemon is stopped; a pull job may be redistributed even when the VIP does not move. Conversely, a VRRP role change may restore push logs while a particular polling job remains delayed until the App Server's timeout expires.</p>\n<h3>Configuration workflow</h3>\n<p>In Admin &gt; Settings &gt; System &gt; Cluster Config, create a Collector HA group for the correct Organization, select VRRP, choose the Collectors, set the VIP and VIP Router ID, and configure each Collector's interface, role, and priority. Only one member can be Leader, and the Leader should have a higher priority than Followers. The VIP and all Collectors in the group must be on the same network. Click Test before saving. In AWS, each Collector also needs the documented IAM role and an unused VIP. In Azure/GCP, deploy and health-check the load balancer instead of assuming VRRP is used.</p>\n<h3>Verification and fault isolation</h3>\n<p>For on-prem/AWS VRRP, SSH to the Leader and inspect <code>/etc/keepalived/keepalived.conf</code> for the configured virtual_ipaddress. Use <code>ip a</code> to verify that the VIP is bound to the expected interface. Confirm which Collector owns the VIP, then send a controlled syslog test and verify arrival at the new Leader after failover. Separately inspect the Supervisor/App Server job assignments and confirm that event-pulling and performance-monitoring jobs are reassigned.</p>\n<p>If the VIP does not move, inspect the VRRP interface, same-subnet requirement, priority, and network filtering. If the VIP moves but logs stop, inspect the Collector service and log input configuration. If logs arrive but polling remains stale, inspect App Server task redistribution and the 10-minute timeout. If only a process is down while the interface stays up, add an external service-health check or load-balancer monitor appropriate to the deployment; do not assume VRRP will detect the process. A healthy HA group is proven only when both push-log and scheduled-collection paths recover under their respective failure tests.</p>",
+      "diagram": {
+        "title": "FortiSIEM Collector HA data and job planes",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "Syslog / cloud\nlog sources"
+          },
+          {
+            "id": "b",
+            "label": "VRRP VIP\nLeader Collector"
+          },
+          {
+            "id": "c",
+            "label": "Follower Collector\npriority takeover"
+          },
+          {
+            "id": "d",
+            "label": "Supervisor / App Server\njob redistribution"
+          },
+          {
+            "id": "e",
+            "label": "Event pull + metrics\nnew Collector"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "b"
+          ],
+          [
+            "d",
+            "c"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 619
+    },
+    {
+      "id": "L11",
+      "product": "FortiSASE",
+      "title": "FortiManager central management: one-way policy-package synchronization",
+      "version": "FortiSASE 26.1.107 / FortiManager 7.4.8+",
+      "summary": "Treat package installation and FortiSASE synchronization as separate stages with object, ADOM, and feature-visibility constraints.",
+      "primary_sources": [
+        {
+          "title": "Configuring settings using policy packages in FortiManager",
+          "url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/936846"
+        },
+        {
+          "title": "Adding FortiSASE to FortiManager",
+          "url": "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/907875/adding-fortisase"
+        },
+        {
+          "title": "Example: one-time schedule synchronization",
+          "url": "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/306985/example-creating-a-secure-internet-access-policy-with-one-time-schedule"
+        }
+      ],
+      "scenario_sources": [],
+      "body_html": "<h3>Central management is one-way synchronization</h3>\n<p>FortiSASE central management lets FortiManager act as the configuration source for supported FortiSASE objects and policies. The connector supports one-way synchronization from FortiManager to FortiSASE; it is not a bidirectional merge. This matters operationally: administrators should avoid deleting or independently editing centrally managed objects in FortiSASE because the next install may reapply the FortiManager state. A successful FortiManager policy-package install is only the start of the workflow. The FortiSASE side must report that the supported objects and policies were synchronized.</p>\n<p>FortiSASE supports synchronization of firewall policies, firewall proxy policies, firewall schedules, security-posture tags, and the objects required by those policies. Objects include addresses, services, profile groups, external feeds, users, user groups, and authentication sources. FortiManager automatically retrieves FortiSASE zones through the connector, including SASE_ingress_zone, SASE_public_zone, and SASE_secure_private_access_zone. The policy package must use supported settings: profile-based NGFW mode, policy offload disabled, and an empty folder; Central NAT can be enabled or disabled without changing FortiSASE behavior.</p>\n<h3>Prerequisites and workflow</h3>\n<p>Central management must be enabled on FortiSASE and the FortiCare account must have a valid FortiSASE entitlement. FortiManager and FortiSASE must be under the same FortiCloud/FortiCare account; if they are, the connector can be established without manually entering the generated non-expiring FortiManager key. FortiSASE cannot be added to a FortiManager 7.0 ADOM, the Global Database ADOM, or an ADOM in Backup mode. Once added, the device cannot be moved to another ADOM. Multiple FortiSASE devices need unique names.</p>\n<p>Build supported objects first, then the policy package, then policies, then the installation target. Security profiles require Feature Visibility for Profile Group. Proxy policy support requires Proxy Policy visibility. Firewall policies must use supported actions and normalized interfaces; proxy policies have their own supported type and outgoing-interface requirements. Installing device settings only is appropriate for connector/object settings; policy packages are installed with the Install Wizard. The connector synchronizes objects implicitly when the package is installed.</p>\n<h3>Schedule and identity edge cases</h3>\n<p>FortiSASE documentation includes a one-time schedule example. When a one-time schedule is created with the FortiManager date/time picker, FortiSASE central management interprets the entered date and time as GMT during synchronization. To avoid ambiguity, use the Advanced Options start-utc and end-utc epoch timestamp fields. This is a common source of “policy ran at the wrong local time” confusion: the policy object may be correct while the time-zone interpretation differs from the operator's expectation.</p>\n<p>Identity-based policies have additional prerequisites. The documented FSSO example imports the CA certificate used by FortiAuthenticator, creates an FSSO connector and user group in FortiManager, and installs the policy package to FortiSASE. The FortiSASE side should show the certificate, FSSO connector, group, and policy after synchronization. A captive-portal exemption policy in the example is not supported by central management and must be configured in FortiSASE before enabling the feature.</p>\n<h3>Verification and failure isolation</h3>\n<p>After installation, verify the result in Security &gt; Traffic &gt; Policies and Proxy policies. Then inspect Operations &gt; Logs &gt; Central management synchronizations and open the log details. A FortiManager “Installed successfully” result proves that the package install workflow completed; it does not prove every object was accepted by FortiSASE. The central-management log is the authoritative place to identify per-object synchronization errors.</p>\n<p>When a policy is missing, check the connector status, ADOM eligibility, feature visibility, normalized interface mapping, policy-package settings, and object support before rebuilding the policy. Do not assume FortiSASE is out of sync simply because an object is absent from the FortiManager Global Database ADOM; FortiSASE interfaces are not created there by default and normalized interfaces may need manual configuration. Treat the integration as a controlled source-of-truth workflow, and test one package with a small object set before scaling to many policies.</p>",
+      "diagram": {
+        "title": "FortiManager to FortiSASE policy synchronization",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "FortiManager ADOM\nobjects + connectors"
+          },
+          {
+            "id": "b",
+            "label": "Policy package\ninstall target"
+          },
+          {
+            "id": "c",
+            "label": "Central management\none-way sync"
+          },
+          {
+            "id": "d",
+            "label": "FortiSASE policies\nobjects / schedules"
+          },
+          {
+            "id": "e",
+            "label": "Synchronization log\nper-object result"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "c",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 607
+    },
+    {
+      "id": "L12",
+      "product": "Secure SD-WAN",
+      "title": "Minimum SLA-meet member gating in Lowest Cost (SLA) rules",
+      "version": "FortiOS 7.6.3",
+      "summary": "Use minimum-sla-meet-members to prevent a Lowest Cost (SLA) rule from remaining eligible when too few links meet quality targets.",
+      "primary_sources": [
+        {
+          "title": "Lowest cost (SLA) strategy",
+          "url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/342836/lowest-cost-sla-strategy"
+        }
+      ],
+      "scenario_sources": [
+        {
+          "title": "Technical Tip: Set the minimum number of links for an SD-WAN Lowest Cost SLA rule",
+          "url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-set-the-minimum-number-of-links-for-an-sd-wan-lowest-cost-sla-rule-to-take-effect-97182",
+          "date": "2020-12",
+          "recency": "Historical companion; outside the 30-day scenario window"
+        }
+      ],
+      "body_html": "<h3>Lowest Cost (SLA) is an eligibility decision, not a link-up check</h3>\n<p>In Lowest Cost (SLA) mode, an SD-WAN service rule selects the lowest-cost member that satisfies its configured Performance SLA. A link can be physically up and still fail the SLA because latency, jitter, or packet loss is outside the configured threshold. Conversely, if the health check is still alive but no member meets the SLA, the default behavior can still leave a member eligible; Fortinet's 7.6.3 example shows that when neither WAN link meets the SLA, the lower-cost WAN2 is used. That behavior may be acceptable for best-effort internet access but is often wrong for voice, payment, or real-time control traffic.</p>\n<p>The <code>minimum-sla-meet-members</code> option lets the rule specify how many members must meet the SLA for the rule to take effect. If the number of SLA-qualified members is lower than the configured minimum, the rule does not take effect. Traffic then continues to the next matching SD-WAN rule. This is a rule-eligibility gate, not a new health-check protocol and not a guarantee that traffic is dropped. A later fallback rule or the implicit rule may still forward the session.</p>\n<h3>Why the distinction matters</h3>\n<p>There are at least three states to separate: member down, member alive but out of SLA, and member alive and meeting SLA. A simple ping or interface status reports only part of that state. The SD-WAN health-check output exposes latency, jitter, packet loss, alive state, and SLA map. The service diagnostic shows which members are selected and how many SLA targets each passes. When a rule has a nonzero minimum, the number of qualified members controls whether the rule is eligible at all.</p>\n<p>For example, a rule might require at least two links to meet the voice SLA. If both links meet it, the Lowest Cost rule can select the lower-cost member. If only one meets it, the rule is skipped and a later best-quality or manual fallback rule can take over. If neither meets it, the primary rule remains skipped, so the fallback strategy is explicit rather than silently using an out-of-SLA member. Choose the threshold based on the application requirement; a threshold of one means at least one qualified path is enough, while two requires two qualified paths.</p>\n<h3>Configuration pattern</h3>\n<pre><code>config system sdwan\n    config service\n        edit 10\n            set name \"voice-primary\"\n            set mode sla\n            set minimum-sla-meet-members 2\n            set priority-members 1 2\n            config sla\n                edit \"voice-sla\"\n                    set id 1\n                next\n            end\n        next\n        edit 20\n            set name \"voice-fallback\"\n            set mode sla\n            set priority-members 3\n        next\n    end\nend</code></pre>\n<p>The example illustrates the rule gate and a later fallback; verify the exact CLI schema and SLA references on the installed FortiOS release. Ensure the fallback rule matches the same traffic selectors and is ordered after the primary rule. A rule that does not match the application is not a fallback, regardless of its strategy.</p>\n<h3>Verification and operational test</h3>\n<p>Use <code>diagnose sys sdwan health-check status</code> to inspect each member's alive state, latency, jitter, loss, and SLA map. Use <code>diagnose sys sdwan service4 10</code> to inspect the selected members, SLA pass count, and rule mode. A member marked alive with an empty SLA map is not meeting the configured SLA; do not count it as a healthy path for the threshold. Confirm the next rule is actually selected when the threshold is not met.</p>\n<p>Test three cases: all members meet SLA; one member falls out but remains alive; and all members are alive but outside the SLA. Verify which rule matches each case and capture the selected interface for a new session. Existing sessions may remain pinned according to session behavior, so use new test sessions when validating steering. The older Community technical tip is useful historical context for the minimum-link setting, but no directly matched Community scenario was found within the current 30-day window.</p>\n<p>Use this control when the business requirement is “only use the primary Lowest Cost policy if enough quality-qualified paths exist.” Do not confuse it with inbandwidth/outbandwidth load-balancing hash or with underlay bandwidth steering; those mechanisms choose among eligible members, while minimum-sla-meet-members decides whether the rule is eligible in the first place.</p>",
+      "diagram": {
+        "title": "SD-WAN minimum SLA member gate",
+        "nodes": [
+          {
+            "id": "a",
+            "label": "WAN1 / WAN2\nlink state"
+          },
+          {
+            "id": "b",
+            "label": "Performance SLA\nlatency / jitter / loss"
+          },
+          {
+            "id": "c",
+            "label": "Count SLA-qualified\nmembers"
+          },
+          {
+            "id": "d",
+            "label": "Minimum threshold\nrule eligible?"
+          },
+          {
+            "id": "e",
+            "label": "Fallback rule\nnext matching strategy"
+          }
+        ],
+        "edges": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ],
+          [
+            "c",
+            "d"
+          ],
+          [
+            "d",
+            "e"
+          ]
+        ]
+      },
+      "word_count": 685
+    }
+  ],
+  "validation": {
+    "lesson_count": 12,
+    "min_words": 558,
+    "max_words": 685,
+    "all_within_500_1000": true
+  }
+}
