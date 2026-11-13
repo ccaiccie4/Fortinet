@@ -1,0 +1,620 @@
+{
+  "schema_version": "1.0",
+  "run_date": "2026-11-13",
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Central SNAT map selection with dynamic external IP-feed source objects",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "external-resource address feed -> central-snat-map orig-addr/orig-addr6 reference -> ordered SNAT rule selection after firewall-policy match -> IP-pool translation",
+      "workflow_transaction_fingerprint": "refresh external IP feed; match source against feed in central SNAT table; choose first matching map by source/destination/interface/protocol/port; translate source after security policy",
+      "failure_class": "feed unavailable or stale; wrong address-family object; map shadowing/order; central NAT disabled or per-policy NAT assumed",
+      "evidence_pattern": "external-resource refresh/status; diagnose firewall iprope list 10000d; matching central-snat-map entry; session/NAT table showing translated source",
+      "remediation_path": "validate feed type and address family; verify feed fetch and parsed addresses; enable central NAT; check top-down map ordering and interfaces; confirm policy admits flow; inspect session translation",
+      "question_fingerprint": "distinguish policy acceptance from central-SNAT map selection and diagnose a stale or shadowed dynamic feed",
+      "diagram_topology_layout_fingerprint": "external IP feed -> address external-resource -> ordered central SNAT map -> firewall session translation -> WAN",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager script object types and execution-target boundaries: CLI, Tcl and Jinja",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "ADOM-scoped script object -> type selector CLI/Tcl/Jinja -> Run Script on target constraint -> platform/build validation -> target-specific execution context",
+      "workflow_transaction_fingerprint": "create script in Device Manager or Global Database ADOM; choose type and execution target; validate syntax/platform; select device/database/policy package; run and inspect execution history",
+      "failure_class": "script type incompatible with target; Global Database restriction; platform/build syntax mismatch; script runs against device database rather than live device",
+      "evidence_pattern": "script type and Run Script on fields; validation result; script execution history; device task status; resulting device/database diff",
+      "remediation_path": "select type/target pair deliberately; validate on actual platform/build; scope script to intended ADOM and device group; compare device database and live running config before/after",
+      "question_fingerprint": "identify which execution target is valid for CLI versus Tcl versus Jinja and what a successful validation does not prove",
+      "diagram_topology_layout_fingerprint": "ADOM script definition -> type/target gate -> validator -> device database/ADOM database/direct FortiGate target -> execution history",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer forwarding-mode log export: reliable TCP buffering, filters, exclusions and masking",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "client-side forwarding profile -> destination type FAZ/syslog/CEF/output plugin -> device/log filters and field exclusions/masking -> TCP reliable buffer or UDP -> remote receiver",
+      "workflow_transaction_fingerprint": "create forwarding entry on source FortiAnalyzer; select server type and destination; optionally filter devices/logs and mask fields; enable reliable TCP; forward real-time or near-real-time; remote FAZ authorizes forwarded devices",
+      "failure_class": "transport UDP loss; TCP buffer saturation; unsupported server type/port; filters suppress needed events; remote device remains unauthorized",
+      "evidence_pattern": "get system log-forward; forwarding status; remote connection; sender buffer/backlog; receiver device authorization and incoming log timestamps",
+      "remediation_path": "separate forwarding from aggregation mode; confirm destination protocol and port; use reliable TCP where supported; verify filter logic and masking; authorize remote FAZ devices; check buffer headroom",
+      "question_fingerprint": "distinguish real-time forwarding from scheduled FAZ aggregation and determine why logs are delayed, filtered or held in buffer",
+      "diagram_topology_layout_fingerprint": "source FAZ log stream -> forwarding profile/filter/mask -> TCP/UDP transport -> remote FAZ/syslog/CEF receiver",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "LACP trunk formation and member-selection behavior: aggregator mode, fallback and hash fields",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/7.6.2/fortiswitchos-cli-reference/511852",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "config switch trunk -> LACP active/passive or static/fortinet-trunk mode -> aggregator selection by bandwidth/count -> per-flow port-selection criteria -> optional fallback-port and member withdrawal behavior",
+      "workflow_transaction_fingerprint": "define trunk members and mode; negotiate LACP if active/passive; select eligible aggregator; hash source/destination MAC/IP to member; handle partner absence via fallback or member withdrawal policy",
+      "failure_class": "partner not negotiating; mismatched LACP mode/key; fallback hides peer misconfiguration; poor hash entropy causes uneven utilization; member withdrawal blocks traffic",
+      "evidence_pattern": "show switch trunk; LACP actor/partner state; per-member counters; port-selection criteria; link state and fallback member",
+      "remediation_path": "match LACP settings at both ends; verify actor/partner state; choose hash tuple that fits traffic diversity; configure fallback only for intentional non-LACP peer; validate min/max bundle and withdrawal behavior",
+      "question_fingerprint": "distinguish a formed LACP bundle from balanced traffic distribution and predict which flow tuple keeps traffic on one member",
+      "diagram_topology_layout_fingerprint": "two peer switches -> LACP control exchange -> aggregator selection -> flow hash -> individual trunk member links",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "SSID VLAN pooling: AP-group assignment versus tunnel-mode client load balancing",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "SSID VAP VLAN pool -> optional AP-group-to-VLAN mapping or tunnel-mode client load balancer -> round-robin least-populated VLAN or hash selection -> generated SSID zone",
+      "workflow_transaction_fingerprint": "define VLAN pool under VAP; create matching VLAN interfaces/networks/DHCP; choose wtp-group, round-robin or hash; AP association selects VLAN; client obtains address from selected VLAN",
+      "failure_class": "pool VLAN has no valid member; VLAN interface/DHCP missing; attempt to use load balancing in bridge mode; mistaken assumption hash and round-robin are equivalent",
+      "evidence_pattern": "show wireless-controller vap; SSID zone membership; client association VLAN; DHCP lease and VLAN interface counters",
+      "remediation_path": "verify every pool VLAN is valid and provisioned; use tunnel mode for load-balancing pools; distinguish AP-group mapping from client-count balancing; confirm DHCP and policy for each VLAN",
+      "question_fingerprint": "choose the right pool method for per-AP segmentation versus client load distribution and identify fallback to static VLAN",
+      "diagram_topology_layout_fingerprint": "SSID VAP -> VLAN pool selector (AP group/round-robin/hash) -> SSID zone/VLAN interfaces -> DHCP scopes -> wireless clients",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 User Organizational Unit LDAP mapping into User/Host Profiles and FSSO context",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "remote LDAP user object -> OU attribute mapping in FortiNAC User/Host Profile -> FSSO publication to FortiGate alongside FortiGate Device Tag and User Group",
+      "workflow_transaction_fingerprint": "LDAP sync obtains user and OU membership; FortiNAC profile can match OU context; FSSO communicates user identity, group and device tag context to FortiGate for policy selection",
+      "failure_class": "OU not mapped or not synchronized; nested/renamed OU mismatch; FortiGate receives group/device tag but not expected OU context; policy assumes OU value is a network access policy field rather than FSSO identity metadata",
+      "evidence_pattern": "remote LDAP user record and OU; User/Host Profile mapping; FSSO connection/log; FortiGate FSSO user/group/device-tag view and matching firewall policy",
+      "remediation_path": "verify LDAP attribute and OU value are populated; map the correct OU field in User/Host Profile; verify FSSO publication and FortiGate receipt; align FortiGate identity-based policy with received context",
+      "question_fingerprint": "trace an OU-based identity classification from LDAP into FortiNAC and FSSO without confusing it with FortiNAC RADIUS VLAN policy matching",
+      "diagram_topology_layout_fingerprint": "LDAP directory -> FortiNAC User/Host Profile OU mapping -> FSSO identity update -> FortiGate user/device-tag policy",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "IP phone voice VLAN provisioning: Local RADIUS attributes and MAC-notification-driven refresh",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "IP-phone host profile -> Network Access Policy -> Logical Network -> Local RADIUS attribute group (Tunnel-Medium-Type, Tunnel-Type, Tunnel-Private-Group-Id, Cisco-AVPair voice class) -> switch tagged voice VLAN",
+      "workflow_transaction_fingerprint": "phone is profiled/registered; FortiNAC selects voice policy; RADIUS Access-Accept returns VLAN and voice attributes; switch places phone in voice VLAN; MAC notification traps can trigger revalidation on connect/disconnect",
+      "failure_class": "Local versus Proxy RADIUS mode confusion; missing policy; mismatched RADIUS shared secret; incorrect VLAN attribute group; noisy MAC notification traps",
+      "evidence_pattern": "RADIUS Access-Request/Accept attributes; switch port voice/data VLAN state; FortiNAC host profile/policy; MAC notification trap event timeline",
+      "remediation_path": "confirm Local RADIUS requirement; create profile/policy/logical network; use RFC VLAN attributes plus Cisco-AVPair; match shared secret; enable MAC traps only when real-time voice provisioning is required",
+      "question_fingerprint": "diagnose why an IP phone receives data VLAN but not voice VLAN by separating policy match, RADIUS attribute response and switch interpretation",
+      "diagram_topology_layout_fingerprint": "IP phone -> access switch -> RADIUS Access-Request -> FortiNAC policy/attribute group -> Access-Accept -> tagged voice VLAN",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Self-service password recovery with SMS or FortiToken verification and rate-limited portal workflow",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.3/release-notes/568509/whats-new",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Authentication portal pre-login Password Reset option -> permitted verification methods -> per-user SMS/FortiToken recovery enrollment -> rate-limited recovery transaction -> LDAP/local password update",
+      "workflow_transaction_fingerprint": "enable Password Reset and select verification methods in portal policy; configure user recovery options or LDAP sync rule; user requests reset; proves identity by SMS or FortiToken; reset operation updates account password",
+      "failure_class": "portal method disabled; user lacks recovery channel; SMS gateway or token delivery failure; LDAP permission/LDAPS constraint; rate limit reached",
+      "evidence_pattern": "portal pre-login configuration; user recovery options; SMS/token send and verification logs; LDAP bind/reset permissions; rate-limit response",
+      "remediation_path": "enable supported method in portal; provision user or remote LDAP sync recovery options; verify SMS delivery and FortiToken enrollment; confirm LDAPS/domain-join permissions; respect throttling before retry",
+      "question_fingerprint": "distinguish portal-wide verification methods from per-user recovery enrollment and identify why a user sees no SMS or token option",
+      "diagram_topology_layout_fingerprint": "user portal reset request -> selected SMS/FortiToken factor -> recovery verification -> local/LDAP password update",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Native RDP TCP forwarding mode: transport fallback and lost native RDP security controls",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "RDP Service secret -> TCP Forwarding option -> FortiPAM TCP tunnel consistent with Other clientType launcher instead of native RDP launcher integration",
+      "workflow_transaction_fingerprint": "enable TCP forwarding for RDP secret; client establishes forwarded TCP path through FortiPAM; remote endpoint receives RDP stream; certificate revocation or legacy RDP protocol issue bypassed at the native launcher layer",
+      "failure_class": "native RDP launch fails certificate revocation check or protocol compatibility; operator enables TCP forwarding but assumes native RDP features still apply",
+      "evidence_pattern": "secret RDP Service configuration; launcher/client type; TCP forwarding session state; observed absence of RDP security level, Restricted Admin, Auto TOTP and clipboard block controls",
+      "remediation_path": "use TCP forwarding only for documented compatibility reasons; if native RDP controls are required, keep TCP forwarding disabled and fix certificate/protocol prerequisites; test with least privilege",
+      "question_fingerprint": "select TCP forwarding to bypass native-launch compatibility failure while recognizing which native RDP security features are no longer available",
+      "diagram_topology_layout_fingerprint": "FortiPAM RDP secret -> TCP forwarding tunnel -> target RDP service; native RDP feature-control branch omitted",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM discovery orchestration: Range Scan, Smart Scan, cloud scans and Collector/Worker job placement",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "discovery entry type/range/root IP -> credential mapping -> Collector performs discovery when assigned; otherwise Supervisor discovers and distributes performance jobs to active Workers via weighted round robin",
+      "workflow_transaction_fingerprint": "create discovery range and include/exclude criteria; map credentials by device type/domain; run or schedule scan; Collector/Supervisor discovers and returns CMDB objects; inspect results/errors/changes and assign ongoing monitoring jobs",
+      "failure_class": "wrong scan type/root IP; credential mapping absent or ambiguous; scan scope too broad; ping precheck suppresses non-ICMP hosts; Worker reassignment changes monitoring placement",
+      "evidence_pattern": "discovery Results/Errors/History/Changes; Collector assignment; CMDB host inventory; credential test; job distribution status",
+      "remediation_path": "select Range/Smart/L2/cloud scan appropriately; validate credentials and IP-to-credential mapping; use do-not-ping option where required; narrow include/exclude; schedule off-peak and inspect changes/errors",
+      "question_fingerprint": "distinguish Smart Scan topology traversal from Range Scan and diagnose why a Collector discovery result does not imply monitoring jobs are on the Supervisor",
+      "diagram_topology_layout_fingerprint": "discovery definition -> Collector or Supervisor -> discovered devices/CMDB -> Worker performance-monitoring job assignment",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE external log forwarding: server access type, reliable TCP and TLS trust chain",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Security PoP logs -> external server profile -> Public/Private reachability via internet or SPA FortiGate hub -> FAZ/syslog/CEF destination -> reliable TCP and optional TLS CA validation",
+      "workflow_transaction_fingerprint": "enable external log forwarding; select server type and public/private access; define endpoint and port; choose forwarding frequency; for syslog enable reliable TCP and secure TLS; upload remote CA; verify Connecting to Connected",
+      "failure_class": "private server lacks SPA path; primary/secondary access-type constraint; TLS fails because remote CA missing; UDP/TCP reachability or cipher incompatibility",
+      "evidence_pattern": "FortiSASE connection status; selected access type; remote server listener; TLS certificate chain and CA; receiver log timestamps and per-log-type arrival",
+      "remediation_path": "match Public/Private to actual route; ensure SPA hub for private endpoint; import remote CA; use TCP for reliable delivery; validate server port/ciphers and allowed log types",
+      "question_fingerprint": "distinguish a network reachability failure from TLS trust failure and select the correct Public/Private server path",
+      "diagram_topology_layout_fingerprint": "FortiSASE Security PoP log sources -> forwarding profile -> public internet or SPA hub -> FAZ/syslog/CEF collector",
+      "semantic_review": "PASS"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Passive application-specific SLA measurement: per-service latency/jitter/loss from inspected live sessions",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "firewall policy passive-wan-health-measurement + application-control identification + passive/prefer-passive performance SLA + SD-WAN service passive-measurement per ISDB/application",
+      "workflow_transaction_fingerprint": "enable passive measurements on policy and SD-WAN rule; classify traffic by ISDB/application signatures; collect live session metrics by application and member; compare SLA thresholds; steer subsequent flows based on per-application measured path quality",
+      "failure_class": "hardware offload left enabled; application classification missing; no live traffic for passive-only SLA; using active probe metrics as proxy for application performance",
+      "evidence_pattern": "diagnose sys link-monitor-passive admin list by-interface; per-rule SLA metrics; policy application-control profile; passive-measurement setting; interface session samples",
+      "remediation_path": "disable auto-asic-offload on participating policies; enable app-control classification; use passive or prefer-passive health check; generate representative app traffic; use active fallback where idle paths need measurement",
+      "question_fingerprint": "explain why a generic ping SLA is healthy while one application has poor latency and identify the policy/rule requirements for per-application passive measurement",
+      "diagram_topology_layout_fingerprint": "application session -> firewall policy inspection -> passive metrics collector -> app-specific SLA per WAN member -> SD-WAN rule steering",
+      "semantic_review": "PASS"
+    }
+  ],
+  "question_fingerprints": [
+    {
+      "number": 1,
+      "fingerprint": "FortiGate|a branch policy permits traffic and has policy nat enabled, but the desi",
+      "correct": "A"
+    },
+    {
+      "number": 2,
+      "fingerprint": "FortiGate|the feed object refreshes successfully, but traffic from one listed host",
+      "correct": "B"
+    },
+    {
+      "number": 3,
+      "fingerprint": "FortiGate|ipv4 sessions match a feed-backed snat row, but equivalent ipv6 sessions",
+      "correct": "C"
+    },
+    {
+      "number": 4,
+      "fingerprint": "FortiGate|a compiled central-snat entry appears in iprope output, but a new sessio",
+      "correct": "D"
+    },
+    {
+      "number": 5,
+      "fingerprint": "FortiManager|an engineer creates a jinja script but the target selector only offers a",
+      "correct": "A"
+    },
+    {
+      "number": 6,
+      "fingerprint": "FortiManager|a cli script reports success in fortimanager, but the live fortigate con",
+      "correct": "B"
+    },
+    {
+      "number": 7,
+      "fingerprint": "FortiManager|a tcl script is needed for a remote fortigate operation, but an administ",
+      "correct": "C"
+    },
+    {
+      "number": 8,
+      "fingerprint": "FortiManager|a script passes cli syntax validation on one platform, then fails on an ",
+      "correct": "D"
+    },
+    {
+      "number": 9,
+      "fingerprint": "FortiAnalyzer|a remote syslog receiver is offline for several hours. which forwarding ",
+      "correct": "A"
+    },
+    {
+      "number": 10,
+      "fingerprint": "FortiAnalyzer|a filter must exclude 172.10.0.0/16, but equal to does not accept the su",
+      "correct": "B"
+    },
+    {
+      "number": 11,
+      "fingerprint": "FortiAnalyzer|a fortianalyzer pair should exchange only records not already stored on ",
+      "correct": "C"
+    },
+    {
+      "number": 12,
+      "fingerprint": "FortiAnalyzer|the sender connects to a remote fortianalyzer, but forwarded devices app",
+      "correct": "D"
+    },
+    {
+      "number": 13,
+      "fingerprint": "FortiSwitch|two switches are configured lacp passive and neither sends pdus. the tru",
+      "correct": "A"
+    },
+    {
+      "number": 14,
+      "fingerprint": "FortiSwitch|a trunk has four 1-gbps ports and two 10-gbps ports. which setting choos",
+      "correct": "B"
+    },
+    {
+      "number": 15,
+      "fingerprint": "FortiSwitch|one long tcp transfer uses only one member of a healthy four-link bundle",
+      "correct": "C"
+    },
+    {
+      "number": 16,
+      "fingerprint": "FortiSwitch|a two-switch mclag pair is configured with lacp fallback on both peers. ",
+      "correct": "D"
+    },
+    {
+      "number": 17,
+      "fingerprint": "FortiAP/Wireless|a vlan-pooling ssid is configured in local-bridge mode, but client load ",
+      "correct": "A"
+    },
+    {
+      "number": 18,
+      "fingerprint": "FortiAP/Wireless|the same ssid should use one subnet per building, regardless of how many",
+      "correct": "B"
+    },
+    {
+      "number": 19,
+      "fingerprint": "FortiAP/Wireless|after a pool change, all clients still obtain addresses from the ssid's ",
+      "correct": "C"
+    },
+    {
+      "number": 20,
+      "fingerprint": "FortiAP/Wireless|a design requires radius tunnel-private-group-id to select each user's v",
+      "correct": "D"
+    },
+    {
+      "number": 21,
+      "fingerprint": "FortiNAC|two users share an ad group but reside in different ous. fortigate shoul",
+      "correct": "A"
+    },
+    {
+      "number": 22,
+      "fingerprint": "FortiNAC|the ldap bind succeeds and the user is visible, but fortigate never rece",
+      "correct": "B"
+    },
+    {
+      "number": 23,
+      "fingerprint": "FortiNAC|fortinac shows the correct ou in the user profile, but fortigate still a",
+      "correct": "C"
+    },
+    {
+      "number": 24,
+      "fingerprint": "FortiNAC|an engineer expects the ou mapping to change a switch port's vlan automa",
+      "correct": "D"
+    },
+    {
+      "number": 25,
+      "fingerprint": "FortiNAC-F|a profiled ip phone matches its policy, but the radius access-accept con",
+      "correct": "A"
+    },
+    {
+      "number": 26,
+      "fingerprint": "FortiNAC-F|the access-accept includes tunnel-type vlan and tunnel-private-group-id,",
+      "correct": "B"
+    },
+    {
+      "number": 27,
+      "fingerprint": "FortiNAC-F|a phone receives dhcp successfully, but the engineer cannot prove it lan",
+      "correct": "C"
+    },
+    {
+      "number": 28,
+      "fingerprint": "FortiNAC-F|a phone model sends frequent mac notification traps. what is the safest ",
+      "correct": "D"
+    },
+    {
+      "number": 29,
+      "fingerprint": "FortiAuthenticator|a user has a mobile number and fortitoken, but the portal offers only em",
+      "correct": "A"
+    },
+    {
+      "number": 30,
+      "fingerprint": "FortiAuthenticator|fortitoken verification succeeds for a remote ldap user, but the passwor",
+      "correct": "B"
+    },
+    {
+      "number": 31,
+      "fingerprint": "FortiAuthenticator|the portal displays sms recovery, but the user never receives the challe",
+      "correct": "C"
+    },
+    {
+      "number": 32,
+      "fingerprint": "FortiAuthenticator|repeated recovery attempts are temporarily rejected even though the user",
+      "correct": "D"
+    },
+    {
+      "number": 33,
+      "fingerprint": "FortiPAM|a legacy rdp server cannot complete the native launcher because of a doc",
+      "correct": "A"
+    },
+    {
+      "number": 34,
+      "fingerprint": "FortiPAM|a security policy requires restricted admin mode and block clipboard for",
+      "correct": "B"
+    },
+    {
+      "number": 35,
+      "fingerprint": "FortiPAM|a windows target requires network level authentication. which native rdp",
+      "correct": "C"
+    },
+    {
+      "number": 36,
+      "fingerprint": "FortiPAM|after enabling tcp forwarding, the auto totp control is no longer availa",
+      "correct": "D"
+    },
+    {
+      "number": 37,
+      "fingerprint": "FortiSIEM|an engineer wants to discover a router, then recursively inventory devic",
+      "correct": "A"
+    },
+    {
+      "number": 38,
+      "fingerprint": "FortiSIEM|a discovery task is explicitly assigned to a collector. where should the",
+      "correct": "B"
+    },
+    {
+      "number": 39,
+      "fingerprint": "FortiSIEM|a network device blocks icmp but responds to snmp. discovery stops after",
+      "correct": "C"
+    },
+    {
+      "number": 40,
+      "fingerprint": "FortiSIEM|a smart scan is planned on bgp routers, but route collection is not need",
+      "correct": "D"
+    },
+    {
+      "number": 41,
+      "fingerprint": "FortiSASE|a fortisase external syslog collector is reachable only through a secure",
+      "correct": "A"
+    },
+    {
+      "number": 42,
+      "fingerprint": "FortiSASE|the external server shows tcp connected, but tls setup fails certificate",
+      "correct": "B"
+    },
+    {
+      "number": 43,
+      "fingerprint": "FortiSASE|the primary external log server is configured as private. what restricti",
+      "correct": "C"
+    },
+    {
+      "number": 44,
+      "fingerprint": "FortiSASE|connection status is connected, but no endpoint telemetry arrives at the",
+      "correct": "D"
+    },
+    {
+      "number": 45,
+      "fingerprint": "Secure SD-WAN|a generic ping sla is healthy, but one saas application has poor perform",
+      "correct": "A"
+    },
+    {
+      "number": 46,
+      "fingerprint": "Secure SD-WAN|a passive-only sla has no fresh data on an idle wan member. what is the ",
+      "correct": "B"
+    },
+    {
+      "number": 47,
+      "fingerprint": "Secure SD-WAN|no passive session entries appear even though users are generating appli",
+      "correct": "C"
+    },
+    {
+      "number": 48,
+      "fingerprint": "Secure SD-WAN|passive metrics exist, but the sla is not separated by application. whic",
+      "correct": "D"
+    },
+    {
+      "number": 49,
+      "fingerprint": "FortiGate|a policy counter increments, but the client exits with its untranslated ",
+      "correct": "A"
+    },
+    {
+      "number": 50,
+      "fingerprint": "Secure SD-WAN|which command directly inspects passive session information by interface",
+      "correct": "B"
+    }
+  ],
+  "diagram_fingerprints": [
+    {
+      "product": "FortiGate",
+      "topology": [
+        "External IP feed",
+        "Address external-resource",
+        "Ordered central SNAT map",
+        "Firewall session translation",
+        "WAN egress / IP pool"
+      ],
+      "flow": [
+        "fetches and parses",
+        "referenced by orig-addr",
+        "first matching map selects pool",
+        "translated session exits"
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "topology": [
+        "ADOM script object",
+        "Language / type gate",
+        "Target compatibility gate",
+        "Device DB / ADOM DB / live FortiGate",
+        "Execution history and diff"
+      ],
+      "flow": [
+        "stores script",
+        "CLI / Tcl / Jinja rules",
+        "restricts target choices",
+        "runs in selected context"
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "topology": [
+        "Incoming FAZ logs",
+        "Forwarding profile / filters",
+        "TCP buffer or UDP sender",
+        "Remote FAZ / syslog / CEF",
+        "Receiver authorization / indexing"
+      ],
+      "flow": [
+        "arrive at source",
+        "filter, exclude and mask",
+        "transport and buffer",
+        "authorize and index"
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "topology": [
+        "LACP peer PDUs",
+        "Speed-group aggregators",
+        "Aggregator-mode selector",
+        "Flow hash tuple",
+        "Selected physical member"
+      ],
+      "flow": [
+        "negotiates members",
+        "groups by speed",
+        "chooses one group",
+        "hashes each flow"
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "topology": [
+        "Wireless client association",
+        "SSID VAP VLAN pool",
+        "AP-group / round-robin / hash selector",
+        "SSID zone and VLAN interfaces",
+        "Per-VLAN DHCP and policy"
+      ],
+      "flow": [
+        "associates to SSID",
+        "selects VLAN",
+        "maps into zone",
+        "client receives subnet"
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "topology": [
+        "LDAP directory user / OU",
+        "FortiNAC User/Host Profile mapping",
+        "FSSO identity update",
+        "FortiGate user/group/device-tag context",
+        "Identity-based firewall policy"
+      ],
+      "flow": [
+        "syncs user attributes",
+        "maps OU",
+        "publishes context",
+        "selects policy"
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "topology": [
+        "IP phone / workstation",
+        "Access switch port",
+        "FortiNAC profile and policy",
+        "Local RADIUS Access-Accept",
+        "Tagged voice VLAN + data VLAN"
+      ],
+      "flow": [
+        "connects to port",
+        "sends Access-Request",
+        "selects profile and attributes",
+        "switch applies VLANs"
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "topology": [
+        "User portal pre-login reset",
+        "Portal allowed-method policy",
+        "Per-user SMS / FortiToken enrollment",
+        "Factor verification and rate limit",
+        "Local / LDAP password update"
+      ],
+      "flow": [
+        "requests reset",
+        "filters allowed methods",
+        "delivers challenge",
+        "updates account"
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "topology": [
+        "FortiPAM RDP secret",
+        "Native RDP launcher",
+        "TCP forwarding option",
+        "Forwarded TCP tunnel",
+        "Target RDP service"
+      ],
+      "flow": [
+        "defines target and controls",
+        "selects path",
+        "wraps RDP stream",
+        "connects to target"
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "topology": [
+        "Discovery entry and credentials",
+        "Supervisor / Collector",
+        "Range or Smart Scan targets",
+        "CMDB inventory result",
+        "Active Worker monitoring jobs"
+      ],
+      "flow": [
+        "defines scope and credentials",
+        "assigns discovery task",
+        "collects device facts",
+        "distributes monitoring"
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "topology": [
+        "FortiSASE Security PoP logs",
+        "External server profile",
+        "Public internet or SPA hub",
+        "TCP / TLS trust gate",
+        "FortiAnalyzer / Syslog / CEF"
+      ],
+      "flow": [
+        "selects log families",
+        "chooses route",
+        "establishes transport and trust",
+        "delivers records"
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "topology": [
+        "Live TCP application sessions",
+        "Firewall policy inspection",
+        "Passive metrics collector",
+        "Per-app SLA by WAN member",
+        "SD-WAN service rule / member"
+      ],
+      "flow": [
+        "classifies traffic",
+        "captures session data",
+        "computes latency/jitter/loss",
+        "uses SLA for steering"
+      ]
+    }
+  ]
+}
