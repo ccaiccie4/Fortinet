@@ -10,7 +10,7 @@
     "C": 12,
     "D": 12
   },
-  "max_choice_word_count_spread": 7,
+  "max_choice_word_count_spread": 3,
   "questions": [
     {
       "id": "Q01",
@@ -304,7 +304,7 @@
         },
         {
           "label": "B",
-          "text": "Enable auto-cache before any SQL query testing.",
+          "text": "Enable report auto-cache before running the dataset SQL validation and test.",
           "correct": false,
           "feedback": "Incorrect: caching does not validate SQL and can consume resources unnecessarily."
         },
@@ -316,7 +316,7 @@
         },
         {
           "label": "D",
-          "text": "Change the report cover page, then regenerate output.",
+          "text": "Change the report cover page and regenerate the report output again.",
           "correct": false,
           "feedback": "Incorrect: cover-page changes do not test dataset logic."
         }
@@ -366,7 +366,7 @@
         },
         {
           "label": "B",
-          "text": "Increase the report schedule interval and rerun the query.",
+          "text": "Increase the report schedule interval and rerun the query for this report.",
           "correct": false,
           "feedback": "Incorrect: schedule timing does not resolve an unsupported dataset schema."
         },
@@ -378,7 +378,7 @@
         },
         {
           "label": "D",
-          "text": "Disable every hcache table across the FortiAnalyzer.",
+          "text": "Disable all hcache tables on the FortiAnalyzer appliance for testing.",
           "correct": false,
           "feedback": "Incorrect: hcache is unrelated to an ADOM device-type compatibility problem."
         }
@@ -620,13 +620,13 @@
         },
         {
           "label": "C",
-          "text": "Increase the wireless client's DHCP lease duration.",
+          "text": "Increase the wireless client's DHCP lease duration on the access VLAN.",
           "correct": false,
           "feedback": "Incorrect: client DHCP lease duration does not select the mesh backhaul radio."
         },
         {
           "label": "D",
-          "text": "Change the controller's HTTPS administration certificate.",
+          "text": "Change the controller's HTTPS administration certificate used by GUI access.",
           "correct": false,
           "feedback": "Incorrect: the admin certificate is unrelated to RF association."
         }
@@ -1166,7 +1166,7 @@
       "choices": [
         {
           "label": "A",
-          "text": "The incident rule removed its SQL dataset after execution.",
+          "text": "The incident rule automatically removed its SQL dataset after execution.",
           "correct": false,
           "feedback": "Incorrect: dataset deletion is not the documented UI-state behavior."
         },
@@ -1178,13 +1178,13 @@
         },
         {
           "label": "C",
-          "text": "The FortiAI tab lost focus and the result was not added to comments.",
+          "text": "The FortiAI tab lost focus and results were not added to comments.",
           "correct": true,
           "feedback": "Correct: switching focus can stop the run; results are lost unless added to Incident Comments."
         },
         {
           "label": "D",
-          "text": "The incident source stopped forwarding syslog during analysis.",
+          "text": "The incident source stopped forwarding syslog while analysis was running.",
           "correct": false,
           "feedback": "Incorrect: a source-forwarding outage does not explain a running analysis being cancelled by navigation."
         }
@@ -1290,13 +1290,13 @@
       "choices": [
         {
           "label": "A",
-          "text": "The endpoint's DNS search suffix configuration.",
+          "text": "The endpoint's configured DNS search suffix for internal name resolution.",
           "correct": false,
           "feedback": "Incorrect: DNS suffix does not establish trust in the interception certificate."
         },
         {
           "label": "B",
-          "text": "The SaaS provider's API token expiration.",
+          "text": "The SaaS provider's API token expiration date and rotation policy.",
           "correct": false,
           "feedback": "Incorrect: API tokens are unrelated to TLS interception between endpoint and PoP."
         },
@@ -1321,13 +1321,13 @@
       "choices": [
         {
           "label": "A",
-          "text": "QUIC prevents DNS resolution from reaching FortiSASE.",
+          "text": "QUIC prevents the client DNS request from reaching the FortiSASE inspection path.",
           "correct": false,
           "feedback": "Incorrect: DNS resolution is not the reason for the recommendation."
         },
         {
           "label": "B",
-          "text": "QUIC changes the SaaS application's API permissions.",
+          "text": "QUIC changes the SaaS application's API permissions in the tenant configuration.",
           "correct": false,
           "feedback": "Incorrect: API authorization is not changed by the transport fallback."
         },
@@ -1339,7 +1339,7 @@
         },
         {
           "label": "D",
-          "text": "Blocking QUIC disables every other security engine.",
+          "text": "Blocking QUIC disables every other FortiSASE security engine for that user.",
           "correct": false,
           "feedback": "Incorrect: the purpose is to expose traffic to inspection, not disable security engines."
         }
@@ -1476,25 +1476,25 @@
       "choices": [
         {
           "label": "A",
-          "text": "It makes the hub terminate spoke-to-spoke data traffic.",
+          "text": "It forces the hub to terminate all spoke-to-spoke data traffic.",
           "correct": false,
           "feedback": "Incorrect: the goal is to avoid forcing all data through the hub."
         },
         {
           "label": "B",
-          "text": "It disables discovery and installs a static route instead.",
+          "text": "It disables edge discovery and installs a static route instead.",
           "correct": false,
           "feedback": "Incorrect: placeholders are part of ADVPN 2.0 path discovery, not a static-route replacement."
         },
         {
           "label": "C",
-          "text": "It lets the hub relay discovery while spokes form direct paths over their own transports.",
+          "text": "It lets the hub relay discovery while spokes form direct tunnels.",
           "correct": true,
           "feedback": "Correct: the hub can relay discovery without being connected to every direct spoke transport."
         },
         {
           "label": "D",
-          "text": "It converts the shortcut into a FortiSASE tunnel.",
+          "text": "It converts the shortcut into a FortiSASE secure access tunnel.",
           "correct": false,
           "feedback": "Incorrect: ADVPN shortcut tunnels remain IPsec overlay paths, not FortiSASE tunnels."
         }
@@ -1525,7 +1525,7 @@
         },
         {
           "label": "D",
-          "text": "Both automatically isolate endpoints before a profile match.",
+          "text": "Both automatically isolate endpoints before any profile or policy match.",
           "correct": false,
           "feedback": "Incorrect: neither pipeline automatically isolates a host without its configured rule/action conditions."
         }
