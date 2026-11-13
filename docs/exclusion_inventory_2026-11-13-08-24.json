@@ -5787,17 +5787,17 @@
     },
     {
       "product": "FortiManager",
-      "lesson_subject": "FortiManager 8.0 Workflow Mode: concurrent admin sessions, selective approval groups, session diff and install boundary",
-      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/424502/workflow-mode",
-      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-policy-package-install-fails-with-verification-error-due-to-antiphish-max-body-len-parameter-230824",
-      "feature_mechanism_fingerprint": "ADOM workflow session as isolated change set; multiple concurrent sessions; approval-group quorum; View Diff; selective approval independent of submission order",
-      "workflow_transaction_fingerprint": "admin creates session -> changes policy/object DB -> saves/submits -> approval groups review diff -> approved session updates ADOM DB -> separate install wizard deploys to managed devices",
-      "failure_class": "session not submitted/approved; approval group incomplete; conflict between sessions; rejection/repair; approved ADOM change fails target install verification",
-      "evidence_pattern": "workflow mode setting; session state/list; View Diff; approver group status; install preview and install history",
-      "remediation_path": "verify per-ADOM workflow mode and approval matrix; compare session diff; resolve session conflicts; submit/review; run install preview and address target-specific verification separately",
-      "question_fingerprint": "separate ADOM session approval from device installation and reason about concurrent sessions and approval order",
-      "diagram_topology_layout_fingerprint": "multiple administrators -> concurrent ADOM sessions -> selective approval groups -> ADOM database -> independent install preview/deploy",
-      "uniqueness_rationale": "No prior published lesson covers FortiManager workflow sessions, concurrent changes or selective approval; revision restore and script targeting are different.",
+      "lesson_subject": "Policy consistency check: duplicate, shadowed, overlapping and orphaned objects with install-time guard",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/233367/perform-a-policy-consistency-check",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/install-failure-on-2-gb-ram-fortigates-after-fortimanager-7-6-8-upgrade-ssl-ssh-profile-udp-not-quic-230808",
+      "feature_mechanism_fingerprint": "ADOM policy consistency engine checks duplicate definitions, higher-priority shadowing, partial overlaps and orphan objects across source/destination interfaces, addresses, services and schedules; optional install-time check covers modified/added policies; per-ADOM stop/continue behavior.",
+      "workflow_transaction_fingerprint": "select ADOM and policy package -> run full consistency check -> inspect category results and hit counts -> optionally export report -> configure per-ADOM automatic check -> install runs targeted check and applies stop/continue action.",
+      "failure_class": "duplicate or shadowed objects; partially overlapping address/service definitions; orphan objects; install guard stops deployment; false confidence from checking only modified/added policies.",
+      "evidence_pattern": "policy consistency result categories; duplicate occurrence count; policy hit-count report; ADOM automatic-check setting; install result showing stop/continue on conflict.",
+      "remediation_path": "run full check; inspect object definitions and policy order; consolidate duplicates; correct shadow/overlap; remove orphan objects; set per-ADOM install guard behavior.",
+      "question_fingerprint": "distinguish duplicate, shadow, overlap and orphan findings; explain full package check versus modified/added-only install check.",
+      "diagram_topology_layout_fingerprint": "policy package -> consistency engine -> duplicate/shadow/overlap/orphan findings -> remediation -> install-time guard.",
+      "uniqueness_rationale": "Replaces Workflow Mode after similarity screening found a same-product November 3 lesson on per-session workflow approvals. Policy consistency evaluates object relationships and install-time conflict checks, a different mechanism.",
       "report_date": "2026-11-13-selection",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-08-24.html",
       "additional_primary_urls": [],
@@ -5806,17 +5806,17 @@
     },
     {
       "product": "FortiAnalyzer",
-      "lesson_subject": "Custom report assembly: datasets, charts, macros, Report Guidance and persistent hcache auto-cache",
-      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/990433/how-reports-are-populated",
+      "lesson_subject": "Indicators of Compromise service: FortiGuard threat database matching, endpoint verdicts and historical rescan",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/137635",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "SQL dataset queries analytics tables; chart and macro objects consume datasets; report composes objects; Report Guidance maps report item to device/log type/fields; hcache precomputes matured table query results",
-      "workflow_transaction_fingerprint": "select ADOM -> create/validate/test dataset SQL -> reference dataset from chart/macro -> add to report -> Report Guidance verifies analytics fields -> optional auto-cache builds persistent hcache for matured tables -> report merges cached results",
-      "failure_class": "No Data from missing analytics log type/fields/device mapping/license/no matching rows; invalid SQL; wrong ADOM; hcache resource/disk pressure or stale query assumptions",
-      "evidence_pattern": "dataset Validate/Analyze Query/Test; Report Guidance item/device/log type/field availability; report Cache Status; hcache query display",
-      "remediation_path": "check ADOM and dataset device type; validate SQL and run test for same devices/time; inspect Report Guidance missing fields; enable auto-cache only for slow reports and monitor cache build/resources",
-      "question_fingerprint": "identify whether No Data is due to source log availability, dataset SQL, chart/macro reference, ADOM scope or hcache",
-      "diagram_topology_layout_fingerprint": "analytics logs -> SQL dataset -> chart/macro -> report definition; parallel Report Guidance validation and hcache precompute/merge",
-      "uniqueness_rationale": "No prior lesson covers report object dependency graphs, Report Guidance or hcache precomputation; earlier log-storage and playbook topics are different.",
+      "feature_mechanism_fingerprint": "Licensed FortiGuard IOC database synchronizes local threat intelligence; matches IP/domain/URL or event threat type across attack, DNS, email-filter, event, traffic and web-filter logs; endpoint IOC results include detect pattern/method; scheduled or package-triggered rescan of previous logs adds Ioc_Rescan tag.",
+      "workflow_transaction_fingerprint": "FortiAnalyzer receives logs -> real-time IOC checks new records -> FortiGuard package update -> optional historical rescan -> rescanned records tagged Ioc_Rescan -> alert handler creates tagged alert -> analyst drills into original log.",
+      "failure_class": "missing IOC license or FortiGuard sync; source log absent; unsupported field/log type; stale threat package; rescan disabled; rescan alert confused with real-time alert.",
+      "evidence_pattern": "IOC view; detect pattern and method; source-log drilldown; rescan task status/progress/threat count; Ioc_Rescan tag; FortiGuard and license state.",
+      "remediation_path": "verify IOC license and FortiGuard subscription; enable required UTM/web-filter logging; select supported log types; configure global/ADOM rescan schedule and day range; ensure alert handlers include Ioc_Rescan.",
+      "question_fingerprint": "distinguish real-time IOC from historical rescan and interpret Ioc_Rescan tag, endpoint verdict and source-log evidence.",
+      "diagram_topology_layout_fingerprint": "FortiGuard IOC database -> live/historical log matching -> endpoint verdict -> rescan tag -> alert handler -> source-log drilldown.",
+      "uniqueness_rationale": "Replaces report dataset/hcache lesson after similarity screening found a same-product November 3 report-generation lesson. IOC threat-database matching and historical rescan is a different security analytics pipeline.",
       "report_date": "2026-11-13-selection",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-08-24.html",
       "additional_primary_urls": [],
@@ -5939,17 +5939,17 @@
     },
     {
       "product": "FortiSIEM",
-      "lesson_subject": "FortiAI incident analysis: agentic plan execution, SQL evidence chaining, analyst persistence and false-positive decision support",
-      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/661386",
+      "lesson_subject": "Generic HTTPS webhook event ingestion: credential-generated endpoint, CMDB identity and custom parser",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/external-systems-configuration-guide/11855/configuring-fortisiem-to-receive-events-via-webhook",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiAI incident analysis offers non-agentic answer or agentic plan; agentic plan executes sequential SQL evidence queries and passes outputs between steps; conclusion assesses false-positive/true-positive context",
-      "workflow_transaction_fingerprint": "open incident slide-in -> choose FortiAI Agentic -> inspect/edit prompt -> run plan -> monitor sequential steps -> review holistic summary -> add analysis to Incident Comments or export PDF -> optionally save prompt as rule attribute",
-      "failure_class": "analysis stopped by tab/focus/incident change; results not persisted if not added to comments; poor prompt scope; missing/insufficient event history; generated conclusion over-trusted without validating query evidence",
-      "evidence_pattern": "visible plan steps and SQL query results; related incidents/time-window aggregates; incident comments attachment; FortiAI run completion state",
-      "remediation_path": "stay on incident/FortiAI tab until completion; review each query and time range; constrain prompt to specific IOCs/entities; add result to comments before navigating; corroborate conclusion against raw incident evidence",
-      "question_fingerprint": "distinguish agentic multi-step evidence chain from a one-shot summary and identify why a completed analysis may disappear",
-      "diagram_topology_layout_fingerprint": "incident -> FortiAI plan -> sequential SQL queries with output handoff -> holistic assessment -> comments/PDF persistence",
-      "uniqueness_rationale": "No previous lesson covers FortiSIEM FortiAI incident analysis or agentic SQL query chaining.",
+      "feature_mechanism_fingerprint": "FortiSIEM 7.2+ generic webhook receiver accepts push notifications from arbitrary SaaS/apps; device/application definition plus credential creates endpoint URL and authentication method; Collector receives HTTPS POST; generic parser initially yields Vendor-Model-JSON or unknown_eventType; custom parser enriches fields/event types.",
+      "workflow_transaction_fingerprint": "remote app event -> Collector HTTPS webhook endpoint -> authenticate shared secret/token/HMAC -> raw JSON includes vendor/model/reporting IP/name for CMDB -> Analytics Raw Event Log search -> custom parser validate/test/apply -> normalized event types feed rules/reports.",
+      "failure_class": "Collector unreachable from SaaS; TLS CA validation fails; credential/secret mismatch; wrong endpoint or reporting identity; payload remains unknown_eventType; custom parser not applied across collectors.",
+      "evidence_pattern": "credential endpoint preview; HTTPS POST status; Raw Event Log PH_DEV_MON_CUSTOM_JSON; CMDB device identity; custom parser Apply state; normalized event type.",
+      "remediation_path": "prefer VPN or expose Collector TCP/443 safely; install public CA certificate; align auth type/shared secret/HMAC header or parameter; configure reporting host/IP; validate and apply parser on all collectors.",
+      "question_fingerprint": "separate webhook transport/authentication from CMDB source identity and JSON parser normalization.",
+      "diagram_topology_layout_fingerprint": "SaaS event -> Collector HTTPS webhook/auth -> raw JSON plus CMDB identity -> custom parser -> normalized event/rules.",
+      "uniqueness_rationale": "Replaces FortiAI agentic incident analysis after similarity screening found a recent FortiAnalyzer FortiAI investigation lesson. Webhook ingestion is a separate event-collection transport and parser pipeline.",
       "report_date": "2026-11-13-selection",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-08-24.html",
       "additional_primary_urls": [],
@@ -5958,17 +5958,17 @@
     },
     {
       "product": "FortiSASE",
-      "lesson_subject": "Inline-CASB Application Control: IPS decoder identification, SSL deep inspection, category actions and per-app overrides",
-      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/mature-ssa-inline-casb-deployment-guide/205318",
-      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-unable-to-select-profile-groups-in-swg-policy-in-fortisase-186314",
-      "feature_mechanism_fingerprint": "IPS protocol decoders identify SaaS applications over HTTP/1.0-2.0 including non-standard ports; SSL deep inspection decrypts HTTPS; category action and individual application override feed inline policy",
-      "workflow_transaction_fingerprint": "steer endpoint traffic to FortiSASE -> SSL deep inspection CA trust -> HTTP decoder identifies app -> category allow/monitor/block -> application override takes precedence -> other security engines inspect permitted content",
-      "failure_class": "SSL deep inspection absent or untrusted; QUIC/UDP443 bypasses TLS inspection; unsupported HTTP version/protocol; app override conflict; security profile groups unavailable due proxy category behavior",
-      "evidence_pattern": "Application Control category and per-app override settings; cloud signature icon/lock requirement; SSL inspection CA deployment; QUIC block and fallback; application logs",
-      "remediation_path": "deploy trusted FortiSASE inspection CA; enable deep inspection; block QUIC where required for HTTP3 inspection; validate HTTP/1.0-2.0 support; configure category then explicit app overrides; use separate SWG profile if proxy category restrictions conflict",
-      "question_fingerprint": "distinguish network application decoder visibility from API CASB tenant scanning and reason about SSL/QUIC prerequisites and override precedence",
-      "diagram_topology_layout_fingerprint": "endpoint -> FortiSASE PoP TLS interception -> IPS HTTP decoder -> category action -> per-application override -> security engines/SaaS",
-      "uniqueness_rationale": "Earlier FortiSASE CASB lesson covered API-based SaaS data scanning; this lesson is inline network application identification and TLS interception, a different transaction.",
+      "lesson_subject": "SPA hub priority advertisement: PoP SLA health encoded as BGP community for return-path steering",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/943871",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE PoP selects among multiple SPA hubs using SLA compliance and configured priority; encodes priority P1-P12 as BGP community ASN:Y where Y=5*X; SLA violation advertises ASN:9999; remote-user pool prefix carries community to hub and network core.",
+      "workflow_transaction_fingerprint": "PoP measures latency/jitter/loss to each SPA hub -> selects highest-priority SLA-compliant hub -> advertises remote-user prefix with ASN:5*priority or ASN:9999 -> hub propagates community to core -> core route policy steers return traffic to preferred hub.",
+      "failure_class": "FortiSASE/SPA hub ASN mismatch; Hub Health and Priority not selected; SLA thresholds wrong; core strips community; core policy ignores values; multi-ASN/eBGP mode uses MED and is incompatible with this selection method.",
+      "evidence_pattern": "service-connection SLA; Hub Selection Method; per-PoP hub priority P1-P12; BGP advertised community; received community on hub/core; ASN:9999 on SLA failure.",
+      "remediation_path": "use same ASN; select Hub Health and Priority; configure per-PoP hub priorities and SLA thresholds; enable Advertise Hub Priorities; preserve communities and configure core route policy to prefer the intended values.",
+      "question_fingerprint": "decode ASN:5*P priority and ASN:9999 failure signal; distinguish PoP hub selection from network-core return-path decision.",
+      "diagram_topology_layout_fingerprint": "FortiSASE PoP SLA+priority -> BGP community -> SPA hub -> network-core route policy -> return-path hub selection.",
+      "uniqueness_rationale": "Replaces Inline-CASB after similarity screening found a same-product November 8 Inline-CASB lesson. Hub priority advertisement is a BGP return-path signaling mechanism, not application decoding or TLS inspection.",
       "report_date": "2026-11-13-selection",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-08-24.html",
       "additional_primary_urls": [],
@@ -5977,17 +5977,17 @@
     },
     {
       "product": "Secure SD-WAN",
-      "lesson_subject": "ADVPN 2.0 edge discovery and path management: shortcut query/reply, transport groups and overlay placeholders",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/637049/advpn-2-0",
-      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-advpn-2-0-shortcut-tunnel-does-not-form-and-ike-debug-shows-error-vwl-found-no-viable-shortcut-drop-exchange-204721",
-      "feature_mechanism_fingerprint": "ADVPN 2.0 spoke edge discovery and path management; shortcut query/reply advertises participating links and health-checks; transport groups constrain compatible underlay pairs; overlay placeholders enable shortcuts across hub-disconnected transports",
-      "workflow_transaction_fingerprint": "spoke traffic triggers shortcut query -> hub relays discovery to remote spoke -> peers exchange eligible link/health/transport-group data -> each spoke chooses matching underlay -> direct shortcut IKE/IPsec forms and path manager tracks viable paths",
-      "failure_class": "no common eligible transport group/underlay; health-check mismatch; missing shortcut query/reply path; IKE exchange rejected as no viable shortcut; IPv4-only support misunderstood",
-      "evidence_pattern": "SD-WAN zone advpn-select; member transport-group; SLA health state; IKE debug 'vwl found no viable shortcut'; route/shortcut tunnel and traffic path",
-      "remediation_path": "verify ADVPN 2.0 enabled on spokes; compare member transport groups and underlays; validate health-check state and reachability; capture IKE shortcut query/reply; test same transport pair; confirm IPv4 scope",
-      "question_fingerprint": "identify why spokes remain hub-routed when no common healthy transport path exists, separating edge discovery from IKE tunnel establishment",
-      "diagram_topology_layout_fingerprint": "hub relays spoke edge-discovery query/reply -> spokes compare underlay/health/transport groups -> direct shortcut tunnel or overlay placeholder path",
-      "uniqueness_rationale": "No prior published lesson covers ADVPN 2.0 edge discovery, transport-group selection or overlay placeholders; prior BGP tag and graceful-shutdown topics are distinct.",
+      "lesson_subject": "SD-WAN configuration portability: interface-unbound member placeholders for reusable spoke templates",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.4.3/administration-guide/386667/sd-wan-configuration-portability",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "SD-WAN member interface binding is optional; empty members can participate in Performance SLA and service-rule references before physical interface names exist; stable member IDs are portable; copied configuration creates disabled/unbound members until target-specific interfaces are assigned.",
+      "workflow_transaction_fingerprint": "create member placeholders -> define health-check participants and SD-WAN rule preference against member IDs -> copy configuration to another FortiGate -> target creates unbound disabled members -> assign local interfaces -> members become active and SLA/rule path selection operates.",
+      "failure_class": "unbound member remains disabled; member ID mismatch in SLA or rule; target interface name mismatch; template appears applied but no path exists; device-specific source interface binding was copied accidentally.",
+      "evidence_pattern": "show system sdwan member interface/disabled state; member sequence IDs; health-check participant list; service-rule priority-members; target interface assignment and SLA state.",
+      "remediation_path": "keep template members unbound; reference stable member IDs in SLA/rules; apply to target; assign target-local interfaces; verify SLA and service rule before moving traffic.",
+      "question_fingerprint": "explain why empty members can be referenced by SLA/rules yet remain inactive until target-specific interface binding.",
+      "diagram_topology_layout_fingerprint": "portable member placeholders -> SLA/service-rule references -> target device -> local interface binding -> active SD-WAN path.",
+      "uniqueness_rationale": "Replaces ADVPN 2.0 after similarity screening found a same-product November 2 remote-health-check/BGP route-suppression lesson. Configuration portability is an interface-binding/template mechanism, not shortcut discovery or route suppression.",
       "report_date": "2026-11-13-selection",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-13-08-24.html",
       "additional_primary_urls": [],
@@ -6089,8 +6089,122 @@
         "product": "FortiAnalyzer",
         "subject": "Archive log retention and log rolling",
         "reason": "Rejected because 2026-10-25 already covered archive rolling/retention; selected report assembly objects and hcache instead."
+      },
+      {
+        "product": "FortiManager",
+        "subject": "FortiManager 8.0 Workflow Mode: concurrent sessions and selective approvals",
+        "reason": "Rejected after fingerprint comparison found a substantially equivalent same-product November 3 workflow-session/approval lesson; replaced with Policy Consistency Check."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "subject": "Custom report assembly: datasets, charts, macros, Report Guidance and hcache",
+        "reason": "Rejected after fingerprint comparison found a substantially equivalent same-product November 3 custom dataset/hcache/report lesson; replaced with IOC service and historical rescan."
+      },
+      {
+        "product": "FortiSIEM",
+        "subject": "FortiAI Incident Analysis: agentic plans and chained SQL evidence",
+        "reason": "Rejected after fingerprint comparison found a closely related recent FortiAI incident-analysis lesson in the Fortinet analytics portfolio; replaced with generic HTTPS webhook event ingestion."
+      },
+      {
+        "product": "FortiSASE",
+        "subject": "Inline-CASB Application Control: HTTP decoding, TLS inspection and application overrides",
+        "reason": "Rejected after fingerprint comparison found a same-product November 8 Inline-CASB application detection/deep-inspection lesson; replaced with SPA hub priority advertisement."
+      },
+      {
+        "product": "FortiSASE",
+        "subject": "Pre-logon tunnel: machine certificate authentication and AD reachability",
+        "reason": "Rejected because the 30-day inventory includes a same-product November 7 pre-logon connectivity/tunnel-lifecycle lesson."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "subject": "ADVPN 2.0 edge discovery and transport-group shortcut selection",
+        "reason": "Rejected after fingerprint comparison found a related same-product November 2 remote-health-check/overlay failover route-suppression lesson; replaced with SD-WAN configuration portability."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "subject": "Hub BGP route suppression when all spoke overlay links fail",
+        "reason": "Rejected because the exact same-product route-suppression/remote-health-check mechanism was taught on November 2."
       }
     ],
-    "result": "12 candidates selected after semantic comparison; no substantial duplicates found."
+    "result": "12 candidates selected after semantic comparison; no substantial duplicates found.",
+    "final_pass": {
+      "automated_screen": "Token-overlap screening across all 282 historical records was used to identify nearest fingerprint neighbors, followed by manual mechanism/workflow review.",
+      "selected_count": 12,
+      "all_semantically_distinct": true,
+      "final_candidates": [
+        {
+          "product": "FortiGate",
+          "subject": "DNS over QUIC and DNS over HTTP/3 in transparent and local-in DNS modes: proxy inspection, TLS identity and certificate selection",
+          "result": "PASS",
+          "rationale": "No prior report teaches encrypted DNS over QUIC/HTTP3, DNS service mode split, or the FortiOS 8.0 DNS certificate selection rule."
+        },
+        {
+          "product": "FortiManager",
+          "subject": "Policy consistency check: duplicate, shadowed, overlapping and orphaned objects with install-time guard",
+          "result": "PASS",
+          "rationale": "Replaces Workflow Mode after similarity screening found a same-product November 3 lesson on per-session workflow approvals. Policy consistency evaluates object relationships and install-time conflict checks, a different mechanism."
+        },
+        {
+          "product": "FortiAnalyzer",
+          "subject": "Indicators of Compromise service: FortiGuard threat database matching, endpoint verdicts and historical rescan",
+          "result": "PASS",
+          "rationale": "Replaces report dataset/hcache lesson after similarity screening found a same-product November 3 report-generation lesson. IOC threat-database matching and historical rescan is a different security analytics pipeline."
+        },
+        {
+          "product": "FortiSwitch",
+          "subject": "Private VLAN forwarding matrix: primary/isolated/community VLANs and promiscuous/host ports",
+          "result": "PASS",
+          "rationale": "No prior FortiSwitch lesson covers PVLAN isolation/community forwarding; dynamic VLAN pruning, MCLAG and STP are separate."
+        },
+        {
+          "product": "FortiAP/Wireless",
+          "subject": "FortiAP mesh ZTP: default-mesh root provisioning, Ethernet-first backhaul and leaf authorization",
+          "result": "PASS",
+          "rationale": "No prior published lesson covers mesh ZTP/bootstrap discovery; prior AP topics cover radio, roaming, CAPWAP, LoRaWAN and LAN MACsec."
+        },
+        {
+          "product": "FortiNAC",
+          "subject": "Security event parser pipeline: syslog field extraction, severity normalization, host correlation, security trigger and alarm action",
+          "result": "PASS",
+          "rationale": "No prior FortiNAC lesson covers the syslog parser-to-security-alarm event pipeline; prior NAC topics cover roles, RADIUS, compliance and quarantine."
+        },
+        {
+          "product": "FortiNAC-F",
+          "subject": "Endpoint fingerprint evidence and source ranking: DHCP/NMAP/SNMP/SSH/agent/WinRM, profile rules and rogue-to-registered transition",
+          "result": "PASS",
+          "rationale": "No prior lesson covers multi-source endpoint fingerprint records/source ranking; earlier trap-driven L2/L3 host learning is a separate discovery mechanism."
+        },
+        {
+          "product": "FortiAuthenticator",
+          "subject": "RADIUS accounting proxy: source/destination mapping, rule sets, attribute add/rename, LDAP-derived groups and RSSO session feed",
+          "result": "PASS",
+          "rationale": "No prior lesson covers FAC accounting proxy transformations and fan-out; previous FAC lessons cover SAML, OTP, SCEP, certificate lifecycle and user import."
+        },
+        {
+          "product": "FortiPAM",
+          "subject": "Additional Access Authentication for secrets: policy inheritance, per-secret override, time-limited access and launch gate",
+          "result": "PASS",
+          "rationale": "No prior report covers FortiPAM's additional secret access/launch authentication gate or time-limited access status."
+        },
+        {
+          "product": "FortiSIEM",
+          "subject": "Generic HTTPS webhook event ingestion: credential-generated endpoint, CMDB identity and custom parser",
+          "result": "PASS",
+          "rationale": "Replaces FortiAI agentic incident analysis after similarity screening found a recent FortiAnalyzer FortiAI investigation lesson. Webhook ingestion is a separate event-collection transport and parser pipeline."
+        },
+        {
+          "product": "FortiSASE",
+          "subject": "SPA hub priority advertisement: PoP SLA health encoded as BGP community for return-path steering",
+          "result": "PASS",
+          "rationale": "Replaces Inline-CASB after similarity screening found a same-product November 8 Inline-CASB lesson. Hub priority advertisement is a BGP return-path signaling mechanism, not application decoding or TLS inspection."
+        },
+        {
+          "product": "Secure SD-WAN",
+          "subject": "SD-WAN configuration portability: interface-unbound member placeholders for reusable spoke templates",
+          "result": "PASS",
+          "rationale": "Replaces ADVPN 2.0 after similarity screening found a same-product November 2 remote-health-check/BGP route-suppression lesson. Configuration portability is an interface-binding/template mechanism, not shortcut discovery or route suppression."
+        }
+      ]
+    }
   }
 }
