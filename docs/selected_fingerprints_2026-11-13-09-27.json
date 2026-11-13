@@ -1,0 +1,261 @@
+{
+  "generated_at": "2026-11-13T09:27:45-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-13-09-27.json",
+  "historical_record_count": 294,
+  "actual_report_artifact_count": 28,
+  "semantic_gate": "PASS",
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "NP7 link-scan interval tuning and FGCP failover convergence",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.7/hyperscale-firewall-guide/147731/changing-the-np7-link-scan-interval-to-reduce-ha-failover-delays",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "NP7 hardware link-scan interval controls cadence for link-state detection; distinct from generic FGCP heartbeat/election tuning",
+      "workflow_transaction_fingerprint": "NP7 scans physical link state -> link-down indication reaches FortiOS/FGCP monitoring -> cluster failover and gratuitous ARP follow the detected event; interval bounds detection cadence, not election logic",
+      "failure_class": "slow link-down detection on NP7-based interfaces delays the start of failover convergence",
+      "evidence_pattern": "show full-configuration system npu; configured np-link-scan-interval; interface link-state transitions; HA event timestamps and GARP timing",
+      "remediation_path": "verify platform and NP7 support, tune only the documented scan interval within supported range, compare HA event and link-state timestamps, validate GARP and traffic recovery",
+      "question_fingerprint": "distinguish NP7 link-scan cadence from HA heartbeat, election and session synchronization",
+      "diagram_topology_layout_fingerprint": "physical link -> NP7 link scanner -> FortiOS interface state -> FGCP monitor/failover -> GARP -> upstream switch",
+      "matched_historical_records": 0,
+      "semantic_review": "PASS: no prior lesson teaches NP7 link-scan cadence; historical HA topics cover other triggers and election/session behavior.",
+      "lesson_id": "L01",
+      "lesson_word_count": 627,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.6.7/hyperscale-firewall-guide/147731/changing-the-np7-link-scan-interval-to-reduce-ha-failover-delays",
+        "https://docs.fortinet.com/document/fortigate/7.6.7/fortios-release-notes/743723"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager HA: manual versus VRRP failover, heartbeat timers and delta-sync queue",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/800686/configuring-ha-options",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-file-quota-on-fortimanager-ha-configuration-97361",
+      "feature_mechanism_fingerprint": "FortiManager HA primary/secondary state replication using heartbeat and delta-sync queue; VRRP mode owns shared management address while manual mode requires operator promotion",
+      "workflow_transaction_fingerprint": "primary records config changes -> delta sync queue transfers updates to secondary -> heartbeat/VRRP health controls role and shared address -> secondary takes over after failure; queue quota bounds pending delta state",
+      "failure_class": "secondary is stale or failover is delayed because heartbeat threshold, VRRP reachability, peer identity or delta-sync queue capacity is wrong",
+      "evidence_pattern": "HA status and peer state; heartbeat interval and failover threshold; VRRP interface/VIP; HA event log; file quota and delta-sync queue state",
+      "remediation_path": "validate peer serial/IP and cluster password, heartbeat path and VRRP interface, ensure shared management address routing, inspect queue/quota before forcing resync, test controlled failover",
+      "question_fingerprint": "choose correct HA mode and identify why VRRP or delta-sync evidence does not prove application-level recovery",
+      "diagram_topology_layout_fingerprint": "primary FortiManager -> delta-sync queue -> secondary FortiManager; heartbeat/VRRP side channel -> shared management VIP",
+      "lesson_id": "L02",
+      "lesson_word_count": 680,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/800686/configuring-ha-options",
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide"
+      ],
+      "scenario_source_urls": [
+        "https://community.fortinet.com/fortimanager-27/technical-tip-file-quota-on-fortimanager-ha-configuration-97361"
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Asset Identity Center endpoint vulnerability enrichment through FortiClient EMS and OT inventory",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/658758",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Asset Identity Center joins discovered asset identity with EMS endpoint vulnerability data and licensed OT/IoT vulnerability intelligence; distinct from log analytics and event anomaly detection",
+      "workflow_transaction_fingerprint": "EMS connector supplies endpoint/telemetry context -> playbook Get Endpoints/Get Vulnerabilities actions retrieve records -> Asset List/Identity Center enriches asset with software and vulnerability attributes -> dashboards/reports expose risk",
+      "failure_class": "asset exists but vulnerability fields are absent or stale because connector, playbook action, license scope, endpoint identity or schedule is incomplete",
+      "evidence_pattern": "connector status; playbook execution result; endpoint and vulnerability action outputs; asset last-seen/source fields; subscription entitlement and dashboard filters",
+      "remediation_path": "validate EMS connector and permissions, confirm action inputs and scheduled execution, reconcile endpoint identifiers, check OT/IoT license scope and report time range",
+      "question_fingerprint": "distinguish asset discovery from vulnerability enrichment and determine which stage failed",
+      "diagram_topology_layout_fingerprint": "FortiClient EMS + FortiGate/OT sources -> FortiAnalyzer connectors/playbook -> Asset Identity Center -> vulnerability-enriched asset list/report",
+      "lesson_id": "L03",
+      "lesson_word_count": 650,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/658758",
+        "https://docs.fortinet.com/document/fortianalyzer/7.4.0/new-features/496780/managed-endpoint-vulnerability-dashboard-7-4-4"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "IEEE 1588 PTPv2 transparent and boundary clocks, E2E/P2P delay correction and Layer-3 transport",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/123383/precision-time-protocol",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch PTPv2 transparent clock updates Sync correctionField for residence/link delay; boundary clock participates in BMCA and regenerates timing across VLANs; Layer-3 PTP added in 8.0",
+      "workflow_transaction_fingerprint": "Announce selects grandmaster -> Sync/Follow_Up carries time -> E2E Delay_Req/Resp or P2P PDelay exchange measures path -> transparent clock updates correctionField or boundary clock disciplines and redistributes time",
+      "failure_class": "wrong PTP profile/domain/transport/VLAN or unsupported clock mode yields offset drift, missing delay samples or no downstream synchronization",
+      "evidence_pattern": "PTP profile/mode/domain/transport; interface ptp-status/policy; diagnose switch ptp port get-link-delay; packet capture of Announce/Sync/PDelay and correctionField",
+      "remediation_path": "confirm model/firmware support, align domain/profile/transport, allow PTP VLAN on every participating port, account for IGMP snooping and avoid unsupported P2P combinations",
+      "question_fingerprint": "differentiate transparent versus boundary clock and E2E versus P2P delay evidence",
+      "diagram_topology_layout_fingerprint": "grandmaster -> transparent switch with correctionField -> downstream slave; alternate boundary clock across VLANs with BMCA",
+      "lesson_id": "L04",
+      "lesson_word_count": 658,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/123383/precision-time-protocol"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "WPA3 Beacon Protection: beacon integrity MIC, PMF dependency and Wi-Fi 6E/7 compatibility",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/463484/enabling-beacon-protection",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Beacon Protection adds integrity protection to beacon frames using a MIC in WPA3/PMF-capable wireless operation; distinct from rogue AP detection and client roaming",
+      "workflow_transaction_fingerprint": "WPA3/PMF SSID advertises beacon-protection capability -> client and AP negotiate supported protection -> protected beacon carries integrity element -> client validates beacon integrity before accepting management information",
+      "failure_class": "feature is enabled on an unsupported AP/firmware or incompatible security profile, or clients cannot negotiate required PMF/beacon protection",
+      "evidence_pattern": "AP model and firmware; SSID security profile; pmf and beacon-protection settings; over-the-air beacon capture and client association result",
+      "remediation_path": "verify Wi-Fi 6E/7 model and minimum FortiAP release, enable PMF and beacon protection only on compatible WPA3 SSIDs, validate with capable clients and packet capture",
+      "question_fingerprint": "identify beacon-integrity protection versus rogue AP containment or protected data frames",
+      "diagram_topology_layout_fingerprint": "FortiAP WPA3 beacon -> MIC/integrity element -> client verification; separate association/PMF negotiation",
+      "lesson_id": "L05",
+      "lesson_word_count": 558,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/463484/enabling-beacon-protection"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiSwitch endpoint connection notifications: SNMP link traps, MAC notifications and FortiGate syslog",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortiswitch-integration/98804/connection-notification-methods",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-takes-no-action-on-endpoints-behind-a-fortilink-managed-fortiswitch-and-the-fortigate-shows-a-blue-status-icon-229997",
+      "feature_mechanism_fingerprint": "FortiNAC learns endpoint movement through alternative notification sources: SNMP link traps trigger L2 poll, FortiGate syslog MAC Add/Delete/Move, or FortiSwitch MAC notification traps; each has distinct latency and indirect-host coverage",
+      "workflow_transaction_fingerprint": "endpoint connects/moves -> switch or FortiGate emits selected notification -> FortiNAC correlates switch/port/MAC -> L2 poll or direct MAC update refreshes host location -> access policy/enforcement engine evaluates new location",
+      "failure_class": "NAC does not update endpoint location because chosen notification source is absent, unsupported, delayed or unable to see hosts behind AP/indirect ports",
+      "evidence_pattern": "FortiNAC network-device integration mode; SNMP trap/syslog receive logs; MAC Add/Move/Delete event; L2 poll result; host switch/port/SSID attributes",
+      "remediation_path": "select supported notification method for the topology, configure traps/syslog on the correct FortiGate/FortiSwitch, verify source IP and SNMP credentials, run a controlled MAC move and compare host location",
+      "question_fingerprint": "distinguish link-up-triggered polling from direct MAC movement notifications and identify indirect-host blind spots",
+      "diagram_topology_layout_fingerprint": "endpoint -> FortiSwitch/FortiAP -> FortiGate/FortiLink -> SNMP/syslog notification -> FortiNAC host-location update",
+      "lesson_id": "L06",
+      "lesson_word_count": 640,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/fortiswitch-integration/98804/connection-notification-methods",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide"
+      ],
+      "scenario_source_urls": [
+        "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-takes-no-action-on-endpoints-behind-a-fortilink-managed-fortiswitch-and-the-fortigate-shows-a-blue-status-icon-229997"
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "RADIUS Change of Authorization and Disconnect with dynamic ACL attribute groups",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/239599",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-coa-support-in-fortinac-v7-4-and-applying-dacls-in-fortiswitch-fortilink-scenario-173151",
+      "feature_mechanism_fingerprint": "FortiNAC-F Local RADIUS attribute groups construct RFC 5176 CoA-Request/Disconnect-Request and dynamic ACL payloads; distinct from initial Access-Accept VLAN assignment",
+      "workflow_transaction_fingerprint": "endpoint session established -> NAC policy/state changes -> CoA or Disconnect request uses NAS/session identifiers and attribute group -> NAS returns ACK/NAK -> port/session policy is reauthorized or disconnected",
+      "failure_class": "NAS ignores or NAKs CoA because Calling-Station-Id/session identifiers, message type, attribute group scope or vendor DACL syntax is wrong",
+      "evidence_pattern": "Local RADIUS mode; attribute group and message type; Calling-Station-Id/Acct-Session-Id; NAS CoA/Disconnect logs; ACK/NAK and resulting ACL/session state",
+      "remediation_path": "confirm NAS support for RFC5176 and DACL format, map the correct device/logical-network attribute group, include required identifiers, validate CoA reachability and test ACK before policy rollout",
+      "question_fingerprint": "distinguish initial authentication VLAN attributes from post-auth CoA/Disconnect and diagnose a NAK",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F policy engine -> RADIUS CoA/Disconnect -> NAS session -> ACK/NAK -> dynamic ACL or session termination",
+      "lesson_id": "L07",
+      "lesson_word_count": 607,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/239599",
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/922505/dynamic-access-control-lists",
+        "https://docs.fortinet.com/document/fortiswitch/7.6.5/fortilink-guide/756049/fortiswitch-security-policies"
+      ],
+      "scenario_source_urls": [
+        "https://community.fortinet.com/fortinac-f-57/technical-tip-coa-support-in-fortinac-v7-4-and-applying-dacls-in-fortiswitch-fortilink-scenario-173151"
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator Cloud per-policy OCSP verification for EAP-TLS client certificates",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281/fortiauthenticator-8-0-2",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "RADIUS EAP-TLS policy performs online OCSP status check for presented client certificate with disable, enable and softfail behavior; distinct from SCEP enrollment and CRL download",
+      "workflow_transaction_fingerprint": "supplicant presents client certificate during EAP-TLS -> FAC Cloud validates chain and policy -> OCSP responder queried -> good/revoked/unknown/timeout mapped to reject or softfail decision -> RADIUS result returned",
+      "failure_class": "valid user certificate is rejected or accepted unexpectedly because OCSP response, responder reachability, softfail mode or per-policy setting is misunderstood",
+      "evidence_pattern": "RADIUS authentication profile OCSP mode; OCSP request/response status; responder reachability and timeout; EAP-TLS result; certificate serial/issuer",
+      "remediation_path": "enable OCSP only on intended EAP-TLS policy, choose strict or softfail deliberately, validate responder DNS/TLS reachability and revoked/unknown/timeout cases",
+      "question_fingerprint": "distinguish OCSP good/revoked/unknown/timeout from CRL freshness and SCEP issuance",
+      "diagram_topology_layout_fingerprint": "supplicant certificate -> FAC Cloud EAP-TLS policy -> OCSP responder -> status decision -> RADIUS accept/reject",
+      "lesson_id": "L08",
+      "lesson_word_count": 585,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/280281/fortiauthenticator-8-0-2",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "SSH filter profiles: command interception, owner bypass and secret-scoped policy enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/414026/ssh-filter-profiles",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM SSH filter profile evaluates commands within proxied SSH session and can exempt secret owner; distinct from SSH certificate authentication and session recording",
+      "workflow_transaction_fingerprint": "user launches secret -> FortiPAM proxy establishes SSH session with target -> command stream inspected against assigned filter profile -> allowed/blocked/owner-bypass result -> session event/audit record",
+      "failure_class": "blocked command unexpectedly passes or valid command is denied because profile attachment, owner bypass, launcher path or proxy mode is wrong",
+      "evidence_pattern": "secret SSH filter profile association; owner identity/secret ownership; proxy launcher/session details; command audit and filter decision logs",
+      "remediation_path": "attach filter to intended secret or policy, review owner bypass semantics and command patterns, use proxied SSH launcher, test commands with owner and non-owner identities",
+      "question_fingerprint": "identify why command filtering differs for secret owner and delegated user without confusing it with certificate authentication",
+      "diagram_topology_layout_fingerprint": "privileged user -> FortiPAM SSH proxy -> filter profile decision -> target SSH server; owner-bypass branch",
+      "lesson_id": "L09",
+      "lesson_word_count": 610,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/900399/creating-an-ssh-filter",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/769846/creating-a-policy"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Collector HA with VRRP VIP, leader/follower roles and process-health failover boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/841876/cluster-config",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-216/fortisiem-high-availability-221062",
+      "feature_mechanism_fingerprint": "Collector HA uses VRRP VIP for on-prem/AWS or load balancer for Azure/GCP; leader receives logs while Supervisor/App Server redistributes pull and performance jobs",
+      "workflow_transaction_fingerprint": "devices send syslog to VIP -> VRRP leader owns VIP and receives logs -> Supervisor schedules pull/metrics jobs across collectors -> leader failure triggers follower VIP ownership and job redistribution",
+      "failure_class": "process-level collector failure does not trigger VRRP because network interface remains up; log transport and scheduled collection failover behave differently",
+      "evidence_pattern": "VRRP role/VIP owner; collector interface and priority; Supervisor job assignments; App Server 10-minute task-request timeout; log arrival at new leader",
+      "remediation_path": "separate interface/VRRP health from process health, use external load balancer health checks where needed, validate VIP L2 adjacency, test leader and follower failures independently",
+      "question_fingerprint": "distinguish VRRP interface failure from collector process failure and identify separate log versus polling-job recovery",
+      "diagram_topology_layout_fingerprint": "syslog devices -> VRRP VIP -> leader/follower collectors; Supervisor/App Server job distribution side plane",
+      "lesson_id": "L10",
+      "lesson_word_count": 619,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/841876/cluster-config",
+        "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/828499/what-is-new-in-7-3-0"
+      ],
+      "scenario_source_urls": [
+        "https://community.fortinet.com/fortisiem-216/fortisiem-high-availability-221062"
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiManager central management policy-package synchronization to FortiSASE",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/936846",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager policy-package install synchronizes supported firewall/proxy policies, objects, SAML IdP settings, user groups and one-time schedules to FortiSASE under select-availability central management",
+      "workflow_transaction_fingerprint": "FortiManager objects created first -> policy package assembled and installed to FortiSASE target -> central management connector synchronizes supported objects/policies -> FortiSASE sync log reports success or per-object error",
+      "failure_class": "policy package installs in FortiManager but FortiSASE policy is missing or partially synchronized because feature is not enabled, unsupported object/visibility setting, connector/ADOM mapping or duplicate object",
+      "evidence_pattern": "select-availability enablement and FortiManager version; connector status; package install target; Central Management Synchronization Log and error details; resulting FortiSASE policy",
+      "remediation_path": "confirm select-availability enablement and FortiManager 7.4.4+, enable required Feature Visibility, create objects before policies, verify global ADOM normalized interfaces, inspect sync error details and retry",
+      "question_fingerprint": "distinguish FortiManager package installation from successful FortiSASE synchronization and locate object-level sync errors",
+      "diagram_topology_layout_fingerprint": "FortiManager ADOM objects/policy package -> central management connector -> FortiSASE policy objects/SAML/schedules -> sync log",
+      "lesson_id": "L11",
+      "lesson_word_count": 607,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/936846",
+        "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/907875/adding-fortisase",
+        "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/306985/example-creating-a-secure-internet-access-policy-with-one-time-schedule"
+      ],
+      "scenario_source_urls": []
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Secure SD-WAN: minimum-sla-meet-members gating in Lowest Cost (SLA) rules",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/342836/lowest-cost-sla-strategy",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-set-the-minimum-number-of-links-for-an-sd-wan-lowest-cost-sla-rule-to-take-effect-97182",
+      "feature_mechanism_fingerprint": "SD-WAN service rule uses minimum-sla-meet-members to gate rule eligibility based on the count of members meeting configured SLA; distinct from underlay bandwidth steering and BGP neighbor selection.",
+      "workflow_transaction_fingerprint": "health-check measures each member -> rule counts in-SLA members -> threshold comparison -> rule remains eligible or is skipped -> next matching rule selects fallback; zero threshold preserves legacy behavior when no member meets SLA.",
+      "failure_class": "alive members fall out of SLA and the rule unexpectedly remains eligible or falls through because threshold and fallback ordering are misconfigured",
+      "evidence_pattern": "diagnose sys sdwan health-check status; diagnose sys sdwan service4 <id>; per-member alive and SLA map; configured minimum-sla-meet-members; subsequent matching rule",
+      "remediation_path": "set a deliberate threshold, keep a later fallback rule, verify health-check targets/thresholds, test one-member and all-members-out-of-SLA cases",
+      "question_fingerprint": "distinguish link-alive from SLA-qualified and explain rule fall-through when minimum-sla-meet-members is not met",
+      "diagram_topology_layout_fingerprint": "WAN members -> health-check SLA state -> member-count threshold gate -> primary lowest-cost rule or ordered fallback rule",
+      "lesson_id": "L12",
+      "lesson_word_count": 685,
+      "primary_source_urls": [
+        "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/342836/lowest-cost-sla-strategy"
+      ],
+      "scenario_source_urls": [
+        "https://community.fortinet.com/fortigate-3/technical-tip-how-to-set-the-minimum-number-of-links-for-an-sd-wan-lowest-cost-sla-rule-to-take-effect-97182"
+      ]
+    }
+  ]
+}
