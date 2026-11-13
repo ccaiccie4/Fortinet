@@ -1,0 +1,1566 @@
+{
+  "schema_version": "1.0",
+  "run_date": "2026-11-13",
+  "generated_at_local": "2026-11-13T08:24:40-08:00",
+  "question_count": 50,
+  "choice_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "max_choice_word_count_spread": 7,
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "stem": "A client resolves ordinary DNS, but DoQ queries traverse the firewall without the expected category block. Which policy-path correction is required?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Use a proxy-mode firewall policy with QUIC inspection enabled.",
+          "correct": true,
+          "feedback": "Correct: the documented DoQ/DoH3 inspection path requires proxy mode and QUIC inspection."
+        },
+        {
+          "label": "B",
+          "text": "Change the local DNS database to authoritative mode.",
+          "correct": false,
+          "feedback": "Incorrect: local database mode changes answer sourcing, not transparent proxy inspection."
+        },
+        {
+          "label": "C",
+          "text": "Replace the upstream resolver with the FortiGate interface IP.",
+          "correct": false,
+          "feedback": "Incorrect: local-in DNS is a different service placement from transparent proxying."
+        },
+        {
+          "label": "D",
+          "text": "Move the DNS filter profile to the web-filter policy.",
+          "correct": false,
+          "feedback": "Incorrect: the DNS filter must be bound to the DNS service or inspected DNS path."
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "stem": "An administrator enables DoQ on a FortiGate interface. The design requires FortiGate to answer from local records and forward misses. Which mode matches that behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Non-recursive, because it forwards only unmatched public records.",
+          "correct": false,
+          "feedback": "Incorrect: non-recursive serves the public DNS database only."
+        },
+        {
+          "label": "B",
+          "text": "Forward-only, because it checks the local shadow database first.",
+          "correct": false,
+          "feedback": "Incorrect: forward-only bypasses the local database rather than checking it first."
+        },
+        {
+          "label": "C",
+          "text": "Recursive, because it checks the shadow database then forwards misses.",
+          "correct": true,
+          "feedback": "Correct: recursive mode checks the shadow database before forwarding misses to system DNS."
+        },
+        {
+          "label": "D",
+          "text": "Resolver, because it forwards all misses to system DNS.",
+          "correct": false,
+          "feedback": "Incorrect: resolver mode iterates root, TLD and authoritative servers."
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "stem": "A packet capture shows UDP/443 QUIC and the client says it is using encrypted DNS. Which protocol is most likely in use?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "DoQ on its standard DNS-over-QUIC listener.",
+          "correct": false,
+          "feedback": "Incorrect: the documented DoQ listener uses UDP/853, not UDP/443."
+        },
+        {
+          "label": "B",
+          "text": "Classic DNS over UDP with a non-standard source port.",
+          "correct": false,
+          "feedback": "Incorrect: classic DNS is not identified by a QUIC transport."
+        },
+        {
+          "label": "C",
+          "text": "DoH over HTTP/2 carried inside TCP/443.",
+          "correct": false,
+          "feedback": "Incorrect: HTTP/2 DoH uses HTTPS/TCP rather than HTTP/3 QUIC."
+        },
+        {
+          "label": "D",
+          "text": "DoH3 over HTTP/3 carried inside QUIC.",
+          "correct": true,
+          "feedback": "Correct: DoH3 uses HTTP/3 over QUIC on UDP/443."
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "stem": "On FortiOS 8.0, no DNS service certificate is set in the DNS server object. Which certificate source is used as fallback?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The certificate bound to the incoming firewall policy.",
+          "correct": false,
+          "feedback": "Incorrect: firewall policies do not select the DNS server TLS certificate."
+        },
+        {
+          "label": "B",
+          "text": "The SSL certificate configured under web-proxy global.",
+          "correct": true,
+          "feedback": "Correct: FortiOS 8.0 falls back to the web-proxy global SSL certificate when the DNS server ssl-cert is unset."
+        },
+        {
+          "label": "C",
+          "text": "The certificate configured on the upstream recursive resolver.",
+          "correct": false,
+          "feedback": "Incorrect: the upstream resolver's certificate is not the local listener's fallback identity."
+        },
+        {
+          "label": "D",
+          "text": "The FortiGate GUI certificate selected by admin-sport.",
+          "correct": false,
+          "feedback": "Incorrect: GUI administration certificate selection is a separate service."
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiManager",
+      "stem": "Two administrators need to stage changes in the same ADOM at the same time under FortiManager 8.0 Workflow. What is the intended behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Each administrator can create an individual concurrent workflow session.",
+          "correct": true,
+          "feedback": "Correct: the redesigned workflow supports concurrent individual sessions without an ADOM-wide lock for every change."
+        },
+        {
+          "label": "B",
+          "text": "The first administrator must lock the entire ADOM for both users.",
+          "correct": false,
+          "feedback": "Incorrect: the 8.0 workflow redesign is not the old lock-only Workspace model."
+        },
+        {
+          "label": "C",
+          "text": "The second administrator can only view the first session's diff.",
+          "correct": false,
+          "feedback": "Incorrect: concurrent sessions are independently staged, not read-only mirrors."
+        },
+        {
+          "label": "D",
+          "text": "Workflow sessions are serialized strictly by submission time.",
+          "correct": false,
+          "feedback": "Incorrect: the 8.0 guide allows sessions to be approved in any order."
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "stem": "A workflow session has reached its approval quorum, but the FortiGate install fails verification. What should the engineer inspect next?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The approval matrix and modifier's session ownership only.",
+          "correct": false,
+          "feedback": "Incorrect: approval has already completed; the failure is at the deployment boundary."
+        },
+        {
+          "label": "B",
+          "text": "The email notification delivery state for each approver.",
+          "correct": false,
+          "feedback": "Incorrect: notification delivery does not explain target-side configuration verification."
+        },
+        {
+          "label": "C",
+          "text": "The ADOM lock state before the session was created.",
+          "correct": false,
+          "feedback": "Incorrect: 8.0 workflow sessions do not require the old ADOM-wide lock gate."
+        },
+        {
+          "label": "D",
+          "text": "Install Preview and target-specific verification output.",
+          "correct": true,
+          "feedback": "Correct: approved ADOM changes still require a separate device install and target verification."
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "stem": "Two concurrent sessions modify related objects and FortiManager reports a conflict. Which response preserves change intent?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Approve both sessions immediately and let installation resolve the conflict.",
+          "correct": false,
+          "feedback": "Incorrect: approval does not resolve semantic conflicts between staged object changes."
+        },
+        {
+          "label": "B",
+          "text": "Compare both diffs, then merge or discard the conflicting change set.",
+          "correct": true,
+          "feedback": "Correct: inspect View Diff and conflict details before merging or discarding affected changes."
+        },
+        {
+          "label": "C",
+          "text": "Delete the shared object and recreate it after both approvals.",
+          "correct": false,
+          "feedback": "Incorrect: deleting the object can break package references and does not resolve session state."
+        },
+        {
+          "label": "D",
+          "text": "Install the earlier-submitted session before reviewing either diff.",
+          "correct": false,
+          "feedback": "Incorrect: 8.0 workflow approval is not restricted to submission order."
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "stem": "Which statement correctly separates Workflow approval from installation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Approval pushes the configuration directly to every managed device.",
+          "correct": false,
+          "feedback": "Incorrect: the install wizard remains a separate deployment operation."
+        },
+        {
+          "label": "B",
+          "text": "Approval validates the target's firmware syntax and live reachability.",
+          "correct": false,
+          "feedback": "Incorrect: target verification occurs during install preview/installation, not approval."
+        },
+        {
+          "label": "C",
+          "text": "Approval commits the approved change to the ADOM; installation is separate.",
+          "correct": true,
+          "feedback": "Correct: workflow approval updates the ADOM database; device deployment is a later step."
+        },
+        {
+          "label": "D",
+          "text": "Approval updates only the administrator's private session and never ADOM state.",
+          "correct": false,
+          "feedback": "Incorrect: approved session changes are implemented in the shared ADOM state."
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiAnalyzer",
+      "stem": "A report renders, but one chart says No Data. Which tool most directly maps that chart to required device, log type and fields?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The report scheduler's next-run timestamp.",
+          "correct": false,
+          "feedback": "Incorrect: scheduling proves a report run was requested, not that required Analytics fields exist."
+        },
+        {
+          "label": "B",
+          "text": "Report Guidance in the report definition list.",
+          "correct": true,
+          "feedback": "Correct: Report Guidance lists item title, device type, log type, required fields and Analytics availability."
+        },
+        {
+          "label": "C",
+          "text": "The archive log quota and disk-retention panel.",
+          "correct": false,
+          "feedback": "Incorrect: archive quota does not identify the dataset fields required by a chart."
+        },
+        {
+          "label": "D",
+          "text": "The FortiGate device's central management status.",
+          "correct": false,
+          "feedback": "Incorrect: central management status does not establish report log-field availability."
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "stem": "A custom dataset must be checked for SQL syntax, executed against selected devices and inspected for transformed hcache SQL. Which workflow is appropriate?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Add it to a report and infer correctness from the PDF.",
+          "correct": false,
+          "feedback": "Incorrect: final rendering can hide a dataset error or an empty result set."
+        },
+        {
+          "label": "B",
+          "text": "Enable auto-cache before testing any dataset query.",
+          "correct": false,
+          "feedback": "Incorrect: caching does not validate SQL and can consume resources unnecessarily."
+        },
+        {
+          "label": "C",
+          "text": "Use Validate, Test and Analyze Query in the dataset editor.",
+          "correct": true,
+          "feedback": "Correct: Validate checks syntax, Test executes the query and Analyze Query exposes transformed/hcache SQL."
+        },
+        {
+          "label": "D",
+          "text": "Change the report cover page and regenerate the output.",
+          "correct": false,
+          "feedback": "Incorrect: cover-page changes do not test dataset logic."
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "stem": "A report takes hours because it repeatedly queries old rolled database tables. What does auto-cache do?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Stores the full PDF in browser memory for later retrieval.",
+          "correct": false,
+          "feedback": "Incorrect: auto-cache is not a browser or PDF cache."
+        },
+        {
+          "label": "B",
+          "text": "Copies raw logs into the archive database before each report run.",
+          "correct": false,
+          "feedback": "Incorrect: hcache stores query results, not a second raw-log archive."
+        },
+        {
+          "label": "C",
+          "text": "Rewrites the dataset to query only the newest log table.",
+          "correct": false,
+          "feedback": "Incorrect: it does not automatically rewrite the report's time scope to recent logs."
+        },
+        {
+          "label": "D",
+          "text": "Precomputes hcache results from matured tables for later merging.",
+          "correct": true,
+          "feedback": "Correct: hcache persists intermediate query results for matured tables and speeds later report assembly."
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "stem": "A dataset works in Fabric ADOM but fails when imported into a device-specific ADOM. What is the first design check?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Confirm the dataset's device type and tables are supported by that ADOM.",
+          "correct": true,
+          "feedback": "Correct: each ADOM has its own report objects and supports specific device types; Fabric ADOM is broader."
+        },
+        {
+          "label": "B",
+          "text": "Increase the report schedule interval and rerun the same query.",
+          "correct": false,
+          "feedback": "Incorrect: schedule timing does not resolve an unsupported dataset schema."
+        },
+        {
+          "label": "C",
+          "text": "Delete the chart and replace it with a macro.",
+          "correct": false,
+          "feedback": "Incorrect: charts and macros both consume datasets, so changing object type may not fix scope."
+        },
+        {
+          "label": "D",
+          "text": "Disable all hcache tables across the FortiAnalyzer.",
+          "correct": false,
+          "feedback": "Incorrect: hcache is unrelated to an ADOM device-type compatibility problem."
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "stem": "An isolated host can reach the gateway but cannot reach another host in the same isolated secondary VLAN. Is this expected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "No; isolated hosts must communicate with every primary-VLAN member.",
+          "correct": false,
+          "feedback": "Incorrect: isolated hosts are not permitted to communicate with one another."
+        },
+        {
+          "label": "B",
+          "text": "No; same-subnet IP addressing bypasses PVLAN Layer-2 controls.",
+          "correct": false,
+          "feedback": "Incorrect: PVLAN filtering occurs at Layer 2 even when IP addressing is shared."
+        },
+        {
+          "label": "C",
+          "text": "Yes; isolated ports communicate with promiscuous ports, not peers.",
+          "correct": true,
+          "feedback": "Correct: an isolated port can reach the promiscuous gateway port but not other secondary hosts."
+        },
+        {
+          "label": "D",
+          "text": "Yes; isolated ports communicate only with community ports.",
+          "correct": false,
+          "feedback": "Incorrect: community ports are a separate secondary class and are not reachable from isolated ports."
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "stem": "Two hosts in different community VLANs share the same primary PVLAN. What peer reachability should be expected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "They cannot communicate directly across community groups.",
+          "correct": true,
+          "feedback": "Correct: a community port communicates with its own community and promiscuous ports, not another community."
+        },
+        {
+          "label": "B",
+          "text": "They can communicate because both use the same primary VLAN.",
+          "correct": false,
+          "feedback": "Incorrect: primary-VLAN membership does not erase secondary community isolation."
+        },
+        {
+          "label": "C",
+          "text": "They can communicate only after the gateway routes between them.",
+          "correct": false,
+          "feedback": "Incorrect: PVLAN's local Layer-2 forwarding matrix is independent of whether routing is configured."
+        },
+        {
+          "label": "D",
+          "text": "They can communicate if both learn the same default gateway.",
+          "correct": false,
+          "feedback": "Incorrect: sharing a gateway does not authorize peer forwarding across community VLANs."
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "stem": "Which port role is appropriate for the shared router or firewall gateway in a PVLAN domain?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "An isolated host port assigned to the isolated secondary VLAN.",
+          "correct": false,
+          "feedback": "Incorrect: an isolated port is intentionally restricted from peer secondary segments."
+        },
+        {
+          "label": "B",
+          "text": "A community host port assigned to the largest community group.",
+          "correct": false,
+          "feedback": "Incorrect: a community port is a host role and cannot reach every secondary group."
+        },
+        {
+          "label": "C",
+          "text": "A sub-VLAN host port with no primary VLAN association.",
+          "correct": false,
+          "feedback": "Incorrect: a host port must be associated with the PVLAN's primary and secondary identifiers."
+        },
+        {
+          "label": "D",
+          "text": "A promiscuous port associated with the primary VLAN.",
+          "correct": true,
+          "feedback": "Correct: the promiscuous port provides gateway/shared-service reachability to all PVLAN classes."
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "stem": "A host receives a DHCP lease and can ping its gateway, but the wrong peer-isolation behavior occurs. What is the best next check?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Change the host's IP subnet and renew its DHCP lease.",
+          "correct": false,
+          "feedback": "Incorrect: the feature is designed to preserve the shared subnet; changing IPs obscures the issue."
+        },
+        {
+          "label": "B",
+          "text": "Verify the port's primary VLAN, secondary VLAN and P/I/C role.",
+          "correct": true,
+          "feedback": "Correct: DHCP and gateway reachability do not prove the port has the intended PVLAN role."
+        },
+        {
+          "label": "C",
+          "text": "Disable all routed firewall policies on the upstream gateway.",
+          "correct": false,
+          "feedback": "Incorrect: local Layer-2 PVLAN forwarding may never reach the routed firewall policy."
+        },
+        {
+          "label": "D",
+          "text": "Increase the MAC aging timer for the primary VLAN.",
+          "correct": false,
+          "feedback": "Incorrect: MAC aging does not correct a wrong secondary VLAN or port class."
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP/Wireless",
+      "stem": "A new mesh leaf is powered on while Ethernet is connected. It does not immediately associate to the root's default-mesh SSID. What behavior should be checked first?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The leaf must be factory-reset after every controller discovery.",
+          "correct": false,
+          "feedback": "Incorrect: ZTP is intended to provision a default-configured leaf without repeated resets."
+        },
+        {
+          "label": "B",
+          "text": "The root must use an open SSID until the leaf is authorized.",
+          "correct": false,
+          "feedback": "Incorrect: the documented bootstrap security uses WPA3-SAE and protected management frames."
+        },
+        {
+          "label": "C",
+          "text": "The leaf must disable CAPWAP before scanning for the root.",
+          "correct": false,
+          "feedback": "Incorrect: controller discovery remains part of the managed mesh workflow."
+        },
+        {
+          "label": "D",
+          "text": "The leaf may prefer Ethernet because MESH_AP_TYPE defaults to Ethernet with mesh backup.",
+          "correct": true,
+          "feedback": "Correct: the documented default type is Ethernet-first with mesh fallback when Ethernet is unavailable."
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "stem": "Which FortiGate WTP profile setting enables the default mesh provisioning SSID on a root AP?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "set mesh-leaf enable",
+          "correct": false,
+          "feedback": "Incorrect: this is not the documented root bootstrap control."
+        },
+        {
+          "label": "B",
+          "text": "set default-mesh-root enable",
+          "correct": true,
+          "feedback": "Correct: the WTP profile uses default-mesh-root to broadcast the provisioning SSID."
+        },
+        {
+          "label": "C",
+          "text": "set mesh-backhaul-disable enable",
+          "correct": false,
+          "feedback": "Incorrect: disabling backhaul would prevent the intended root role."
+        },
+        {
+          "label": "D",
+          "text": "set ap-discovery-ztp enable",
+          "correct": false,
+          "feedback": "Incorrect: the documented control is default-mesh-root, not this invented setting."
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "stem": "A leaf appears in Managed FortiAPs but clients cannot use the intended custom mesh backhaul. Which statement is accurate?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Controller visibility proves the custom SSID is already applied.",
+          "correct": false,
+          "feedback": "Incorrect: visibility does not prove the runtime mesh profile has migrated."
+        },
+        {
+          "label": "B",
+          "text": "The leaf must be moved to a different FortiGate ADOM.",
+          "correct": false,
+          "feedback": "Incorrect: ADOM selection is not the mesh onboarding state transition."
+        },
+        {
+          "label": "C",
+          "text": "Authorization is unnecessary once the default mesh association succeeds.",
+          "correct": true,
+          "feedback": "Incorrect: the administrator still authorizes the detected AP."
+        },
+        {
+          "label": "D",
+          "text": "Discovery and authorization are separate from custom-profile migration.",
+          "correct": false,
+          "feedback": "Correct: the AP must be discovered, authorized and then moved to the custom mesh profile."
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "stem": "A leaf can see the root but repeatedly selects the wrong radio in a mesh troubleshooting case. Which evidence is most useful?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Compare the root radio BSSID with the leaf's selected backhaul radio.",
+          "correct": true,
+          "feedback": "Correct: the radio/BSSID determines which root radio the leaf is actually joining."
+        },
+        {
+          "label": "B",
+          "text": "Change the FortiGate DNS filter profile assigned to the SSID.",
+          "correct": false,
+          "feedback": "Incorrect: DNS filtering does not determine mesh radio association."
+        },
+        {
+          "label": "C",
+          "text": "Increase the DHCP lease time for wireless clients.",
+          "correct": false,
+          "feedback": "Incorrect: client DHCP lease duration does not select the mesh backhaul radio."
+        },
+        {
+          "label": "D",
+          "text": "Change the controller's admin HTTPS certificate.",
+          "correct": false,
+          "feedback": "Incorrect: the admin certificate is unrelated to RF association."
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "stem": "A syslog event is visible in Security Events but no alarm is created. What should be checked next?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Host correlation, trigger fields, matching profile and rule rank.",
+          "correct": true,
+          "feedback": "Correct: event visibility proves parsing, but alarm creation also requires host/profile and trigger matching."
+        },
+        {
+          "label": "B",
+          "text": "The FortiNAC license only, regardless of event contents.",
+          "correct": false,
+          "feedback": "Incorrect: licensing may affect feature availability, but it is not the only or first event-to-alarm boundary."
+        },
+        {
+          "label": "C",
+          "text": "The switch port's native VLAN and PoE power budget.",
+          "correct": false,
+          "feedback": "Incorrect: VLAN/PoE can affect endpoint connectivity, not FortiNAC rule evaluation itself."
+        },
+        {
+          "label": "D",
+          "text": "The syslog sender's NTP server before examining parser output.",
+          "correct": false,
+          "feedback": "Incorrect: timestamps matter, but they do not replace checking parsed fields and rule matching."
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "stem": "A vendor sends messages such as src=192.0.2.44 severity=critical. Which parser format naturally maps tagged fields?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "CSV with a comma delimiter.",
+          "correct": false,
+          "feedback": "Incorrect: CSV expects positional columns separated by a delimiter."
+        },
+        {
+          "label": "B",
+          "text": "CEF with fixed-position fields only.",
+          "correct": false,
+          "feedback": "Incorrect: CEF can include tags, but this example is directly tag/value syntax."
+        },
+        {
+          "label": "C",
+          "text": "TAG/VALUE with tag and value delimiters.",
+          "correct": true,
+          "feedback": "Correct: TAG/VALUE parses each named field and its associated value."
+        },
+        {
+          "label": "D",
+          "text": "Binary syslog with an SNMP OID map.",
+          "correct": false,
+          "feedback": "Incorrect: the documented parser formats are CSV, TAG/VALUE and CEF."
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "stem": "A vendor reports severity 0-7, while FortiNAC rules expect Low, Medium or High. Which parser feature normalizes that difference?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The device location field.",
+          "correct": false,
+          "feedback": "Incorrect: location identifies where the host is connected, not event priority."
+        },
+        {
+          "label": "B",
+          "text": "The Source/IP Column setting.",
+          "correct": false,
+          "feedback": "Incorrect: Source/IP maps the host identity field, not severity levels."
+        },
+        {
+          "label": "C",
+          "text": "The parser's In Use display.",
+          "correct": false,
+          "feedback": "Incorrect: In Use shows devices using a parser, not value normalization."
+        },
+        {
+          "label": "D",
+          "text": "Severity value mappings.",
+          "correct": true,
+          "feedback": "Correct: severity mappings translate vendor values into FortiNAC severity levels."
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "stem": "A syslog message parses correctly, but its source IP is not yet in the host database. What does FortiNAC do?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Discard the event immediately because no MAC was present.",
+          "correct": false,
+          "feedback": "Incorrect: the documented workflow allows time for host correlation."
+        },
+        {
+          "label": "B",
+          "text": "Hold the event in memory until an associated host can be found.",
+          "correct": true,
+          "feedback": "Correct: unresolved events are held in memory while FortiNAC attempts IP-to-MAC correlation."
+        },
+        {
+          "label": "C",
+          "text": "Convert the source IP into a new registered device automatically.",
+          "correct": false,
+          "feedback": "Incorrect: event parsing does not automatically register an endpoint."
+        },
+        {
+          "label": "D",
+          "text": "Create an alarm using the destination IP as the source host.",
+          "correct": false,
+          "feedback": "Incorrect: destination IP is a separate event field and should not replace source identity."
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "stem": "Two fingerprint records show the same MAC and port but different operating systems. What is a plausible explanation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The switch has necessarily duplicated the endpoint MAC address.",
+          "correct": false,
+          "feedback": "Incorrect: duplicate records are an expected way to retain different observations over time."
+        },
+        {
+          "label": "B",
+          "text": "The host may be dual-booting or presenting changed identity evidence.",
+          "correct": true,
+          "feedback": "Correct: Fortinet documents differing OS records for the same MAC/port as a possible dual-boot host."
+        },
+        {
+          "label": "C",
+          "text": "The records prove that two physical NICs share one chassis.",
+          "correct": false,
+          "feedback": "Incorrect: the same MAC/port does not prove two separate physical NICs."
+        },
+        {
+          "label": "D",
+          "text": "FortiNAC automatically merged the two OS values into one record.",
+          "correct": false,
+          "feedback": "Incorrect: the view retains separate fingerprints and can raise Device Fingerprint Changed."
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "stem": "Which statement best describes Set Source Rank?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It ranks switch ports by PoE power available to an endpoint.",
+          "correct": false,
+          "feedback": "Incorrect: PoE power is unrelated to fingerprint source precedence."
+        },
+        {
+          "label": "B",
+          "text": "It decides which rogue host is isolated first by policy priority.",
+          "correct": false,
+          "feedback": "Incorrect: isolation rule priority is a separate enforcement mechanism."
+        },
+        {
+          "label": "C",
+          "text": "It selects the strongest Wi-Fi radio for passive DHCP capture.",
+          "correct": false,
+          "feedback": "Incorrect: radio selection does not define host-record source precedence."
+        },
+        {
+          "label": "D",
+          "text": "It orders fingerprint methods used to populate the host record.",
+          "correct": true,
+          "feedback": "Correct: source rank determines which fingerprint method is processed first for host-record population."
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "stem": "DHCP fingerprints are missing for endpoints on a remote access VLAN. What is a supported visibility design?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Mirror only DHCP traffic to FortiNAC eth0 and permit DHCP fingerprint access.",
+          "correct": true,
+          "feedback": "Correct: FortiNAC can use SPAN-filtered DHCP traffic on eth0; eth1 is primarily for isolation."
+        },
+        {
+          "label": "B",
+          "text": "Mirror all user traffic to eth1 because it is the profiling interface.",
+          "correct": false,
+          "feedback": "Incorrect: eth1 is not the documented passive profiling interface."
+        },
+        {
+          "label": "C",
+          "text": "Enable active NMAP without ICMP on every network segment.",
+          "correct": false,
+          "feedback": "Incorrect: active NMAP is a different method and can be resource intensive."
+        },
+        {
+          "label": "D",
+          "text": "Change the DHCP server's default gateway to FortiNAC eth0.",
+          "correct": false,
+          "feedback": "Incorrect: changing the gateway is not required to receive mirrored DHCP evidence."
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "stem": "A device has several fingerprints but remains Rogue. What condition permits automatic registration?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Any fingerprint from a known vendor OUI registers the host immediately.",
+          "correct": false,
+          "feedback": "Incorrect: OUI is evidence and may be insufficient or unrecognized."
+        },
+        {
+          "label": "B",
+          "text": "The endpoint has to send two DHCP Discover packets in sequence.",
+          "correct": false,
+          "feedback": "Incorrect: packet count is not the registration criterion documented for profiling rules."
+        },
+        {
+          "label": "C",
+          "text": "A matching Device Profiling rule must be configured for automatic registration.",
+          "correct": true,
+          "feedback": "Correct: automatic registration occurs only when a matching rule is configured for it."
+        },
+        {
+          "label": "D",
+          "text": "The source rank must be changed to put OUI above every other method.",
+          "correct": false,
+          "feedback": "Incorrect: source rank affects record population, not the rule's registration action."
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "stem": "What is the primary job of FortiAuthenticator's RADIUS accounting proxy?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Authenticate users against LDAP and issue EAP challenges to supplicants.",
+          "correct": false,
+          "feedback": "Incorrect: that describes an authentication service, not the accounting proxy."
+        },
+        {
+          "label": "B",
+          "text": "Replace the carrier RADIUS server as the authoritative identity store.",
+          "correct": false,
+          "feedback": "Incorrect: the proxy adapts accounting records rather than replacing the carrier identity store."
+        },
+        {
+          "label": "C",
+          "text": "Transform accounting attributes and forward them to RSSO consumers.",
+          "correct": true,
+          "feedback": "Correct: it matches, transforms and forwards accounting records to FortiGate/FortiMail RSSO destinations."
+        },
+        {
+          "label": "D",
+          "text": "Generate RADIUS Access-Accept messages for every accounting Start packet.",
+          "correct": false,
+          "feedback": "Incorrect: accounting and authentication packet types have different purposes."
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "stem": "A FortiGate expects Fortinet-Group-Name, but the carrier sends a differently named group attribute. What can the accounting proxy do?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Rename the incoming attribute or add an LDAP-derived group value.",
+          "correct": true,
+          "feedback": "Correct: rule sets can add fixed/LDAP values and modify attribute names."
+        },
+        {
+          "label": "B",
+          "text": "Change the source shared secret to the FortiGate destination secret.",
+          "correct": false,
+          "feedback": "Incorrect: source and destination secrets are separate peer credentials, not attribute mapping controls."
+        },
+        {
+          "label": "C",
+          "text": "Disable accounting retries so the original packet is preserved.",
+          "correct": false,
+          "feedback": "Incorrect: retries affect delivery behavior, not attribute transformation."
+        },
+        {
+          "label": "D",
+          "text": "Convert every accounting record into a RADIUS Access-Request.",
+          "correct": false,
+          "feedback": "Incorrect: the proxy forwards accounting records rather than converting them to authentication requests."
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "stem": "A user's LDAP group changed, but RSSO continues using the old group for several hours. Which setting is relevant?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The RADIUS source port number.",
+          "correct": false,
+          "feedback": "Incorrect: source port does not determine LDAP group cache freshness."
+        },
+        {
+          "label": "B",
+          "text": "The group cache lifetime used for LDAP-derived values.",
+          "correct": true,
+          "feedback": "Correct: the group cache lifetime controls how long cached group membership can remain in use."
+        },
+        {
+          "label": "C",
+          "text": "The FortiGate's central SNAT map ordering.",
+          "correct": false,
+          "feedback": "Incorrect: central SNAT selection does not update RADIUS accounting attributes."
+        },
+        {
+          "label": "D",
+          "text": "The FAC administrator's GUI idle timeout.",
+          "correct": false,
+          "feedback": "Incorrect: GUI idle timeout is unrelated to proxy group-cache behavior."
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "stem": "FAC logs show the accounting record was forwarded, but the FortiGate does not learn the RSSO session. Which peer setting deserves immediate comparison?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FAC report schedule and hcache status.",
+          "correct": false,
+          "feedback": "Incorrect: report generation does not determine RADIUS packet acceptance."
+        },
+        {
+          "label": "B",
+          "text": "The FortiGate web-filter category action.",
+          "correct": false,
+          "feedback": "Incorrect: web filtering does not validate an RSSO accounting message."
+        },
+        {
+          "label": "C",
+          "text": "The LDAP server's password expiry warning.",
+          "correct": false,
+          "feedback": "Incorrect: password expiry is not the receiver's RADIUS accounting secret."
+        },
+        {
+          "label": "D",
+          "text": "The destination shared secret and expected accounting attributes.",
+          "correct": true,
+          "feedback": "Correct: destination peer secret and attribute names must match the receiver's configuration."
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "stem": "A folder policy must allow each secret to choose whether additional authentication is required. What policy value enables that?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Enable, because all secrets then inherit mandatory authentication.",
+          "correct": false,
+          "feedback": "Incorrect: explicit Enable enforces the policy and prevents a secret override."
+        },
+        {
+          "label": "B",
+          "text": "Disable, because all secrets then require their own independent challenge.",
+          "correct": false,
+          "feedback": "Incorrect: explicit Disable enforces the opposite setting rather than exposing an override."
+        },
+        {
+          "label": "C",
+          "text": "Enable with owner bypass, because it preserves per-secret control.",
+          "correct": false,
+          "feedback": "Incorrect: owner bypass is a separate exception, not an inheritance control."
+        },
+        {
+          "label": "D",
+          "text": "Not Set, because the secret-level setting can then be customized.",
+          "correct": true,
+          "feedback": "Correct: Not Set allows the secret to customize the Access Authentication setting."
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "stem": "The Access Authentication setting is explicitly enabled in a folder policy. Why is the secret-level toggle unavailable?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The secret has no target host configured yet.",
+          "correct": false,
+          "feedback": "Incorrect: target host data does not control policy inheritance."
+        },
+        {
+          "label": "B",
+          "text": "The policy's explicit Enable/Disable value is enforced on its secrets.",
+          "correct": true,
+          "feedback": "Correct: an explicit policy value is enforced; secret-level customization is available when the policy is Not Set."
+        },
+        {
+          "label": "C",
+          "text": "The user's browser does not support the launcher extension.",
+          "correct": false,
+          "feedback": "Incorrect: browser extension support affects launch features, not policy override availability."
+        },
+        {
+          "label": "D",
+          "text": "The secret is checked out by another administrator.",
+          "correct": false,
+          "feedback": "Incorrect: checkout is a separate access-control mechanism."
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "stem": "A remote LDAP user reaches a protected secret but cannot complete the additional access-authentication step with the remote login identity. What documented option should be tested?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Authenticate using PAM login credentials.",
+          "correct": true,
+          "feedback": "Correct: FortiPAM documents using PAM login credentials for remote RADIUS/LDAP users at this step."
+        },
+        {
+          "label": "B",
+          "text": "Bypass For Owner on the secret policy.",
+          "correct": false,
+          "feedback": "Incorrect: owner bypass is an authorization exception, not the remote-user authentication method."
+        },
+        {
+          "label": "C",
+          "text": "Force Checkin on the active secret.",
+          "correct": false,
+          "feedback": "Incorrect: Force Checkin addresses secret checkout state, not authentication."
+        },
+        {
+          "label": "D",
+          "text": "Enable RDP Restricted Admin Mode.",
+          "correct": false,
+          "feedback": "Incorrect: Restricted Admin Mode protects RDP credential delegation, not Access Authentication."
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "stem": "A policy uses Access Authentication duration 0. What does the documented value mean?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It disables authentication until the secret is edited again.",
+          "correct": false,
+          "feedback": "Incorrect: zero is not the Disable setting."
+        },
+        {
+          "label": "B",
+          "text": "It grants an unlimited authentication window for the current browser session.",
+          "correct": false,
+          "feedback": "Incorrect: zero does not create an unlimited validity period."
+        },
+        {
+          "label": "C",
+          "text": "It provides short-lived authentication intended for immediate use.",
+          "correct": true,
+          "feedback": "Correct: zero is documented as a short-lived authorization for immediate use."
+        },
+        {
+          "label": "D",
+          "text": "It requires two separate approvals before each secret launch.",
+          "correct": false,
+          "feedback": "Incorrect: approval is a separate policy control from Access Authentication."
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "stem": "What distinguishes Agentic FortiAI Incident Analysis from a one-shot summary?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It creates a plan, executes sequential SQL queries and passes outputs between steps.",
+          "correct": true,
+          "feedback": "Correct: the agentic approach plans and executes dependent evidence queries, then analyzes them together."
+        },
+        {
+          "label": "B",
+          "text": "It changes the incident severity before retrieving any related events.",
+          "correct": false,
+          "feedback": "Incorrect: severity mutation is not the documented analysis workflow."
+        },
+        {
+          "label": "C",
+          "text": "It automatically blocks the source IP when a false positive is rejected.",
+          "correct": false,
+          "feedback": "Incorrect: Incident Analysis is decision support, not automatic containment."
+        },
+        {
+          "label": "D",
+          "text": "It exports a PDF before asking the analyst to select a prompt.",
+          "correct": false,
+          "feedback": "Incorrect: PDF export is an optional action after analysis."
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "stem": "An analysis stops when the analyst opens another incident, and the result is absent later. What explains this behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The incident rule deleted its SQL dataset after execution.",
+          "correct": false,
+          "feedback": "Incorrect: dataset deletion is not the documented UI-state behavior."
+        },
+        {
+          "label": "B",
+          "text": "The prompt was not saved as a rule attribute.",
+          "correct": false,
+          "feedback": "Incorrect: saving the prompt is separate from persisting a completed result."
+        },
+        {
+          "label": "C",
+          "text": "The FortiAI tab lost focus and the result was not added to comments.",
+          "correct": true,
+          "feedback": "Correct: switching focus can stop the run; results are lost unless added to Incident Comments."
+        },
+        {
+          "label": "D",
+          "text": "The incident's event source stopped forwarding syslog.",
+          "correct": false,
+          "feedback": "Incorrect: a source-forwarding outage does not explain a running analysis being cancelled by navigation."
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "stem": "What does saving the FortiAI prompt as a rule attribute preserve?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The complete raw packet capture for the original incident.",
+          "correct": false,
+          "feedback": "Incorrect: packet capture is separate evidence storage."
+        },
+        {
+          "label": "B",
+          "text": "The analyst's final disposition and containment action.",
+          "correct": false,
+          "feedback": "Incorrect: prompt saving does not automatically apply a disposition."
+        },
+        {
+          "label": "C",
+          "text": "The PDF report and all related incident comments automatically.",
+          "correct": false,
+          "feedback": "Incorrect: result persistence requires Add to Comments or PDF export."
+        },
+        {
+          "label": "D",
+          "text": "The reusable analysis instructions for future incidents triggered by that rule.",
+          "correct": true,
+          "feedback": "Correct: the prompt can be saved as a rule attribute for reuse."
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "stem": "A seven-day query returns no related successful logins. What is the safest interpretation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The source country is conclusively malicious for every user.",
+          "correct": false,
+          "feedback": "Incorrect: absence of returned events is not proof of maliciousness."
+        },
+        {
+          "label": "B",
+          "text": "The result is limited by available telemetry, time range and query criteria.",
+          "correct": true,
+          "feedback": "Correct: verify source coverage, retention and query scope before drawing a conclusion."
+        },
+        {
+          "label": "C",
+          "text": "The incident should be auto-closed because no context was found.",
+          "correct": false,
+          "feedback": "Incorrect: missing context does not justify automatic closure."
+        },
+        {
+          "label": "D",
+          "text": "The user account must have been disabled before the incident.",
+          "correct": false,
+          "feedback": "Incorrect: query absence does not establish account state."
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "stem": "Which description correctly distinguishes Inline-CASB from API-based CASB?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It scans tenant objects through SaaS APIs without seeing user traffic.",
+          "correct": false,
+          "feedback": "Incorrect: that describes API-oriented SaaS inspection, not inline traffic decoding."
+        },
+        {
+          "label": "B",
+          "text": "It decodes steered user traffic inline and applies app/category actions.",
+          "correct": true,
+          "feedback": "Correct: Inline-CASB uses IPS protocol decoders and TLS inspection in the traffic path."
+        },
+        {
+          "label": "C",
+          "text": "It only checks endpoint posture before creating a SASE tunnel.",
+          "correct": false,
+          "feedback": "Incorrect: endpoint posture is not the application decoder mechanism."
+        },
+        {
+          "label": "D",
+          "text": "It forwards all SaaS logs to FortiAnalyzer without enforcement.",
+          "correct": false,
+          "feedback": "Incorrect: the feature applies inline allow/monitor/block decisions, not only log forwarding."
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "stem": "A managed endpoint shows certificate warnings during Inline-CASB deep inspection. Which dependency should be validated first?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The endpoint's default DNS search suffix.",
+          "correct": false,
+          "feedback": "Incorrect: DNS suffix does not establish trust in the interception certificate."
+        },
+        {
+          "label": "B",
+          "text": "The SaaS provider's API token expiration.",
+          "correct": false,
+          "feedback": "Incorrect: API tokens are unrelated to TLS interception between endpoint and PoP."
+        },
+        {
+          "label": "C",
+          "text": "The SD-WAN transport-group mapping for the user's subnet.",
+          "correct": false,
+          "feedback": "Incorrect: transport-group mapping is an ADVPN path-selection setting."
+        },
+        {
+          "label": "D",
+          "text": "Trust of the FortiSASE inspection CA in the endpoint root store.",
+          "correct": true,
+          "feedback": "Correct: the endpoint must trust the CA that signs inspected TLS sessions."
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "stem": "Why does the Inline-CASB deployment guide recommend blocking QUIC when HTTP/3 traffic must be inspected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "QUIC prevents all DNS resolution from reaching FortiSASE.",
+          "correct": false,
+          "feedback": "Incorrect: DNS resolution is not the reason for the recommendation."
+        },
+        {
+          "label": "B",
+          "text": "QUIC changes the SaaS application's API permissions.",
+          "correct": false,
+          "feedback": "Incorrect: API authorization is not changed by the transport fallback."
+        },
+        {
+          "label": "C",
+          "text": "Blocking UDP/443 forces browser fallback to TLS over TCP for inspection.",
+          "correct": true,
+          "feedback": "Correct: the documented path blocks QUIC so HTTP/3 sessions fall back to TLS over TCP."
+        },
+        {
+          "label": "D",
+          "text": "Blocking QUIC automatically disables every other security engine.",
+          "correct": false,
+          "feedback": "Incorrect: the purpose is to expose traffic to inspection, not disable security engines."
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "stem": "A category is set to Allow, but one application in that category is blocked. Which setting should be inspected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The individual Application Override for that application.",
+          "correct": true,
+          "feedback": "Correct: a per-application override takes precedence over the category action."
+        },
+        {
+          "label": "B",
+          "text": "The endpoint's DHCP lease duration.",
+          "correct": false,
+          "feedback": "Incorrect: DHCP lease duration does not determine application-control precedence."
+        },
+        {
+          "label": "C",
+          "text": "The FortiSASE PoP's BGP router ID.",
+          "correct": false,
+          "feedback": "Incorrect: PoP router ID is not the app-level policy decision."
+        },
+        {
+          "label": "D",
+          "text": "The FortiClient EMS license assignment only.",
+          "correct": false,
+          "feedback": "Incorrect: EMS deployment may affect CA trust, but not override precedence."
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "stem": "Two spokes have healthy links, but no shortcut is eligible. What should be compared first in ADVPN 2.0?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Their transport-group membership and advertised eligible underlays.",
+          "correct": true,
+          "feedback": "Correct: shortcut candidates must satisfy compatible transport-group and path-health criteria."
+        },
+        {
+          "label": "B",
+          "text": "Their FortiAnalyzer report cache status.",
+          "correct": false,
+          "feedback": "Incorrect: report caching does not affect spoke edge discovery."
+        },
+        {
+          "label": "C",
+          "text": "Their administrator workflow approval groups.",
+          "correct": false,
+          "feedback": "Incorrect: FortiManager approval groups do not select SD-WAN transports."
+        },
+        {
+          "label": "D",
+          "text": "Their FortiNAC endpoint fingerprint source rank.",
+          "correct": false,
+          "feedback": "Incorrect: endpoint source ranking is unrelated to overlay path selection."
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "stem": "IKE debug reports 'vwl found no viable shortcut'. What does this most directly suggest?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The hub's certificate has expired and every IKE proposal is invalid.",
+          "correct": false,
+          "feedback": "Incorrect: the message alone does not prove certificate or proposal failure."
+        },
+        {
+          "label": "B",
+          "text": "The remote spoke has no route to any LAN prefix.",
+          "correct": false,
+          "feedback": "Incorrect: the message concerns shortcut viability, not necessarily all LAN routing."
+        },
+        {
+          "label": "C",
+          "text": "The local BGP process has rejected all route communities.",
+          "correct": false,
+          "feedback": "Incorrect: BGP community rejection is not the direct meaning of this IKE message."
+        },
+        {
+          "label": "D",
+          "text": "The shortcut exchange found no eligible path candidate.",
+          "correct": true,
+          "feedback": "Correct: compare transport groups, link health and advertised path eligibility before changing proposals."
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "stem": "What release limitation must be included in an ADVPN 2.0 design review?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It requires IPv6-only transport and cannot use IPv4.",
+          "correct": false,
+          "feedback": "Incorrect: the guide's limitation is the opposite; IPv4 is supported."
+        },
+        {
+          "label": "B",
+          "text": "The documented FortiOS 8.0 feature scope is IPv4 only.",
+          "correct": true,
+          "feedback": "Correct: the documented FortiOS 8.0 guide states IPv4-only support."
+        },
+        {
+          "label": "C",
+          "text": "It operates only when all spokes use the same hub WAN.",
+          "correct": false,
+          "feedback": "Incorrect: overlay placeholders allow designs where the hub is not on every spoke transport."
+        },
+        {
+          "label": "D",
+          "text": "It cannot use health-check information for path selection.",
+          "correct": false,
+          "feedback": "Incorrect: health-check and link state are part of path eligibility."
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "stem": "Why can an overlay placeholder be useful when spokes use transports the hub does not have?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It makes the hub terminate every spoke-to-spoke data packet.",
+          "correct": false,
+          "feedback": "Incorrect: the goal is to avoid forcing all data through the hub."
+        },
+        {
+          "label": "B",
+          "text": "It disables edge discovery and installs a static route instead.",
+          "correct": false,
+          "feedback": "Incorrect: placeholders are part of ADVPN 2.0 path discovery, not a static-route replacement."
+        },
+        {
+          "label": "C",
+          "text": "It lets the hub relay discovery while spokes form a direct path on their own transports.",
+          "correct": true,
+          "feedback": "Correct: the hub can relay discovery without being connected to every direct spoke transport."
+        },
+        {
+          "label": "D",
+          "text": "It converts the shortcut into a FortiSASE application tunnel.",
+          "correct": false,
+          "feedback": "Incorrect: ADVPN shortcut tunnels remain IPsec overlay paths, not FortiSASE tunnels."
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Cross-product",
+      "stem": "A FortiNAC syslog event is parsed, while a FortiNAC-F endpoint fingerprint is collected. Which distinction is correct?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Both are identical host-registration events and should be merged into one rule.",
+          "correct": false,
+          "feedback": "Incorrect: the products expose different evidence pipelines and object lifecycles."
+        },
+        {
+          "label": "B",
+          "text": "The first normalizes a security event; the second records endpoint identity evidence.",
+          "correct": true,
+          "feedback": "Correct: FortiNAC parses security messages into events; FortiNAC-F aggregates identity fingerprints for profiling."
+        },
+        {
+          "label": "C",
+          "text": "The first creates a DHCP fingerprint; the second creates a syslog severity map.",
+          "correct": false,
+          "feedback": "Incorrect: this reverses the evidence types and their data sources."
+        },
+        {
+          "label": "D",
+          "text": "Both automatically isolate the endpoint before a profile match.",
+          "correct": false,
+          "feedback": "Incorrect: neither pipeline automatically isolates a host without its configured rule/action conditions."
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Cross-product",
+      "stem": "A FortiAnalyzer report is slow and a chart says No Data. Which pair of tools addresses the two different symptoms?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Report Guidance for data availability; auto-cache/hcache for generation performance.",
+          "correct": true,
+          "feedback": "Correct: Report Guidance maps required Analytics data; hcache precomputes matured-table query results."
+        },
+        {
+          "label": "B",
+          "text": "Auto-cache for missing log fields; Report Guidance for disk performance.",
+          "correct": false,
+          "feedback": "Incorrect: hcache cannot create missing logs, and Report Guidance is not a performance cache."
+        },
+        {
+          "label": "C",
+          "text": "ADOM locking for data availability; session approval for report speed.",
+          "correct": false,
+          "feedback": "Incorrect: FortiManager workspace controls do not repair FortiAnalyzer report data."
+        },
+        {
+          "label": "D",
+          "text": "Log forwarding for SQL syntax; dataset variables for TLS certificate trust.",
+          "correct": false,
+          "feedback": "Incorrect: those functions belong to unrelated subsystems."
+        }
+      ]
+    }
+  ]
+}
