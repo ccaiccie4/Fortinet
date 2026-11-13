@@ -298,13 +298,13 @@
       "choices": [
         {
           "label": "A",
-          "text": "Add it to a report and infer correctness from the PDF.",
+          "text": "Add it to a report and judge the final PDF output.",
           "correct": false,
           "feedback": "Incorrect: final rendering can hide a dataset error or an empty result set."
         },
         {
           "label": "B",
-          "text": "Enable auto-cache before testing any dataset query.",
+          "text": "Enable auto-cache before any SQL query testing.",
           "correct": false,
           "feedback": "Incorrect: caching does not validate SQL and can consume resources unnecessarily."
         },
@@ -316,7 +316,7 @@
         },
         {
           "label": "D",
-          "text": "Change the report cover page and regenerate the output.",
+          "text": "Change the report cover page, then regenerate output.",
           "correct": false,
           "feedback": "Incorrect: cover-page changes do not test dataset logic."
         }
@@ -360,25 +360,25 @@
       "choices": [
         {
           "label": "A",
-          "text": "Confirm the dataset's device type and tables are supported by that ADOM.",
+          "text": "Confirm the dataset device type and tables are supported in that ADOM.",
           "correct": true,
           "feedback": "Correct: each ADOM has its own report objects and supports specific device types; Fabric ADOM is broader."
         },
         {
           "label": "B",
-          "text": "Increase the report schedule interval and rerun the same query.",
+          "text": "Increase the report schedule interval and rerun the query.",
           "correct": false,
           "feedback": "Incorrect: schedule timing does not resolve an unsupported dataset schema."
         },
         {
           "label": "C",
-          "text": "Delete the chart and replace it with a macro.",
+          "text": "Replace the chart with a macro using the same dataset.",
           "correct": false,
           "feedback": "Incorrect: charts and macros both consume datasets, so changing object type may not fix scope."
         },
         {
           "label": "D",
-          "text": "Disable all hcache tables across the FortiAnalyzer.",
+          "text": "Disable every hcache table across the FortiAnalyzer.",
           "correct": false,
           "feedback": "Incorrect: hcache is unrelated to an ADOM device-type compatibility problem."
         }
@@ -515,13 +515,13 @@
       "choices": [
         {
           "label": "A",
-          "text": "The leaf must be factory-reset after every controller discovery.",
+          "text": "The leaf may still prefer its connected Ethernet backhaul.",
           "correct": false,
           "feedback": "Incorrect: ZTP is intended to provision a default-configured leaf without repeated resets."
         },
         {
           "label": "B",
-          "text": "The root must use an open SSID until the leaf is authorized.",
+          "text": "The root must use an open SSID before authorization.",
           "correct": false,
           "feedback": "Incorrect: the documented bootstrap security uses WPA3-SAE and protected management frames."
         },
@@ -533,7 +533,7 @@
         },
         {
           "label": "D",
-          "text": "The leaf may prefer Ethernet because MESH_AP_TYPE defaults to Ethernet with mesh backup.",
+          "text": "MESH_AP_TYPE defaults to Ethernet first with mesh backup.",
           "correct": true,
           "feedback": "Correct: the documented default type is Ethernet-first with mesh fallback when Ethernet is unavailable."
         }
@@ -620,13 +620,13 @@
         },
         {
           "label": "C",
-          "text": "Increase the DHCP lease time for wireless clients.",
+          "text": "Increase the wireless client's DHCP lease duration.",
           "correct": false,
           "feedback": "Incorrect: client DHCP lease duration does not select the mesh backhaul radio."
         },
         {
           "label": "D",
-          "text": "Change the controller's admin HTTPS certificate.",
+          "text": "Change the controller's HTTPS administration certificate.",
           "correct": false,
           "feedback": "Incorrect: the admin certificate is unrelated to RF association."
         }
@@ -1166,13 +1166,13 @@
       "choices": [
         {
           "label": "A",
-          "text": "The incident rule deleted its SQL dataset after execution.",
+          "text": "The incident rule removed its SQL dataset after execution.",
           "correct": false,
           "feedback": "Incorrect: dataset deletion is not the documented UI-state behavior."
         },
         {
           "label": "B",
-          "text": "The prompt was not saved as a rule attribute.",
+          "text": "The prompt was not saved as a reusable rule attribute.",
           "correct": false,
           "feedback": "Incorrect: saving the prompt is separate from persisting a completed result."
         },
@@ -1184,7 +1184,7 @@
         },
         {
           "label": "D",
-          "text": "The incident's event source stopped forwarding syslog.",
+          "text": "The incident source stopped forwarding syslog during analysis.",
           "correct": false,
           "feedback": "Incorrect: a source-forwarding outage does not explain a running analysis being cancelled by navigation."
         }
@@ -1197,7 +1197,7 @@
       "choices": [
         {
           "label": "A",
-          "text": "The complete raw packet capture for the original incident.",
+          "text": "The raw packet capture for the original incident.",
           "correct": false,
           "feedback": "Incorrect: packet capture is separate evidence storage."
         },
@@ -1209,13 +1209,13 @@
         },
         {
           "label": "C",
-          "text": "The PDF report and all related incident comments automatically.",
+          "text": "The PDF report and incident comments automatically.",
           "correct": false,
           "feedback": "Incorrect: result persistence requires Add to Comments or PDF export."
         },
         {
           "label": "D",
-          "text": "The reusable analysis instructions for future incidents triggered by that rule.",
+          "text": "Reusable analysis instructions for later incidents from that rule.",
           "correct": true,
           "feedback": "Correct: the prompt can be saved as a rule attribute for reuse."
         }
@@ -1290,7 +1290,7 @@
       "choices": [
         {
           "label": "A",
-          "text": "The endpoint's default DNS search suffix.",
+          "text": "The endpoint's DNS search suffix configuration.",
           "correct": false,
           "feedback": "Incorrect: DNS suffix does not establish trust in the interception certificate."
         },
@@ -1302,7 +1302,7 @@
         },
         {
           "label": "C",
-          "text": "The SD-WAN transport-group mapping for the user's subnet.",
+          "text": "The SD-WAN transport-group mapping for the user subnet.",
           "correct": false,
           "feedback": "Incorrect: transport-group mapping is an ADVPN path-selection setting."
         },
@@ -1321,7 +1321,7 @@
       "choices": [
         {
           "label": "A",
-          "text": "QUIC prevents all DNS resolution from reaching FortiSASE.",
+          "text": "QUIC prevents DNS resolution from reaching FortiSASE.",
           "correct": false,
           "feedback": "Incorrect: DNS resolution is not the reason for the recommendation."
         },
@@ -1333,13 +1333,13 @@
         },
         {
           "label": "C",
-          "text": "Blocking UDP/443 forces browser fallback to TLS over TCP for inspection.",
+          "text": "Blocking UDP/443 forces HTTP/3 browsers to fall back to TLS over TCP.",
           "correct": true,
           "feedback": "Correct: the documented path blocks QUIC so HTTP/3 sessions fall back to TLS over TCP."
         },
         {
           "label": "D",
-          "text": "Blocking QUIC automatically disables every other security engine.",
+          "text": "Blocking QUIC disables every other security engine.",
           "correct": false,
           "feedback": "Incorrect: the purpose is to expose traffic to inspection, not disable security engines."
         }
@@ -1476,25 +1476,25 @@
       "choices": [
         {
           "label": "A",
-          "text": "It makes the hub terminate every spoke-to-spoke data packet.",
+          "text": "It makes the hub terminate spoke-to-spoke data traffic.",
           "correct": false,
           "feedback": "Incorrect: the goal is to avoid forcing all data through the hub."
         },
         {
           "label": "B",
-          "text": "It disables edge discovery and installs a static route instead.",
+          "text": "It disables discovery and installs a static route instead.",
           "correct": false,
           "feedback": "Incorrect: placeholders are part of ADVPN 2.0 path discovery, not a static-route replacement."
         },
         {
           "label": "C",
-          "text": "It lets the hub relay discovery while spokes form a direct path on their own transports.",
+          "text": "It lets the hub relay discovery while spokes form direct paths over their own transports.",
           "correct": true,
           "feedback": "Correct: the hub can relay discovery without being connected to every direct spoke transport."
         },
         {
           "label": "D",
-          "text": "It converts the shortcut into a FortiSASE application tunnel.",
+          "text": "It converts the shortcut into a FortiSASE tunnel.",
           "correct": false,
           "feedback": "Incorrect: ADVPN shortcut tunnels remain IPsec overlay paths, not FortiSASE tunnels."
         }
@@ -1507,7 +1507,7 @@
       "choices": [
         {
           "label": "A",
-          "text": "Both are identical host-registration events and should be merged into one rule.",
+          "text": "Both are identical host-registration events and should share one rule.",
           "correct": false,
           "feedback": "Incorrect: the products expose different evidence pipelines and object lifecycles."
         },
@@ -1519,13 +1519,13 @@
         },
         {
           "label": "C",
-          "text": "The first creates a DHCP fingerprint; the second creates a syslog severity map.",
+          "text": "The first creates a DHCP fingerprint; the second maps syslog severity.",
           "correct": false,
           "feedback": "Incorrect: this reverses the evidence types and their data sources."
         },
         {
           "label": "D",
-          "text": "Both automatically isolate the endpoint before a profile match.",
+          "text": "Both automatically isolate endpoints before a profile match.",
           "correct": false,
           "feedback": "Incorrect: neither pipeline automatically isolates a host without its configured rule/action conditions."
         }
