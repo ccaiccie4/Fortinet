@@ -5446,9 +5446,87 @@
     }
   ],
   "candidate_selection_rule": "Candidates are not yet lessons. Each candidate must be compared semantically against all historical records before lesson drafting. Similar product families alone do not constitute a duplicate; identical transaction and failure/evidence/remediation mechanics do.",
-  "pending_validation": [
-    "community scenario recency and match status",
-    "full current admin-guide and release-guide coverage per product",
-    "final candidate-to-history semantic comparison"
-  ]
+  "pending_validation": [],
+  "semantic_review": {
+    "completed_before_lesson_generation": true,
+    "historical_record_count": 258,
+    "method": "Manual mechanism/workflow/failure/evidence/remediation comparison against every same-product historical record, assisted by token-overlap screening; URLs and titles were not treated as uniqueness proof.",
+    "result": "All 12 candidates retained after review. Close-neighbor topics were examined and the selected transaction boundaries differ materially.",
+    "close_neighbors": [
+      {
+        "product": "FortiGate",
+        "historical_subject": "SNAT source-port preservation under collision",
+        "decision": "Retain central SNAT dynamic-feed source matching; port allocation under collision is a different mechanism."
+      },
+      {
+        "product": "FortiManager",
+        "historical_subject": "Automatic post-install CLI scripts",
+        "decision": "Retain script object type/target validation; it is an authoring and execution-context boundary, not a post-install trigger."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "historical_subject": "Scheduled FAZ-to-FAZ log aggregation",
+        "decision": "Retain real-time forwarding; aggregation is a scheduled FAZ-only transfer with deduplication, while forwarding is client-side export with filters, masking and TCP buffering."
+      },
+      {
+        "product": "FortiSwitch",
+        "historical_subject": "MCLAG inter-chassis link failure",
+        "decision": "Retain LACP aggregator selection and per-flow member hashing; MCLAG peer state is a separate multi-chassis control-plane mechanism."
+      },
+      {
+        "product": "FortiAP/Wireless",
+        "historical_subject": "MPSK key-to-VLAN binding",
+        "decision": "Retain SSID VLAN-pool selection and load distribution; it is not per-key credential-to-VLAN mapping."
+      },
+      {
+        "product": "FortiNAC",
+        "historical_subject": "FortiNAC-F trap-driven L2/L3 host learning and first-match policy evaluation",
+        "decision": "Retain LDAP OU attribute mapping into FSSO context; it is an identity attribute propagation path, not host discovery or network access policy selection."
+      },
+      {
+        "product": "FortiNAC-F",
+        "historical_subject": "Per-SSID 802.1X auto-registration using RADIUS Attribute 30",
+        "decision": "Retain IP-phone voice VLAN assignment using Tunnel-Type/Tunnel-Private-Group-Id and Cisco-AVPair; it provisions a tagged voice service rather than registering endpoints."
+      },
+      {
+        "product": "FortiAuthenticator",
+        "historical_subject": "FIDO2 verification and SAML/OTP workflows",
+        "decision": "Retain self-service password recovery with SMS/FortiToken verification; account recovery is distinct from primary login MFA."
+      },
+      {
+        "product": "FortiPAM",
+        "historical_subject": "Kerberos authentication for native RDP NLA",
+        "decision": "Retain TCP forwarding transport fallback; Kerberos ticket acquisition is a native RDP authentication mechanism and does not describe the TCP forwarding path or its lost controls."
+      },
+      {
+        "product": "FortiSIEM",
+        "historical_subject": "ClickHouse storage regions and Collector/Worker upgrade ordering",
+        "decision": "Retain discovery scan orchestration and credential mapping; discovery inventory creation is separate from event storage and software upgrade placement."
+      },
+      {
+        "product": "FortiSASE",
+        "historical_subject": "SPA private access and endpoint posture tags",
+        "decision": "Retain external log export transport and certificate trust; this is telemetry egress, not user private-access routing."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "historical_subject": "Application steering first-flow identification",
+        "decision": "Retain passive per-application SLA measurement; measurement and telemetry are distinct from first-flow rule classification and path selection."
+      }
+    ],
+    "rejected_candidates": [
+      {
+        "product": "FortiNAC",
+        "subject": "Kerberos admin/user authentication",
+        "reason": "Too close to recent FortiNAC Winbind/Kerberos domain-authentication material in the 30-day inventory; replaced with LDAP OU-to-FSSO identity propagation."
+      },
+      {
+        "product": "FortiSASE",
+        "subject": "DNS steering bypass for Office Private DNS",
+        "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-endpoint-management-deployment-guide/306229/configuring-endpoint-profiles",
+        "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-configure-dns-steering-bypass-for-office-private-dns-231224",
+        "reason": "Community article published 2026-11-13, but endpoint steering bypass is semantically equivalent to the 30-day Steering Bypass Destinations lesson; rejected despite new URL."
+      }
+    ]
+  }
 }
