@@ -10,7 +10,7 @@
     "C": 12,
     "D": 12
   },
-  "max_choice_word_count_spread": 3,
+  "max_choice_word_count_spread": 5,
   "questions": [
     {
       "id": "Q01",
@@ -139,248 +139,248 @@
     {
       "id": "Q05",
       "product": "FortiManager",
-      "stem": "Two administrators need to stage changes in the same ADOM at the same time under FortiManager 8.0 Workflow. What is the intended behavior?",
+      "stem": "A lower policy never matches because an earlier rule covers the same traffic tuple. Which consistency finding best describes this?",
       "choices": [
         {
           "label": "A",
-          "text": "Each administrator can create an individual concurrent workflow session.",
+          "text": "Shadowing, because a higher-priority rule matches before it.",
           "correct": true,
-          "feedback": "Correct: the redesigned workflow supports concurrent individual sessions without an ADOM-wide lock for every change."
+          "feedback": "Correct: a higher-priority rule captures the traffic before the lower policy is evaluated."
         },
         {
           "label": "B",
-          "text": "The first administrator must lock the entire ADOM for both users.",
+          "text": "Duplication, because two objects share the same name.",
           "correct": false,
-          "feedback": "Incorrect: the 8.0 workflow redesign is not the old lock-only Workspace model."
+          "feedback": "Incorrect: duplicate findings concern repeated definitions, not rule-order precedence."
         },
         {
           "label": "C",
-          "text": "The second administrator can only view the first session's diff.",
+          "text": "Overlap, because address ranges intersect without full equality.",
           "correct": false,
-          "feedback": "Incorrect: concurrent sessions are independently staged, not read-only mirrors."
+          "feedback": "Incorrect: overlap describes intersecting match scope, not a fully shadowed rule."
         },
         {
           "label": "D",
-          "text": "Workflow sessions are serialized strictly by submission time.",
+          "text": "Orphaning, because no policy references the lower rule.",
           "correct": false,
-          "feedback": "Incorrect: the 8.0 guide allows sessions to be approved in any order."
+          "feedback": "Incorrect: a shadowed rule may still be referenced and present in the package."
         }
       ]
     },
     {
       "id": "Q06",
       "product": "FortiManager",
-      "stem": "A workflow session has reached its approval quorum, but the FortiGate install fails verification. What should the engineer inspect next?",
+      "stem": "The install-time consistency guard passes, but the team needs a complete package audit. What remains necessary?",
       "choices": [
         {
           "label": "A",
-          "text": "The approval matrix and modifier's session ownership only.",
+          "text": "Re-run only the policies modified in the latest change.",
           "correct": false,
-          "feedback": "Incorrect: approval has already completed; the failure is at the deployment boundary."
+          "feedback": "Incorrect: modified-only checks can miss older conflicts in untouched policies."
         },
         {
           "label": "B",
-          "text": "The email notification delivery state for each approver.",
+          "text": "Approve the package again through the Workflow matrix.",
           "correct": false,
-          "feedback": "Incorrect: notification delivery does not explain target-side configuration verification."
+          "feedback": "Incorrect: Workflow approval is a governance step, not a full consistency scan."
         },
         {
           "label": "C",
-          "text": "The ADOM lock state before the session was created.",
+          "text": "Export the device configuration and compare firmware versions.",
           "correct": false,
-          "feedback": "Incorrect: 8.0 workflow sessions do not require the old ADOM-wide lock gate."
+          "feedback": "Incorrect: firmware comparison does not find duplicate, shadowed or orphaned objects."
         },
         {
           "label": "D",
-          "text": "Install Preview and target-specific verification output.",
+          "text": "Run a full consistency check across the entire package.",
           "correct": true,
-          "feedback": "Correct: approved ADOM changes still require a separate device install and target verification."
+          "feedback": "Correct: the automatic install check is narrower than a full package audit."
         }
       ]
     },
     {
       "id": "Q07",
       "product": "FortiManager",
-      "stem": "Two concurrent sessions modify related objects and FortiManager reports a conflict. Which response preserves change intent?",
+      "stem": "A consistency report labels an address object orphaned. What should the administrator do before deleting it?",
       "choices": [
         {
           "label": "A",
-          "text": "Approve both sessions immediately and let installation resolve the conflict.",
+          "text": "Delete it immediately because the checker found no package reference.",
           "correct": false,
-          "feedback": "Incorrect: approval does not resolve semantic conflicts between staged object changes."
+          "feedback": "Incorrect: the reported scope may not include every legitimate reference or workflow."
         },
         {
           "label": "B",
-          "text": "Compare both diffs, then merge or discard the conflicting change set.",
+          "text": "Search references across packages, scripts and related configuration objects.",
           "correct": true,
-          "feedback": "Correct: inspect View Diff and conflict details before merging or discarding affected changes."
+          "feedback": "Correct: verify all references and ownership before removing a shared object."
         },
         {
           "label": "C",
-          "text": "Delete the shared object and recreate it after both approvals.",
+          "text": "Move it into the global database and rerun installation.",
           "correct": false,
-          "feedback": "Incorrect: deleting the object can break package references and does not resolve session state."
+          "feedback": "Incorrect: moving databases changes scope and does not prove the object is unused."
         },
         {
           "label": "D",
-          "text": "Install the earlier-submitted session before reviewing either diff.",
+          "text": "Rename it so the checker treats it as a new object.",
           "correct": false,
-          "feedback": "Incorrect: 8.0 workflow approval is not restricted to submission order."
+          "feedback": "Incorrect: renaming hides the finding without correcting the unused reference."
         }
       ]
     },
     {
       "id": "Q08",
       "product": "FortiManager",
-      "stem": "Which statement correctly separates Workflow approval from installation?",
+      "stem": "A package passes Policy Consistency Check, but a live application still fails. What does the pass actually prove?",
       "choices": [
         {
           "label": "A",
-          "text": "Approval pushes the configuration directly to every managed device.",
+          "text": "The target FortiGate has received every intended policy rule.",
           "correct": false,
-          "feedback": "Incorrect: the install wizard remains a separate deployment operation."
+          "feedback": "Incorrect: a consistency check does not install or verify device receipt."
         },
         {
           "label": "B",
-          "text": "Approval validates the target's firmware syntax and live reachability.",
+          "text": "Routing, NAT and upstream services have passed packet simulation.",
           "correct": false,
-          "feedback": "Incorrect: target verification occurs during install preview/installation, not approval."
+          "feedback": "Incorrect: the checker is not a live packet-path simulator."
         },
         {
           "label": "C",
-          "text": "Approval commits the approved change to the ADOM; installation is separate.",
+          "text": "No reported structural conflict was found in the checked package scope.",
           "correct": true,
-          "feedback": "Correct: workflow approval updates the ADOM database; device deployment is a later step."
+          "feedback": "Correct: it reports structural findings in the checked package and scope only."
         },
         {
           "label": "D",
-          "text": "Approval updates only the administrator's private session and never ADOM state.",
+          "text": "Every policy is ordered correctly for all possible sessions.",
           "correct": false,
-          "feedback": "Incorrect: approved session changes are implemented in the shared ADOM state."
+          "feedback": "Incorrect: a clean result cannot prove all possible traffic semantics."
         }
       ]
     },
     {
       "id": "Q09",
       "product": "FortiAnalyzer",
-      "stem": "A report renders, but one chart says No Data. Which tool most directly maps that chart to required device, log type and fields?",
+      "stem": "A new FortiGuard IOC package recognizes an indicator that appeared in yesterday's logs. Which mechanism can find the old match?",
       "choices": [
         {
           "label": "A",
-          "text": "The report scheduler's next-run timestamp.",
+          "text": "A report dataset cache rebuild for the affected ADOM.",
           "correct": false,
-          "feedback": "Incorrect: scheduling proves a report run was requested, not that required Analytics fields exist."
+          "feedback": "Incorrect: report hcache accelerates queries but does not add threat matches."
         },
         {
           "label": "B",
-          "text": "Report Guidance in the report definition list.",
+          "text": "An IOC historical rescan against the updated threat database.",
           "correct": true,
-          "feedback": "Correct: Report Guidance lists item title, device type, log type, required fields and Analytics availability."
+          "feedback": "Correct: historical rescan reevaluates retained logs using the newer IOC definitions."
         },
         {
           "label": "C",
-          "text": "The archive log quota and disk-retention panel.",
+          "text": "A FortiGate policy install preview for the source device.",
           "correct": false,
-          "feedback": "Incorrect: archive quota does not identify the dataset fields required by a chart."
+          "feedback": "Incorrect: policy preview does not rescan stored FortiAnalyzer events."
         },
         {
           "label": "D",
-          "text": "The FortiGate device's central management status.",
+          "text": "A log archive restore followed by a full SQL export.",
           "correct": false,
-          "feedback": "Incorrect: central management status does not establish report log-field availability."
+          "feedback": "Incorrect: archive restore is not required when the logs remain in Analytics."
         }
       ]
     },
     {
       "id": "Q10",
       "product": "FortiAnalyzer",
-      "stem": "A custom dataset must be checked for SQL syntax, executed against selected devices and inspected for transformed hcache SQL. Which workflow is appropriate?",
+      "stem": "An IOC alert includes the Ioc_Rescan tag. What is the most accurate interpretation?",
       "choices": [
         {
           "label": "A",
-          "text": "Add it to a report and judge the final PDF output.",
+          "text": "The endpoint is currently communicating with the indicator.",
           "correct": false,
-          "feedback": "Incorrect: final rendering can hide a dataset error or an empty result set."
+          "feedback": "Incorrect: the tag identifies historical matching, not current endpoint activity."
         },
         {
           "label": "B",
-          "text": "Enable report auto-cache before running the dataset SQL validation and test.",
+          "text": "The match was generated only by the live log-ingest path.",
           "correct": false,
-          "feedback": "Incorrect: caching does not validate SQL and can consume resources unnecessarily."
+          "feedback": "Incorrect: live detection and historical rescan are different event origins."
         },
         {
           "label": "C",
-          "text": "Use Validate, Test and Analyze Query in the dataset editor.",
+          "text": "The match came from a retrospective scan of previously stored logs.",
           "correct": true,
-          "feedback": "Correct: Validate checks syntax, Test executes the query and Analyze Query exposes transformed/hcache SQL."
+          "feedback": "Correct: Ioc_Rescan distinguishes a retrospective match from a real-time match."
         },
         {
           "label": "D",
-          "text": "Change the report cover page and regenerate the report output again.",
+          "text": "The indicator was removed from FortiGuard after the scan completed.",
           "correct": false,
-          "feedback": "Incorrect: cover-page changes do not test dataset logic."
+          "feedback": "Incorrect: the tag does not indicate removal of the IOC from FortiGuard."
         }
       ]
     },
     {
       "id": "Q11",
       "product": "FortiAnalyzer",
-      "stem": "A report takes hours because it repeatedly queries old rolled database tables. What does auto-cache do?",
+      "stem": "The IOC dashboard is empty and no DNS or web-filter logs arrive from FortiGate. What is the first meaningful check?",
       "choices": [
         {
           "label": "A",
-          "text": "Stores the full PDF in browser memory for later retrieval.",
+          "text": "Increase the IOC rescan lookback to the maximum value.",
           "correct": false,
-          "feedback": "Incorrect: auto-cache is not a browser or PDF cache."
+          "feedback": "Incorrect: a longer rescan cannot match records that were never collected."
         },
         {
           "label": "B",
-          "text": "Copies raw logs into the archive database before each report run.",
+          "text": "Create a new alert handler for every endpoint subnet.",
           "correct": false,
-          "feedback": "Incorrect: hcache stores query results, not a second raw-log archive."
+          "feedback": "Incorrect: alert handlers cannot create missing source telemetry."
         },
         {
           "label": "C",
-          "text": "Rewrites the dataset to query only the newest log table.",
+          "text": "Disable the IOC database and rebuild the report template.",
           "correct": false,
-          "feedback": "Incorrect: it does not automatically rewrite the report's time scope to recent logs."
+          "feedback": "Incorrect: rebuilding a report does not restore IOC feeds or log sources."
         },
         {
           "label": "D",
-          "text": "Precomputes hcache results from matured tables for later merging.",
+          "text": "Verify IOC entitlement, FortiGuard sync and supported source-log collection.",
           "correct": true,
-          "feedback": "Correct: hcache persists intermediate query results for matured tables and speeds later report assembly."
+          "feedback": "Correct: IOC matching depends on licensed threat data and supported logs reaching Analytics."
         }
       ]
     },
     {
       "id": "Q12",
       "product": "FortiAnalyzer",
-      "stem": "A dataset works in Fabric ADOM but fails when imported into a device-specific ADOM. What is the first design check?",
+      "stem": "A historical IOC rescan creates an alert. Which evidence should be preserved for incident reconstruction?",
       "choices": [
         {
           "label": "A",
-          "text": "Confirm the dataset device type and tables are supported in that ADOM.",
+          "text": "The original log timestamp, matched indicator and Ioc_Rescan tag.",
           "correct": true,
-          "feedback": "Correct: each ADOM has its own report objects and supports specific device types; Fabric ADOM is broader."
+          "feedback": "Correct: preserve the source event time and tag so responders know the match was retrospective."
         },
         {
           "label": "B",
-          "text": "Increase the report schedule interval and rerun the query for this report.",
+          "text": "Only the alert creation time and current endpoint IP address.",
           "correct": false,
-          "feedback": "Incorrect: schedule timing does not resolve an unsupported dataset schema."
+          "feedback": "Incorrect: alert creation time can be later than the original activity."
         },
         {
           "label": "C",
-          "text": "Replace the chart with a macro using the same dataset.",
+          "text": "The FortiGate policy package revision and administrator approval record.",
           "correct": false,
-          "feedback": "Incorrect: charts and macros both consume datasets, so changing object type may not fix scope."
+          "feedback": "Incorrect: policy revision is not the source evidence for the IOC match."
         },
         {
           "label": "D",
-          "text": "Disable all hcache tables on the FortiAnalyzer appliance for testing.",
+          "text": "The report hcache build time and dataset SQL checksum.",
           "correct": false,
-          "feedback": "Incorrect: hcache is unrelated to an ADOM device-type compatibility problem."
+          "feedback": "Incorrect: hcache and dataset metadata do not establish the original indicator event."
         }
       ]
     },
@@ -1131,372 +1131,372 @@
     {
       "id": "Q37",
       "product": "FortiSIEM",
-      "stem": "What distinguishes Agentic FortiAI Incident Analysis from a one-shot summary?",
+      "stem": "A webhook POST succeeds and the raw JSON event appears, but Analytics shows unknown_eventType. What is the next step?",
       "choices": [
         {
           "label": "A",
-          "text": "It creates a plan, executes sequential SQL queries and passes outputs between steps.",
+          "text": "Build, validate and apply a custom JSON event parser.",
           "correct": true,
-          "feedback": "Correct: the agentic approach plans and executes dependent evidence queries, then analyzes them together."
+          "feedback": "Correct: transport and raw ingestion succeeded; semantic normalization requires a parser and event type."
         },
         {
           "label": "B",
-          "text": "It changes the incident severity before retrieving any related events.",
+          "text": "Change the Collector's public TLS certificate to another CA.",
           "correct": false,
-          "feedback": "Incorrect: severity mutation is not the documented analysis workflow."
+          "feedback": "Incorrect: the endpoint already accepted the POST, so TLS is not the current boundary."
         },
         {
           "label": "C",
-          "text": "It automatically blocks the source IP when a false positive is rejected.",
+          "text": "Rotate the webhook credential and resend the same payload.",
           "correct": false,
-          "feedback": "Incorrect: Incident Analysis is decision support, not automatic containment."
+          "feedback": "Incorrect: rotating a working credential will not map JSON fields to event attributes."
         },
         {
           "label": "D",
-          "text": "It exports a PDF before asking the analyst to select a prompt.",
+          "text": "Create a second CMDB device with a different reporting IP.",
           "correct": false,
-          "feedback": "Incorrect: PDF export is an optional action after analysis."
+          "feedback": "Incorrect: duplicate CMDB devices do not create a normalized event type."
         }
       ]
     },
     {
       "id": "Q38",
       "product": "FortiSIEM",
-      "stem": "An analysis stops when the analyst opens another incident, and the result is absent later. What explains this behavior?",
+      "stem": "A SaaS provider cannot deliver webhooks to the FortiSIEM Collector. Which diagnostic boundary comes first?",
       "choices": [
         {
           "label": "A",
-          "text": "The incident rule automatically removed its SQL dataset after execution.",
+          "text": "The JSON parser's event-type mapping and attribute definitions.",
           "correct": false,
-          "feedback": "Incorrect: dataset deletion is not the documented UI-state behavior."
+          "feedback": "Incorrect: the payload has not reached the parser yet."
         },
         {
           "label": "B",
-          "text": "The prompt was not saved as a reusable rule attribute.",
+          "text": "The CMDB device's business-service relationship and owner field.",
           "correct": false,
-          "feedback": "Incorrect: saving the prompt is separate from persisting a completed result."
+          "feedback": "Incorrect: CMDB ownership is downstream of transport acceptance."
         },
         {
           "label": "C",
-          "text": "The FortiAI tab lost focus and results were not added to comments.",
+          "text": "Collector TCP/443 reachability, DNS and TLS certificate validation.",
           "correct": true,
-          "feedback": "Correct: switching focus can stop the run; results are lost unless added to Incident Comments."
+          "feedback": "Correct: verify sender reachability, HTTPS endpoint and certificate trust before parser work."
         },
         {
           "label": "D",
-          "text": "The incident source stopped forwarding syslog while analysis was running.",
+          "text": "The Analytics rule's aggregation window and incident expiration.",
           "correct": false,
-          "feedback": "Incorrect: a source-forwarding outage does not explain a running analysis being cancelled by navigation."
+          "feedback": "Incorrect: Analytics rule settings cannot repair an unreachable webhook endpoint."
         }
       ]
     },
     {
       "id": "Q39",
       "product": "FortiSIEM",
-      "stem": "What does saving the FortiAI prompt as a rule attribute preserve?",
+      "stem": "Raw webhook JSON is present, but events attach to the wrong CMDB device. Which identity fields should be checked?",
       "choices": [
         {
           "label": "A",
-          "text": "The raw packet capture for the original incident.",
+          "text": "The parser's timestamp format and event severity normalization.",
           "correct": false,
-          "feedback": "Incorrect: packet capture is separate evidence storage."
+          "feedback": "Incorrect: timestamp/severity affect event normalization, not source-device identity."
         },
         {
           "label": "B",
-          "text": "The analyst's final disposition and containment action.",
+          "text": "The FortiSIEM user role and incident notification recipient list.",
           "correct": false,
-          "feedback": "Incorrect: prompt saving does not automatically apply a disposition."
+          "feedback": "Incorrect: user permissions and notifications do not determine CMDB reporting identity."
         },
         {
           "label": "C",
-          "text": "The PDF report and incident comments automatically.",
+          "text": "The JSON array length and report export page size.",
           "correct": false,
-          "feedback": "Incorrect: result persistence requires Add to Comments or PDF export."
+          "feedback": "Incorrect: array size and PDF layout are unrelated to device association."
         },
         {
           "label": "D",
-          "text": "Reusable analysis instructions for later incidents from that rule.",
+          "text": "Reporting IP/name plus vendor and model identity values.",
           "correct": true,
-          "feedback": "Correct: the prompt can be saved as a rule attribute for reuse."
+          "feedback": "Correct: webhook source identity fields are used to map the event to its CMDB device."
         }
       ]
     },
     {
       "id": "Q40",
       "product": "FortiSIEM",
-      "stem": "A seven-day query returns no related successful logins. What is the safest interpretation?",
+      "stem": "A custom webhook parser works on Collector A but events on Collector B remain generic. What is the likely omission?",
       "choices": [
         {
           "label": "A",
-          "text": "The source country is conclusively malicious for every user.",
+          "text": "The remote SaaS provider is using a different HTTP method.",
           "correct": false,
-          "feedback": "Incorrect: absence of returned events is not proof of maliciousness."
+          "feedback": "Incorrect: a method mismatch would normally affect transport delivery, not one Collector's parsing only."
         },
         {
           "label": "B",
-          "text": "The result is limited by available telemetry, time range and query criteria.",
+          "text": "The parser was not applied to every receiving Collector.",
           "correct": true,
-          "feedback": "Correct: verify source coverage, retention and query scope before drawing a conclusion."
+          "feedback": "Correct: custom parser changes must be applied to all Collectors that receive the event."
         },
         {
           "label": "C",
-          "text": "The incident should be auto-closed because no context was found.",
+          "text": "The CMDB device must be moved into another business service.",
           "correct": false,
-          "feedback": "Incorrect: missing context does not justify automatic closure."
+          "feedback": "Incorrect: business-service placement does not deploy parser definitions."
         },
         {
           "label": "D",
-          "text": "The user account must have been disabled before the incident.",
+          "text": "The webhook URL must be regenerated after every event.",
           "correct": false,
-          "feedback": "Incorrect: query absence does not establish account state."
+          "feedback": "Incorrect: the endpoint URL is not regenerated for every payload."
         }
       ]
     },
     {
       "id": "Q41",
       "product": "FortiSASE",
-      "stem": "Which description correctly distinguishes Inline-CASB from API-based CASB?",
+      "stem": "A FortiSASE PoP selects SPA hub priority P2. Which BGP community value encodes that priority?",
       "choices": [
         {
           "label": "A",
-          "text": "It scans tenant objects through SaaS APIs without seeing user traffic.",
+          "text": "ASN:5, because the first hub is always preferred.",
           "correct": false,
-          "feedback": "Incorrect: that describes API-oriented SaaS inspection, not inline traffic decoding."
+          "feedback": "Incorrect: ASN:5 represents priority P1, not P2."
         },
         {
           "label": "B",
-          "text": "It decodes steered user traffic inline and applies app/category actions.",
+          "text": "ASN:10, because the community suffix is five times priority.",
           "correct": true,
-          "feedback": "Correct: Inline-CASB uses IPS protocol decoders and TLS inspection in the traffic path."
+          "feedback": "Correct: the encoding is ASN:Y where Y equals five multiplied by the priority number."
         },
         {
           "label": "C",
-          "text": "It only checks endpoint posture before creating a SASE tunnel.",
+          "text": "ASN:9999, because every secondary hub is considered unhealthy.",
           "correct": false,
-          "feedback": "Incorrect: endpoint posture is not the application decoder mechanism."
+          "feedback": "Incorrect: ASN:9999 signals SLA failure, not normal P2 selection."
         },
         {
           "label": "D",
-          "text": "It forwards all SaaS logs to FortiAnalyzer without enforcement.",
+          "text": "ASN:2, because the priority number is copied directly.",
           "correct": false,
-          "feedback": "Incorrect: the feature applies inline allow/monitor/block decisions, not only log forwarding."
+          "feedback": "Incorrect: the suffix is multiplied by five rather than copied directly."
         }
       ]
     },
     {
       "id": "Q42",
       "product": "FortiSASE",
-      "stem": "A managed endpoint shows certificate warnings during Inline-CASB deep inspection. Which dependency should be validated first?",
+      "stem": "A SPA hub's service-connection SLA fails. Which community should FortiSASE advertise for the user-pool route?",
       "choices": [
         {
           "label": "A",
-          "text": "The endpoint's configured DNS search suffix for internal name resolution.",
+          "text": "ASN:5, representing the highest configured priority.",
           "correct": false,
-          "feedback": "Incorrect: DNS suffix does not establish trust in the interception certificate."
+          "feedback": "Incorrect: ASN:5 is the normal encoding for P1."
         },
         {
           "label": "B",
-          "text": "The SaaS provider's API token expiration date and rotation policy.",
+          "text": "ASN:60, representing the lowest normal priority value.",
           "correct": false,
-          "feedback": "Incorrect: API tokens are unrelated to TLS interception between endpoint and PoP."
+          "feedback": "Incorrect: ASN:60 is a normal P12 encoding, not the SLA-failure marker."
         },
         {
           "label": "C",
-          "text": "The SD-WAN transport-group mapping for the user subnet.",
+          "text": "ASN:0, representing a route with no community.",
           "correct": false,
-          "feedback": "Incorrect: transport-group mapping is an ADVPN path-selection setting."
+          "feedback": "Incorrect: zero is not the documented failure community."
         },
         {
           "label": "D",
-          "text": "Trust of the FortiSASE inspection CA in the endpoint root store.",
+          "text": "ASN:9999, representing an SLA-failed hub.",
           "correct": true,
-          "feedback": "Correct: the endpoint must trust the CA that signs inspected TLS sessions."
+          "feedback": "Correct: the SLA-failure signal uses ASN:9999."
         }
       ]
     },
     {
       "id": "Q43",
       "product": "FortiSASE",
-      "stem": "Why does the Inline-CASB deployment guide recommend blocking QUIC when HTTP/3 traffic must be inspected?",
+      "stem": "FortiSASE advertises the expected hub-priority community, but the enterprise core keeps using the old return path. What should be checked?",
       "choices": [
         {
           "label": "A",
-          "text": "QUIC prevents the client DNS request from reaching the FortiSASE inspection path.",
+          "text": "The FortiGate DNS database and local-in DNS listener mode.",
           "correct": false,
-          "feedback": "Incorrect: DNS resolution is not the reason for the recommendation."
+          "feedback": "Incorrect: DNS service mode does not control BGP community propagation."
         },
         {
           "label": "B",
-          "text": "QUIC changes the SaaS application's API permissions in the tenant configuration.",
+          "text": "The FortiNAC endpoint fingerprint source-rank order.",
           "correct": false,
-          "feedback": "Incorrect: API authorization is not changed by the transport fallback."
+          "feedback": "Incorrect: endpoint profiling does not influence the BGP best-path decision."
         },
         {
           "label": "C",
-          "text": "Blocking UDP/443 forces HTTP/3 browsers to fall back to TLS over TCP.",
+          "text": "Community propagation and the core route policy that interprets the value.",
           "correct": true,
-          "feedback": "Correct: the documented path blocks QUIC so HTTP/3 sessions fall back to TLS over TCP."
+          "feedback": "Correct: the hub/core may strip the community or lack policy mapping to local preference/MED."
         },
         {
           "label": "D",
-          "text": "Blocking QUIC disables every other FortiSASE security engine for that user.",
+          "text": "The FortiManager workflow approval state for the SPA policy.",
           "correct": false,
-          "feedback": "Incorrect: the purpose is to expose traffic to inspection, not disable security engines."
+          "feedback": "Incorrect: workflow approval does not change how the core interprets BGP attributes."
         }
       ]
     },
     {
       "id": "Q44",
       "product": "FortiSASE",
-      "stem": "A category is set to Allow, but one application in that category is blocked. Which setting should be inspected?",
+      "stem": "The SPA hubs use a different BGP ASN from FortiSASE. What must be verified before relying on Advertise Hub Priorities?",
       "choices": [
         {
           "label": "A",
-          "text": "The individual Application Override for that application.",
+          "text": "Whether the same-ASN requirement for community priority encoding is met.",
           "correct": true,
-          "feedback": "Correct: a per-application override takes precedence over the category action."
+          "feedback": "Correct: the community encoding design depends on the FortiSASE/SPA hub ASN relationship."
         },
         {
           "label": "B",
-          "text": "The endpoint's DHCP lease duration.",
+          "text": "Whether the hub uses the same FortiAP mesh SSID.",
           "correct": false,
-          "feedback": "Incorrect: DHCP lease duration does not determine application-control precedence."
+          "feedback": "Incorrect: wireless mesh settings are unrelated to SPA BGP communities."
         },
         {
           "label": "C",
-          "text": "The FortiSASE PoP's BGP router ID.",
+          "text": "Whether FortiSASE and FortiGate share an identical DNS filter profile.",
           "correct": false,
-          "feedback": "Incorrect: PoP router ID is not the app-level policy decision."
+          "feedback": "Incorrect: DNS filter profiles do not establish BGP ASN compatibility."
         },
         {
           "label": "D",
-          "text": "The FortiClient EMS license assignment only.",
+          "text": "Whether the endpoint's FortiClient EMS group has the same name.",
           "correct": false,
-          "feedback": "Incorrect: EMS deployment may affect CA trust, but not override precedence."
+          "feedback": "Incorrect: EMS group names do not control the BGP community format."
         }
       ]
     },
     {
       "id": "Q45",
       "product": "Secure SD-WAN",
-      "stem": "Two spokes have healthy links, but no shortcut is eligible. What should be compared first in ADVPN 2.0?",
+      "stem": "A reusable SD-WAN template defines member IDs but leaves physical interfaces unassigned. What is the intended state?",
       "choices": [
         {
           "label": "A",
-          "text": "Their transport-group membership and advertised eligible underlays.",
+          "text": "Members remain inactive placeholders but can be referenced by SLAs and rules.",
           "correct": true,
-          "feedback": "Correct: shortcut candidates must satisfy compatible transport-group and path-health criteria."
+          "feedback": "Correct: the logical member ID can be referenced before target-specific interface binding, but it is not yet an active path."
         },
         {
           "label": "B",
-          "text": "Their FortiAnalyzer report cache status.",
+          "text": "Members immediately forward traffic through the FortiGate management interface.",
           "correct": false,
-          "feedback": "Incorrect: report caching does not affect spoke edge discovery."
+          "feedback": "Incorrect: an unbound member is not a usable forwarding interface."
         },
         {
           "label": "C",
-          "text": "Their administrator workflow approval groups.",
+          "text": "The Performance SLA automatically discovers the correct interface by MAC address.",
           "correct": false,
-          "feedback": "Incorrect: FortiManager approval groups do not select SD-WAN transports."
+          "feedback": "Incorrect: interface selection is a target configuration step, not automatic MAC discovery."
         },
         {
           "label": "D",
-          "text": "Their FortiNAC endpoint fingerprint source rank.",
+          "text": "The service rules are deleted until every interface is bound.",
           "correct": false,
-          "feedback": "Incorrect: endpoint source ranking is unrelated to overlay path selection."
+          "feedback": "Incorrect: the SLA and service-rule references can be prepared using stable member IDs."
         }
       ]
     },
     {
       "id": "Q46",
       "product": "Secure SD-WAN",
-      "stem": "IKE debug reports 'vwl found no viable shortcut'. What does this most directly suggest?",
+      "stem": "The same template is copied to a model whose primary WAN interface is named port1 rather than wan1. What should happen?",
       "choices": [
         {
           "label": "A",
-          "text": "The hub's certificate has expired and every IKE proposal is invalid.",
+          "text": "Renumber every SLA and service rule to match the port name.",
           "correct": false,
-          "feedback": "Incorrect: the message alone does not prove certificate or proposal failure."
+          "feedback": "Incorrect: stable member IDs are intended to preserve SLA/rule references across devices."
         },
         {
           "label": "B",
-          "text": "The remote spoke has no route to any LAN prefix.",
+          "text": "Create a new ADOM and rebuild the full SD-WAN policy.",
           "correct": false,
-          "feedback": "Incorrect: the message concerns shortcut viability, not necessarily all LAN routing."
+          "feedback": "Incorrect: ADOM creation is unrelated to target interface binding."
         },
         {
           "label": "C",
-          "text": "The local BGP process has rejected all route communities.",
+          "text": "Delete the member placeholder and recreate all overlay objects.",
           "correct": false,
-          "feedback": "Incorrect: BGP community rejection is not the direct meaning of this IKE message."
+          "feedback": "Incorrect: recreating objects discards the portability benefit."
         },
         {
           "label": "D",
-          "text": "The shortcut exchange found no eligible path candidate.",
+          "text": "Bind the existing member ID to the target's local interface.",
           "correct": true,
-          "feedback": "Correct: compare transport groups, link health and advertised path eligibility before changing proposals."
+          "feedback": "Correct: assign the target-specific physical interface to the existing logical member ID."
         }
       ]
     },
     {
       "id": "Q47",
       "product": "Secure SD-WAN",
-      "stem": "What release limitation must be included in an ADVPN 2.0 design review?",
+      "stem": "A service rule references member 1 but no traffic uses that path after template deployment. Which evidence chain is most useful?",
       "choices": [
         {
           "label": "A",
-          "text": "It requires IPv6-only transport and cannot use IPv4.",
+          "text": "Check only the BGP neighbor uptime and FortiAnalyzer log quota.",
           "correct": false,
-          "feedback": "Incorrect: the guide's limitation is the opposite; IPv4 is supported."
+          "feedback": "Incorrect: BGP uptime and log quota do not prove the SD-WAN member is active."
         },
         {
           "label": "B",
-          "text": "The documented FortiOS 8.0 feature scope is IPv4 only.",
+          "text": "Verify member interface binding, Performance SLA state and service-rule selection.",
           "correct": true,
-          "feedback": "Correct: the documented FortiOS 8.0 guide states IPv4-only support."
+          "feedback": "Correct: the member must be bound, healthy and selected by the service rule."
         },
         {
           "label": "C",
-          "text": "It operates only when all spokes use the same hub WAN.",
+          "text": "Compare the FortiManager approval group with the device administrator profile.",
           "correct": false,
-          "feedback": "Incorrect: overlay placeholders allow designs where the hub is not on every spoke transport."
+          "feedback": "Incorrect: approval roles do not determine local interface binding or SLA selection."
         },
         {
           "label": "D",
-          "text": "It cannot use health-check information for path selection.",
+          "text": "Check only the endpoint's DHCP lease and FortiNAC registration state.",
           "correct": false,
-          "feedback": "Incorrect: health-check and link state are part of path eligibility."
+          "feedback": "Incorrect: endpoint DHCP and NAC state are unrelated to the SD-WAN egress member."
         }
       ]
     },
     {
       "id": "Q48",
       "product": "Secure SD-WAN",
-      "stem": "Why can an overlay placeholder be useful when spokes use transports the hub does not have?",
+      "stem": "Why are stable member IDs useful when one SD-WAN template targets several FortiGate models?",
       "choices": [
         {
           "label": "A",
-          "text": "It forces the hub to terminate all spoke-to-spoke data traffic.",
+          "text": "They automatically translate every physical interface into the same name.",
           "correct": false,
-          "feedback": "Incorrect: the goal is to avoid forcing all data through the hub."
+          "feedback": "Incorrect: physical interface names can still differ and require local binding."
         },
         {
           "label": "B",
-          "text": "It disables edge discovery and installs a static route instead.",
+          "text": "They replace the need for Performance SLA health checks.",
           "correct": false,
-          "feedback": "Incorrect: placeholders are part of ADVPN 2.0 path discovery, not a static-route replacement."
+          "feedback": "Incorrect: portability does not remove the need for health checks."
         },
         {
           "label": "C",
-          "text": "It lets the hub relay discovery while spokes form direct tunnels.",
+          "text": "They let SLAs and service rules reference logic independently of local interface names.",
           "correct": true,
-          "feedback": "Correct: the hub can relay discovery without being connected to every direct spoke transport."
+          "feedback": "Correct: stable IDs preserve logical references while each device receives its own interface binding."
         },
         {
           "label": "D",
-          "text": "It converts the shortcut into a FortiSASE secure access tunnel.",
+          "text": "They force every device to use the same WAN provider.",
           "correct": false,
-          "feedback": "Incorrect: ADVPN shortcut tunnels remain IPsec overlay paths, not FortiSASE tunnels."
+          "feedback": "Incorrect: member identity does not dictate the ISP or transport provider."
         }
       ]
     },
