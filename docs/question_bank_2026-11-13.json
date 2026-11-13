@@ -52,7 +52,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Increase the firewall policy session TTL",
+          "text": "Increase the firewall policy session TTL in this flow",
           "correct": false,
           "feedback": "Session TTL does not alter first-match SNAT map selection."
         },
@@ -64,7 +64,7 @@
         },
         {
           "letter": "C",
-          "text": "Disable all IPv6 firewall policies temporarily",
+          "text": "Disable all IPv6 firewall policies temporarily in this flow",
           "correct": false,
           "feedback": "IPv6 policies do not explain an IPv4 row-order mismatch."
         },
@@ -124,19 +124,19 @@
         },
         {
           "letter": "B",
-          "text": "A route-table entry for the translated public IP",
+          "text": "A route-table entry for the translated public IP here",
           "correct": false,
           "feedback": "A route to the pool address does not prove translation was selected."
         },
         {
           "letter": "C",
-          "text": "A policy hit counter increment only",
+          "text": "A policy hit counter increment only in this flow",
           "correct": false,
           "feedback": "A policy hit proves authorization, not central-SNAT map selection."
         },
         {
           "letter": "D",
-          "text": "The live session's NAT fields and the first matching map",
+          "text": "The live session's NAT fields and the winning map",
           "correct": true,
           "feedback": "The session shows actual translation; map order explains why that row won."
         }
@@ -151,7 +151,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Keep the Jinja script on ADOM Database or redesign it as a supported CLI target",
+          "text": "Keep Jinja on ADOM Database or redesign as CLI here",
           "correct": true,
           "feedback": "Jinja is restricted to ADOM Database; target choice must match the interpreter."
         },
@@ -190,7 +190,7 @@
         },
         {
           "letter": "B",
-          "text": "The script ran against Device Database or ADOM Database rather than the live device",
+          "text": "It changed a database, not the live FortiGate in this ADOM",
           "correct": true,
           "feedback": "Database execution changes FortiManager's model; it is not direct device execution."
         },
@@ -202,7 +202,7 @@
         },
         {
           "letter": "D",
-          "text": "The script was automatically converted into a Jinja template",
+          "text": "The script was automatically converted into a Jinja template here",
           "correct": false,
           "feedback": "FortiManager does not silently convert CLI scripts into Jinja scripts."
         }
@@ -217,7 +217,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Enable Validate on Change for the Tcl script",
+          "text": "Enable Validate on Change for the Tcl script here",
           "correct": false,
           "feedback": "Validate on Change is a CLI-script validation feature, not a target override."
         },
@@ -229,13 +229,13 @@
         },
         {
           "letter": "C",
-          "text": "Use a CLI or Jinja workflow designed for the ADOM database",
+          "text": "Use CLI or Jinja for the ADOM database target",
           "correct": true,
           "feedback": "Tcl is direct-remote-only; choose a supported language for database execution."
         },
         {
           "letter": "D",
-          "text": "Select a different FortiGate platform in validation",
+          "text": "Select a different FortiGate platform in validation here",
           "correct": false,
           "feedback": "Platform selection does not change Tcl's permitted execution target."
         }
@@ -250,19 +250,19 @@
       "choices": [
         {
           "letter": "A",
-          "text": "That the ADOM contains the expected policy package",
+          "text": "That the ADOM contains the expected policy package in this ADOM",
           "correct": false,
           "feedback": "The package context is unrelated to a platform-specific command failure."
         },
         {
           "letter": "B",
-          "text": "That the device is reachable by ICMP",
+          "text": "That the device is reachable by ICMP in this ADOM",
           "correct": false,
           "feedback": "ICMP reachability is a separate network prerequisite, not syntax compatibility."
         },
         {
           "letter": "C",
-          "text": "That the script is stored in the Global Database",
+          "text": "That the script is stored in the Global Database here",
           "correct": false,
           "feedback": "Global Database placement does not establish runtime command support."
         },
@@ -295,7 +295,7 @@
         },
         {
           "letter": "C",
-          "text": "Convert the entry to scheduled aggregation",
+          "text": "Convert the entry to scheduled aggregation at the receiver",
           "correct": false,
           "feedback": "Aggregation is a scheduled FAZ-to-FAZ transfer, not syslog forwarding."
         },
@@ -316,7 +316,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Change the destination to CEF",
+          "text": "Change the destination to CEF before log indexing",
           "correct": false,
           "feedback": "CEF changes output format, not filter operator semantics."
         },
@@ -328,13 +328,13 @@
         },
         {
           "letter": "C",
-          "text": "Enable masking on the source field",
+          "text": "Enable masking on the source field at the receiver",
           "correct": false,
           "feedback": "Masking changes field values, not record selection."
         },
         {
           "letter": "D",
-          "text": "Increase the TCP forwarding buffer",
+          "text": "Increase the TCP forwarding buffer at the receiver",
           "correct": false,
           "feedback": "Buffer size does not change which records match the filter."
         }
@@ -349,13 +349,13 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Real-time forwarding to syslog",
+          "text": "Real-time forwarding to syslog here",
           "correct": false,
           "feedback": "Real-time syslog forwarding exports incoming logs as they arrive."
         },
         {
           "letter": "B",
-          "text": "Output-plugin forwarding with TCP",
+          "text": "Output-plugin forwarding with TCP at the receiver",
           "correct": false,
           "feedback": "A plugin does not implement FAZ-to-FAZ deduplicated scheduled aggregation."
         },
@@ -382,19 +382,19 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Disable log filtering on the sender",
+          "text": "Disable log filtering on the sender here",
           "correct": false,
           "feedback": "Filtering does not authorize devices on the receiver."
         },
         {
           "letter": "B",
-          "text": "Change the source device serial number",
+          "text": "Change the source device serial number at the receiver",
           "correct": false,
           "feedback": "Changing a serial number would create identity mismatch, not trust."
         },
         {
           "letter": "C",
-          "text": "Switch the destination to UDP",
+          "text": "Switch the destination to UDP at the receiver",
           "correct": false,
           "feedback": "UDP does not affect the receiver's device authorization state."
         },
@@ -427,13 +427,13 @@
         },
         {
           "letter": "C",
-          "text": "Enable fallback on both MCLAG peers",
+          "text": "Enable fallback on both MCLAG peers here",
           "correct": false,
           "feedback": "Fallback on both MCLAG peers is explicitly discouraged and can cause mismatch."
         },
         {
           "letter": "D",
-          "text": "Set aggregator-mode to count",
+          "text": "Set aggregator-mode to count after negotiation",
           "correct": false,
           "feedback": "Aggregator selection does not initiate LACP control exchange."
         }
@@ -481,13 +481,13 @@
       "choices": [
         {
           "letter": "A",
-          "text": "LACP active mode is limited to one member",
+          "text": "LACP active mode is limited to one member after negotiation",
           "correct": false,
           "feedback": "Active LACP can form multi-member bundles; it is not a single-member mode."
         },
         {
           "letter": "B",
-          "text": "The aggregator-mode count setting is wrong",
+          "text": "The aggregator-mode count setting is wrong within the trunk",
           "correct": false,
           "feedback": "Aggregator mode selects a speed group, not per-flow striping."
         },
@@ -499,7 +499,7 @@
         },
         {
           "letter": "D",
-          "text": "The switch has entered fallback mode",
+          "text": "The switch has entered fallback mode within the trunk",
           "correct": false,
           "feedback": "Fallback uses one selected port only when LACP PDUs are absent."
         }
@@ -520,13 +520,13 @@
         },
         {
           "letter": "B",
-          "text": "Increase the fallback timer to 180 seconds",
+          "text": "Increase the fallback timer to 180 seconds within the trunk",
           "correct": false,
           "feedback": "Increasing the timer does not remove the MCLAG fallback restriction."
         },
         {
           "letter": "C",
-          "text": "Use max_bundle on both peers with fallback retained",
+          "text": "Use max_bundle on both peers with fallback retained within the trunk",
           "correct": false,
           "feedback": "Fallback cannot be combined with min_bundle or max_bundle."
         },
@@ -553,7 +553,7 @@
         },
         {
           "letter": "B",
-          "text": "Add more SSIDs with identical security settings",
+          "text": "Add more SSIDs with identical security settings here",
           "correct": false,
           "feedback": "More SSIDs avoid the pool rather than enabling its selection behavior."
         },
@@ -565,7 +565,7 @@
         },
         {
           "letter": "D",
-          "text": "Change the AP's country code",
+          "text": "Change the AP's country code before client DHCP",
           "correct": false,
           "feedback": "Country code controls radio regulatory behavior, not VLAN pool mode."
         }
@@ -580,13 +580,13 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Round-robin client-count balancing",
+          "text": "Round-robin client-count balancing for this SSID",
           "correct": false,
           "feedback": "Round-robin chooses the least-populated VLAN, not a building-specific VLAN."
         },
         {
           "letter": "B",
-          "text": "FortiAP group-to-VLAN mapping",
+          "text": "FortiAP group-to-VLAN mapping here",
           "correct": true,
           "feedback": "AP-group mapping associates a FortiAP group with a selected VLAN."
         },
@@ -598,7 +598,7 @@
         },
         {
           "letter": "D",
-          "text": "RADIUS user-group assignment",
+          "text": "RADIUS user-group assignment here",
           "correct": false,
           "feedback": "RADIUS user groups are a separate dynamic user-VLAN mechanism."
         }
@@ -613,25 +613,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The wireless radio's transmit power",
+          "text": "The wireless radio's transmit power here",
           "correct": false,
           "feedback": "Transmit power affects RF coverage, not VLAN selection fallback."
         },
         {
           "letter": "B",
-          "text": "The FortiAP's LLDP neighbor table",
+          "text": "The FortiAP's LLDP neighbor table for this SSID",
           "correct": false,
           "feedback": "LLDP is not the VLAN-pool selector."
         },
         {
           "letter": "C",
-          "text": "Whether pool entries contain valid VLAN IDs and group references",
+          "text": "Check pool VLAN IDs and AP-group references",
           "correct": true,
           "feedback": "Invalid pool entries can cause fallback to the SSID static VLAN setting."
         },
         {
           "letter": "D",
-          "text": "The WAN interface's SD-WAN health check",
+          "text": "The WAN interface's SD-WAN health check here",
           "correct": false,
           "feedback": "SD-WAN health checks do not influence wireless VLAN assignment."
         }
@@ -658,13 +658,13 @@
         },
         {
           "letter": "C",
-          "text": "Create a separate SSID per user",
+          "text": "Create a separate SSID per user here",
           "correct": false,
           "feedback": "Per-user SSIDs are not required to satisfy the feature constraint."
         },
         {
           "letter": "D",
-          "text": "Choose either RADIUS VLAN assignment or VLAN pooling for that SSID",
+          "text": "Choose RADIUS VLAN or VLAN pooling, not both",
           "correct": true,
           "feedback": "The two methods cannot be used simultaneously on the same SSID."
         }
@@ -679,25 +679,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "User Organizational Unit LDAP mapping in the User/Host Profile and FSSO",
+          "text": "Map LDAP OU in User/Host Profile and publish via FSSO",
           "correct": true,
           "feedback": "FortiNAC 9.4 adds OU mapping and sends it with FSSO user/group and device-tag context."
         },
         {
           "letter": "B",
-          "text": "RADIUS Tunnel-Private-Group-Id returned by Local RADIUS",
+          "text": "RADIUS Tunnel-Private-Group-Id returned by Local RADIUS before FSSO publication",
           "correct": false,
           "feedback": "Tunnel attributes select VLANs, not directory OU identity context."
         },
         {
           "letter": "C",
-          "text": "A switch-port MAC notification trap",
+          "text": "A switch-port MAC notification trap for the directory-derived identity context",
           "correct": false,
           "feedback": "MAC traps report connectivity changes, not LDAP organization placement."
         },
         {
           "letter": "D",
-          "text": "A FortiNAC guest sponsor approval rule",
+          "text": "A FortiNAC guest sponsor approval rule before FSSO publication",
           "correct": false,
           "feedback": "Sponsor approval is a guest workflow unrelated to OU propagation."
         }
@@ -712,7 +712,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "FortiGate SD-WAN route selection",
+          "text": "FortiGate SD-WAN route selection before FSSO publication",
           "correct": false,
           "feedback": "SD-WAN routing does not publish directory identity attributes."
         },
@@ -724,13 +724,13 @@
         },
         {
           "letter": "C",
-          "text": "The switch's voice VLAN attribute group",
+          "text": "The switch's voice VLAN attribute group here",
           "correct": false,
           "feedback": "Voice VLAN attributes are unrelated to FSSO identity publication."
         },
         {
           "letter": "D",
-          "text": "FortiAuthenticator SMS recovery enrollment",
+          "text": "FortiAuthenticator SMS recovery enrollment within the User/Host Profile",
           "correct": false,
           "feedback": "SMS recovery is a password-reset feature, not an FSSO path."
         }
@@ -745,13 +745,13 @@
       "choices": [
         {
           "letter": "A",
-          "text": "A successful DNS SRV lookup only",
+          "text": "A successful DNS SRV lookup only for this user",
           "correct": false,
           "feedback": "DNS lookup is only a prerequisite and does not show the received identity."
         },
         {
           "letter": "B",
-          "text": "A FortiNAC host count dashboard",
+          "text": "A FortiNAC host count dashboard for this user",
           "correct": false,
           "feedback": "A host count does not expose FSSO user attributes or policy selection."
         },
@@ -763,7 +763,7 @@
         },
         {
           "letter": "D",
-          "text": "A RADIUS Access-Accept for the workstation",
+          "text": "A RADIUS Access-Accept for the workstation here",
           "correct": false,
           "feedback": "A workstation RADIUS response is a separate access-authentication path."
         }
@@ -778,25 +778,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "OU mapping always replaces the logical network",
+          "text": "OU mapping always replaces the logical network before FSSO publication",
           "correct": false,
           "feedback": "The release note does not define OU mapping as a VLAN override."
         },
         {
           "letter": "B",
-          "text": "OU is translated into Tunnel-Type VLAN by default",
+          "text": "OU is translated into Tunnel-Type VLAN by default here",
           "correct": false,
           "feedback": "No automatic Tunnel-Type VLAN translation is documented for OU mapping."
         },
         {
           "letter": "C",
-          "text": "FSSO updates directly reconfigure switch port state",
+          "text": "FSSO updates directly reconfigure switch port state before FSSO publication",
           "correct": false,
           "feedback": "FSSO identity updates are not switch configuration commands."
         },
         {
           "letter": "D",
-          "text": "OU is identity metadata for FSSO and firewall policy, not a RADIUS VLAN command",
+          "text": "OU is FSSO identity metadata, not a RADIUS VLAN command",
           "correct": true,
           "feedback": "OU is sent as identity context; network access VLAN enforcement is a separate path."
         }
@@ -811,25 +811,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The switch model uses Local RADIUS and the logical network has its attribute group",
+          "text": "Use Local RADIUS and map the voice attribute group",
           "correct": true,
           "feedback": "The documented IP-phone provisioning workflow uses Local RADIUS and a mapped RADIUS attribute group."
         },
         {
           "letter": "B",
-          "text": "The switch has a larger DHCP scope",
+          "text": "The switch has a larger DHCP scope for this phone",
           "correct": false,
           "feedback": "DHCP scope size does not cause FortiNAC to omit RADIUS attributes."
         },
         {
           "letter": "C",
-          "text": "FortiNAC has a FortiAnalyzer log receiver configured",
+          "text": "FortiNAC has a FortiAnalyzer log receiver configured here",
           "correct": false,
           "feedback": "FortiAnalyzer logging is not required to construct the Access-Accept."
         },
         {
           "letter": "D",
-          "text": "The phone's LLDP neighbor table includes a gateway",
+          "text": "The phone's LLDP neighbor table includes a gateway here",
           "correct": false,
           "feedback": "LLDP neighbor information does not replace the RADIUS voice VLAN response."
         }
@@ -844,7 +844,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The LDAP OU synchronization interval",
+          "text": "The LDAP OU synchronization interval in the RADIUS response",
           "correct": false,
           "feedback": "LDAP OU mapping is unrelated to the IP-phone RADIUS response."
         },
@@ -856,13 +856,13 @@
         },
         {
           "letter": "C",
-          "text": "The FortiGate central-SNAT map order",
+          "text": "The FortiGate central-SNAT map order in the RADIUS response",
           "correct": false,
           "feedback": "Central SNAT affects routed source translation, not access-port voice VLAN tagging."
         },
         {
           "letter": "D",
-          "text": "The FortiPAM TCP-forwarding setting",
+          "text": "The FortiPAM TCP-forwarding setting in the RADIUS response",
           "correct": false,
           "feedback": "FortiPAM's RDP transport does not affect switch VLAN provisioning."
         }
@@ -877,25 +877,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The phone can resolve an Internet hostname",
+          "text": "The phone can resolve an Internet hostname here",
           "correct": false,
           "feedback": "DNS reachability does not identify which VLAN the phone used."
         },
         {
           "letter": "B",
-          "text": "The FortiNAC license count is below capacity",
+          "text": "The FortiNAC license count is below capacity for this phone",
           "correct": false,
           "feedback": "License count does not prove switch VLAN assignment."
         },
         {
           "letter": "C",
-          "text": "The switch port reports the voice VLAN separately from the data VLAN",
+          "text": "Check the switch port's separate voice and data VLANs",
           "correct": true,
           "feedback": "The switch port's separate voice/data VLAN state confirms the intended access-port result."
         },
         {
           "letter": "D",
-          "text": "The FortiNAC admin GUI is reachable",
+          "text": "The FortiNAC admin GUI is reachable in the RADIUS response",
           "correct": false,
           "feedback": "GUI reachability proves management access only."
         }
@@ -916,19 +916,19 @@
         },
         {
           "letter": "B",
-          "text": "Disable all RADIUS authentication",
+          "text": "Disable all RADIUS authentication before the tagged voice VLAN applies",
           "correct": false,
           "feedback": "Disabling RADIUS removes the provisioning transaction rather than optimizing it."
         },
         {
           "letter": "C",
-          "text": "Increase the phone's DHCP lease time",
+          "text": "Increase the phone's DHCP lease time for this phone",
           "correct": false,
           "feedback": "DHCP lease time does not control MAC-notification processing."
         },
         {
           "letter": "D",
-          "text": "Enable MAC notification trap processing only when real-time phone revalidation is required",
+          "text": "Enable MAC traps only when phone revalidation needs them",
           "correct": true,
           "feedback": "The guide cautions that frequent traps require processing; enable only when needed."
         }
@@ -955,13 +955,13 @@
         },
         {
           "letter": "C",
-          "text": "The FortiSwitch LACP aggregator mode",
+          "text": "The FortiSwitch LACP aggregator mode during password recovery",
           "correct": false,
           "feedback": "LACP settings do not control portal recovery options."
         },
         {
           "letter": "D",
-          "text": "The FortiSIEM discovery credential map",
+          "text": "The FortiSIEM discovery credential map for this account",
           "correct": false,
           "feedback": "Discovery credentials are unrelated to FortiAuthenticator self-service recovery."
         }
@@ -976,7 +976,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The wireless SSID VLAN pool",
+          "text": "The wireless SSID VLAN pool for this account",
           "correct": false,
           "feedback": "Wireless VLAN selection is unrelated to directory password writes."
         },
@@ -988,13 +988,13 @@
         },
         {
           "letter": "C",
-          "text": "The FortiGate central NAT table",
+          "text": "The FortiGate central NAT table for this account",
           "correct": false,
           "feedback": "Central NAT affects egress translation, not LDAP account permissions."
         },
         {
           "letter": "D",
-          "text": "The FortiPAM RDP launcher type",
+          "text": "The FortiPAM RDP launcher type during password recovery",
           "correct": false,
           "feedback": "RDP launcher type does not affect FortiAuthenticator LDAP updates."
         }
@@ -1009,25 +1009,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Change the user's AD OU",
+          "text": "Change the user's AD OU at the portal policy gate",
           "correct": false,
           "feedback": "OU mapping changes identity context, not SMS delivery."
         },
         {
           "letter": "B",
-          "text": "Modify the FortiNAC voice VLAN policy",
+          "text": "Modify the FortiNAC voice VLAN policy for this account",
           "correct": false,
           "feedback": "Voice VLAN provisioning is a separate NAC workflow."
         },
         {
           "letter": "C",
-          "text": "Check the SMS provider route and the user's enrolled phone number",
+          "text": "Check SMS delivery and the user's enrolled phone number",
           "correct": true,
           "feedback": "The challenge delivery path and user contact data are the relevant boundaries."
         },
         {
           "letter": "D",
-          "text": "Increase the FortiSwitch LACP fast timer",
+          "text": "Increase the FortiSwitch LACP fast timer for this account",
           "correct": false,
           "feedback": "LACP timers do not affect the SMS gateway."
         }
@@ -1054,7 +1054,7 @@
         },
         {
           "letter": "C",
-          "text": "The LDAP OU was renamed",
+          "text": "The LDAP OU was renamed during password recovery",
           "correct": false,
           "feedback": "OU changes do not explain a recovery attempt throttle."
         },
@@ -1075,19 +1075,19 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Enable TCP Forwarding on the RDP secret after assessing lost native controls",
+          "text": "Enable TCP Forwarding after assessing native-control loss here",
           "correct": true,
           "feedback": "TCP forwarding is documented for legacy/plaintext RDP and certain native-launch compatibility failures."
         },
         {
           "letter": "B",
-          "text": "Enable Restricted Admin Mode and TCP Forwarding together",
+          "text": "Enable Restricted Admin Mode and TCP Forwarding together here",
           "correct": false,
           "feedback": "Restricted Admin Mode is unavailable when TCP Forwarding is enabled."
         },
         {
           "letter": "C",
-          "text": "Change the FortiAuthenticator SMS recovery method",
+          "text": "Change the FortiAuthenticator SMS recovery method for this secret",
           "correct": false,
           "feedback": "SMS recovery does not change RDP protocol handling."
         },
@@ -1108,7 +1108,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Enable TCP Forwarding and remove the RDP Security Level",
+          "text": "Enable TCP Forwarding and remove the RDP Security Level here",
           "correct": false,
           "feedback": "TCP forwarding disables those native RDP controls."
         },
@@ -1120,13 +1120,13 @@
         },
         {
           "letter": "C",
-          "text": "Switch the secret to a Syslog destination",
+          "text": "Switch the secret to a Syslog destination before RDP launch",
           "correct": false,
           "feedback": "Syslog destinations are unrelated to RDP secret launch."
         },
         {
           "letter": "D",
-          "text": "Use a static FortiSwitch trunk instead of LACP",
+          "text": "Use a static FortiSwitch trunk instead of LACP here",
           "correct": false,
           "feedback": "Trunk mode does not change the FortiPAM session launcher."
         }
@@ -1147,7 +1147,7 @@
         },
         {
           "letter": "B",
-          "text": "RDP",
+          "text": "RDP here",
           "correct": false,
           "feedback": "RDP mode is standard RDP encryption and is documented for Web-RDP only."
         },
@@ -1174,13 +1174,13 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The secret database is corrupt",
+          "text": "The secret database is corrupt for this secret",
           "correct": false,
           "feedback": "The documented feature boundary does not imply secret corruption."
         },
         {
           "letter": "B",
-          "text": "The target account has expired",
+          "text": "The target account has expired before RDP launch",
           "correct": false,
           "feedback": "Target account state does not restore the native launcher option."
         },
@@ -1192,7 +1192,7 @@
         },
         {
           "letter": "D",
-          "text": "This is an expected limitation of the TCP-forwarded native RDP path",
+          "text": "TCP forwarding intentionally removes native Auto TOTP support",
           "correct": true,
           "feedback": "FortiPAM explicitly excludes RDP Auto TOTP when TCP Forwarding is enabled."
         }
@@ -1219,13 +1219,13 @@
         },
         {
           "letter": "C",
-          "text": "Ping-only discovery with no credentials",
+          "text": "Ping-only discovery with no credentials for this scan",
           "correct": false,
           "feedback": "Ping-only checks reachability without detailed inventory."
         },
         {
           "letter": "D",
-          "text": "L2 Scan across cloud accounts",
+          "text": "L2 Scan across cloud accounts here",
           "correct": false,
           "feedback": "L2 Scan is for Layer 2 connectivity, not cloud API inventory."
         }
@@ -1240,7 +1240,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Only on the Supervisor",
+          "text": "Only on the Supervisor for this scan",
           "correct": false,
           "feedback": "The Supervisor coordinates, but the assigned Collector performs discovery and receives its monitoring task."
         },
@@ -1252,13 +1252,13 @@
         },
         {
           "letter": "C",
-          "text": "On every Worker simultaneously",
+          "text": "On every Worker simultaneously for this scan",
           "correct": false,
           "feedback": "Workers are not all assigned every device task."
         },
         {
           "letter": "D",
-          "text": "On an arbitrary inactive Collector",
+          "text": "On an arbitrary inactive Collector for this scan",
           "correct": false,
           "feedback": "An inactive Collector cannot perform the assigned monitoring job."
         }
@@ -1273,25 +1273,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Enable Ping-only discovery",
+          "text": "Enable Ping-only discovery for the selected discovery type",
           "correct": false,
           "feedback": "Ping-only would test ICMP reachability, not perform the intended inventory."
         },
         {
           "letter": "B",
-          "text": "Change the device's SNMP community to a longer string",
+          "text": "Change the SNMP community string for this scan",
           "correct": false,
           "feedback": "Credential strength is not the cause of the ICMP precheck stopping discovery."
         },
         {
           "letter": "C",
-          "text": "Select Do not ping before discovery",
+          "text": "Disable the ping precheck before discovery for this scan",
           "correct": true,
           "feedback": "Do not ping before discovery allows the configured management protocol to be attempted."
         },
         {
           "letter": "D",
-          "text": "Move the device into the FortiSASE private server list",
+          "text": "Add the device to a private scan list",
           "correct": false,
           "feedback": "FortiSASE server access does not control FortiSIEM discovery."
         }
@@ -1306,25 +1306,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The scan cannot use SNMP credentials",
+          "text": "SNMP credentials cannot be used before CMDB update",
           "correct": false,
           "feedback": "Smart Scan can use credentials without requiring route collection."
         },
         {
           "letter": "B",
-          "text": "Every route is stored in the FortiSASE log buffer",
+          "text": "Routes fill the external log buffer here",
           "correct": false,
           "feedback": "FortiSASE buffering is unrelated to FortiSIEM topology discovery."
         },
         {
           "letter": "C",
-          "text": "The scan will convert all devices into Workers",
+          "text": "Discovery converts devices into Workers before CMDB update",
           "correct": false,
           "feedback": "Discovery does not convert network devices into FortiSIEM Workers."
         },
         {
           "letter": "D",
-          "text": "Discover Routes can be expensive on BGP routers",
+          "text": "Discover Routes can be costly on BGP routers",
           "correct": true,
           "feedback": "The guide cautions that route discovery can be expensive on BGP routers."
         }
@@ -1372,7 +1372,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The FortiNAC User/Host Profile",
+          "text": "The FortiNAC User/Host Profile over the SPA private path",
           "correct": false,
           "feedback": "User/Host Profiles do not establish TLS trust for the log receiver."
         },
@@ -1384,13 +1384,13 @@
         },
         {
           "letter": "C",
-          "text": "The FortiSwitch member hash",
+          "text": "The FortiSwitch member hash over the SPA private path",
           "correct": false,
           "feedback": "Switch hashing does not affect the server certificate chain."
         },
         {
           "letter": "D",
-          "text": "The FortiGate central-SNAT map order",
+          "text": "The FortiGate central-SNAT map order for this server",
           "correct": false,
           "feedback": "SNAT ordering may affect reachability, but it does not fix certificate trust."
         }
@@ -1423,7 +1423,7 @@
         },
         {
           "letter": "D",
-          "text": "The secondary cannot use CEF",
+          "text": "The secondary cannot use CEF here",
           "correct": false,
           "feedback": "CEF is a supported destination format and is not prohibited by this rule."
         }
@@ -1438,25 +1438,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "Replace the TLS certificate immediately",
+          "text": "Replace the TLS certificate immediately over the SPA private path",
           "correct": false,
           "feedback": "A connected transport does not prove a particular log family is enabled."
         },
         {
           "letter": "B",
-          "text": "Change the primary server to Private",
+          "text": "Change the primary server to Private over the SPA private path",
           "correct": false,
           "feedback": "Changing access type without a routing reason may break a working path."
         },
         {
           "letter": "C",
-          "text": "Increase the firewall session TTL",
+          "text": "Increase the firewall session TTL over the SPA private path",
           "correct": false,
           "feedback": "Session TTL does not select forwarded log categories."
         },
         {
           "letter": "D",
-          "text": "Verify endpoint logs are selected and test an endpoint event at the receiver",
+          "text": "Select endpoint logs and test an endpoint event at receiver",
           "correct": true,
           "feedback": "The selected log families and receiver arrival must be checked separately."
         }
@@ -1477,19 +1477,19 @@
         },
         {
           "letter": "B",
-          "text": "The FortiSwitch LACP actor state",
+          "text": "The FortiSwitch LACP actor state here",
           "correct": false,
           "feedback": "LACP state proves link aggregation, not SaaS path quality."
         },
         {
           "letter": "C",
-          "text": "FortiAuthenticator password-recovery status",
+          "text": "FortiAuthenticator password-recovery status for the measured application",
           "correct": false,
           "feedback": "Password recovery is unrelated to WAN application performance."
         },
         {
           "letter": "D",
-          "text": "The FortiManager script validation history",
+          "text": "The FortiManager script validation history here",
           "correct": false,
           "feedback": "Script validation does not measure application path quality."
         }
@@ -1510,7 +1510,7 @@
         },
         {
           "letter": "B",
-          "text": "Prefer-passive can fall back to active probes after three idle minutes",
+          "text": "Prefer-passive probes after three continuous idle minutes",
           "correct": true,
           "feedback": "Prefer-passive uses live traffic first and probes after three continuous idle minutes."
         },
@@ -1537,7 +1537,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "A FortiAnalyzer receiver and CEF output",
+          "text": "A FortiAnalyzer receiver and CEF output for this flow",
           "correct": false,
           "feedback": "Log export is not a prerequisite for passive session metrics."
         },
@@ -1570,25 +1570,25 @@
       "choices": [
         {
           "letter": "A",
-          "text": "The external IP-feed address family",
+          "text": "The external IP-feed address family for this flow",
           "correct": false,
           "feedback": "IP-feed address family controls central SNAT source matching."
         },
         {
           "letter": "B",
-          "text": "The FortiManager script type",
+          "text": "The FortiManager script type for this flow",
           "correct": false,
           "feedback": "Script type determines FortiManager execution context, not SD-WAN app identity."
         },
         {
           "letter": "C",
-          "text": "The FortiPAM native RDP launcher",
+          "text": "The FortiPAM native RDP launcher for this flow",
           "correct": false,
           "feedback": "RDP launcher settings do not classify WAN sessions."
         },
         {
           "letter": "D",
-          "text": "The SD-WAN rule's ISDB/application signature and passive-measurement setting",
+          "text": "Match the ISDB/application and enable passive measurement",
           "correct": true,
           "feedback": "Per-app differentiation requires the rule's service/signature match and passive-measurement enablement."
         }
@@ -1609,19 +1609,19 @@
         },
         {
           "letter": "B",
-          "text": "Increase the policy logging level only",
+          "text": "Increase the policy logging level only before SNAT selection",
           "correct": false,
           "feedback": "Logging detail alone cannot make a map match."
         },
         {
           "letter": "C",
-          "text": "Change the destination route to a blackhole",
+          "text": "Change the destination route to a blackhole here",
           "correct": false,
           "feedback": "A blackhole route would break forwarding rather than select SNAT."
         },
         {
           "letter": "D",
-          "text": "Enable a VIP for the client's source",
+          "text": "Enable a VIP for the client's source in this flow",
           "correct": false,
           "feedback": "VIP is destination translation and is not the outbound source mapping."
         }
@@ -1636,7 +1636,7 @@
       "choices": [
         {
           "letter": "A",
-          "text": "diagnose sys sdwan health-check",
+          "text": "diagnose sys sdwan health-check for this flow",
           "correct": false,
           "feedback": "The generic health-check command is not the documented passive-session listing."
         },
@@ -1648,17 +1648,573 @@
         },
         {
           "letter": "C",
-          "text": "diagnose firewall iprope list 10000d",
+          "text": "diagnose firewall iprope list 10000d here",
           "correct": false,
           "feedback": "iprope lists firewall policy/SNAT compilation, not passive session metrics."
         },
         {
           "letter": "D",
-          "text": "get system log-forward",
+          "text": "get system log-forward for this flow",
           "correct": false,
           "feedback": "log-forward displays FortiAnalyzer forwarding configuration, not SD-WAN measurement."
         }
       ]
     }
-  ]
+  ],
+  "length_validation": {
+    "max_spread": 2,
+    "questions_over_2": [],
+    "spread_by_question": [
+      {
+        "n": 1,
+        "spread": 1,
+        "lens": [
+          9,
+          9,
+          8,
+          9
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 2,
+        "spread": 2,
+        "lens": [
+          9,
+          7,
+          9,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 3,
+        "spread": 0,
+        "lens": [
+          7,
+          7,
+          7,
+          7
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 4,
+        "spread": 1,
+        "lens": [
+          8,
+          9,
+          9,
+          9
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 5,
+        "spread": 0,
+        "lens": [
+          10,
+          10,
+          10,
+          10
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 6,
+        "spread": 2,
+        "lens": [
+          9,
+          11,
+          10,
+          10
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 7,
+        "spread": 1,
+        "lens": [
+          9,
+          8,
+          9,
+          8
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 8,
+        "spread": 1,
+        "lens": [
+          11,
+          10,
+          10,
+          10
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 9,
+        "spread": 0,
+        "lens": [
+          9,
+          9,
+          9,
+          9
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 10,
+        "spread": 1,
+        "lens": [
+          8,
+          8,
+          9,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 11,
+        "spread": 2,
+        "lens": [
+          5,
+          7,
+          6,
+          6
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 12,
+        "spread": 2,
+        "lens": [
+          7,
+          9,
+          8,
+          8
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 13,
+        "spread": 1,
+        "lens": [
+          7,
+          7,
+          7,
+          6
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 14,
+        "spread": 0,
+        "lens": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 15,
+        "spread": 1,
+        "lens": [
+          10,
+          9,
+          10,
+          9
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 16,
+        "spread": 1,
+        "lens": [
+          11,
+          10,
+          11,
+          10
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 17,
+        "spread": 1,
+        "lens": [
+          7,
+          8,
+          8,
+          8
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 18,
+        "spread": 2,
+        "lens": [
+          6,
+          4,
+          5,
+          4
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 19,
+        "spread": 2,
+        "lens": [
+          6,
+          8,
+          7,
+          7
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 20,
+        "spread": 1,
+        "lens": [
+          7,
+          8,
+          7,
+          8
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 21,
+        "spread": 1,
+        "lens": [
+          10,
+          9,
+          10,
+          9
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 22,
+        "spread": 1,
+        "lens": [
+          7,
+          8,
+          7,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 23,
+        "spread": 2,
+        "lens": [
+          9,
+          8,
+          8,
+          7
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 24,
+        "spread": 1,
+        "lens": [
+          10,
+          9,
+          10,
+          10
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 25,
+        "spread": 2,
+        "lens": [
+          9,
+          10,
+          8,
+          9
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 26,
+        "spread": 1,
+        "lens": [
+          9,
+          8,
+          9,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 27,
+        "spread": 2,
+        "lens": [
+          8,
+          10,
+          9,
+          10
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 28,
+        "spread": 2,
+        "lens": [
+          8,
+          10,
+          9,
+          9
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 29,
+        "spread": 0,
+        "lens": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 30,
+        "spread": 0,
+        "lens": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 31,
+        "spread": 1,
+        "lens": [
+          10,
+          9,
+          9,
+          9
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 32,
+        "spread": 1,
+        "lens": [
+          8,
+          7,
+          8,
+          8
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 33,
+        "spread": 1,
+        "lens": [
+          8,
+          9,
+          9,
+          9
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 34,
+        "spread": 1,
+        "lens": [
+          10,
+          10,
+          10,
+          9
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 35,
+        "spread": 1,
+        "lens": [
+          2,
+          2,
+          1,
+          2
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 36,
+        "spread": 1,
+        "lens": [
+          8,
+          8,
+          7,
+          8
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 37,
+        "spread": 2,
+        "lens": [
+          7,
+          6,
+          8,
+          6
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 38,
+        "spread": 1,
+        "lens": [
+          7,
+          7,
+          7,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 39,
+        "spread": 1,
+        "lens": [
+          8,
+          8,
+          9,
+          8
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 40,
+        "spread": 1,
+        "lens": [
+          8,
+          7,
+          8,
+          8
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 41,
+        "spread": 0,
+        "lens": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 42,
+        "spread": 1,
+        "lens": [
+          9,
+          8,
+          9,
+          8
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 43,
+        "spread": 1,
+        "lens": [
+          5,
+          6,
+          6,
+          6
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 44,
+        "spread": 1,
+        "lens": [
+          10,
+          11,
+          10,
+          10
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 45,
+        "spread": 1,
+        "lens": [
+          7,
+          6,
+          7,
+          6
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 46,
+        "spread": 0,
+        "lens": [
+          7,
+          7,
+          7,
+          7
+        ],
+        "correct": "B"
+      },
+      {
+        "n": 47,
+        "spread": 2,
+        "lens": [
+          9,
+          7,
+          8,
+          8
+        ],
+        "correct": "C"
+      },
+      {
+        "n": 48,
+        "spread": 1,
+        "lens": [
+          8,
+          7,
+          8,
+          7
+        ],
+        "correct": "D"
+      },
+      {
+        "n": 49,
+        "spread": 2,
+        "lens": [
+          9,
+          9,
+          8,
+          10
+        ],
+        "correct": "A"
+      },
+      {
+        "n": 50,
+        "spread": 1,
+        "lens": [
+          7,
+          6,
+          6,
+          6
+        ],
+        "correct": "B"
+      }
+    ]
+  }
 }
