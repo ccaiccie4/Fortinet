@@ -1,0 +1,286 @@
+{
+  "schema_version": "1.0",
+  "run_date": "2026-11-13",
+  "files": [
+    {
+      "product": "FortiGate",
+      "lesson": "Central SNAT map selection with dynamic external IP-feed sources",
+      "svg": "docs/diagrams/2026-11-13/fortigate.svg",
+      "svg_sha": "18b7b8195686ec884110e7856450322808d13c12",
+      "drawio": "docs/diagrams/2026-11-13/fortigate.drawio",
+      "drawio_sha": "729deacc5adaf824f82eb57c79fdd0d0fd7115b7",
+      "diagram_topology": [
+        "External IP feed",
+        "Address external-resource",
+        "Ordered central SNAT map",
+        "Firewall session translation",
+        "WAN egress / IP pool"
+      ],
+      "diagram_flow": [
+        "fetches and parses",
+        "referenced by orig-addr",
+        "first matching map selects pool",
+        "translated session exits"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiManager",
+      "lesson": "Script object types and execution-target boundaries",
+      "svg": "docs/diagrams/2026-11-13/fortimanager.svg",
+      "svg_sha": "75bf5c6ef10cde70eda69901f84492f06a6b4108",
+      "drawio": "docs/diagrams/2026-11-13/fortimanager.drawio",
+      "drawio_sha": "7a58d50b6c22d368e69d65287510f303c4cf7231",
+      "diagram_topology": [
+        "ADOM script object",
+        "Language / type gate",
+        "Target compatibility gate",
+        "Device DB / ADOM DB / live FortiGate",
+        "Execution history and diff"
+      ],
+      "diagram_flow": [
+        "stores script",
+        "CLI / Tcl / Jinja rules",
+        "restricts target choices",
+        "runs in selected context"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson": "Real-time log forwarding: filters, masking and reliable TCP buffering",
+      "svg": "docs/diagrams/2026-11-13/fortianalyzer.svg",
+      "svg_sha": "7acdf87888b3b4ad93770a2799cd133cb7665db3",
+      "drawio": "docs/diagrams/2026-11-13/fortianalyzer.drawio",
+      "drawio_sha": "5b6e7ee640648e56ebb86195d0ddd1365b60ec57",
+      "diagram_topology": [
+        "Incoming FAZ logs",
+        "Forwarding profile / filters",
+        "TCP buffer or UDP sender",
+        "Remote FAZ / syslog / CEF",
+        "Receiver authorization / indexing"
+      ],
+      "diagram_flow": [
+        "arrive at source",
+        "filter, exclude and mask",
+        "transport and buffer",
+        "authorize and index"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson": "LACP aggregator selection, fallback and per-flow member hashing",
+      "svg": "docs/diagrams/2026-11-13/fortiswitch.svg",
+      "svg_sha": "3fbf7e3f38c5e8607e593ba330c3e28d4c58144f",
+      "drawio": "docs/diagrams/2026-11-13/fortiswitch.drawio",
+      "drawio_sha": "76b8a9fda480f672567ef0cf08528ed941f09202",
+      "diagram_topology": [
+        "LACP peer PDUs",
+        "Speed-group aggregators",
+        "Aggregator-mode selector",
+        "Flow hash tuple",
+        "Selected physical member"
+      ],
+      "diagram_flow": [
+        "negotiates members",
+        "groups by speed",
+        "chooses one group",
+        "hashes each flow"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson": "SSID VLAN pools: AP-group mapping versus client load balancing",
+      "svg": "docs/diagrams/2026-11-13/fortiap-wireless.svg",
+      "svg_sha": "4515149fcb4ebcc9d81adbe2a8100896617f58b1",
+      "drawio": "docs/diagrams/2026-11-13/fortiap-wireless.drawio",
+      "drawio_sha": "271191426af340160029333af2e47ee5aa28e68f",
+      "diagram_topology": [
+        "Wireless client association",
+        "SSID VAP VLAN pool",
+        "AP-group / round-robin / hash selector",
+        "SSID zone and VLAN interfaces",
+        "Per-VLAN DHCP and policy"
+      ],
+      "diagram_flow": [
+        "associates to SSID",
+        "selects VLAN",
+        "maps into zone",
+        "client receives subnet"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiNAC",
+      "lesson": "LDAP Organizational Unit mapping into User/Host Profiles and FSSO",
+      "svg": "docs/diagrams/2026-11-13/fortinac.svg",
+      "svg_sha": "a90436250629a365d48bace9ebaba3c14c3ad932",
+      "drawio": "docs/diagrams/2026-11-13/fortinac.drawio",
+      "drawio_sha": "0453fe01783d9d657483a75730eac7ea88f7a61a",
+      "diagram_topology": [
+        "LDAP directory user / OU",
+        "FortiNAC User/Host Profile mapping",
+        "FSSO identity update",
+        "FortiGate user/group/device-tag context",
+        "Identity-based firewall policy"
+      ],
+      "diagram_flow": [
+        "syncs user attributes",
+        "maps OU",
+        "publishes context",
+        "selects policy"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson": "IP-phone voice VLAN provisioning with Local RADIUS attributes",
+      "svg": "docs/diagrams/2026-11-13/fortinac-f.svg",
+      "svg_sha": "9920f2cabc5533cdfcaead993f5f409801e4bc74",
+      "drawio": "docs/diagrams/2026-11-13/fortinac-f.drawio",
+      "drawio_sha": "232a4b9a17df2f5360a0a8314ef8fbe187e92c2e",
+      "diagram_topology": [
+        "IP phone / workstation",
+        "Access switch port",
+        "FortiNAC profile and policy",
+        "Local RADIUS Access-Accept",
+        "Tagged voice VLAN + data VLAN"
+      ],
+      "diagram_flow": [
+        "connects to port",
+        "sends Access-Request",
+        "selects profile and attributes",
+        "switch applies VLANs"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson": "Self-service password recovery with SMS or FortiToken verification",
+      "svg": "docs/diagrams/2026-11-13/fortiauthenticator.svg",
+      "svg_sha": "0115c7f5485026d0d8490a61d9d27ff721f57041",
+      "drawio": "docs/diagrams/2026-11-13/fortiauthenticator.drawio",
+      "drawio_sha": "4e2377f70a4cee0d7e0592303658f983b260ef66",
+      "diagram_topology": [
+        "User portal pre-login reset",
+        "Portal allowed-method policy",
+        "Per-user SMS / FortiToken enrollment",
+        "Factor verification and rate limit",
+        "Local / LDAP password update"
+      ],
+      "diagram_flow": [
+        "requests reset",
+        "filters allowed methods",
+        "delivers challenge",
+        "updates account"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiPAM",
+      "lesson": "Native RDP TCP forwarding: compatibility path and security-control trade-offs",
+      "svg": "docs/diagrams/2026-11-13/fortipam.svg",
+      "svg_sha": "99f466e3cbba1f85008dc6c45c7de7fc2cceea7a",
+      "drawio": "docs/diagrams/2026-11-13/fortipam.drawio",
+      "drawio_sha": "ac45f378268104bc9b876a28a69c2312f907a98b",
+      "diagram_topology": [
+        "FortiPAM RDP secret",
+        "Native RDP launcher",
+        "TCP forwarding option",
+        "Forwarded TCP tunnel",
+        "Target RDP service"
+      ],
+      "diagram_flow": [
+        "defines target and controls",
+        "selects path",
+        "wraps RDP stream",
+        "connects to target"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson": "Discovery orchestration: scan types, credential mapping and worker placement",
+      "svg": "docs/diagrams/2026-11-13/fortisiem.svg",
+      "svg_sha": "3f6bcdec8559f700d0a2d7cfc95098f17d21ee79",
+      "drawio": "docs/diagrams/2026-11-13/fortisiem.drawio",
+      "drawio_sha": "5dfe0042db15cac2c6721acd29a1bf8a47872387",
+      "diagram_topology": [
+        "Discovery entry and credentials",
+        "Supervisor / Collector",
+        "Range or Smart Scan targets",
+        "CMDB inventory result",
+        "Active Worker monitoring jobs"
+      ],
+      "diagram_flow": [
+        "defines scope and credentials",
+        "assigns discovery task",
+        "collects device facts",
+        "distributes monitoring"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "FortiSASE",
+      "lesson": "External log forwarding: public/private paths, reliable TCP and TLS trust",
+      "svg": "docs/diagrams/2026-11-13/fortisase.svg",
+      "svg_sha": "d7e2884555cfd931b68a6ab6b1063bee097b605d",
+      "drawio": "docs/diagrams/2026-11-13/fortisase.drawio",
+      "drawio_sha": "9b27d90c20983e3fc00e5176947cbdf609f4b5cc",
+      "diagram_topology": [
+        "FortiSASE Security PoP logs",
+        "External server profile",
+        "Public internet or SPA hub",
+        "TCP / TLS trust gate",
+        "FortiAnalyzer / Syslog / CEF"
+      ],
+      "diagram_flow": [
+        "selects log families",
+        "chooses route",
+        "establishes transport and trust",
+        "delivers records"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson": "Passive per-application SLA measurement from inspected live sessions",
+      "svg": "docs/diagrams/2026-11-13/secure-sd-wan.svg",
+      "svg_sha": "ca93ca9574d289f912036d8c1efd297849bb5d8e",
+      "drawio": "docs/diagrams/2026-11-13/secure-sd-wan.drawio",
+      "drawio_sha": "374a913cd0c39bb697894c41e75663aa879d6079",
+      "diagram_topology": [
+        "Live TCP application sessions",
+        "Firewall policy inspection",
+        "Passive metrics collector",
+        "Per-app SLA by WAN member",
+        "SD-WAN service rule / member"
+      ],
+      "diagram_flow": [
+        "classifies traffic",
+        "captures session data",
+        "computes latency/jitter/loss",
+        "uses SLA for steering"
+      ],
+      "readback": "PASS",
+      "structural_validation": "SVG root or draw.io mxfile root present"
+    }
+  ],
+  "asset_count": 24,
+  "all_created": true,
+  "all_readback_pass": true,
+  "transport": "direct individual GitHub file writes; no archive or staging transport"
+}
