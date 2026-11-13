@@ -1,0 +1,1564 @@
+{
+  "run_date": "2026-11-13",
+  "question_count": 50,
+  "choice_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "max_choice_word_count_spread": 7,
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "stem": "A workstation authenticates on a software-switch member, but another member can still reach it without a firewall policy. Which setting is the first design check?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It forces member-to-member frames through firewall policy and session processing.",
+          "correct": true,
+          "feedback": "Correct: explicit mode makes member traffic policy-controlled instead of automatically bridged."
+        },
+        {
+          "label": "B",
+          "text": "It enables bridge learning without RADIUS authentication on member ports.",
+          "correct": false,
+          "feedback": "Incorrect: DHCP and bridge learning do not change the intra-switch policy boundary."
+        },
+        {
+          "label": "C",
+          "text": "It changes the software switch into a routed aggregate with ECMP.",
+          "correct": false,
+          "feedback": "Incorrect: explicit intra-switch policy does not convert the interface into a routed aggregate."
+        },
+        {
+          "label": "D",
+          "text": "It makes the switch interface eligible for hardware-only ASIC offload.",
+          "correct": false,
+          "feedback": "Incorrect: the setting controls policy enforcement, not hardware offload eligibility."
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "stem": "A dynamic 802.1X address object remains empty after RADIUS returns Access-Accept. Which response attribute must be checked against the object name?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The NAS-Port-Type value reported for the physical switch port.",
+          "correct": false,
+          "feedback": "Incorrect: NAS-Port-Type is not the documented group-to-address name mapping."
+        },
+        {
+          "label": "B",
+          "text": "The Fortinet-Group-Name AVP returned by the RADIUS server.",
+          "correct": true,
+          "feedback": "Correct: the dynamic address-object name must match the Fortinet-Group-Name value."
+        },
+        {
+          "label": "C",
+          "text": "The Called-Station-ID string copied from the wireless access point.",
+          "correct": false,
+          "feedback": "Incorrect: Called-Station-ID is not the address-object mapping contract for this feature."
+        },
+        {
+          "label": "D",
+          "text": "The DHCP hostname learned after the client obtains an address.",
+          "correct": false,
+          "feedback": "Incorrect: DHCP hostname is not used to bind the 802.1X dynamic address object."
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "stem": "The 802.1X address dump shows a MAC, interface and VLAN ID. What has this evidence established?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The endpoint's Internet session has matched the intended security policy.",
+          "correct": false,
+          "feedback": "Incorrect: the address table does not prove firewall policy or application-session matching."
+        },
+        {
+          "label": "B",
+          "text": "The RADIUS server has been installed as the active default gateway.",
+          "correct": false,
+          "feedback": "Incorrect: the dump records authentication binding, not gateway selection."
+        },
+        {
+          "label": "C",
+          "text": "The authenticated endpoint has been bound to the dynamic address object.",
+          "correct": true,
+          "feedback": "Correct: the entry demonstrates the MAC, interface and VLAN association used by the address object."
+        },
+        {
+          "label": "D",
+          "text": "The software switch has converted every member into a routed interface.",
+          "correct": false,
+          "feedback": "Incorrect: the evidence does not change the interface's Layer-2 switch type."
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "stem": "MAB succeeds and the endpoint reaches the software-switch gateway, but an internal application is denied. What should be checked next?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Increase the RADIUS retransmission count for all access ports.",
+          "correct": false,
+          "feedback": "Incorrect: successful MAB and gateway reachability move the fault beyond initial authentication."
+        },
+        {
+          "label": "B",
+          "text": "Change the DHCP lease duration to match the RADIUS session timeout.",
+          "correct": false,
+          "feedback": "Incorrect: lease duration does not determine firewall application authorization."
+        },
+        {
+          "label": "C",
+          "text": "Disable explicit intra-switch policy so the bridge forwards the application automatically.",
+          "correct": false,
+          "feedback": "Incorrect: that removes the intended policy boundary instead of fixing the denied flow."
+        },
+        {
+          "label": "D",
+          "text": "Verify the dynamic source object, policy order, destination and service match.",
+          "correct": true,
+          "feedback": "Correct: authentication and gateway reachability do not prove that the application policy matched."
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiManager",
+      "stem": "One FortiSwitch needs a different voice-port setting while the same template remains assigned to twenty other switches. What is the intended 8.0 mechanism?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Enable a device-specific override for that switch and edit only the required port.",
+          "correct": true,
+          "feedback": "Correct: the override layer records selected deviations for one assigned device."
+        },
+        {
+          "label": "B",
+          "text": "Clone the entire ADOM and move the switch into the duplicate database.",
+          "correct": false,
+          "feedback": "Incorrect: a new ADOM is unnecessary for a per-device port exception."
+        },
+        {
+          "label": "C",
+          "text": "Change the shared template and install it only on the selected switch.",
+          "correct": false,
+          "feedback": "Incorrect: changing the shared template changes the common baseline for its assignments."
+        },
+        {
+          "label": "D",
+          "text": "Remove the template and configure every port directly on the switch.",
+          "correct": false,
+          "feedback": "Incorrect: that discards the centralized baseline and new override workflow."
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "stem": "The Managed FortiSwitches table shows a tooltip icon in the Template column. What should the engineer infer?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The switch has failed its last firmware upgrade and is running rollback mode.",
+          "correct": false,
+          "feedback": "Incorrect: the documented icon indicates an override, not firmware state."
+        },
+        {
+          "label": "B",
+          "text": "A device-specific template override has been configured for that switch.",
+          "correct": true,
+          "feedback": "Correct: FortiManager marks the device when an override has been performed."
+        },
+        {
+          "label": "C",
+          "text": "The template is unassigned and the switch is using factory defaults.",
+          "correct": false,
+          "feedback": "Incorrect: the icon is not an unassigned-template indicator."
+        },
+        {
+          "label": "D",
+          "text": "Every port on the switch is excluded from future template installs.",
+          "correct": false,
+          "feedback": "Incorrect: an override changes selected settings; it does not exclude every port."
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "stem": "A single port should return to its template value, but the other device-specific exceptions must remain. Which action has the narrowest scope?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Disable override mode for the entire switch and confirm the warning.",
+          "correct": false,
+          "feedback": "Incorrect: disabling device override reverts all customized values on that device."
+        },
+        {
+          "label": "B",
+          "text": "Edit the shared template and replace all port settings with defaults.",
+          "correct": false,
+          "feedback": "Incorrect: changing the baseline can affect every switch assigned to the template."
+        },
+        {
+          "label": "C",
+          "text": "Use Revert All while editing the specific port that should be reset.",
+          "correct": true,
+          "feedback": "Correct: the documented port-level Revert All discards customizations for that port."
+        },
+        {
+          "label": "D",
+          "text": "Unassign the template and reassign it after the next maintenance window.",
+          "correct": false,
+          "feedback": "Incorrect: unassigning and reassigning is broader than the required port-level reset."
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "stem": "A switch still differs from its peers after the override was saved. Which verification best separates stored intent from deployed state?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Check only the shared template name shown in the device list.",
+          "correct": false,
+          "feedback": "Incorrect: the template name alone does not show effective port values or installation."
+        },
+        {
+          "label": "B",
+          "text": "Reboot the switch before inspecting any FortiManager configuration.",
+          "correct": false,
+          "feedback": "Incorrect: a reboot does not establish whether the intended override was installed."
+        },
+        {
+          "label": "C",
+          "text": "Disable all overrides so every device has an identical configuration.",
+          "correct": false,
+          "feedback": "Incorrect: that destroys legitimate per-device exceptions without diagnosing the issue."
+        },
+        {
+          "label": "D",
+          "text": "Compare the override marker, target configuration and install preview for that switch.",
+          "correct": true,
+          "feedback": "Correct: the marker proves stored deviation; target and install evidence establish deployment intent."
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiAnalyzer",
+      "stem": "After enabling custom session labels, an administrator logs in but cannot reach the dashboard until a label is entered. Is that expected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Yes; enabling the feature makes a label mandatory for each new login session.",
+          "correct": true,
+          "feedback": "Correct: FortiAnalyzer prompts for a custom label after successful login and requires it."
+        },
+        {
+          "label": "B",
+          "text": "No; labels are optional metadata and can only be added after logout.",
+          "correct": false,
+          "feedback": "Incorrect: the feature requires a label during the login process."
+        },
+        {
+          "label": "C",
+          "text": "Only administrators with Super_User permission must enter a label.",
+          "correct": false,
+          "feedback": "Incorrect: the feature is enabled globally and makes labels mandatory."
+        },
+        {
+          "label": "D",
+          "text": "The prompt indicates that the administrator's password was rejected.",
+          "correct": false,
+          "feedback": "Incorrect: the prompt follows successful login and requests session context."
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "stem": "An engineer must prevent a session label from being changed during a maintenance window. Which mode provides that behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Changeable, because it permits an administrator to edit the label at any time.",
+          "correct": false,
+          "feedback": "Incorrect: changeable mode explicitly allows edits during an active session."
+        },
+        {
+          "label": "B",
+          "text": "Unique-per-session, because the label cannot change until the session ends.",
+          "correct": true,
+          "feedback": "Correct: this mode makes the assigned label immutable for that session."
+        },
+        {
+          "label": "C",
+          "text": "Disabled, because no label is stored after the administrator logs in.",
+          "correct": false,
+          "feedback": "Incorrect: disabled mode turns off the feature rather than fixing a label."
+        },
+        {
+          "label": "D",
+          "text": "Shared-per-admin, because every browser login inherits one administrator label.",
+          "correct": false,
+          "feedback": "Incorrect: the feature supports labels per session, not one permanent label per admin."
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "stem": "Two administrators accidentally use the same change label. What is the correct interpretation of the Event Log?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "FortiAnalyzer merges their actions into one authenticated administrator session.",
+          "correct": false,
+          "feedback": "Incorrect: matching label strings do not merge separate login sessions."
+        },
+        {
+          "label": "B",
+          "text": "The second label is rejected and the second administrator is logged out.",
+          "correct": false,
+          "feedback": "Incorrect: FortiAnalyzer does not enforce global label uniqueness."
+        },
+        {
+          "label": "C",
+          "text": "The label is not a globally unique key; correlate it with user and time.",
+          "correct": true,
+          "feedback": "Correct: uniqueness is not enforced, so other session identifiers remain important."
+        },
+        {
+          "label": "D",
+          "text": "The duplicate label proves that both administrators used the same browser.",
+          "correct": false,
+          "feedback": "Incorrect: a repeated label does not establish shared browser or session identity."
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "stem": "A change auditor wants to reconstruct a maintenance session after it ended. Which evidence is the most direct label lookup?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The current FortiAnalyzer firmware image checksum.",
+          "correct": false,
+          "feedback": "Incorrect: the checksum identifies firmware integrity, not an administrator session."
+        },
+        {
+          "label": "B",
+          "text": "The FortiGate policy package revision and installation timestamp.",
+          "correct": false,
+          "feedback": "Incorrect: device installation data does not identify every FortiAnalyzer admin action."
+        },
+        {
+          "label": "C",
+          "text": "The Dashboard widget's current CPU and memory graphs.",
+          "correct": false,
+          "feedback": "Incorrect: resource graphs do not provide session-level action tagging."
+        },
+        {
+          "label": "D",
+          "text": "System Settings Event Logs filtered by the Custom Session ID column.",
+          "correct": true,
+          "feedback": "Correct: the Event Log column carries the custom session label for recorded actions."
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "stem": "A two-router RVI transit should not elect a designated router. Which OSPF network type matches that topology?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Point-to-point, which suppresses DR and BDR election on that interface.",
+          "correct": true,
+          "feedback": "Correct: FortiSwitchOS 8.0 documents no DR/BDR election for point-to-point."
+        },
+        {
+          "label": "B",
+          "text": "Broadcast, which requires a DR and BDR on the segment.",
+          "correct": false,
+          "feedback": "Incorrect: broadcast Ethernet uses DR/BDR election by default."
+        },
+        {
+          "label": "C",
+          "text": "Point-to-multipoint, which requires a DR for each neighbor pair.",
+          "correct": false,
+          "feedback": "Incorrect: point-to-multipoint also avoids DR/BDR election, but the stated topology is a two-router transit."
+        },
+        {
+          "label": "D",
+          "text": "Passive, which removes the interface from the OSPF process.",
+          "correct": false,
+          "feedback": "Incorrect: passive behavior is not one of the documented network-type choices."
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "stem": "A route cost differs between two routers on the same OSPF domain after one reference-bandwidth change. What is the likely design error?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Only the RVI IP address was changed on the FortiSwitch.",
+          "correct": false,
+          "feedback": "Incorrect: an address change does not explain the reference-bandwidth mismatch."
+        },
+        {
+          "label": "B",
+          "text": "The routers are using different OSPF reference-bandwidth values.",
+          "correct": true,
+          "feedback": "Correct: Fortinet requires the same reference bandwidth on all routers in the OSPF domain."
+        },
+        {
+          "label": "C",
+          "text": "The DR election timer is shorter on the upstream switch.",
+          "correct": false,
+          "feedback": "Incorrect: DR election timers do not set the reference-bandwidth cost scale."
+        },
+        {
+          "label": "D",
+          "text": "IPv6 is enabled on one RVI and IPv4 is enabled on the other.",
+          "correct": false,
+          "feedback": "Incorrect: the feature supports reference bandwidth for both IPv4 and IPv6."
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "stem": "An interface bandwidth is greater than the configured OSPF reference bandwidth. How is the resulting cost treated?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It becomes zero so the highest-speed interface always wins.",
+          "correct": false,
+          "feedback": "Incorrect: OSPF cost is not reduced to zero by this calculation."
+        },
+        {
+          "label": "B",
+          "text": "It is copied from the neighbor's most recent LSA.",
+          "correct": false,
+          "feedback": "Incorrect: the local reference-bandwidth formula derives the interface cost."
+        },
+        {
+          "label": "C",
+          "text": "It is set to one when the reference-bandwidth ratio is below one.",
+          "correct": true,
+          "feedback": "Correct: the documented minimum cost is one when the ratio is below one."
+        },
+        {
+          "label": "D",
+          "text": "It is replaced with the interface's VLAN ID.",
+          "correct": false,
+          "feedback": "Incorrect: VLAN numbering is unrelated to OSPF cost calculation."
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "stem": "A multi-access Ethernet RVI has several OSPF routers and currently elects a DR. What should be checked before changing it to point-to-point?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Whether the FortiAnalyzer report dataset includes the RVI interface name.",
+          "correct": false,
+          "feedback": "Incorrect: report datasets do not determine OSPF network topology."
+        },
+        {
+          "label": "B",
+          "text": "Whether the FortiManager template has a per-port override marker.",
+          "correct": false,
+          "feedback": "Incorrect: template overrides are unrelated to OSPF adjacency semantics."
+        },
+        {
+          "label": "C",
+          "text": "Whether all routers have the same administrator password.",
+          "correct": false,
+          "feedback": "Incorrect: administrator credentials do not determine OSPF network type."
+        },
+        {
+          "label": "D",
+          "text": "Whether the segment truly has only two OSPF endpoints and matches point-to-point semantics.",
+          "correct": true,
+          "feedback": "Correct: suppressing DR election is safe only when the configured type reflects topology."
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP/Wireless",
+      "stem": "The FQDN address type is missing when an engineer edits an AP L3 Firewall Profile. What is the first documented prerequisite?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Enable Advanced Wireless Features under System Feature Visibility.",
+          "correct": true,
+          "feedback": "Correct: the Fortinet feature procedure requires this visibility option first."
+        },
+        {
+          "label": "B",
+          "text": "Enable FortiGate Central NAT before editing the AP profile.",
+          "correct": false,
+          "feedback": "Incorrect: central NAT is not the AP L3 ACL feature prerequisite."
+        },
+        {
+          "label": "C",
+          "text": "Move the SSID into bridge mode and disable the AP profile.",
+          "correct": false,
+          "feedback": "Incorrect: changing SSID mode does not expose the documented FQDN control."
+        },
+        {
+          "label": "D",
+          "text": "Install a separate FortiAnalyzer license for the wireless controller.",
+          "correct": false,
+          "feedback": "Incorrect: the FQDN ACL feature is not gated by FortiAnalyzer licensing."
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "stem": "A narrow allow rule for maps.google.com is shadowed by a broad *google.com block. What should the engineer review?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FortiGate's global DNS database before changing any AP policy.",
+          "correct": false,
+          "feedback": "Incorrect: the immediate policy issue is overlapping AP ACL match scope."
+        },
+        {
+          "label": "B",
+          "text": "The ordering of the specific FQDN rule and the wildcard rule.",
+          "correct": true,
+          "feedback": "Correct: the specific exception must be evaluated before the broader wildcard match."
+        },
+        {
+          "label": "C",
+          "text": "The FortiManager ADOM revision number for the wireless profile.",
+          "correct": false,
+          "feedback": "Incorrect: ADOM revision does not explain local AP ACL rule precedence."
+        },
+        {
+          "label": "D",
+          "text": "The DHCP lease timer for clients using the affected SSID.",
+          "correct": false,
+          "feedback": "Incorrect: DHCP timing does not determine which ACL rule matches first."
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "stem": "A wireless client uses IPv6, but the engineer only tested the IPv4 FQDN rule. What is missing?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "A RADIUS accounting record from the FortiAuthenticator.",
+          "correct": false,
+          "feedback": "Incorrect: accounting does not establish which address-family ACL matched."
+        },
+        {
+          "label": "B",
+          "text": "A FortiSwitch port override for the AP uplink.",
+          "correct": false,
+          "feedback": "Incorrect: a switch template override does not validate the AP IPv6 rule."
+        },
+        {
+          "label": "C",
+          "text": "A test of the IPv6 rule and the actual IPv6 destination path.",
+          "correct": true,
+          "feedback": "Correct: the feature supports IPv4 and IPv6 rules, so test the family in use."
+        },
+        {
+          "label": "D",
+          "text": "A FortiPAM secret approval record for the wireless administrator.",
+          "correct": false,
+          "feedback": "Incorrect: privileged access approvals are unrelated to wireless ACL evaluation."
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "stem": "A hostname's DNS answer changes, but the AP still appears to block the old destination. What is the safest next step?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Assume the ACL immediately refreshes and delete the matching rule.",
+          "correct": false,
+          "feedback": "Incorrect: the indexed feature description does not specify an immediate refresh timer."
+        },
+        {
+          "label": "B",
+          "text": "Disable every AP L3 Firewall Profile and rely only on upstream routing.",
+          "correct": false,
+          "feedback": "Incorrect: that removes the intended enforcement point without isolating the cause."
+        },
+        {
+          "label": "C",
+          "text": "Change the FortiGate address object to the new IP and ignore the AP profile.",
+          "correct": false,
+          "feedback": "Incorrect: changing a FortiGate object does not update the AP L3 ACL rule."
+        },
+        {
+          "label": "D",
+          "text": "Verify the AP profile, current name resolution and observed allow/block behavior after convergence.",
+          "correct": true,
+          "feedback": "Correct: validate the effective AP policy and DNS state without assuming a refresh interval."
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "stem": "A branch wants FortiNAC itself to process MAC authentication and 802.1X EAP rather than forward requests to an external server. Which mode fits?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Enable the built-in Local RADIUS authentication mode.",
+          "correct": true,
+          "feedback": "Correct: Local RADIUS can process MAC and EAP authentication within FortiNAC."
+        },
+        {
+          "label": "B",
+          "text": "Use only the external RADIUS proxy mode for every request.",
+          "correct": false,
+          "feedback": "Incorrect: proxy mode forwards authentication to another RADIUS server."
+        },
+        {
+          "label": "C",
+          "text": "Disable RADIUS and use DHCP fingerprinting as the authentication method.",
+          "correct": false,
+          "feedback": "Incorrect: DHCP fingerprinting is not a RADIUS authentication mode."
+        },
+        {
+          "label": "D",
+          "text": "Send all EAP requests to FortiAnalyzer before policy evaluation.",
+          "correct": false,
+          "feedback": "Incorrect: FortiAnalyzer is not the Local RADIUS authentication engine."
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "stem": "Local RADIUS returns Access-Accept, but the accounting server receives no session records. Which explanation is documented?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Local RADIUS automatically writes accounting to the FortiNAC event database only.",
+          "correct": false,
+          "feedback": "Incorrect: the guide states Local RADIUS does not provide accounting."
+        },
+        {
+          "label": "B",
+          "text": "Local RADIUS does not provide accounting; proxy accounting externally if required.",
+          "correct": true,
+          "feedback": "Correct: authentication and accounting are separate, and accounting can be proxied externally."
+        },
+        {
+          "label": "C",
+          "text": "The endpoint's EAP method is unsupported because Access-Accept was returned.",
+          "correct": false,
+          "feedback": "Incorrect: a successful Access-Accept does not explain the missing accounting path."
+        },
+        {
+          "label": "D",
+          "text": "FortiNAC must be converted to a RADIUS client before accounting can work.",
+          "correct": false,
+          "feedback": "Incorrect: the documented design can proxy accounting without changing the local authentication role."
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "stem": "Both Local RADIUS and Proxy RADIUS modes are enabled, and requests intermittently hit the wrong service. What configuration conflict should be checked?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The shared FortiGate software-switch interface name.",
+          "correct": false,
+          "feedback": "Incorrect: interface naming does not resolve FortiNAC RADIUS listener collisions."
+        },
+        {
+          "label": "B",
+          "text": "The LDAP group name returned by FortiAuthenticator.",
+          "correct": false,
+          "feedback": "Incorrect: group naming is unrelated to local/proxy listener port allocation."
+        },
+        {
+          "label": "C",
+          "text": "The authentication port numbers assigned to Local and Proxy RADIUS.",
+          "correct": true,
+          "feedback": "Correct: Fortinet warns that authentication ports must differ when both modes are configured."
+        },
+        {
+          "label": "D",
+          "text": "The FortiAnalyzer report hcache retention interval.",
+          "correct": false,
+          "feedback": "Incorrect: report caching does not affect RADIUS listener ports."
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "stem": "Which EAP method is explicitly listed as supported by the FortiNAC Local RADIUS server?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "EAP-FAST with PAC provisioning only.",
+          "correct": false,
+          "feedback": "Incorrect: EAP-FAST is not in the documented Local RADIUS method list."
+        },
+        {
+          "label": "B",
+          "text": "EAP-SIM with carrier-derived subscriber credentials.",
+          "correct": false,
+          "feedback": "Incorrect: EAP-SIM is not listed for the Local RADIUS feature."
+        },
+        {
+          "label": "C",
+          "text": "EAP-PWD with a password-authenticated key exchange.",
+          "correct": false,
+          "feedback": "Incorrect: EAP-PWD is not listed in the guide's supported set."
+        },
+        {
+          "label": "D",
+          "text": "PEAP with MSCHAPv2 inner authentication.",
+          "correct": true,
+          "feedback": "Correct: PEAP/MSCHAPv2 is one of the four documented methods."
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "stem": "A legacy deployment has a Manager plus separate Control and Application servers. Which migration guide should be selected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FortiNAC-OS migration guide for Manager environments with separate C+A servers.",
+          "correct": true,
+          "feedback": "Correct: the procedure must match both Manager management and separate C+A topology."
+        },
+        {
+          "label": "B",
+          "text": "The single-appliance CA migration guide because it has fewer cutover steps.",
+          "correct": false,
+          "feedback": "Incorrect: a single-appliance guide does not describe separate C+A roles."
+        },
+        {
+          "label": "C",
+          "text": "The FortiPAM cross-platform restore article because both products use appliance backups.",
+          "correct": false,
+          "feedback": "Incorrect: FortiPAM backup guidance is unrelated to FortiNAC migration topology."
+        },
+        {
+          "label": "D",
+          "text": "The N+1 failover guide even if no N+1 group is configured.",
+          "correct": false,
+          "feedback": "Incorrect: N+1 failover is not the same as a CentOS-to-NAC-OS migration."
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "stem": "The source FortiNAC uses subscription endpoint licenses. What should the migration plan assume?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Customer Service will always transfer every subscription entitlement to the new serial.",
+          "correct": false,
+          "feedback": "Incorrect: the guide distinguishes perpetual from subscription support types."
+        },
+        {
+          "label": "B",
+          "text": "A new endpoint license is required because subscription entitlements are not transferred.",
+          "correct": true,
+          "feedback": "Correct: subscription or combined entitlements require a new endpoint license."
+        },
+        {
+          "label": "C",
+          "text": "The configuration backup itself carries the entitlement to any new appliance.",
+          "correct": false,
+          "feedback": "Incorrect: a configuration file does not transfer the licensing contract."
+        },
+        {
+          "label": "D",
+          "text": "The target must retain the old serial number after the cutover.",
+          "correct": false,
+          "feedback": "Incorrect: the new appliance has its own serial and registration process."
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "stem": "The migration is complete and the new appliance has inherited the old IP addresses. When should a planned IP change occur?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Before collecting migration data so the new server starts on the final address.",
+          "correct": false,
+          "feedback": "Incorrect: the guide says IP changes should be made after migration completes."
+        },
+        {
+          "label": "B",
+          "text": "During the version check while the migration tool is running.",
+          "correct": false,
+          "feedback": "Incorrect: changing addressing during cutover risks breaking the migration transaction."
+        },
+        {
+          "label": "C",
+          "text": "After the migration is complete and the new appliance is operational.",
+          "correct": true,
+          "feedback": "Correct: Fortinet explicitly places any required IP change after migration."
+        },
+        {
+          "label": "D",
+          "text": "Only after deleting the old appliance from FortiNAC Manager.",
+          "correct": false,
+          "feedback": "Incorrect: the documented sequence does not require deleting the old appliance first."
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "stem": "After migration, SNMP traps are no longer received from a managed switch. What is the first FortiNAC-OS-specific check?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Increase the SNMP polling interval on every managed switch.",
+          "correct": false,
+          "feedback": "Incorrect: polling interval does not open the FortiNAC interface service."
+        },
+        {
+          "label": "B",
+          "text": "Restore the old CentOS firewall rules without reviewing the new OS.",
+          "correct": false,
+          "feedback": "Incorrect: the migration guide highlights FortiNAC-OS's restricted default port exposure."
+        },
+        {
+          "label": "C",
+          "text": "Disable the endpoint license check and reboot the CA server.",
+          "correct": false,
+          "feedback": "Incorrect: licensing is not the direct reason SNMP traffic is discarded."
+        },
+        {
+          "label": "D",
+          "text": "Verify SNMP is included in the appropriate interface allowaccess list.",
+          "correct": true,
+          "feedback": "Correct: FortiNAC-OS discards traffic for services not enabled on the interface."
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "stem": "A Windows account ends in $, but the administrator does not want to discard every such string blindly. What does FortiAuthenticator 6.6.7 do?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It performs an AD lookup to determine whether the account is a computer or a user.",
+          "correct": true,
+          "feedback": "Correct: the feature classifies the object through AD before excluding computer accounts."
+        },
+        {
+          "label": "B",
+          "text": "It drops every username containing a dollar sign without querying the directory.",
+          "correct": false,
+          "feedback": "Incorrect: the documented mechanism is an AD lookup, not suffix-only filtering."
+        },
+        {
+          "label": "C",
+          "text": "It converts the account into a local FortiAuthenticator user group.",
+          "correct": false,
+          "feedback": "Incorrect: the feature excludes computer accounts from FSSO rather than creating a group."
+        },
+        {
+          "label": "D",
+          "text": "It asks FortiGate to classify the account after the FSSO update.",
+          "correct": false,
+          "feedback": "Incorrect: classification occurs on FortiAuthenticator before FSSO propagation."
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "stem": "A computer account is still visible as an FSSO user after enabling the new option. Which check is most relevant?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FortiGate SD-WAN rule's preferred underlay bandwidth type.",
+          "correct": false,
+          "feedback": "Incorrect: SD-WAN steering is unrelated to FSSO account classification."
+        },
+        {
+          "label": "B",
+          "text": "Whether the active FSSO method has the option enabled and can query AD.",
+          "correct": true,
+          "feedback": "Correct: the filter depends on the active method and an AD object lookup."
+        },
+        {
+          "label": "C",
+          "text": "The FortiAnalyzer custom session label mode for administrator logins.",
+          "correct": false,
+          "feedback": "Incorrect: admin session labels do not change Windows account classification."
+        },
+        {
+          "label": "D",
+          "text": "The RADIUS accounting proxy's NAS-IP-Address rewrite rule.",
+          "correct": false,
+          "feedback": "Incorrect: RADIUS accounting transformation is unrelated to FSSO filtering."
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "stem": "A valid human account is not propagated after the computer-account filter is enabled. What is the best test?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Rename the user so the username no longer contains punctuation.",
+          "correct": false,
+          "feedback": "Incorrect: changing identity names is not a safe diagnostic for directory classification."
+        },
+        {
+          "label": "B",
+          "text": "Disable all FSSO methods and rebuild the FortiGate user database.",
+          "correct": false,
+          "feedback": "Incorrect: this destroys useful state and does not isolate the AD lookup."
+        },
+        {
+          "label": "C",
+          "text": "Compare a known user object and a known computer object through the same AD lookup path.",
+          "correct": true,
+          "feedback": "Correct: paired test objects show whether classification or the FSSO method is failing."
+        },
+        {
+          "label": "D",
+          "text": "Create a duplicate local user on FortiAuthenticator with the same username.",
+          "correct": false,
+          "feedback": "Incorrect: a local duplicate does not validate the AD object lookup."
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "stem": "A suffix-based filter is proposed as a substitute for the 6.6.7 feature. What is the key weakness?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It requires every workstation to use the same IP address.",
+          "correct": false,
+          "feedback": "Incorrect: IP addressing is not the key classification issue."
+        },
+        {
+          "label": "B",
+          "text": "It changes RADIUS accounting records but leaves FSSO unchanged.",
+          "correct": false,
+          "feedback": "Incorrect: the proposed filter is about FSSO identity handling."
+        },
+        {
+          "label": "C",
+          "text": "It forces computer accounts to authenticate using PEAP-MAB.",
+          "correct": false,
+          "feedback": "Incorrect: PEAP-MAB is not part of this feature's account classification."
+        },
+        {
+          "label": "D",
+          "text": "A string suffix cannot reliably distinguish a computer object from a user object.",
+          "correct": true,
+          "feedback": "Correct: FortiAuthenticator uses AD lookup because the suffix alone is insufficient."
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "stem": "A FortiPAM backup restores system settings and secrets, but old session videos and secret logs are missing. What is the expected explanation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "System Events, secret logs and videos are not included in the configuration backup file.",
+          "correct": true,
+          "feedback": "Correct: those records are separate from the configuration backup payload."
+        },
+        {
+          "label": "B",
+          "text": "The backup was encrypted with the wrong password so videos were skipped.",
+          "correct": false,
+          "feedback": "Incorrect: encryption protects the backup file; videos are not included in that file."
+        },
+        {
+          "label": "C",
+          "text": "FortiPAM only backs up video files when the appliance is in Stop mode.",
+          "correct": false,
+          "feedback": "Incorrect: remote video storage is separate and requires Rolling mode."
+        },
+        {
+          "label": "D",
+          "text": "The restore process automatically deletes all secret activity from FortiAnalyzer.",
+          "correct": false,
+          "feedback": "Incorrect: the backup content boundary does not imply deletion of external logs."
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "stem": "A restore is planned while private-data-encryption is enabled. What must be done before restoring the backup?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Disable all secret launchers and remove the FortiPAM license.",
+          "correct": false,
+          "feedback": "Incorrect: those actions do not supply the key needed to decrypt private data."
+        },
+        {
+          "label": "B",
+          "text": "Enable private-data-encryption with the same 32-hexadecimal key first.",
+          "correct": true,
+          "feedback": "Correct: the documented restore example requires the same key before restore."
+        },
+        {
+          "label": "C",
+          "text": "Export all session videos into the configuration backup file.",
+          "correct": false,
+          "feedback": "Incorrect: videos are not included in the configuration backup payload."
+        },
+        {
+          "label": "D",
+          "text": "Change every target password manually before uploading the backup.",
+          "correct": false,
+          "feedback": "Incorrect: credential rotation is not the encryption-key precondition."
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "stem": "A backup may contain a password that is no longer current because a password changer ran after the backup. What is Fortinet's recommended control?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Increase the SFTP server's file retention and restore the newest filename only.",
+          "correct": false,
+          "feedback": "Incorrect: retention does not prevent a concurrent password change during backup."
+        },
+        {
+          "label": "B",
+          "text": "Disable the password changer permanently across all secrets.",
+          "correct": false,
+          "feedback": "Incorrect: the guide recommends a controlled maintenance-mode backup, not permanent disablement."
+        },
+        {
+          "label": "C",
+          "text": "Enter maintenance mode so no password changer runs, then trigger the backup.",
+          "correct": true,
+          "feedback": "Correct: maintenance mode protects the backup from a concurrent password-rotation transaction."
+        },
+        {
+          "label": "D",
+          "text": "Export only the system event log and use it as the credential database.",
+          "correct": false,
+          "feedback": "Incorrect: event logs do not contain the current secret values."
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "stem": "A team assumes that restoring a FortiPAM configuration backup is an officially supported cross-platform migration. Which statement is safest?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Any FortiPAM backup can be restored to FortiSRA if the IP address is unchanged.",
+          "correct": false,
+          "feedback": "Incorrect: product type and platform compatibility are not interchangeable."
+        },
+        {
+          "label": "B",
+          "text": "FortiConverter automatically translates every FortiPAM platform identifier.",
+          "correct": false,
+          "feedback": "Incorrect: the recent Community article says FortiConverter does not support this migration."
+        },
+        {
+          "label": "C",
+          "text": "The configuration file includes all videos and audit logs needed for a full clone.",
+          "correct": false,
+          "feedback": "Incorrect: logs and videos are not contained in the configuration backup."
+        },
+        {
+          "label": "D",
+          "text": "Backup/restore is documented, but cross-platform migration is not an official supported procedure.",
+          "correct": true,
+          "feedback": "Correct: keep the recovery workflow distinct from the unsupported platform-migration scenario."
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "stem": "After a Windows Agent upgrade, raw events arrive as XML but custom fields disappear. What is the most likely parser-side cause?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "A custom parser still expects the previous flat attribute/value format.",
+          "correct": true,
+          "feedback": "Correct: the agent now sends native XML and custom parsers must be updated."
+        },
+        {
+          "label": "B",
+          "text": "The Windows agent is sending only UDP accounting packets to FortiNAC.",
+          "correct": false,
+          "feedback": "Incorrect: the described issue is a parser-schema mismatch, not RADIUS accounting."
+        },
+        {
+          "label": "C",
+          "text": "The FortiAnalyzer report hcache has expired before the Collector reads the event.",
+          "correct": false,
+          "feedback": "Incorrect: hcache is not the Windows event parser."
+        },
+        {
+          "label": "D",
+          "text": "The FortiGate software switch has assigned the endpoint to the wrong VLAN.",
+          "correct": false,
+          "feedback": "Incorrect: VLAN assignment does not explain missing XML-parsed fields."
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "stem": "A team plans to upgrade thousands of Windows Agents. What must happen before the rollout?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Delete all custom Windows parsers so the Collector accepts any event format.",
+          "correct": false,
+          "feedback": "Incorrect: deleting parsers removes required normalization and detection logic."
+        },
+        {
+          "label": "B",
+          "text": "Update and test custom parsers against native XML before upgrading agents.",
+          "correct": true,
+          "feedback": "Correct: Fortinet explicitly requires custom parsers to be upgraded before the agent change."
+        },
+        {
+          "label": "C",
+          "text": "Upgrade the Agents first, then compare a sample of raw messages afterward.",
+          "correct": false,
+          "feedback": "Incorrect: that sequence risks a large-scale parsing gap."
+        },
+        {
+          "label": "D",
+          "text": "Move all Windows Event Logs into FortiAnalyzer before upgrading the Collector.",
+          "correct": false,
+          "feedback": "Incorrect: this does not resolve the FortiSIEM parser schema transition."
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "stem": "A 7.1.x deployment has empty Message nodes and incomplete Windows Agent XML events. Which content update is called out by Fortinet?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Content Update 450, which changes FortiGate traffic-log field names.",
+          "correct": false,
+          "feedback": "Incorrect: that content update is not the documented Windows Agent parser fix."
+        },
+        {
+          "label": "B",
+          "text": "A FortiNAC endpoint fingerprint package for Windows devices.",
+          "correct": false,
+          "feedback": "Incorrect: endpoint profiling packages do not update FortiSIEM XML parsing."
+        },
+        {
+          "label": "C",
+          "text": "Content Update 606 for FortiSIEM 7.1.x.",
+          "correct": true,
+          "feedback": "Correct: Fortinet identifies Content Update 606 for the WinOSXmlParser improvement."
+        },
+        {
+          "label": "D",
+          "text": "A FortiManager ADOM metadata variable update to 32,768 characters.",
+          "correct": false,
+          "feedback": "Incorrect: FortiManager metadata variables are unrelated to Windows event parsing."
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "stem": "Why can endpoint CPU decrease while Collector CPU rises slightly after the native XML transfer change?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The Agent encrypts every Windows event twice before sending it.",
+          "correct": false,
+          "feedback": "Incorrect: the change is not described as duplicate encryption."
+        },
+        {
+          "label": "B",
+          "text": "The Collector stops receiving Forwarded Events and processes fewer records.",
+          "correct": false,
+          "feedback": "Incorrect: Forwarded Events are included in the native XML transfer."
+        },
+        {
+          "label": "C",
+          "text": "The Windows Agent compresses all event logs into a FortiGate VPN tunnel.",
+          "correct": false,
+          "feedback": "Incorrect: the documented change concerns where parsing occurs."
+        },
+        {
+          "label": "D",
+          "text": "Parsing moves from the Windows Agent to the Collector's WinOSXmlParser.",
+          "correct": true,
+          "feedback": "Correct: the work is shifted from endpoint parsing to Collector parsing."
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "stem": "A user exceeds a configured FortiSASE bandwidth limit. What is the documented enforcement behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Policing drops traffic that exceeds the configured bandwidth limit.",
+          "correct": true,
+          "feedback": "Correct: FortiSASE describes bandwidth control as policing, not queuing."
+        },
+        {
+          "label": "B",
+          "text": "The excess traffic is always buffered until the profile becomes available.",
+          "correct": false,
+          "feedback": "Incorrect: the feature description says excess traffic is dropped."
+        },
+        {
+          "label": "C",
+          "text": "The user's IPsec tunnel is automatically terminated after one over-limit packet.",
+          "correct": false,
+          "feedback": "Incorrect: policing does not imply tunnel teardown."
+        },
+        {
+          "label": "D",
+          "text": "The FortiGate WAN interface is rate-limited before traffic reaches the PoP.",
+          "correct": false,
+          "feedback": "Incorrect: FortiSASE applies the policy to matching IPsec agent-tunnel traffic."
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "stem": "A shared profile must limit traffic in the destination-to-source direction. Which policy option should be enabled?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Per-IP profile, because it only shapes the source-to-destination direction.",
+          "correct": false,
+          "feedback": "Incorrect: per-IP profiles apply in both directions."
+        },
+        {
+          "label": "B",
+          "text": "Reverse direction of shared profile, because shared profiles are directional.",
+          "correct": true,
+          "feedback": "Correct: the reverse-direction option applies the shared profile destination-to-source."
+        },
+        {
+          "label": "C",
+          "text": "Implicit Medium Control, because it reverses every policy automatically.",
+          "correct": false,
+          "feedback": "Incorrect: the implicit policy is predefined and does not reverse a chosen shared profile."
+        },
+        {
+          "label": "D",
+          "text": "Application Override, because it changes the traffic direction before policing.",
+          "correct": false,
+          "feedback": "Incorrect: application overrides are unrelated to bandwidth direction."
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "stem": "A broad bandwidth policy matches before a specific voice policy. Why might voice traffic receive the wrong profile?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Shared profiles are evaluated after every per-IP profile regardless of policy order.",
+          "correct": false,
+          "feedback": "Incorrect: the documented matching sequence is top-down."
+        },
+        {
+          "label": "B",
+          "text": "The IPsec tunnel ignores user and service matching when bandwidth is enabled.",
+          "correct": false,
+          "feedback": "Incorrect: user, service and other fields are policy match criteria."
+        },
+        {
+          "label": "C",
+          "text": "Bandwidth-control policies are matched top-down, so the broad rule may win first.",
+          "correct": true,
+          "feedback": "Correct: more granular rules should be placed above general policies."
+        },
+        {
+          "label": "D",
+          "text": "The FortiSASE PoP chooses the profile using the endpoint MAC address only.",
+          "correct": false,
+          "feedback": "Incorrect: the feature matches configured IP/header and upper-layer criteria."
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "stem": "A bandwidth policy matches an application name, but traffic never hits the expected rule. What prerequisite should be checked?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "A FortiAnalyzer custom session label for the user's browser login.",
+          "correct": false,
+          "feedback": "Incorrect: administrator session labels do not classify application traffic."
+        },
+        {
+          "label": "B",
+          "text": "A FortiSwitch OSPF network type for the user's access VLAN.",
+          "correct": false,
+          "feedback": "Incorrect: OSPF network type does not identify application traffic."
+        },
+        {
+          "label": "C",
+          "text": "A FortiNAC local RADIUS accounting proxy for the endpoint.",
+          "correct": false,
+          "feedback": "Incorrect: RADIUS accounting is not the application-control prerequisite."
+        },
+        {
+          "label": "D",
+          "text": "An Application Control profile in a policy that identifies the selected application.",
+          "correct": true,
+          "feedback": "Correct: the guide requires Application Control for application-based bandwidth matching."
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "stem": "Four IPsec overlays share two physical WAN ports. The design must compare physical circuit capacity, not each tunnel independently. Which setting applies?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Set bandwidth-type underlay on the load-balance service.",
+          "correct": true,
+          "feedback": "Correct: underlay mode evaluates the shared physical WAN capacity."
+        },
+        {
+          "label": "B",
+          "text": "Keep bandwidth-type overlay so every tunnel is measured independently.",
+          "correct": false,
+          "feedback": "Incorrect: overlay is the default and measures individual overlay availability."
+        },
+        {
+          "label": "C",
+          "text": "Disable load-balance and create one static route per spoke.",
+          "correct": false,
+          "feedback": "Incorrect: the feature is designed for load-balance services."
+        },
+        {
+          "label": "D",
+          "text": "Set every member to round-robin and ignore bandwidth estimates.",
+          "correct": false,
+          "feedback": "Incorrect: round-robin does not select by shared underlay availability."
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "stem": "An application is sensitive to both incoming and outgoing capacity. Which hash mode considers both directions?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "inbandwidth, because it selects the member with the best outgoing capacity.",
+          "correct": false,
+          "feedback": "Incorrect: inbandwidth considers incoming available bandwidth."
+        },
+        {
+          "label": "B",
+          "text": "bibandwidth, because it considers incoming and outgoing available bandwidth.",
+          "correct": true,
+          "feedback": "Correct: bidirectional bandwidth mode evaluates both directions."
+        },
+        {
+          "label": "C",
+          "text": "outbandwidth, because it uses the sum of both directional values.",
+          "correct": false,
+          "feedback": "Incorrect: outbandwidth considers outgoing capacity only."
+        },
+        {
+          "label": "D",
+          "text": "round-robin, because it uses the current utilization of both directions.",
+          "correct": false,
+          "feedback": "Incorrect: round-robin does not use the documented bandwidth hash selection."
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "stem": "The service output lists members as alive and shows different bibandwidth values. What does that output establish?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The application has achieved the expected end-to-end throughput.",
+          "correct": false,
+          "feedback": "Incorrect: member selection evidence does not measure application throughput."
+        },
+        {
+          "label": "B",
+          "text": "The ISP has committed to the displayed bandwidth for the next hour.",
+          "correct": false,
+          "feedback": "Incorrect: the diagnostic output is a current selection snapshot, not an ISP guarantee."
+        },
+        {
+          "label": "C",
+          "text": "Which eligible members and bandwidth values the service used for selection.",
+          "correct": true,
+          "feedback": "Correct: the output exposes service mode, member health and calculated bandwidth values."
+        },
+        {
+          "label": "D",
+          "text": "That every overlay has an independent physical WAN circuit.",
+          "correct": false,
+          "feedback": "Incorrect: several overlays can share one underlay circuit."
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "stem": "A bandwidth estimate is high, but traffic still avoids the overlay. Which pair of conditions should be checked together?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "FortiAnalyzer report caching and FortiManager administrator session labels.",
+          "correct": false,
+          "feedback": "Incorrect: neither affects SD-WAN member eligibility or bandwidth selection."
+        },
+        {
+          "label": "B",
+          "text": "FortiNAC registration status and FortiAuthenticator computer-account filtering.",
+          "correct": false,
+          "feedback": "Incorrect: endpoint identity feeds do not determine the SD-WAN service member."
+        },
+        {
+          "label": "C",
+          "text": "FortiAP FQDN ACL order and FortiSwitch private VLAN membership.",
+          "correct": false,
+          "feedback": "Incorrect: wireless ACL and Layer-2 isolation do not establish SD-WAN selection."
+        },
+        {
+          "label": "D",
+          "text": "The member's SLA eligibility and the service's load-balance/hash/bandwidth-type settings.",
+          "correct": true,
+          "feedback": "Correct: a high bandwidth value cannot make a failed or ineligible member usable."
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Cross-product operations",
+      "stem": "A feature test succeeds in a control-plane table, but the application still fails. Which troubleshooting discipline is most reliable?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Treat each evidence surface as proof of only its own transaction stage, then verify the next stage.",
+          "correct": true,
+          "feedback": "Correct: authentication, object binding, route selection and application sessions are separate proofs."
+        },
+        {
+          "label": "B",
+          "text": "Assume the first successful control-plane status proves the full data path.",
+          "correct": false,
+          "feedback": "Incorrect: one stage's success does not prove downstream policy or forwarding."
+        },
+        {
+          "label": "C",
+          "text": "Change every related product configuration at once to remove uncertainty.",
+          "correct": false,
+          "feedback": "Incorrect: simultaneous changes destroy fault isolation and causal evidence."
+        },
+        {
+          "label": "D",
+          "text": "Use a dashboard screenshot as the sole acceptance test for the feature.",
+          "correct": false,
+          "feedback": "Incorrect: a dashboard view rarely proves the complete packet or identity transaction."
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Cross-product operations",
+      "stem": "A candidate topic has a new article URL but its mechanism matches a lesson from last week. What should happen before generation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Accept it because the URL and publication date are different.",
+          "correct": false,
+          "feedback": "Incorrect: URL novelty does not establish semantic novelty."
+        },
+        {
+          "label": "B",
+          "text": "Reject it if the feature/workflow/evidence/remediation fingerprint is substantially equivalent.",
+          "correct": true,
+          "feedback": "Correct: the rolling exclusion is semantic, not a title or URL comparison."
+        },
+        {
+          "label": "C",
+          "text": "Rename the lesson and keep the same packet or identity mechanism.",
+          "correct": false,
+          "feedback": "Incorrect: renaming does not change the underlying lesson mechanism."
+        },
+        {
+          "label": "D",
+          "text": "Publish it as a scenario even when the article is the only primary source.",
+          "correct": false,
+          "feedback": "Incorrect: Community troubleshooting material is scenario evidence, not a substitute for an authoritative primary lesson."
+        }
+      ]
+    }
+  ]
+}
