@@ -1,0 +1,1664 @@
+{
+  "schema_version": "2.0",
+  "run_date": "2026-11-13",
+  "question_count": 50,
+  "choice_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "number": 1,
+      "product": "FortiGate",
+      "stem": "A branch policy permits traffic and has policy NAT enabled, but the design requires central SNAT. Which change establishes the intended translation authority?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "fingerprint": "FortiGate|a branch policy permits traffic and has policy nat enabled, but the desi",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable central NAT and add an ordered central-SNAT map",
+          "correct": true,
+          "feedback": "Central NAT moves SNAT selection into the ordered map table; policy NAT is skipped."
+        },
+        {
+          "letter": "B",
+          "text": "Keep policy NAT enabled and add another IP pool",
+          "correct": false,
+          "feedback": "A pool alone does not make a policy NAT rule use central mapping."
+        },
+        {
+          "letter": "C",
+          "text": "Create a VIP for the outbound source address",
+          "correct": false,
+          "feedback": "A VIP is destination translation, not outbound source translation."
+        },
+        {
+          "letter": "D",
+          "text": "Add a static route for the external feed subnet",
+          "correct": false,
+          "feedback": "A route controls next-hop selection, not source-address translation."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "product": "FortiGate",
+      "stem": "The feed object refreshes successfully, but traffic from one listed host uses a broader SNAT pool. What is the first precise check?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "fingerprint": "FortiGate|the feed object refreshes successfully, but traffic from one listed host",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Increase the firewall policy session TTL",
+          "correct": false,
+          "feedback": "Session TTL does not alter first-match SNAT map selection."
+        },
+        {
+          "letter": "B",
+          "text": "Inspect central-SNAT map order and match constraints",
+          "correct": true,
+          "feedback": "A broader earlier row can shadow the feed-backed map despite a healthy feed."
+        },
+        {
+          "letter": "C",
+          "text": "Disable all IPv6 firewall policies temporarily",
+          "correct": false,
+          "feedback": "IPv6 policies do not explain an IPv4 row-order mismatch."
+        },
+        {
+          "letter": "D",
+          "text": "Replace the external feed with a static VIP",
+          "correct": false,
+          "feedback": "A VIP changes destination translation and does not repair source-map precedence."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "product": "FortiGate",
+      "stem": "IPv4 sessions match a feed-backed SNAT row, but equivalent IPv6 sessions do not. Which mismatch is most likely?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "fingerprint": "FortiGate|ipv4 sessions match a feed-backed snat row, but equivalent ipv6 sessions",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The feed uses HTTPS rather than HTTP",
+          "correct": false,
+          "feedback": "Transport encryption does not determine which address-family field the map uses."
+        },
+        {
+          "letter": "B",
+          "text": "The firewall policy has a logging profile",
+          "correct": false,
+          "feedback": "Logging profiles do not select the central SNAT source object."
+        },
+        {
+          "letter": "C",
+          "text": "The map references orig-addr instead of orig-addr6",
+          "correct": true,
+          "feedback": "The IPv6 map must reference the IPv6 original-address field and matching feed family."
+        },
+        {
+          "letter": "D",
+          "text": "The WAN interface has a higher MTU",
+          "correct": false,
+          "feedback": "MTU affects packet sizing, not address-family matching in the SNAT table."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "product": "FortiGate",
+      "stem": "A compiled central-SNAT entry appears in iprope output, but a new session retains its original source. What evidence is still required?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "fingerprint": "FortiGate|a compiled central-snat entry appears in iprope output, but a new sessio",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A successful DNS lookup for the feed URL",
+          "correct": false,
+          "feedback": "DNS reachability does not prove the session matched the feed object."
+        },
+        {
+          "letter": "B",
+          "text": "A route-table entry for the translated public IP",
+          "correct": false,
+          "feedback": "A route to the pool address does not prove translation was selected."
+        },
+        {
+          "letter": "C",
+          "text": "A policy hit counter increment only",
+          "correct": false,
+          "feedback": "A policy hit proves authorization, not central-SNAT map selection."
+        },
+        {
+          "letter": "D",
+          "text": "The live session's NAT fields and the first matching map",
+          "correct": true,
+          "feedback": "The session shows actual translation; map order explains why that row won."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "product": "FortiManager",
+      "stem": "An engineer creates a Jinja script but the target selector only offers ADOM Database. What should the engineer do?",
+      "source_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "fingerprint": "FortiManager|an engineer creates a jinja script but the target selector only offers a",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Keep the Jinja script on ADOM Database or redesign it as a supported CLI target",
+          "correct": true,
+          "feedback": "Jinja is restricted to ADOM Database; target choice must match the interpreter."
+        },
+        {
+          "letter": "B",
+          "text": "Force the Jinja script to run directly on the FortiGate",
+          "correct": false,
+          "feedback": "Jinja cannot be forced into the direct FortiGate execution path."
+        },
+        {
+          "letter": "C",
+          "text": "Move the script to Global Database and select remote execution",
+          "correct": false,
+          "feedback": "Global Database supports CLI scripts only and not direct remote execution."
+        },
+        {
+          "letter": "D",
+          "text": "Convert the Jinja body to Tcl without changing its target",
+          "correct": false,
+          "feedback": "Tcl is remote-device-only, so it also cannot target the ADOM database."
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "product": "FortiManager",
+      "stem": "A CLI script reports success in FortiManager, but the live FortiGate configuration is unchanged. Which explanation best fits?",
+      "source_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "fingerprint": "FortiManager|a cli script reports success in fortimanager, but the live fortigate con",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The script was validated against the wrong syntax version",
+          "correct": false,
+          "feedback": "A platform mismatch can cause failure, but the target context explains no live change."
+        },
+        {
+          "letter": "B",
+          "text": "The script ran against Device Database or ADOM Database rather than the live device",
+          "correct": true,
+          "feedback": "Database execution changes FortiManager's model; it is not direct device execution."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiGate rejected every CLI command because logging was disabled",
+          "correct": false,
+          "feedback": "Logging configuration does not prevent CLI commands from changing device state."
+        },
+        {
+          "letter": "D",
+          "text": "The script was automatically converted into a Jinja template",
+          "correct": false,
+          "feedback": "FortiManager does not silently convert CLI scripts into Jinja scripts."
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "product": "FortiManager",
+      "stem": "A Tcl script is needed for a remote FortiGate operation, but an administrator wants to execute it against the ADOM database. What is the correct response?",
+      "source_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "fingerprint": "FortiManager|a tcl script is needed for a remote fortigate operation, but an administ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable Validate on Change for the Tcl script",
+          "correct": false,
+          "feedback": "Validate on Change is a CLI-script validation feature, not a target override."
+        },
+        {
+          "letter": "B",
+          "text": "Move the script into the Global Database ADOM",
+          "correct": false,
+          "feedback": "Global Database is restricted to CLI scripts and database/package targets."
+        },
+        {
+          "letter": "C",
+          "text": "Use a CLI or Jinja workflow designed for the ADOM database",
+          "correct": true,
+          "feedback": "Tcl is direct-remote-only; choose a supported language for database execution."
+        },
+        {
+          "letter": "D",
+          "text": "Select a different FortiGate platform in validation",
+          "correct": false,
+          "feedback": "Platform selection does not change Tcl's permitted execution target."
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "product": "FortiManager",
+      "stem": "A script passes CLI syntax validation on one platform, then fails on an older device build. What did validation not prove?",
+      "source_url": "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/219334/add-a-script",
+      "fingerprint": "FortiManager|a script passes cli syntax validation on one platform, then fails on an ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "That the ADOM contains the expected policy package",
+          "correct": false,
+          "feedback": "The package context is unrelated to a platform-specific command failure."
+        },
+        {
+          "letter": "B",
+          "text": "That the device is reachable by ICMP",
+          "correct": false,
+          "feedback": "ICMP reachability is a separate network prerequisite, not syntax compatibility."
+        },
+        {
+          "letter": "C",
+          "text": "That the script is stored in the Global Database",
+          "correct": false,
+          "feedback": "Global Database placement does not establish runtime command support."
+        },
+        {
+          "letter": "D",
+          "text": "That every target build supports the command and runtime state",
+          "correct": true,
+          "feedback": "Syntax validation cannot guarantee command availability or runtime success on every build."
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "product": "FortiAnalyzer",
+      "stem": "A remote syslog receiver is offline for several hours. Which forwarding behavior preserves logs until connectivity returns, within the documented limit?",
+      "source_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "fingerprint": "FortiAnalyzer|a remote syslog receiver is offline for several hours. which forwarding ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable Reliable Connection so TCP buffering can resume forwarding",
+          "correct": true,
+          "feedback": "Reliable Connection uses TCP and buffers logs up to the documented 12 GB limit."
+        },
+        {
+          "letter": "B",
+          "text": "Switch to UDP because it queues every unsent message",
+          "correct": false,
+          "feedback": "UDP does not provide the same retransmission and backlog behavior."
+        },
+        {
+          "letter": "C",
+          "text": "Convert the entry to scheduled aggregation",
+          "correct": false,
+          "feedback": "Aggregation is a scheduled FAZ-to-FAZ transfer, not syslog forwarding."
+        },
+        {
+          "letter": "D",
+          "text": "Create an output plugin for the same syslog server",
+          "correct": false,
+          "feedback": "A plugin is not required for ordinary syslog forwarding."
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "product": "FortiAnalyzer",
+      "stem": "A filter must exclude 172.10.0.0/16, but Equal to does not accept the subnet. What is the appropriate adjustment?",
+      "source_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "fingerprint": "FortiAnalyzer|a filter must exclude 172.10.0.0/16, but equal to does not accept the su",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Change the destination to CEF",
+          "correct": false,
+          "feedback": "CEF changes output format, not filter operator semantics."
+        },
+        {
+          "letter": "B",
+          "text": "Use regex with Contain or Not contain semantics",
+          "correct": true,
+          "feedback": "Subnet/wildcard values are not supported with Equal/Not equal; regex containment is the documented alternative."
+        },
+        {
+          "letter": "C",
+          "text": "Enable masking on the source field",
+          "correct": false,
+          "feedback": "Masking changes field values, not record selection."
+        },
+        {
+          "letter": "D",
+          "text": "Increase the TCP forwarding buffer",
+          "correct": false,
+          "feedback": "Buffer size does not change which records match the filter."
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "product": "FortiAnalyzer",
+      "stem": "A FortiAnalyzer pair should exchange only records not already stored on the receiver at a scheduled interval. Which mode matches that transaction?",
+      "source_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "fingerprint": "FortiAnalyzer|a fortianalyzer pair should exchange only records not already stored on ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Real-time forwarding to syslog",
+          "correct": false,
+          "feedback": "Real-time syslog forwarding exports incoming logs as they arrive."
+        },
+        {
+          "letter": "B",
+          "text": "Output-plugin forwarding with TCP",
+          "correct": false,
+          "feedback": "A plugin does not implement FAZ-to-FAZ deduplicated scheduled aggregation."
+        },
+        {
+          "letter": "C",
+          "text": "Scheduled log aggregation between FortiAnalyzer units",
+          "correct": true,
+          "feedback": "Aggregation transfers records not already present on the server on a schedule."
+        },
+        {
+          "letter": "D",
+          "text": "CEF export to an external collector",
+          "correct": false,
+          "feedback": "CEF is an external event format, not the FAZ aggregation workflow."
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "product": "FortiAnalyzer",
+      "stem": "The sender connects to a remote FortiAnalyzer, but forwarded devices appear as unauthorized there. What action completes receiver-side trust?",
+      "source_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/19991/configuring-log-forwarding",
+      "fingerprint": "FortiAnalyzer|the sender connects to a remote fortianalyzer, but forwarded devices app",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Disable log filtering on the sender",
+          "correct": false,
+          "feedback": "Filtering does not authorize devices on the receiver."
+        },
+        {
+          "letter": "B",
+          "text": "Change the source device serial number",
+          "correct": false,
+          "feedback": "Changing a serial number would create identity mismatch, not trust."
+        },
+        {
+          "letter": "C",
+          "text": "Switch the destination to UDP",
+          "correct": false,
+          "feedback": "UDP does not affect the receiver's device authorization state."
+        },
+        {
+          "letter": "D",
+          "text": "Authorize the forwarded devices on the receiving FortiAnalyzer",
+          "correct": true,
+          "feedback": "Forwarded devices are added as unauthorized and must be authorized on the receiver."
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "product": "FortiSwitch",
+      "stem": "Two switches are configured LACP passive and neither sends PDUs. The trunk never forms. Which correction is appropriate?",
+      "source_url": "https://docs.fortinet.com/document/fortiswitch/7.6.3/fortiswitchos-administration-guide/352388/link-aggregation-groups",
+      "fingerprint": "FortiSwitch|two switches are configured lacp passive and neither sends pdus. the tru",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Make at least one side LACP active",
+          "correct": true,
+          "feedback": "At least one peer must initiate LACP negotiation; passive/passive can remain silent."
+        },
+        {
+          "letter": "B",
+          "text": "Change the member hash to destination MAC",
+          "correct": false,
+          "feedback": "Hash selection occurs after a bundle is formed."
+        },
+        {
+          "letter": "C",
+          "text": "Enable fallback on both MCLAG peers",
+          "correct": false,
+          "feedback": "Fallback on both MCLAG peers is explicitly discouraged and can cause mismatch."
+        },
+        {
+          "letter": "D",
+          "text": "Set aggregator-mode to count",
+          "correct": false,
+          "feedback": "Aggregator selection does not initiate LACP control exchange."
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "product": "FortiSwitch",
+      "stem": "A trunk has four 1-Gbps ports and two 10-Gbps ports. Which setting chooses the speed-group aggregator with greatest total bandwidth?",
+      "source_url": "https://docs.fortinet.com/document/fortiswitch/7.6.3/fortiswitchos-administration-guide/352388/link-aggregation-groups",
+      "fingerprint": "FortiSwitch|a trunk has four 1-gbps ports and two 10-gbps ports. which setting choos",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "port-selection-criteria src-dst-ip",
+          "correct": false,
+          "feedback": "The port hash selects members within the chosen aggregator, not the aggregator itself."
+        },
+        {
+          "letter": "B",
+          "text": "aggregator-mode bandwidth",
+          "correct": true,
+          "feedback": "Bandwidth selects the aggregator with the greatest total bandwidth."
+        },
+        {
+          "letter": "C",
+          "text": "member-withdrawal-behavior forward",
+          "correct": false,
+          "feedback": "Withdrawal behavior controls a member after loss of control packets."
+        },
+        {
+          "letter": "D",
+          "text": "lacp-speed fast",
+          "correct": false,
+          "feedback": "LACP speed controls PDU interval, not speed-group preference."
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "product": "FortiSwitch",
+      "stem": "One long TCP transfer uses only one member of a healthy four-link bundle. What should the engineer explain first?",
+      "source_url": "https://docs.fortinet.com/document/fortiswitch/7.6.3/fortiswitchos-administration-guide/352388/link-aggregation-groups",
+      "fingerprint": "FortiSwitch|one long tcp transfer uses only one member of a healthy four-link bundle",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "LACP active mode is limited to one member",
+          "correct": false,
+          "feedback": "Active LACP can form multi-member bundles; it is not a single-member mode."
+        },
+        {
+          "letter": "B",
+          "text": "The aggregator-mode count setting is wrong",
+          "correct": false,
+          "feedback": "Aggregator mode selects a speed group, not per-flow striping."
+        },
+        {
+          "letter": "C",
+          "text": "A flow hash normally keeps one flow on one member",
+          "correct": true,
+          "feedback": "Per-flow hashing preserves packet order, so one flow is not spread packet by packet."
+        },
+        {
+          "letter": "D",
+          "text": "The switch has entered fallback mode",
+          "correct": false,
+          "feedback": "Fallback uses one selected port only when LACP PDUs are absent."
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "product": "FortiSwitch",
+      "stem": "A two-switch MCLAG pair is configured with LACP fallback on both peers. Which change avoids the documented consistency problem?",
+      "source_url": "https://docs.fortinet.com/document/fortiswitch/7.6.3/fortiswitchos-administration-guide/352388/link-aggregation-groups",
+      "fingerprint": "FortiSwitch|a two-switch mclag pair is configured with lacp fallback on both peers. ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Set both peers to static mode without reviewing the far end",
+          "correct": false,
+          "feedback": "Static mode changes the control protocol and may create a separate mismatch."
+        },
+        {
+          "letter": "B",
+          "text": "Increase the fallback timer to 180 seconds",
+          "correct": false,
+          "feedback": "Increasing the timer does not remove the MCLAG fallback restriction."
+        },
+        {
+          "letter": "C",
+          "text": "Use max_bundle on both peers with fallback retained",
+          "correct": false,
+          "feedback": "Fallback cannot be combined with min_bundle or max_bundle."
+        },
+        {
+          "letter": "D",
+          "text": "Configure fallback on only one MCLAG switch or remove it",
+          "correct": true,
+          "feedback": "Fortinet warns against fallback on both MCLAG peers; the consistency check flags it."
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "product": "FortiAP/Wireless",
+      "stem": "A VLAN-pooling SSID is configured in local-bridge mode, but client load balancing is unavailable. Which design change fits the feature?",
+      "source_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "fingerprint": "FortiAP/Wireless|a vlan-pooling ssid is configured in local-bridge mode, but client load ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Use tunnel-mode SSID for VLAN-pool load balancing",
+          "correct": true,
+          "feedback": "The documented VLAN-pool load-balancing method requires tunnel mode."
+        },
+        {
+          "letter": "B",
+          "text": "Add more SSIDs with identical security settings",
+          "correct": false,
+          "feedback": "More SSIDs avoid the pool rather than enabling its selection behavior."
+        },
+        {
+          "letter": "C",
+          "text": "Enable RADIUS VLAN assignment and VLAN pooling together",
+          "correct": false,
+          "feedback": "RADIUS VLAN assignment and VLAN pooling cannot be used together for one SSID."
+        },
+        {
+          "letter": "D",
+          "text": "Change the AP's country code",
+          "correct": false,
+          "feedback": "Country code controls radio regulatory behavior, not VLAN pool mode."
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "product": "FortiAP/Wireless",
+      "stem": "The same SSID should use one subnet per building, regardless of how many clients associate. Which pool method is appropriate?",
+      "source_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "fingerprint": "FortiAP/Wireless|the same ssid should use one subnet per building, regardless of how many",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Round-robin client-count balancing",
+          "correct": false,
+          "feedback": "Round-robin chooses the least-populated VLAN, not a building-specific VLAN."
+        },
+        {
+          "letter": "B",
+          "text": "FortiAP group-to-VLAN mapping",
+          "correct": true,
+          "feedback": "AP-group mapping associates a FortiAP group with a selected VLAN."
+        },
+        {
+          "letter": "C",
+          "text": "Hash distribution across all clients",
+          "correct": false,
+          "feedback": "Hash is a client distribution method, not a location-based AP mapping."
+        },
+        {
+          "letter": "D",
+          "text": "RADIUS user-group assignment",
+          "correct": false,
+          "feedback": "RADIUS user groups are a separate dynamic user-VLAN mechanism."
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "product": "FortiAP/Wireless",
+      "stem": "After a pool change, all clients still obtain addresses from the SSID's static VLAN. What should be inspected?",
+      "source_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "fingerprint": "FortiAP/Wireless|after a pool change, all clients still obtain addresses from the ssid's ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The wireless radio's transmit power",
+          "correct": false,
+          "feedback": "Transmit power affects RF coverage, not VLAN selection fallback."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiAP's LLDP neighbor table",
+          "correct": false,
+          "feedback": "LLDP is not the VLAN-pool selector."
+        },
+        {
+          "letter": "C",
+          "text": "Whether pool entries contain valid VLAN IDs and group references",
+          "correct": true,
+          "feedback": "Invalid pool entries can cause fallback to the SSID static VLAN setting."
+        },
+        {
+          "letter": "D",
+          "text": "The WAN interface's SD-WAN health check",
+          "correct": false,
+          "feedback": "SD-WAN health checks do not influence wireless VLAN assignment."
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "product": "FortiAP/Wireless",
+      "stem": "A design requires RADIUS Tunnel-Private-Group-Id to select each user's VLAN while also enabling VLAN pooling. What is the supported approach?",
+      "source_url": "https://docs.fortinet.com/document/fortiap/7.6.1/fortiwifi-and-fortiap-configuration-guide/84238/vlan-assignment-by-vlan-pool",
+      "fingerprint": "FortiAP/Wireless|a design requires radius tunnel-private-group-id to select each user's v",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable both and rely on RADIUS precedence",
+          "correct": false,
+          "feedback": "The guide does not define a combined precedence model for both mechanisms."
+        },
+        {
+          "letter": "B",
+          "text": "Use round-robin only for users with no group",
+          "correct": false,
+          "feedback": "Round-robin does not resolve the documented mutual-exclusion constraint."
+        },
+        {
+          "letter": "C",
+          "text": "Create a separate SSID per user",
+          "correct": false,
+          "feedback": "Per-user SSIDs are not required to satisfy the feature constraint."
+        },
+        {
+          "letter": "D",
+          "text": "Choose either RADIUS VLAN assignment or VLAN pooling for that SSID",
+          "correct": true,
+          "feedback": "The two methods cannot be used simultaneously on the same SSID."
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "product": "FortiNAC",
+      "stem": "Two users share an AD group but reside in different OUs. FortiGate should distinguish them using FortiNAC 9.4. What feature supplies that context?",
+      "source_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "fingerprint": "FortiNAC|two users share an ad group but reside in different ous. fortigate shoul",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "User Organizational Unit LDAP mapping in the User/Host Profile and FSSO",
+          "correct": true,
+          "feedback": "FortiNAC 9.4 adds OU mapping and sends it with FSSO user/group and device-tag context."
+        },
+        {
+          "letter": "B",
+          "text": "RADIUS Tunnel-Private-Group-Id returned by Local RADIUS",
+          "correct": false,
+          "feedback": "Tunnel attributes select VLANs, not directory OU identity context."
+        },
+        {
+          "letter": "C",
+          "text": "A switch-port MAC notification trap",
+          "correct": false,
+          "feedback": "MAC traps report connectivity changes, not LDAP organization placement."
+        },
+        {
+          "letter": "D",
+          "text": "A FortiNAC guest sponsor approval rule",
+          "correct": false,
+          "feedback": "Sponsor approval is a guest workflow unrelated to OU propagation."
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "product": "FortiNAC",
+      "stem": "The LDAP bind succeeds and the user is visible, but FortiGate never receives the OU context. Which boundary should be checked next?",
+      "source_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "fingerprint": "FortiNAC|the ldap bind succeeds and the user is visible, but fortigate never rece",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "FortiGate SD-WAN route selection",
+          "correct": false,
+          "feedback": "SD-WAN routing does not publish directory identity attributes."
+        },
+        {
+          "letter": "B",
+          "text": "FortiNAC User/Host Profile OU mapping and FSSO publication",
+          "correct": true,
+          "feedback": "LDAP visibility alone does not prove the profile mapped OU or FSSO sent it."
+        },
+        {
+          "letter": "C",
+          "text": "The switch's voice VLAN attribute group",
+          "correct": false,
+          "feedback": "Voice VLAN attributes are unrelated to FSSO identity publication."
+        },
+        {
+          "letter": "D",
+          "text": "FortiAuthenticator SMS recovery enrollment",
+          "correct": false,
+          "feedback": "SMS recovery is a password-reset feature, not an FSSO path."
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "product": "FortiNAC",
+      "stem": "FortiNAC shows the correct OU in the user profile, but FortiGate still applies a broad identity policy. What evidence separates propagation from policy matching?",
+      "source_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "fingerprint": "FortiNAC|fortinac shows the correct ou in the user profile, but fortigate still a",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A successful DNS SRV lookup only",
+          "correct": false,
+          "feedback": "DNS lookup is only a prerequisite and does not show the received identity."
+        },
+        {
+          "letter": "B",
+          "text": "A FortiNAC host count dashboard",
+          "correct": false,
+          "feedback": "A host count does not expose FSSO user attributes or policy selection."
+        },
+        {
+          "letter": "C",
+          "text": "FortiGate FSSO identity view and matching policy logs",
+          "correct": true,
+          "feedback": "FortiGate's received FSSO context and policy logs show both stages."
+        },
+        {
+          "letter": "D",
+          "text": "A RADIUS Access-Accept for the workstation",
+          "correct": false,
+          "feedback": "A workstation RADIUS response is a separate access-authentication path."
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "product": "FortiNAC",
+      "stem": "An engineer expects the OU mapping to change a switch port's VLAN automatically. What correction is technically accurate?",
+      "source_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "fingerprint": "FortiNAC|an engineer expects the ou mapping to change a switch port's vlan automa",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "OU mapping always replaces the logical network",
+          "correct": false,
+          "feedback": "The release note does not define OU mapping as a VLAN override."
+        },
+        {
+          "letter": "B",
+          "text": "OU is translated into Tunnel-Type VLAN by default",
+          "correct": false,
+          "feedback": "No automatic Tunnel-Type VLAN translation is documented for OU mapping."
+        },
+        {
+          "letter": "C",
+          "text": "FSSO updates directly reconfigure switch port state",
+          "correct": false,
+          "feedback": "FSSO identity updates are not switch configuration commands."
+        },
+        {
+          "letter": "D",
+          "text": "OU is identity metadata for FSSO and firewall policy, not a RADIUS VLAN command",
+          "correct": true,
+          "feedback": "OU is sent as identity context; network access VLAN enforcement is a separate path."
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "product": "FortiNAC-F",
+      "stem": "A profiled IP phone matches its policy, but the RADIUS Access-Accept contains no voice VLAN attributes. Which configuration is the first prerequisite to verify?",
+      "source_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "fingerprint": "FortiNAC-F|a profiled ip phone matches its policy, but the radius access-accept con",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The switch model uses Local RADIUS and the logical network has its attribute group",
+          "correct": true,
+          "feedback": "The documented IP-phone provisioning workflow uses Local RADIUS and a mapped RADIUS attribute group."
+        },
+        {
+          "letter": "B",
+          "text": "The switch has a larger DHCP scope",
+          "correct": false,
+          "feedback": "DHCP scope size does not cause FortiNAC to omit RADIUS attributes."
+        },
+        {
+          "letter": "C",
+          "text": "FortiNAC has a FortiAnalyzer log receiver configured",
+          "correct": false,
+          "feedback": "FortiAnalyzer logging is not required to construct the Access-Accept."
+        },
+        {
+          "letter": "D",
+          "text": "The phone's LLDP neighbor table includes a gateway",
+          "correct": false,
+          "feedback": "LLDP neighbor information does not replace the RADIUS voice VLAN response."
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "product": "FortiNAC-F",
+      "stem": "The Access-Accept includes Tunnel-Type VLAN and Tunnel-Private-Group-Id, yet the phone remains in the data VLAN. What is the next boundary?",
+      "source_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "fingerprint": "FortiNAC-F|the access-accept includes tunnel-type vlan and tunnel-private-group-id,",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The LDAP OU synchronization interval",
+          "correct": false,
+          "feedback": "LDAP OU mapping is unrelated to the IP-phone RADIUS response."
+        },
+        {
+          "letter": "B",
+          "text": "The switch's interpretation of voice attributes and Cisco-AVPair",
+          "correct": true,
+          "feedback": "The switch must interpret the VLAN tunnel attributes and voice-class marker."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiGate central-SNAT map order",
+          "correct": false,
+          "feedback": "Central SNAT affects routed source translation, not access-port voice VLAN tagging."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiPAM TCP-forwarding setting",
+          "correct": false,
+          "feedback": "FortiPAM's RDP transport does not affect switch VLAN provisioning."
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "product": "FortiNAC-F",
+      "stem": "A phone receives DHCP successfully, but the engineer cannot prove it landed in the tagged voice VLAN. Which check is decisive?",
+      "source_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "fingerprint": "FortiNAC-F|a phone receives dhcp successfully, but the engineer cannot prove it lan",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The phone can resolve an Internet hostname",
+          "correct": false,
+          "feedback": "DNS reachability does not identify which VLAN the phone used."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiNAC license count is below capacity",
+          "correct": false,
+          "feedback": "License count does not prove switch VLAN assignment."
+        },
+        {
+          "letter": "C",
+          "text": "The switch port reports the voice VLAN separately from the data VLAN",
+          "correct": true,
+          "feedback": "The switch port's separate voice/data VLAN state confirms the intended access-port result."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiNAC admin GUI is reachable",
+          "correct": false,
+          "feedback": "GUI reachability proves management access only."
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "product": "FortiNAC-F",
+      "stem": "A phone model sends frequent MAC notification traps. What is the safest operational choice?",
+      "source_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cisco-meraki-wired-integration/764934/dynamically-provision-voice-vlan-for-ip-phones",
+      "fingerprint": "FortiNAC-F|a phone model sends frequent mac notification traps. what is the safest ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable all trap processing globally for every switch",
+          "correct": false,
+          "feedback": "Broad trap processing can create unnecessary event load on noisy phone models."
+        },
+        {
+          "letter": "B",
+          "text": "Disable all RADIUS authentication",
+          "correct": false,
+          "feedback": "Disabling RADIUS removes the provisioning transaction rather than optimizing it."
+        },
+        {
+          "letter": "C",
+          "text": "Increase the phone's DHCP lease time",
+          "correct": false,
+          "feedback": "DHCP lease time does not control MAC-notification processing."
+        },
+        {
+          "letter": "D",
+          "text": "Enable MAC notification trap processing only when real-time phone revalidation is required",
+          "correct": true,
+          "feedback": "The guide cautions that frequent traps require processing; enable only when needed."
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "product": "FortiAuthenticator",
+      "stem": "A user has a mobile number and FortiToken, but the portal offers only email recovery. What should be compared first?",
+      "source_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "fingerprint": "FortiAuthenticator|a user has a mobile number and fortitoken, but the portal offers only em",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Portal verification-method policy and the user's recovery enrollment",
+          "correct": true,
+          "feedback": "Portal policy is the outer gate and the user record supplies available recovery methods."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiGate firewall policy for the portal subnet",
+          "correct": false,
+          "feedback": "Firewall policy does not decide which password-reset factors the portal displays."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiSwitch LACP aggregator mode",
+          "correct": false,
+          "feedback": "LACP settings do not control portal recovery options."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiSIEM discovery credential map",
+          "correct": false,
+          "feedback": "Discovery credentials are unrelated to FortiAuthenticator self-service recovery."
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "product": "FortiAuthenticator",
+      "stem": "FortiToken verification succeeds for a remote LDAP user, but the password update fails. Which dependency is most relevant?",
+      "source_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "fingerprint": "FortiAuthenticator|fortitoken verification succeeds for a remote ldap user, but the passwor",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The wireless SSID VLAN pool",
+          "correct": false,
+          "feedback": "Wireless VLAN selection is unrelated to directory password writes."
+        },
+        {
+          "letter": "B",
+          "text": "LDAPS connectivity and the bind account's password-reset permission",
+          "correct": true,
+          "feedback": "Factor verification is complete; the LDAP write path still needs secure transport and reset rights."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiGate central NAT table",
+          "correct": false,
+          "feedback": "Central NAT affects egress translation, not LDAP account permissions."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiPAM RDP launcher type",
+          "correct": false,
+          "feedback": "RDP launcher type does not affect FortiAuthenticator LDAP updates."
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "product": "FortiAuthenticator",
+      "stem": "The portal displays SMS recovery, but the user never receives the challenge. Which investigation is most targeted?",
+      "source_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "fingerprint": "FortiAuthenticator|the portal displays sms recovery, but the user never receives the challe",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Change the user's AD OU",
+          "correct": false,
+          "feedback": "OU mapping changes identity context, not SMS delivery."
+        },
+        {
+          "letter": "B",
+          "text": "Modify the FortiNAC voice VLAN policy",
+          "correct": false,
+          "feedback": "Voice VLAN provisioning is a separate NAC workflow."
+        },
+        {
+          "letter": "C",
+          "text": "Check the SMS provider route and the user's enrolled phone number",
+          "correct": true,
+          "feedback": "The challenge delivery path and user contact data are the relevant boundaries."
+        },
+        {
+          "letter": "D",
+          "text": "Increase the FortiSwitch LACP fast timer",
+          "correct": false,
+          "feedback": "LACP timers do not affect the SMS gateway."
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "product": "FortiAuthenticator",
+      "stem": "Repeated recovery attempts are temporarily rejected even though the user's FortiToken is valid. What behavior best explains this?",
+      "source_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "fingerprint": "FortiAuthenticator|repeated recovery attempts are temporarily rejected even though the user",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The user is missing an FSSO device tag",
+          "correct": false,
+          "feedback": "FSSO device tags are not password-recovery controls."
+        },
+        {
+          "letter": "B",
+          "text": "The portal has switched to CEF forwarding",
+          "correct": false,
+          "feedback": "CEF is a log format and does not change recovery rate limits."
+        },
+        {
+          "letter": "C",
+          "text": "The LDAP OU was renamed",
+          "correct": false,
+          "feedback": "OU changes do not explain a recovery attempt throttle."
+        },
+        {
+          "letter": "D",
+          "text": "The password-recovery rate limiter is enforcing its threshold",
+          "correct": true,
+          "feedback": "The 6.6.3 recovery workflow adds rate limiting to repeated reset attempts."
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "product": "FortiPAM",
+      "stem": "A legacy RDP server cannot complete the native launcher because of a documented compatibility issue. What option may provide a controlled workaround?",
+      "source_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "fingerprint": "FortiPAM|a legacy rdp server cannot complete the native launcher because of a doc",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable TCP Forwarding on the RDP secret after assessing lost native controls",
+          "correct": true,
+          "feedback": "TCP forwarding is documented for legacy/plaintext RDP and certain native-launch compatibility failures."
+        },
+        {
+          "letter": "B",
+          "text": "Enable Restricted Admin Mode and TCP Forwarding together",
+          "correct": false,
+          "feedback": "Restricted Admin Mode is unavailable when TCP Forwarding is enabled."
+        },
+        {
+          "letter": "C",
+          "text": "Change the FortiAuthenticator SMS recovery method",
+          "correct": false,
+          "feedback": "SMS recovery does not change RDP protocol handling."
+        },
+        {
+          "letter": "D",
+          "text": "Move the RDP target into a FortiSIEM Smart Scan",
+          "correct": false,
+          "feedback": "Discovery scans inventory targets; they do not alter FortiPAM launch transport."
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "product": "FortiPAM",
+      "stem": "A security policy requires Restricted Admin Mode and Block Clipboard for privileged RDP. Which configuration preserves those native controls?",
+      "source_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "fingerprint": "FortiPAM|a security policy requires restricted admin mode and block clipboard for",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable TCP Forwarding and remove the RDP Security Level",
+          "correct": false,
+          "feedback": "TCP forwarding disables those native RDP controls."
+        },
+        {
+          "letter": "B",
+          "text": "Keep TCP Forwarding disabled and use the native RDP launcher",
+          "correct": true,
+          "feedback": "The native launcher retains RDP Security Level, Restricted Admin and clipboard controls."
+        },
+        {
+          "letter": "C",
+          "text": "Switch the secret to a Syslog destination",
+          "correct": false,
+          "feedback": "Syslog destinations are unrelated to RDP secret launch."
+        },
+        {
+          "letter": "D",
+          "text": "Use a static FortiSwitch trunk instead of LACP",
+          "correct": false,
+          "feedback": "Trunk mode does not change the FortiPAM session launcher."
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "product": "FortiPAM",
+      "stem": "A Windows target requires Network Level Authentication. Which native RDP security setting forces CredSSP?",
+      "source_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "fingerprint": "FortiPAM|a windows target requires network level authentication. which native rdp",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Best Effort",
+          "correct": false,
+          "feedback": "Best Effort uses NLA only when supported and otherwise falls back."
+        },
+        {
+          "letter": "B",
+          "text": "RDP",
+          "correct": false,
+          "feedback": "RDP mode is standard RDP encryption and is documented for Web-RDP only."
+        },
+        {
+          "letter": "C",
+          "text": "NLA",
+          "correct": true,
+          "feedback": "NLA forces CredSSP authentication to the target."
+        },
+        {
+          "letter": "D",
+          "text": "TCP Forwarding",
+          "correct": false,
+          "feedback": "TCP Forwarding is a compatibility transport and removes native RDP security options."
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "product": "FortiPAM",
+      "stem": "After enabling TCP Forwarding, the Auto TOTP control is no longer available. What is the correct interpretation?",
+      "source_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "fingerprint": "FortiPAM|after enabling tcp forwarding, the auto totp control is no longer availa",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The secret database is corrupt",
+          "correct": false,
+          "feedback": "The documented feature boundary does not imply secret corruption."
+        },
+        {
+          "letter": "B",
+          "text": "The target account has expired",
+          "correct": false,
+          "feedback": "Target account state does not restore the native launcher option."
+        },
+        {
+          "letter": "C",
+          "text": "The browser cache has hidden the control",
+          "correct": false,
+          "feedback": "A cache refresh will not restore a feature disabled by the selected path."
+        },
+        {
+          "letter": "D",
+          "text": "This is an expected limitation of the TCP-forwarded native RDP path",
+          "correct": true,
+          "feedback": "FortiPAM explicitly excludes RDP Auto TOTP when TCP Forwarding is enabled."
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "product": "FortiSIEM",
+      "stem": "An engineer wants to discover a router, then recursively inventory devices it knows about. Which discovery type fits?",
+      "source_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "fingerprint": "FortiSIEM|an engineer wants to discover a router, then recursively inventory devic",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Smart Scan with a useful root IP",
+          "correct": true,
+          "feedback": "Smart Scan starts from a root device and recursively follows learned devices."
+        },
+        {
+          "letter": "B",
+          "text": "Range Scan over one arbitrary /24",
+          "correct": false,
+          "feedback": "Range Scan walks specified ranges sequentially rather than traversing learned topology."
+        },
+        {
+          "letter": "C",
+          "text": "Ping-only discovery with no credentials",
+          "correct": false,
+          "feedback": "Ping-only checks reachability without detailed inventory."
+        },
+        {
+          "letter": "D",
+          "text": "L2 Scan across cloud accounts",
+          "correct": false,
+          "feedback": "L2 Scan is for Layer 2 connectivity, not cloud API inventory."
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "product": "FortiSIEM",
+      "stem": "A discovery task is explicitly assigned to a Collector. Where should the ongoing performance-monitoring task be placed?",
+      "source_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "fingerprint": "FortiSIEM|a discovery task is explicitly assigned to a collector. where should the",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Only on the Supervisor",
+          "correct": false,
+          "feedback": "The Supervisor coordinates, but the assigned Collector performs discovery and receives its monitoring task."
+        },
+        {
+          "letter": "B",
+          "text": "On the same Collector that performed discovery",
+          "correct": true,
+          "feedback": "FortiSIEM assigns the performance task to the same Collector in this workflow."
+        },
+        {
+          "letter": "C",
+          "text": "On every Worker simultaneously",
+          "correct": false,
+          "feedback": "Workers are not all assigned every device task."
+        },
+        {
+          "letter": "D",
+          "text": "On an arbitrary inactive Collector",
+          "correct": false,
+          "feedback": "An inactive Collector cannot perform the assigned monitoring job."
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "product": "FortiSIEM",
+      "stem": "A network device blocks ICMP but responds to SNMP. Discovery stops after a ping precheck. Which option addresses this boundary?",
+      "source_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "fingerprint": "FortiSIEM|a network device blocks icmp but responds to snmp. discovery stops after",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Enable Ping-only discovery",
+          "correct": false,
+          "feedback": "Ping-only would test ICMP reachability, not perform the intended inventory."
+        },
+        {
+          "letter": "B",
+          "text": "Change the device's SNMP community to a longer string",
+          "correct": false,
+          "feedback": "Credential strength is not the cause of the ICMP precheck stopping discovery."
+        },
+        {
+          "letter": "C",
+          "text": "Select Do not ping before discovery",
+          "correct": true,
+          "feedback": "Do not ping before discovery allows the configured management protocol to be attempted."
+        },
+        {
+          "letter": "D",
+          "text": "Move the device into the FortiSASE private server list",
+          "correct": false,
+          "feedback": "FortiSASE server access does not control FortiSIEM discovery."
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "product": "FortiSIEM",
+      "stem": "A Smart Scan is planned on BGP routers, but route collection is not needed. What is the operational concern?",
+      "source_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/157952/discovering-devices",
+      "fingerprint": "FortiSIEM|a smart scan is planned on bgp routers, but route collection is not need",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The scan cannot use SNMP credentials",
+          "correct": false,
+          "feedback": "Smart Scan can use credentials without requiring route collection."
+        },
+        {
+          "letter": "B",
+          "text": "Every route is stored in the FortiSASE log buffer",
+          "correct": false,
+          "feedback": "FortiSASE buffering is unrelated to FortiSIEM topology discovery."
+        },
+        {
+          "letter": "C",
+          "text": "The scan will convert all devices into Workers",
+          "correct": false,
+          "feedback": "Discovery does not convert network devices into FortiSIEM Workers."
+        },
+        {
+          "letter": "D",
+          "text": "Discover Routes can be expensive on BGP routers",
+          "correct": true,
+          "feedback": "The guide cautions that route discovery can be expensive on BGP routers."
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "product": "FortiSASE",
+      "stem": "A FortiSASE external syslog collector is reachable only through a secure private-access FortiGate hub. Which access type matches?",
+      "source_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "fingerprint": "FortiSASE|a fortisase external syslog collector is reachable only through a secure",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Private",
+          "correct": true,
+          "feedback": "Private access uses the SPA FortiGate hub path to reach the collector."
+        },
+        {
+          "letter": "B",
+          "text": "Public",
+          "correct": false,
+          "feedback": "Public assumes the collector is reachable over the internet."
+        },
+        {
+          "letter": "C",
+          "text": "Local-only",
+          "correct": false,
+          "feedback": "Local-only is not the documented external-server access type."
+        },
+        {
+          "letter": "D",
+          "text": "CEF-only",
+          "correct": false,
+          "feedback": "CEF is a log format, not a reachability type."
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "product": "FortiSASE",
+      "stem": "The external server shows TCP connected, but TLS setup fails certificate validation. What should be checked?",
+      "source_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "fingerprint": "FortiSASE|the external server shows tcp connected, but tls setup fails certificate",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The FortiNAC User/Host Profile",
+          "correct": false,
+          "feedback": "User/Host Profiles do not establish TLS trust for the log receiver."
+        },
+        {
+          "letter": "B",
+          "text": "Reliable Connection and the remote CA trust chain",
+          "correct": true,
+          "feedback": "TLS requires reliable TCP and a trusted remote CA certificate."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiSwitch member hash",
+          "correct": false,
+          "feedback": "Switch hashing does not affect the server certificate chain."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiGate central-SNAT map order",
+          "correct": false,
+          "feedback": "SNAT ordering may affect reachability, but it does not fix certificate trust."
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "product": "FortiSASE",
+      "stem": "The primary external log server is configured as Private. What restriction applies to the secondary server?",
+      "source_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "fingerprint": "FortiSASE|the primary external log server is configured as private. what restricti",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Both servers must use UDP",
+          "correct": false,
+          "feedback": "The documentation does not require both servers to use UDP."
+        },
+        {
+          "letter": "B",
+          "text": "The secondary must also be Private",
+          "correct": false,
+          "feedback": "The primary/secondary rule does not permit two Private destinations."
+        },
+        {
+          "letter": "C",
+          "text": "The secondary server must be Public",
+          "correct": true,
+          "feedback": "FortiSASE requires the secondary to be Public when the primary is Private."
+        },
+        {
+          "letter": "D",
+          "text": "The secondary cannot use CEF",
+          "correct": false,
+          "feedback": "CEF is a supported destination format and is not prohibited by this rule."
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "product": "FortiSASE",
+      "stem": "Connection status is Connected, but no endpoint telemetry arrives at the SIEM. Which check is most direct?",
+      "source_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/774663/forwarding-logs-to-an-external-server",
+      "fingerprint": "FortiSASE|connection status is connected, but no endpoint telemetry arrives at the",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Replace the TLS certificate immediately",
+          "correct": false,
+          "feedback": "A connected transport does not prove a particular log family is enabled."
+        },
+        {
+          "letter": "B",
+          "text": "Change the primary server to Private",
+          "correct": false,
+          "feedback": "Changing access type without a routing reason may break a working path."
+        },
+        {
+          "letter": "C",
+          "text": "Increase the firewall session TTL",
+          "correct": false,
+          "feedback": "Session TTL does not select forwarded log categories."
+        },
+        {
+          "letter": "D",
+          "text": "Verify endpoint logs are selected and test an endpoint event at the receiver",
+          "correct": true,
+          "feedback": "The selected log families and receiver arrival must be checked separately."
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "product": "Secure SD-WAN",
+      "stem": "A generic ping SLA is healthy, but one SaaS application has poor performance. Which telemetry is most useful?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "fingerprint": "Secure SD-WAN|a generic ping sla is healthy, but one saas application has poor perform",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Passive per-application SLA metrics from live sessions",
+          "correct": true,
+          "feedback": "Per-application passive measurement differentiates live application latency, jitter and loss by WAN member."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiSwitch LACP actor state",
+          "correct": false,
+          "feedback": "LACP state proves link aggregation, not SaaS path quality."
+        },
+        {
+          "letter": "C",
+          "text": "FortiAuthenticator password-recovery status",
+          "correct": false,
+          "feedback": "Password recovery is unrelated to WAN application performance."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiManager script validation history",
+          "correct": false,
+          "feedback": "Script validation does not measure application path quality."
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "product": "Secure SD-WAN",
+      "stem": "A passive-only SLA has no fresh data on an idle WAN member. What is the correct expectation?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "fingerprint": "Secure SD-WAN|a passive-only sla has no fresh data on an idle wan member. what is the ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "It should continue sending probes every second",
+          "correct": false,
+          "feedback": "Passive-only mode relies on live sessions and sends no active probes."
+        },
+        {
+          "letter": "B",
+          "text": "Prefer-passive can fall back to active probes after three idle minutes",
+          "correct": true,
+          "feedback": "Prefer-passive uses live traffic first and probes after three continuous idle minutes."
+        },
+        {
+          "letter": "C",
+          "text": "The link must be marked down immediately",
+          "correct": false,
+          "feedback": "No passive sample does not automatically mean the link is down."
+        },
+        {
+          "letter": "D",
+          "text": "The FortiGate should disable all application control",
+          "correct": false,
+          "feedback": "Application Control is needed for app identification, not disabled to create probes."
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "product": "Secure SD-WAN",
+      "stem": "No passive session entries appear even though users are generating application traffic. Which prerequisite pair is most important?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "fingerprint": "Secure SD-WAN|no passive session entries appear even though users are generating appli",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "A FortiAnalyzer receiver and CEF output",
+          "correct": false,
+          "feedback": "Log export is not a prerequisite for passive session metrics."
+        },
+        {
+          "letter": "B",
+          "text": "A FortiSwitch fallback port and fast LACP",
+          "correct": false,
+          "feedback": "LACP fallback does not control FortiGate policy session inspection."
+        },
+        {
+          "letter": "C",
+          "text": "Policy passive measurement enabled and ASIC offload disabled",
+          "correct": true,
+          "feedback": "The policy must enable passive measurement and disable auto-ASIC-offload for participating traffic."
+        },
+        {
+          "letter": "D",
+          "text": "A FortiAuthenticator SMS gateway and LDAP sync rule",
+          "correct": false,
+          "feedback": "SMS and LDAP sync are unrelated to application measurement."
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "product": "Secure SD-WAN",
+      "stem": "Passive metrics exist, but the SLA is not separated by application. Which configuration boundary should be reviewed?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "fingerprint": "Secure SD-WAN|passive metrics exist, but the sla is not separated by application. whic",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "The external IP-feed address family",
+          "correct": false,
+          "feedback": "IP-feed address family controls central SNAT source matching."
+        },
+        {
+          "letter": "B",
+          "text": "The FortiManager script type",
+          "correct": false,
+          "feedback": "Script type determines FortiManager execution context, not SD-WAN app identity."
+        },
+        {
+          "letter": "C",
+          "text": "The FortiPAM native RDP launcher",
+          "correct": false,
+          "feedback": "RDP launcher settings do not classify WAN sessions."
+        },
+        {
+          "letter": "D",
+          "text": "The SD-WAN rule's ISDB/application signature and passive-measurement setting",
+          "correct": true,
+          "feedback": "Per-app differentiation requires the rule's service/signature match and passive-measurement enablement."
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "product": "FortiGate",
+      "stem": "A policy counter increments, but the client exits with its untranslated source address after central NAT was enabled. Which check best isolates the issue?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/359383/apply-external-feed-connectors-as-source-addresses-in-central-snat",
+      "fingerprint": "FortiGate|a policy counter increments, but the client exits with its untranslated ",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "Confirm a matching central-SNAT row exists above broader rows",
+          "correct": true,
+          "feedback": "A policy hit is not a SNAT decision; first-match map selection must be confirmed."
+        },
+        {
+          "letter": "B",
+          "text": "Increase the policy logging level only",
+          "correct": false,
+          "feedback": "Logging detail alone cannot make a map match."
+        },
+        {
+          "letter": "C",
+          "text": "Change the destination route to a blackhole",
+          "correct": false,
+          "feedback": "A blackhole route would break forwarding rather than select SNAT."
+        },
+        {
+          "letter": "D",
+          "text": "Enable a VIP for the client's source",
+          "correct": false,
+          "feedback": "VIP is destination translation and is not the outbound source mapping."
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "product": "Secure SD-WAN",
+      "stem": "Which command directly inspects passive session information by interface in the documented workflow?",
+      "source_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/379794/passive-health-check-measurement-by-internet-service-and-application",
+      "fingerprint": "Secure SD-WAN|which command directly inspects passive session information by interface",
+      "choices": [
+        {
+          "letter": "A",
+          "text": "diagnose sys sdwan health-check",
+          "correct": false,
+          "feedback": "The generic health-check command is not the documented passive-session listing."
+        },
+        {
+          "letter": "B",
+          "text": "diagnose sys link-monitor-passive admin list by-interface",
+          "correct": true,
+          "feedback": "This command lists passive link-monitor session information by interface."
+        },
+        {
+          "letter": "C",
+          "text": "diagnose firewall iprope list 10000d",
+          "correct": false,
+          "feedback": "iprope lists firewall policy/SNAT compilation, not passive session metrics."
+        },
+        {
+          "letter": "D",
+          "text": "get system log-forward",
+          "correct": false,
+          "feedback": "log-forward displays FortiAnalyzer forwarding configuration, not SD-WAN measurement."
+        }
+      ]
+    }
+  ]
+}
