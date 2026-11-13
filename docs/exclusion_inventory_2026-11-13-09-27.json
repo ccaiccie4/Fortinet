@@ -6041,7 +6041,7 @@
       {
         "product": "FortiManager",
         "lesson_subject": "FortiManager HA: manual versus VRRP failover, heartbeat timers and delta-sync queue",
-        "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/800686/configuring-ha-options",
+        "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/800686/configuring-ha-options",
         "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-file-quota-on-fortimanager-ha-configuration-97361",
         "feature_mechanism_fingerprint": "FortiManager HA primary/secondary state replication using heartbeat and delta-sync queue; VRRP mode owns shared management address while manual mode requires operator promotion",
         "workflow_transaction_fingerprint": "primary records config changes -> delta sync queue transfers updates to secondary -> heartbeat/VRRP health controls role and shared address -> secondary takes over after failure; queue quota bounds pending delta state",
@@ -6145,7 +6145,7 @@
       {
         "product": "FortiSIEM",
         "lesson_subject": "Collector HA with VRRP VIP, leader/follower roles and process-health failover boundary",
-        "primary_url": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/841876",
+        "primary_url": "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/841876/cluster-config",
         "scenario_community_url": "https://community.fortinet.com/fortisiem-216/fortisiem-high-availability-221062",
         "feature_mechanism_fingerprint": "Collector HA uses VRRP VIP for on-prem/AWS or load balancer for Azure/GCP; leader receives logs while Supervisor/App Server redistributes pull and performance jobs",
         "workflow_transaction_fingerprint": "devices send syslog to VIP -> VRRP leader owns VIP and receives logs -> Supervisor schedules pull/metrics jobs across collectors -> leader failure triggers follower VIP ownership and job redistribution",
@@ -6171,7 +6171,7 @@
       {
         "product": "Secure SD-WAN",
         "lesson_subject": "Secure SD-WAN: minimum-sla-meet-members gating in Lowest Cost (SLA) rules",
-        "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.0/administration-guide/342836/lowest-cost-sla-strategy",
+        "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.3/administration-guide/342836/lowest-cost-sla-strategy",
         "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-set-the-minimum-number-of-links-for-an-sd-wan-lowest-cost-sla-rule-to-take-effect-97182",
         "feature_mechanism_fingerprint": "SD-WAN service rule uses minimum-sla-meet-members to gate rule eligibility based on the count of members meeting configured SLA; distinct from underlay bandwidth steering and BGP neighbor selection.",
         "workflow_transaction_fingerprint": "health-check measures each member -> rule counts in-SLA members -> threshold comparison -> rule remains eligible or is skipped -> next matching rule selects fallback; zero threshold preserves legacy behavior when no member meets SLA.",
