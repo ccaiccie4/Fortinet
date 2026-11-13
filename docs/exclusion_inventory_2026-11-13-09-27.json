@@ -6170,16 +6170,16 @@
       },
       {
         "product": "Secure SD-WAN",
-        "lesson_subject": "SD-WAN BGP neighbor minimum-sla-meet-members: route-map preference by tunnel health",
-        "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/722590/using-multiple-members-per-sd-wan-neighbor-configuration",
+        "lesson_subject": "Secure SD-WAN: minimum-sla-meet-members gating in Lowest Cost (SLA) rules",
+        "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.0/administration-guide/342836/lowest-cost-sla-strategy",
         "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-set-the-minimum-number-of-links-for-an-sd-wan-lowest-cost-sla-rule-to-take-effect-97182",
-        "feature_mechanism_fingerprint": "BGP neighbor member list counts in-SLA overlay members; minimum-sla-meet-members selects route-map-out-preferable or default route-map-out, changing BGP community advertisement rather than local egress hash selection",
-        "workflow_transaction_fingerprint": "health-check marks each tunnel SLA pass/fail -> neighbor counts passing members -> route-map-out-preferable or route-map-out is selected -> BGP update carries community -> hub translates community into MED/prepend or inbound preference",
-        "failure_class": "all links are alive but too few meet quality threshold, causing either unintended use of out-of-SLA links or unexpected rule fall-through",
-        "evidence_pattern": "diagnose sys sdwan health-check status; diagnose sys sdwan service4; SLA map and member alive/in-SLA states; rule order and minimum-sla-meet-members value",
-        "remediation_path": "set a deliberate nonzero minimum threshold, add a later fallback rule with explicit strategy, verify health-check metrics and member eligibility, test one-link degradation and full SLA failure",
-        "question_fingerprint": "distinguish link alive from in-SLA and explain why the primary rule is skipped while the session remains routed",
-        "diagram_topology_layout_fingerprint": "WAN members -> Performance SLA health check -> minimum-member threshold gate -> primary SLA rule or fallback best-quality rule"
+        "feature_mechanism_fingerprint": "SD-WAN service rule uses minimum-sla-meet-members to gate rule eligibility based on the count of members meeting configured SLA; distinct from underlay bandwidth steering and BGP neighbor selection.",
+        "workflow_transaction_fingerprint": "health-check measures each member -> rule counts in-SLA members -> threshold comparison -> rule remains eligible or is skipped -> next matching rule selects fallback; zero threshold preserves legacy behavior when no member meets SLA.",
+        "failure_class": "alive members fall out of SLA and the rule unexpectedly remains eligible or falls through because threshold and fallback ordering are misconfigured",
+        "evidence_pattern": "diagnose sys sdwan health-check status; diagnose sys sdwan service4 <id>; per-member alive and SLA map; configured minimum-sla-meet-members; subsequent matching rule",
+        "remediation_path": "set a deliberate threshold, keep a later fallback rule, verify health-check targets/thresholds, test one-member and all-members-out-of-SLA cases",
+        "question_fingerprint": "distinguish link-alive from SLA-qualified and explain rule fall-through when minimum-sla-meet-members is not met",
+        "diagram_topology_layout_fingerprint": "WAN members -> health-check SLA state -> member-count threshold gate -> primary lowest-cost rule or ordered fallback rule"
       }
     ],
     "explicit_near_miss_rejections": [
