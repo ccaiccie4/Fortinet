@@ -1,0 +1,1466 @@
+{
+  "generated_at": "2026-11-13T09:27:45-08:00",
+  "question_count": 50,
+  "points_total": 50,
+  "choices_per_question": 4,
+  "feedback_count": 200,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "max_choice_word_spread": 5,
+  "questions": [
+    {
+      "id": "Q01",
+      "lesson_id": "L01",
+      "stem": "An NP7 cluster changes roles quickly, but GARP appears late. Which setting directly changes hardware link-detection cadence?",
+      "choices": [
+        {
+          "text": "np-link-scan-interval controls NP7 link-state scan cadence.",
+          "feedback": "This is the dedicated NP7 link-scan control; it can shorten detection before FGCP processes the event.",
+          "is_correct": true
+        },
+        {
+          "text": "hb-interval controls FGCP peer heartbeat transmission.",
+          "feedback": "Heartbeat cadence is separate from the NP7 physical-link scan interval.",
+          "is_correct": false
+        },
+        {
+          "text": "failover-threshold controls missed heartbeat count before failover.",
+          "feedback": "The threshold changes heartbeat-based failure detection, not NP7 link polling.",
+          "is_correct": false
+        },
+        {
+          "text": "session-pickup controls session synchronization between cluster members.",
+          "feedback": "Session pickup affects session continuity, not when hardware detects link-down.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q02",
+      "lesson_id": "L01",
+      "stem": "What interval does Fortinet document for NP7 link scanning?",
+      "choices": [
+        {
+          "text": "Default 500 ms, supported range 100–2000 ms.",
+          "feedback": "Those values do not match the documented default or range.",
+          "is_correct": false
+        },
+        {
+          "text": "Default 1000 ms, supported range 50–1000 ms.",
+          "feedback": "The dedicated NP7 guide documents 1000 ms by default and a 50–1000 ms range.",
+          "is_correct": true
+        },
+        {
+          "text": "Default 100 ms, supported range 10–500 ms.",
+          "feedback": "The lower bound is below the documented range and the default is wrong.",
+          "is_correct": false
+        },
+        {
+          "text": "Default 2000 ms, supported range 500–5000 ms.",
+          "feedback": "The proposed default and maximum exceed the documented interval.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q03",
+      "lesson_id": "L01",
+      "stem": "Which part of the failover chain does a lower NP7 interval not change?",
+      "choices": [
+        {
+          "text": "Time until the NP7 hardware notices a physical link failure.",
+          "feedback": "This is the direct behavior the setting changes.",
+          "is_correct": false
+        },
+        {
+          "text": "Delay before the first GARP is emitted after role activation.",
+          "feedback": "Earlier detection can move the start of the GARP stage sooner.",
+          "is_correct": false
+        },
+        {
+          "text": "FGCP heartbeat, election, session pickup, and routing convergence.",
+          "feedback": "The interval only affects hardware link detection; it does not tune the other HA or routing stages.",
+          "is_correct": true
+        },
+        {
+          "text": "The scan cadence for NP7 physical interface link state.",
+          "feedback": "This is exactly the hardware scan cadence controlled by the setting.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q04",
+      "lesson_id": "L01",
+      "stem": "Which evidence best proves that the new primary actually transmitted GARP?",
+      "choices": [
+        {
+          "text": "A cluster status page showing the new primary role.",
+          "feedback": "Role status does not show the GARP packet itself.",
+          "is_correct": false
+        },
+        {
+          "text": "A configuration dump showing the selected NP7 scan interval.",
+          "feedback": "Configuration proves the value, not the emitted packet.",
+          "is_correct": false
+        },
+        {
+          "text": "An HA event log showing the monitored interface went down.",
+          "feedback": "The event log proves detection, not neighbor notification.",
+          "is_correct": false
+        },
+        {
+          "text": "A SPAN capture showing GARP sourced by the new primary.",
+          "feedback": "A packet capture directly proves the GARP frame was transmitted on the observed segment.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q05",
+      "lesson_id": "L01",
+      "stem": "The HA role transition itself is slow, before GARP is emitted. What should be examined first?",
+      "choices": [
+        {
+          "text": "Heartbeat reachability, monitored interfaces, and cluster election health.",
+          "feedback": "Those controls govern FGCP detection and election, which occur before GARP.",
+          "is_correct": true
+        },
+        {
+          "text": "Upstream ARP cache age and switch MAC-table aging.",
+          "feedback": "These affect neighbor convergence after failover, not the slow role transition.",
+          "is_correct": false
+        },
+        {
+          "text": "The client certificate OCSP responder and RADIUS policy.",
+          "feedback": "OCSP is unrelated to HA role selection.",
+          "is_correct": false
+        },
+        {
+          "text": "FortiAnalyzer Asset List and EMS connector freshness.",
+          "feedback": "Asset enrichment does not participate in FortiGate HA.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q06",
+      "lesson_id": "L02",
+      "stem": "Which statement correctly distinguishes FortiManager Manual and VRRP HA modes?",
+      "choices": [
+        {
+          "text": "Manual moves a VIP automatically; VRRP requires an operator promotion.",
+          "feedback": "The behaviors are reversed.",
+          "is_correct": false
+        },
+        {
+          "text": "Both modes always use the same shared VIP and election process.",
+          "feedback": "Manual mode does not use the same VRRP VIP mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "Manual requires operator promotion; VRRP can move a shared VIP automatically.",
+          "feedback": "Manual promotion is operator-driven; VRRP uses a monitored interface and virtual address.",
+          "is_correct": true
+        },
+        {
+          "text": "VRRP synchronizes policies, while Manual synchronizes only device inventory.",
+          "feedback": "Both modes replicate module data; this is not their defining distinction.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q07",
+      "lesson_id": "L02",
+      "stem": "What is the documented default heartbeat detection window in FortiManager 7.6.6?",
+      "choices": [
+        {
+          "text": "1-second heartbeat interval multiplied by 10 missed heartbeats.",
+          "feedback": "These values produce a much shorter and undocumented detection window.",
+          "is_correct": false
+        },
+        {
+          "text": "10-second heartbeat interval multiplied by 30 missed heartbeats.",
+          "feedback": "The documented defaults produce 300 seconds, or five minutes, before the threshold is reached.",
+          "is_correct": true
+        },
+        {
+          "text": "5-second heartbeat interval multiplied by 5 missed heartbeats.",
+          "feedback": "Those values do not match the documented defaults.",
+          "is_correct": false
+        },
+        {
+          "text": "30-second heartbeat interval multiplied by 10 missed heartbeats.",
+          "feedback": "The interval and threshold are both mis-stated.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q08",
+      "lesson_id": "L02",
+      "stem": "What is the default FortiManager HA file quota and its documented range?",
+      "choices": [
+        {
+          "text": "2048 MB default, configurable from 1024 to 8192 MB.",
+          "feedback": "The default and range are lower than documented.",
+          "is_correct": false
+        },
+        {
+          "text": "8192 MB default, configurable from 4096 to 32768 MB.",
+          "feedback": "The default is twice the documented default and the maximum is too high.",
+          "is_correct": false
+        },
+        {
+          "text": "1024 MB default, configurable from 512 to 4096 MB.",
+          "feedback": "The documented minimum is 2048 MB, not 512 MB.",
+          "is_correct": false
+        },
+        {
+          "text": "4096 MB default, configurable from 2048 to 20480 MB.",
+          "feedback": "The HA guide documents 4096 MB by default and a 2048–20480 MB range.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q09",
+      "lesson_id": "L02",
+      "stem": "What does Pending Module Data indicate in FortiManager HA?",
+      "choices": [
+        {
+          "text": "Managed FortiGate devices that are currently unreachable by management traffic.",
+          "feedback": "Device reachability is a different management-plane state.",
+          "is_correct": false
+        },
+        {
+          "text": "Replication data still waiting to synchronize to the backup unit.",
+          "feedback": "Pending Module Data measures synchronization backlog between HA members.",
+          "is_correct": true
+        },
+        {
+          "text": "The number of policy packages awaiting administrator approval.",
+          "feedback": "Policy approvals are not what this HA counter measures.",
+          "is_correct": false
+        },
+        {
+          "text": "The count of missed heartbeat packets since the last role change.",
+          "feedback": "Heartbeat loss is tracked separately from module data replication.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q10",
+      "lesson_id": "L02",
+      "stem": "What can happen when the FortiManager delta-sync file quota is exhausted?",
+      "choices": [
+        {
+          "text": "The queue can reset and synchronization can restart from a fresh state.",
+          "feedback": "The documented quota failure can reset the delta queue and restart synchronization.",
+          "is_correct": true
+        },
+        {
+          "text": "The secondary automatically becomes primary and moves the VIP.",
+          "feedback": "Quota exhaustion is not itself a VRRP or role-election event.",
+          "is_correct": false
+        },
+        {
+          "text": "All managed FortiGates are removed from the device database.",
+          "feedback": "The device database is not deleted by the queue reset.",
+          "is_correct": false
+        },
+        {
+          "text": "The primary stops sending heartbeat packets until quota is increased.",
+          "feedback": "Heartbeat and delta-sync storage are separate mechanisms.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q11",
+      "lesson_id": "L03",
+      "stem": "An asset appears with MAC and IP but no hostname, OS, or user details. What is the likely explanation?",
+      "choices": [
+        {
+          "text": "The Industrial Security Service license has expired for every asset.",
+          "feedback": "The OT/IoT license controls vulnerability details, not basic hostname enrichment for all assets.",
+          "is_correct": false
+        },
+        {
+          "text": "The Asset Identity Center is configured to suppress all user identities.",
+          "feedback": "The missing fields are not explained by a global suppression setting.",
+          "is_correct": false
+        },
+        {
+          "text": "The vulnerability playbook has changed the endpoint MAC address.",
+          "feedback": "The playbook does not rewrite endpoint MAC addresses.",
+          "is_correct": false
+        },
+        {
+          "text": "The endpoint was discovered from logs without managed FortiClient EMS enrichment.",
+          "feedback": "Fortinet documents limited identity fields when endpoints are detected without FortiClient context.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q12",
+      "lesson_id": "L03",
+      "stem": "Which action retrieves managed-endpoint vulnerability data for the Asset List?",
+      "choices": [
+        {
+          "text": "Get Endpoints through the FortiGate traffic-log connector only.",
+          "feedback": "Get Endpoints retrieves endpoint details, not the vulnerability list by itself.",
+          "is_correct": false
+        },
+        {
+          "text": "Run a FortiSwitch MAC poll against every access port.",
+          "feedback": "A switch MAC poll does not retrieve endpoint vulnerability data.",
+          "is_correct": false
+        },
+        {
+          "text": "Get Vulnerabilities through the FortiClient EMS connector.",
+          "feedback": "The documented enrichment path uses Get Vulnerabilities with an EMS connector.",
+          "is_correct": true
+        },
+        {
+          "text": "Export the Top 10 Risky Assets widget to CSV.",
+          "feedback": "Exporting a widget does not trigger source enrichment.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q13",
+      "lesson_id": "L03",
+      "stem": "What is required to view OT/IoT vulnerability details in the Asset List?",
+      "choices": [
+        {
+          "text": "A FortiClient EMS license assigned to every unmanaged sensor.",
+          "feedback": "EMS enriches managed endpoints; it does not replace the OT/IoT service license.",
+          "is_correct": false
+        },
+        {
+          "text": "A vSphere connector configured for all OT network segments.",
+          "feedback": "The vSphere connector is for VMware endpoint details, not OT vulnerability licensing.",
+          "is_correct": false
+        },
+        {
+          "text": "A valid Industrial Security Service license for the OT/IoT vulnerability feed.",
+          "feedback": "Fortinet states that OT/IoT vulnerability details require Industrial Security Service entitlement.",
+          "is_correct": true
+        },
+        {
+          "text": "A daily log-forwarding policy from FortiAnalyzer to FortiGate.",
+          "feedback": "Log forwarding is not the required entitlement.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q14",
+      "lesson_id": "L03",
+      "stem": "Why might an asset be absent from Top 10 Vulnerable Assets despite having findings?",
+      "choices": [
+        {
+          "text": "The widget includes only endpoints discovered by MAC address.",
+          "feedback": "MAC-only discovery is not the stated widget exclusion rule.",
+          "is_correct": false
+        },
+        {
+          "text": "The widget excludes low-severity vulnerabilities; inspect the detailed table.",
+          "feedback": "Fortinet documents that low-severity vulnerabilities are omitted from that Top 10 widget.",
+          "is_correct": true
+        },
+        {
+          "text": "The widget excludes all findings older than one hour.",
+          "feedback": "The time filter can matter, but the documented severity exclusion is the key distinction.",
+          "is_correct": false
+        },
+        {
+          "text": "The widget displays only assets with a FortiGate serial number.",
+          "feedback": "A FortiGate serial number is not a required asset identity.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q15",
+      "lesson_id": "L04",
+      "stem": "What is the key behavior of a PTP transparent clock?",
+      "choices": [
+        {
+          "text": "It updates the Sync correctionField for time spent inside the switch.",
+          "feedback": "A transparent clock corrects for residence time and does not participate in BMCA.",
+          "is_correct": true
+        },
+        {
+          "text": "It becomes grandmaster whenever the upstream Announce message is received.",
+          "feedback": "Receiving Announce does not make it grandmaster.",
+          "is_correct": false
+        },
+        {
+          "text": "It terminates PTP and regenerates all messages on a new VLAN.",
+          "feedback": "That describes neither transparent-clock forwarding nor correctionField behavior.",
+          "is_correct": false
+        },
+        {
+          "text": "It selects the best master through BMCA and disciplines its local clock.",
+          "feedback": "BMCA participation and local discipline describe a boundary clock.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q16",
+      "lesson_id": "L04",
+      "stem": "Which messages measure adjacent-link delay in PTP peer-to-peer mode?",
+      "choices": [
+        {
+          "text": "Delay_Req and Delay_Resp exchanged only between slave and grandmaster.",
+          "feedback": "Delay_Req/Resp are the E2E path-delay mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "Announce and Sync messages exchanged only after a clock election.",
+          "feedback": "Announce/Sync establish hierarchy and time, not the P2P link-delay exchange.",
+          "is_correct": false
+        },
+        {
+          "text": "ARP Request and Reply messages exchanged between PTP VLAN peers.",
+          "feedback": "ARP does not measure PTP link delay.",
+          "is_correct": false
+        },
+        {
+          "text": "PDelay_Req, PDelay_Resp, and optional PDelay_Resp_Follow_Up.",
+          "feedback": "P2P measures each adjacent link with PDelay messages.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q17",
+      "lesson_id": "L04",
+      "stem": "Which Layer-3 PTP transport does FortiSwitchOS 8.0.0 document?",
+      "choices": [
+        {
+          "text": "ipv4-UDP-mcast with transparent-p2p or boundary clock modes.",
+          "feedback": "The guide specifies IPv4 UDP multicast and the listed Layer-3 clock modes.",
+          "is_correct": true
+        },
+        {
+          "text": "l2-mcast with transparent-e2e and no Layer-3 address.",
+          "feedback": "L2 multicast is a Layer-2 transport, not the documented Layer-3 transport.",
+          "is_correct": false
+        },
+        {
+          "text": "ipv6-UDP-unicast with transparent-e2e on any RVI.",
+          "feedback": "The documented transport is IPv4 UDP multicast; transparent RVI mode is unsupported.",
+          "is_correct": false
+        },
+        {
+          "text": "tcp-ptp with boundary-e2e and no VLAN policy.",
+          "feedback": "PTP does not use the described TCP transport.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q18",
+      "lesson_id": "L04",
+      "stem": "What is the documented P2P interaction with IGMP snooping?",
+      "choices": [
+        {
+          "text": "P2P requires IGMP snooping to be enabled on every VLAN.",
+          "feedback": "Enabling snooping does not make P2P interoperable.",
+          "is_correct": false
+        },
+        {
+          "text": "P2P uses IGMP snooping to elect the grandmaster clock.",
+          "feedback": "BMCA selects the master; IGMP does not.",
+          "is_correct": false
+        },
+        {
+          "text": "P2P mode is not interoperable with IGMP snooping.",
+          "feedback": "Fortinet explicitly documents P2P and IGMP snooping as incompatible.",
+          "is_correct": true
+        },
+        {
+          "text": "P2P requires static IGMP groups only when using IPv6 unicast.",
+          "feedback": "The static-group caveat applies to E2E IPv4 multicast with snooping.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q19",
+      "lesson_id": "L05",
+      "stem": "Which AP and software combination is documented for Beacon Protection?",
+      "choices": [
+        {
+          "text": "Any Wi-Fi 5 FortiAP running FAP 7.2 or later.",
+          "feedback": "Wi-Fi 5 is not in the documented support scope.",
+          "is_correct": false
+        },
+        {
+          "text": "Wi-Fi 6E or Wi-Fi 7 FortiAP running FAP 7.6.1 or later.",
+          "feedback": "Fortinet documents Wi-Fi 6E/7 hardware and FAP 7.6.1 or later.",
+          "is_correct": true
+        },
+        {
+          "text": "Any FortiAP running FortiOS 7.6.1 regardless of radio generation.",
+          "feedback": "The AP model and FortiAP software both matter.",
+          "is_correct": false
+        },
+        {
+          "text": "Only Wi-Fi 7 FortiAP running FAP 8.0.0 with WPA2 Enterprise.",
+          "feedback": "WPA2 is not the documented WPA3 Beacon Protection profile.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q20",
+      "lesson_id": "L05",
+      "stem": "Which over-the-air evidence best confirms Beacon Protection is being advertised?",
+      "choices": [
+        {
+          "text": "The AP sends an EAP Access-Accept after the client association request.",
+          "feedback": "EAP success is authentication evidence, not beacon integrity evidence.",
+          "is_correct": false
+        },
+        {
+          "text": "The controller lists the SSID as enabled in the WTP profile.",
+          "feedback": "A WTP profile proves configuration, not the emitted beacon contents.",
+          "is_correct": false
+        },
+        {
+          "text": "The client receives an IPv4 address from the WLAN DHCP server.",
+          "feedback": "DHCP success occurs later and does not prove beacon protection.",
+          "is_correct": false
+        },
+        {
+          "text": "A beacon contains the Management MIC element and Beacon Protection capability flag.",
+          "feedback": "The Management MIC element and Extended Capabilities flag are the packet-level indicators.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q21",
+      "lesson_id": "L05",
+      "stem": "Which VAP configuration dependency is required in Fortinet's Beacon Protection example?",
+      "choices": [
+        {
+          "text": "WPA2 security, PMF disabled, and rogue-AP detection enabled.",
+          "feedback": "This combination is inconsistent with the documented security requirements.",
+          "is_correct": false
+        },
+        {
+          "text": "Open authentication, captive portal, and a DHCP relay profile.",
+          "feedback": "Captive portal and DHCP relay do not enable beacon integrity.",
+          "is_correct": false
+        },
+        {
+          "text": "WPA3 security with PMF disabled and beacon protection left default.",
+          "feedback": "Beacon Protection is disabled by default and must be explicitly enabled.",
+          "is_correct": false
+        },
+        {
+          "text": "WPA3 security, PMF enabled, and beacon-protection enabled.",
+          "feedback": "The example uses WPA3 and enables PMF and Beacon Protection together.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q22",
+      "lesson_id": "L05",
+      "stem": "What does Beacon Protection not provide by itself?",
+      "choices": [
+        {
+          "text": "Protection against RF jamming or complete rogue-AP prevention.",
+          "feedback": "Beacon integrity does not stop an attacker from transmitting or jamming RF energy.",
+          "is_correct": true
+        },
+        {
+          "text": "Integrity protection for supported beacon management frames.",
+          "feedback": "This is the intended feature behavior.",
+          "is_correct": false
+        },
+        {
+          "text": "A MIC element that a capable client can verify.",
+          "feedback": "This is part of the advertised protected-beacon information.",
+          "is_correct": false
+        },
+        {
+          "text": "A WPA3/PMF-related integrity mechanism on supported FortiAP radios.",
+          "feedback": "This describes the feature's supported scope.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q23",
+      "lesson_id": "L06",
+      "stem": "Which FortiNAC notification method provides direct MAC Add/Delete/Move events from a FortiSwitch?",
+      "choices": [
+        {
+          "text": "SNMP Link Traps followed by an L2 poll of the port.",
+          "feedback": "Link traps trigger a poll; they do not carry the MAC move itself.",
+          "is_correct": false
+        },
+        {
+          "text": "A FortiGate interface status poll every five minutes.",
+          "feedback": "A periodic interface poll is not the documented MAC notification method.",
+          "is_correct": false
+        },
+        {
+          "text": "SNMP MAC Notification Traps from the switch.",
+          "feedback": "MAC Notification Traps carry the endpoint MAC event directly to FortiNAC.",
+          "is_correct": true
+        },
+        {
+          "text": "A RADIUS Access-Accept sent during the original 802.1X login.",
+          "feedback": "Access-Accept is authentication, not endpoint movement notification.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q24",
+      "lesson_id": "L06",
+      "stem": "What is the key limitation of SNMP Link Traps for endpoint movement?",
+      "choices": [
+        {
+          "text": "They directly report every MAC address and exact downstream switch port.",
+          "feedback": "That describes direct MAC notifications, not link traps.",
+          "is_correct": false
+        },
+        {
+          "text": "They trigger L2 polling and may miss hosts behind indirect devices.",
+          "feedback": "A link event triggers a poll, which may not see endpoints behind phones, hubs, or APs.",
+          "is_correct": true
+        },
+        {
+          "text": "They are processed only when FortiClient EMS is licensed.",
+          "feedback": "EMS licensing is unrelated to SNMP link-trap processing.",
+          "is_correct": false
+        },
+        {
+          "text": "They carry full endpoint identity and user data in the trap.",
+          "feedback": "A link trap reports port state, not full endpoint identity.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q25",
+      "lesson_id": "L06",
+      "stem": "What does FortiGate syslog MAC notification not process according to the guide?",
+      "choices": [
+        {
+          "text": "Access-point connection events are not processed through this syslog method.",
+          "feedback": "The guide explicitly notes that AP connection events are not processed by this syslog method.",
+          "is_correct": true
+        },
+        {
+          "text": "MAC Add/Delete/Move events for FortiLink-managed FortiSwitches.",
+          "feedback": "These are the intended event types for FortiLink-managed switches.",
+          "is_correct": false
+        },
+        {
+          "text": "MAC movement events forwarded by the FortiGate to FortiNAC.",
+          "feedback": "This is the intended forwarding path.",
+          "is_correct": false
+        },
+        {
+          "text": "Syslog events received by FortiNAC from the configured FortiGate.",
+          "feedback": "FortiNAC can receive the configured syslog events.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q26",
+      "lesson_id": "L06",
+      "stem": "FortiNAC shows no action behind a FortiLink-managed switch and FortiGate shows a blue icon. What should be checked first?",
+      "choices": [
+        {
+          "text": "The endpoint's OCSP responder and EAP-TLS certificate serial number.",
+          "feedback": "Certificate validation does not establish FortiLink device visibility.",
+          "is_correct": false
+        },
+        {
+          "text": "The FortiSwitch PTP domain and transparent-clock correction field.",
+          "feedback": "PTP is unrelated to NAC switch integration.",
+          "is_correct": false
+        },
+        {
+          "text": "The FortiAnalyzer EMS playbook schedule and OT vulnerability license.",
+          "feedback": "Asset enrichment is unrelated to the missing FortiSwitch model.",
+          "is_correct": false
+        },
+        {
+          "text": "FortiGate REST API integration, credentials, switch model, and interface synchronization.",
+          "feedback": "The recent scenario points to the integration/control plane before endpoint notification tuning.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q27",
+      "lesson_id": "L07",
+      "stem": "Which statement correctly separates Access-Accept from CoA?",
+      "choices": [
+        {
+          "text": "Access-Accept changes an existing session; CoA performs initial authentication.",
+          "feedback": "The message roles are reversed.",
+          "is_correct": false
+        },
+        {
+          "text": "Access-Accept establishes initial access; CoA changes an existing session.",
+          "feedback": "CoA is a post-authentication change to an active RADIUS session.",
+          "is_correct": true
+        },
+        {
+          "text": "Both messages only disconnect the client and require a new DHCP lease.",
+          "feedback": "Neither message is defined only as a disconnect operation.",
+          "is_correct": false
+        },
+        {
+          "text": "CoA is an SNMP trap that updates the switch MAC table.",
+          "feedback": "CoA is a RADIUS dynamic-authorization message, not an SNMP trap.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q28",
+      "lesson_id": "L07",
+      "stem": "What response is expected when a CoA requests a DACL on a port with DACL disabled?",
+      "choices": [
+        {
+          "text": "A CoA-ACK with the DACL silently ignored.",
+          "feedback": "The NAS does not acknowledge an unsupported DACL request as successful.",
+          "is_correct": false
+        },
+        {
+          "text": "An Access-Challenge requesting a new client certificate.",
+          "feedback": "Access-Challenge belongs to authentication, not this CoA response.",
+          "is_correct": false
+        },
+        {
+          "text": "A CoA-NAK indicating service not available.",
+          "feedback": "FortiSwitchOS returns a NAK with service not available when DACL is disabled.",
+          "is_correct": true
+        },
+        {
+          "text": "A Disconnect-ACK that confirms the policy was applied.",
+          "feedback": "A Disconnect-ACK is not the documented response for disabled DACL.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q29",
+      "lesson_id": "L07",
+      "stem": "What is the difference between Filter-Id and NAS-Filter-Rule?",
+      "choices": [
+        {
+          "text": "Filter-Id carries rule text; NAS-Filter-Rule references a local ACL name.",
+          "feedback": "The attribute functions are reversed.",
+          "is_correct": false
+        },
+        {
+          "text": "Both attributes only identify the authenticated user's RADIUS group.",
+          "feedback": "These are ACL attributes, not only user-group identifiers.",
+          "is_correct": false
+        },
+        {
+          "text": "Both attributes are used only for IPv6 ACLs on wireless clients.",
+          "feedback": "FortiSwitch DACL support is IPv4, not IPv6.",
+          "is_correct": false
+        },
+        {
+          "text": "Filter-Id references a switch ACL; NAS-Filter-Rule carries rule text.",
+          "feedback": "Filter-Id names a preconfigured ACL, while NAS-Filter-Rule carries filter rules.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q30",
+      "lesson_id": "L07",
+      "stem": "What can happen when a later CoA omits a DACL that was previously installed by CoA?",
+      "choices": [
+        {
+          "text": "The previously installed CoA DACL can be removed.",
+          "feedback": "FortiSwitchOS documents removal when the prior DACL was installed by CoA.",
+          "is_correct": true
+        },
+        {
+          "text": "The original Access-Accept is replayed and the port is rebooted.",
+          "feedback": "This is not the documented CoA behavior.",
+          "is_correct": false
+        },
+        {
+          "text": "The FortiNAC-F policy engine changes the switch's native VLAN.",
+          "feedback": "A CoA DACL update does not inherently change the native VLAN.",
+          "is_correct": false
+        },
+        {
+          "text": "The NAS automatically retains the last DACL until the session ends.",
+          "feedback": "The documented behavior is removal in this case, not guaranteed retention.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q31",
+      "lesson_id": "L08",
+      "stem": "Which OCSP mode accepts a certificate when the responder times out, unless an explicit reject was received?",
+      "choices": [
+        {
+          "text": "Enable mode with strict OCSP verification on the profile.",
+          "feedback": "Strict Enable requires successful OCSP verification.",
+          "is_correct": false
+        },
+        {
+          "text": "Enable-softfail on the selected RADIUS authentication profile.",
+          "feedback": "Enable-softfail accepts on no response or timeout unless an explicit reject arrives.",
+          "is_correct": true
+        },
+        {
+          "text": "Disable mode, which still queries the responder but ignores results.",
+          "feedback": "Disable performs no OCSP verification; it does not query and ignore.",
+          "is_correct": false
+        },
+        {
+          "text": "CRL-only mode with no online certificate-status request.",
+          "feedback": "CRL checking is a separate revocation mechanism.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q32",
+      "lesson_id": "L08",
+      "stem": "What is the documented OCSP timeout in FortiAuthenticator 8.0.2?",
+      "choices": [
+        {
+          "text": "One second, configurable per RADIUS client.",
+          "feedback": "The documented timeout is not one second or per-client.",
+          "is_correct": false
+        },
+        {
+          "text": "Five seconds, inherited from the EAP retransmission timer.",
+          "feedback": "EAP retransmission is a different timer.",
+          "is_correct": false
+        },
+        {
+          "text": "Three seconds, fixed in this release.",
+          "feedback": "The 8.0.2 release notes specify a fixed three-second timeout.",
+          "is_correct": true
+        },
+        {
+          "text": "Ten seconds, configurable on the OCSP responder object.",
+          "feedback": "The timeout is not documented as a ten-second responder setting.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q33",
+      "lesson_id": "L08",
+      "stem": "Where is OCSP verification configured for EAP-TLS client certificates?",
+      "choices": [
+        {
+          "text": "In the RADIUS Auth Profile when Client Credential is Certificates.",
+          "feedback": "The option is per authentication profile under RADIUS Service and certificate client credentials.",
+          "is_correct": true
+        },
+        {
+          "text": "Globally under the FortiAuthenticator system DNS settings.",
+          "feedback": "DNS is a dependency for reaching a responder, not the policy control.",
+          "is_correct": false
+        },
+        {
+          "text": "On each FortiAP radio profile under the PMF option.",
+          "feedback": "The AP radio profile is not where FAC performs certificate OCSP validation.",
+          "is_correct": false
+        },
+        {
+          "text": "In the SCEP CA enrollment policy before a certificate is issued.",
+          "feedback": "SCEP issuance and runtime OCSP verification are separate stages.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q34",
+      "lesson_id": "L08",
+      "stem": "What does a successful OCSP responder connection prove by itself?",
+      "choices": [
+        {
+          "text": "That the certificate subject maps to the intended user and group.",
+          "feedback": "User/group mapping is a separate authorization step.",
+          "is_correct": false
+        },
+        {
+          "text": "That the certificate is not revoked for every issuing CA.",
+          "feedback": "The response applies to a specific issuer and serial, not every CA.",
+          "is_correct": false
+        },
+        {
+          "text": "That the EAP-TLS handshake passed all authorization factors.",
+          "feedback": "OCSP is one check in the authentication flow, not the entire authorization result.",
+          "is_correct": false
+        },
+        {
+          "text": "Responder reachability, but not correct certificate-to-user authorization.",
+          "feedback": "Transport success proves reachability only; status and identity still need validation.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q35",
+      "lesson_id": "L09",
+      "stem": "In FortiPAM SSH filtering, what is the practical difference between Allow and Deny mode?",
+      "choices": [
+        {
+          "text": "Allow blocks only matched commands; Deny blocks every unlisted command.",
+          "feedback": "The mode semantics are reversed.",
+          "is_correct": false
+        },
+        {
+          "text": "Allow blocks commands not matched; Deny blocks only matched commands.",
+          "feedback": "Allow is restricted mode; Deny blocks listed patterns while leaving other commands unblocked.",
+          "is_correct": true
+        },
+        {
+          "text": "Both modes allow unlisted commands and only log matched patterns.",
+          "feedback": "The modes do not both behave as audit-only filters.",
+          "is_correct": false
+        },
+        {
+          "text": "Both modes block all SSH commands unless owner bypass is enabled.",
+          "feedback": "Owner bypass is an exception, not the default state of every profile.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q36",
+      "lesson_id": "L09",
+      "stem": "What does Bypass for owner permit when enabled?",
+      "choices": [
+        {
+          "text": "The secret owner can execute commands otherwise blocked by the SSH filter.",
+          "feedback": "Fortinet documents that the secret owner can send otherwise prohibited commands when bypass is enabled.",
+          "is_correct": true
+        },
+        {
+          "text": "Any delegated user can bypass all channel restrictions on the target.",
+          "feedback": "The bypass is specifically for the secret owner, not every delegated user.",
+          "is_correct": false
+        },
+        {
+          "text": "The SSH proxy stops recording commands for the secret owner.",
+          "feedback": "Command logging and channel controls are separate settings.",
+          "is_correct": false
+        },
+        {
+          "text": "The owner can bypass RADIUS authentication for the target server.",
+          "feedback": "This does not bypass target authentication.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q37",
+      "lesson_id": "L09",
+      "stem": "Which control is required for FortiPAM Other Channels restrictions?",
+      "choices": [
+        {
+          "text": "A FortiGate NP7 link-scan profile assigned to the target subnet.",
+          "feedback": "NP7 link scanning is unrelated to SSH channel controls.",
+          "is_correct": false
+        },
+        {
+          "text": "A FortiAuthenticator OCSP profile attached to the secret owner.",
+          "feedback": "OCSP is a certificate status feature, not a channel restriction.",
+          "is_correct": false
+        },
+        {
+          "text": "A custom launcher for X11, forwarding, SFTP/SCP, and related channels.",
+          "feedback": "Fortinet notes that Other Channels settings require a custom launcher.",
+          "is_correct": true
+        },
+        {
+          "text": "A FortiSwitch PTP policy on the management VLAN.",
+          "feedback": "PTP does not control SSH forwarding channels.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q38",
+      "lesson_id": "L09",
+      "stem": "What upgrade caveat applies to SSH filter profiles created on FortiPAM 1.3.0 or earlier?",
+      "choices": [
+        {
+          "text": "Legacy Deny entries become a default-deny profile automatically.",
+          "feedback": "The guide does not say legacy Deny entries become default deny.",
+          "is_correct": false
+        },
+        {
+          "text": "All legacy profiles are deleted and must be recreated manually.",
+          "feedback": "The profiles are not all deleted by the upgrade.",
+          "is_correct": false
+        },
+        {
+          "text": "Legacy patterns are converted into RADIUS Filter-Id attributes.",
+          "feedback": "RADIUS Filter-Id is unrelated to SSH filter profiles.",
+          "is_correct": false
+        },
+        {
+          "text": "Legacy Action=Allow entries may not block unlisted commands after upgrade.",
+          "feedback": "Fortinet documents that legacy Action=Allow entries are not shown in the new pattern table and do not block other commands.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q39",
+      "lesson_id": "L10",
+      "stem": "Which Collector HA mechanism is used for on-premises and AWS deployments?",
+      "choices": [
+        {
+          "text": "A FortiGate SD-WAN rule with Lowest Cost SLA selection.",
+          "feedback": "SD-WAN is not the Collector HA mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "VRRP with a Leader, Followers, and a virtual IP.",
+          "feedback": "FortiSIEM documents VRRP for on-prem and AWS/EC2 Collector HA.",
+          "is_correct": true
+        },
+        {
+          "text": "An Active Directory site link with DNS round-robin records.",
+          "feedback": "AD site links and DNS do not implement the documented Collector VIP.",
+          "is_correct": false
+        },
+        {
+          "text": "A FortiAnalyzer log-forwarding policy with TCP acknowledgment.",
+          "feedback": "Log forwarding is a data transport feature, not Collector HA.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q40",
+      "lesson_id": "L10",
+      "stem": "What happens when the FortiSIEM Collector Leader fails?",
+      "choices": [
+        {
+          "text": "A higher-priority Follower takes the VIP and jobs are redistributed.",
+          "feedback": "The new Leader owns the VIP, while Supervisor/App Server redistributes scheduled jobs.",
+          "is_correct": true
+        },
+        {
+          "text": "All Followers stop receiving logs until the Supervisor is restarted.",
+          "feedback": "Followers continue service through the HA mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "The Supervisor becomes the new Collector and owns the VIP.",
+          "feedback": "The Supervisor manages jobs but is not the Collector VIP owner.",
+          "is_correct": false
+        },
+        {
+          "text": "The failed Leader remains active while its interface is reachable.",
+          "feedback": "The failed node does not remain the active Leader after takeover.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q41",
+      "lesson_id": "L10",
+      "stem": "Why might a stopped Collector process fail to trigger VRRP failover?",
+      "choices": [
+        {
+          "text": "VRRP requires a successful EAP-TLS certificate before changing roles.",
+          "feedback": "EAP-TLS is unrelated to Collector HA.",
+          "is_correct": false
+        },
+        {
+          "text": "The Supervisor prevents failover whenever syslog is enabled.",
+          "feedback": "Syslog does not disable VRRP role changes.",
+          "is_correct": false
+        },
+        {
+          "text": "VRRP may track interface state rather than the health of each process.",
+          "feedback": "Fortinet warns that process failure may not trigger VRRP when network state remains up.",
+          "is_correct": true
+        },
+        {
+          "text": "The VIP is moved only when the Collector database is corrupted.",
+          "feedback": "Database corruption is not the documented trigger.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q42",
+      "lesson_id": "L10",
+      "stem": "What happens when a FortiSIEM Follower Collector goes down?",
+      "choices": [
+        {
+          "text": "The Leader immediately demotes itself and releases the VIP.",
+          "feedback": "Follower failure does not force the Leader to demote.",
+          "is_correct": false
+        },
+        {
+          "text": "The App Server redistributes its jobs to other working Collectors.",
+          "feedback": "The App Server redistributes jobs from a failed Follower; the returning node remains a Follower.",
+          "is_correct": true
+        },
+        {
+          "text": "The Supervisor deletes the failed Collector from the HA group permanently.",
+          "feedback": "The node can return as a Follower; permanent deletion is not automatic.",
+          "is_correct": false
+        },
+        {
+          "text": "All event-pulling jobs remain assigned until an administrator reboots the Leader.",
+          "feedback": "The guide describes automated job redistribution, not a mandatory reboot.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q43",
+      "lesson_id": "L11",
+      "stem": "What is the direction of FortiManager central-management synchronization to FortiSASE?",
+      "choices": [
+        {
+          "text": "Bidirectional, with changes merged automatically in both systems.",
+          "feedback": "The documented workflow is not a bidirectional merge.",
+          "is_correct": false
+        },
+        {
+          "text": "One-way from FortiSASE to FortiManager after each policy install.",
+          "feedback": "The direction is reversed.",
+          "is_correct": false
+        },
+        {
+          "text": "Only identity objects synchronize; policies remain local to FortiSASE.",
+          "feedback": "Supported firewall and proxy policies are also synchronized.",
+          "is_correct": false
+        },
+        {
+          "text": "One-way from FortiManager to FortiSASE.",
+          "feedback": "The integration is a one-way source-of-truth workflow from FortiManager to FortiSASE.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q44",
+      "lesson_id": "L11",
+      "stem": "Which FortiManager ADOM restriction applies when adding FortiSASE?",
+      "choices": [
+        {
+          "text": "Do not use FortiManager 7.0, Global Database ADOM, or Backup mode.",
+          "feedback": "FortiSASE cannot be added to a 7.0 ADOM, Global Database ADOM, or Backup-mode ADOM.",
+          "is_correct": true
+        },
+        {
+          "text": "Use only the Global Database ADOM with backup mode enabled.",
+          "feedback": "Those are explicitly excluded configurations.",
+          "is_correct": false
+        },
+        {
+          "text": "Add FortiSASE to any ADOM, then move it after installation.",
+          "feedback": "The device cannot be moved to another ADOM after it is added.",
+          "is_correct": false
+        },
+        {
+          "text": "Use a 7.0 ADOM and enable policy offload for synchronization.",
+          "feedback": "The 7.0 ADOM is unsupported and offload must be disabled.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q45",
+      "lesson_id": "L11",
+      "stem": "FortiManager reports that a package installed successfully, but a FortiSASE policy is missing. What is the authoritative next check?",
+      "choices": [
+        {
+          "text": "Rebuild the FortiGate device database and clear all FortiAnalyzer logs.",
+          "feedback": "Those changes do not diagnose object-level synchronization.",
+          "is_correct": false
+        },
+        {
+          "text": "Change the FortiSASE WAN bandwidth policy and wait for the next SLA probe.",
+          "feedback": "Bandwidth policy and SLA probes are unrelated.",
+          "is_correct": false
+        },
+        {
+          "text": "Open FortiSASE Central Management Synchronization Log and inspect per-object errors.",
+          "feedback": "The FortiSASE synchronization log reports whether supported objects actually synchronized.",
+          "is_correct": true
+        },
+        {
+          "text": "Delete the FortiManager ADOM and recreate it in Global Database mode.",
+          "feedback": "Global Database ADOM is explicitly unsupported.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q46",
+      "lesson_id": "L11",
+      "stem": "How should one-time schedule timestamps be handled during FortiManager synchronization?",
+      "choices": [
+        {
+          "text": "Enter local time and assume FortiSASE preserves the FortiManager timezone.",
+          "feedback": "The date/time picker is interpreted as GMT during synchronization.",
+          "is_correct": false
+        },
+        {
+          "text": "Use UTC epoch start-utc and end-utc values to avoid local-time ambiguity.",
+          "feedback": "The documented example treats the date/time picker as GMT and recommends UTC epoch fields.",
+          "is_correct": true
+        },
+        {
+          "text": "Convert every timestamp to the FortiSASE PoP's current local time.",
+          "feedback": "PoP local time is not the documented schedule conversion.",
+          "is_correct": false
+        },
+        {
+          "text": "Use the RADIUS accounting timestamp from the authentication server.",
+          "feedback": "RADIUS accounting timestamps are unrelated to schedule synchronization.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    },
+    {
+      "id": "Q47",
+      "lesson_id": "L12",
+      "stem": "What does minimum-sla-meet-members control in a Lowest Cost (SLA) rule?",
+      "choices": [
+        {
+          "text": "The number of physical links that must be administratively up.",
+          "feedback": "Link-up alone is not the same as SLA qualification.",
+          "is_correct": false
+        },
+        {
+          "text": "The maximum number of sessions that can use each SD-WAN member.",
+          "feedback": "Session capacity is not what the option counts.",
+          "is_correct": false
+        },
+        {
+          "text": "The number of BGP neighbors that must advertise a community.",
+          "feedback": "BGP community advertisement is a separate routing mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "The minimum count of SLA-qualified members required for the rule to take effect.",
+          "feedback": "It is a rule-eligibility gate based on how many members meet the configured SLA.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "points": 1
+    },
+    {
+      "id": "Q48",
+      "lesson_id": "L12",
+      "stem": "If the minimum SLA member threshold is not met, what happens to the primary rule?",
+      "choices": [
+        {
+          "text": "All traffic is dropped immediately, regardless of later rules.",
+          "feedback": "A later rule or implicit rule may still forward traffic.",
+          "is_correct": false
+        },
+        {
+          "text": "The primary rule remains active and uses any alive member.",
+          "feedback": "The primary rule is not kept eligible when the threshold fails.",
+          "is_correct": false
+        },
+        {
+          "text": "It is skipped and evaluation continues to the next matching SD-WAN rule.",
+          "feedback": "The option gates rule eligibility; it does not inherently drop traffic.",
+          "is_correct": true
+        },
+        {
+          "text": "The FortiGate disables the Performance SLA health check globally.",
+          "feedback": "The health check remains configured; only the service rule is skipped.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "points": 1
+    },
+    {
+      "id": "Q49",
+      "lesson_id": "L12",
+      "stem": "Which member should count toward minimum-sla-meet-members?",
+      "choices": [
+        {
+          "text": "A member that is alive and satisfies the configured SLA thresholds.",
+          "feedback": "The threshold counts members that meet the SLA, not merely links that are up.",
+          "is_correct": true
+        },
+        {
+          "text": "Any member with carrier, even when latency and loss exceed limits.",
+          "feedback": "Carrier alone does not prove SLA compliance.",
+          "is_correct": false
+        },
+        {
+          "text": "A member that has a route but no successful health-check probe.",
+          "feedback": "A route without successful probes does not meet the configured SLA.",
+          "is_correct": false
+        },
+        {
+          "text": "A member selected by cost, even when its SLA map is failing.",
+          "feedback": "Cost ranking does not override the SLA pass condition.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "points": 1
+    },
+    {
+      "id": "Q50",
+      "lesson_id": "L12",
+      "stem": "Which diagnostics best show SLA qualification and rule selection for service 10?",
+      "choices": [
+        {
+          "text": "Only get system interface, because link state equals SLA state.",
+          "feedback": "Interface state does not expose all SLA metrics.",
+          "is_correct": false
+        },
+        {
+          "text": "Health-check status plus diagnose sys sdwan service4 10.",
+          "feedback": "The health-check diagnostic shows member SLA state; service4 shows service-rule selection.",
+          "is_correct": true
+        },
+        {
+          "text": "Only the routing table, because it records the selected SLA map.",
+          "feedback": "The routing table does not show the complete service SLA decision.",
+          "is_correct": false
+        },
+        {
+          "text": "Only a packet capture, because it shows the configured minimum threshold.",
+          "feedback": "A packet capture cannot show the configured rule threshold.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "points": 1
+    }
+  ]
+}
