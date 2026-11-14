@@ -1,0 +1,591 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-14T08:02:00-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-14-08-02.json",
+  "history_records_compared": 270,
+  "candidate_only_records_compared": 12,
+  "selected_topic_count": 12,
+  "selected_topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "TCP congestion control with BBR: model the bottleneck instead of waiting for loss",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/840778/tcp-congestion-control-enhancement-with-bbr",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Global FortiOS TCP sender congestion-control selection between default CUBIC and model-based BBR using bottleneck bandwidth and propagation RTT.",
+      "workflow_transaction_fingerprint": "TCP sender pacing -> bottleneck bandwidth/RTT model -> ACK-derived delivery feedback -> pacing/cwnd adjustment; configured globally rather than per firewall policy.",
+      "failure_class": "Low TCP goodput on a congested or high-RTT path; a policy-only change is incorrectly expected to alter the global TCP algorithm.",
+      "evidence_pattern": "config system global read-back proves selected algorithm; controlled same-path transfer plus RTT/loss/retransmission measurements tests outcome; neither alone proves an application is healthy.",
+      "remediation_path": "A/B test CUBIC and BBR under identical path, policy, endpoints and load; change globally in a controlled window; revert to CUBIC if fairness or stability regresses.",
+      "question_fingerprint": "Global BBR selection; controlled CUBIC/BBR A-B test; TCP-only/global scope; configuration-versus-performance evidence.",
+      "question_ids": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "diagram_topology_layout_fingerprint": "Closed-loop TCP sender -> bottleneck -> ACK feedback -> BBR bandwidth/RTT estimator -> pacing controller.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "Fortinet Support Tool capture lifecycle: scoped keys, daemon selection, and a time-bounded evidence bundle"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Local-in policy boundaries and per-policy logging"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "FSSO filters: ingestion boundary versus per-FortiGate forwarding"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Local-out routing: steering FortiGate-originated service traffic"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiGate — Hybrid post-quantum IKEv2 key exchanges: IKE_INTERMEDIATE and CHILD_SA rekey boundaries"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "DHCP Option 82 address assignment and relay identity matching"
+        }
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "TPM-backed private-data encryption: the key hierarchy and the hardware-bound backup",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/515831/trusted-platform-module-support",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "TPM protects the 32-hex master-encryption-password; that password derives a primary key used to encrypt individual FortiManager secrets.",
+      "workflow_transaction_fingerprint": "Enable private-data-encryption -> enter master key -> TPM protects key material -> primary key encrypts stored credentials -> backup binds protected key to appliance.",
+      "failure_class": "Restore or migration fails because the destination TPM/master-encryption-password does not match the encrypted backup; TPM is mistaken for disk encryption.",
+      "evidence_pattern": "diagnose hardware info reports TPM detected/enabled, not the integrity of every encrypted object; successful restore with matching key validates backup compatibility.",
+      "remediation_path": "Confirm supported hardware and TPM state, escrow the master key securely, retain tested backups, and use the correct key during restore or migration.",
+      "question_fingerprint": "TPM key hierarchy; supported hardware and enablement; backup key mismatch; disk/database encryption boundary.",
+      "question_ids": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "diagram_topology_layout_fingerprint": "TPM root -> master-encryption-password -> RSA-protected primary key -> AES-encrypted secrets -> hardware-bound backup/restore.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-28",
+          "subject": "CLI template timing: model bootstrap versus install phases"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiManager — Scheduled FortiSwitch packet capture: management delegation and capture evidence lifecycle"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiManager — Managed device/VDOM license accounting and unexpected setup-wizard reentry"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiManager — Retrieve versus policy-package authority"
+        },
+        {
+          "date": "2026-10-27",
+          "subject": "FortiManager — Policy Blocks: reusable rule sets and installation-target boundaries"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Automatic post-install CLI scripts and running-versus-managed configuration"
+        }
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "ADOM lifecycle and device modes: why disabling the feature is a migration",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/208717/enabling-and-disabling-the-adom-feature",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "ADOM feature state partitions Device Manager, FortiView, logs, incidents and reports; Normal mode assigns a FortiGate as one device to one ADOM, Advanced mode allows VDOM-level assignment.",
+      "workflow_transaction_fingerprint": "Enable as super user -> create ADOMs and assign devices/admins -> optionally assign individual VDOMs in Advanced mode -> consolidate to root and delete non-root ADOMs before disabling.",
+      "failure_class": "ADOM disable or Advanced-to-Normal transition is blocked because non-root ADOMs or VDOM assignments remain; FortiMail/FortiWeb logging is unavailable if ADOMs are off.",
+      "evidence_pattern": "ADOM/device/VDOM assignment views and the System Information Administrative Domain switch show state; they do not prove historical log data was migrated.",
+      "remediation_path": "Inventory devices, VDOMs, administrators, report scope and retention before migration; move devices to root, delete non-root ADOMs, then disable.",
+      "question_fingerprint": "Super-user enablement; Normal versus Advanced VDOM mapping; safe disable sequence; device-type ADOM constraints.",
+      "question_ids": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "diagram_topology_layout_fingerprint": "ADOM lifecycle state machine: disabled -> enabled/root -> normal or advanced assignment -> consolidate -> delete non-root -> disabled.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "OFTP log encryption negotiation: compatible algorithm levels, TLS, and server identity"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "RFC 6587 syslog framing: byte-counted TCP messages versus delimiters"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiAnalyzer — Log-file rolling versus retention: why archive age can exceed configured days"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiAnalyzer — FortiAnalyzer Fabric member HA: primary-only supervisor registration and failover visibility"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiAnalyzer — JSON API request/response audit"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Scheduled log aggregation between FortiAnalyzer appliances"
+        }
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "DNS over TLS on FortiSwitch: encrypted resolver traffic is not the same as authenticated DNS",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitchOS 8.0 resolver protocol changes from default cleartext DNS to DNS over TLS on TCP/853; optional server-ca-cert enables CA validation before connection.",
+      "workflow_transaction_fingerprint": "Switch management-plane resolver selects primary/secondary server -> TCP/853 TLS handshake -> optional CA-chain validation -> encrypted DNS query/response -> local resolver cache.",
+      "failure_class": "Resolver timeout or TLS handshake failure after switching protocol; DoT is enabled but certificate trust is not configured, or source-IP routing/firewall blocks TCP/853.",
+      "evidence_pattern": "show system dns proves protocol/server/CA settings; packet capture showing TCP/853 and TLS proves transport; it does not prove the answer is authoritative or DNSSEC-validated.",
+      "remediation_path": "Confirm resolver DoT support, TCP/853 reachability, source IP route, CA chain and server certificate; configure server-ca-cert and test name resolution before rollout.",
+      "question_fingerprint": "TCP/853 transport; CA validation semantics; source-IP reachability; TLS-versus-DNSSEC evidence boundary.",
+      "question_ids": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "diagram_topology_layout_fingerprint": "Switch resolver -> TCP/853 TLS handshake -> CA trust gate -> encrypted DNS query/response; separate source-IP route.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "BGP EVPN multihoming: ESI identity, designated-forwarder preference, and MAC holdtime"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Dynamic VLAN pruning: GVRP state and ISL trunk membership"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiSwitch — Ingress/prelookup/egress ACL pipeline and hardware density-mode tradeoffs"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiSwitch — Port storm control: pps thresholds, traffic classes and burst-level exceptions"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiSwitch — Routed VLAN interfaces"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "STP root guard versus BPDU guard"
+        }
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "BLE real-time location services: scan windows, tag filters and cloud reporting",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/316456/ble-real-time-location-services",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Managed FortiAP built-in Bluetooth radios scan BLE advertisers using a BLE profile; WTP profile binds the scan profile to an RTLS provider and sends filtered measurements to a cloud service.",
+      "workflow_transaction_fingerprint": "BLE advertiser/tag -> AP scan window and RSSI threshold -> UUID/MAC allowlist -> accumulation/reporting interval -> WSS/TLS provider endpoint -> location analytics.",
+      "failure_class": "Tags are visible over the air but absent from cloud analytics because scan profile is not applied, RSSI threshold excludes them, UUID/MAC filters do not match, or token/FQDN/egress is wrong.",
+      "evidence_pattern": "wlac wtpprof proves controller profile and RTLS binding; cw_diag ble-config proves AP received scan settings; cw_diag ble-rtls proves endpoint/protocol settings, not cloud acceptance or location accuracy.",
+      "remediation_path": "Tune scan type/window/threshold, bind BLE profile to WTP profile, verify provider endpoint/token and allowlists, then compare AP-side sightings with cloud ingestion.",
+      "question_fingerprint": "Passive versus active BLE scanning; WTP/LBS profile binding; AP-side diagnostics; RSSI/UUID/token/egress fault isolation.",
+      "question_ids": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "diagram_topology_layout_fingerprint": "BLE advertiser -> AP scan window/threshold -> UUID/MAC filter -> accumulation/reporting -> WSS/TLS RTLS cloud.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "RadSec for WPA2/WPA3-Enterprise: RADIUS-over-TLS transport and certificate trust"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Legacy WTP profile LLDP state and post-upgrade AP stability"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiAP/Wireless — MPSK profile key-to-VLAN binding and WPA2/WPA3 transition compatibility"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiAP/Wireless — FortiAP controller discovery, authorization and DTLS trust-chain failure isolation"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiAP/Wireless — EST/SCEP wired certificate bootstrap"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Wi-Fi 7 Multi-Link Operation prerequisites and radio support"
+        }
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Kerberos authentication scope in FortiNAC 9.4: admin and user login are different support planes",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.7/release-notes/636223/new-features-in-9-4-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 adds Kerberos for administrator and user authentication on FortiNAC-CA, and administrator authentication on FNAC-M; the supported roles differ by platform.",
+      "workflow_transaction_fingerprint": "Client/domain context -> Kerberos KDC ticket exchange -> FortiNAC authentication endpoint -> local application authorization; separate this from LDAP lookup, RADIUS endpoint access and machine domain join.",
+      "failure_class": "Repeated admin/user login prompt despite directory reachability because realm, clock, service identity or ticket negotiation is wrong; unsupported platform/authentication scope is assumed.",
+      "evidence_pattern": "KDC AS/TGS events and FortiNAC authentication logs show ticket issuance/validation path; successful LDAP search or TGT acquisition alone does not prove application authorization.",
+      "remediation_path": "Confirm 9.4+ release and platform/scope first; validate DNS, time, realm and service identity using the version-matched guide; do not reuse another Fortinet product's Kerberos CLI blindly.",
+      "question_fingerprint": "FortiNAC-CA versus FNAC-M Kerberos support matrix; TGT/service-ticket sequence; SPN/realm/DNS/time fault isolation; LDAP-versus-Kerberos evidence boundary.",
+      "question_ids": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "diagram_topology_layout_fingerprint": "Client -> KDC AS/TGS exchange -> FortiNAC service ticket validation -> application role authorization; separate CA and FNAC-M support branches.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "IPv6 endpoint access versus IPv4-only infrastructure discovery: the FortiNAC capability boundary"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "FortiLink CoA disconnect failures: accounting access and return path"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiNAC — Portal Request Processing Rules: HTTP regex matching, publishing and duplicate-rule failure"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiNAC — Legacy FortiNAC L2/L3 polling: MAC location versus ARP identity reconciliation"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiNAC — Register as Device placement"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Security-event normalization, rule precedence, and host containment"
+        }
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiGate VDOM multi-tenancy with FortiNAC-F: shared access hardware, separate tenant enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.5/fortigate-multitenancy-integration-guide/874333/overview",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiGate MGMT/root VDOM manages shared FortiSwitch/FortiAP infrastructure while tenant VDOMs own tenant VLANs/SSIDs; FortiNAC-F maps each virtual device's logical networks to the VLANs in that VDOM.",
+      "workflow_transaction_fingerprint": "FortiLink-managed switch -> export physical port to tenant VDOM -> create tenant VLAN/default VLAN -> VDOM-link routes/policies -> FortiNAC virtual-device and logical-network mapping -> endpoint VLAN assignment.",
+      "failure_class": "Port appears only in root, tenant VLAN is created in wrong VDOM, DHCP relay/VDOM-link policy is missing, or FortiNAC maps a logical network to the wrong tenant VLAN.",
+      "evidence_pattern": "Exported port is greyed in root and visible in tenant; FortiNAC Virtualized Devices lists root and tenant VDOMs; these prove control-plane mapping, not end-to-end DHCP or tenant reachability.",
+      "remediation_path": "Verify FortiLink, exported port, tenant VLAN, VDOM link routes and firewall policies, DHCP relay, and per-VDOM FortiNAC Model Configuration; test a host in each tenant.",
+      "question_fingerprint": "Root/MGMT versus tenant VDOM ownership; exported switch-port behavior; logical-network/VLAN mapping; DHCP/VDOM-link path troubleshooting.",
+      "question_ids": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "diagram_topology_layout_fingerprint": "Shared root/MGMT FortiGate with FortiLink switch/AP -> exported port -> tenant VDOM VLANs/SSIDs -> VDOM links/policies -> FortiNAC per-tenant mapping.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "Directory-sync machine-auth RBAC: host/user group projections and the AD primary-group trap"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "IoT profiling: combine fingerprints without blocking on missing data"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiNAC-F — Winbind MSCHAPv2 AD domain join versus non-AD LDAP/Kerberos directories"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiNAC-F — FortiNAC-F active/passive HA: control ownership versus interface allowaccess"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiNAC-F — Trap-driven L2/L3 host learning"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "External Only event-forwarding behavior and version-specific defect"
+        }
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiGuest guest portals in FortiAuthenticator 8.0: hosted pages, rules and beta boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/563028/fortiauthenticator-8-0-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0 embeds FortiGuest portal configuration through Portals, Portals Rules and Guest Themes; rules select a hosted portal, while authentication is limited to local users in the beta.",
+      "workflow_transaction_fingerprint": "Client captive-portal redirect -> FortiAuthenticator hosted portal -> portal-rule evaluation -> local-user authentication -> success/failure response -> network gateway continues its access workflow.",
+      "failure_class": "Portal renders but user cannot authenticate, wrong portal is selected, theme customization is lost after restore, or HA is assumed to support the beta feature.",
+      "evidence_pattern": "Portal preview proves page rendering; rule match proves portal selection; local authentication logs prove credential validation; none proves gateway VLAN/role enforcement.",
+      "remediation_path": "Validate redirect URL, portal rule order/conditions, local user state and gateway response; back up customizations separately and do not deploy the beta in unsupported HA.",
+      "question_fingerprint": "Guest Portal object model; local-user-only beta scope; HA/backup limitations; page-render versus authentication/gateway enforcement evidence.",
+      "question_ids": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "diagram_topology_layout_fingerprint": "Captive client redirect -> FortiAuthenticator portal -> rule selector -> local-user authentication -> gateway access response.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "SAML IdP signing-certificate auto-rotation: staged trust and timed cutover"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiAuthenticator — OAuth public-client authorization-code PKCE: challenge/verifier binding and redirect controls"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiAuthenticator — HTTPS administration certificate binding and web-server recovery boundaries"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiAuthenticator — Dynamic RADIUS reply attributes"
+        },
+        {
+          "date": "2026-10-27",
+          "subject": "FortiAuthenticator — Realm matching and UPN parsing: preserve the real username"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "SAML service-provider group filters and multi-value assertion attributes"
+        }
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "SSH command filtering: parser semantics, restricted mode and the audit trail",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/900399/creating-an-ssh-filter",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM parses SSH shell input into command and parameters, evaluates simple/exact/regex patterns, and applies deny-list or restricted allow-list semantics to the secret's SSH launcher.",
+      "workflow_transaction_fingerprint": "Create SSH filter profile -> select Deny or Allow/restricted mode -> add patterns and log/severity settings -> attach profile to SSH-enabled secret -> evaluate each command/channel -> write SSH Filter Log.",
+      "failure_class": "An administrator expects a prefix rule to match only one parameter set, assumes Deny mode is an allowlist, or forgets that owner bypass and non-shell channels are separate controls.",
+      "evidence_pattern": "SSH Filter Log shows Blocked or Passthrough and command metadata; it proves filter action, not the full target-side impact or that every non-shell channel is blocked.",
+      "remediation_path": "Test exact and prefix patterns, compound commands, regex fallback, channels and owner bypass with a non-production secret; audit legacy Action=Allow entries after upgrade.",
+      "question_fingerprint": "Deny versus restricted allow mode; exact versus prefix matching; compound-command parser; owner bypass and SSH audit evidence.",
+      "question_ids": [
+        33,
+        34,
+        35,
+        36
+      ],
+      "diagram_topology_layout_fingerprint": "SSH launcher -> command parser -> simple/exact matcher -> regex matcher -> allow/deny decision -> channel controls -> SSH Filter Log.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Windows Application Filter: secret-scoped deny rules and WinRM"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiPAM — Target TOTP secret auto-delivery: template overrides and SSH keyboard-interactive limits"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiPAM — FortiPAM scheduled jobs: secret-scoped SSH, Web API and PowerShell execution"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiPAM — Native launcher tunnel encryption"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Target-only secret templates and Web Launcher behavior"
+        }
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Maintenance Calendars: suppress monitoring noise without hiding the scope of a change",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/172393/configuring-maintenance-calendars",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A calendar schedule gates performance, availability and change monitoring/rule triggers for selected devices and Synthetic Transaction Monitoring tasks during a defined maintenance interval.",
+      "workflow_transaction_fingerprint": "Create calendar -> define one-time or recurring time range -> select devices/groups and STM tasks -> optionally enable incident generation during maintenance -> calendar view and incident behavior.",
+      "failure_class": "A maintenance window suppresses too many devices or the wrong STM tasks; an operator assumes raw event ingestion or all security detection is disabled.",
+      "evidence_pattern": "Calendar view and selected scope prove schedule configuration; missing performance/availability/change incidents during the window are expected; they do not prove raw logs stopped ingesting.",
+      "remediation_path": "Scope devices and STM tasks explicitly, validate recurrence/time range and optional incident override, and compare the calendar with change tickets and device-group membership.",
+      "question_fingerprint": "Monitoring suppression semantics; device/group/STM scope; incident-generation override; raw-log-ingestion boundary.",
+      "question_ids": [
+        37,
+        38,
+        39,
+        40
+      ],
+      "diagram_topology_layout_fingerprint": "Calendar schedule + selected devices/STM -> maintenance gate -> performance/availability/change rule suppression -> optional incident override.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "CMDB business-service records: service inventory context versus live health evidence"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Windows WMI/OMI monitoring: WinRM transport and event evidence"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiSIEM — ClickHouse storage regions: event-worker routing and non-overlapping shard placement"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiSIEM — FortiSIEM synthetic transaction monitoring: HTTP/Selenium application health beyond host ping"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiSIEM — Watch Lists as dynamic incident memory"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Incident clearing conditions and status semantics"
+        }
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Secure Private Access application monitoring: PoP-originated ICMP probes to private apps",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/100856/spa-application-monitoring",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE Security PoPs initiate ICMP health checks every second to up to 20 custom private IPv4 applications hosted behind SPA Hubs; SLA thresholds are evaluated per PoP and SPA Hub service connection.",
+      "workflow_transaction_fingerprint": "Define application name/private IPv4 -> set latency/jitter/loss targets -> PoP probes through SPA service connection -> SLA failure view -> per-PoP drilldown history.",
+      "failure_class": "ICMP is blocked or routed differently from application TCP/TLS traffic; one PoP or hub path fails while the application remains healthy for user traffic, or thresholds are too tight.",
+      "evidence_pattern": "SLA Failure tab shows measured latency/jitter/loss per PoP and hub connection; it proves ICMP probe behavior, not HTTP/TLS/authentication or transaction success.",
+      "remediation_path": "Permit/validate ICMP probe path, compare per-PoP and per-hub results, set thresholds from baseline, and pair ICMP monitoring with an application-layer synthetic test.",
+      "question_fingerprint": "Private application object limit; PoP-originated ICMP cadence; per-PoP/hub SLA drilldown; ICMP-versus-application transaction boundary.",
+      "question_ids": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "diagram_topology_layout_fingerprint": "Multiple Security PoPs -> ICMP probes every second -> SPA Hub service connections -> private application -> per-PoP SLA dashboard.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "Steering bypass destinations: dynamic FQDN routes and on-net/off-net conditions"
+        },
+        {
+          "date": "2026-10-28",
+          "subject": "Certificate inspection versus deep inspection: endpoint trust boundary"
+        },
+        {
+          "date": "2026-10-25",
+          "subject": "FortiSASE — Mandatory administrator change comments: audit transaction and 30-day summary retention"
+        },
+        {
+          "date": "2026-10-24",
+          "subject": "FortiSASE — FortiSASE intrusion prevention: profile modes, custom signature precedence and packet logging"
+        },
+        {
+          "date": "2026-10-21",
+          "subject": "FortiSASE — Branch On-ramp IKEv2 mode config and BGP"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "API-based CASB Data Protection, file-activity rules, and OCR"
+        }
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "L3 VPN segmentation over a single multi-VRF IPsec overlay",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/810981",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A single IPsec overlay carries multiple VRF contexts using VPN-ID/IPIP encapsulation; BGP CE/PE VRF roles, RD and route-target import/export preserve route separation.",
+      "workflow_transaction_fingerprint": "Configure tunnel encapsulation -> define VRFs/RDs/RTs -> exchange routes per VRF -> run VRF-aware health checks -> keep hub egress on the ingress overlay when SLA is met.",
+      "failure_class": "Traffic leaks between tenants, route is absent in one VRF, health check runs in the wrong VRF, or hub sends a flow out a different overlay than the ingress path.",
+      "evidence_pattern": "VRF route tables and BGP RT/RD state prove control-plane separation; VRF-aware SLA output proves probe context; packet capture and policy counters prove forwarding path, not tenant authorization by themselves.",
+      "remediation_path": "Verify VPN-ID encapsulation, matching VRF IDs, RD/RT import/export, source/VRF on health checks, route/policy symmetry and overlay tie-break behavior.",
+      "question_fingerprint": "VPN-ID/IPIP encapsulation; BGP VRF RD/RT; VRF-aware SLA source; ingress-overlay stickiness.",
+      "question_ids": [
+        45,
+        46,
+        47,
+        48
+      ],
+      "diagram_topology_layout_fingerprint": "Hub/spokes over one IPsec overlay carrying VRF-A/VRF-B VPN-ID contexts; separate BGP route targets, SLA probes and ingress-stickiness.",
+      "uniqueness_decision": "PASS after manual comparison against all 30-day records and candidate-only exclusions",
+      "closest_historical_subjects": [
+        {
+          "date": "2026-10-29",
+          "subject": "SD-WAN overlay templates: generated IPsec/BGP provisioning versus SD-WAN path intelligence"
+        },
+        {
+          "date": "2026-10-29",
+          "subject": "ADVPN 2.0 edge discovery and path management: shortcuts require compatible healthy underlays"
+        },
+        {
+          "date": "2026-10-27",
+          "subject": "Secure SD-WAN — Application steering: first-flow identification and top-down rule matching"
+        },
+        {
+          "date": "2026-10-23",
+          "subject": "Secure SD-WAN — Preserving original-direction DSCP on return traffic with diffserv-copy"
+        },
+        {
+          "date": "2026-10-16",
+          "subject": "Secure SD-WAN — Explicit service rules and fallback"
+        }
+      ],
+      "candidate_only_exclusions": [
+        {
+          "date": "2026-10-26",
+          "subject": "Interface migration, zone membership, and route/policy dependencies"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "No URL-only uniqueness claims were accepted; the mechanism, transaction, failure, evidence, remediation, question and diagram fingerprints were compared.",
+    "FortiSASE SPA private-app ICMP monitoring is distinct from the prior public-SaaS/endpoint-to-PoP DEM topic: target, probe source, protocol and object model differ.",
+    "Secure SD-WAN multi-VRF single-overlay segmentation is distinct from prior overlay-template provisioning and ADVPN shortcut discovery: this lesson focuses on VPN-ID/VRF route separation and VRF-aware probes."
+  ]
+}
