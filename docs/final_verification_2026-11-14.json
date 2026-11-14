@@ -9,8 +9,8 @@
   "github_files": [
     {
       "path": "docs/Fortinet_Daily_Study_Quiz_2026-11-14-08-29.html",
-      "sha": "f70eda9494955ec8749797ae7d8627b98315869a",
-      "bytes": 193822
+      "sha": "dbada030f543f1b1d1408602689b17cfe3fc0b21",
+      "bytes": 196817
     },
     {
       "path": "docs/index.html",
@@ -24,8 +24,8 @@
     },
     {
       "path": "docs/selected_fingerprints_2026-11-14-08-29.json",
-      "sha": "46bb02d548aec720d3a62fa465f5f697eab0bca3",
-      "bytes": 20115
+      "sha": "b6ab3792573ab7efae575b905cbdc999a757d893",
+      "bytes": 21844
     },
     {
       "path": "docs/community_sweep_2026-11-14-08-29.json",
@@ -44,8 +44,8 @@
     },
     {
       "path": "docs/question_bank_2026-11-14.json",
-      "sha": "1d283eaf42c0c43d741ea753601a377d7ebbb16f",
-      "bytes": 60162
+      "sha": "7290459bad41c7e80440f45260b081134cf43f17",
+      "bytes": 61612
     },
     {
       "path": "docs/diagram_manifest_2026-11-14.json",
@@ -54,13 +54,13 @@
     },
     {
       "path": "docs/validation_2026-11-14.json",
-      "sha": "be4d3142c67a858080e7ddba34f63ab2e9f0b585",
-      "bytes": 5116
+      "sha": "29582c1abec7d6ed79c7364a7d522195a9473532",
+      "bytes": 5660
     },
     {
       "path": "docs/run_status_2026-11-14-08-29.html",
-      "sha": "31992fe24a662435212df692707c1cc393201835",
-      "bytes": 4694
+      "sha": "7086a8c8687034168d7c3177b614182379065ba7",
+      "bytes": 4793
     }
   ],
   "deliverables": {
@@ -81,7 +81,10 @@
     "inventory_records": 294,
     "report_artifacts": 28,
     "community_product_areas_searched": 12,
-    "recent_direct_scenarios": 2
+    "recent_direct_scenarios": 2,
+    "choice_length_max_spread_words": 2,
+    "avg_correct_choice_words": 10.24,
+    "avg_incorrect_choice_words": 10.24
   },
   "verification": {
     "inventory_readback": "PASS",
@@ -97,7 +100,8 @@
     "pages_workflow": "PARTIAL",
     "public_pages_url_fetch": "INACCESSIBLE_TO_VERIFIER",
     "email": "NOT_ATTEMPTED_DISABLED",
-    "scheduler": "UNCHANGED"
+    "scheduler": "UNCHANGED",
+    "choice_length_balance": "PASS"
   },
   "pages_workflow_runs": [
     {
@@ -105,32 +109,31 @@
       "status": "completed",
       "conclusion": "success",
       "url": "https://github.com/ccaiccie4/Fortinet/actions/runs/43617528563",
-      "note": "Build/deploy/report-build-status jobs succeeded; this run predates final status-only edits."
+      "note": "A Pages build/deploy run completed successfully for the core report/index content."
     },
     {
       "id": 43617669150,
       "status": "in_progress",
       "conclusion": null,
       "url": "https://github.com/ccaiccie4/Fortinet/actions/runs/43617669150",
-      "note": "Triggered by final report status update."
+      "note": "An older follow-up build job remained in progress at the final check."
     },
     {
-      "id": 43617712791,
+      "id": 43618043130,
       "status": "pending",
       "conclusion": null,
-      "url": "https://github.com/ccaiccie4/Fortinet/actions/runs/43617712791",
-      "note": "Triggered by final index status update; latest run at verification time."
+      "url": "https://github.com/ccaiccie4/Fortinet/actions/runs/43618043130",
+      "note": "Latest Pages build was queued after final exam/report/status commits; no final conclusion at verification time."
     }
   ],
   "limitations": [
-    "Some official Fortinet Document Library pages returned HTTP 403 to direct opening; indexed official documentation and Fortinet-hosted PDFs were used.",
+    "Some Fortinet Document Library pages returned HTTP 403 to direct opening; official indexed documentation and Fortinet-hosted PDFs were used.",
     "Only two recent Community scenarios directly matched selected mechanisms; other product areas had no directly matched recent scenario verified.",
-    "GitHub Pages build succeeded but the deploy job is still in progress; public URL verification remains pending.",
-    "GitHub Pages build/deploy workflow succeeded, but the verification fetcher could not access the public report or index URLs; public reachability is therefore unconfirmed."
+    "GitHub Pages build/deploy succeeded for the core report/index content, but a later build was queued and the public report/index URLs remained inaccessible to the verification fetcher."
   ],
   "remediation": [
-    "Retry direct access to the blocked Fortinet documentation pages or use an authenticated documentation session.",
+    "Retry direct access to blocked Fortinet documentation pages through an authenticated documentation session.",
     "Continue searching the ten unmatched Community product areas for new failure modes and material release changes.",
-    "If users cannot reach the Pages URL, inspect the GitHub Pages deployment and repository Pages settings; retry public URL verification from a normal browser/network."
+    "Check the latest Pages workflow run and public URLs from a normal browser/network; retain the verified GitHub repository artifacts if public URL access remains unavailable."
   ]
 }
