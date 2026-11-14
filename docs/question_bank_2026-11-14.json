@@ -1,0 +1,1508 @@
+{
+  "schema_version": "1.0",
+  "run_date": "2026-11-14",
+  "question_count": 50,
+  "choice_count": 200,
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "topic": "BBR selection",
+      "question": "A FortiGate engineer wants to compare BBR with the current default. Which setting changes the TCP congestion algorithm?",
+      "choices": [
+        {
+          "text": "Set tcp-congestion-control bbr under system global.",
+          "correct": true,
+          "feedback": "Correct. FortiOS documents the algorithm under config system global; CUBIC remains the default, and BBR is selected globally."
+        },
+        {
+          "text": "Enable BBR inside the matching firewall policy.",
+          "correct": false,
+          "feedback": "A firewall policy controls traffic handling and inspection, but the documented congestion-control knob is not policy-scoped."
+        },
+        {
+          "text": "Set the BBR option inside the SD-WAN service.",
+          "correct": false,
+          "feedback": "SD-WAN service rules select paths and members; they do not select the FortiGate TCP congestion-control algorithm."
+        },
+        {
+          "text": "Enable BBR under the interface TCP optimizer.",
+          "correct": false,
+          "feedback": "The documented CLI hierarchy is system global. An interface-level optimizer command would be an invented configuration path."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "topic": "BBR test design",
+      "question": "Two throughput runs differ after a BBR change. Which retest produces the strongest comparison?",
+      "choices": [
+        {
+          "text": "Compare different circuits and retain only HTTP status codes.",
+          "correct": false,
+          "feedback": "Different circuits change the bottleneck and RTT, while HTTP status only proves the request completed."
+        },
+        {
+          "text": "Keep policy and endpoints fixed; compare CUBIC and BBR under identical delay and loss.",
+          "correct": true,
+          "feedback": "Correct. Fortinet's example holds the proxy-mode policy and path conditions constant, including 50 ms delay and 1% loss, so the algorithm is the main variable."
+        },
+        {
+          "text": "Disable inspection only for BBR and compare file sizes.",
+          "correct": false,
+          "feedback": "Changing inspection mode introduces another throughput variable and prevents attributing the result to congestion control."
+        },
+        {
+          "text": "Change shaping rates between runs to equalize interface utilization.",
+          "correct": false,
+          "feedback": "Different shaping rates change the bottleneck itself; they do not create a controlled algorithm comparison."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "topic": "BBR scope",
+      "question": "A change request asks for BBR only on one application policy. What is the key design constraint?",
+      "choices": [
+        {
+          "text": "BBR applies only to UDP sessions using that policy.",
+          "correct": false,
+          "feedback": "BBR is a TCP congestion-control algorithm; it does not govern UDP datagrams."
+        },
+        {
+          "text": "BBR is selected per destination address in the routing table.",
+          "correct": false,
+          "feedback": "The Fortinet setting is global, not a route or destination attribute."
+        },
+        {
+          "text": "The documented selector is global, not per policy or interface.",
+          "correct": true,
+          "feedback": "Correct. The setting changes the FortiGate TCP sender algorithm globally, so the change cannot be isolated to one firewall policy."
+        },
+        {
+          "text": "BBR is selected by each SD-WAN performance SLA.",
+          "correct": false,
+          "feedback": "Performance SLAs measure path quality and steer traffic; they do not select the TCP congestion-control implementation."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "topic": "BBR evidence",
+      "question": "The CLI shows BBR configured, but users still report slow downloads. What does that evidence establish?",
+      "choices": [
+        {
+          "text": "It proves the WAN bottleneck has enough capacity for every flow.",
+          "correct": false,
+          "feedback": "A configuration read-back says nothing about the capacity or congestion state of the WAN path."
+        },
+        {
+          "text": "It proves the remote server uses the same algorithm.",
+          "correct": false,
+          "feedback": "The FortiGate setting does not configure the remote TCP endpoint's congestion-control implementation."
+        },
+        {
+          "text": "It proves the application transaction is completing without delay.",
+          "correct": false,
+          "feedback": "The global setting does not measure application response time or confirm the application server is healthy."
+        },
+        {
+          "text": "It proves algorithm selection; controlled measurements must establish performance impact.",
+          "correct": true,
+          "feedback": "Correct. Read-back verifies the configured algorithm. Repeated goodput, RTT, retransmission and CPU measurements are needed to establish whether the change helped."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 5,
+      "product": "FortiManager",
+      "topic": "TPM key hierarchy",
+      "question": "During a security review, an engineer asks where FortiManager stores each protected administrator password. Which explanation is accurate?",
+      "choices": [
+        {
+          "text": "The TPM protects the master key; a derived primary key encrypts individual passwords.",
+          "correct": true,
+          "feedback": "Correct. The master-encryption-password is protected by the TPM, and the primary key derived from it encrypts individual stored secrets."
+        },
+        {
+          "text": "The TPM stores every administrator password as a separate object.",
+          "correct": false,
+          "feedback": "Fortinet states that individual passwords are not stored inside the TPM; they are encrypted using the primary key."
+        },
+        {
+          "text": "The TPM encrypts the entire FortiManager disk automatically.",
+          "correct": false,
+          "feedback": "The TPM feature does not encrypt the disk drive; it protects the private-data-encryption key hierarchy."
+        },
+        {
+          "text": "The backup file contains the primary key in readable form.",
+          "correct": false,
+          "feedback": "The primary key is not displayed in the backup file or system CLI; the protected key material remains bound to the TPM."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "topic": "TPM enablement",
+      "question": "A new FMG-400G is being prepared for private-data encryption. Which verification and enablement sequence matches the guide?",
+      "choices": [
+        {
+          "text": "Run diagnose system tpm, then enable disk-encryption globally.",
+          "correct": false,
+          "feedback": "The documented diagnostic is diagnose hardware info, and the feature is private-data-encryption rather than disk encryption."
+        },
+        {
+          "text": "Check diagnose hardware info, then enable private-data-encryption and enter the 32-hex key.",
+          "correct": true,
+          "feedback": "Correct. The hardware command reports TPM status; enabling private-data-encryption prompts for the 32-hexadecimal-digit master-encryption-password."
+        },
+        {
+          "text": "Enable private-data-encryption in each ADOM before creating backups.",
+          "correct": false,
+          "feedback": "Private-data-encryption is a system-global FortiManager setting, not an ADOM-scoped option."
+        },
+        {
+          "text": "Import a TPM certificate into every managed FortiGate device.",
+          "correct": false,
+          "feedback": "The TPM protects FortiManager's private-data key hierarchy; it is not a per-managed-FortiGate certificate enrollment workflow."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "topic": "TPM restore",
+      "question": "A restore from a TPM-protected backup fails on a replacement unit. The replacement has a different master-encryption-password. What is the likely cause?",
+      "choices": [
+        {
+          "text": "The backup cannot contain passwords when TPM is enabled.",
+          "correct": false,
+          "feedback": "FortiManager backups can contain TPM-protected key material; restore compatibility depends on the master-encryption-password."
+        },
+        {
+          "text": "The destination must disable all administrator accounts first.",
+          "correct": false,
+          "feedback": "The documented restore constraint is the key match, not deleting administrator accounts."
+        },
+        {
+          "text": "The TPM key context differs, so the protected configuration cannot be restored.",
+          "correct": true,
+          "feedback": "Correct. A TPM-enabled destination with a different master-encryption-password cannot restore the protected configuration."
+        },
+        {
+          "text": "The source backup must be converted into a FortiGate configuration file.",
+          "correct": false,
+          "feedback": "This is a FortiManager configuration restore; conversion to a managed FortiGate configuration is unrelated."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "topic": "TPM limits",
+      "question": "An auditor claims TPM support guarantees that managed FortiGate configuration data is encrypted at rest. What should the engineer say?",
+      "choices": [
+        {
+          "text": "Correct, because TPM encrypts every database and disk sector.",
+          "correct": false,
+          "feedback": "Fortinet explicitly says the TPM does not encrypt the FortiManager disk drive or managed FortiGate configuration data in its databases."
+        },
+        {
+          "text": "Correct, but only when every ADOM uses the same key.",
+          "correct": false,
+          "feedback": "ADOM structure does not extend TPM protection to the disk or managed-device configuration database."
+        },
+        {
+          "text": "Incorrect only for virtual FortiManager; hardware models are fully encrypted.",
+          "correct": false,
+          "feedback": "The limitation is stated for the TPM feature itself, not merely virtual appliances."
+        },
+        {
+          "text": "TPM protects private-data key material, not the disk or managed-device database.",
+          "correct": true,
+          "feedback": "Correct. The protected scope is the private-data encryption key hierarchy; disk encryption and managed-device database protection require separate controls."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 9,
+      "product": "FortiAnalyzer",
+      "topic": "ADOM enablement",
+      "question": "A FortiAnalyzer administrator needs separate FortiMail logging and report scopes. What prerequisite must be met?",
+      "choices": [
+        {
+          "text": "Enable ADOMs as a super-user administrator.",
+          "correct": true,
+          "feedback": "Correct. Fortinet requires ADOMs for FortiMail and FortiWeb logging/reporting, and only super users can enable the feature."
+        },
+        {
+          "text": "Create a separate FortiGate VDOM for every report.",
+          "correct": false,
+          "feedback": "VDOMs are not a substitute for FortiAnalyzer ADOMs; the logging/reporting requirement is specifically tied to the ADOM feature."
+        },
+        {
+          "text": "Enable Advanced device mode without enabling ADOMs.",
+          "correct": false,
+          "feedback": "Advanced mode is a device-assignment mode within ADOM deployment; it does not replace enabling ADOMs."
+        },
+        {
+          "text": "Move FortiMail into the root ADOM while ADOMs remain disabled.",
+          "correct": false,
+          "feedback": "The documented prerequisite is to enable ADOMs; FortiMail is placed in its default ADOM when authorized."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "topic": "ADOM device modes",
+      "question": "A single FortiGate has three VDOMs, and each department needs a separate ADOM. Which device mode supports that design?",
+      "choices": [
+        {
+          "text": "Normal mode, because every VDOM becomes a separate device.",
+          "correct": false,
+          "feedback": "Normal mode treats the FortiGate as one device and does not assign its VDOMs to different ADOMs."
+        },
+        {
+          "text": "Advanced mode, because individual VDOMs can be assigned to different ADOMs.",
+          "correct": true,
+          "feedback": "Correct. Advanced mode supports VDOM-level ADOM assignment, with added management complexity."
+        },
+        {
+          "text": "Collector mode, because each VDOM is a separate log collector.",
+          "correct": false,
+          "feedback": "Analyzer/Collector operation mode is separate from the ADOM device mode."
+        },
+        {
+          "text": "Root-only mode, because tenant ADOMs cannot contain VDOMs.",
+          "correct": false,
+          "feedback": "Root-only operation is not the documented mechanism for VDOM-level delegation."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "topic": "ADOM disable",
+      "question": "A change window is approved to disable ADOMs. The toggle remains unavailable. What sequence should be checked first?",
+      "choices": [
+        {
+          "text": "Switch Advanced mode to Normal while non-root ADOMs remain populated.",
+          "correct": false,
+          "feedback": "Advanced-to-Normal has its own VDOM assignment precondition, and disabling ADOMs requires removing non-root ADOMs."
+        },
+        {
+          "text": "Delete the root ADOM and recreate it after the toggle.",
+          "correct": false,
+          "feedback": "The root ADOM is the destination for devices; the guide requires retaining it."
+        },
+        {
+          "text": "Move devices to root, delete all non-root ADOMs, then turn ADOMs off.",
+          "correct": true,
+          "feedback": "Correct. FortiAnalyzer will not disable ADOMs while non-root ADOMs or managed devices remain."
+        },
+        {
+          "text": "Restart the analyzer and clear the log database before disabling.",
+          "correct": false,
+          "feedback": "A restart or database deletion does not satisfy the ADOM ownership preconditions."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "topic": "ADOM device constraints",
+      "question": "A design groups FortiGate and FortiCarrier devices into one ADOM. Which correction follows the administration guide?",
+      "choices": [
+        {
+          "text": "Keep them together if they use the same FortiOS version.",
+          "correct": false,
+          "feedback": "Fortinet explicitly prohibits grouping FortiGate and FortiCarrier devices in the same ADOM."
+        },
+        {
+          "text": "Place FortiCarrier devices in the root ADOM only.",
+          "correct": false,
+          "feedback": "FortiCarrier devices are added to a specific default FortiCarrier ADOM."
+        },
+        {
+          "text": "Use Advanced mode to mix the two device types safely.",
+          "correct": false,
+          "feedback": "Advanced mode changes VDOM assignment behavior; it does not override the device-type ADOM restriction."
+        },
+        {
+          "text": "Separate the device types; FortiCarrier uses its own default ADOM.",
+          "correct": true,
+          "feedback": "Correct. The guide states that FortiGate and FortiCarrier cannot be grouped together and that FortiCarrier uses its own default ADOM."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 13,
+      "product": "FortiSwitch",
+      "topic": "DoT transport",
+      "question": "After upgrading to FortiSwitchOS 8.0, the team wants encrypted switch-originated DNS. Which transport should appear on the wire?",
+      "choices": [
+        {
+          "text": "TCP port 853 carrying TLS-protected DNS.",
+          "correct": true,
+          "feedback": "Correct. FortiSwitchOS DoT uses TLS over TCP port 853; cleartext DNS remains the default until configured."
+        },
+        {
+          "text": "UDP port 853 carrying ordinary DNS messages.",
+          "correct": false,
+          "feedback": "Port 853 is used for DNS over TLS, not ordinary UDP DNS."
+        },
+        {
+          "text": "TCP port 53 with DNSSEC signatures enabled.",
+          "correct": false,
+          "feedback": "TCP/53 is cleartext DNS transport; DNSSEC is a separate data-authentication mechanism."
+        },
+        {
+          "text": "UDP port 53 with an encrypted payload extension.",
+          "correct": false,
+          "feedback": "The documented FortiSwitch DoT protocol uses TCP/853, not an encrypted UDP/53 extension."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "topic": "DoT certificate validation",
+      "question": "DoT is enabled, but the engineer has not configured server-ca-cert. What security property is missing?",
+      "choices": [
+        {
+          "text": "TLS encryption is disabled and DNS returns in cleartext.",
+          "correct": false,
+          "feedback": "DoT remains the selected transport; the missing CA setting affects certificate validation, not the protocol selection."
+        },
+        {
+          "text": "CA certificate validation before establishing the resolver connection.",
+          "correct": true,
+          "feedback": "Correct. FortiSwitchOS validates the DNS server certificate when a CA certificate is specified; without it, no CA validation occurs."
+        },
+        {
+          "text": "The resolver's ability to use TCP instead of UDP.",
+          "correct": false,
+          "feedback": "The protocol setting selects DoT and TCP/853 independently of the CA trust object."
+        },
+        {
+          "text": "DNS cache expiry and negative-response handling.",
+          "correct": false,
+          "feedback": "Cache settings are separate from server certificate validation."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "topic": "DoT failure isolation",
+      "question": "Name lookups fail immediately after enabling DoT. TCP SYNs to the resolver receive no response. What should be investigated first?",
+      "choices": [
+        {
+          "text": "The endpoint's browser certificate store and captive portal cache.",
+          "correct": false,
+          "feedback": "The failing flow is switch-originated resolver traffic; endpoint browser trust is not the first boundary."
+        },
+        {
+          "text": "The FortiSwitch LACP aggregator and member hash.",
+          "correct": false,
+          "feedback": "LACP selection is unrelated unless a separate link failure is proven; the immediate evidence is no TCP/853 response."
+        },
+        {
+          "text": "Resolver reachability on TCP/853 from the configured source IP.",
+          "correct": true,
+          "feedback": "Correct. A missing SYN/ACK points to routing, firewall policy, resolver listener or source-IP reachability before certificate troubleshooting."
+        },
+        {
+          "text": "The DNS record's TTL and negative cache entry only.",
+          "correct": false,
+          "feedback": "A DNS record or cache issue occurs after transport is established; the TCP handshake is failing first."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "topic": "DoT evidence boundary",
+      "question": "A packet capture shows a successful TLS session to the resolver on port 853. What does that establish?",
+      "choices": [
+        {
+          "text": "The returned DNS record is authoritative and signed.",
+          "correct": false,
+          "feedback": "TLS does not prove DNSSEC validation or that the upstream zone data is correct."
+        },
+        {
+          "text": "Every endpoint connected to the switch now uses encrypted DNS.",
+          "correct": false,
+          "feedback": "This setting controls the switch's own resolver, not all client DNS traffic."
+        },
+        {
+          "text": "The switch's DNS cache has been flushed successfully.",
+          "correct": false,
+          "feedback": "A TLS session does not prove cache state or cache invalidation."
+        },
+        {
+          "text": "The switch established an encrypted resolver transport; answer correctness remains separate.",
+          "correct": true,
+          "feedback": "Correct. TLS proves a protected transport session, not DNSSEC validation, correct zone data or endpoint resolver behavior."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 17,
+      "product": "FortiAP/Wireless",
+      "topic": "BLE scan modes",
+      "question": "A battery-powered BLE tag only advertises and does not respond to scan requests. Which scan mode matches that behavior?",
+      "choices": [
+        {
+          "text": "Passive scanning, which only receives advertiser data.",
+          "correct": true,
+          "feedback": "Correct. Passive scanning receives advertisements; active scanning sends a scan request for additional information."
+        },
+        {
+          "text": "Active scanning, which disables advertiser reception.",
+          "correct": false,
+          "feedback": "Active scanning sends requests for additional information; it does not mean receive-only operation."
+        },
+        {
+          "text": "Probe-response scanning, which requires Wi-Fi association.",
+          "correct": false,
+          "feedback": "BLE asset-tag scanning is separate from Wi-Fi client association and 802.11 probe responses."
+        },
+        {
+          "text": "Monitor-mode scanning, which requires a client security profile.",
+          "correct": false,
+          "feedback": "The BLE profile has active/passive scan types; client WLAN security profiles are not the selector."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "topic": "BLE profile binding",
+      "question": "The BLE profile exists, but APs are not reporting asset measurements. Which configuration relationship is required?",
+      "choices": [
+        {
+          "text": "Attach the BLE profile directly to every SSID security policy.",
+          "correct": false,
+          "feedback": "The documented binding is through the WTP profile, not an SSID firewall security policy."
+        },
+        {
+          "text": "Apply the BLE profile to the WTP profile and configure RTLS under LBS.",
+          "correct": true,
+          "feedback": "Correct. Fortinet requires the BLE profile to be applied to a FortiAP profile, then provider settings are configured under LBS in the WTP profile."
+        },
+        {
+          "text": "Create a DHCP reservation for each tag before enabling BLE.",
+          "correct": false,
+          "feedback": "BLE advertisers do not need to join the WLAN or obtain an IP address to be scanned."
+        },
+        {
+          "text": "Configure only the RTLS cloud token and leave scanning disabled.",
+          "correct": false,
+          "feedback": "A valid cloud token cannot create observations if BLE scanning is disabled or not applied."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "topic": "BLE diagnostics",
+      "question": "Which command confirms that a FortiAP received the controller's BLE scan settings?",
+      "choices": [
+        {
+          "text": "diagnose wireless-controller wlac -c wtpprof",
+          "correct": false,
+          "feedback": "That command shows the controller-side WTP profile and its configured BLE/RTLS settings."
+        },
+        {
+          "text": "diagnose sys top",
+          "correct": false,
+          "feedback": "System process output does not confirm the AP's BLE scan profile values."
+        },
+        {
+          "text": "cw_diag -c ble-config",
+          "correct": true,
+          "feedback": "Correct. The AP-side command reports whether BLE scanning is enabled and shows mode, threshold, period, interval and window."
+        },
+        {
+          "text": "cw_diag -c ble-rtls",
+          "correct": false,
+          "feedback": "That command shows provider type, protocol and server details; it does not primarily show the radio scan profile."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "topic": "BLE missing tag",
+      "question": "One tag is visible to a nearby scanner but absent from FortiAP cloud analytics. Which check best isolates the FortiAP path?",
+      "choices": [
+        {
+          "text": "Change the WLAN's 802.1X EAP method and reauthenticate the tag.",
+          "correct": false,
+          "feedback": "The BLE tag is not a Wi-Fi client, so WLAN EAP configuration is not the relevant gate."
+        },
+        {
+          "text": "Increase the DHCP lease duration on the guest VLAN.",
+          "correct": false,
+          "feedback": "BLE advertisements are received by the AP radio; DHCP lease time does not control tag discovery."
+        },
+        {
+          "text": "Replace the WTP profile before checking the tag identity filters.",
+          "correct": false,
+          "feedback": "Replacing the profile is premature; first verify the scan threshold and UUID/MAC allowlists."
+        },
+        {
+          "text": "Check RSSI threshold, UUID or MAC allowlist, token and cloud egress.",
+          "correct": true,
+          "feedback": "Correct. RF threshold, identity filters, provider token and TCP/443/WSS reachability are independent gates in the documented pipeline."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 21,
+      "product": "FortiNAC",
+      "topic": "Kerberos support scope",
+      "question": "A team plans Kerberos for both administrators and users on FortiNAC-CA and FNAC-M. Which scope is documented?",
+      "choices": [
+        {
+          "text": "CA supports admin and user authentication; FNAC-M supports administrator authentication.",
+          "correct": true,
+          "feedback": "Correct. The 9.4.0 release note explicitly distinguishes the supported login classes by platform."
+        },
+        {
+          "text": "Both platforms support administrator and user authentication.",
+          "correct": false,
+          "feedback": "The release note does not state user-authentication support for FNAC-M."
+        },
+        {
+          "text": "FNAC-M supports user authentication only; CA supports administrators.",
+          "correct": false,
+          "feedback": "This reverses and changes the documented support matrix."
+        },
+        {
+          "text": "Kerberos applies only to RADIUS 802.1X endpoint authentication.",
+          "correct": false,
+          "feedback": "The release note describes administrator and user authentication, not endpoint network-access RADIUS."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "topic": "Kerberos ticket flow",
+      "question": "An operator can obtain a domain TGT but still receives a FortiNAC login prompt. What is the next protocol step to examine?",
+      "choices": [
+        {
+          "text": "A DHCP Discover for the FortiNAC management address.",
+          "correct": false,
+          "feedback": "DHCP address acquisition is not the next Kerberos ticket step."
+        },
+        {
+          "text": "The service-ticket request for the FortiNAC service identity.",
+          "correct": true,
+          "feedback": "Correct. A TGT proves the client authenticated to the KDC; the client still needs a service ticket for the target service."
+        },
+        {
+          "text": "A RADIUS Accounting-Stop message from the access switch.",
+          "correct": false,
+          "feedback": "RADIUS accounting is a separate network-access workflow, not the next Kerberos web/service ticket exchange."
+        },
+        {
+          "text": "A SAML logout response from the identity provider.",
+          "correct": false,
+          "feedback": "SAML is a different federation protocol; the question concerns a Kerberos ticket sequence."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "topic": "Kerberos failure isolation",
+      "question": "KDC logs show a TGT was issued, but the service-ticket request fails. Which investigation is most relevant?",
+      "choices": [
+        {
+          "text": "FortiNAC switch-port VLAN assignment and DHCP relay.",
+          "correct": false,
+          "feedback": "Those are network enforcement paths and do not explain a failed Kerberos service-ticket request."
+        },
+        {
+          "text": "The user's FortiToken push delivery and OTP seed.",
+          "correct": false,
+          "feedback": "OTP delivery is a separate authentication method and does not diagnose a Kerberos service-ticket failure."
+        },
+        {
+          "text": "Realm mapping, service identity, DNS and clock alignment.",
+          "correct": true,
+          "feedback": "Correct. These are the protocol dependencies that can allow a TGT while preventing a service ticket for the target service."
+        },
+        {
+          "text": "FortiAnalyzer ADOM mode and log retention policy.",
+          "correct": false,
+          "feedback": "ADOM configuration affects log organization, not Kerberos ticket issuance."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "topic": "Kerberos evidence boundary",
+      "question": "LDAP search succeeds for a user, but the Kerberos login still fails. Which conclusion is sound?",
+      "choices": [
+        {
+          "text": "LDAP success proves the Kerberos service ticket is valid.",
+          "correct": false,
+          "feedback": "LDAP lookup proves directory reachability and search behavior, not Kerberos ticket issuance or validation."
+        },
+        {
+          "text": "The account must be removed from all FortiNAC roles.",
+          "correct": false,
+          "feedback": "Role removal is not justified by the available evidence; the authentication protocol has not yet succeeded."
+        },
+        {
+          "text": "The KDC is irrelevant because LDAP returned the user object.",
+          "correct": false,
+          "feedback": "Kerberos authentication still depends on the KDC and service identity even when LDAP lookup works."
+        },
+        {
+          "text": "Directory lookup and Kerberos ticket validation are separate transactions.",
+          "correct": true,
+          "feedback": "Correct. Continue with KDC ticket events and FortiNAC authentication logs rather than treating LDAP success as proof of Kerberos health."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC-F",
+      "topic": "VDOM multi-tenancy architecture",
+      "question": "A campus shares one FortiSwitch and FortiAP fleet across two departments. Which VDOM model matches the FortiNAC-F guide?",
+      "choices": [
+        {
+          "text": "Root manages shared infrastructure; tenant VDOMs own separate VLANs and SSIDs.",
+          "correct": true,
+          "feedback": "Correct. The root/MGMT VDOM manages the shared switch and APs, while tenant VDOMs own their logical networks."
+        },
+        {
+          "text": "Each tenant manages a separate physical switch and independent AP controller.",
+          "correct": false,
+          "feedback": "That avoids the shared-infrastructure multi-tenancy design documented by FortiNAC-F."
+        },
+        {
+          "text": "Tenant VDOMs manage the AP hardware while root owns all tenant VLANs.",
+          "correct": false,
+          "feedback": "The guide describes AP management from root/MGMT and tenant-specific SSIDs/VLANs."
+        },
+        {
+          "text": "FortiNAC-F replaces FortiGate VDOMs with separate RADIUS virtual servers.",
+          "correct": false,
+          "feedback": "RADIUS configuration is optional; the architecture depends on FortiGate VDOMs and shared FortiLink infrastructure."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "topic": "VDOM port export",
+      "question": "A switch port must be managed by the traffic tenant VDOM. Which configuration result should the engineer expect?",
+      "choices": [
+        {
+          "text": "The port remains active in root and is duplicated into the tenant.",
+          "correct": false,
+          "feedback": "The port is exported from root; it is not intended to be independently managed in both VDOMs."
+        },
+        {
+          "text": "set export-to traffic makes the port grey in root and visible in traffic.",
+          "correct": true,
+          "feedback": "Correct. The documented port export moves management visibility to the tenant VDOM."
+        },
+        {
+          "text": "The port is converted into a VDOM link and loses VLAN membership.",
+          "correct": false,
+          "feedback": "A VDOM link is a separate routed connection between VDOMs; port export assigns the switch port to a tenant."
+        },
+        {
+          "text": "The port is removed from FortiLink and becomes an unmanaged access port.",
+          "correct": false,
+          "feedback": "The design keeps the FortiSwitch managed by FortiLink while exporting the selected port to a tenant VDOM."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "topic": "VDOM logical-network mapping",
+      "question": "FortiNAC sees both root and traffic VDOMs. Where should Registration and production VLANs be mapped?",
+      "choices": [
+        {
+          "text": "In the root VDOM's global DHCP server object only.",
+          "correct": false,
+          "feedback": "The mapping is per tenant virtualized device, not only a root DHCP setting."
+        },
+        {
+          "text": "In the switch's global port description field.",
+          "correct": false,
+          "feedback": "A port description does not map FortiNAC logical networks to tenant VLAN IDs."
+        },
+        {
+          "text": "In the tenant VDOM's Model Configuration for its virtualized device.",
+          "correct": true,
+          "feedback": "Correct. Select the tenant VDOM in Virtualized Devices and map Registration, remediation and production logical networks to VLANs in that VDOM."
+        },
+        {
+          "text": "In the FortiAnalyzer ADOM device-mode setting.",
+          "correct": false,
+          "feedback": "FortiAnalyzer ADOM mode does not control FortiNAC tenant VDOM VLAN mapping."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "topic": "VDOM forwarding failure",
+      "question": "A tenant host receives no address after its port was exported. Which path should be checked first?",
+      "choices": [
+        {
+          "text": "The FortiAP BLE scan threshold and RTLS token.",
+          "correct": false,
+          "feedback": "BLE telemetry is unrelated to a tenant wired host's DHCP path."
+        },
+        {
+          "text": "The FortiManager TPM state and private-data encryption key.",
+          "correct": false,
+          "feedback": "FortiManager key protection does not affect tenant DHCP relay or VLAN forwarding."
+        },
+        {
+          "text": "The FortiSIEM Maintenance Calendar and STM task scope.",
+          "correct": false,
+          "feedback": "Maintenance calendars suppress monitoring; they do not provide tenant DHCP service."
+        },
+        {
+          "text": "Tenant VLAN interface, DHCP relay, VDOM-link route and firewall policies.",
+          "correct": true,
+          "feedback": "Correct. The integration guide requires tenant VLANs, optional DHCP relay, VDOM-link routing and policies in both VDOMs."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 29,
+      "product": "FortiAuthenticator",
+      "topic": "Guest Portal components",
+      "question": "FortiAuthenticator 8.0 Guest Portals beta is enabled. Which three configuration areas are exposed?",
+      "choices": [
+        {
+          "text": "Portals, Portals Rules and Guest Themes.",
+          "correct": true,
+          "feedback": "Correct. These are the three documented tabs: hosted portal pages, portal-selection rules and theme customization."
+        },
+        {
+          "text": "RADIUS Clients, LDAP Realms and SAML Service Providers.",
+          "correct": false,
+          "feedback": "Those are other FortiAuthenticator identity objects, not the three Guest Portals beta tabs."
+        },
+        {
+          "text": "Captive Policies, DHCP Pools and VLAN Interfaces.",
+          "correct": false,
+          "feedback": "Those are network gateway or DHCP constructs, not the FortiAuthenticator portal configuration areas."
+        },
+        {
+          "text": "User Groups, TACACS Profiles and Certificate Authorities.",
+          "correct": false,
+          "feedback": "Those identity objects do not match the Guest Portals beta menu structure."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "topic": "Guest Portal identity support",
+      "question": "A project requires the new portal to authenticate users directly against an external SAML IdP. What limitation applies?",
+      "choices": [
+        {
+          "text": "The beta supports SAML only when HA is enabled.",
+          "correct": false,
+          "feedback": "The documented beta does not support HA, and its login limitation is local users only."
+        },
+        {
+          "text": "The beta supports local-user login only.",
+          "correct": true,
+          "feedback": "Correct. Fortinet explicitly lists local-user-only login as a limitation; do not assume external IdP support."
+        },
+        {
+          "text": "The beta supports only RADIUS machine accounts.",
+          "correct": false,
+          "feedback": "The documented limitation is local users, not a RADIUS machine-account-only workflow."
+        },
+        {
+          "text": "The beta supports LDAP users but not local accounts.",
+          "correct": false,
+          "feedback": "This reverses the documented limitation; local-user login is the supported beta scope."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "topic": "Guest Portal HA and backup",
+      "question": "An architect wants to deploy Guest Portals beta on an HA pair with complete backup recovery. What should be flagged?",
+      "choices": [
+        {
+          "text": "Only active-passive is supported, and all themes synchronize.",
+          "correct": false,
+          "feedback": "Fortinet states that neither HA A-P nor HA A-A is supported and backup/restore misses some customizations."
+        },
+        {
+          "text": "Only active-active is supported, with theme sync disabled.",
+          "correct": false,
+          "feedback": "The documented limitation excludes both HA modes."
+        },
+        {
+          "text": "HA A-P and A-A are unsupported, and backup/restore omits some customizations.",
+          "correct": true,
+          "feedback": "Correct. Both HA modes are unsupported, and the backup/restore process does not preserve all portal customizations."
+        },
+        {
+          "text": "HA is supported when portals use external SAML identities.",
+          "correct": false,
+          "feedback": "External SAML is not the documented workaround; the beta is local-user-only and unsupported in HA."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "topic": "Guest Portal evidence",
+      "question": "A guest portal page renders correctly, but the client remains in the registration VLAN. What does the page test prove?",
+      "choices": [
+        {
+          "text": "It proves the gateway accepted the post-login network authorization.",
+          "correct": false,
+          "feedback": "Portal rendering occurs before the gateway's access-control completion and VLAN enforcement."
+        },
+        {
+          "text": "It proves the local user was authenticated successfully.",
+          "correct": false,
+          "feedback": "A rendered page does not prove that credentials were submitted or validated."
+        },
+        {
+          "text": "It proves the user received the intended production role.",
+          "correct": false,
+          "feedback": "Role and VLAN enforcement are separate from page rendering and must be verified at the gateway."
+        },
+        {
+          "text": "It proves the portal host served the page; authentication and gateway release remain unverified.",
+          "correct": true,
+          "feedback": "Correct. Test portal selection, local authentication, return response and gateway session/VLAN behavior as separate stages."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 33,
+      "product": "FortiPAM",
+      "topic": "SSH filter modes",
+      "question": "A Linux administrator must allow only a small command set through an SSH secret. Which profile mode is appropriate?",
+      "choices": [
+        {
+          "text": "Allow/restricted mode, where unmatched commands are blocked.",
+          "correct": true,
+          "feedback": "Correct. Restricted mode is an allowlist: configured patterns are permitted and other commands are blocked."
+        },
+        {
+          "text": "Deny mode, where only listed commands are permitted.",
+          "correct": false,
+          "feedback": "Deny mode blocks matching patterns but allows unlisted commands; it is not the allowlist mode."
+        },
+        {
+          "text": "Log-only mode, which blocks every command by default.",
+          "correct": false,
+          "feedback": "Log-only can record patterns without blocking; it is not a default-deny allowlist."
+        },
+        {
+          "text": "Owner-bypass mode, which automatically restricts all commands.",
+          "correct": false,
+          "feedback": "Owner bypass is an exception control, not the profile's command allowlist mode."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "topic": "SSH filter matching",
+      "question": "The policy should block only `ifconfig eth0 down` while allowing other ifconfig parameters. Which matcher is required?",
+      "choices": [
+        {
+          "text": "Start with single word matching `ifconfig`.",
+          "correct": false,
+          "feedback": "That matcher treats `ifconfig` as the command and blocks any input beginning with it, including other interfaces."
+        },
+        {
+          "text": "Exact Match on the command and its parameters.",
+          "correct": true,
+          "feedback": "Correct. Exact Match distinguishes the specific command/parameter string from other ifconfig operations."
+        },
+        {
+          "text": "A deny rule on the SSH destination IP address.",
+          "correct": false,
+          "feedback": "Destination filtering does not distinguish shell command parameters."
+        },
+        {
+          "text": "A regex that matches every command containing `ifconfig`.",
+          "correct": false,
+          "feedback": "A broad regex would also catch allowed ifconfig variants and defeats the stated requirement."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "topic": "SSH compound commands",
+      "question": "A user enters `date; ls -l; rm /tmp/file`. How does FortiPAM evaluate the compound line?",
+      "choices": [
+        {
+          "text": "It evaluates only the first command and ignores later separators.",
+          "correct": false,
+          "feedback": "FortiPAM documents evaluation of each command separated by semicolons or ampersands."
+        },
+        {
+          "text": "It sends the entire line to the target before checking the log.",
+          "correct": false,
+          "feedback": "The SSH filter evaluates shell input before allowing or blocking it."
+        },
+        {
+          "text": "It checks each command against simple patterns, then regex patterns as needed.",
+          "correct": true,
+          "feedback": "Correct. The documented sequence evaluates each separated command against simple patterns first, then regex patterns if no simple match is found."
+        },
+        {
+          "text": "It treats every parameter as a separate SSH channel.",
+          "correct": false,
+          "feedback": "Parameters remain part of the parsed command input; channels are separate controls such as SFTP or port forwarding."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "topic": "SSH filter bypass and audit",
+      "question": "A secret owner can run a prohibited command even though the profile blocks it for another user. Which setting is the first suspect?",
+      "choices": [
+        {
+          "text": "FortiPAM Maintenance Calendar suppression.",
+          "correct": false,
+          "feedback": "Maintenance calendars are a FortiSIEM feature and cannot bypass a FortiPAM SSH filter."
+        },
+        {
+          "text": "The target server's SSH host-key algorithm preference.",
+          "correct": false,
+          "feedback": "Host-key negotiation affects connection establishment, not a per-secret command-filter bypass."
+        },
+        {
+          "text": "The FortiGate SD-WAN input-device tie-break.",
+          "correct": false,
+          "feedback": "SD-WAN path selection does not change FortiPAM command authorization."
+        },
+        {
+          "text": "Bypass for owner on the secret's SSH filter settings.",
+          "correct": true,
+          "feedback": "Correct. FortiPAM documents a secret-level owner bypass that can permit otherwise prohibited commands; review its state and ownership."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 37,
+      "product": "FortiSIEM",
+      "topic": "Maintenance Calendar behavior",
+      "question": "During a scheduled upgrade, a monitored switch stops generating availability incidents. What behavior may explain this?",
+      "choices": [
+        {
+          "text": "The device is under maintenance, suppressing performance, availability and change monitoring rules.",
+          "correct": true,
+          "feedback": "Correct. That is the documented default effect for devices in a Maintenance Calendar."
+        },
+        {
+          "text": "The calendar automatically disables all switch syslog forwarding.",
+          "correct": false,
+          "feedback": "The guide describes monitoring/rule suppression, not a blanket syslog-ingestion shutdown."
+        },
+        {
+          "text": "The switch is removed from the CMDB until maintenance ends.",
+          "correct": false,
+          "feedback": "Maintenance status does not imply device deletion from the CMDB."
+        },
+        {
+          "text": "The calendar changes the switch's firewall policy to accept all traffic.",
+          "correct": false,
+          "feedback": "FortiSIEM maintenance scheduling does not alter network enforcement policies."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "topic": "Maintenance Calendar scope",
+      "question": "A synthetic login test should be paused while its application servers remain monitored. How should the calendar be scoped?",
+      "choices": [
+        {
+          "text": "Select the entire device group containing every application server.",
+          "correct": false,
+          "feedback": "Selecting the whole group would suppress more device monitoring than the requirement allows."
+        },
+        {
+          "text": "Select the specific STM task and leave the device selection unchanged.",
+          "correct": true,
+          "feedback": "Correct. The calendar supports separate selection of devices/groups and STM tasks; select only the synthetic task."
+        },
+        {
+          "text": "Disable the global performance monitor for the organization.",
+          "correct": false,
+          "feedback": "A global monitor change has a broader scope than the specific STM task."
+        },
+        {
+          "text": "Delete the STM definition and recreate it after maintenance.",
+          "correct": false,
+          "feedback": "Deleting the test is unnecessary; the calendar can place the STM task under maintenance."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "topic": "Maintenance incident override",
+      "question": "A security operations team wants selected devices to continue generating incidents during maintenance. Which option controls this?",
+      "choices": [
+        {
+          "text": "Enable the calendar's Recurring Months setting.",
+          "correct": false,
+          "feedback": "Recurrence controls when maintenance occurs, not whether incidents are generated during it."
+        },
+        {
+          "text": "Add the devices to the FortiAnalyzer root ADOM.",
+          "correct": false,
+          "feedback": "ADOM assignment is unrelated to FortiSIEM maintenance incident behavior."
+        },
+        {
+          "text": "Enable Generate Incidents for Devices under Maintenance.",
+          "correct": true,
+          "feedback": "Correct. This optional calendar setting changes the default incident-suppression behavior for devices under maintenance."
+        },
+        {
+          "text": "Change the device group name to include the word critical.",
+          "correct": false,
+          "feedback": "Group naming does not alter the maintenance calendar's incident-generation option."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "topic": "Maintenance evidence boundary",
+      "question": "An engineer claims that a device in maintenance must stop sending raw logs. Which response is supported by the guide?",
+      "choices": [
+        {
+          "text": "Correct; maintenance disables all event ingestion for selected devices.",
+          "correct": false,
+          "feedback": "The guide does not state that raw event ingestion is stopped; it describes performance, availability and change monitoring suppression."
+        },
+        {
+          "text": "Correct; the collector automatically discards every event until the window ends.",
+          "correct": false,
+          "feedback": "No such collector discard behavior is specified by the Maintenance Calendar feature."
+        },
+        {
+          "text": "Incorrect only when the STM task is also selected.",
+          "correct": false,
+          "feedback": "STM scope does not change the documented distinction between monitoring suppression and raw log ingestion."
+        },
+        {
+          "text": "Do not infer log-ingestion shutdown; the documented effect is monitoring and corresponding rule suppression.",
+          "correct": true,
+          "feedback": "Correct. Verify event ingestion separately; a quiet performance view does not prove that raw logs stopped arriving."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 41,
+      "product": "FortiSASE",
+      "topic": "SPA app monitoring scope",
+      "question": "A private ERP server is hosted behind an SPA Hub. How many custom applications can SPA monitoring define?",
+      "choices": [
+        {
+          "text": "Up to twenty custom applications.",
+          "correct": true,
+          "feedback": "Correct. FortiSASE documents support for up to 20 custom applications hosted behind SPA Hubs."
+        },
+        {
+          "text": "One application per Security PoP, with no tenant limit.",
+          "correct": false,
+          "feedback": "The documented limit is 20 custom applications, not one per PoP."
+        },
+        {
+          "text": "Unlimited applications if they share one private subnet.",
+          "correct": false,
+          "feedback": "The guide explicitly sets a limit of up to 20 custom applications."
+        },
+        {
+          "text": "Only public SaaS applications with DNS names.",
+          "correct": false,
+          "feedback": "SPA application monitoring is intended for private applications behind SPA Hubs and uses a private IPv4 server address."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "topic": "SPA probe source and protocol",
+      "question": "What generates the health-check traffic for a configured SPA private application?",
+      "choices": [
+        {
+          "text": "The endpoint agent sends TCP probes when the user opens the app.",
+          "correct": false,
+          "feedback": "The documented probes are initiated by Fortinet Security PoPs, not by the endpoint agent."
+        },
+        {
+          "text": "Fortinet Security PoPs initiate ICMP probes every second.",
+          "correct": true,
+          "feedback": "Correct. The guide states that Security PoPs send ICMP health checks to the defined application every second."
+        },
+        {
+          "text": "The SPA Hub sends HTTP GET requests once per hour.",
+          "correct": false,
+          "feedback": "The documented mechanism is PoP-originated ICMP, not hub-originated HTTP polling."
+        },
+        {
+          "text": "FortiAnalyzer sends DNS queries to the application address.",
+          "correct": false,
+          "feedback": "FortiAnalyzer is not the probe source, and the check is ICMP rather than DNS."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "topic": "SPA SLA evidence",
+      "question": "An SLA failure appears for one region. Which view provides the most useful comparison?",
+      "choices": [
+        {
+          "text": "FortiAuthenticator Guest Themes, filtered by portal name.",
+          "correct": false,
+          "feedback": "Guest themes are unrelated to SPA monitoring measurements."
+        },
+        {
+          "text": "FortiManager TPM status, compared across appliance models.",
+          "correct": false,
+          "feedback": "TPM status is a FortiManager hardware security signal, not a FortiSASE path metric."
+        },
+        {
+          "text": "The SLA Failure tab with metrics per Security PoP and SPA Hub connection.",
+          "correct": true,
+          "feedback": "Correct. The view shows latency, jitter and packet loss against thresholds for each PoP and hub service connection, with historical drilldown."
+        },
+        {
+          "text": "FortiSIEM Maintenance Calendar, filtered by endpoint group.",
+          "correct": false,
+          "feedback": "Maintenance calendars suppress monitoring scope; they do not display SPA application probe metrics."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "topic": "SPA ICMP boundary",
+      "question": "ICMP probes are healthy, but users cannot complete the ERP login. What should be concluded?",
+      "choices": [
+        {
+          "text": "The application is healthy because the ICMP threshold is met.",
+          "correct": false,
+          "feedback": "ICMP reachability does not prove that the service port, TLS handshake, authentication or application transaction works."
+        },
+        {
+          "text": "The SPA Hub must be restarted before checking application logs.",
+          "correct": false,
+          "feedback": "A restart is not justified by the evidence; the application-layer path must be tested."
+        },
+        {
+          "text": "The Security PoP is measuring the user's exact browser transaction.",
+          "correct": false,
+          "feedback": "The feature sends ICMP health checks, not browser or HTTP transactions."
+        },
+        {
+          "text": "Network reachability is healthy; test TCP, TLS, identity and application behavior separately.",
+          "correct": true,
+          "feedback": "Correct. Pair the ICMP signal with an application-layer synthetic check to isolate the failed transaction."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 45,
+      "product": "Secure SD-WAN",
+      "topic": "Multi-VRF overlay encapsulation",
+      "question": "A hub must carry several tenant VRFs over one IPsec overlay. Which phase-1 option enables VRF information encapsulation?",
+      "choices": [
+        {
+          "text": "set encapsulation vpn-id-ipip",
+          "correct": true,
+          "feedback": "Correct. FortiOS documents VPN-ID with IPIP encapsulation to carry VRF information in a multi-VRF IPsec tunnel."
+        },
+        {
+          "text": "set net-device enable on every tenant VLAN.",
+          "correct": false,
+          "feedback": "Net-device changes tunnel interface behavior; it does not enable the documented VPN-ID/IPIP VRF encapsulation."
+        },
+        {
+          "text": "set auto-discovery-sender disable on the hub.",
+          "correct": false,
+          "feedback": "ADVPN discovery behavior is separate from the multi-VRF encapsulation setting."
+        },
+        {
+          "text": "set route-tag to the tenant's VLAN number.",
+          "correct": false,
+          "feedback": "A route tag is not the documented tunnel encapsulation selector."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "topic": "VRF BGP attributes",
+      "question": "A tenant route is absent from the expected VRF even though BGP is established. Which control should be checked?",
+      "choices": [
+        {
+          "text": "Only the global BGP router ID and hostname.",
+          "correct": false,
+          "feedback": "The global router ID does not establish which VPN routes a VRF imports or exports."
+        },
+        {
+          "text": "The VRF role, route distinguisher and import/export route targets.",
+          "correct": true,
+          "feedback": "Correct. The guide exposes CE/PE/standalone role, RD, export-rt and import-rt under the BGP VRF configuration."
+        },
+        {
+          "text": "The FortiSwitch DNS-over-TLS certificate and cache TTL.",
+          "correct": false,
+          "feedback": "Resolver transport settings are unrelated to BGP VPN route distribution."
+        },
+        {
+          "text": "The FortiPAM SSH filter profile attached to the hub secret.",
+          "correct": false,
+          "feedback": "Privileged command filtering does not control BGP route import or export."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "topic": "VRF-aware health checks",
+      "question": "A spoke's probe reaches the wrong hub loopback because the default routing table is used. What should be configured?",
+      "choices": [
+        {
+          "text": "Set the probe to use the global table and a public source.",
+          "correct": false,
+          "feedback": "The probe must be tagged with the correct tenant VRF and use a source address in that VRF."
+        },
+        {
+          "text": "Change the IPsec proposal and disable route targets.",
+          "correct": false,
+          "feedback": "IPsec proposal changes do not select the health-check VRF, and route targets remain part of route distribution."
+        },
+        {
+          "text": "Set the health-check VRF ID and source address.",
+          "correct": true,
+          "feedback": "Correct. FortiOS documents set vrf and set source so the probe is tagged with the correct VRF and reaches the same-VRF hub server."
+        },
+        {
+          "text": "Move the server into the default VDOM without changing the probe.",
+          "correct": false,
+          "feedback": "Moving the server can destroy the tenant separation and does not fix the probe's routing context."
+        }
+      ],
+      "correct_index": 2,
+      "correct_letter": "C"
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "topic": "Overlay stickiness",
+      "question": "A hub receives a tenant flow on overlay p1 and must prefer the same overlay on egress when SLAs pass. Which tie-break is documented?",
+      "choices": [
+        {
+          "text": "Lowest-cost route-map regardless of ingress member.",
+          "correct": false,
+          "feedback": "A generic route-map does not provide the documented ingress-device tie-break behavior."
+        },
+        {
+          "text": "Round-robin selection across all SLA-healthy members.",
+          "correct": false,
+          "feedback": "Round-robin may select a different overlay and does not preserve ingress-device affinity."
+        },
+        {
+          "text": "Source-IP hashing without checking the incoming interface.",
+          "correct": false,
+          "feedback": "Source hashing is not the documented tie-break that prefers the ingress member."
+        },
+        {
+          "text": "Set the SD-WAN service tie-break to input-device.",
+          "correct": true,
+          "feedback": "Correct. The guide documents input-device tie-break so SLA-healthy members are selected by matching the input device."
+        }
+      ],
+      "correct_index": 3,
+      "correct_letter": "D"
+    },
+    {
+      "id": 49,
+      "product": "Cross-product",
+      "topic": "TPM scope versus encryption scope",
+      "question": "A compliance finding asks whether FortiManager TPM support replaces full-disk encryption. Which answer is accurate?",
+      "choices": [
+        {
+          "text": "No; TPM protects private-data key material, not the disk or managed-device database.",
+          "correct": true,
+          "feedback": "Correct. Fortinet explicitly limits TPM scope and states that disk encryption and managed FortiGate configuration data need separate protection."
+        },
+        {
+          "text": "Yes; TPM encrypts all disks and every managed configuration database.",
+          "correct": false,
+          "feedback": "That overstates the documented scope and would leave an unaddressed data-at-rest control gap."
+        },
+        {
+          "text": "Yes, but only when every managed FortiGate uses the same firmware.",
+          "correct": false,
+          "feedback": "Managed FortiGate firmware versions do not extend the FortiManager TPM's encryption scope."
+        },
+        {
+          "text": "No; TPM protects only the FortiManager GUI TLS certificate.",
+          "correct": false,
+          "feedback": "The TPM feature protects the private-data encryption key hierarchy, not merely the GUI certificate."
+        }
+      ],
+      "correct_index": 0,
+      "correct_letter": "A"
+    },
+    {
+      "id": 50,
+      "product": "Cross-product",
+      "topic": "VDOM ownership and VLAN mapping",
+      "question": "A FortiNAC-F tenant VDOM is visible, but hosts still enter the root VLAN. Which ownership chain must be checked?",
+      "choices": [
+        {
+          "text": "FortiAnalyzer ADOM mode, report ownership and log retention.",
+          "correct": false,
+          "feedback": "Those are analytics-domain controls and do not determine FortiNAC-F tenant VLAN assignment."
+        },
+        {
+          "text": "Exported switch-port ownership, tenant VLAN and FortiNAC logical-network mapping.",
+          "correct": true,
+          "feedback": "Correct. The physical port must belong to the tenant VDOM, the VLAN must exist there, and FortiNAC must map the logical network to it."
+        },
+        {
+          "text": "FortiManager TPM state, private-data key and backup password.",
+          "correct": false,
+          "feedback": "TPM protects FortiManager secrets and does not control switch-port or tenant VLAN ownership."
+        },
+        {
+          "text": "FortiSASE ICMP threshold, Security PoP and SPA Hub connection.",
+          "correct": false,
+          "feedback": "SPA monitoring is unrelated to the FortiNAC-F wired access enforcement path."
+        }
+      ],
+      "correct_index": 1,
+      "correct_letter": "B"
+    }
+  ]
+}
