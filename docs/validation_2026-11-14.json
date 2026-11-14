@@ -57,17 +57,17 @@
     {
       "name": "index_publication",
       "status": "PASS",
-      "detail": "docs/index.html updated with November 14 report as the only latest summary and read back from GitHub."
+      "detail": "Index updated with November 14 as the only latest summary and read back from GitHub."
     },
     {
       "name": "github_readback",
       "status": "PASS",
-      "detail": "Report, index, lesson content, question bank, inventory, research files, diagram manifest and 24 diagram assets read back from GitHub."
+      "detail": "Report, index, lesson content, question bank, inventory, selected fingerprints, research sweeps, diagram manifest, status and all 24 diagram assets read back from GitHub."
     },
     {
       "name": "github_pages_verification",
-      "status": "IN_PROGRESS",
-      "detail": "GitHub Pages build job succeeded; deployment job is still in progress. Public URL verification will be retried after deployment completes."
+      "status": "PARTIAL",
+      "detail": "GitHub Pages workflow run 43617528563 completed successfully: build, deploy and report-build-status jobs all succeeded. Direct public report and index URL fetches returned inaccessible-to-verifier errors, so end-user public reachability is not independently confirmed."
     },
     {
       "name": "email_delivery",
@@ -104,11 +104,12 @@
   "limitations": [
     "Some official Fortinet Document Library pages returned HTTP 403 to direct opening; indexed official documentation and Fortinet-hosted PDFs were used.",
     "Only two recent Community scenarios directly matched selected mechanisms; other product areas had no directly matched recent scenario verified.",
-    "GitHub Pages build succeeded but the deploy job is still in progress; public URL verification remains pending."
+    "GitHub Pages build succeeded but the deploy job is still in progress; public URL verification remains pending.",
+    "GitHub Pages build/deploy workflow succeeded, but the verification fetcher could not access the public report or index URLs; public reachability is therefore unconfirmed."
   ],
   "remediation": [
     "Retry direct access to the blocked Fortinet documentation pages or use an authenticated documentation session.",
     "Continue searching the ten unmatched Community product areas for new failure modes and material release changes.",
-    "Verify GitHub Pages report and index after the GitHub commit; if unavailable, retry deployment/read-back without suppressing the published report."
+    "If users cannot reach the Pages URL, inspect the GitHub Pages deployment and repository Pages settings; retry public URL verification from a normal browser/network."
   ]
 }
