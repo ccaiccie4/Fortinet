@@ -1,0 +1,634 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-14T08:29:55-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "report_date": "2026-11-14",
+  "lesson_count": 12,
+  "lessons": [
+    {
+      "id": "01-fortigate-fortiguard",
+      "product": "FortiGate",
+      "subject": "FortiOS 8.0 FortiGuard server preference, RTT-based selection and multi-server load balancing",
+      "primary": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/420484/fortiguard-server-preference-new",
+      "scenario": null,
+      "word_target": "focused technical lesson",
+      "body": "<h3>Why the change matters</h3>\n<p>FortiGuard is not one monolithic connection. FortiGate consumes different services: antivirus and IPS package updates, web/DNS rating, IoT detection, and virtual-patching queries. A design that can reach an update server but cannot reach a rating server is only partially healthy. FortiOS 8.0 makes server preference visible in the GUI and exposes more of the service-specific selection behavior, so the engineer can reason about candidate ordering rather than treating “FortiGuard reachable” as a single boolean.</p>\n<h3>Selection mechanics</h3>\n<p>The server list is built from public FortiGuard servers and any configured custom servers. The preference determines whether the public pool or custom pool is primary and whether the other pool is a fallback. The four operational choices are effectively: public only; public first then custom; custom first then public; or custom only. A custom server is not a generic replacement for every FortiGuard function: each entry has one or more service types, such as AntiVirus &amp; IPS Updates, Filtering, IoT detection, or Virtual Patching Query. If the branch cache server is configured only for updates, it cannot satisfy a rating request simply because it is listed.</p>\n<p>FortiOS 8.0 also changes the default value of <code>load-balance-servers</code> from one to five when the field was not explicitly set before upgrade. The field accepts 1–255 and controls how many servers are alternated as the first FortiGuard option. Explicit pre-upgrade values remain unchanged. Fortinet's 8.0 feature description also documents RTT-based sorting and round-robin distribution among the first-choice server candidates. This is control-plane service selection; it is not SD-WAN or firewall-session load balancing.</p>\n<h3>Configuration pattern</h3>\n<pre><code>config system fortiguard\n    set load-balance-servers 5\nend\n\nconfig system central-management\n    config server-list\n        edit 1\n            set server-type update\n            set addr-type ipv4\n            set server-address 172.16.200.60\n        next\n        edit 2\n            set server-type rating\n            set addr-type ipv4\n            set server-address 172.16.200.70\n        next\n    end\n    set include-default-servers enable\n    set use-default-servers-as-main disable\nend</code></pre>\n<p>In this example, custom servers are prioritized while public servers remain available as fallback. The two custom entries serve different functions. The actual deployment should use the server types supported by the organization's FortiGuard distribution design, not copy the sample addresses.</p>\n<h3>Verification and interpretation</h3>\n<p>Open <b>System &gt; FortiGuard &gt; FortiGuard settings</b> and inspect <b>View Details</b> under the relevant server section. Confirm that the expected public/custom servers appear in the intended order and that each has the correct service type. Use <code>show full system central-management</code> to verify the effective server list and default-server flags; inspect <code>config system fortiguard</code> to verify the load-balance count. A populated list proves configuration, not successful application-layer exchange. Test update and rating functions independently and correlate with routing, DNS, and firewall logs.</p>\n<h3>Operational failure analysis</h3>\n<p>If IPS updates succeed but web filtering returns rating failures, first compare the server-type assignments: update success does not prove a filtering server is present. If an upgrade appears to change FortiGuard behavior, check whether <code>load-balance-servers</code> was unset before the upgrade; the new default can expand the first-choice pool from one to five. When a custom server is preferred but unavailable, confirm the fallback mode and public-server inclusion flags. The “Always use custom” choice can be hidden when central management is configured for FortiGate Cloud, so verify <code>show full system central-management</code> before assuming the GUI is inconsistent.</p>\n<p><b>Engineer takeaway:</b> prove the correct service-specific candidate list, the preference order, and the actual exchange. Do not use one successful FortiGuard function as evidence that all FortiGuard services are healthy.</p>",
+      "sources": [
+        {
+          "title": "FortiGuard server preference NEW — FortiOS 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/420484/fortiguard-server-preference-new"
+        },
+        {
+          "title": "Enhanced FortiGuard server selection and load balancing — FortiOS 8.0.0 New Features Guide",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/420484/enhanced-fortiguard-server-selection-and-load-balancing"
+        }
+      ],
+      "diagram": {
+        "title": "FortiGuard server selection",
+        "nodes": [
+          "FortiGate service request",
+          "Preference policy",
+          "Public server pool",
+          "Custom server pool",
+          "Service-specific endpoint",
+          "Update / rating result"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "02-fortimanager-user-map",
+      "product": "FortiManager",
+      "subject": "FortiManager 8.0 local-user per-device mapping for branch-specific credentials and FortiToken bindings",
+      "primary": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/488386/local-user-per-device-mapping",
+      "scenario": null,
+      "body": "<h3>Purpose and object model</h3>\n<p>Large branch environments often reuse a logical username while enforcing different credentials at different sites. A central object named <code>branch-operator</code> may be required on many FortiGates, but headquarters might use a FortiToken binding while a remote branch uses a different password or token assignment. Before per-device mapping, the administrator's practical choice was often to duplicate the user definition or accept identical authentication material everywhere. FortiManager 8.0 introduces device-scoped overrides on a single local-user object.</p>\n<p>The object still lives in an ADOM under <b>Policy &amp; Objects &gt; User &amp; Authentication &gt; User Definition</b>. The base local user supplies the shared identity and common attributes. The <b>Per-Device Mapping</b> section associates a managed FortiGate with the authentication values that should be rendered for that device. The mapping is not a new directory service and does not cause the FortiGate to consult FortiManager at login time. FortiManager resolves the device-specific values during configuration generation and installation; the FortiGate then authenticates locally using the configuration it received.</p>\n<h3>Configuration workflow</h3>\n<p>Create the local user once in the chosen ADOM. Edit that user and add a mapping for each target FortiGate. For each device, specify the required password and/or two-factor configuration, including the appropriate FortiToken assignment. Repeat for other devices that need a different authentication profile. Reference the user in the relevant firewall, SSL-VPN, IPsec or other supported authentication configuration, then install the policy/configuration to the target devices.</p>\n<p>The important unit of review is the device mapping, not merely the parent object. A parent user can look correct while one branch has a stale token serial or an incorrect password override. In a multi-branch deployment, use a consistent naming convention for device mappings and treat a missing mapping as a deployment defect, not as an implicit inheritance decision unless the target release explicitly documents that behavior.</p>\n<h3>Verification</h3>\n<p>Before installation, inspect the user object and confirm that every intended FortiGate has exactly the mapping expected for that site. Compare the install preview for each device rather than relying on one representative device. After installation, inspect the target FortiGate's local-user configuration and authentication state. A successful install proves that FortiManager sent configuration; it does not prove the user can complete an end-to-end login or that the correct FortiToken device is in the user's possession. Perform a controlled authentication test against each materially different mapping.</p>\n<h3>Troubleshooting scenario</h3>\n<p>A branch reports that the shared username works at headquarters but fails at the branch after a policy install. First determine whether the branch mapping exists and whether the install preview contains its device-specific password/token values. If the target has the expected user but the wrong token binding, compare the FortiManager mapping to the target configuration. If the target configuration is correct, move to token activation, clock drift, user lockout and the specific VPN/authentication policy. Do not “fix” the branch by changing the parent password until you know whether that will overwrite other device mappings.</p>\n<h3>Dependencies and operational cautions</h3>\n<p>Per-device mapping depends on the correct ADOM, device membership and install target. It is configuration management, not live credential federation: changes are not effective on a FortiGate until the relevant configuration is installed. Maintain change control around password and token changes, and test both the shared identity and the branch-specific authentication path. Keep a break-glass administrator independent of the mapped account so that a bad mapping does not lock out the only management path.</p>\n<p><b>Engineer takeaway:</b> one logical user can represent multiple device-specific authentication states, but the installed FortiGate configuration remains the final authority for login behavior.</p>",
+      "sources": [
+        {
+          "title": "Local user per-device mapping — FortiManager 8.0.0 New Features Guide",
+          "url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/488386/local-user-per-device-mapping"
+        }
+      ],
+      "diagram": {
+        "title": "Per-device local-user mapping",
+        "nodes": [
+          "ADOM local user",
+          "Per-device mapping table",
+          "HQ FortiGate",
+          "Branch A FortiGate",
+          "HQ token/password",
+          "Branch A credentials"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "03-fortianalyzer-clickhouse",
+      "product": "FortiAnalyzer",
+      "subject": "PostgreSQL-to-ClickHouse analytics migration, migration-state validation and archive-backed rebuild boundary",
+      "primary": "https://docs.fortinet.com/document/fortianalyzer/7.6.3/release-notes/35134/known-issues",
+      "scenario": "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259",
+      "body": "<h3>What changed</h3>\n<p>Starting in FortiAnalyzer 7.6, analytics logs are stored in ClickHouse rather than PostgreSQL. During an upgrade from 7.4, the existing analytics data is migrated. This is not the same operation as rebuilding the analytics database from raw archive logs. The upgrade path also has a sequencing dependency: FortiGate log-schema updates must complete against PostgreSQL before the PostgreSQL-to-ClickHouse migration begins. A long pause at that boundary can look like a hung upgrade even though the migration has not yet started.</p>\n<p>ClickHouse is columnar and compresses analytics data more efficiently. The old database footprint also included hcache data used by FortiView and reports; those caches are regenerated on demand. Consequently, a drop from terabytes to a much smaller footprint is not proof of data loss. The authoritative completeness test is whether the expected time range and per-day log volume are present, not whether the new database occupies the same disk space.</p>\n<h3>Migration versus rebuild</h3>\n<p><b>Migration</b> reads the existing analytics database and moves it to the new storage engine as part of the upgrade. <b>Rebuild</b> removes/recreates the analytics database from archived raw logs. Rebuild is a recovery action, not the first diagnostic step. FortiAnalyzer 7.6 rebuild applies across ADOMs rather than allowing a single-ADOM rebuild. It reboots the appliance, purges the analytics database, and re-inserts the archive logs. It can take hours or days at scale; Log View, FortiView and reports remain incomplete until it finishes. Logs received during the rebuild are not lost, but analytics views are not complete while the operation is running.</p>\n<h3>Verification sequence</h3>\n<pre><code>diagnose sql status rebuild-db\ndiagnose sql show db-size\ndiagnose test application logfiled 4 &lt;adom-name&gt;</code></pre>\n<p>First confirm that migration or rebuild is not still in progress. If database size continues to increase between checks, allow the process to finish before drawing conclusions. Next inspect the oldest analytics date for the ADOM and compare it with the retention configured in the ADOM data policy. Finally compare log counts per day for the same device and filters: an older day should contain a plausible volume relative to a recent day. A valid range with a smaller disk footprint is consistent with compression; a sharply reduced historical daily count is evidence that warrants deeper investigation.</p>\n<h3>When rebuild is justified</h3>\n<p>Before rebuilding, verify that archive logs are retained for at least the analytics retention period and that the analytics quota can hold the complete interval. Rebuild can only recover periods whose raw archive logs still exist. Back up the configuration and, for VM deployments, take a hypervisor snapshot. Set the rebuild start time to the beginning of the required retention interval, then run the documented <code>execute sql-local rebuild-db</code> operation in a maintenance window. Monitor <code>diagnose sql status rebuild-db</code> and <code>diagnose sql show db-size</code>; a status that appears stuck near completion should be correlated with database growth rather than interrupted blindly.</p>\n<h3>Recent operational scenario</h3>\n<p>A Fortinet Community tip dated November 13 describes a 7.4-to-7.6 upgrade where analytics storage fell from roughly 4 TB to under 100 GB and older reports appeared sparse. The article's key diagnostic distinction is correct: size reduction can be normal, while a date-range or daily-count gap is the evidence that data may be incomplete. If archives are present, rebuild may restore the missing range; if the range and counts are already correct, rebuilding only creates unnecessary downtime and load.</p>\n<p><b>Engineer takeaway:</b> prove the missing data before rebuilding. Migration status, oldest date, daily counts, archive retention and quota form the evidence chain.</p>",
+      "sources": [
+        {
+          "title": "FortiAnalyzer 7.6.3 Release Notes — Known Issues (migration sequence)",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/7.6.3/release-notes/35134/known-issues"
+        },
+        {
+          "title": "FortiAnalyzer 7.6.6 CLI Reference — sql-local",
+          "url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/cli-reference/404204/sql-local"
+        },
+        {
+          "title": "Community scenario — ClickHouse migration and reduced analytics range (Nov 13, 2026)",
+          "url": "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259"
+        }
+      ],
+      "diagram": {
+        "title": "FortiAnalyzer analytics migration",
+        "nodes": [
+          "7.4 PostgreSQL",
+          "Schema upgrade",
+          "ClickHouse migration",
+          "ClickHouse analytics",
+          "Raw archive logs",
+          "Conditional rebuild"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "04-fortiswitch-dot",
+      "product": "FortiSwitch",
+      "subject": "FortiSwitchOS 8.0 DNS-over-TLS and explicit resolver CA validation",
+      "primary": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns",
+      "scenario": null,
+      "body": "<h3>Scope: the switch's own DNS client</h3>\n<p>FortiSwitchOS 8.0 adds DNS over TLS (DoT) for DNS lookups initiated by the switch itself. This protects management/control-plane name resolution—for example, when the switch must resolve a service hostname—by encapsulating DNS queries and responses in TLS on TCP/853. It does not automatically encrypt client DNS traffic traversing the switch; that traffic is governed by the endpoint's DNS configuration and the routed/security path.</p>\n<p>Before 8.0, FortiSwitchOS uses cleartext DNS by default over UDP/53 or TCP/53. The documented switch configuration is under <code>config system dns</code>. Selecting <code>set protocol dot</code> changes the resolver transport. All FortiSwitch models are documented as supporting DoT in 8.0.0. The configured primary and secondary resolver addresses remain the destinations; the transport is what changes.</p>\n<h3>Encryption is not the same as server authentication</h3>\n<p>The subtle but important setting is <code>server-ca-cert</code>. When a CA certificate is configured, FortiSwitchOS validates the DNS server's certificate before establishing the connection. If no CA certificate is specified, the connection is still made using TLS, but no CA certificate validation is performed. That means a packet capture showing encrypted TCP/853 proves use of DoT, not that the switch authenticated the intended resolver. In a private resolver deployment, import the organization's issuing CA and bind it to the DNS configuration.</p>\n<h3>Configuration example</h3>\n<pre><code>config system dns\n    set primary 10.105.142.113\n    set secondary 10.105.142.114\n    set server-ca-cert \"CA_Cert_1.cer\"\n    set protocol dot\n    set dns-cache-limit 512\n    set dns-cache-ttl 1800\nend</code></pre>\n<p>The addresses and certificate name are examples; use the actual resolver and CA. FortiSwitchOS 8.0 also changes the meaning of <code>dns-cache-limit</code>: it specifies cache memory in KB (range 1–1023, default 512 KB), rather than the older entry-count interpretation. An upgrade that retains a numeric value can therefore have a different practical cache capacity.</p>\n<h3>Verification</h3>\n<p>Check the effective DNS configuration with <code>show system dns</code>. Capture traffic from the switch management/control-plane address to the configured resolver and confirm TCP/853 plus a successful TLS handshake. If CA validation is enabled, verify the presented certificate chains to the configured trust anchor and that the resolver name/address matches the certificate identity as required by the deployment. Confirm the DNS response and the switch function that depends on the lookup. A successful TLS handshake without a configured CA does not prove trusted resolver identity; a successful DNS answer does not prove the answer came from the intended resolver if certificate verification was omitted.</p>\n<h3>Troubleshooting boundaries</h3>\n<p>If lookups stop immediately after enabling DoT, first verify the resolver supports DoT and that TCP/853 is allowed in both directions. A resolver that only listens on UDP/53 will not become DoT-capable because the switch setting changed. If the TLS session fails, inspect CA import, certificate validity and the resolver's certificate identity. If TLS succeeds but names fail, investigate DNS service response, zone/forwarder behavior and the configured domain. If the issue appears after an upgrade, review the cache-limit unit change before attributing the problem to resolver health.</p>\n<p><b>Engineer takeaway:</b> validate three independent things—transport on TCP/853, trust-anchor validation, and a correct DNS answer. They are separate checkpoints.</p>",
+      "sources": [
+        {
+          "title": "DNS — FortiSwitchOS 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/490125/dns"
+        }
+      ],
+      "diagram": {
+        "title": "FortiSwitch DoT and trust",
+        "nodes": [
+          "FortiSwitch DNS client",
+          "TCP 853 TLS",
+          "CA trust validation",
+          "Primary resolver",
+          "Secondary resolver",
+          "DNS cache / consumer"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "05-fortiap-openroaming",
+      "product": "FortiAP/Wireless",
+      "subject": "Hotspot 2.0 WBA OpenRoaming ANQP advertisement and RADIUS WBA attributes",
+      "primary": "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/125733/configuring-openroaming-on-fortiap",
+      "scenario": null,
+      "body": "<h3>What OpenRoaming adds</h3>\n<p>OpenRoaming uses Hotspot 2.0/Passpoint discovery and Wireless Broadband Alliance federation data so a compatible client can discover a roaming network and authenticate through an identity provider without a manual captive-portal exchange at every venue. On FortiGate-managed FortiAPs, the feature is assembled from several objects: an ANQP roaming-consortium profile containing the provider Organization Identifier (OI), a Hotspot 2.0 profile carrying WBA provider/charging metadata, an enterprise Virtual AP (VAP) using RADIUS, and a WTP profile that applies the VAP to the AP radio.</p>\n<p>Enabling <code>wba-open-roaming</code> alone is not the complete deployment. The OI is part of discovery: it tells a compatible client which roaming consortium is advertised. The WBA financial/data clearing-provider identifiers and charging currency/rate describe the service agreement metadata. The VAP must still use enterprise security and a RADIUS server, because the roaming identity provider performs the actual authentication/authorization exchange.</p>\n<h3>Configuration chain</h3>\n<pre><code>config wireless-controller hotspot20 anqp-roaming-consortium\n    edit \"openroaming\"\n        config oi-list\n            edit 1\n                set oi \"BAA2D00000\"\n            next\n        end\n    next\nend\n\nconfig wireless-controller hotspot20 hs-profile\n    edit \"openroaming\"\n        set roaming-consortium \"openroaming\"\n        set wba-open-roaming enable\n        set wba-financial-clearing-provider \"RBC\"\n        set wba-data-clearing-provider \"444444\"\n        set wba-charging-currency \"CAN\"\n        set wba-charging-rate 135\n    next\nend\n\nconfig wireless-controller vap\n    edit \"openroaming-vap\"\n        set ssid \"radius.openroaming\"\n        set security wpa2-only-enterprise\n        set auth radius\n        set radius-server \"radius-wifi\"\n        set schedule \"always\"\n        set hotspot20-profile \"openroaming\"\n    next\nend</code></pre>\n<p>After the VAP is defined, attach it to the appropriate <code>wtp-profile</code> radio and apply that WTP profile to the physical FortiAP. A correctly created Hotspot 2.0 profile that is not attached to the VAP will not be advertised to clients. Validate the WBA OI and provider identifiers with the roaming provider; the values in the documentation are examples, not universal identifiers.</p>\n<h3>Packet-level verification</h3>\n<p>Fortinet documents using a packet capture to verify that the OpenRoaming configuration was applied. When a client connects, the FortiGate-to-RADIUS Access-Request should include WBA vendor-specific attributes (Type 26, Vendor ID 14122), including WBA-Offered-Service (subtype 12), financial clearing provider (13), data clearing provider (14), and linear-volume rate (15). Seeing these attributes is strong evidence that the Hotspot 2.0 profile was matched to the VAP and that the controller added the WBA metadata to the RADIUS request.</p>\n<p>It does <b>not</b> prove that the RADIUS server accepted the user, that the identity provider has a valid federation agreement, or that a roaming session completed. Continue to inspect the RADIUS response, EAP result, accounting and client association state. If the VSA is missing, walk the object chain in reverse: physical AP/WTP profile, radio VAP list, VAP's Hotspot 2.0 profile, profile's ANQP consortium reference, and OI list.</p>\n<h3>Operational caveats</h3>\n<p>Changing an active VAP or WTP profile can trigger brief client reauthentication or disconnection. Stage the configuration and validate on a test AP before broad deployment. The service's charging metadata must match the operator agreement; it is not a substitute for billing/accounting integration. Treat ANQP discovery, 802.1X/EAP authentication, RADIUS authorization and roaming/accounting as separate phases.</p>\n<p><b>Engineer takeaway:</b> OpenRoaming is a profile-binding and federation workflow. Prove the OI is advertised, the VAP uses enterprise RADIUS, and the WBA attributes appear in Access-Request before investigating credentials.</p>",
+      "sources": [
+        {
+          "title": "Configuring OpenRoaming on FortiAP — FortiAP 7.6.5 Configuration Guide",
+          "url": "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/125733/configuring-openroaming-on-fortiap"
+        },
+        {
+          "title": "Hotspot 2.0 ANQP configuration — FortiAP 7.6.5 Configuration Guide",
+          "url": "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/657393/hotspot-2-0-anqp-configuration"
+        }
+      ],
+      "diagram": {
+        "title": "OpenRoaming discovery and RADIUS",
+        "nodes": [
+          "Client ANQP query",
+          "Roaming OI advertisement",
+          "Enterprise VAP association",
+          "FortiGate RADIUS Access-Request",
+          "WBA VSA metadata",
+          "Identity provider decision"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "06-fortinac-sms",
+      "product": "FortiNAC",
+      "subject": "FortiNAC 9.4 REST SMS Gateway request construction, HTTPS provider integration and visibility semantics",
+      "primary": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/917615/rest-sms-gateway",
+      "scenario": null,
+      "body": "<h3>Purpose and integration boundary</h3>\n<p>FortiNAC's REST SMS Gateway is a Service Connector that lets the product send SMS through a provider's HTTP API rather than relying only on an SMTP-to-SMS gateway. It can be used wherever FortiNAC already uses an SMS gateway. This matters for guest/portal workflows and notifications where the SMS provider exposes a REST endpoint with an API URL, HTTP method, authentication and custom headers.</p>\n<p>The connector is configured in the FortiNAC Manager interface under <b>Network &gt; Connectors &gt; Create New &gt; Email/SMS &gt; SMTP SMS Gateway</b>. The fields describe the outbound request: unique gateway name, API URL, HTTPS toggle, HTTP method, Basic Authentication username/password, content type, and form parameters that are sent as headers. FortiNAC includes example templates for Twilio and Vonage, but their placeholders must be replaced with the organization's account-specific endpoint and credentials.</p>\n<h3>Important semantics</h3>\n<p>If the API URL does not include a scheme, the HTTPS toggle determines whether the connection is HTTPS; the documented default is HTTP. For production, explicitly select HTTPS and verify the provider certificate rather than assuming that the connector will upgrade a bare hostname automatically. The <b>Enabled</b> field is easy to misread: it controls whether the gateway appears in the list of mobile providers for users in the Admin GUI and Portal. It is a visibility toggle, not a kill switch for users who already selected that gateway. If an existing user record still references the gateway, the gateway can still be used.</p>\n<p>Form Parameters are described as headers used to contact the API URL. Therefore, the provider's API contract matters: a provider may expect a particular header name, content type, method and body format. A connector that can reach the endpoint may still fail if the provider rejects the request shape or authentication.</p>\n<h3>Test and debug</h3>\n<p>Save the configuration before testing. From the Service Connectors card, select <b>Test Connection</b>, choose a user, and ensure that the user has the phone number and messaging gateway configured. The phone number must include the country code. A test run with a different user, missing country code, or unsaved connector does not test the intended production path. The gateway can be set as the default from its connector card.</p>\n<p>For debugging, enable the FortiNAC CLI debug described in the guide and inspect <code>output.master</code>. The request and its corresponding provider response are visible there. Use that evidence to separate DNS/TCP/TLS reachability from HTTP status, Basic Auth rejection, content-type mismatch, missing header, invalid phone number and provider-side delivery status. A successful HTTP response indicates that the provider API accepted the request; it does not prove that the handset received or displayed the message.</p>\n<h3>Operational troubleshooting</h3>\n<p>If the test fails before an HTTP response appears, verify name resolution, route, outbound firewall policy, TCP port and TLS certificate. If the provider returns 401/403, check Basic Auth and account status. A 400/415 response usually points to request fields, method, body or content type. If the test succeeds but a portal user receives nothing, confirm the user record's selected mobile provider and E.164-style country-coded phone number, then check the provider's message delivery logs. Do not toggle Enabled expecting it to stop a gateway already referenced by users; change the user's provider selection or remove the connector deliberately.</p>\n<p><b>Engineer takeaway:</b> the connector is a request builder, not a generic SMS relay. Validate the provider contract and inspect the actual request/response.</p>",
+      "sources": [
+        {
+          "title": "REST SMS Gateway — FortiNAC 9.4.0 Manager Guide",
+          "url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/917615/rest-sms-gateway"
+        },
+        {
+          "title": "FortiNAC REST API — messaging gateway endpoints",
+          "url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/60c62b6c-d533-11ee-8c42-fa163e15d75b/FortiNAC_Rest_API_7.4.pdf"
+        }
+      ],
+      "diagram": {
+        "title": "FortiNAC REST SMS request path",
+        "nodes": [
+          "FortiNAC user/provider",
+          "REST SMS connector",
+          "HTTPS request builder",
+          "Provider API",
+          "HTTP response",
+          "output.master"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "07-fortinac-f-cert",
+      "product": "FortiNAC-F",
+      "subject": "Persistent Agent certificate check: client proof, CA trust, CRL reachability and clock tolerance",
+      "primary": "https://docs.fortinet.com/document/fortinac-f/7.2.0/administration-guide/356449/windows",
+      "scenario": null,
+      "body": "<h3>What the certificate check proves</h3>\n<p>The Persistent Agent certificate check is a Windows custom scan that tests whether a host possesses an expected client certificate and can use its private key. This is stronger than checking for a registry value or a certificate file: the scan expects a certificate in the Windows certificate store, a usable private key with Digital Signature key usage, and a signed payload that FortiNAC can validate. The certificate is associated with the endpoint identity through its subject alternative name (SAN), and the signer CA must be trusted by FortiNAC.</p>\n<h3>Object and transaction flow</h3>\n<p>First obtain the client certificate from the organization's CA and install it under <b>Local Computer &gt; Personal &gt; Certificates</b> on the endpoint. Upload the CA certificate that signed the workstation certificate to FortiNAC Certificate Management and select the <b>Persistent Agent Cert Check</b> target. Then create a Windows custom scan using the Certificate Check type and add that custom scan to a scan enabled by the endpoint compliance policy. When the policy runs, the agent locates the certificate, uses its private key to sign data, and reports certificate/signature/timestamp material. FortiNAC validates the chain and configured checks before assigning the scan result.</p>\n<p>The certificate must be signed by a customer-specified CA, the host must be domain joined, the client certificate must be in the Local Computer Personal store, the hostname must appear in SAN, and the private key must support Digital Signature. The CA uploaded to the Persistent Agent Cert Check target is the signer of the workstation authentication certificate—not an arbitrary root copied from another PKI hierarchy.</p>\n<h3>Revocation and time checks</h3>\n<p>CRL Revocation Checking is optional. When enabled, FortiNAC reads CRL distribution-point URIs from the client certificate. It can retrieve a CRL directly from an HTTP URI or indirectly through configured LDAP servers for an LDAP URI. The application server must be able to reach the relevant web server or LDAP path. A correct certificate can therefore fail if revocation checking is enabled but the CRL distribution point is unreachable. The server and endpoint clocks must be within five minutes; time skew is a documented reason for a scan to fail.</p>\n<h3>Verification and failure isolation</h3>\n<p>On the endpoint, inspect the Persistent Agent log for the <code>WinCertCheck</code> payload containing the certificate, signature and timestamp. If that section is missing, the certificate may not be installed in the correct store or the agent cannot read its format/private key. FortiNAC's PersistentAgent debug and <code>output.nessus</code> can show the server-side scan processing. Validate SAN, key usage, uploaded CA, CRL URI reachability and NTP independently. The presence of a certificate in the Windows UI alone does not prove the agent can sign with its private key.</p>\n<p>A Fortinet Community troubleshooting note from June 2026 reports that the agent did not support certificates generated/signed using the CNG framework. That article is outside the current 30-day scenario window, so it is not treated as a fresh scenario, but it remains a useful version-specific compatibility check. Confirm the deployed agent version and current release notes before replacing certificates or weakening PKI policy.</p>\n<h3>Policy and deployment boundaries</h3>\n<p>Certificate validation is one compliance signal; it does not prove that the endpoint is malware-free or that the certificate holder is currently authorized for every network segment. Tie the scan result to an endpoint compliance policy and verify the resulting host state/quarantine action separately. Roll out the scan to a pilot group first, because missing CA distribution or a clock problem can cause broad false noncompliance.</p>\n<p><b>Engineer takeaway:</b> the check is a cryptographic proof plus server-side trust/revocation/time validation. Debug the endpoint's ability to produce the signed payload before changing policy severity.</p>",
+      "sources": [
+        {
+          "title": "Windows custom scan — FortiNAC-F Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortinac-f/7.2.0/administration-guide/356449/windows"
+        },
+        {
+          "title": "FortiNAC-F 7.6.0 Administration Guide (current guide PDF)",
+          "url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/2318b601-6b2b-11ef-bfe5-fa163e15d75b/FortiNAC-7.6.0-F-admin-guide.pdf"
+        },
+        {
+          "title": "Historical troubleshooting note: Persistent Agent not picking up the certificate (June 5, 2026; outside current window)",
+          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-persistent-agent-not-picking-up-the-certificate-228065"
+        }
+      ],
+      "diagram": {
+        "title": "Persistent Agent certificate validation",
+        "nodes": [
+          "Windows Personal store",
+          "Agent private-key signing",
+          "Signed certificate payload",
+          "FortiNAC CA/SAN check",
+          "CRL and clock checks",
+          "Compliance result"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "08-fac-mobility-ntlm",
+      "product": "FortiAuthenticator",
+      "subject": "FSSO Mobility Agent NTLM signing compatibility and endpoint-to-FortiAuthenticator identity transaction",
+      "primary": "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/326993/forticlient-sso-mobility-agent",
+      "scenario": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262",
+      "body": "<h3>Mobility Agent architecture</h3>\n<p>The FSSO Mobility Agent runs on an endpoint and reports the logged-in username, domain and local interface/VPN IP addresses to FortiAuthenticator. It is useful when a domain-controller logon event alone is not sufficiently precise for a roaming workstation whose active address changes between LAN, Wi-Fi and VPN. The agent can be delivered through full FortiClient, VPN-only FortiClient, or the standalone Windows SSO Mobility Agent. FortiClient EMS can enable the feature and configure the FortiAuthenticator destination; EMS and FortiAuthenticator do not directly exchange the user's login event.</p>\n<p>The agent sends identity updates over short-lived TCP sessions. It reports changes on demand and sends a keepalive at an interval controlled by FortiAuthenticator. TCP/8001 is the documented default, although the port can be changed. A pre-shared key is configured on both sides. A Mobility Agent can report several interface/VPN IPs; those can create multiple FSSO sessions while consuming one FortiClient workstation license. FortiAuthenticator's effective limit is constrained by its licensed user/session and FortiClient workstation counts, not simply by the number of endpoint installations. The Community staff guide documents up to 2,048 concurrent TCP sessions, with licensing still limiting accepted agents/sessions.</p>\n<h3>From endpoint identity to FortiGate policy</h3>\n<p>FortiAuthenticator receives the agent update, associates the username/domain/IP, and resolves group membership. In an AD environment it normally queries the LDAP server linked to the domain information. In Entra ID or hybrid environments, the <code>prefer_azure</code> option and an OAuth server entry can be required to obtain group membership. FortiAuthenticator then applies FSSO filters and forwards the user-IP-group mapping to connected FortiGates. Therefore, a working TCP channel does not prove the user will be published: group lookup and filter matching are separate stages.</p>\n<h3>Verification boundaries</h3>\n<p>Look under <b>Monitor &gt; SSO &gt; SSO Sessions</b> and confirm the login source is Mobility Agent. If absent, capture traffic on the configured TCP port, inspect FSSO debug under <code>/debug/fsso-agent/</code>, and review the endpoint agent logs. Verify the port matches on both sides, the PSK is identical, clocks are synchronized, and the license/session limit is not reached. An FSSO debug message such as <code>expired cache item</code> can be caused by time differences. Confirm that the endpoint is domain joined where LDAP group lookup depends on domain information, or that the Entra OAuth path is correctly configured.</p>\n<h3>Recent NTLM signing scenario</h3>\n<p>A Fortinet Community article dated November 13, 2026 reports that after Microsoft's November 10 security update KB5135557, Windows clients began offering NTLM signing by default and the FSSO Mobility Agent experienced NTLM authentication failures. The reported log includes <code>NT_STATUS_MORE_PROCESSING_REQUIRED</code>. The article describes an engineering investigation and a temporary workaround that permits unsigned NTLM. Treat this as a compatibility hypothesis documented by the Community—not proof that every occurrence of the error has the same cause.</p>\n<p>Allowing unsigned NTLM reduces authentication protection. Do not deploy that workaround broadly or permanently. If an emergency exception is approved, isolate the affected clients, document the risk, scope and expiry, collect the agent/FAC traces, and restore signing as soon as a supported compatibility fix is available. Do not confuse this NTLM negotiation failure with a bad Mobility Agent PSK, blocked TCP port, LDAP group lookup failure or license exhaustion.</p>\n<h3>HA and scale considerations</h3>\n<p>Active-passive FortiAuthenticator clusters synchronize Mobility Agent configuration and current FSSO sessions, so failover can preserve mappings if the outage is short. Load-balancing clusters do not synchronize FSSO sessions by default; configuration may need manual mirroring, or agents can report to multiple FortiAuthenticators using the same PSK, or a tiered FSSO design can share sessions. Both nodes require their own relevant licenses. This is an important distinction when a single node works but sessions disappear when traffic is distributed.</p>\n<p><b>Engineer takeaway:</b> trace the complete chain—endpoint report, TCP/PSK, NTLM negotiation, group resolution, FSSO filtering, and FortiGate publication. Each stage has different evidence.</p>",
+      "sources": [
+        {
+          "title": "FortiClient SSO Mobility Agent — FortiAuthenticator 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/326993/forticlient-sso-mobility-agent"
+        },
+        {
+          "title": "A detailed guide to FSSO Mobility Agent — Fortinet Community staff guide",
+          "url": "https://community.fortinet.com/fortiauthenticator-8/a-detailed-guide-to-fsso-mobility-agent-222658"
+        },
+        {
+          "title": "Recent scenario: NT_STATUS_MORE_PROCESSING_REQUIRED after KB5135557 (Nov 13, 2026)",
+          "url": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262"
+        }
+      ],
+      "diagram": {
+        "title": "Mobility Agent FSSO publication",
+        "nodes": [
+          "Windows endpoint",
+          "Mobility Agent TCP/PSK",
+          "FortiAuthenticator",
+          "LDAP / Entra group lookup",
+          "FSSO filters",
+          "FortiGate user-IP mapping"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "09-fortipam-associated",
+      "product": "FortiPAM",
+      "subject": "Associated-secret credential indirection and Smart Association username resolution",
+      "primary": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "scenario": null,
+      "body": "<h3>Separate target metadata from credentials</h3>\n<p>FortiPAM associated secrets let one secret describe the target while another secret supplies the credentials. A primary secret can store a target IP/hostname and launcher settings; an associated secret can hold a shared domain, username/password, SSH key or other credential fields. This avoids duplicating the same credential material across many target objects and supports a clear separation between “where to connect” and “what identity to use.”</p>\n<p>When creating a secret, enable <b>Associated Secret</b> and either select a secret from the list or use <b>Smart Association</b>. Smart Association takes an account prefix and the currently logged-in FortiPAM username, combines them into a generated username, then searches the secret database for a secret whose username matches. If a match is found, that secret is used as the associated credential source. If no match exists—or the user cannot access the matching secret—the launch cannot resolve the intended credentials.</p>\n<h3>Launch-with semantics</h3>\n<p>The <b>Launch with</b> setting determines which secret's credential fields are used. <b>Current secret's credential</b> uses the primary secret. <b>Associated secret's credential</b> uses the associated secret and ignores the credential information stored in the primary secret. Fortinet explicitly requires all fields needed by the launcher to be present in the associated secret. A common error is to keep the hostname in the primary secret and assume that the primary username/password will still be merged with the associated password. The documented behavior is a credential-source selection, not an arbitrary field-by-field merge.</p>\n<p>For SSH, <b>Auto-Switch Account</b> controls what happens after authentication through the associated credential. When enabled, FortiPAM logs in using the associated identity and then switches to the account stored in the primary secret. When disabled, the session remains in the associated account. The two choices are materially different for Cisco enable workflows and for shared Unix accounts.</p>\n<h3>Configuration and verification</h3>\n<pre><code>config secret database\n    edit &lt;secret-id&gt;\n        set associated-secret &lt;associated-secret-id&gt;\n        set launch-with {associated-secret | itself}\n        set ssh-switch-account {enable | disable}\n    next\nend</code></pre>\n<p>Use the GUI or the supported CLI for the deployed FortiPAM version; do not paste IDs from another appliance. Test the generated Smart Association username independently, confirm the target user can access the associated secret/folder, and inspect the launch session's authenticated identity. A successful secret launch proves the chosen credential source worked; it does not necessarily prove the final session is running under the primary secret's account if SSH account switching is disabled.</p>\n<h3>Use cases and failure isolation</h3>\n<p>A Target Only secret can hold each server's address while many such secrets reference one Windows Domain secret for shared credential material. A Cisco Enable Secret can use a Cisco User secret as the associated secret; with Auto-Switch enabled, the user can authenticate and then move to enable mode. Conversely, a primary SSH secret can use an associated enable secret only as the password source when the documented launch settings are configured accordingly.</p>\n<p>If a launch fails, do not immediately rotate the password. First determine which secret supplied the username, password, domain, key and passphrase. Then verify the generated username, association reference, folder permissions, launcher-required fields and SSH account-switch setting. This is especially important when a primary secret is copied or edited: the association can remain correct while a required field is missing from the credential object.</p>\n<p><b>Engineer takeaway:</b> associated secrets are credential indirection, not a field merge. Model the primary target object, credential object, lookup rule and final login identity separately.</p>",
+      "sources": [
+        {
+          "title": "Creating a secret — FortiPAM 1.9.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret"
+        }
+      ],
+      "diagram": {
+        "title": "Associated-secret credential resolution",
+        "nodes": [
+          "Primary target secret",
+          "Smart Association lookup",
+          "Associated credential secret",
+          "Launcher authentication",
+          "Optional SSH account switch",
+          "Target session"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "10-fortisiem-bipartite",
+      "product": "FortiSIEM",
+      "subject": "Bipartite user-workstation login anomaly detection and dynamic peer communities",
+      "primary": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/658281/anomaly-detection",
+      "scenario": null,
+      "body": "<h3>Why this model is different</h3>\n<p>FortiSIEM's login anomaly model is not a simple count threshold such as “more than 20 logins per hour.” It models which users access which workstations. The graph is bipartite: one node set contains users, the other contains workstations, and edges connect only users to workstations. An edge represents a login; its weight can represent the number of logins in a time interval. The model learns normal user-to-workstation relationships and builds dynamic peer groups from users and workstations with similar access patterns.</p>\n<h3>Scoring mechanics</h3>\n<p>During training, FortiSIEM calculates similarity relationships. A user is similar to another user when they access similar workstations; workstations are similar when they are accessed by a common set of users. During inference, a new login from user A to workstation B is anomalous when A is dissimilar to the users who typically access B. The guide defines B's user community (C), A and C's shared workstation set (E), A's exclusive workstation set (D), and C's exclusive workstation set (F). An anomaly is more likely when the shared set E is much smaller than the exclusive sets D and F. This is why a login can be suspicious even if the raw login count is low: the relationship is unusual, not necessarily the volume.</p>\n<p>The principal tuning parameters are <b>Threshold</b> (scores below it are anomalous), <b>Max node degree</b> (high-degree users/workstations are ignored), and <b>Convergence bound</b> (an internal stopping criterion for the reward-matrix calculation). High-degree exclusions are intentional: domain administrators who access many workstations and shared infrastructure servers accessed by many users can distort peer relationships. Users/workstations absent from training are not in the model and may not raise incidents until retraining includes them.</p>\n<h3>Training and inference workflow</h3>\n<p>FortiSIEM provides a system-defined login report and Bipartite Graph Edge Anomaly job. Prepare the data from a report, choose the organization and time range, then train the model. The guide recommends a training factor greater than 70%, leaving the remainder for testing. Inspect Model Quality, Anomalies Found and Normal Results before scheduling. In the schedule phase, configure inference frequency and retraining frequency; the guide recommends retraining at least every seven days because new users and workstations must become part of the baseline. Inference can create a FortiSIEM incident or send email if the mail server is configured.</p>\n<h3>Verification and tuning</h3>\n<p>Review the job's input report/time window, algorithm parameters, train/test split, model quality and anomaly output. The results table marks anomalies with <code>isAnomaly = 1</code>; inspect the graph visualization to understand which user/workstation edge crossed the threshold. If legitimate shared-workstation logins create too many anomalies, review the peer community and max-node-degree setting before simply raising the threshold. If new endpoints/users produce no incidents, check whether they existed in the training data and whether the retraining schedule has run.</p>\n<h3>Operational cautions</h3>\n<p>The model learns from the report dataset. Missing numerical/time attributes, a narrow training window, or inconsistent login sources reduce the quality of the graph. Rows missing required fields can be ignored by the ML module. A CSV can be used to test training behavior, but the guide notes that CSV data cannot be scheduled for inference because it may not exist in FortiSIEM. Keep the training report stable and representative, and use the incident graph to validate whether a score is operationally meaningful.</p>\n<p><b>Engineer takeaway:</b> this is relationship anomaly detection. Investigate who normally accesses the workstation and how that peer community differs from the new user—not only how many logins occurred.</p>",
+      "sources": [
+        {
+          "title": "Anomaly Detection — FortiSIEM 7.4.0 User Guide",
+          "url": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/658281/anomaly-detection"
+        },
+        {
+          "title": "What's New in 7.0.0 — FortiSIEM 7.4.1 User Guide",
+          "url": "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/588857/whats-new-in-7-0-0"
+        }
+      ],
+      "diagram": {
+        "title": "Bipartite login graph",
+        "nodes": [
+          "User nodes",
+          "Workstation nodes",
+          "Weighted login edges",
+          "Peer communities",
+          "Anomalous cross-community edge",
+          "FortiSIEM incident"
+        ],
+        "edges": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "11-fortisase-eap-ldap",
+      "product": "FortiSASE",
+      "subject": "EAP-TTLS LDAP authentication for IKEv2 IPsec agent tunnels",
+      "primary": "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/079498/configuring-fortisase-with-an-ldap-server-for-remote-user-authentication-in-forticlient-agent-based-mode",
+      "scenario": null,
+      "body": "<h3>Where EAP-TTLS fits</h3>\n<p>FortiSASE can authenticate remote FortiClient users against an LDAP server, including Windows Active Directory. For IPsec agent tunnels using IKEv2, the administrator must enable <b>EAP for LDAP authentication</b>. Fortinet describes this toggle as enabling EAP-TTLS support for FortiSASE IPsec agent tunnels. EAP-TTLS carries the user's credentials inside a TLS tunnel so the IKEv2 agent tunnel can use LDAP authentication. This setting is only supported on instances with FortiClient 7.4 support.</p>\n<p>The distinction between tunnel types matters. The setting is not required for LDAP authentication on SSL agent tunnels, so it is not visible on instances that support only SSL agent tunnels. In SSL-to-IPsec transition mode, the setting is supported only for an endpoint profile configured with IPsec tunnel type. Enabling it globally does not make an SSL profile use IKEv2/EAP-TTLS.</p>\n<h3>LDAP source configuration</h3>\n<p>Create an LDAP authentication source under <b>Access &amp; authentication &gt; Authentication Sources &gt; LDAP</b>. Configure server name/address, port, common-name identifier, distinguished name/search base, secure connection, certificate and group-matching options. In AD, the user identifier may be <code>cn</code>, <code>sAMAccountName</code>, or <code>userPrincipalName</code>, depending on the username format. These attributes are case-sensitive where documented. Use a bind type that can search the intended DN/subtree; Fortinet recommends Regular bind for the documented example.</p>\n<p>LDAPS is recommended. The default secure LDAP port is 636; for a custom port, enter the actual listener. Import the issuing CA when the server certificate is not signed by a CA already trusted by FortiSASE. If Server Identity Check is enabled, the certificate must contain the server IP or name configured in the LDAP source. Password renewal is available only with LDAPS. Group matching can use group objects, POSIX groups or user attributes; if user-attribute matching is selected, the filter and search base must be configured.</p>\n<h3>Private LDAP via SPA</h3>\n<p>If the directory uses a private address, set Access Type to Private so the connection uses Secure Private Access (SPA). The LDAP server must be behind the SPA hub, the BGP routing design must include the directory subnet, and policies must allow FortiSASE security PoPs to reach the hub. A successful LDAP object test from a public endpoint does not prove that a private LDAP path through the SPA hub is correct. Validate both the directory bind and the network path.</p>\n<h3>Endpoint authentication workflow</h3>\n<p>Invite or add LDAP users/groups in FortiSASE, provision a compatible FortiClient through the invitation/EMS process, and configure the endpoint profile or custom IPsec tunnel with EAP for LDAP authentication enabled. The user connects using their Windows/domain username and password. FortiSASE uses EAP-TTLS to transport the credentials securely to the LDAP authentication source, resolves user/group membership, and applies the configured access policy.</p>\n<h3>Verification and troubleshooting</h3>\n<p>Use <b>Test connection</b> on the LDAP source first. If that fails, inspect DNS, route, TCP/636, certificate chain, server identity, bind credentials, DN and group filters. If LDAP test succeeds but IPsec agent login fails, verify FortiClient version, IKEv2 tunnel type, EAP toggle scope and endpoint profile. If private LDAP is used, trace PoP-to-SPA-hub reachability and the BGP route/policy separately. Do not disable LDAPS or certificate identity checks to mask a routing or EAP profile problem.</p>\n<p><b>Engineer takeaway:</b> EAP-TTLS is an IPsec-agent authentication prerequisite, while LDAP bind/group matching and SPA reachability are separate dependencies. Validate them in that order.</p>",
+      "sources": [
+        {
+          "title": "Configuring FortiSASE with an LDAP server for remote user authentication in FortiClient agent-based mode — FortiSASE 7.4.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortisase/7.4.0/administration-guide/079498/configuring-fortisase-with-an-ldap-server-for-remote-user-authentication-in-forticlient-agent-based-mode"
+        }
+      ],
+      "diagram": {
+        "title": "FortiSASE EAP-TTLS LDAP path",
+        "nodes": [
+          "FortiClient IKEv2",
+          "EAP-TTLS tunnel",
+          "FortiSASE security PoP",
+          "SPA hub / BGP",
+          "Private LDAP / AD",
+          "Group authorization"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "12-sdwan-isdb",
+      "product": "Secure SD-WAN",
+      "subject": "FortiOS 8.0 SD-WAN ISDB destination identity matching",
+      "primary": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/370974/fields-for-identifying-traffic",
+      "scenario": null,
+      "body": "<h3>ISDB is a destination identity, not an application signature</h3>\n<p>FortiOS SD-WAN rules classify traffic before choosing an outgoing member. The destination can be identified with an address object, an Internet Service Database (ISDB) service or service group, an application-control object, a BGP route tag, or DSCP/TOS criteria. These are different classifiers. ISDB uses FortiGuard-maintained service definitions to represent destination services; application-aware routing uses application-control signatures and the IPS/application database. A rule that matches an ISDB service is not proving that the IPS engine identified the application payload.</p>\n<p>The distinction is useful for SaaS and cloud services whose destination address ranges change. Rather than maintaining a static address group for every vendor edge, an SD-WAN rule can match an internet-service name or group. Custom Internet Services and custom groups are also available. The destination classifier is part of the service rule; the rule's strategy and SLA/member health determine which SD-WAN interface is selected after the traffic matches.</p>\n<h3>Configuration model</h3>\n<p>In the GUI, edit <b>Network &gt; SD-WAN &gt; SD-WAN Rules</b> and select one or more Internet Services or Internet Service Groups in the Destination section. In the CLI, the documented fields include:</p>\n<pre><code>config system sdwan\n    config service\n        edit &lt;rule-id&gt;\n            set internet-service enable\n            set internet-service-name &lt;service-name&gt;\n            set internet-service-group &lt;service-group-name&gt;\n        next\n    end\nend</code></pre>\n<p>For custom service objects, the corresponding fields are <code>internet-service-custom</code> and <code>internet-service-custom-group</code>. The guide also lists application fields such as <code>internet-service-app-ctrl</code> and application groups. These are not interchangeable: ISDB uses service identity from the Internet Service Database, while application matching depends on application detection. The static <code>dst</code> field is a different destination match path; the documentation notes that an ISDB destination is configured instead of the destination address object.</p>\n<h3>Rule evaluation and member selection</h3>\n<p>Think of the process as two stages. First, the packet must match the rule's source and destination criteria. Second, the rule's strategy chooses an SD-WAN member based on the configured condition and performance SLA. If no explicit rule matches, the implicit rule handles the traffic. Therefore, an ISDB match does not guarantee that the preferred WAN is selected: the rule may match but its chosen member may be out of SLA, or a different earlier rule may have matched first.</p>\n<h3>Verification</h3>\n<p>Confirm that the FortiGuard ISDB database is current and that the actual destination IP/protocol/port maps to the expected service. Use the documented Internet Service lookup/diagnostic tools available in the deployed FortiOS version to validate the service identity, then inspect SD-WAN rule order, hit counters, selected member and SLA state. A rule object containing the service name proves configuration; a hit counter and session/member evidence prove the packet matched and was steered. A green SLA proves link health, not that the intended classifier matched.</p>\n<h3>Operational failure analysis</h3>\n<p>If Microsoft 365 or another SaaS workload uses an unexpected WAN, check the actual destination and ISDB identity first. A service may resolve to multiple IP ranges, and the same IP can be associated with more than one internet service. Then check whether the rule is ordered ahead of a broader rule, whether the destination field is configured as ISDB rather than a static address, and whether the member selected by the rule is eligible under the SLA. If application-control matching is enabled, verify the application-detection feature visibility and IPS/application database separately.</p>\n<p><b>Engineer takeaway:</b> ISDB classifies a destination service; the SD-WAN rule strategy and SLA select the member. Prove classifier match and member choice independently.</p>",
+      "sources": [
+        {
+          "title": "Fields for identifying traffic — FortiOS 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/370974/fields-for-identifying-traffic"
+        },
+        {
+          "title": "SD-WAN rules — FortiOS 8.0.0 Administration Guide",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/716691/sd-wan-rules"
+        },
+        {
+          "title": "config system sdwan — FortiOS 8.0.0 CLI Reference",
+          "url": "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/838040159/config-system-sdwan"
+        }
+      ],
+      "diagram": {
+        "title": "ISDB SD-WAN classifier",
+        "nodes": [
+          "Packet arrival",
+          "ISDB service lookup",
+          "SD-WAN rule match",
+          "Rule strategy",
+          "SLA/member eligibility",
+          "Selected WAN member"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      }
+    }
+  ]
+}
