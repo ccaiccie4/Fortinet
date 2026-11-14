@@ -37,7 +37,7 @@
     {
       "name": "quiz_generation",
       "status": "PASS",
-      "detail": "Exactly 50 graded MCQs, four choices each, 200 substantive per-choice feedback explanations. Answer distribution A=13, B=13, C=12, D=12."
+      "detail": "Exactly 50 graded MCQs, four choices each, 200 substantive per-choice explanations. Answer distribution A=13, B=13, C=12, D=12. Choice lengths normalized: maximum spread two words per question; average correct and incorrect choice length both 10.24 words."
     },
     {
       "name": "diagram_generation",
@@ -78,6 +78,11 @@
       "name": "scheduler_continuity",
       "status": "PASS",
       "detail": "No scheduler changes were made."
+    },
+    {
+      "name": "choice_length_balance",
+      "status": "PASS",
+      "detail": "Across 50 questions, maximum within-question choice-length spread is two words; correct and incorrect choices have equal average length (10.24 words); only three questions have a unique longest correct option."
     }
   ],
   "counts": {
@@ -99,7 +104,10 @@
     "drawio": 12,
     "diagram_assets": 24,
     "asset_readback_success": 24,
-    "index_readback": 1
+    "index_readback": 1,
+    "choice_length_max_spread_words": 2,
+    "avg_correct_choice_words": 10.24,
+    "avg_incorrect_choice_words": 10.24
   },
   "limitations": [
     "Some official Fortinet Document Library pages returned HTTP 403 to direct opening; indexed official documentation and Fortinet-hosted PDFs were used.",
