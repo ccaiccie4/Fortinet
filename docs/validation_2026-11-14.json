@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "report_date": "2026-11-14",
+  "generated_at_local": "2026-11-14T08:29:55-08:00",
+  "overall_status": "PARTIAL",
+  "stages": [
+    {
+      "name": "historical_discovery",
+      "status": "PASS",
+      "detail": "Read 30-day historical exclusion inventory and actual report HTML; built docs/exclusion_inventory_2026-11-14-08-29.json before final topic selection; 294 historical records from 28 report/status artifacts."
+    },
+    {
+      "name": "inventory_readback",
+      "status": "PASS",
+      "detail": "New inventory fetched from GitHub and parsed; all required fingerprint fields present in the historical records."
+    },
+    {
+      "name": "community_sweep",
+      "status": "PASS_WITH_LIMITATION",
+      "detail": "All 12 required product areas searched; two fresh directly matched scenarios verified (FortiAnalyzer and FortiAuthenticator); ten areas had no directly matched recent scenario verified."
+    },
+    {
+      "name": "admin_guide_sweep",
+      "status": "PASS_WITH_LIMITATION",
+      "detail": "Official documentation discovery completed for all 12 targets. Some Document Library pages returned HTTP 403 to direct opening; official indexed content and Fortinet-hosted PDFs were used."
+    },
+    {
+      "name": "semantic_uniqueness",
+      "status": "PASS",
+      "detail": "All 12 selected candidates compared against historical product/mechanism/workflow/failure/evidence/remediation/question/diagram fingerprints; no same-product mechanism duplicate identified."
+    },
+    {
+      "name": "lesson_generation",
+      "status": "PASS",
+      "detail": "12 substantive lessons generated; 6,902 focused words; every lesson includes purpose, mechanics, configuration/objects, evidence, troubleshooting and caveats."
+    },
+    {
+      "name": "quiz_generation",
+      "status": "PASS",
+      "detail": "Exactly 50 graded MCQs, four choices each, 200 substantive per-choice feedback explanations. Answer distribution A=13, B=13, C=12, D=12."
+    },
+    {
+      "name": "diagram_generation",
+      "status": "PASS",
+      "detail": "12 standalone SVG and 12 editable draw.io files generated; 24 assets total."
+    },
+    {
+      "name": "asset_readback",
+      "status": "PASS",
+      "detail": "All 24 assets independently fetched from GitHub and passed structural checks; no retries required."
+    },
+    {
+      "name": "report_publication",
+      "status": "PASS",
+      "detail": "Dated HTML report written and read back; SHA cace61115abef3066488dc4225eff2eaf46fd568."
+    },
+    {
+      "name": "index_publication",
+      "status": "PENDING",
+      "detail": "Index update is next; no success claim until read-back."
+    },
+    {
+      "name": "github_readback",
+      "status": "PASS_WITH_PENDING_INDEX",
+      "detail": "Lesson, question, inventory, research and diagram manifest files read back; report read back."
+    },
+    {
+      "name": "github_pages_verification",
+      "status": "PENDING",
+      "detail": "Public Pages report and index URLs will be checked after index publication."
+    },
+    {
+      "name": "email_delivery",
+      "status": "NOT_ATTEMPTED",
+      "detail": "Notifications and email are disabled for this run; no email was sent."
+    },
+    {
+      "name": "scheduler_continuity",
+      "status": "PASS",
+      "detail": "No scheduler changes were made."
+    }
+  ],
+  "counts": {
+    "historical_records": 294,
+    "report_artifacts": 28,
+    "products": 12,
+    "lessons": 12,
+    "lesson_words": 6902,
+    "questions": 50,
+    "choices": 200,
+    "choice_feedback": 200,
+    "answer_distribution": {
+      "A": 13,
+      "B": 13,
+      "C": 12,
+      "D": 12
+    },
+    "svg": 12,
+    "drawio": 12,
+    "diagram_assets": 24,
+    "asset_readback_success": 24
+  },
+  "limitations": [
+    "Some official Fortinet Document Library pages returned HTTP 403 to direct opening; indexed official documentation and Fortinet-hosted PDFs were used.",
+    "Only two recent Community scenarios directly matched selected mechanisms; other product areas had no directly matched recent scenario verified.",
+    "Public Pages and index read-back verification remain pending."
+  ],
+  "remediation": [
+    "Retry direct access to the blocked Fortinet documentation pages or use an authenticated documentation session.",
+    "Continue searching the ten unmatched Community product areas for new failure modes and material release changes.",
+    "Verify GitHub Pages report and index after the GitHub commit; if unavailable, retry deployment/read-back without suppressing the published report."
+  ]
+}
