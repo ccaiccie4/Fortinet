@@ -171,7 +171,7 @@
           "feedback": "Correct. The hardware command reports TPM status; enabling private-data-encryption prompts for the 32-hexadecimal-digit master-encryption-password."
         },
         {
-          "text": "Enable private-data-encryption separately in each ADOM before creating backups.",
+          "text": "Enable private-data-encryption separately in each ADOM before creating backups for recovery.",
           "correct": false,
           "feedback": "Private-data-encryption is a system-global FortiManager setting, not an ADOM-scoped option."
         },
@@ -886,12 +886,12 @@
           "feedback": "The documented beta does not support HA, and its login limitation is local users only."
         },
         {
-          "text": "The beta supports local-user login only in this release.",
+          "text": "The beta supports local-user login only for guest portals in this release.",
           "correct": true,
           "feedback": "Correct. Fortinet explicitly lists local-user-only login as a limitation; do not assume external IdP support."
         },
         {
-          "text": "The beta supports RADIUS machine accounts only for guest access.",
+          "text": "The beta supports RADIUS machine accounts only for guest access in beta.",
           "correct": false,
           "feedback": "The documented limitation is local users, not a RADIUS machine-account-only workflow."
         },
@@ -1001,7 +1001,7 @@
       "question": "The policy should block only `ifconfig eth0 down` while allowing other ifconfig parameters. Which matcher is required?",
       "choices": [
         {
-          "text": "Start-with-single-word matching on the `ifconfig` command prefix.",
+          "text": "Start-with-single-word matching on the `ifconfig` command prefix only.",
           "correct": false,
           "feedback": "That matcher treats `ifconfig` as the command and blocks any input beginning with it, including other interfaces."
         },
@@ -1011,12 +1011,12 @@
           "feedback": "Correct. Exact Match distinguishes the specific command/parameter string from other ifconfig operations."
         },
         {
-          "text": "A deny rule on the SSH destination IP address only.",
+          "text": "A deny rule on the SSH destination IP.",
           "correct": false,
           "feedback": "Destination filtering does not distinguish shell command parameters."
         },
         {
-          "text": "A regex matching every command containing `ifconfig`.",
+          "text": "A regex matching every shell command containing `ifconfig`.",
           "correct": false,
           "feedback": "A broad regex would also catch allowed ifconfig variants and defeats the stated requirement."
         }
@@ -1151,7 +1151,7 @@
       "question": "A security operations team wants selected devices to continue generating incidents during maintenance. Which option controls this?",
       "choices": [
         {
-          "text": "Enable the calendar's Recurring Months schedule option.",
+          "text": "Enable the calendar's Recurring Months schedule option there.",
           "correct": false,
           "feedback": "Recurrence controls when maintenance occurs, not whether incidents are generated during it."
         },
@@ -1161,7 +1161,7 @@
           "feedback": "ADOM assignment is unrelated to FortiSIEM maintenance incident behavior."
         },
         {
-          "text": "Enable Generate Incidents for Devices under Maintenance option.",
+          "text": "Enable Generate Incidents for Devices under Maintenance setting.",
           "correct": true,
           "feedback": "Correct. This optional calendar setting changes the default incident-suppression behavior for devices under maintenance."
         },
@@ -1371,7 +1371,7 @@
           "feedback": "Correct. The guide exposes CE/PE/standalone role, RD, export-rt and import-rt under the BGP VRF configuration."
         },
         {
-          "text": "The FortiSwitch DNS-over-TLS certificate and cache settings.",
+          "text": "The FortiSwitch DNS-over-TLS certificate and cache settings only.",
           "correct": false,
           "feedback": "Resolver transport settings are unrelated to BGP VPN route distribution."
         },
