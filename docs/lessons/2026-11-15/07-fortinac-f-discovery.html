@@ -1,0 +1,22 @@
+<h3>Discovery scope and inventory model</h3>
+<p>FortiNAC-F network-device discovery is different from endpoint device profiling. Discovery starts with one or more IP ranges and determines which SNMP-enabled network devices exist in those ranges. When a device responds, FortiNAC creates a model in its database and places it in the Network Devices list. The discovery process can receive traps and communicate with devices using SNMPv1, SNMPv2, or SNMPv3. For FortiNAC-OS, the SNMP management service must be allowed on the interface; the documented requirement is that <code>snmp</code> be included in the <code>set allowaccess</code> command.</p>
+<p>The optional Use CDP setting expands discovery beyond the initial IP range. FortiNAC queries a discovered device for information about other devices connected to it. If CDP is enabled on that device, it can return neighbor information, and FortiNAC can query those secondary devices and continue until it reaches the edge of the discoverable network. CDP is therefore a recursive topology-expansion input, not a generic IP scanner that can see every device.</p>
+<h3>Transaction flow and scale limits</h3>
+<p>The operator defines search criteria for a container, including the IP ranges and whether CDP should be used. FortiNAC probes candidate addresses through SNMP, creates device models for responders, and optionally follows CDP neighbor information to discover additional routers and switches. The container view displays the discovery process status; Refresh updates that status while the scan is running. A large network can take a long time because the process is bounded by address count, SNMP response time, device count, and recursive neighbor expansion.</p>
+<p>The Fortinet guide sets a planning limit: the total number of IP addresses across all configured ranges should not exceed 65,000 for a discovery process. Calculate the sum across all ranges, not just the size of each individual range. The guide also warns that a device with multiple interfaces, each using a different IP address and its own SNMP settings, can appear more than once. FortiNAC does not automatically consolidate those duplicate models in this case.</p>
+<h3>Configuration and security</h3>
+<p>Use a dedicated SNMPv3 user with authentication and privacy where supported. Ensure the device allows SNMP from the FortiNAC management source and that ACLs permit the SNMP query and response path. If the device uses a separate management VRF or interface, discovery must originate from a reachable FortiNAC interface. A successful ping is not sufficient proof of SNMP reachability, because UDP/161 may be filtered or the SNMP user, authentication protocol, privacy protocol, or context may be wrong.</p>
+<p>For FortiNAC-OS, verify that the interface's allowaccess list includes <code>snmp</code>. For other managed devices, verify their own SNMP service and permitted managers. CDP expansion is useful only when the discovered network devices actually advertise CDP neighbor data; it will not infer links from arbitrary LLDP data unless the specific discovery feature supports it. Treat CDP as an optional enhancement and retain the IP-range seed as the explicit discovery boundary.</p>
+<pre><code>config system interface
+    edit "port2"
+        set allowaccess ping https ssh snmp
+    next
+end
+
+# Discovery planning
+# - Sum of all IP ranges <= 65,000 addresses
+# - Validate SNMPv3 credentials from FortiNAC
+# - Enable CDP only where neighbors advertise CDP</code></pre>
+<h3>Verification and troubleshooting</h3>
+<p>After starting discovery, refresh the Containers view and inspect its status. Confirm that responding devices appear in Network Devices with the expected model, IP, and management attributes. If the discovery count is lower than expected, test SNMP from the FortiNAC appliance, verify UDP/161 and the return path, confirm SNMP version and credentials, and check <code>allowaccess snmp</code> on FortiNAC-OS. If only the initial seed devices appear, verify that CDP is enabled on those devices and that neighbor information is populated.</p>
+<p>If duplicate models appear, compare the device's interfaces and SNMP settings rather than assuming that FortiNAC has duplicated one IP range. The guide describes multiple representations when multiple interfaces have different addresses and SNMP settings; it does not describe automatic deduplication. If a scan never completes, recompute the total address count, reduce the range to a controlled subset, and test discovery on one container before scaling out.</p>
