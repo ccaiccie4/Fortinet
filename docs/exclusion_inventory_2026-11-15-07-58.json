@@ -6241,6 +6241,363 @@
       "classification": "historical published lesson"
     }
   ],
-  "candidate_audit": [],
-  "selection_gate": "Historical inventory is committed and read back before today's final candidate selection. The 30-day inventory contains only published lesson records; status-only artifacts remain listed as inspected artifacts but are not counted as lessons."
+  "candidate_audit": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "FortiOS 8.0 seven-day first-boot setup window and FortiCare registration enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/924998",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/509319/seven-day-setup-period-for-gui-and-cli-configuration"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "first-boot cumulative powered-on uptime timer gates GUI/CLI configuration on eligible latest-BIOS FortiGate models until FortiCare registration; not a firewall policy or license feature",
+      "workflow_transaction_fingerprint": "first GUI login -> detect internet/registration dialog -> postpone -> setup wizard -> cumulative uptime accrues while powered on; logout plus power-down pauses; FortiCare registration or seven days ends window",
+      "failure_class": "pre-staging window expires before end-customer registration; first login unexpectedly blocked; operator mistakes registration gate for SSO failure",
+      "evidence_pattern": "remaining uptime in postpone dialog, first-powered-up timestamp, registration state, GUI/CLI access state; power-off alone without logout does not establish paused timer",
+      "remediation_path": "register device to FortiCare; if still within window, logout and power down to pause; factory reset or firmware restore restarts timer but is not routine remediation",
+      "question_fingerprint": "distinguish cumulative uptime window from wall-clock seven days and registration from administrator SSO",
+      "diagram_topology_layout_fingerprint": "factory staging -> first boot timer -> postpone/register branch -> configuration window -> timer expiry or FortiCare registration",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager 8.0 recurring policy-package installation scheduling",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/768273/recurring-policy-package-installation-can-be-scheduled",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-retrieve-configuration-file-using-gui-or-cli-from-a-fortimanager-93564",
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "time-based recurring install schedule attached to policy package and selected managed devices; daily/weekly/monthly cadence with start date/time and end date",
+      "workflow_transaction_fingerprint": "Policy & Objects package -> Install Wizard -> Install Policy Package & Device Settings -> Schedule Install -> choose recurrence/window -> select target devices -> scheduler creates future install tasks",
+      "failure_class": "schedule exists but target list, package state, connectivity or validation prevents intended deployment; change is deployed outside window if operators bypass scheduler",
+      "evidence_pattern": "clock icon schedule details, scheduled task history, install task status and per-device install results; schedule creation does not prove future install success",
+      "remediation_path": "inspect schedule definition and target list, validate package before window, verify device connectivity and task result, modify/cancel schedule using package clock details",
+      "question_fingerprint": "distinguish schedule definition from execution result and one-time versus recurring cadence",
+      "diagram_topology_layout_fingerprint": "policy package changes -> recurring schedule -> time trigger -> selected managed FortiGate devices -> per-device install task/results",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer 8.0 AI Access Visibility dashboard data lineage and evidence boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/247446/ai-access-visibility",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/288065"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "dashboard aggregates authorized FortiGate DLP, DNS AI-category, Web Filter AI-category and Application Control Generative AI logs into threat, overview and category widgets",
+      "workflow_transaction_fingerprint": "FortiGate inspection/logging -> log transport to authorized FortiAnalyzer -> ADOM/time-filtered aggregation -> threat/overview/category widgets with sanctioned/unsanctioned labels sourced from FortiGate",
+      "failure_class": "AI activity absent or undercounted because source logs, device authorization, category classification or time filter are missing; stale device status misread as no logs",
+      "evidence_pattern": "DLP violations, threat detected/alerted/blocked, sensitive-data counts, application/user totals and categories; dashboard totals do not prove every SaaS/AI flow was inspected",
+      "remediation_path": "verify FortiGate authorization, DLP/DNS/Web Filter/App Control logging and categories, ADOM/time filters and log receive counters before treating zero as no usage",
+      "question_fingerprint": "distinguish visibility telemetry coverage from enforcement and distinguish stale Device Manager state from stopped log delivery",
+      "diagram_topology_layout_fingerprint": "FortiGate DLP/DNS/WebFilter/AppControl logs -> authorized FortiAnalyzer -> time/ADOM filter -> threats/overview/categories",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitchOS 8.0 automatic system-clock source selection (PTP, NTP, local)",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/296921/time",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/500379/config-system"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-resolving-snmpv3-error-47-usm-not-in-time-window-due-to-ntp-synchronization-offset-230169",
+      "scenario_match": true,
+      "feature_mechanism_fingerprint": "system-time-mode auto chooses valid source by priority PTP then NTP then manual local time; PTP/NTP availability and UTC offset mode remain separate settings",
+      "workflow_transaction_fingerprint": "configure PTP/NTP/manual candidates -> automatic source arbitration -> clock discipline -> logs/SNMPv3/authenticated management consumers use selected clock",
+      "failure_class": "clock source unavailable or inconsistent between managed device and SNMP manager; SNMPv3 USM time-window rejects requests despite valid credentials",
+      "evidence_pattern": "diagnose sys ntp status, selected server/stratum/clock offset, PTP sync status, SNMPv3 errno=-47; a configured NTP server alone does not prove selected source or low skew",
+      "remediation_path": "use a common time reference, validate PTP domain/profile and NTP reachability/source IP, inspect selected source and offset, align monitoring server time",
+      "question_fingerprint": "distinguish configured source from selected source and NTP reachability from SNMPv3 engine-time agreement",
+      "diagram_topology_layout_fingerprint": "PTP candidate + NTP candidate + local clock -> priority selector -> FortiSwitch system clock -> SNMP/logging consumers",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiOS 8.0 FortiAP radio VAP-broadcast disable without deleting SSID configuration",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/897629/allow-fortiap-radio-and-fortiwifi-local-radio-to-be-disabled",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/897629/disabling-radios-on-fortiap-and-fortiwifi"
+      ],
+      "scenario_community_url": null,
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "radio-level vap-status suppresses all configured SSID/VAP broadcasts while preserving per-radio SSID assignments; device override can supersede WTP profile setting",
+      "workflow_transaction_fingerprint": "WTP profile radio vap-status disable -> controller pushes radio state; optional per-WTP override-vap-status enable plus local vap-status controls one AP; re-enable restores configured VAPs",
+      "failure_class": "maintenance/test AP stops advertising but operator deletes SSID or changes VAP assignment unnecessarily; profile setting masked by device override",
+      "evidence_pattern": "WTP profile radio vap-status and per-device override state; SSID remains assigned but is not broadcast; no beacon does not prove AP is unpowered",
+      "remediation_path": "check profile and per-device override precedence, disable broadcast at intended scope, preserve VAP list, re-enable and verify beacons/association",
+      "question_fingerprint": "distinguish radio VAP broadcast suppression from deleting an SSID, disabling CAPWAP or removing PoE",
+      "diagram_topology_layout_fingerprint": "WTP profile radio status -> per-device override decision -> radio VAP broadcast on/off; SSID objects retained",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 dashboard widgets as host-activity, logical-network and RADIUS evidence",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/965487/whats-new-in-fortinac-9-4",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "Recent Hosts, Top Host Activity, Logical Network Access and RADIUS widgets expose discovery, connection activity, network access and authentication success/failure over configurable windows",
+      "workflow_transaction_fingerprint": "host discovery and connection events plus logical-network assignment and RADIUS outcomes -> FortiNAC activity data -> dashboard widget time-window aggregation -> drill-down triage",
+      "failure_class": "operator confuses host presence/activity with successful authorization or assumes RADIUS success proves correct logical-network access",
+      "evidence_pattern": "new host by type, most active hosts, hosts per logical network, RADIUS success/failure counts and time filters; widget aggregation is not a packet trace or policy enforcement proof",
+      "remediation_path": "align timeframe, drill to host and RADIUS details, correlate logical network and endpoint state with access policy and network-device logs",
+      "question_fingerprint": "choose the widget that answers discovery versus activity versus logical-network access versus authentication result",
+      "diagram_topology_layout_fingerprint": "host discovery/connection/RADIUS/logical-network events -> FortiNAC data -> four dashboard widgets -> drill-down host investigation",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F maximum concurrent sessions with accounting-backed Registered Host and Logged in Host limits",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/232311",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-disconnect-request-fails-with-ruckus-wireless-230980",
+      "scenario_match": true,
+      "feature_mechanism_fingerprint": "global and per-user session caps distinguish Registered Host from Logged in Host; supported authentication methods depend on accounting/logout behavior; per-user overrides global and no group-level setting exists",
+      "workflow_transaction_fingerprint": "RADIUS/agent/VPN/captive portal session event -> accounting start/stop updates active host/session state -> global or per-user limit check -> allow or reject additional concurrent host",
+      "failure_class": "stale or missing accounting records cause incorrect session counts; Disconnect-NAK leaves a client in prior session/VLAN and may delay session cleanup",
+      "evidence_pattern": "accounting enabled, Registered Host/Logged in Host counts, user-level override, RADIUS start/stop and Disconnect-Request/NAK; a disconnect request sent does not prove the NAS ended the session",
+      "remediation_path": "enable accounting on the relevant access device, verify supported auth method, correlate start/stop and disconnect responses, correct custom RFC5176 attributes where NAS rejects disconnect",
+      "question_fingerprint": "distinguish registered endpoints from active logged-in sessions and identify when missing accounting skews a limit",
+      "diagram_topology_layout_fingerprint": "endpoint authentication -> NAS/RADIUS accounting -> FortiNAC session table -> global/user limit evaluation -> access decision",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator 6.6.7 SHA-1 cryptographic operation removal and certificate migration",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.7/release-notes/564992/special-notices",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.7/release-notes/355786/fortiauthenticator-6-6-7-release"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262",
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "FortiAuthenticator removes SHA-1 cryptographic operations; certificate signing must use SHA-2 or above; compatibility boundary is algorithm support, not a generic key-size change",
+      "workflow_transaction_fingerprint": "certificate or signing operation requests SHA-1 -> FAC rejects unsupported algorithm -> administrator identifies issuing profile/certificate chain and reissues with SHA-2+ -> relying parties validate new chain",
+      "failure_class": "legacy SHA-1-signed certificate or signing workflow fails after upgrade; operator misattributes any SSO failure to SHA-1 without inspecting signature algorithm",
+      "evidence_pattern": "certificate signature algorithm, issuer chain, FAC release and cryptographic operation logs; RSA key size alone does not reveal SHA-1 use",
+      "remediation_path": "inventory SHA-1-signed certificates and dependent signing workflows, reissue with SHA-256 or stronger supported digest, validate chain and relying-party trust before upgrade",
+      "question_fingerprint": "distinguish certificate public-key algorithm from signature digest and distinguish SHA-1 deprecation from unrelated NTLM signing failures",
+      "diagram_topology_layout_fingerprint": "legacy SHA-1 certificate/profile -> FAC algorithm policy gate -> reissue SHA-2 certificate -> relying-party chain validation",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 auto-purging inactive auto-provisioned users (disable then delete)",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/35785/settings"
+      ],
+      "scenario_community_url": null,
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "two-stage lifecycle for auto-provisioned users: inactivity threshold disables account; disabled-duration threshold purges it; each threshold can be disabled with value 0",
+      "workflow_transaction_fingerprint": "external provisioning creates user -> inactivity timer expires -> account disabled and system event logged/license seat freed -> disabled timer expires -> account deleted",
+      "failure_class": "stale accounts consume seats or are deleted unexpectedly; manual users incorrectly assumed to be in auto-provisioned cleanup scope",
+      "evidence_pattern": "User Max Inactivity Days, User Max Disabled Days, auto-provision source, User Events system log; disabled status is not deletion and cleanup applies to auto-provisioned users",
+      "remediation_path": "scope auto-provision rules, set inactivity and disabled retention separately, use 0 to disable a stage, review system event logs and ownership before enabling purge",
+      "question_fingerprint": "distinguish disable threshold from purge threshold and auto-provisioned from manually created users",
+      "diagram_topology_layout_fingerprint": "auto-provisioned user -> inactivity timer -> disabled/license release -> disabled retention timer -> purge",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM 7.5 ClickHouse Event Log Integrity checksum validation and status interpretation",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/227510/event-log-integrity",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "ClickHouse archived event partitions expose checksum validation status; validation can be manual per file/multiple/all or automatic at consolidation; feature is not available for Elasticsearch",
+      "workflow_transaction_fingerprint": "ClickHouse consolidates event data -> integrity checksum is generated/stored -> operator filters by time/status/shard/partition -> Validate triggers checksum comparison -> Success/Failure/Not Found/System Error",
+      "failure_class": "tampered partition, missing/detached partition, consolidation/storage issue or validator system error misread as one generic integrity failure",
+      "evidence_pattern": "Success checksum match; Failure checksum mismatch; Not Found partition issue; blank partition/status may indicate ClickHouse consolidation/storage limitation; System Error shell/parsing failure",
+      "remediation_path": "preserve evidence, identify shard/partition/time range, distinguish mismatch from missing partition/system error, check storage/consolidation, export validation results and investigate before repair",
+      "question_fingerprint": "interpret four distinct validation states and distinguish unvalidated from validated-success",
+      "diagram_topology_layout_fingerprint": "ClickHouse event partitions -> checksum metadata -> Event Integrity UI filter -> validate action -> status/result",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE IP Management custom FortiExtender/LAN Extension control-plane subnet and BGP-save caveat",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/051293/ip-management",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "FortiExtender/LAN Extension management addresses allocated from configurable control-plane subnet; default 10.252.0.0/16; customization removes formerly reserved 10.253.0.0/16; saving BGP config currently resets custom value to default",
+      "workflow_transaction_fingerprint": "Network > IP management > Advanced set subnet -> FortiExtender/LAN Extension receives management IP from pool -> save BGP configuration may overwrite setting -> reapply custom subnet",
+      "failure_class": "control-plane management addresses overlap customer LAN or revert after BGP save; SPA BGP router ID/tunnel IP overlap creates neighbor flapping",
+      "evidence_pattern": "configured control-plane subnet, assigned FortiExtender management IPs, BGP peer state/router ID and tunnel address; BGP Established alone does not prove management subnet is conflict-free",
+      "remediation_path": "reserve non-overlapping range, save custom subnet after BGP changes, verify allocated management IPs and BGP router IDs/tunnel ranges",
+      "question_fingerprint": "distinguish FortiExtender control-plane pool from IPAM pool for remote agents/edge endpoints and account for BGP-save reset",
+      "diagram_topology_layout_fingerprint": "customer LAN + FortiSASE control-plane subnet -> FortiExtender/LAN Extension management addresses; BGP save reset/reapply loop",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiOS 8.0 scheduled SD-WAN interface speed tests and measured-bandwidth shaping integration",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/671892/sd-wan-speed-test-scheduling-improvements",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/671892",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/833531/scheduled-interface-speed-test"
+      ],
+      "scenario_community_url": null,
+      "scenario_match": false,
+      "feature_mechanism_fingerprint": "FortiGate/backend coordinate scheduled speed tests without retries/retry-pause; results populate measured-upstream/downstream-bandwidth; interface inbandwidth-source/outbandwidth-source measured selects measured values for shaping; min/max clamp values apply to test traffic",
+      "workflow_transaction_fingerprint": "schedule per interface/tunnel -> backend token coordination -> speed-test traffic bypasses ordinary interface shaper but respects speed-test max/min caps -> measured results saved -> interface source selects measured bandwidth for shaping",
+      "failure_class": "scheduled test does not run or results do not affect shaping because schedule, interface source selection or min/max caps are misunderstood",
+      "evidence_pattern": "speedtestd debug schedule/token/test completion and up/down throughput; diagnose vpn tunnel list egress traffic control bandwidth reflects applied measured value; test completion alone does not prove shaping selected measured value",
+      "remediation_path": "verify per-interface schedule, backend coordination and tunnel reachability; inspect min/max units; set interface bandwidth source measured; compare test output with tunnel egress control bandwidth",
+      "question_fingerprint": "distinguish test scheduling from measured-value selection and speed-test traffic caps from ordinary interface shaping",
+      "diagram_topology_layout_fingerprint": "hub scheduler/backend token -> hub-spoke speed-test traffic -> measured bandwidth result -> interface source selector -> egress shaping",
+      "uniqueness_result": "PASS",
+      "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
+    }
+  ],
+  "selection_gate": "Historical inventory is committed and read back before today's final candidate selection. The 30-day inventory contains only published lesson records; status-only artifacts remain listed as inspected artifacts but are not counted as lessons.",
+  "rejected_candidates": [
+    {
+      "candidate": "FortiManager script/script-group revision history and JSON diff",
+      "reason": "Rejected because recent FortiManager revision-history/JSON-diff lesson and ADOM revision mechanisms share the same version-history/diff transaction fingerprint."
+    },
+    {
+      "candidate": "FortiAnalyzer machine-learning anomaly detection",
+      "reason": "Rejected because FortiAnalyzer anomaly detection was already taught in the 30-day window."
+    },
+    {
+      "candidate": "FortiSwitch OpenSSL security levels",
+      "reason": "Rejected because per-application OpenSSL security-level policy was taught in the 30-day window."
+    },
+    {
+      "candidate": "FortiNAC-F N+1 CA failover",
+      "reason": "Rejected because N+1 failover was taught in the 30-day window."
+    },
+    {
+      "candidate": "FortiSASE Digital Experience Monitoring SaaS health",
+      "reason": "Rejected because DEM monitoring was taught in the 30-day window."
+    },
+    {
+      "candidate": "Secure SD-WAN underlay-bandwidth steering",
+      "reason": "Rejected because underlay bandwidth steering was taught in the 30-day window."
+    },
+    {
+      "candidate": "Secure SD-WAN Overlay-as-a-Service dynamic shortcut design",
+      "reason": "Rejected because the ADVPN 2.0 dynamic shortcut/edge-discovery workflow is substantially equivalent to prior overlay lessons."
+    },
+    {
+      "candidate": "FortiAnalyzer FortiMQ automated blocking connector",
+      "reason": "Rejected because FortiMQ connector for automated blocking was taught in the 30-day window."
+    }
+  ],
+  "admin_guide_sweep_summary": {
+    "FortiGate": "FortiOS 8.0 Administration Guide and New Features Guide inspected; selected first-boot setup window.",
+    "FortiManager": "FortiManager 8.0 Administration Guide and New Features Guide inspected; selected recurring policy-package installation schedule.",
+    "FortiAnalyzer": "FortiAnalyzer 8.0 Administration Guide and New Features Guide inspected; selected AI Access Visibility data-lineage dashboard.",
+    "FortiSwitch": "FortiSwitchOS 8.0 Administration Guide and CLI Reference inspected; selected automatic PTP/NTP/local clock arbitration.",
+    "FortiAP_Wireless": "FortiAP/FortiWiFi 8.0 Configuration Guide and FortiOS 8.0 New Features Guide inspected; selected VAP broadcast disable with retained SSID objects.",
+    "FortiNAC": "FortiNAC 9.4 Administration Guide/New Features inspected; selected four new host/activity/logical-network/RADIUS dashboard widgets.",
+    "FortiNAC_F": "FortiNAC-F 7.6 Administration Guide inspected; selected accounting-backed maximum concurrent sessions.",
+    "FortiAuthenticator": "FortiAuthenticator 6.6.7 release notes and current admin documentation inspected; selected SHA-1 cryptographic operation removal and SHA-2 migration.",
+    "FortiPAM": "FortiPAM 1.9 Administration Guide and Release Notes inspected; selected two-stage auto-provisioned-user cleanup.",
+    "FortiSIEM": "FortiSIEM 7.5 User Guide inspected; selected ClickHouse event-log checksum validation.",
+    "FortiSASE": "FortiSASE 26.1.107 Feature Administration Guide inspected; selected custom FortiExtender/LAN Extension control-plane subnet.",
+    "Secure_SD_WAN": "FortiOS 8.0 SD-WAN New Features and Administration Guide inspected; selected scheduled speed tests and measured-bandwidth shaping."
+  },
+  "community_sweep_summary": {
+    "window_start": "2026-10-16",
+    "window_end": "2026-11-14",
+    "searched_product_areas": [
+      "FortiGate",
+      "FortiManager",
+      "FortiAnalyzer",
+      "FortiSwitch",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiNAC-F",
+      "FortiAuthenticator",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ],
+    "verified_recent_scenarios": [
+      {
+        "product": "FortiSwitch",
+        "date": "2026-10 (last month)",
+        "title": "Resolving SNMPv3 error -47 (USM not in time window) due to NTP synchronization offset",
+        "url": "https://community.fortinet.com/fortiswitch-36/technical-tip-resolving-snmpv3-error-47-usm-not-in-time-window-due-to-ntp-synchronization-offset-230169",
+        "use": "Direct scenario companion for clock-source selection; explains 150-second SNMPv3 USM time-window and common NTP reference."
+      },
+      {
+        "product": "FortiNAC-F",
+        "date": "2026-10-29",
+        "title": "FortiNAC Disconnect-Request fails with Ruckus wireless",
+        "url": "https://community.fortinet.com/fortinac-f-57/fortinac-disconnect-request-fails-with-ruckus-wireless-230980",
+        "use": "Direct session-accounting/termination scenario; Disconnect-NAK means the NAS rejected termination, not that the session ended."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "date": "2026-10 (last month)",
+        "title": "FortiAnalyzer shows devices as down and a stale Last Log time for 10-15 minutes after a reboot",
+        "url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+        "use": "Scenario companion for dashboard evidence freshness; verify OFTP receive counters before treating stale UI status as no logs."
+      },
+      {
+        "product": "FortiAuthenticator",
+        "date": "2026-11-13",
+        "title": "FortiAuthenticator SSO session failure with NT_STATUS_MORE_PROCESSING_REQUIRED error",
+        "url": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262",
+        "use": "Scenario-only identity compatibility example; not evidence of SHA-1 failure."
+      },
+      {
+        "product": "FortiGate",
+        "date": "2026-10-23; updated 2026-11-12",
+        "title": "Administrator SSO authentication fails after upgrade to FortiOS 7.6.8",
+        "url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
+        "use": "Scenario-only release regression; distinguish SSO failure from FortiCare first-boot registration gating."
+      },
+      {
+        "product": "FortiGate",
+        "date": "2026-10-16 through 2026-11-10",
+        "title": "FortiGate enters conserve mode after upgrading to FortiOS 7.6.8 (IPSEngine 7.01200)",
+        "url": "https://community.fortinet.com/fortigate-3/fortigate-enters-conserve-mode-after-upgrading-to-fortios-version-7-6-8-ipsengine-7-01200-230996",
+        "use": "Recent upgrade/engine resource scenario; not a primary lesson source."
+      },
+      {
+        "product": "FortiSASE",
+        "date": "2026-09-18 (outside strict 30-day window)",
+        "title": "SPA BGP flapping due to router ID overlap with tunnel IP",
+        "url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
+        "use": "Excluded from recent scenario set because publication date is outside the 30-day window."
+      }
+    ],
+    "no_directly_matched_recent_scenario_for": [
+      "FortiManager",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ],
+    "note": "Community material is used only as scenario/evidence context; all twelve primary lesson topics are sourced from Fortinet administration/configuration/new-feature/release documentation."
+  },
+  "semantic_uniqueness_check": {
+    "checked_records": 306,
+    "selected_count": 12,
+    "pass_count": 0,
+    "rejected_candidates": 8,
+    "duplicate_mechanisms_found": 0,
+    "manual_review": "Candidates sharing an equivalent transaction or question concept were rejected even when the URL or release version differed."
+  }
 }
