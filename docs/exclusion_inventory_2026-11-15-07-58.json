@@ -21,7 +21,7 @@
       "rule": "Rolling 30-day exclusion window: published reports from 2026-10-15 through 2026-11-13; the current 2026-11-14 report is not included in its own historical exclusions.",
       "semantic_rule": "Reject same or substantially equivalent feature mechanism, workflow/transaction, failure class, evidence pattern, remediation path, question concept, or diagram topology even when source URL/title differs."
     },
-    "method": "Fetched actual report HTML from default branch and reconciled published lesson headings to the existing fingerprint inventory; corrected Unclassified product labels using authoritative Fortinet URL product path."
+    "method": "Fetched and inspected actual report HTML from the default branch for every published report artifact in the window, reconciled all lesson subjects to the latest machine-readable fingerprint inventory, added all twelve lessons from the November 14 published report, and corrected product classification using the source URL or explicit lesson identity."
   },
   "report_artifacts_inspected": [
     {
@@ -344,7 +344,7 @@
     {
       "report_date": "2026-10-29",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-29-08-00.html",
-      "product": "Unclassified",
+      "product": "FortiAuthenticator",
       "lesson_subject": "SAML IdP signing-certificate auto-rotation: staged trust and timed cutover",
       "primary_url": null,
       "additional_primary_urls": [],
@@ -6242,5 +6242,5 @@
     }
   ],
   "candidate_audit": [],
-  "selection_gate": "Inventory committed before selecting today's twelve new lesson topics. Candidate selection is permitted only after this file is read back."
+  "selection_gate": "Historical inventory is committed and read back before today's final candidate selection. The 30-day inventory contains only published lesson records; status-only artifacts remain listed as inspected artifacts but are not counted as lessons."
 }
