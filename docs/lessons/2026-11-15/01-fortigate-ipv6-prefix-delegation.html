@@ -1,0 +1,41 @@
+<h3>Purpose and object model</h3>
+<p>DHCPv6 Prefix Delegation (DHCPv6-PD) solves a different problem from giving one interface or one workstation an IPv6 address. An ISP delegates a routed prefix to a customer-edge router, and that router allocates sub-prefixes to downstream routed interfaces. FortiGate represents the upstream interface, one or more Identity Associations for Prefix Delegation (IA_PD), downstream interfaces in delegated mode, and optionally a DHCPv6 server or SLAAC on each downstream segment. The IAID is the join key: it binds the delegated prefix received upstream to the downstream interface and to the DHCPv6 server that advertises it.</p>
+<p>A prefix hint such as <code>::/48</code> is a request or preference sent to the provider, not a promise that the provider will return that exact prefix. The actual delegated prefix, preferred lifetime, valid lifetime, and delegated DNS addresses are learned from the DHCPv6 server. Do not hard-code the hint as if it were the installed route. A provider may return a different length or a different prefix after a lease renewal, and the downstream configuration must follow the received IA_PD.</p>
+<h3>Packet and configuration flow</h3>
+<p>The ISP-facing FortiGate sends DHCPv6 client messages for an IA_PD and receives a Reply containing the delegated prefix and DNS information. The FortiGate then associates that IAID with a downstream interface. The downstream interface can use the delegated prefix directly; the FortiGate can also run a DHCPv6 server on that segment and pass the delegated DNS service to clients. A second FortiGate can use DHCPv6 client mode on its WAN-facing interface to request a further delegation from the first FortiGate. This is router-to-router prefix allocation, not DHCPv6 relay: the upstream router owns the lease and deliberately subdivides it.</p>
+<p>The Fortinet example uses port1 as the upstream ISP interface, port5 as a delegated downstream interface, IAID 1, and a /48 hint. The downstream DHCPv6 server references the same upstream interface and IAID. Keep those values aligned; a syntactically valid delegated interface with the wrong IAID can remain unnumbered even though the upstream lease exists.</p>
+<pre><code>config system interface
+    edit "port1"
+        config ipv6
+            set dhcp6-prefix-delegation enable
+            config dhcp6-iapd-list
+                edit 1
+                    set prefix-hint ::/48
+                next
+            end
+        end
+    next
+    edit "port5"
+        config ipv6
+            set ip6-mode delegated
+            set ip6-delegated-prefix-iaid 1
+            set ip6-upstream-interface "port1"
+        end
+    next
+end
+
+config system dhcp6 server
+    edit 1
+        set interface "port5"
+        set upstream-interface "port1"
+        set delegated-prefix-iaid 1
+        set dns-service delegated
+        set ip-mode delegated
+    next
+end</code></pre>
+<h3>Verification: what the outputs prove</h3>
+<p>On the upstream interface, inspect the IPv6 configuration with <code>get</code> and confirm that DHCPv6 prefix delegation is enabled, the expected IAID is present, and a real delegated prefix plus preferred and valid lifetimes has been installed. The delegated DNS fields should also be populated if the provider supplies DNS. On the downstream interface, verify <code>ip6-mode delegated</code>, <code>ip6-delegated-prefix-iaid</code>, <code>ip6-upstream-interface</code>, and the resulting <code>ip6-address</code>. A configured IAID with no <code>ip6-address</code> proves only that the interface is configured to request a delegation; it does not prove that the upstream lease arrived.</p>
+<p>For the child FortiGate, verify that its interface is in DHCP mode and that its obtained IPv6 address/prefix and DNS fields are populated. <code>diagnose ipv6 address list</code> confirms installed addresses and prefix lengths. The DNS proxy diagnostic confirms which DNS servers the local VDOM is actually using; a delegated DNS value in the interface output does not prove that a client can resolve names.</p>
+<h3>Troubleshooting and operational boundaries</h3>
+<p>If the upstream IA_PD is absent, start with the ISP-facing link, DHCPv6 client state, provider entitlement, and the prefix hint. If the upstream prefix exists but port5 is empty, compare the IAID and upstream-interface references on port5 and the DHCPv6 server. If the downstream FortiGate receives a prefix but LAN clients do not, check whether the upstream FortiGate is serving DHCPv6 or sending Router Advertisements with SLAAC, and verify that the downstream interface is actually connected to that segment. DNS failure is a separate path: check delegated DNS, DHCPv6 DNS service, RA RDNSS if SLAAC is used, and client resolver state.</p>
+<p>Prefix delegation does not by itself create a firewall policy, route policy, or working default gateway on every downstream device. Confirm the RA/default-router path and the routing/policy path independently. Multiple IA_PD entries can be used when the provider delegates multiple prefixes; do not reuse an IAID accidentally. The guide describes the normal upstream/downstream flow but does not promise a particular HA lease-recovery behavior for every topology, so test failover and renewal with the actual provider before relying on a stable prefix across a maintenance event.</p>
