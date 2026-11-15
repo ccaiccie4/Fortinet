@@ -6244,20 +6244,21 @@
   "candidate_audit": [
     {
       "product": "FortiGate",
-      "lesson_subject": "FortiOS 8.0 seven-day first-boot setup window and FortiCare registration enforcement",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/924998",
+      "lesson_subject": "FortiOS IPsec pre- versus post-encapsulation fragmentation: GTP-U packet integrity, reassembly and throughput",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/814752/fragmenting-ip-packets-before-ipsec-encapsulation",
       "additional_primary_urls": [
-        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/509319/seven-day-setup-period-for-gui-and-cli-configuration"
+        "https://docs.fortinet.com/document/fortigate/8.0.0/secgw-for-mobile-networks-deployment/325893/ipsec-and-packet-fragmentation",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/790613/phase-1-configuration"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
-      "scenario_match": false,
-      "feature_mechanism_fingerprint": "first-boot cumulative powered-on uptime timer gates GUI/CLI configuration on eligible latest-BIOS FortiGate models until FortiCare registration; not a firewall policy or license feature",
-      "workflow_transaction_fingerprint": "first GUI login -> detect internet/registration dialog -> postpone -> setup wizard -> cumulative uptime accrues while powered on; logout plus power-down pauses; FortiCare registration or seven days ends window",
-      "failure_class": "pre-staging window expires before end-customer registration; first login unexpectedly blocked; operator mistakes registration gate for SSO failure",
-      "evidence_pattern": "remaining uptime in postpone dialog, first-powered-up timestamp, registration state, GUI/CLI access state; power-off alone without logout does not establish paused timer",
-      "remediation_path": "register device to FortiCare; if still within window, logout and power down to pause; factory reset or firmware restore restarts timer but is not routine remediation",
-      "question_fingerprint": "distinguish cumulative uptime window from wall-clock seven days and registration from administrator SSO",
-      "diagram_topology_layout_fingerprint": "factory staging -> first boot timer -> postpone/register branch -> configuration window -> timer expiry or FortiCare registration",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/fragmented-gtp-u-delivered-through-an-ipsec-tunnel-and-throughput-tuning-with-post-encapsulation-fragmentation-231257",
+      "scenario_match": true,
+      "feature_mechanism_fingerprint": "ip-fragmentation phase1 control selects pre-encapsulation inner fragmentation versus post-encapsulation outer ESP fragmentation; post-encapsulation reassembles ESP before decrypting so downstream receives complete inner GTP-U",
+      "workflow_transaction_fingerprint": "inner GTP-U packet -> IPsec encryption -> outer ESP packet; post-encapsulation fragments outer IP packet to underlay MTU -> receiver reassembles outer fragments -> decrypts ESP -> forwards complete inner GTP-U; pre-encapsulation instead fragments inner packet before encryption",
+      "failure_class": "downstream GTP-U endpoint receives inner IPv4 fragments it cannot reassemble; post-encapsulation avoids that but can expose CPU/HPE/reassembly-memory bottlenecks",
+      "evidence_pattern": "downstream sniffer shows fragment offsets vs complete UDP/2152 datagram; tunnel phase1 ip-fragmentation mode; HPE_IPSEC_ESP/HPE_IP_FRAG counters; ReasmFails and fragment memory; tunnel interface MTU",
+      "remediation_path": "configure post-encapsulation on both sending peers, ensure tunnel MTU fits largest inner packet, inspect HPE and fragment reassembly counters, size HPE/fragment memory safely, preferably avoid fragmentation by sizing GTP-U MTU",
+      "question_fingerprint": "distinguish inner fragmentation before encryption from outer ESP fragmentation after encryption and distinguish packet integrity from CPU/reassembly throughput",
+      "diagram_topology_layout_fingerprint": "inner GTP-U packet -> encrypt -> outer ESP fragment pair -> underlay -> reassemble outer ESP -> decrypt -> complete GTP-U to downstream",
       "uniqueness_result": "PASS",
       "comparison": "Compared against all 306 published lesson fingerprints in the 30-day inventory; exact subject and mechanism/workflow/evidence/question/topology comparison found no equivalent lesson."
     },
@@ -6500,7 +6501,7 @@
     }
   ],
   "admin_guide_sweep_summary": {
-    "FortiGate": "FortiOS 8.0 Administration Guide and New Features Guide inspected; selected first-boot setup window.",
+    "FortiGate": "FortiOS 8.0 Administration Guide and SecGW deployment guide inspected; selected the phase1 ip-fragmentation pre/post-encapsulation behavior, MTU implications and hardware/reassembly boundaries.",
     "FortiManager": "FortiManager 8.0 Administration Guide and New Features Guide inspected; selected recurring policy-package installation schedule.",
     "FortiAnalyzer": "FortiAnalyzer 8.0 Administration Guide and New Features Guide inspected; selected AI Access Visibility data-lineage dashboard.",
     "FortiSwitch": "FortiSwitchOS 8.0 Administration Guide and CLI Reference inspected; selected automatic PTP/NTP/local clock arbitration.",
@@ -6532,72 +6533,103 @@
     ],
     "verified_recent_scenarios": [
       {
-        "product": "FortiSwitch",
-        "date": "2026-10 (last month)",
-        "title": "Resolving SNMPv3 error -47 (USM not in time window) due to NTP synchronization offset",
-        "url": "https://community.fortinet.com/fortiswitch-36/technical-tip-resolving-snmpv3-error-47-usm-not-in-time-window-due-to-ntp-synchronization-offset-230169",
-        "use": "Direct scenario companion for clock-source selection; explains 150-second SNMPv3 USM time-window and common NTP reference."
+        "product": "FortiGate",
+        "date": "2026-11-13",
+        "title": "Fragmented GTP-U delivered through an IPsec tunnel and throughput tuning with post-encapsulation fragmentation",
+        "url": "https://community.fortinet.com/fortigate-3/fragmented-gtp-u-delivered-through-an-ipsec-tunnel-and-throughput-tuning-with-post-encapsulation-fragmentation-231257",
+        "use": "Direct scenario for the primary lesson; demonstrates downstream fragment capture, post-encapsulation behavior, HPE counters and reassembly memory."
+      },
+      {
+        "product": "FortiManager",
+        "date": "2026-10-23",
+        "title": "Install failure on 2 GB RAM FortiGates after FortiManager 7.6.8 upgrade — ssl-ssh-profile udp-not-quic",
+        "url": "https://community.fortinet.com/support-forum-92/install-failure-on-2-gb-ram-fortigates-after-fortimanager-7-6-8-upgrade-ssl-ssh-profile-udp-not-quic-230808",
+        "use": "Scenario companion for scheduled package installation; demonstrates per-device schema/firmware validation failure and why schedule creation does not prove install success."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "date": "2026-11-13",
+        "title": "FortiAnalyzer log forwarding stops working after upgrade to 7.6",
+        "url": "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
+        "use": "Scenario companion for AI visibility data lineage; Collector-to-Analyzer auth state and certificate CN mismatch can stop source logs before dashboard aggregation."
+      },
+      {
+        "product": "FortiAP/Wireless",
+        "date": "2026-11-03",
+        "title": "FortiAP CAPWAP AP-leave/join behavior with reason AP DTLS peer disconnected",
+        "url": "https://community.fortinet.com/fortiap-5/fortiap-capwap-ap-leave-join-behavior-with-reason-ap-dtls-peer-disconnected-231069",
+        "use": "Scenario-only boundary; a CAPWAP keepalive/underlay failure is not the same as disabling VAP broadcast in a WTP profile."
       },
       {
         "product": "FortiNAC-F",
         "date": "2026-10-29",
-        "title": "FortiNAC Disconnect-Request fails with Ruckus wireless",
+        "title": "FortiNAC Disconnect-Request fails with RADIUS Disconnect-NAK",
         "url": "https://community.fortinet.com/fortinac-f-57/fortinac-disconnect-request-fails-with-ruckus-wireless-230980",
-        "use": "Direct session-accounting/termination scenario; Disconnect-NAK means the NAS rejected termination, not that the session ended."
-      },
-      {
-        "product": "FortiAnalyzer",
-        "date": "2026-10 (last month)",
-        "title": "FortiAnalyzer shows devices as down and a stale Last Log time for 10-15 minutes after a reboot",
-        "url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
-        "use": "Scenario companion for dashboard evidence freshness; verify OFTP receive counters before treating stale UI status as no logs."
+        "use": "Direct session termination scenario; NAS returns Disconnect-NAK when identifying attributes are missing, so session state may remain active."
       },
       {
         "product": "FortiAuthenticator",
         "date": "2026-11-13",
-        "title": "FortiAuthenticator SSO session failure with NT_STATUS_MORE_PROCESSING_REQUIRED error",
+        "title": "FortiAuthenticator SSO session failure with NT_STATUS_MORE_PROCESSING_REQUIRED",
         "url": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262",
-        "use": "Scenario-only identity compatibility example; not evidence of SHA-1 failure."
+        "use": "Scenario-only identity compatibility example; do not confuse NTLM signing with SHA-1 certificate signing."
+      },
+      {
+        "product": "FortiPAM",
+        "date": "2026-11-06",
+        "title": "HTTP 400 Bad Request error after passkey registration and AD password change",
+        "url": "https://community.fortinet.com/fortipam-52/http-400-bad-request-error-231126",
+        "use": "Scenario-only launch-path example; WAD request parsing failure is distinct from auto-provisioned user inactivity/purge lifecycle."
       },
       {
         "product": "FortiGate",
-        "date": "2026-10-23; updated 2026-11-12",
+        "date": "2026-10-23",
         "title": "Administrator SSO authentication fails after upgrade to FortiOS 7.6.8",
         "url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
-        "use": "Scenario-only release regression; distinguish SSO failure from FortiCare first-boot registration gating."
-      },
-      {
-        "product": "FortiGate",
-        "date": "2026-10-16 through 2026-11-10",
-        "title": "FortiGate enters conserve mode after upgrading to FortiOS 7.6.8 (IPSEngine 7.01200)",
-        "url": "https://community.fortinet.com/fortigate-3/fortigate-enters-conserve-mode-after-upgrading-to-fortios-version-7-6-8-ipsengine-7-01200-230996",
-        "use": "Recent upgrade/engine resource scenario; not a primary lesson source."
-      },
-      {
-        "product": "FortiSASE",
-        "date": "2026-09-18 (outside strict 30-day window)",
-        "title": "SPA BGP flapping due to router ID overlap with tunnel IP",
-        "url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
-        "use": "Excluded from recent scenario set because publication date is outside the 30-day window."
+        "use": "Additional recent auth regression; local admin and RADIUS/LDAP/TACACS remain unaffected, so maintain break-glass access."
       }
     ],
     "no_directly_matched_recent_scenario_for": [
-      "FortiManager",
-      "FortiAP/Wireless",
+      "FortiSwitch",
       "FortiNAC",
-      "FortiPAM",
       "FortiSIEM",
       "FortiSASE",
       "Secure SD-WAN"
     ],
-    "note": "Community material is used only as scenario/evidence context; all twelve primary lesson topics are sourced from Fortinet administration/configuration/new-feature/release documentation."
+    "note": "Twelve product areas were searched. Only articles with verified publication dates from 2026-10-16 through 2026-11-14 are classified as recent. Several older results surfaced in search but were explicitly excluded. Community material remains scenario-only.",
+    "excluded_recent_misclassifications": [
+      {
+        "title": "FortiAnalyzer stale Last Log time for 10-15 minutes after reboot",
+        "url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+        "actual_date": "2026-10-05",
+        "reason": "Outside the strict 30-day window beginning 2026-10-16."
+      },
+      {
+        "title": "SNMPv3 error -47 due to NTP synchronization offset",
+        "url": "https://community.fortinet.com/fortiswitch-36/technical-tip-resolving-snmpv3-error-47-usm-not-in-time-window-due-to-ntp-synchronization-offset-230169",
+        "actual_date": "2026-09-25",
+        "reason": "Outside the strict 30-day window."
+      },
+      {
+        "title": "FortiSASE SPA BGP router-ID overlap with tunnel IP",
+        "url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
+        "actual_date": "2026-09-18",
+        "reason": "Outside the strict 30-day window."
+      },
+      {
+        "title": "FortiSwitch 108 SSH issue",
+        "url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193",
+        "actual_date": "2026-09-28",
+        "reason": "Outside the strict 30-day window."
+      }
+    ]
   },
   "semantic_uniqueness_check": {
     "checked_records": 306,
     "selected_count": 12,
-    "pass_count": 0,
+    "pass_count": 12,
     "rejected_candidates": 8,
     "duplicate_mechanisms_found": 0,
-    "manual_review": "Candidates sharing an equivalent transaction or question concept were rejected even when the URL or release version differed."
+    "manual_review": "FortiGate fragmentation mode was compared against earlier packet-fragmentation, IPsec, FEC and SD-WAN topics; the specific pre/post IPsec encapsulation transaction and downstream reassembly/HPE evidence path are new in the 30-day window."
   }
 }
