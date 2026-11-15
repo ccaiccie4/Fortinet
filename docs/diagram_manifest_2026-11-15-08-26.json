@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-15",
+  "lesson_count": 12,
+  "svg_count": 12,
+  "drawio_count": 12,
+  "assets": [
+    {
+      "product": "FortiGate",
+      "lesson": "IPv6 prefix delegation: IA_PD from the ISP to routed downstream segments",
+      "svg_path": "docs/assets/2026-11-15/01-fortigate-ipv6-prefix-delegation.svg",
+      "drawio_path": "docs/assets/2026-11-15/01-fortigate-ipv6-prefix-delegation.drawio",
+      "topology_fingerprint": "ISP DHCPv6 server -> core FortiGate upstream IA_PD -> delegated downstream port -> branch FortiGate DHCPv6 client -> LAN."
+    },
+    {
+      "product": "FortiManager",
+      "lesson": "Protected object permissions: controlled editing without breaking policy reuse",
+      "svg_path": "docs/assets/2026-11-15/02-fortimanager-protected-objects.svg",
+      "drawio_path": "docs/assets/2026-11-15/02-fortimanager-protected-objects.drawio",
+      "topology_fingerprint": "Object owner -> protected policy/object repository -> restricted administrator can reference object but edit/save is denied."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson": "IOC rescan lifecycle: FortiGuard TIDB, historical logs, and tagged alerts",
+      "svg_path": "docs/assets/2026-11-15/03-fortianalyzer-ioc-rescan.svg",
+      "drawio_path": "docs/assets/2026-11-15/03-fortianalyzer-ioc-rescan.drawio",
+      "topology_fingerprint": "FortiGate logs + FortiGuard TIDB -> FortiAnalyzer IOC -> real-time/rescan paths -> tagged event handlers -> analyst."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson": "FIDO2-backed OpenSSH security keys for administrator MFA",
+      "svg_path": "docs/assets/2026-11-15/04-fortiswitch-fido2-ssh.svg",
+      "drawio_path": "docs/assets/2026-11-15/04-fortiswitch-fido2-ssh.drawio",
+      "topology_fingerprint": "Admin workstation -> FIDO2 hardware authenticator challenge/signature -> FortiSwitch SSH service -> admin profile."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson": "Clear Channel Assessment threshold tuning for high-density radios",
+      "svg_path": "docs/assets/2026-11-15/05-fortiap-cca-threshold.svg",
+      "drawio_path": "docs/assets/2026-11-15/05-fortiap-cca-threshold.drawio",
+      "topology_fingerprint": "Neighboring AP transmissions -> FortiAP radio CCA threshold -> defer or transmit -> client airtime/retry outcomes."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson": "Device profiling rules: ordered rogue evaluation and host lifecycle",
+      "svg_path": "docs/assets/2026-11-15/06-fortinac-device-profiling.svg",
+      "drawio_path": "docs/assets/2026-11-15/06-fortinac-device-profiling.drawio",
+      "topology_fingerprint": "Unknown endpoint -> rogue record/IP mapping -> ranked rules -> pass/fail/cannot-evaluate -> Host View/Inventory/manual review."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson": "Network-device discovery with SNMP and recursive CDP expansion",
+      "svg_path": "docs/assets/2026-11-15/07-fortinac-f-discovery.svg",
+      "drawio_path": "docs/assets/2026-11-15/07-fortinac-f-discovery.drawio",
+      "topology_fingerprint": "FortiNAC-F seed ranges -> SNMP-discovered switch/router -> CDP neighbor graph -> recursive network inventory."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson": "RADIUS accounting proxy: attribute transformation and RSSO fan-out",
+      "svg_path": "docs/assets/2026-11-15/08-fortiauthenticator-accounting-proxy.svg",
+      "drawio_path": "docs/assets/2026-11-15/08-fortiauthenticator-accounting-proxy.drawio",
+      "topology_fingerprint": "Carrier RADIUS server -> FortiAuthenticator source -> transform/filter rule set -> multiple RSSO destinations."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson": "Remote user groups: LDAP, RADIUS, and SAML membership projection",
+      "svg_path": "docs/assets/2026-11-15/09-fortipam-remote-groups.svg",
+      "drawio_path": "docs/assets/2026-11-15/09-fortipam-remote-groups.drawio",
+      "topology_fingerprint": "LDAP/RADIUS/SAML identity source -> remote group match -> FortiPAM group -> group-object permission and separate secret-access policy."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson": "FortiEMS discovery and endpoint tagging as a ZTNA remediation loop",
+      "svg_path": "docs/assets/2026-11-15/10-fortisiem-fortiems-tagging.svg",
+      "drawio_path": "docs/assets/2026-11-15/10-fortisiem-fortiems-tagging.drawio",
+      "topology_fingerprint": "FortiEMS API -> FortiSIEM poll/CMDB -> incident remediation -> EMS endpoint tag -> Security Fabric -> ZTNA policy."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson": "IPsec agent-tunnel dead peer detection: idle probes, on-demand probes, and change impact",
+      "svg_path": "docs/assets/2026-11-15/11-fortisase-ipsec-dpd.svg",
+      "drawio_path": "docs/assets/2026-11-15/11-fortisase-ipsec-dpd.drawio",
+      "topology_fingerprint": "FortiClient IPsec agent -> Security PoP DPD probes -> retry timer/count -> alive peer or dead-peer cleanup."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson": "Zone service-SLA tie-break: configuration order versus FIB best match",
+      "svg_path": "docs/assets/2026-11-15/12-sdwan-sla-tiebreak.svg",
+      "drawio_path": "docs/assets/2026-11-15/12-sdwan-sla-tiebreak.drawio",
+      "topology_fingerprint": "Traffic -> service rule -> SLA-qualified members -> zone tie-break/FIB longest prefix -> selected WAN member."
+    }
+  ]
+}
