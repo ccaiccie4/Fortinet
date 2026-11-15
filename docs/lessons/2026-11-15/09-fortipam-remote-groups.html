@@ -1,0 +1,23 @@
+<h3>Purpose and group model</h3>
+<p>FortiPAM user groups can contain local users or references to remote identity groups. A group of type Remote can include remote servers such as LDAP, RADIUS, and SAML, and can optionally restrict membership to a specific remote group. This lets an organization keep identity membership in its directory or identity provider while using FortiPAM groups as the local authorization boundary. The User Groups table exposes User Members, Remote Groups, and Remote Members so an administrator can see whether membership is local or projected from an external source.</p>
+<p>Two default groups are documented: <code>everyone</code>, to which every user belongs, and <code>fortipam_auth_group</code>, which contains the Super Administrator account on applicable upgraded instances. The latter is not available on a fresh FortiPAM 1.6.0-or-later instance, so automation should not assume that it exists in every deployment. Remote membership is separate from manually importing a user account; it is a group mapping that can represent many users and can be constrained by remote group criteria.</p>
+<h3>Membership resolution workflow</h3>
+<p>Create and configure the remote authentication server first. Then create a user group, set Type to Remote, and add one or more remote groups. For LDAP, the administrator can select remote users, filter by group, or enter a custom LDAP filter. The guide shows filters using AND/OR clauses, for example matching person objects whose givenName begins with a letter, or selecting POSIX groups. The syntax is directory-specific, so validate the filter against the actual LDAP schema.</p>
+<p>For RADIUS and SAML, the remote group match uses explicit group names. At least one corresponding remote server must already be configured. The resulting group contains the remote users that match the selected server/group definition. The FortiPAM user-group object then has a Permission tab: Access can be Everyone or Customized, and customized user permissions can designate Viewer or Owner for the user-group object.</p>
+<pre><code>config user group
+    edit "ldap_ops"
+        set member "ldap_server"
+        config match
+            edit 1
+                set server-name "ldap_server"
+                set group-name "cn=User,dc=example,dc=com"
+            next
+        end
+    next
+end</code></pre>
+<h3>Authorization boundaries</h3>
+<p>Be careful with the Permission tab's terminology. Viewer and Owner are permissions on the user-group object: Viewer can view the group; Owner can create, edit, and delete user groups. That is not the same thing as granting a remote user permission to launch a privileged secret or open a managed session. Secret access is governed by the relevant FortiPAM resource, secret, and access-control configuration. Do not infer that making a user an Owner of a group automatically grants access to every password in the vault.</p>
+<p>The remote group is therefore one input to FortiPAM's identity and authorization model, not a substitute for resource-specific least privilege. Map remote groups narrowly, separate administrators who can manage group definitions from operators who can consume secrets, and test both membership resolution and the resulting access decision.</p>
+<h3>Verification and troubleshooting</h3>
+<p>Inspect the User Groups table and confirm that the intended Remote Groups and Remote Members appear. For LDAP, test the remote server, base DN, group DN, filter syntax, and whether subtree search is enabled. For RADIUS and SAML, compare the group name configured in FortiPAM with the group attribute or name emitted by the remote server; spelling and case differences can create a group that looks configured but never matches a user.</p>
+<p>If authentication succeeds but the user is absent from the intended group, investigate group mapping before changing the secret's access policy. If the user appears in the group but cannot launch a secret, inspect the resource/secret access policy separately. If a user can edit group definitions unexpectedly, inspect the Customized permission assignment and Owner role. The most useful troubleshooting split is identity authentication, remote-group membership, FortiPAM group-object administration, and secret-resource authorization.</p>
