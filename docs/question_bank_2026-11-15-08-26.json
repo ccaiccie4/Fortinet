@@ -1,0 +1,1816 @@
+{
+  "date": "2026-11-15",
+  "run_time": "08:26 America/Los_Angeles",
+  "question_count": 50,
+  "choice_count": 200,
+  "feedback_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "max_choice_length_spread": 8,
+  "questions": [
+    {
+      "number": 1,
+      "topic": "FortiGate",
+      "prompt": "The ISP has delegated a /48, but the downstream interface has no IPv6 prefix. What is the first configuration relationship to verify?",
+      "options": [
+        {
+          "text": "Add a static route for the ISP /48 and enable DHCPv4 relay.",
+          "feedback": "A route does not create the delegated prefix or bind the IA_PD to the downstream interface.",
+          "is_correct": false
+        },
+        {
+          "text": "Match the downstream delegated-prefix IAID and upstream-interface reference to the received IA_PD.",
+          "feedback": "The IAID binds the upstream lease to the downstream interface; a mismatch leaves the child interface unnumbered.",
+          "is_correct": true
+        },
+        {
+          "text": "Change the prefix hint to /64 and restart the DHCPv6 server.",
+          "feedback": "The hint is a preference to the provider, not the installed prefix or IAID mapping.",
+          "is_correct": false
+        },
+        {
+          "text": "Enable NAT66 on the downstream interface and renew the client lease.",
+          "feedback": "NAT66 does not repair DHCPv6-PD acquisition or the IAID relationship.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        12,
+        12,
+        11,
+        11
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 2,
+      "topic": "FortiGate",
+      "prompt": "The provider returns a different prefix than the configured ::/48 hint. What should the engineer conclude?",
+      "options": [
+        {
+          "text": "The hint is a request preference; use the actual delegated prefix and its lifetimes.",
+          "feedback": "The provider controls the allocation. Downstream interfaces must follow the installed IA_PD, not the requested hint.",
+          "is_correct": true
+        },
+        {
+          "text": "The ISP has violated DHCPv6 because the hint must be returned exactly.",
+          "feedback": "Prefix hints are not guarantees; the server can delegate another suitable prefix.",
+          "is_correct": false
+        },
+        {
+          "text": "The FortiGate has silently converted the /48 into a DHCPv6 relay.",
+          "feedback": "Prefix delegation is a lease relationship, not a relay conversion.",
+          "is_correct": false
+        },
+        {
+          "text": "The downstream interface must be assigned the hint as a static address.",
+          "feedback": "A static prefix can become stale when the provider renews or changes the delegation.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        14,
+        12,
+        11,
+        12
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 3,
+      "topic": "FortiGate",
+      "prompt": "The core FortiGate has a valid IA_PD, but LAN clients receive no IPv6 configuration. Which path should be checked next?",
+      "options": [
+        {
+          "text": "Increase the ISP prefix hint length and clear the IPv6 routing table.",
+          "feedback": "Changing the hint does not enable client addressing on the downstream segment.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify downstream Router Advertisements or DHCPv6 server operation and the matching delegated IAID.",
+          "feedback": "The upstream lease can be valid while the downstream client-advertisement path is missing.",
+          "is_correct": true
+        },
+        {
+          "text": "Enable DHCPv4 relay on the LAN and renew the IPv4 leases.",
+          "feedback": "DHCPv4 relay does not distribute an IPv6 delegated prefix.",
+          "is_correct": false
+        },
+        {
+          "text": "Replace the upstream IA_PD client with a static IPv6 address.",
+          "feedback": "A static upstream address does not solve the missing downstream RA/DHCPv6 service.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        12,
+        13,
+        11,
+        10
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 4,
+      "topic": "FortiGate",
+      "prompt": "IPv6 addresses work on downstream clients, but DNS resolution fails after prefix delegation. Which setting is most directly relevant?",
+      "options": [
+        {
+          "text": "Change the downstream IAID to match the DNS server address.",
+          "feedback": "IAID identifies the prefix association, not the DNS server.",
+          "is_correct": false
+        },
+        {
+          "text": "Enable DHCPv4 option 6 on the delegated interface.",
+          "feedback": "DHCPv4 option 6 does not supply DNS to IPv6-only clients.",
+          "is_correct": false
+        },
+        {
+          "text": "Add a static route for the DNS server without checking resolver delivery.",
+          "feedback": "Routing may be correct while clients have no DNS server configured.",
+          "is_correct": false
+        },
+        {
+          "text": "Check delegated DNS propagation and the downstream DHCPv6 DNS service or RA RDNSS.",
+          "feedback": "Address assignment and DNS delivery are separate; the clients must receive usable resolver information.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        10,
+        8,
+        12,
+        13
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 5,
+      "topic": "FortiManager",
+      "prompt": "A restricted administrator must use a protected address object in a policy but must not edit its definition. What is the expected behavior?",
+      "options": [
+        {
+          "text": "The administrator cannot see or reference the protected object anywhere.",
+          "feedback": "FortiManager explicitly allows protected objects to be selected in policy packages.",
+          "is_correct": false
+        },
+        {
+          "text": "The administrator can edit the object but cannot install the policy package.",
+          "feedback": "Protection blocks editing, not the use of the object in a policy.",
+          "is_correct": false
+        },
+        {
+          "text": "The administrator can modify the object only while workspace mode is enabled.",
+          "feedback": "Workspace mode is separate from Protected Objects permission.",
+          "is_correct": false
+        },
+        {
+          "text": "The administrator can reference the protected object, but its definition remains read-only.",
+          "feedback": "FortiManager separates permission to consume an object from permission to modify its definition.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        10,
+        12,
+        12,
+        12
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 6,
+      "topic": "FortiManager",
+      "prompt": "The Protected toggle is missing for every administrator, including the object owner. What should be checked first?",
+      "options": [
+        {
+          "text": "Enable ADOM workspace mode and restart the managed FortiGates.",
+          "feedback": "Workspace mode does not expose the Protected Objects feature.",
+          "is_correct": false
+        },
+        {
+          "text": "Assign the FortiGate super_admin profile to every FortiManager user.",
+          "feedback": "Device-side profiles do not control FortiManager object protection.",
+          "is_correct": false
+        },
+        {
+          "text": "Enable gui-object-protect globally so the Protected Objects controls are exposed.",
+          "feedback": "The global visibility switch must be enabled before the administrator-profile permission can expose the controls.",
+          "is_correct": true
+        },
+        {
+          "text": "Reinstall the policy package to regenerate the Protected column.",
+          "feedback": "The column is controlled by FortiManager global and profile settings.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        9,
+        9,
+        10,
+        9
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 7,
+      "topic": "FortiManager",
+      "prompt": "A user can see the Protected column but still edits an object that should be protected. What is the most likely explanation?",
+      "options": [
+        {
+          "text": "The item is not marked protected, or the user has the Protected Objects permission.",
+          "feedback": "Protection requires both per-item state and a user profile without the permission to change it.",
+          "is_correct": true
+        },
+        {
+          "text": "The FortiGate has not received the latest policy package installation.",
+          "feedback": "The control is enforced in FortiManager's management plane, not on the device.",
+          "is_correct": false
+        },
+        {
+          "text": "The user is in the wrong firewall policy sequence number.",
+          "feedback": "Policy order does not grant or remove object-protection permission.",
+          "is_correct": false
+        },
+        {
+          "text": "The ADOM database needs a full rebuild before protection is enforced.",
+          "feedback": "A rebuild is not the documented prerequisite for per-object protection.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        14,
+        10,
+        10,
+        11
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 8,
+      "topic": "FortiManager",
+      "prompt": "Which test best proves that Protected Objects works as designed?",
+      "options": [
+        {
+          "text": "Confirm that a protected policy installs successfully on one FortiGate.",
+          "feedback": "Installation proves consumption, but not that edits are denied.",
+          "is_correct": false
+        },
+        {
+          "text": "Use an owner and consumer account to test edit denial and successful policy reference.",
+          "feedback": "The two-persona test proves both sides of the feature: guarded definition and continued policy reuse.",
+          "is_correct": true
+        },
+        {
+          "text": "Check that the consumer account can view the object name in search.",
+          "feedback": "Visibility alone does not prove the object is read-only.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify that workspace mode is set to normal on the ADOM.",
+          "feedback": "Workspace mode does not demonstrate Protected Objects enforcement.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        10,
+        14,
+        12,
+        11
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 9,
+      "topic": "FortiAnalyzer",
+      "prompt": "An IOC alert is generated by a historical rescan. Which marker distinguishes it from a real-time match?",
+      "options": [
+        {
+          "text": "The alert always contains a FortiGate policy UUID in the message.",
+          "feedback": "A policy UUID is not the documented marker for rescan-originated alerts.",
+          "is_correct": false
+        },
+        {
+          "text": "The IOC record is stored only in the FortiAnalyzer event database.",
+          "feedback": "The tag is the key distinction, not a separate storage database.",
+          "is_correct": false
+        },
+        {
+          "text": "The alert severity is automatically raised to Critical during rescan.",
+          "feedback": "Rescan origin does not itself define the severity.",
+          "is_correct": false
+        },
+        {
+          "text": "The rescanned log and resulting alert carry the Ioc_Rescan tag.",
+          "feedback": "The tag identifies the historical rescan path; real-time matches continue without that tag.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        11,
+        11,
+        10,
+        10
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 10,
+      "topic": "FortiAnalyzer",
+      "prompt": "The Rescan Tasks table is empty even though real-time IOC alerts exist. Which scope should be checked?",
+      "options": [
+        {
+          "text": "Increase the FortiGate traffic-log retention and reboot the analyzer.",
+          "feedback": "Retention does not enable the rescan policy or satisfy its license requirement.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify the IOC license, global rescan switch, current-ADOM switch, and selected log types.",
+          "feedback": "Real-time IOC can work while historical rescan remains disabled or unlicensed at either scope.",
+          "is_correct": true
+        },
+        {
+          "text": "Change the event-handler severity from High to Critical.",
+          "feedback": "Severity settings do not create historical rescan tasks.",
+          "is_correct": false
+        },
+        {
+          "text": "Disable TIDB updates so the rescan scheduler can start.",
+          "feedback": "Rescan depends on current threat intelligence, not on stopping package updates.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        9,
+        13,
+        8,
+        9
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 11,
+      "topic": "FortiAnalyzer",
+      "prompt": "IOC alerts appear to be based on stale or demo threat data. What is the strongest verification?",
+      "options": [
+        {
+          "text": "Inspect the IOC license and TIDB version/load time using the documented sqllogd statistics.",
+          "feedback": "A valid service license and current threat database are prerequisites for meaningful IOC results.",
+          "is_correct": true
+        },
+        {
+          "text": "Compare the FortiGate firmware build with the FortiAnalyzer GUI theme version.",
+          "feedback": "Those versions do not establish IOC license or TIDB freshness.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase rescan-max-runner to the maximum CPU count immediately.",
+          "feedback": "Concurrency changes throughput, not threat database freshness or license state.",
+          "is_correct": false
+        },
+        {
+          "text": "Delete the old IOC event handlers and recreate the default handlers.",
+          "feedback": "Event handlers cannot correct a stale or demo TIDB package.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        13,
+        11,
+        8,
+        11
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 12,
+      "topic": "FortiAnalyzer",
+      "prompt": "A large historical rescan competes with interactive reports. Which control directly affects concurrent rescan work?",
+      "options": [
+        {
+          "text": "Increase the notification throttle to the maximum value.",
+          "feedback": "Notification throttle affects alert frequency, not the number of rescan workers.",
+          "is_correct": false
+        },
+        {
+          "text": "Extend the FortiGate log upload interval to one day.",
+          "feedback": "Log upload cadence does not control historical rescan concurrency.",
+          "is_correct": false
+        },
+        {
+          "text": "Tune rescan-max-runner while considering CPU and database I/O contention.",
+          "feedback": "The setting controls concurrent rescan workers; more workers can shorten backlog but increase resource contention.",
+          "is_correct": true
+        },
+        {
+          "text": "Disable the current ADOM and let global settings process every log.",
+          "feedback": "ADOM scope is required for selecting eligible logs and date ranges.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        8,
+        9,
+        9,
+        11
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 13,
+      "topic": "FortiSwitch",
+      "prompt": "Which OpenSSH security-key algorithms are explicitly supported by FortiSwitchOS 8.0.0?",
+      "options": [
+        {
+          "text": "sk-ecdsa-sha2-nistp256 and sk-ssh-ed25519 are the documented security-key algorithms.",
+          "feedback": "The 8.0.0 release notes name these two FIDO2-backed OpenSSH security-key types.",
+          "is_correct": true
+        },
+        {
+          "text": "ssh-rsa and ssh-dss are the documented FIDO2 security-key algorithms.",
+          "feedback": "Those are legacy key algorithms, not the two supported security-key types named in the release notes.",
+          "is_correct": false
+        },
+        {
+          "text": "ecdsa-sha2-nistp256 and ssh-ed25519 without security-key markers.",
+          "feedback": "Ordinary keys are not the same as the documented sk-prefixed security-key algorithms.",
+          "is_correct": false
+        },
+        {
+          "text": "x509-client-cert and eap-tls are the supported SSH security-key types.",
+          "feedback": "Those are certificate/EAP terms, not OpenSSH security-key algorithms.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        8,
+        9,
+        6,
+        9
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 14,
+      "topic": "FortiSwitch",
+      "prompt": "An administrator uses a normal registered SSH public key that skips the password prompt. What security claim is safe?",
+      "options": [
+        {
+          "text": "It proves that every SSH login requires a hardware authenticator touch.",
+          "feedback": "The normal public-key field does not prove a FIDO2 challenge occurred.",
+          "is_correct": false
+        },
+        {
+          "text": "It proves that the administrator profile has full super-user privileges.",
+          "feedback": "Authentication does not determine the command authorization profile.",
+          "is_correct": false
+        },
+        {
+          "text": "It proves public-key authentication, not necessarily FIDO2-backed multi-factor authentication.",
+          "feedback": "A static authorized key can authenticate without a password; that alone does not prove hardware-backed MFA.",
+          "is_correct": true
+        },
+        {
+          "text": "It proves that the FortiSwitch has validated a RADIUS accounting record.",
+          "feedback": "SSH public-key authentication is unrelated to RADIUS accounting.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        11,
+        10,
+        9,
+        11
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 15,
+      "topic": "FortiSwitch",
+      "prompt": "SSH authentication succeeds, but the administrator cannot run a configuration command. Which layer should be checked?",
+      "options": [
+        {
+          "text": "Regenerate the FIDO2 private key because the command was denied.",
+          "feedback": "A command authorization denial occurs after authentication and is not fixed by regenerating the key.",
+          "is_correct": false
+        },
+        {
+          "text": "Change the FortiSwitch management VLAN to match the user group.",
+          "feedback": "VLAN placement does not grant administrator command permissions.",
+          "is_correct": false
+        },
+        {
+          "text": "Inspect the administrator access profile and command permissions after key authentication.",
+          "feedback": "Successful key exchange proves authentication; the admin profile controls what the account can do.",
+          "is_correct": true
+        },
+        {
+          "text": "Disable trusted-host restrictions for all administrator accounts.",
+          "feedback": "A successful login already passed the trusted-host check.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        10,
+        10,
+        11,
+        7
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 16,
+      "topic": "FortiSwitch",
+      "prompt": "A FIDO2 key is rejected before the administrator session starts. What is the best first comparison?",
+      "options": [
+        {
+          "text": "Change the switch spanning-tree root priority and retry SSH.",
+          "feedback": "Layer 2 root selection does not affect the SSH key algorithm.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase the admin profile privilege level before testing the key.",
+          "feedback": "The access profile is evaluated after authentication, not before the key is accepted.",
+          "is_correct": false
+        },
+        {
+          "text": "Modify the RADIUS accounting proxy retry interval.",
+          "feedback": "RADIUS accounting is not part of this SSH key exchange.",
+          "is_correct": false
+        },
+        {
+          "text": "Compare the client-offered sk algorithm, registered public key, account, and firmware support.",
+          "feedback": "Algorithm mismatch or wrong registered key is an authentication-stage failure.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        9,
+        10,
+        7,
+        12
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 17,
+      "topic": "FortiAP/Wireless",
+      "prompt": "A radio defers to weak neighboring signals too often. Which CCA adjustment is consistent with Fortinet's guidance?",
+      "options": [
+        {
+          "text": "Use a more-negative threshold so the radio senses weaker signals earlier.",
+          "feedback": "A lower threshold increases sensitivity and generally causes more deferral.",
+          "is_correct": false
+        },
+        {
+          "text": "Set the threshold to zero to force maximum channel occupancy.",
+          "feedback": "Zero means unconfigured; the driver uses its predefined value.",
+          "is_correct": false
+        },
+        {
+          "text": "Use a less-negative, higher CCA threshold to ignore weaker signals more often.",
+          "feedback": "A higher threshold reduces sensitivity and deferrals, increasing spatial reuse but also collision risk.",
+          "is_correct": true
+        },
+        {
+          "text": "Increase the DHCP lease time so the radio transmits sooner.",
+          "feedback": "DHCP lease duration does not change radio carrier-sense behavior.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        11,
+        10,
+        12,
+        10
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 18,
+      "topic": "FortiAP/Wireless",
+      "prompt": "A dense auditorium needs more spatial reuse. What trade-off must be monitored after raising CCA?",
+      "options": [
+        {
+          "text": "Lower throughput is guaranteed, but collisions are eliminated completely.",
+          "feedback": "A higher threshold can increase throughput and does not eliminate collisions.",
+          "is_correct": false
+        },
+        {
+          "text": "Only transmit power changes; collision behavior remains identical.",
+          "feedback": "CCA changes the busy/idle decision, not the transmit-power setting.",
+          "is_correct": false
+        },
+        {
+          "text": "The AP will automatically select a different regulatory channel.",
+          "feedback": "CCA threshold tuning does not select a new channel.",
+          "is_correct": false
+        },
+        {
+          "text": "Throughput may rise, but collisions and hidden-node interference can increase.",
+          "feedback": "Raising the threshold reduces deferrals while increasing the chance of simultaneous transmissions.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        9,
+        8,
+        9,
+        10
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 19,
+      "topic": "FortiAP/Wireless",
+      "prompt": "A per-AP override is disabled. Which CCA value should the radio inherit?",
+      "options": [
+        {
+          "text": "The last value entered on the AP remains active regardless of override state.",
+          "feedback": "The per-AP value is not authoritative while override is disabled.",
+          "is_correct": false
+        },
+        {
+          "text": "The assigned WTP profile's radio-specific CCA threshold should remain authoritative.",
+          "feedback": "With override disabled, the AP follows the profile; the profile must be assigned and applied.",
+          "is_correct": true
+        },
+        {
+          "text": "The FortiGate uses the neighbor AP's threshold from the RF scan.",
+          "feedback": "The feature does not automatically copy a neighbor's threshold.",
+          "is_correct": false
+        },
+        {
+          "text": "The AP always uses the default zero threshold after profile assignment.",
+          "feedback": "Zero means unconfigured; a configured profile value should be applied.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        13,
+        10,
+        11,
+        11
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 20,
+      "topic": "FortiAP/Wireless",
+      "prompt": "Which command provides the strongest AP-side proof of the effective radio CCA value?",
+      "options": [
+        {
+          "text": "Run diagnose wireless-controller wlac -c wtp only on the FortiGate.",
+          "feedback": "The controller view is useful, but the AP-side output verifies the effective radio configuration.",
+          "is_correct": false
+        },
+        {
+          "text": "Check only the SSID security profile and WPA authentication counters.",
+          "feedback": "Those settings do not show the radio's CCA threshold.",
+          "is_correct": false
+        },
+        {
+          "text": "Run cw_diag -c radio-cfg on the FortiAP and inspect the radio configuration.",
+          "feedback": "The AP-side radio output shows the value actually applied, including any per-AP override.",
+          "is_correct": true
+        },
+        {
+          "text": "Inspect the DHCP server lease table for the AP management address.",
+          "feedback": "The lease table does not show radio carrier-sense configuration.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        10,
+        10,
+        12,
+        11
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 21,
+      "topic": "FortiNAC",
+      "prompt": "A profiling rule returns Fail. What should the Device Profiler do next?",
+      "options": [
+        {
+          "text": "Continue evaluation with the next enabled rule in rank order.",
+          "feedback": "Fail means the current rule did not match; it is not a stop condition.",
+          "is_correct": true
+        },
+        {
+          "text": "Stop the entire rule chain and leave the host unclassified.",
+          "feedback": "That is the documented behavior for Cannot Evaluate, not Fail.",
+          "is_correct": false
+        },
+        {
+          "text": "Register the host automatically in Inventory regardless of rule settings.",
+          "feedback": "Registration placement is defined by the matching rule, not by every failure.",
+          "is_correct": false
+        },
+        {
+          "text": "Reboot the switch port and delete the host record immediately.",
+          "feedback": "A rule mismatch does not require port bounce or record deletion.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        10,
+        10,
+        10,
+        10
+      ],
+      "choice_length_spread": 0
+    },
+    {
+      "number": 22,
+      "topic": "FortiNAC",
+      "prompt": "The first rule reports Cannot Evaluate because its IP data is stale. Why can a lower rule never match?",
+      "options": [
+        {
+          "text": "Fail and Cannot Evaluate both continue to the next rule automatically.",
+          "feedback": "Only Fail continues; Cannot Evaluate stops evaluation.",
+          "is_correct": false
+        },
+        {
+          "text": "Cannot Evaluate stops the rule chain when required evidence is unavailable or not current.",
+          "feedback": "Unlike Fail, Cannot Evaluate is a data-availability stop condition.",
+          "is_correct": true
+        },
+        {
+          "text": "The Catch All rule always overrides every earlier evaluation result.",
+          "feedback": "Catch All is last and cannot override a stop caused by missing data.",
+          "is_correct": false
+        },
+        {
+          "text": "The host must be associated with a user before any rule can run.",
+          "feedback": "Unknown rogues are precisely the devices the profiler evaluates.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        11,
+        14,
+        10,
+        13
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 23,
+      "topic": "FortiNAC",
+      "prompt": "A static-IP device never sends a DHCP fingerprint. How should the rule set be improved?",
+      "options": [
+        {
+          "text": "Place the DHCP fingerprint rule at rank one to force a lease renewal.",
+          "feedback": "A static-IP device may never send DHCP, so the rule can stop useful evaluation.",
+          "is_correct": false
+        },
+        {
+          "text": "Delete the Catch All rule so all devices are evaluated by DHCP.",
+          "feedback": "Catch All is a system rule and DHCP is not universal evidence.",
+          "is_correct": false
+        },
+        {
+          "text": "Disable IP-to-MAC polling because static addresses need no identity mapping.",
+          "feedback": "The profiler may still need current IP/MAC information for other methods.",
+          "is_correct": false
+        },
+        {
+          "text": "Move DHCP-dependent rules after methods that can classify the device without DHCP data.",
+          "feedback": "A missing DHCP fingerprint should not block later rules for static-IP hosts.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        13,
+        12,
+        10,
+        13
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 24,
+      "topic": "FortiNAC",
+      "prompt": "A rule is changed and Run is clicked, but an already registered device keeps its old classification. Why?",
+      "options": [
+        {
+          "text": "The device must wait for the next DHCP lease before every rule change.",
+          "feedback": "Lease renewal matters for DHCP fingerprint collection, not all already-registered devices.",
+          "is_correct": false
+        },
+        {
+          "text": "Run processes eligible rogues; already categorized devices are not re-evaluated.",
+          "feedback": "The profiler does not re-run modified rules against devices that are no longer rogues.",
+          "is_correct": true
+        },
+        {
+          "text": "The Profiled Devices tab hides all registered devices until a reboot.",
+          "feedback": "Visibility depends on placement and user association, not reboot state.",
+          "is_correct": false
+        },
+        {
+          "text": "The new rule is applied only after FortiNAC restarts its database service.",
+          "feedback": "A restart does not change the documented rogue-only re-evaluation scope.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        13,
+        10,
+        11,
+        12
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 25,
+      "topic": "FortiNAC-F",
+      "prompt": "A FortiNAC-F discovery job contains several IP ranges. What total address ceiling should be planned?",
+      "options": [
+        {
+          "text": "Keep each individual range below 65,000, regardless of the combined total.",
+          "feedback": "The combined total is the relevant planning limit.",
+          "is_correct": false
+        },
+        {
+          "text": "Limit the discovery to 4,096 addresses because SNMPv3 uses that many OIDs.",
+          "feedback": "The address limit is not derived from the SNMP OID count.",
+          "is_correct": false
+        },
+        {
+          "text": "There is no range ceiling when CDP recursive discovery is enabled.",
+          "feedback": "CDP expansion does not remove the documented seed-range limit.",
+          "is_correct": false
+        },
+        {
+          "text": "Keep the sum of addresses across all ranges at or below 65,000.",
+          "feedback": "The documented limit applies to the total combined range size, not each range independently.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        11,
+        12,
+        11,
+        12
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 26,
+      "topic": "FortiNAC-F",
+      "prompt": "The initial SNMP-discovered switch exposes neighbor information. What does enabling CDP discovery add?",
+      "options": [
+        {
+          "text": "It converts every LLDP neighbor into a DHCP host record automatically.",
+          "feedback": "CDP is a network-device neighbor mechanism, not a general DHCP host-registration path.",
+          "is_correct": false
+        },
+        {
+          "text": "FortiNAC can query advertised CDP neighbors and recursively expand the network-device inventory.",
+          "feedback": "CDP provides neighbor edges that allow additional devices to be discovered beyond the seed ranges.",
+          "is_correct": true
+        },
+        {
+          "text": "It bypasses SNMP credentials and discovers devices from MAC addresses alone.",
+          "feedback": "SNMP is still needed to query discovered devices.",
+          "is_correct": false
+        },
+        {
+          "text": "It merges every interface address into one guaranteed unique device model.",
+          "feedback": "The guide warns that multiple interfaces can create duplicate models.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        11,
+        12,
+        11,
+        11
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 27,
+      "topic": "FortiNAC-F",
+      "prompt": "One physical switch appears as two network-device models after discovery. What documented behavior could explain it?",
+      "options": [
+        {
+          "text": "CDP always creates one model for every VLAN on the switch.",
+          "feedback": "The documented duplication warning concerns multiple interfaces and SNMP settings.",
+          "is_correct": false
+        },
+        {
+          "text": "Multiple interfaces with different IP addresses and SNMP settings can create duplicate models.",
+          "feedback": "FortiNAC-F does not automatically consolidate those multi-interface representations in the described case.",
+          "is_correct": true
+        },
+        {
+          "text": "The discovery container has exceeded the 65,000-address range limit.",
+          "feedback": "The range limit can constrain discovery, but it does not explain interface-based duplicates.",
+          "is_correct": false
+        },
+        {
+          "text": "FortiNAC-F converts every SNMPv3 user into a separate network device.",
+          "feedback": "SNMP user identity is not the documented cause of duplicate models.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        11,
+        13,
+        9,
+        10
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 28,
+      "topic": "FortiNAC-F",
+      "prompt": "Ping to a FortiNAC-OS interface succeeds, but SNMP discovery fails. Which check is most specific?",
+      "options": [
+        {
+          "text": "Enable HTTPS only and rely on the web interface to answer SNMP probes.",
+          "feedback": "HTTPS access does not enable the SNMP management service.",
+          "is_correct": false
+        },
+        {
+          "text": "Change the discovery container name and increase its polling frequency.",
+          "feedback": "Container naming does not repair SNMP reachability or credentials.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify allowaccess includes snmp and confirm UDP/161 credentials and return-path ACLs.",
+          "feedback": "Ping proves ICMP reachability, not SNMP service enablement or SNMP authentication.",
+          "is_correct": true
+        },
+        {
+          "text": "Replace CDP with DHCP relay because the switch already responds to ping.",
+          "feedback": "DHCP relay is unrelated to SNMP discovery.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        13,
+        10,
+        11,
+        12
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 29,
+      "topic": "FortiAuthenticator",
+      "prompt": "Why would an organization deploy the FortiAuthenticator RADIUS accounting proxy?",
+      "options": [
+        {
+          "text": "To authenticate every wireless client instead of the upstream RADIUS server.",
+          "feedback": "The accounting proxy processes accounting records after the access decision.",
+          "is_correct": false
+        },
+        {
+          "text": "To replace LDAP with local passwords for all RADIUS users.",
+          "feedback": "LDAP can enrich group attributes; the proxy does not replace the authentication server.",
+          "is_correct": false
+        },
+        {
+          "text": "To transform accounting attributes and replicate records to multiple RSSO destinations.",
+          "feedback": "The proxy solves a one-source-to-many-subscribers problem while applying attribute rules.",
+          "is_correct": true
+        },
+        {
+          "text": "To forward only RADIUS Access-Accept messages to a single switch.",
+          "feedback": "The feature is an accounting fan-out path with configurable destinations.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        11,
+        10,
+        11,
+        10
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 30,
+      "topic": "FortiAuthenticator",
+      "prompt": "Accounting records arrive at FortiAuthenticator but one FortiGate has no RSSO session. What should be compared first?",
+      "options": [
+        {
+          "text": "Change the upstream Access-Request password on the carrier RADIUS server.",
+          "feedback": "The failure is on one accounting destination, not necessarily authentication.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase the FortiGate policy session timeout before checking accounting packets.",
+          "feedback": "Policy session timeout does not create an RSSO user session.",
+          "is_correct": false
+        },
+        {
+          "text": "Check that destination's address, shared secret, source binding, and applied rule set.",
+          "feedback": "A source can be valid while one downstream destination rejects or misses the transformed record.",
+          "is_correct": true
+        },
+        {
+          "text": "Disable LDAP group lookup on every source and destination.",
+          "feedback": "A single destination failure should be isolated before changing all transformations.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        10,
+        10,
+        12,
+        9
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 31,
+      "topic": "FortiAuthenticator",
+      "prompt": "A proxied accounting packet needs a Fortinet group attribute derived from directory membership. Which component performs that work?",
+      "options": [
+        {
+          "text": "The source object changes the RADIUS username into a FortiGate VDOM.",
+          "feedback": "Sources identify the upstream server and secret; they do not perform group enrichment.",
+          "is_correct": false
+        },
+        {
+          "text": "A matching rule set can look up LDAP group membership and add the attribute.",
+          "feedback": "The rule set transforms the accounting record using the configured LDAP mapping.",
+          "is_correct": true
+        },
+        {
+          "text": "The destination object creates a new LDAP user for each accounting packet.",
+          "feedback": "Destinations identify receivers; they do not create directory identities.",
+          "is_correct": false
+        },
+        {
+          "text": "The FortiGate firewall policy derives the group before the proxy forwards the packet.",
+          "feedback": "The group attribute must be present in the accounting record for RSSO parsing.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        11,
+        14,
+        12,
+        13
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 32,
+      "topic": "FortiAuthenticator",
+      "prompt": "A user changed directory groups, but proxied RSSO records still show the old group. Which parameter is relevant?",
+      "options": [
+        {
+          "text": "Review the accounting proxy group-cache lifetime and its last refresh.",
+          "feedback": "A long cache lifetime can retain an older LDAP-derived group mapping.",
+          "is_correct": true
+        },
+        {
+          "text": "Change the FortiGate DHCP lease duration to force a new group lookup.",
+          "feedback": "DHCP lease time does not control FortiAuthenticator's group cache.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase the RADIUS accounting packet identifier to a larger value.",
+          "feedback": "The packet identifier does not refresh cached LDAP membership.",
+          "is_correct": false
+        },
+        {
+          "text": "Disable all proxy retries so the group is always looked up immediately.",
+          "feedback": "Retries govern destination delivery; they do not replace the group-cache lifetime.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        10,
+        12,
+        10,
+        12
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 33,
+      "topic": "FortiPAM",
+      "prompt": "An organization wants FortiPAM membership to follow an LDAP group without importing every user locally. Which group type is appropriate?",
+      "options": [
+        {
+          "text": "Create a Remote user group and add the LDAP server/group match.",
+          "feedback": "Remote groups project membership from the configured identity source into FortiPAM.",
+          "is_correct": true
+        },
+        {
+          "text": "Create a Local User group and manually copy every LDAP username.",
+          "feedback": "That creates local membership rather than a remote group mapping.",
+          "is_correct": false
+        },
+        {
+          "text": "Add the LDAP server as a secret resource and grant it Owner access.",
+          "feedback": "LDAP is a membership source, not a secret resource.",
+          "is_correct": false
+        },
+        {
+          "text": "Place all LDAP users in everyone and disable remote group matching.",
+          "feedback": "Everyone is a default group, not a scoped mapping of directory membership.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        11,
+        11,
+        13,
+        11
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 34,
+      "topic": "FortiPAM",
+      "prompt": "An LDAP remote group returns too many users. Which control narrows membership to a directory subset?",
+      "options": [
+        {
+          "text": "Change the FortiPAM session recording retention to reduce the user count.",
+          "feedback": "Recording retention does not affect remote group membership.",
+          "is_correct": false
+        },
+        {
+          "text": "Set the remote group Access option to Customized without defining a filter.",
+          "feedback": "Customized access governs group-object permissions, not LDAP membership selection.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase the RADIUS retry count and leave LDAP matching unchanged.",
+          "feedback": "RADIUS retry settings do not constrain an LDAP remote group.",
+          "is_correct": false
+        },
+        {
+          "text": "Use a directory-specific LDAP filter or select the required remote group.",
+          "feedback": "The filter and group match determine which remote users are projected into the FortiPAM group.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        11,
+        12,
+        10,
+        11
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 35,
+      "topic": "FortiPAM",
+      "prompt": "A user is listed as Owner on a FortiPAM user group. What does that permission mean?",
+      "options": [
+        {
+          "text": "The user can launch every secret and record every privileged session.",
+          "feedback": "Secret launch rights are governed by separate resource and secret access controls.",
+          "is_correct": false
+        },
+        {
+          "text": "The user can change the LDAP server's global schema and password policy.",
+          "feedback": "FortiPAM group ownership does not grant directory administration.",
+          "is_correct": false
+        },
+        {
+          "text": "The user can create, edit, and delete that user-group object.",
+          "feedback": "Owner/Viewer are group-object management permissions, not automatic vault-wide secret permissions.",
+          "is_correct": true
+        },
+        {
+          "text": "The user can bypass all remote authentication and sign in locally.",
+          "feedback": "Owner is not an authentication method or bypass.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        11,
+        12,
+        10,
+        11
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 36,
+      "topic": "FortiPAM",
+      "prompt": "A user authenticates successfully but is missing from the expected Remote group. What should be checked?",
+      "options": [
+        {
+          "text": "Change the secret's password rotation schedule before inspecting group membership.",
+          "feedback": "Secret rotation does not control identity group matching.",
+          "is_correct": false
+        },
+        {
+          "text": "Compare the LDAP filter or exact RADIUS/SAML group name with the returned identity attributes.",
+          "feedback": "Authentication success and remote-group membership are separate stages.",
+          "is_correct": true
+        },
+        {
+          "text": "Grant the user Owner on every FortiPAM group and retest.",
+          "feedback": "Owner controls group-object management, not remote membership resolution.",
+          "is_correct": false
+        },
+        {
+          "text": "Disable the identity provider and recreate the FortiPAM appliance.",
+          "feedback": "The targeted issue is group mapping, not appliance initialization.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        10,
+        14,
+        10,
+        9
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 37,
+      "topic": "FortiSIEM",
+      "prompt": "Which protocol and default polling interval are documented for FortiEMS discovery?",
+      "options": [
+        {
+          "text": "Use FORTIEMS_API with the documented five-minute default pull interval.",
+          "feedback": "FortiSIEM polls the EMS Management Server API; it is not an immediate push feed by default.",
+          "is_correct": true
+        },
+        {
+          "text": "Use SNMPv3 traps with a one-minute default polling interval.",
+          "feedback": "The EMS integration uses the FortiEMS API, not SNMP traps.",
+          "is_correct": false
+        },
+        {
+          "text": "Use WMI over TCP/135 with a fifteen-minute default polling interval.",
+          "feedback": "WMI is not the documented FortiEMS integration protocol.",
+          "is_correct": false
+        },
+        {
+          "text": "Use syslog over UDP/514 with a thirty-second default polling interval.",
+          "feedback": "The vulnerability feed is retrieved through the EMS API.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        9,
+        9,
+        10,
+        10
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 38,
+      "topic": "FortiSIEM",
+      "prompt": "Vulnerability events are ingested, but the Set tag remediation script fails. Which item is specifically required?",
+      "options": [
+        {
+          "text": "Verify the FortiEMS serial number and write permissions for the remediation account.",
+          "feedback": "Tag remediation requires the EMS serial number and permissions beyond read-only vulnerability ingestion.",
+          "is_correct": true
+        },
+        {
+          "text": "Increase the CMDB event retention and disable EMS write access.",
+          "feedback": "Retention does not supply the serial number or required write permissions.",
+          "is_correct": false
+        },
+        {
+          "text": "Change the FortiSIEM collector hostname to match the FortiGate serial number.",
+          "feedback": "The remediation script needs the EMS serial number, not a FortiGate identifier.",
+          "is_correct": false
+        },
+        {
+          "text": "Switch the credential protocol from FORTIEMS_API to SNMPv2.",
+          "feedback": "The API integration remains the required management path.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        12,
+        10,
+        11,
+        8
+      ],
+      "choice_length_spread": 4
+    },
+    {
+      "number": 39,
+      "topic": "FortiSIEM",
+      "prompt": "Which EMS role is sufficient when the requirement is vulnerability ingestion only?",
+      "options": [
+        {
+          "text": "A read-only EMS role can retrieve vulnerability data without tag-changing permissions.",
+          "feedback": "Write permissions are needed only when FortiSIEM must set or unset endpoint tags.",
+          "is_correct": true
+        },
+        {
+          "text": "A full EMS administrator role is mandatory for every discovery operation.",
+          "feedback": "Fortinet documents read-only access for vulnerability ingestion.",
+          "is_correct": false
+        },
+        {
+          "text": "A FortiGate super_admin role can substitute for an EMS account.",
+          "feedback": "The integration authenticates to EMS, not to the FortiGate.",
+          "is_correct": false
+        },
+        {
+          "text": "A local FortiSIEM analyst role can replace EMS API credentials.",
+          "feedback": "FortiSIEM user roles do not authenticate the EMS API request.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        11,
+        11,
+        10,
+        10
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 40,
+      "topic": "FortiSIEM",
+      "prompt": "The EMS tag changes successfully, but a FortiGate still permits the endpoint. What is the missing enforcement check?",
+      "options": [
+        {
+          "text": "Run the FortiSIEM query again until the endpoint appears in Analytics.",
+          "feedback": "Analytics visibility does not prove the firewall imported or used the tag.",
+          "is_correct": false
+        },
+        {
+          "text": "Increase the FortiEMS polling interval to one day to stabilize the tag.",
+          "feedback": "A slower poll does not create a FortiGate ZTNA rule.",
+          "is_correct": false
+        },
+        {
+          "text": "Confirm the Security Fabric imported the tag and the ZTNA policy references it.",
+          "feedback": "Changing the EMS tag is only the classification step; the enforcement point must consume it in policy.",
+          "is_correct": true
+        },
+        {
+          "text": "Disable endpoint vulnerability polling and clear the FortiGate session table.",
+          "feedback": "The tag import and policy reference must be checked directly.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        11,
+        12,
+        13,
+        10
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 41,
+      "topic": "FortiSASE",
+      "prompt": "Which statement correctly distinguishes FortiSASE DPD modes?",
+      "options": [
+        {
+          "text": "On-idle probes idle tunnels; on-demand probes when outbound traffic lacks a response; disable only responds.",
+          "feedback": "The modes differ in when the PoP initiates DPD; disable still responds to peer probes.",
+          "is_correct": true
+        },
+        {
+          "text": "On-demand probes continuously; on-idle never sends probes; disable drops all IKE traffic.",
+          "feedback": "Those behaviors reverse the documented DPD semantics.",
+          "is_correct": false
+        },
+        {
+          "text": "On-idle applies only to SSL tunnels; on-demand applies only to DNS requests.",
+          "feedback": "DPD is an IPsec IKE liveness mechanism.",
+          "is_correct": false
+        },
+        {
+          "text": "Disable actively probes every minute, while on-idle disables peer responses.",
+          "feedback": "Disable suppresses active generation but still responds to incoming DPD.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        15,
+        12,
+        12,
+        10
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 42,
+      "topic": "FortiSASE",
+      "prompt": "When does on-demand DPD send a probe according to the feature description?",
+      "options": [
+        {
+          "text": "At fixed intervals whenever the tunnel has no user traffic.",
+          "feedback": "That describes idle probing, not the on-demand trigger.",
+          "is_correct": false
+        },
+        {
+          "text": "When outbound messages have been sent but no inbound messages arrive during the retry interval.",
+          "feedback": "On-demand ties liveness probing to pending outbound traffic with no response.",
+          "is_correct": true
+        },
+        {
+          "text": "Only after three successful DNS lookups from the endpoint.",
+          "feedback": "DNS success is not the DPD trigger.",
+          "is_correct": false
+        },
+        {
+          "text": "Immediately after every endpoint profile is downloaded.",
+          "feedback": "Profile download does not itself require an IKE DPD probe.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        10,
+        15,
+        9,
+        7
+      ],
+      "choice_length_spread": 8
+    },
+    {
+      "number": 43,
+      "topic": "FortiSASE",
+      "prompt": "What is the documented default Security PoP DPD retry window?",
+      "options": [
+        {
+          "text": "A 60-second retry interval with three missed attempts before the peer is dropped.",
+          "feedback": "The default combines the interval and retry count; together they define the liveness window.",
+          "is_correct": true
+        },
+        {
+          "text": "A 10-second interval with one missed attempt before the peer is dropped.",
+          "feedback": "Those are not the documented defaults.",
+          "is_correct": false
+        },
+        {
+          "text": "A 30-second interval with five missed attempts before the peer is dropped.",
+          "feedback": "The documented default is 60 seconds and three misses.",
+          "is_correct": false
+        },
+        {
+          "text": "A 120-second interval with two missed attempts before the peer is dropped.",
+          "feedback": "Those values do not match the documented Security PoP default.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        13,
+        12,
+        12,
+        12
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 44,
+      "topic": "FortiSASE",
+      "prompt": "Why should a FortiSASE DPD change be scheduled in a maintenance window?",
+      "options": [
+        {
+          "text": "The change permanently deletes all endpoint certificates from FortiClient.",
+          "feedback": "The documented impact is a temporary tunnel disconnect, not certificate deletion.",
+          "is_correct": false
+        },
+        {
+          "text": "The change restarts every FortiGate in the Security Fabric.",
+          "feedback": "The change applies to FortiSASE IPsec agent tunnel settings.",
+          "is_correct": false
+        },
+        {
+          "text": "The change forces all users to re-enroll their identity provider accounts.",
+          "feedback": "DPD changes liveness behavior, not user identity enrollment.",
+          "is_correct": false
+        },
+        {
+          "text": "Currently connected endpoints can be disconnected for a few minutes while the change applies.",
+          "feedback": "Fortinet explicitly warns that the DPD change can interrupt connected endpoints.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        9,
+        9,
+        11,
+        14
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 45,
+      "topic": "Secure SD-WAN",
+      "prompt": "A service rule has two SLA-qualified members. What does the tie-break setting do?",
+      "options": [
+        {
+          "text": "It measures latency and loss for every member from scratch.",
+          "feedback": "Health-check/SLA logic performs the measurement; tie-break selects among qualified candidates.",
+          "is_correct": false
+        },
+        {
+          "text": "It overrides firewall policy and selects a VDOM before routing.",
+          "feedback": "The setting is an SD-WAN member-selection method.",
+          "is_correct": false
+        },
+        {
+          "text": "It creates a new static route for each destination prefix automatically.",
+          "feedback": "Tie-break uses existing routing information; it does not create routes.",
+          "is_correct": false
+        },
+        {
+          "text": "It selects among members that already passed the service's SLA qualification.",
+          "feedback": "SLA qualification creates the candidate set; tie-break chooses among eligible members.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        10,
+        10,
+        11,
+        11
+      ],
+      "choice_length_spread": 1
+    },
+    {
+      "number": 46,
+      "topic": "Secure SD-WAN",
+      "prompt": "What is the defining behavior of fib-best-match for service-SLA tie-break?",
+      "options": [
+        {
+          "text": "Choose the member listed first in the service configuration every time.",
+          "feedback": "That is cfg-order, not fib-best-match.",
+          "is_correct": false
+        },
+        {
+          "text": "Choose the member with the lowest measured latency regardless of route.",
+          "feedback": "That is not the FIB longest-prefix method.",
+          "is_correct": false
+        },
+        {
+          "text": "Choose the member that received the most packets in the previous interval.",
+          "feedback": "Traffic volume is not the fib-best-match criterion.",
+          "is_correct": false
+        },
+        {
+          "text": "Choose the SLA-qualified member whose route has the longest prefix match in the FIB.",
+          "feedback": "The native forwarding table's most-specific route influences selection among healthy members.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        11,
+        11,
+        12,
+        14
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 47,
+      "topic": "Secure SD-WAN",
+      "prompt": "A service rule should inherit the zone's configured SLA tie-break method. Which service setting expresses that intent?",
+      "options": [
+        {
+          "text": "Set the service rule tie-break to cfg-order even when the zone uses FIB matching.",
+          "feedback": "That explicitly selects a different method rather than inheriting the zone setting.",
+          "is_correct": false
+        },
+        {
+          "text": "Set the SLA target to zone and remove all eligible members.",
+          "feedback": "SLA targets and tie-break selection are separate settings.",
+          "is_correct": false
+        },
+        {
+          "text": "Set the firewall policy route to zone and disable SD-WAN health checks.",
+          "feedback": "Policy routing does not configure the SD-WAN tie-break.",
+          "is_correct": false
+        },
+        {
+          "text": "Set the service rule tie-break to zone so it uses the zone-level value.",
+          "feedback": "The service rule can inherit the zone's service-sla-tie-break behavior.",
+          "is_correct": true
+        }
+      ],
+      "correct_index": 3,
+      "answer_letter": "D",
+      "choice_word_counts": [
+        14,
+        11,
+        12,
+        13
+      ],
+      "choice_length_spread": 3
+    },
+    {
+      "number": 48,
+      "topic": "Secure SD-WAN",
+      "prompt": "Which description correctly distinguishes the four documented tie-break methods?",
+      "options": [
+        {
+          "text": "cfg-order uses latency; fib-best-match uses packet count; priority uses ingress; input-device uses route prefix.",
+          "feedback": "The criteria are assigned to the wrong methods.",
+          "is_correct": false
+        },
+        {
+          "text": "cfg-order uses ingress; fib-best-match uses configured order; priority uses DNS; input-device uses loss.",
+          "feedback": "These descriptions do not match the CLI reference.",
+          "is_correct": false
+        },
+        {
+          "text": "cfg-order follows configured order; fib-best-match uses FIB prefix; priority uses cost factor; input-device matches ingress.",
+          "feedback": "Each method uses a different deterministic criterion after SLA qualification.",
+          "is_correct": true
+        },
+        {
+          "text": "All four methods choose the first SLA-qualified member and differ only in logging.",
+          "feedback": "The methods make distinct member-selection decisions.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 2,
+      "answer_letter": "C",
+      "choice_word_counts": [
+        14,
+        13,
+        15,
+        13
+      ],
+      "choice_length_spread": 2
+    },
+    {
+      "number": 49,
+      "topic": "Integrative",
+      "prompt": "A recent SD-WAN case shows implicit-rule spillover after an ingress threshold. Why should it not be diagnosed as fib-best-match failure immediately?",
+      "options": [
+        {
+          "text": "Implicit-rule threshold/session timing is separate from the zone SLA tie-break applied after member qualification.",
+          "feedback": "The two mechanisms operate at different decision stages and need separate evidence.",
+          "is_correct": true
+        },
+        {
+          "text": "Both features use the same FIB longest-prefix lookup, so the symptoms are interchangeable.",
+          "feedback": "Implicit-rule spillover is not the zone's service-SLA tie-break algorithm.",
+          "is_correct": false
+        },
+        {
+          "text": "Implicit rules are controlled by FortiAuthenticator accounting proxy settings.",
+          "feedback": "The feature belongs to SD-WAN service processing, not RADIUS accounting.",
+          "is_correct": false
+        },
+        {
+          "text": "A failed implicit rule always proves that all SLA members are down.",
+          "feedback": "Threshold/session behavior does not prove the health-check state.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 0,
+      "answer_letter": "A",
+      "choice_word_counts": [
+        14,
+        13,
+        9,
+        12
+      ],
+      "choice_length_spread": 5
+    },
+    {
+      "number": 50,
+      "topic": "Integrative",
+      "prompt": "FortiSIEM sets an EMS endpoint tag, but ZTNA access remains unchanged. Which evidence chain is required?",
+      "options": [
+        {
+          "text": "Verify only that the FortiSIEM incident closed successfully.",
+          "feedback": "Incident closure does not prove tag propagation or firewall policy enforcement.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify EMS tag, Security Fabric import, and the FortiGate ZTNA policy match in sequence.",
+          "feedback": "Each stage proves classification, propagation, and enforcement respectively.",
+          "is_correct": true
+        },
+        {
+          "text": "Verify only that the EMS API returned HTTP 200 during discovery.",
+          "feedback": "API reachability does not prove the tag changed or was imported.",
+          "is_correct": false
+        },
+        {
+          "text": "Verify only that the endpoint has a CMDB record in FortiSIEM.",
+          "feedback": "CMDB presence does not prove the tag or ZTNA rule is active.",
+          "is_correct": false
+        }
+      ],
+      "correct_index": 1,
+      "answer_letter": "B",
+      "choice_word_counts": [
+        8,
+        14,
+        11,
+        11
+      ],
+      "choice_length_spread": 6
+    }
+  ]
+}
