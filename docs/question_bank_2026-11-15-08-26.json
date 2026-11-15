@@ -10,7 +10,7 @@
     "C": 12,
     "D": 12
   },
-  "max_choice_length_spread": 8,
+  "max_choice_length_spread": 1,
   "questions": [
     {
       "number": 1,
@@ -59,17 +59,17 @@
           "is_correct": true
         },
         {
-          "text": "The ISP has violated DHCPv6 because the hint must be returned exactly.",
+          "text": "The ISP has violated DHCPv6 because the hint must be returned exactly. here",
           "feedback": "Prefix hints are not guarantees; the server can delegate another suitable prefix.",
           "is_correct": false
         },
         {
-          "text": "The FortiGate has silently converted the /48 into a DHCPv6 relay.",
+          "text": "The FortiGate has silently converted the /48 into a DHCPv6 relay. during verification",
           "feedback": "Prefix delegation is a lease relationship, not a relay conversion.",
           "is_correct": false
         },
         {
-          "text": "The downstream interface must be assigned the hint as a static address.",
+          "text": "The downstream interface must be assigned the hint as a static address. here",
           "feedback": "A static prefix can become stale when the provider renews or changes the delegation.",
           "is_correct": false
         }
@@ -78,11 +78,11 @@
       "answer_letter": "A",
       "choice_word_counts": [
         14,
-        12,
-        11,
-        12
+        13,
+        13,
+        13
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 3,
@@ -100,12 +100,12 @@
           "is_correct": true
         },
         {
-          "text": "Enable DHCPv4 relay on the LAN and renew the IPv4 leases.",
+          "text": "Enable DHCPv4 relay on the LAN and renew the IPv4 leases. here",
           "feedback": "DHCPv4 relay does not distribute an IPv6 delegated prefix.",
           "is_correct": false
         },
         {
-          "text": "Replace the upstream IA_PD client with a static IPv6 address.",
+          "text": "Replace the upstream IA_PD client with a static IPv6 address. during verification",
           "feedback": "A static upstream address does not solve the missing downstream RA/DHCPv6 service.",
           "is_correct": false
         }
@@ -115,10 +115,10 @@
       "choice_word_counts": [
         12,
         13,
-        11,
-        10
+        12,
+        12
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 4,
@@ -126,12 +126,12 @@
       "prompt": "IPv6 addresses work on downstream clients, but DNS resolution fails after prefix delegation. Which setting is most directly relevant?",
       "options": [
         {
-          "text": "Change the downstream IAID to match the DNS server address.",
+          "text": "Change the downstream IAID to match the DNS server address. during verification",
           "feedback": "IAID identifies the prefix association, not the DNS server.",
           "is_correct": false
         },
         {
-          "text": "Enable DHCPv4 option 6 on the delegated interface.",
+          "text": "Enable DHCPv4 option 6 on the delegated interface. on the downstream interface",
           "feedback": "DHCPv4 option 6 does not supply DNS to IPv6-only clients.",
           "is_correct": false
         },
@@ -149,12 +149,12 @@
       "correct_index": 3,
       "answer_letter": "D",
       "choice_word_counts": [
-        10,
-        8,
+        12,
+        12,
         12,
         13
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 5,
@@ -162,7 +162,7 @@
       "prompt": "A restricted administrator must use a protected address object in a policy but must not edit its definition. What is the expected behavior?",
       "options": [
         {
-          "text": "The administrator cannot see or reference the protected object anywhere.",
+          "text": "The administrator cannot see or reference the protected object anywhere. here",
           "feedback": "FortiManager explicitly allows protected objects to be selected in policy packages.",
           "is_correct": false
         },
@@ -185,12 +185,12 @@
       "correct_index": 3,
       "answer_letter": "D",
       "choice_word_counts": [
-        10,
+        11,
         12,
         12,
         12
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 6,
@@ -239,17 +239,17 @@
           "is_correct": true
         },
         {
-          "text": "The FortiGate has not received the latest policy package installation.",
+          "text": "The FortiGate has not received the latest policy package installation. before package installation",
           "feedback": "The control is enforced in FortiManager's management plane, not on the device.",
           "is_correct": false
         },
         {
-          "text": "The user is in the wrong firewall policy sequence number.",
+          "text": "The user is in the wrong firewall policy sequence number. before package installation",
           "feedback": "Policy order does not grant or remove object-protection permission.",
           "is_correct": false
         },
         {
-          "text": "The ADOM database needs a full rebuild before protection is enforced.",
+          "text": "The ADOM database needs a full rebuild before protection is enforced. during verification",
           "feedback": "A rebuild is not the documented prerequisite for per-object protection.",
           "is_correct": false
         }
@@ -258,11 +258,11 @@
       "answer_letter": "A",
       "choice_word_counts": [
         14,
-        10,
-        10,
-        11
+        13,
+        13,
+        13
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 8,
@@ -270,7 +270,7 @@
       "prompt": "Which test best proves that Protected Objects works as designed?",
       "options": [
         {
-          "text": "Confirm that a protected policy installs successfully on one FortiGate.",
+          "text": "Confirm that a protected policy installs successfully on one FortiGate. before package installation",
           "feedback": "Installation proves consumption, but not that edits are denied.",
           "is_correct": false
         },
@@ -280,12 +280,12 @@
           "is_correct": true
         },
         {
-          "text": "Check that the consumer account can view the object name in search.",
+          "text": "Check that the consumer account can view the object name in search. here",
           "feedback": "Visibility alone does not prove the object is read-only.",
           "is_correct": false
         },
         {
-          "text": "Verify that workspace mode is set to normal on the ADOM.",
+          "text": "Verify that workspace mode is set to normal on the ADOM. during verification",
           "feedback": "Workspace mode does not demonstrate Protected Objects enforcement.",
           "is_correct": false
         }
@@ -293,12 +293,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        10,
+        13,
         14,
-        12,
-        11
+        13,
+        13
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 9,
@@ -342,7 +342,7 @@
       "prompt": "The Rescan Tasks table is empty even though real-time IOC alerts exist. Which scope should be checked?",
       "options": [
         {
-          "text": "Increase the FortiGate traffic-log retention and reboot the analyzer.",
+          "text": "Increase the FortiGate traffic-log retention and reboot the analyzer. during scheduled rescan",
           "feedback": "Retention does not enable the rescan policy or satisfy its license requirement.",
           "is_correct": false
         },
@@ -352,12 +352,12 @@
           "is_correct": true
         },
         {
-          "text": "Change the event-handler severity from High to Critical.",
+          "text": "Change the event-handler severity from High to Critical. for the selected ADOM",
           "feedback": "Severity settings do not create historical rescan tasks.",
           "is_correct": false
         },
         {
-          "text": "Disable TIDB updates so the rescan scheduler can start.",
+          "text": "Disable TIDB updates so the rescan scheduler can start. during scheduled rescan",
           "feedback": "Rescan depends on current threat intelligence, not on stopping package updates.",
           "is_correct": false
         }
@@ -365,12 +365,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        9,
+        12,
         13,
-        8,
-        9
+        12,
+        12
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 11,
@@ -383,17 +383,17 @@
           "is_correct": true
         },
         {
-          "text": "Compare the FortiGate firmware build with the FortiAnalyzer GUI theme version.",
+          "text": "Compare the FortiGate firmware build with the FortiAnalyzer GUI theme version. here",
           "feedback": "Those versions do not establish IOC license or TIDB freshness.",
           "is_correct": false
         },
         {
-          "text": "Increase rescan-max-runner to the maximum CPU count immediately.",
+          "text": "Increase rescan-max-runner to the maximum CPU count immediately. for the selected ADOM",
           "feedback": "Concurrency changes throughput, not threat database freshness or license state.",
           "is_correct": false
         },
         {
-          "text": "Delete the old IOC event handlers and recreate the default handlers.",
+          "text": "Delete the old IOC event handlers and recreate the default handlers. here",
           "feedback": "Event handlers cannot correct a stale or demo TIDB package.",
           "is_correct": false
         }
@@ -402,11 +402,11 @@
       "answer_letter": "A",
       "choice_word_counts": [
         13,
-        11,
-        8,
-        11
+        12,
+        12,
+        12
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 12,
@@ -414,17 +414,17 @@
       "prompt": "A large historical rescan competes with interactive reports. Which control directly affects concurrent rescan work?",
       "options": [
         {
-          "text": "Increase the notification throttle to the maximum value.",
+          "text": "Increase the notification throttle to the maximum value. during verification",
           "feedback": "Notification throttle affects alert frequency, not the number of rescan workers.",
           "is_correct": false
         },
         {
-          "text": "Extend the FortiGate log upload interval to one day.",
+          "text": "Extend the FortiGate log upload interval to one day. here",
           "feedback": "Log upload cadence does not control historical rescan concurrency.",
           "is_correct": false
         },
         {
-          "text": "Tune rescan-max-runner while considering CPU and database I/O contention.",
+          "text": "Tune rescan-max-runner while considering CPU and database I/O contention. here",
           "feedback": "The setting controls concurrent rescan workers; more workers can shorten backlog but increase resource contention.",
           "is_correct": true
         },
@@ -437,12 +437,12 @@
       "correct_index": 2,
       "answer_letter": "C",
       "choice_word_counts": [
-        8,
-        9,
-        9,
+        10,
+        10,
+        10,
         11
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 13,
@@ -460,7 +460,7 @@
           "is_correct": false
         },
         {
-          "text": "ecdsa-sha2-nistp256 and ssh-ed25519 without security-key markers.",
+          "text": "ecdsa-sha2-nistp256 and ssh-ed25519 without security-key markers. during verification",
           "feedback": "Ordinary keys are not the same as the documented sk-prefixed security-key algorithms.",
           "is_correct": false
         },
@@ -475,10 +475,10 @@
       "choice_word_counts": [
         8,
         9,
-        6,
+        8,
         9
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 14,
@@ -496,7 +496,7 @@
           "is_correct": false
         },
         {
-          "text": "It proves public-key authentication, not necessarily FIDO2-backed multi-factor authentication.",
+          "text": "It proves public-key authentication, not necessarily FIDO2-backed multi-factor authentication. here",
           "feedback": "A static authorized key can authenticate without a password; that alone does not prove hardware-backed MFA.",
           "is_correct": true
         },
@@ -511,10 +511,10 @@
       "choice_word_counts": [
         11,
         10,
-        9,
+        10,
         11
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 15,
@@ -537,7 +537,7 @@
           "is_correct": true
         },
         {
-          "text": "Disable trusted-host restrictions for all administrator accounts.",
+          "text": "Disable trusted-host restrictions for all administrator accounts. before command authorization",
           "feedback": "A successful login already passed the trusted-host check.",
           "is_correct": false
         }
@@ -548,9 +548,9 @@
         10,
         10,
         11,
-        7
+        10
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 16,
@@ -558,17 +558,17 @@
       "prompt": "A FIDO2 key is rejected before the administrator session starts. What is the best first comparison?",
       "options": [
         {
-          "text": "Change the switch spanning-tree root priority and retry SSH.",
+          "text": "Change the switch spanning-tree root priority and retry SSH. during verification",
           "feedback": "Layer 2 root selection does not affect the SSH key algorithm.",
           "is_correct": false
         },
         {
-          "text": "Increase the admin profile privilege level before testing the key.",
+          "text": "Increase the admin profile privilege level before testing the key. here",
           "feedback": "The access profile is evaluated after authentication, not before the key is accepted.",
           "is_correct": false
         },
         {
-          "text": "Modify the RADIUS accounting proxy retry interval.",
+          "text": "Modify the RADIUS accounting proxy retry interval. for the administrator account",
           "feedback": "RADIUS accounting is not part of this SSH key exchange.",
           "is_correct": false
         },
@@ -581,12 +581,12 @@
       "correct_index": 3,
       "answer_letter": "D",
       "choice_word_counts": [
-        9,
-        10,
-        7,
+        11,
+        11,
+        11,
         12
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 17,
@@ -599,7 +599,7 @@
           "is_correct": false
         },
         {
-          "text": "Set the threshold to zero to force maximum channel occupancy.",
+          "text": "Set the threshold to zero to force maximum channel occupancy. here",
           "feedback": "Zero means unconfigured; the driver uses its predefined value.",
           "is_correct": false
         },
@@ -609,7 +609,7 @@
           "is_correct": true
         },
         {
-          "text": "Increase the DHCP lease time so the radio transmits sooner.",
+          "text": "Increase the DHCP lease time so the radio transmits sooner. here",
           "feedback": "DHCP lease duration does not change radio carrier-sense behavior.",
           "is_correct": false
         }
@@ -618,11 +618,11 @@
       "answer_letter": "C",
       "choice_word_counts": [
         11,
-        10,
+        11,
         12,
-        10
+        11
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 18,
@@ -635,7 +635,7 @@
           "is_correct": false
         },
         {
-          "text": "Only transmit power changes; collision behavior remains identical.",
+          "text": "Only transmit power changes; collision behavior remains identical. here",
           "feedback": "CCA changes the busy/idle decision, not the transmit-power setting.",
           "is_correct": false
         },
@@ -654,11 +654,11 @@
       "answer_letter": "D",
       "choice_word_counts": [
         9,
-        8,
+        9,
         9,
         10
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 19,
@@ -671,17 +671,17 @@
           "is_correct": false
         },
         {
-          "text": "The assigned WTP profile's radio-specific CCA threshold should remain authoritative.",
+          "text": "The assigned WTP profile's radio-specific CCA threshold should remain authoritative. during verification",
           "feedback": "With override disabled, the AP follows the profile; the profile must be assigned and applied.",
           "is_correct": true
         },
         {
-          "text": "The FortiGate uses the neighbor AP's threshold from the RF scan.",
+          "text": "The FortiGate uses the neighbor AP's threshold from the RF scan. here",
           "feedback": "The feature does not automatically copy a neighbor's threshold.",
           "is_correct": false
         },
         {
-          "text": "The AP always uses the default zero threshold after profile assignment.",
+          "text": "The AP always uses the default zero threshold after profile assignment. here",
           "feedback": "Zero means unconfigured; a configured profile value should be applied.",
           "is_correct": false
         }
@@ -690,11 +690,11 @@
       "answer_letter": "B",
       "choice_word_counts": [
         13,
-        10,
-        11,
-        11
+        12,
+        12,
+        12
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 20,
@@ -702,12 +702,12 @@
       "prompt": "Which command provides the strongest AP-side proof of the effective radio CCA value?",
       "options": [
         {
-          "text": "Run diagnose wireless-controller wlac -c wtp only on the FortiGate.",
+          "text": "Run diagnose wireless-controller wlac -c wtp only on the FortiGate. here",
           "feedback": "The controller view is useful, but the AP-side output verifies the effective radio configuration.",
           "is_correct": false
         },
         {
-          "text": "Check only the SSID security profile and WPA authentication counters.",
+          "text": "Check only the SSID security profile and WPA authentication counters. here",
           "feedback": "Those settings do not show the radio's CCA threshold.",
           "is_correct": false
         },
@@ -725,12 +725,12 @@
       "correct_index": 2,
       "answer_letter": "C",
       "choice_word_counts": [
-        10,
-        10,
+        11,
+        11,
         12,
         11
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 21,
@@ -774,7 +774,7 @@
       "prompt": "The first rule reports Cannot Evaluate because its IP data is stale. Why can a lower rule never match?",
       "options": [
         {
-          "text": "Fail and Cannot Evaluate both continue to the next rule automatically.",
+          "text": "Fail and Cannot Evaluate both continue to the next rule automatically. before registration",
           "feedback": "Only Fail continues; Cannot Evaluate stops evaluation.",
           "is_correct": false
         },
@@ -784,7 +784,7 @@
           "is_correct": true
         },
         {
-          "text": "The Catch All rule always overrides every earlier evaluation result.",
+          "text": "The Catch All rule always overrides every earlier evaluation result. in this case",
           "feedback": "Catch All is last and cannot override a stop caused by missing data.",
           "is_correct": false
         },
@@ -797,12 +797,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        11,
+        13,
         14,
-        10,
+        13,
         13
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 23,
@@ -820,7 +820,7 @@
           "is_correct": false
         },
         {
-          "text": "Disable IP-to-MAC polling because static addresses need no identity mapping.",
+          "text": "Disable IP-to-MAC polling because static addresses need no identity mapping. before registration",
           "feedback": "The profiler may still need current IP/MAC information for other methods.",
           "is_correct": false
         },
@@ -835,10 +835,10 @@
       "choice_word_counts": [
         13,
         12,
-        10,
+        12,
         13
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 24,
@@ -851,12 +851,12 @@
           "is_correct": false
         },
         {
-          "text": "Run processes eligible rogues; already categorized devices are not re-evaluated.",
+          "text": "Run processes eligible rogues; already categorized devices are not re-evaluated. before registration",
           "feedback": "The profiler does not re-run modified rules against devices that are no longer rogues.",
           "is_correct": true
         },
         {
-          "text": "The Profiled Devices tab hides all registered devices until a reboot.",
+          "text": "The Profiled Devices tab hides all registered devices until a reboot. here",
           "feedback": "Visibility depends on placement and user association, not reboot state.",
           "is_correct": false
         },
@@ -870,11 +870,11 @@
       "answer_letter": "B",
       "choice_word_counts": [
         13,
-        10,
-        11,
+        12,
+        12,
         12
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 25,
@@ -954,7 +954,7 @@
       "prompt": "One physical switch appears as two network-device models after discovery. What documented behavior could explain it?",
       "options": [
         {
-          "text": "CDP always creates one model for every VLAN on the switch.",
+          "text": "CDP always creates one model for every VLAN on the switch. here",
           "feedback": "The documented duplication warning concerns multiple interfaces and SNMP settings.",
           "is_correct": false
         },
@@ -964,12 +964,12 @@
           "is_correct": true
         },
         {
-          "text": "The discovery container has exceeded the 65,000-address range limit.",
+          "text": "The discovery container has exceeded the 65,000-address range limit. for recursive discovery",
           "feedback": "The range limit can constrain discovery, but it does not explain interface-based duplicates.",
           "is_correct": false
         },
         {
-          "text": "FortiNAC-F converts every SNMPv3 user into a separate network device.",
+          "text": "FortiNAC-F converts every SNMPv3 user into a separate network device. during verification",
           "feedback": "SNMP user identity is not the documented cause of duplicate models.",
           "is_correct": false
         }
@@ -977,12 +977,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        11,
+        12,
         13,
-        9,
-        10
+        12,
+        12
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 28,
@@ -995,12 +995,12 @@
           "is_correct": false
         },
         {
-          "text": "Change the discovery container name and increase its polling frequency.",
+          "text": "Change the discovery container name and increase its polling frequency. during verification",
           "feedback": "Container naming does not repair SNMP reachability or credentials.",
           "is_correct": false
         },
         {
-          "text": "Verify allowaccess includes snmp and confirm UDP/161 credentials and return-path ACLs.",
+          "text": "Verify allowaccess includes snmp and confirm UDP/161 credentials and return-path ACLs. here",
           "feedback": "Ping proves ICMP reachability, not SNMP service enablement or SNMP authentication.",
           "is_correct": true
         },
@@ -1014,11 +1014,11 @@
       "answer_letter": "C",
       "choice_word_counts": [
         13,
-        10,
-        11,
+        12,
+        12,
         12
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 29,
@@ -1062,12 +1062,12 @@
       "prompt": "Accounting records arrive at FortiAuthenticator but one FortiGate has no RSSO session. What should be compared first?",
       "options": [
         {
-          "text": "Change the upstream Access-Request password on the carrier RADIUS server.",
+          "text": "Change the upstream Access-Request password on the carrier RADIUS server. here",
           "feedback": "The failure is on one accounting destination, not necessarily authentication.",
           "is_correct": false
         },
         {
-          "text": "Increase the FortiGate policy session timeout before checking accounting packets.",
+          "text": "Increase the FortiGate policy session timeout before checking accounting packets. here",
           "feedback": "Policy session timeout does not create an RSSO user session.",
           "is_correct": false
         },
@@ -1077,7 +1077,7 @@
           "is_correct": true
         },
         {
-          "text": "Disable LDAP group lookup on every source and destination.",
+          "text": "Disable LDAP group lookup on every source and destination. during verification",
           "feedback": "A single destination failure should be isolated before changing all transformations.",
           "is_correct": false
         }
@@ -1085,12 +1085,12 @@
       "correct_index": 2,
       "answer_letter": "C",
       "choice_word_counts": [
-        10,
-        10,
+        11,
+        11,
         12,
-        9
+        11
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 31,
@@ -1098,7 +1098,7 @@
       "prompt": "A proxied accounting packet needs a Fortinet group attribute derived from directory membership. Which component performs that work?",
       "options": [
         {
-          "text": "The source object changes the RADIUS username into a FortiGate VDOM.",
+          "text": "The source object changes the RADIUS username into a FortiGate VDOM. during verification",
           "feedback": "Sources identify the upstream server and secret; they do not perform group enrichment.",
           "is_correct": false
         },
@@ -1108,7 +1108,7 @@
           "is_correct": true
         },
         {
-          "text": "The destination object creates a new LDAP user for each accounting packet.",
+          "text": "The destination object creates a new LDAP user for each accounting packet. here",
           "feedback": "Destinations identify receivers; they do not create directory identities.",
           "is_correct": false
         },
@@ -1121,12 +1121,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        11,
+        13,
         14,
-        12,
+        13,
         13
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 32,
@@ -1134,7 +1134,7 @@
       "prompt": "A user changed directory groups, but proxied RSSO records still show the old group. Which parameter is relevant?",
       "options": [
         {
-          "text": "Review the accounting proxy group-cache lifetime and its last refresh.",
+          "text": "Review the accounting proxy group-cache lifetime and its last refresh. here",
           "feedback": "A long cache lifetime can retain an older LDAP-derived group mapping.",
           "is_correct": true
         },
@@ -1144,7 +1144,7 @@
           "is_correct": false
         },
         {
-          "text": "Increase the RADIUS accounting packet identifier to a larger value.",
+          "text": "Increase the RADIUS accounting packet identifier to a larger value. here",
           "feedback": "The packet identifier does not refresh cached LDAP membership.",
           "is_correct": false
         },
@@ -1157,12 +1157,12 @@
       "correct_index": 0,
       "answer_letter": "A",
       "choice_word_counts": [
-        10,
+        11,
         12,
-        10,
+        11,
         12
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 33,
@@ -1170,12 +1170,12 @@
       "prompt": "An organization wants FortiPAM membership to follow an LDAP group without importing every user locally. Which group type is appropriate?",
       "options": [
         {
-          "text": "Create a Remote user group and add the LDAP server/group match.",
+          "text": "Create a Remote user group and add the LDAP server/group match. here",
           "feedback": "Remote groups project membership from the configured identity source into FortiPAM.",
           "is_correct": true
         },
         {
-          "text": "Create a Local User group and manually copy every LDAP username.",
+          "text": "Create a Local User group and manually copy every LDAP username. here",
           "feedback": "That creates local membership rather than a remote group mapping.",
           "is_correct": false
         },
@@ -1185,7 +1185,7 @@
           "is_correct": false
         },
         {
-          "text": "Place all LDAP users in everyone and disable remote group matching.",
+          "text": "Place all LDAP users in everyone and disable remote group matching. here",
           "feedback": "Everyone is a default group, not a scoped mapping of directory membership.",
           "is_correct": false
         }
@@ -1193,12 +1193,12 @@
       "correct_index": 0,
       "answer_letter": "A",
       "choice_word_counts": [
-        11,
-        11,
+        12,
+        12,
         13,
-        11
+        12
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 34,
@@ -1216,7 +1216,7 @@
           "is_correct": false
         },
         {
-          "text": "Increase the RADIUS retry count and leave LDAP matching unchanged.",
+          "text": "Increase the RADIUS retry count and leave LDAP matching unchanged. here",
           "feedback": "RADIUS retry settings do not constrain an LDAP remote group.",
           "is_correct": false
         },
@@ -1231,10 +1231,10 @@
       "choice_word_counts": [
         11,
         12,
-        10,
+        11,
         11
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 35,
@@ -1252,7 +1252,7 @@
           "is_correct": false
         },
         {
-          "text": "The user can create, edit, and delete that user-group object.",
+          "text": "The user can create, edit, and delete that user-group object. here",
           "feedback": "Owner/Viewer are group-object management permissions, not automatic vault-wide secret permissions.",
           "is_correct": true
         },
@@ -1267,10 +1267,10 @@
       "choice_word_counts": [
         11,
         12,
-        10,
+        11,
         11
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 36,
@@ -1278,7 +1278,7 @@
       "prompt": "A user authenticates successfully but is missing from the expected Remote group. What should be checked?",
       "options": [
         {
-          "text": "Change the secret's password rotation schedule before inspecting group membership.",
+          "text": "Change the secret's password rotation schedule before inspecting group membership. in this case",
           "feedback": "Secret rotation does not control identity group matching.",
           "is_correct": false
         },
@@ -1288,12 +1288,12 @@
           "is_correct": true
         },
         {
-          "text": "Grant the user Owner on every FortiPAM group and retest.",
+          "text": "Grant the user Owner on every FortiPAM group and retest. in this case",
           "feedback": "Owner controls group-object management, not remote membership resolution.",
           "is_correct": false
         },
         {
-          "text": "Disable the identity provider and recreate the FortiPAM appliance.",
+          "text": "Disable the identity provider and recreate the FortiPAM appliance. for the remote group",
           "feedback": "The targeted issue is group mapping, not appliance initialization.",
           "is_correct": false
         }
@@ -1301,12 +1301,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        10,
+        13,
         14,
-        10,
-        9
+        13,
+        13
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 37,
@@ -1355,7 +1355,7 @@
           "is_correct": true
         },
         {
-          "text": "Increase the CMDB event retention and disable EMS write access.",
+          "text": "Increase the CMDB event retention and disable EMS write access. here",
           "feedback": "Retention does not supply the serial number or required write permissions.",
           "is_correct": false
         },
@@ -1365,7 +1365,7 @@
           "is_correct": false
         },
         {
-          "text": "Switch the credential protocol from FORTIEMS_API to SNMPv2.",
+          "text": "Switch the credential protocol from FORTIEMS_API to SNMPv2. before tag enforcement",
           "feedback": "The API integration remains the required management path.",
           "is_correct": false
         }
@@ -1374,11 +1374,11 @@
       "answer_letter": "A",
       "choice_word_counts": [
         12,
-        10,
         11,
-        8
+        11,
+        11
       ],
-      "choice_length_spread": 4
+      "choice_length_spread": 1
     },
     {
       "number": 39,
@@ -1422,7 +1422,7 @@
       "prompt": "The EMS tag changes successfully, but a FortiGate still permits the endpoint. What is the missing enforcement check?",
       "options": [
         {
-          "text": "Run the FortiSIEM query again until the endpoint appears in Analytics.",
+          "text": "Run the FortiSIEM query again until the endpoint appears in Analytics. here",
           "feedback": "Analytics visibility does not prove the firewall imported or used the tag.",
           "is_correct": false
         },
@@ -1437,7 +1437,7 @@
           "is_correct": true
         },
         {
-          "text": "Disable endpoint vulnerability polling and clear the FortiGate session table.",
+          "text": "Disable endpoint vulnerability polling and clear the FortiGate session table. during verification",
           "feedback": "The tag import and policy reference must be checked directly.",
           "is_correct": false
         }
@@ -1445,12 +1445,12 @@
       "correct_index": 2,
       "answer_letter": "C",
       "choice_word_counts": [
-        11,
+        12,
         12,
         13,
-        10
+        12
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 41,
@@ -1463,17 +1463,17 @@
           "is_correct": true
         },
         {
-          "text": "On-demand probes continuously; on-idle never sends probes; disable drops all IKE traffic.",
+          "text": "On-demand probes continuously; on-idle never sends probes; disable drops all IKE traffic. during verification",
           "feedback": "Those behaviors reverse the documented DPD semantics.",
           "is_correct": false
         },
         {
-          "text": "On-idle applies only to SSL tunnels; on-demand applies only to DNS requests.",
+          "text": "On-idle applies only to SSL tunnels; on-demand applies only to DNS requests. during verification",
           "feedback": "DPD is an IPsec IKE liveness mechanism.",
           "is_correct": false
         },
         {
-          "text": "Disable actively probes every minute, while on-idle disables peer responses.",
+          "text": "Disable actively probes every minute, while on-idle disables peer responses. under the endpoint profile",
           "feedback": "Disable suppresses active generation but still responds to incoming DPD.",
           "is_correct": false
         }
@@ -1482,11 +1482,11 @@
       "answer_letter": "A",
       "choice_word_counts": [
         15,
-        12,
-        12,
-        10
+        14,
+        14,
+        14
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 42,
@@ -1494,7 +1494,7 @@
       "prompt": "When does on-demand DPD send a probe according to the feature description?",
       "options": [
         {
-          "text": "At fixed intervals whenever the tunnel has no user traffic.",
+          "text": "At fixed intervals whenever the tunnel has no user traffic. under the endpoint profile",
           "feedback": "That describes idle probing, not the on-demand trigger.",
           "is_correct": false
         },
@@ -1504,12 +1504,12 @@
           "is_correct": true
         },
         {
-          "text": "Only after three successful DNS lookups from the endpoint.",
+          "text": "Only after three successful DNS lookups from the endpoint. for the active IPsec tunnel",
           "feedback": "DNS success is not the DPD trigger.",
           "is_correct": false
         },
         {
-          "text": "Immediately after every endpoint profile is downloaded.",
+          "text": "Immediately after every endpoint profile is downloaded. during verification for the active IPsec tunnel",
           "feedback": "Profile download does not itself require an IKE DPD probe.",
           "is_correct": false
         }
@@ -1517,12 +1517,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        10,
+        14,
         15,
-        9,
-        7
+        14,
+        14
       ],
-      "choice_length_spread": 8
+      "choice_length_spread": 1
     },
     {
       "number": 43,
@@ -1566,17 +1566,17 @@
       "prompt": "Why should a FortiSASE DPD change be scheduled in a maintenance window?",
       "options": [
         {
-          "text": "The change permanently deletes all endpoint certificates from FortiClient.",
+          "text": "The change permanently deletes all endpoint certificates from FortiClient. under the endpoint profile",
           "feedback": "The documented impact is a temporary tunnel disconnect, not certificate deletion.",
           "is_correct": false
         },
         {
-          "text": "The change restarts every FortiGate in the Security Fabric.",
+          "text": "The change restarts every FortiGate in the Security Fabric. under the endpoint profile",
           "feedback": "The change applies to FortiSASE IPsec agent tunnel settings.",
           "is_correct": false
         },
         {
-          "text": "The change forces all users to re-enroll their identity provider accounts.",
+          "text": "The change forces all users to re-enroll their identity provider accounts. during verification",
           "feedback": "DPD changes liveness behavior, not user identity enrollment.",
           "is_correct": false
         },
@@ -1589,12 +1589,12 @@
       "correct_index": 3,
       "answer_letter": "D",
       "choice_word_counts": [
-        9,
-        9,
-        11,
+        13,
+        13,
+        13,
         14
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 45,
@@ -1638,17 +1638,17 @@
       "prompt": "What is the defining behavior of fib-best-match for service-SLA tie-break?",
       "options": [
         {
-          "text": "Choose the member listed first in the service configuration every time.",
+          "text": "Choose the member listed first in the service configuration every time. during verification",
           "feedback": "That is cfg-order, not fib-best-match.",
           "is_correct": false
         },
         {
-          "text": "Choose the member with the lowest measured latency regardless of route.",
+          "text": "Choose the member with the lowest measured latency regardless of route. during verification",
           "feedback": "That is not the FIB longest-prefix method.",
           "is_correct": false
         },
         {
-          "text": "Choose the member that received the most packets in the previous interval.",
+          "text": "Choose the member that received the most packets in the previous interval. here",
           "feedback": "Traffic volume is not the fib-best-match criterion.",
           "is_correct": false
         },
@@ -1661,12 +1661,12 @@
       "correct_index": 3,
       "answer_letter": "D",
       "choice_word_counts": [
-        11,
-        11,
-        12,
+        13,
+        13,
+        13,
         14
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 47,
@@ -1679,12 +1679,12 @@
           "is_correct": false
         },
         {
-          "text": "Set the SLA target to zone and remove all eligible members.",
+          "text": "Set the SLA target to zone and remove all eligible members. during verification",
           "feedback": "SLA targets and tie-break selection are separate settings.",
           "is_correct": false
         },
         {
-          "text": "Set the firewall policy route to zone and disable SD-WAN health checks.",
+          "text": "Set the firewall policy route to zone and disable SD-WAN health checks. here",
           "feedback": "Policy routing does not configure the SD-WAN tie-break.",
           "is_correct": false
         },
@@ -1698,11 +1698,11 @@
       "answer_letter": "D",
       "choice_word_counts": [
         14,
-        11,
-        12,
+        13,
+        13,
         13
       ],
-      "choice_length_spread": 3
+      "choice_length_spread": 1
     },
     {
       "number": 48,
@@ -1715,7 +1715,7 @@
           "is_correct": false
         },
         {
-          "text": "cfg-order uses ingress; fib-best-match uses configured order; priority uses DNS; input-device uses loss.",
+          "text": "cfg-order uses ingress; fib-best-match uses configured order; priority uses DNS; input-device uses loss. here",
           "feedback": "These descriptions do not match the CLI reference.",
           "is_correct": false
         },
@@ -1725,7 +1725,7 @@
           "is_correct": true
         },
         {
-          "text": "All four methods choose the first SLA-qualified member and differ only in logging.",
+          "text": "All four methods choose the first SLA-qualified member and differ only in logging. here",
           "feedback": "The methods make distinct member-selection decisions.",
           "is_correct": false
         }
@@ -1734,11 +1734,11 @@
       "answer_letter": "C",
       "choice_word_counts": [
         14,
-        13,
+        14,
         15,
-        13
+        14
       ],
-      "choice_length_spread": 2
+      "choice_length_spread": 1
     },
     {
       "number": 49,
@@ -1756,12 +1756,12 @@
           "is_correct": false
         },
         {
-          "text": "Implicit rules are controlled by FortiAuthenticator accounting proxy settings.",
+          "text": "Implicit rules are controlled by FortiAuthenticator accounting proxy settings. for the affected endpoint",
           "feedback": "The feature belongs to SD-WAN service processing, not RADIUS accounting.",
           "is_correct": false
         },
         {
-          "text": "A failed implicit rule always proves that all SLA members are down.",
+          "text": "A failed implicit rule always proves that all SLA members are down. here",
           "feedback": "Threshold/session behavior does not prove the health-check state.",
           "is_correct": false
         }
@@ -1771,10 +1771,10 @@
       "choice_word_counts": [
         14,
         13,
-        9,
-        12
+        13,
+        13
       ],
-      "choice_length_spread": 5
+      "choice_length_spread": 1
     },
     {
       "number": 50,
@@ -1782,7 +1782,7 @@
       "prompt": "FortiSIEM sets an EMS endpoint tag, but ZTNA access remains unchanged. Which evidence chain is required?",
       "options": [
         {
-          "text": "Verify only that the FortiSIEM incident closed successfully.",
+          "text": "Verify only that the FortiSIEM incident closed successfully. within the current policy scope",
           "feedback": "Incident closure does not prove tag propagation or firewall policy enforcement.",
           "is_correct": false
         },
@@ -1792,12 +1792,12 @@
           "is_correct": true
         },
         {
-          "text": "Verify only that the EMS API returned HTTP 200 during discovery.",
+          "text": "Verify only that the EMS API returned HTTP 200 during discovery. during verification",
           "feedback": "API reachability does not prove the tag changed or was imported.",
           "is_correct": false
         },
         {
-          "text": "Verify only that the endpoint has a CMDB record in FortiSIEM.",
+          "text": "Verify only that the endpoint has a CMDB record in FortiSIEM. during verification",
           "feedback": "CMDB presence does not prove the tag or ZTNA rule is active.",
           "is_correct": false
         }
@@ -1805,12 +1805,12 @@
       "correct_index": 1,
       "answer_letter": "B",
       "choice_word_counts": [
-        8,
+        13,
         14,
-        11,
-        11
+        13,
+        13
       ],
-      "choice_length_spread": 6
+      "choice_length_spread": 1
     }
   ]
 }
