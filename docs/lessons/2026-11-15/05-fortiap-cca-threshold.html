@@ -1,0 +1,31 @@
+<h3>Radio behavior and design purpose</h3>
+<p>Clear Channel Assessment (CCA) is the radio's carrier-sense decision about whether the medium is busy. The configurable CCA threshold changes how weak a received signal must be before the radio treats the channel as occupied and defers transmission. FortiOS 8.0 exposes <code>cca-threshold</code> under each radio in a FortiAP WTP profile and allows a per-AP override. The documented range is -94 to -11 dBm; value 0 means unconfigured, so the FortiAP uses the Wi-Fi driver's predefined value.</p>
+<p>A lower, more negative threshold makes the radio more sensitive to neighboring transmissions. It detects weaker energy, defers more often, and can reduce collisions, but it can also suppress useful transmissions and reduce throughput. A higher, less negative threshold ignores weaker neighboring signals and allows more spatial reuse, which can improve throughput in dense deployments. The trade-off is increased collision and hidden-node risk. CCA tuning is therefore a local contention-domain adjustment, not a transmit-power setting or channel-selection algorithm.</p>
+<h3>Configuration scope and precedence</h3>
+<p>The normal configuration belongs in the WTP profile, under the radio that should use the threshold. This lets the operator apply a consistent radio policy to a group of APs. A specific FortiAP can override the profile, but the override must be enabled; otherwise the profile remains the source of truth. This distinction matters when one AP has a different RF environment, such as a conference room next to a high-density auditorium.</p>
+<p>Use a small change set. Tune one band or radio group, record the current threshold, and compare airtime utilization, retries, channel occupancy, and client throughput before widening the change. A value that helps 5 GHz in a dense office may not be appropriate for 2.4 GHz in a low-density warehouse. Regulatory domain and hardware capabilities still constrain channels and power; CCA does not override those controls.</p>
+<pre><code>config wireless-controller wtp-profile
+    edit "FAP431F-default"
+        config radio-1
+            set cca-threshold "-72"
+        end
+        config radio-2
+            set cca-threshold "-70"
+        end
+    next
+end
+
+config wireless-controller wtp
+    edit "FP431FTF23099ZAZ"
+        config radio-1
+            set override-cca-threshold enable
+            set cca-threshold "-74"
+        end
+    next
+end</code></pre>
+<h3>Verification and evidence</h3>
+<p>From the FortiGate controller, run <code>diagnose wireless-controller wlac -c wtp</code> and inspect each radio's <code>cca_threshold</code>, WTP profile, and override state. From the FortiAP, run <code>cw_diag -c radio-cfg</code> and confirm the effective threshold for each radio. A profile containing -72 dBm is not proof that a specific AP is operating at -72 dBm if an override is enabled. The AP-side radio output is the best evidence of the value actually applied.</p>
+<p>Correlate the configured threshold with noise floor, channel utilization, retry counters, and client behavior. A lower threshold may reduce collision symptoms while increasing deferral and latency. A higher threshold may raise throughput but increase retries if hidden nodes cannot hear one another. A high channel-utilization number alone does not prove that CCA is misconfigured; it can also reflect legitimate airtime demand, interference, or a narrow channel plan.</p>
+<h3>Troubleshooting and boundaries</h3>
+<p>If the value is not taking effect, verify the WTP profile assigned to the AP, the radio section, and the per-device override flag. If the controller shows the expected profile but the AP reports a different value, inspect the override and confirm the AP has received the latest profile. If an AP is repeatedly leaving CAPWAP with a DTLS-peer-disconnected reason, investigate the control channel, reachability, and AP profile compatibility; changing CCA does not repair an IKE/DTLS or controller-liveness failure.</p>
+<p>The best starting point is the unconfigured driver default, then a measured adjustment based on the RF environment. Avoid copying a threshold across all radios simply because one cell improved. CCA is a local radio behavior that interacts with overlapping cells and hidden nodes, so validate both the tuned AP and neighboring APs after each change.</p>
