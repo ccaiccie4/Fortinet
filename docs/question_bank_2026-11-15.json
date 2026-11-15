@@ -1,0 +1,1414 @@
+{
+  "date": "2026-11-15",
+  "count": 50,
+  "graded": true,
+  "choice_feedback_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "product": "FortiGate",
+      "stem": "A downstream GTP-U node rejects inner fragments after an IPsec tunnel. Which change delivers a complete inner datagram?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Set ip-fragmentation post-encapsulation on both sending peers",
+          "feedback": "Correct: the receiver reassembles outer ESP fragments before decrypting, so the clear side receives the complete GTP-U packet."
+        },
+        {
+          "label": "B",
+          "text": "Increase the downstream host's UDP receive buffer first",
+          "feedback": "A larger socket buffer does not change where FortiGate fragments the inner packet; the downstream node still receives fragments."
+        },
+        {
+          "label": "C",
+          "text": "Enable NAT traversal and lower the ESP replay window",
+          "feedback": "NAT traversal changes ESP transport encapsulation and ports, not the pre/post fragmentation point."
+        },
+        {
+          "label": "D",
+          "text": "Disable NPU offload and leave pre-encapsulation enabled",
+          "feedback": "Disabling offload may change processing cost, but pre-encapsulation still forwards inner fragments to the downstream node."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q2",
+      "product": "FortiGate",
+      "stem": "Throughput falls after switching to post-encapsulation fragmentation. Which evidence best isolates receiver-side pressure?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Increase tunnel MTU and ignore fragment counters",
+          "feedback": "Increasing MTU may reduce fragmentation, but it does not identify HPE rate limiting or reassembly-memory exhaustion."
+        },
+        {
+          "label": "B",
+          "text": "Inspect HPE_IPSEC_ESP, HPE_IP_FRAG and ReasmFails",
+          "feedback": "Correct: HPE counters expose CPU protection drops, while ReasmFails indicates fragment reassembly trouble."
+        },
+        {
+          "label": "C",
+          "text": "Disable DLP inspection on the downstream policy",
+          "feedback": "DLP inspection is unrelated to outer ESP fragment reassembly and would not explain these counters."
+        },
+        {
+          "label": "D",
+          "text": "Lower the IPsec replay window to accept fragments",
+          "feedback": "Replay-window changes do not fix CPU rate limits or exhausted reassembly buffers."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q3",
+      "product": "FortiGate",
+      "stem": "Two FortiGates carry oversized traffic in both directions. Where must the fragmentation mode be configured?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Only on the receiver that decrypts traffic",
+          "feedback": "The receiver does not choose how the remote peer fragments before encryption; the encrypting side makes that decision."
+        },
+        {
+          "label": "B",
+          "text": "Only on the hub that owns the tunnel",
+          "feedback": "A hub-only setting leaves the opposite direction using the other peer's configured mode."
+        },
+        {
+          "label": "C",
+          "text": "On each peer when that peer encrypts traffic",
+          "feedback": "Correct: fragmentation is applied by the encrypting side, so configure each sender for its outbound direction."
+        },
+        {
+          "label": "D",
+          "text": "The mode is negotiated once during IKE establishment",
+          "feedback": "The setting is not negotiated as a single IKE parameter that automatically overrides both configurations."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q4",
+      "product": "FortiGate",
+      "stem": "A GTP-U packet exceeds the tunnel interface MTU before encryption. What happens even with post-encapsulation selected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The receiver reassembles it before any encryption",
+          "feedback": "Reassembly at the receiver cannot occur before the sender has encrypted and transmitted the packet."
+        },
+        {
+          "label": "B",
+          "text": "ESP bypasses the interface MTU after encryption",
+          "feedback": "ESP overhead can exceed the underlay MTU; it does not bypass the tunnel interface's inner MTU."
+        },
+        {
+          "label": "C",
+          "text": "Only TCP MSS adjustment controls GTP-U size",
+          "feedback": "MSS adjustment applies to TCP and does not control UDP GTP-U datagrams."
+        },
+        {
+          "label": "D",
+          "text": "The oversized inner packet fragments before IPsec processing",
+          "feedback": "Correct: packets larger than the tunnel interface MTU are fragmented before IPsec processing regardless of the post-encapsulation setting."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q5",
+      "product": "FortiManager",
+      "stem": "A package has a clock icon beside its name. What does that prove?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "A recurring schedule is attached to that policy package",
+          "feedback": "Correct: the clock indicator identifies an attached schedule; it proves intent, not execution success."
+        },
+        {
+          "label": "B",
+          "text": "Every selected FortiGate installed the latest revision",
+          "feedback": "Installation must be checked in Task Monitor and per-device results."
+        },
+        {
+          "label": "C",
+          "text": "The next run passed syntax verification on all devices",
+          "feedback": "A schedule can exist before the next run and before any device verification occurs."
+        },
+        {
+          "label": "D",
+          "text": "The package has no pending configuration differences",
+          "feedback": "Pending differences are separate from the existence of a schedule."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q6",
+      "product": "FortiManager",
+      "stem": "One device fails verification during a scheduled package install. What is the best next step?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Delete the schedule and repeat the same install",
+          "feedback": "Repeating the same task without correcting the device-specific cause will reproduce the failure."
+        },
+        {
+          "label": "B",
+          "text": "Inspect that device's verification report and unsupported command",
+          "feedback": "Correct: inspect the per-device verification output and identify the model or firmware command mismatch."
+        },
+        {
+          "label": "C",
+          "text": "Assume the package failed on every selected device",
+          "feedback": "FortiManager creates per-device results; one failure does not prove every target failed."
+        },
+        {
+          "label": "D",
+          "text": "Increase the schedule recurrence until installation succeeds",
+          "feedback": "Changing recurrence does not correct syntax or model compatibility."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q7",
+      "product": "FortiManager",
+      "stem": "Which fields define the recurring policy-package installation schedule?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "ADOM name, device serial, policy checksum and retries",
+          "feedback": "Those fields do not define the documented recurrence schedule."
+        },
+        {
+          "label": "B",
+          "text": "Package name, revision number, user role and timeout",
+          "feedback": "Package identity and user role matter elsewhere, but they are not the recurrence definition."
+        },
+        {
+          "label": "C",
+          "text": "Start date/time, recurrence pattern, targets and end date",
+          "feedback": "Correct: recurrence uses a start time, daily/weekly/monthly pattern, target devices and an end condition."
+        },
+        {
+          "label": "D",
+          "text": "Firmware version, interface address, tunnel name and SLA",
+          "feedback": "These are device or SD-WAN attributes, not schedule fields."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q8",
+      "product": "FortiManager",
+      "stem": "An operator edits a package after a recurring schedule is created. What should happen before its next run?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Assume the old preview remains valid indefinitely",
+          "feedback": "The preview can become stale when package content changes."
+        },
+        {
+          "label": "B",
+          "text": "Duplicate the schedule to capture the package change",
+          "feedback": "Duplicating the schedule risks overlapping installs and does not validate the changed package."
+        },
+        {
+          "label": "C",
+          "text": "Move every target device into another ADOM",
+          "feedback": "Moving devices between ADOMs is unrelated and may create additional scope problems."
+        },
+        {
+          "label": "D",
+          "text": "Reopen the package and verify the current install preview",
+          "feedback": "Correct: verify the current package and target set before the scheduled execution."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q9",
+      "product": "FortiAnalyzer",
+      "stem": "AI Access Visibility is empty immediately after an upgrade. What should be checked first?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Source authorization, log forwarding and required FortiGate log families",
+          "feedback": "Correct: the dashboard depends on authorized source devices and DLP, DNS, Web Filter and Application Control logs."
+        },
+        {
+          "label": "B",
+          "text": "Only the dashboard theme and browser cache",
+          "feedback": "Browser rendering cannot explain a missing source event pipeline."
+        },
+        {
+          "label": "C",
+          "text": "Only the FortiAnalyzer report schedule and output format",
+          "feedback": "Report scheduling is separate from the AI Access Visibility log aggregation."
+        },
+        {
+          "label": "D",
+          "text": "The user's password and the ADOM display name",
+          "feedback": "User authentication and ADOM naming do not prove that source logs are arriving."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "stem": "The Categories widget labels an AI application as sanctioned. Where does that label originate?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "FortiAnalyzer infers it from user browsing duration",
+          "feedback": "Browsing duration is not the documented source of the sanctioned attribute."
+        },
+        {
+          "label": "B",
+          "text": "FortiGate configuration supplies the sanctioned classification",
+          "feedback": "Correct: the sanctioned/unsanctioned label is supplied through FortiGate configuration or metadata."
+        },
+        {
+          "label": "C",
+          "text": "FortiGuard automatically approves every application in that category",
+          "feedback": "Category classification and sanctioned status are different concepts."
+        },
+        {
+          "label": "D",
+          "text": "The user identity provider writes the dashboard label",
+          "feedback": "Identity providers do not author this FortiGate application classification."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "stem": "Application activity appears, but the DLP threat widget remains empty. What is the best check?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Rebuild the ADOM database before checking policies",
+          "feedback": "Rebuilding the database is disproportionate before validating source DLP logs."
+        },
+        {
+          "label": "B",
+          "text": "Change the dashboard refresh interval to one minute",
+          "feedback": "Refresh frequency changes display timing, not the existence of DLP events."
+        },
+        {
+          "label": "C",
+          "text": "Verify DLP sensor coverage and event logging on FortiGate",
+          "feedback": "Correct: DLP requires an applied sensor and logging of the relevant actions."
+        },
+        {
+          "label": "D",
+          "text": "Disable Application Control to force DLP events",
+          "feedback": "Application Control is a separate log source and disabling it does not create DLP events."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "stem": "Collector forwarding is disconnected and server-auth state remains Query after upgrade. What is indicated?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The AI category taxonomy is missing a sanctioned label",
+          "feedback": "AI category taxonomy does not control the Collector's transport authentication state."
+        },
+        {
+          "label": "B",
+          "text": "The dashboard has reached its maximum widget count",
+          "feedback": "Widget count does not affect Collector-to-Analyzer authentication."
+        },
+        {
+          "label": "C",
+          "text": "The DLP sensor is matching too many documents",
+          "feedback": "DLP match volume does not explain a disconnected forwarding channel."
+        },
+        {
+          "label": "D",
+          "text": "The source transport or certificate identity check is failing",
+          "feedback": "Correct: inspect the Collector certificate common name, trust and forwarding connection before troubleshooting dashboard widgets."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "stem": "FortiSwitchOS automatic system-time mode selects sources in which order?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "PTP, then NTP, then manual local time",
+          "feedback": "Correct: automatic mode prefers PTP, falls back to NTP, then uses manual local time."
+        },
+        {
+          "label": "B",
+          "text": "NTP, then manual local time, then PTP",
+          "feedback": "NTP is second, not first, when a valid PTP source exists."
+        },
+        {
+          "label": "C",
+          "text": "Manual local time, then PTP, then NTP",
+          "feedback": "Manual time is the last fallback, not the preferred source."
+        },
+        {
+          "label": "D",
+          "text": "PTP, then manual local time, then NTP",
+          "feedback": "Manual time follows NTP, not PTP."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "stem": "An NTP server responds, but the switch still uses another clock source. What proves selection?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The NTP server's DNS record and ping response",
+          "feedback": "Reachability shows the server can be contacted, not that automatic arbitration selected it."
+        },
+        {
+          "label": "B",
+          "text": "The saved NTP configuration in the GUI only",
+          "feedback": "Correct: inspect live synchronization status and the selected source, not only saved configuration."
+        },
+        {
+          "label": "C",
+          "text": "The configured NTP polling interval value",
+          "feedback": "A polling interval does not identify which source currently disciplines the clock."
+        },
+        {
+          "label": "D",
+          "text": "Diagnose sys ntp status and the selected source",
+          "feedback": "A GUI configuration screenshot does not prove current source selection."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "stem": "SNMPv3 reports USM not in time window while credentials are correct. What is most likely?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The SNMP view excludes the requested interface",
+          "feedback": "An SNMP view controls accessible objects, not the USM time-window check."
+        },
+        {
+          "label": "B",
+          "text": "The switch has no DNS record for its hostname",
+          "feedback": "DNS may affect name resolution but does not explain a time-window rejection after packets reach the agent."
+        },
+        {
+          "label": "C",
+          "text": "The switch and manager clocks have excessive skew",
+          "feedback": "Correct: compare engine time, stratum and clock offset on both systems."
+        },
+        {
+          "label": "D",
+          "text": "The community string has the wrong capitalization",
+          "feedback": "SNMPv3 uses user security parameters, not the SNMPv2c community string."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "stem": "PTP becomes invalid while an NTP candidate remains valid in automatic mode. What should occur?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The switch stays on PTP until reboot",
+          "feedback": "Automatic selection is intended to use the highest-priority valid source, not pin an invalid PTP source."
+        },
+        {
+          "label": "B",
+          "text": "The switch disables all time-dependent services",
+          "feedback": "Loss of PTP does not require disabling SNMP, logs or scheduled services."
+        },
+        {
+          "label": "C",
+          "text": "The switch switches directly to manual local time",
+          "feedback": "Manual local time is the last fallback when NTP is also unavailable."
+        },
+        {
+          "label": "D",
+          "text": "The selector falls back to the valid NTP source",
+          "feedback": "Correct: NTP is the next valid source after PTP."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP/Wireless",
+      "stem": "A maintenance window must stop every SSID on radio 2 but preserve configuration. Which setting fits?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Delete each VAP from the shared WTP profile",
+          "feedback": "Deleting VAPs destroys the retained configuration the maintenance task is trying to preserve."
+        },
+        {
+          "label": "B",
+          "text": "Set vap-status disable under the radio profile",
+          "feedback": "Correct: vap-status suppresses all configured VAP broadcasts on that radio while retaining assignments."
+        },
+        {
+          "label": "C",
+          "text": "Remove the SSID objects from the WLAN database",
+          "feedback": "Deleting SSID objects makes restoration a reconstruction task."
+        },
+        {
+          "label": "D",
+          "text": "Disable the CAPWAP tunnel for the affected APs",
+          "feedback": "CAPWAP shutdown removes controller connectivity rather than only stopping radio VAP broadcasts."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "stem": "One AP keeps advertising an SSID after the shared profile disables radio 2. What should be inspected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The RADIUS server's accounting-stop timer",
+          "feedback": "Accounting timers do not determine radio broadcast state."
+        },
+        {
+          "label": "B",
+          "text": "The AP's per-device override-vap-status setting",
+          "feedback": "Correct: a per-device override can take precedence over the shared WTP profile."
+        },
+        {
+          "label": "C",
+          "text": "The FortiAnalyzer ADOM's log retention setting",
+          "feedback": "Log retention has no effect on whether an AP advertises a VAP."
+        },
+        {
+          "label": "D",
+          "text": "The DHCP server's lease-time configuration",
+          "feedback": "DHCP lease time affects client addressing after association, not beacon transmission."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "stem": "The SSID beacon disappears, but the AP remains connected to the controller. What does this suggest?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The AP has lost PoE and powered down",
+          "feedback": "A powered-down AP cannot remain connected to the controller."
+        },
+        {
+          "label": "B",
+          "text": "The CAPWAP tunnel has been deleted",
+          "feedback": "A deleted CAPWAP tunnel would remove controller connectivity."
+        },
+        {
+          "label": "C",
+          "text": "The radio's VAP broadcast state is disabled",
+          "feedback": "Correct: VAP broadcast can be disabled while SSID objects and CAPWAP control remain present."
+        },
+        {
+          "label": "D",
+          "text": "The SSID security profile has been removed",
+          "feedback": "A removed security profile is not required to stop beacon advertisement."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "stem": "APs repeatedly leave and rejoin with DTLS peer-disconnected messages. What is the right focus?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Recreate every SSID before checking connectivity",
+          "feedback": "SSID recreation does not repair a CAPWAP control-path failure."
+        },
+        {
+          "label": "B",
+          "text": "Change the radio's VAP status to enabled",
+          "feedback": "VAP status controls WLAN advertisement, not DTLS peer liveness."
+        },
+        {
+          "label": "C",
+          "text": "Increase the DHCP lease time for wireless clients",
+          "feedback": "DHCP lease duration is unrelated to CAPWAP keepalive loss."
+        },
+        {
+          "label": "D",
+          "text": "Inspect CAPWAP keepalives, DTLS and uplink captures",
+          "feedback": "Correct: investigate the AP/controller transport path and missed keepalive responses."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "stem": "A newly connected endpoint should be visible by device type. Which widget answers that?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Recent Hosts",
+          "feedback": "Correct: Recent Hosts shows newly discovered hosts grouped by type."
+        },
+        {
+          "label": "B",
+          "text": "Top Host Activity",
+          "feedback": "Top Host Activity ranks connection activity, not newly discovered device types."
+        },
+        {
+          "label": "C",
+          "text": "Logical Network Access",
+          "feedback": "Logical Network Access shows hosts associated with a logical network during a period."
+        },
+        {
+          "label": "D",
+          "text": "RADIUS",
+          "feedback": "RADIUS shows authentication success/failure events."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "stem": "One endpoint generates unusually frequent connections during the last hour. Which widget is most useful?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Recent Hosts",
+          "feedback": "Recent Hosts answers discovery timing, not connection-volume ranking."
+        },
+        {
+          "label": "B",
+          "text": "Top Host Activity",
+          "feedback": "Correct: Top Host Activity ranks hosts by connection activity over the selected period."
+        },
+        {
+          "label": "C",
+          "text": "Logical Network Access",
+          "feedback": "Logical Network Access shows host-to-network association, not activity ranking."
+        },
+        {
+          "label": "D",
+          "text": "RADIUS",
+          "feedback": "RADIUS summarizes authentication outcomes, not general connection activity."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "stem": "An auditor asks which hosts accessed a specific logical network yesterday. Which view fits?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Recent Hosts",
+          "feedback": "Recent Hosts is about newly discovered endpoints."
+        },
+        {
+          "label": "B",
+          "text": "Top Host Activity",
+          "feedback": "Top Host Activity ranks connection events, not membership in a logical network."
+        },
+        {
+          "label": "C",
+          "text": "Logical Network Access",
+          "feedback": "Correct: Logical Network Access lists hosts associated with each logical network over a chosen period."
+        },
+        {
+          "label": "D",
+          "text": "RADIUS",
+          "feedback": "RADIUS counts authentication outcomes and does not directly answer logical-network access."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "stem": "RADIUS successes are high, but endpoints still land in the wrong logical network. What next?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Assume Access-Accept proves the VLAN was applied",
+          "feedback": "Access-Accept proves authentication acceptance, not successful VLAN/role application."
+        },
+        {
+          "label": "B",
+          "text": "Clear all Recent Hosts entries and retry",
+          "feedback": "Clearing discovery data removes evidence and does not fix mapping."
+        },
+        {
+          "label": "C",
+          "text": "Increase the Top Host Activity time window",
+          "feedback": "Activity window changes do not correct authorization attributes."
+        },
+        {
+          "label": "D",
+          "text": "Correlate RADIUS attributes with host and network-device state",
+          "feedback": "Correct: inspect returned role/VLAN attributes and verify the network device applied them."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "stem": "The goal is to cap simultaneous authenticated endpoint sessions. Which counter should be selected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Registered Host",
+          "feedback": "Registered Host limits how many endpoints are registered, not necessarily active now."
+        },
+        {
+          "label": "B",
+          "text": "Logged in Host",
+          "feedback": "Logged in Host is the right counter, so this choice would measure active sessions instead of registered devices."
+        },
+        {
+          "label": "C",
+          "text": "Recent Host",
+          "feedback": "Recent Host is a discovery widget, not a FortiNAC-F concurrent-session counter."
+        },
+        {
+          "label": "D",
+          "text": "Top Host Activity",
+          "feedback": "Top Host Activity is a dashboard metric, not a session-limit type."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "stem": "A user has a global limit of two but an individual limit of four. Which applies?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The lower value always wins across all scopes",
+          "feedback": "FortiNAC-F documents individual-user precedence rather than a minimum-value rule."
+        },
+        {
+          "label": "B",
+          "text": "The individual user's limit overrides the global limit",
+          "feedback": "Correct: the per-user value overrides the global value for that user."
+        },
+        {
+          "label": "C",
+          "text": "The global limit overrides every user setting",
+          "feedback": "Global settings apply when no individual override takes precedence."
+        },
+        {
+          "label": "D",
+          "text": "The two values are added to create six sessions",
+          "feedback": "Limits are not additive."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "stem": "An administrator wants a separate concurrent-session cap for a user group. What is supported?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Create a group policy under Allowed Hosts",
+          "feedback": "FortiNAC-F does not expose the feature at user-group scope."
+        },
+        {
+          "label": "B",
+          "text": "Set the group cap in RADIUS accounting",
+          "feedback": "RADIUS accounting supplies session evidence, not a FortiNAC group limit object."
+        },
+        {
+          "label": "C",
+          "text": "Use per-user overrides because group-level limits are unavailable",
+          "feedback": "Correct: configure a global default and individual-user overrides; no group-level setting is available."
+        },
+        {
+          "label": "D",
+          "text": "Set the limit on every access switch port",
+          "feedback": "Port-level limits do not implement the documented FortiNAC-F user-session policy."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "stem": "FortiNAC sends Disconnect-Request, but the NAS returns Disconnect-NAK. What does that prove?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The user session has ended successfully",
+          "feedback": "A successful session end would require an accepted disconnect or subsequent stop evidence."
+        },
+        {
+          "label": "B",
+          "text": "The accounting stop was received and stored",
+          "feedback": "Disconnect-NAK is not an Accounting-Stop message."
+        },
+        {
+          "label": "C",
+          "text": "The host was deleted from FortiNAC",
+          "feedback": "Host deletion is not implied by a rejected request."
+        },
+        {
+          "label": "D",
+          "text": "The NAS rejected the disconnect request",
+          "feedback": "Correct: inspect missing session-identifying attributes and confirm the NAS later ends the session."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "stem": "An RSA certificate is rejected after the SHA-1 removal notice. What must be inspected first?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The certificate's signature digest algorithm",
+          "feedback": "Correct: SHA-1 can be the certificate signature digest even when the public key is RSA."
+        },
+        {
+          "label": "B",
+          "text": "The RSA public-key length alone",
+          "feedback": "Key length does not identify the digest used to sign the certificate."
+        },
+        {
+          "label": "C",
+          "text": "The certificate's friendly name only",
+          "feedback": "A friendly name is a local label, not a cryptographic property."
+        },
+        {
+          "label": "D",
+          "text": "The subject's organizational unit field",
+          "feedback": "The organizational unit is subject metadata, not the signature algorithm."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "stem": "A certificate chain uses SHA-1 signing. What is the preferred migration?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Increase RSA key size but keep SHA-1",
+          "feedback": "A larger RSA key does not remove SHA-1 from the certificate signature."
+        },
+        {
+          "label": "B",
+          "text": "Reissue certificates with SHA-256 or stronger",
+          "feedback": "Correct: reissue affected certificates and chains using a supported SHA-2-or-stronger digest."
+        },
+        {
+          "label": "C",
+          "text": "Change the certificate subject without reissuing",
+          "feedback": "Changing the subject field does not change the signature digest."
+        },
+        {
+          "label": "D",
+          "text": "Disable certificate validation on relying systems",
+          "feedback": "Disabling validation weakens authentication rather than fixing the chain."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "stem": "A Mobility Agent reports NT_STATUS_MORE_PROCESSING_REQUIRED after a Windows update. What should not be assumed?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "That the certificate signature uses SHA-1",
+          "feedback": "Correct: NTLM signing/negotiation is separate from X.509 SHA-1 certificate-signature processing."
+        },
+        {
+          "label": "B",
+          "text": "That the agent reached the domain controller",
+          "feedback": "Reachability may be relevant, but it is not the only possible cause."
+        },
+        {
+          "label": "C",
+          "text": "That the error belongs to NTLM negotiation",
+          "feedback": "The error is associated with the NTLM exchange and should be investigated at that layer."
+        },
+        {
+          "label": "D",
+          "text": "That the FAC version is relevant",
+          "feedback": "FAC and agent compatibility can matter for this separate authentication workflow."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "stem": "An integration cannot yet move off SHA-1 before upgrade. What is the documented fallback?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Disable all certificate authentication permanently",
+          "feedback": "Disabling all certificate authentication is not the documented fallback and may break unrelated services."
+        },
+        {
+          "label": "B",
+          "text": "Replace the FAC appliance with a RADIUS proxy",
+          "feedback": "A RADIUS proxy does not restore SHA-1 signing support on FAC."
+        },
+        {
+          "label": "C",
+          "text": "Ignore the warning and upgrade without testing",
+          "feedback": "Ignoring the notice risks breaking dependent cryptographic operations."
+        },
+        {
+          "label": "D",
+          "text": "Use the vendor-documented 6.5.3 compatibility fallback",
+          "feedback": "Correct: Fortinet documents 6.5.3 as the fallback if SHA-1 support is indispensable; migration remains preferable."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "stem": "An auto-provisioned user has been inactive past the first threshold. What happens?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The user is disabled and a User Event is logged",
+          "feedback": "Correct: the inactivity stage disables the auto-provisioned account and records a system event."
+        },
+        {
+          "label": "B",
+          "text": "The user is immediately deleted from the database",
+          "feedback": "Deletion is the second stage after the disabled-retention timer."
+        },
+        {
+          "label": "C",
+          "text": "The user is converted into a manual local account",
+          "feedback": "The feature does not convert account provisioning type."
+        },
+        {
+          "label": "D",
+          "text": "The user's secrets are automatically transferred to admin",
+          "feedback": "The documentation does not promise automatic secret ownership transfer."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "stem": "A disabled auto-provisioned user remains for another retention period. Which setting controls deletion?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "User Max Inactivity Days",
+          "feedback": "User Max Inactivity Days controls the first disable stage, not purge after disable."
+        },
+        {
+          "label": "B",
+          "text": "User Max Disabled Days",
+          "feedback": "Correct: User Max Disabled Days defines how long a disabled provisioned user remains before deletion."
+        },
+        {
+          "label": "C",
+          "text": "Password Expiry Warning Days",
+          "feedback": "Password warning settings do not control user-account lifecycle."
+        },
+        {
+          "label": "D",
+          "text": "Session Recording Retention Days",
+          "feedback": "Session recording retention is separate from user cleanup."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "stem": "An organization sets User Max Disabled Days to zero. What is the effect?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Disabled users are purged immediately",
+          "feedback": "Zero does not mean immediate deletion; it disables that stage."
+        },
+        {
+          "label": "B",
+          "text": "All manual users are disabled after one day",
+          "feedback": "Manual users are outside this auto-provisioned cleanup policy."
+        },
+        {
+          "label": "C",
+          "text": "The automatic deletion stage is disabled",
+          "feedback": "Correct: a value of zero disables automatic purge of disabled users."
+        },
+        {
+          "label": "D",
+          "text": "The inactivity timer changes to zero hours",
+          "feedback": "The setting is a day-count threshold, not a time-of-day conversion."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "stem": "A manually created local user remains after the purge threshold. Is that expected?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "No, every user type shares the same purge policy",
+          "feedback": "The feature is not a universal deletion policy for every user."
+        },
+        {
+          "label": "B",
+          "text": "No, the user must first be disabled by RADIUS",
+          "feedback": "RADIUS disablement is not the criterion for this lifecycle feature."
+        },
+        {
+          "label": "C",
+          "text": "Only users with secrets are exempt from purge",
+          "feedback": "Secret ownership is not the documented scope selector."
+        },
+        {
+          "label": "D",
+          "text": "Yes, the cleanup applies to auto-provisioned users",
+          "feedback": "Correct: verify the account's provisioning source; manual users are not the auto-provisioned cleanup target."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "stem": "An Event Log Integrity row reports Success. What does that prove?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The stored checksum matches the recalculated checksum",
+          "feedback": "Correct: Success indicates the checksum comparison matched for that partition."
+        },
+        {
+          "label": "B",
+          "text": "The original event source was truthful and complete",
+          "feedback": "Checksum integrity does not validate the truth of the source event."
+        },
+        {
+          "label": "C",
+          "text": "No event was deleted before archive creation",
+          "feedback": "The feature cannot prove that no event was deleted before the archive existed."
+        },
+        {
+          "label": "D",
+          "text": "The entire ClickHouse cluster has a current backup",
+          "feedback": "Event integrity is not a backup-status report."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "stem": "The Event Integrity view reports Not Found for a partition. What is the right interpretation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The checksum matched and validation succeeded",
+          "feedback": "Success is the status for a matching checksum."
+        },
+        {
+          "label": "B",
+          "text": "The partition is missing or detached",
+          "feedback": "Correct: Not Found indicates the event partition/log file is absent or detached."
+        },
+        {
+          "label": "C",
+          "text": "The validator encountered a shell parsing error",
+          "feedback": "System Error represents a validator execution or parsing problem."
+        },
+        {
+          "label": "D",
+          "text": "The event has not yet been validated",
+          "feedback": "Not Validated is the status for a check that has not run."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "stem": "Why is automatic Event Log Integrity validation off by default?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It is supported only on Elasticsearch",
+          "feedback": "Fortinet documents the feature for ClickHouse, not Elasticsearch."
+        },
+        {
+          "label": "B",
+          "text": "It prevents manual validation from running",
+          "feedback": "Manual validation remains available independently of automatic validation."
+        },
+        {
+          "label": "C",
+          "text": "It is resource-intensive during ClickHouse consolidation",
+          "feedback": "Correct: automatic checks run at consolidation and consume resources."
+        },
+        {
+          "label": "D",
+          "text": "It deletes the checksum after each validation",
+          "feedback": "The checksum is used for comparison; it is not simply deleted after validation."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "stem": "Partition name and validation status are blank for a ClickHouse event row. What should be checked?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Whether the user has a valid MFA token",
+          "feedback": "MFA does not explain a missing ClickHouse partition name."
+        },
+        {
+          "label": "B",
+          "text": "Whether the firewall policy permits DNS",
+          "feedback": "Firewall DNS policy is unrelated to the database consolidation state."
+        },
+        {
+          "label": "C",
+          "text": "Whether the event rule has a severity value",
+          "feedback": "Event severity does not determine partition consolidation."
+        },
+        {
+          "label": "D",
+          "text": "Whether storage pressure prevented ClickHouse consolidation",
+          "feedback": "Correct: insufficient storage can prevent consolidation and leave those fields blank."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "stem": "A FortiExtender management address overlaps a customer LAN. Which setting is relevant?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FortiExtender/LAN Extension control-plane subnet",
+          "feedback": "Correct: the dedicated control-plane subnet allocates management addresses to FortiExtender/LAN Extension."
+        },
+        {
+          "label": "B",
+          "text": "The remote-agent IPAM pool for VPN clients",
+          "feedback": "Remote-agent IPAM is a separate pool and does not solve this control-plane collision."
+        },
+        {
+          "label": "C",
+          "text": "The browser isolation profile for web access",
+          "feedback": "Browser isolation has no effect on FortiExtender management addressing."
+        },
+        {
+          "label": "D",
+          "text": "The endpoint posture tag for device compliance",
+          "feedback": "Posture tags do not allocate control-plane addresses."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "stem": "A custom control-plane subnet reverts after a BGP configuration save. What is documented?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The IPAM pool is automatically merged with BGP",
+          "feedback": "IPAM is a separate address-management feature."
+        },
+        {
+          "label": "B",
+          "text": "The BGP save resets the control-plane subnet to default",
+          "feedback": "Correct: Fortinet documents a caveat where saving BGP restores the default control-plane subnet."
+        },
+        {
+          "label": "C",
+          "text": "The FortiExtender retains the old address indefinitely",
+          "feedback": "Do not assume the old custom subnet remains active after the save."
+        },
+        {
+          "label": "D",
+          "text": "The custom subnet is moved into the agent pool",
+          "feedback": "The feature does not move the control-plane range into the remote-agent pool."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "stem": "After a custom control-plane subnet is applied, what happens to the old 10.253.0.0/16 reservation?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It becomes the new default control-plane subnet",
+          "feedback": "The default control-plane subnet remains 10.252.0.0/16."
+        },
+        {
+          "label": "B",
+          "text": "It remains reserved for every FortiExtender",
+          "feedback": "Fortinet documents that the old reservation is removed after customization."
+        },
+        {
+          "label": "C",
+          "text": "It is removed from the previous reserved set",
+          "feedback": "Correct: the former 10.253.0.0/16 reservation is removed when a custom control-plane subnet is configured."
+        },
+        {
+          "label": "D",
+          "text": "It becomes the remote-agent pool automatically",
+          "feedback": "The remote-agent pool is configured separately and is not automatically replaced."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "stem": "A remote agent needs a different address pool. Which area should be changed?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The FortiExtender control-plane subnet under Advanced",
+          "feedback": "The control-plane subnet is for FortiExtender/LAN Extension management addresses."
+        },
+        {
+          "label": "B",
+          "text": "The BGP router ID on the SPA tunnel",
+          "feedback": "BGP router IDs identify routing speakers; they do not allocate remote-agent addresses."
+        },
+        {
+          "label": "C",
+          "text": "The LAN Extension management subnet only",
+          "feedback": "LAN Extension management addressing is not the remote-agent IPAM pool."
+        },
+        {
+          "label": "D",
+          "text": "The remote-agent IPAM pool and exclusions",
+          "feedback": "Correct: remote-agent and edge-endpoint pools are managed separately under IPAM."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "stem": "FortiOS 8.0 removes the old speed-test retry parameters. What replaces their behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "FortiGate/backend coordination handles retries",
+          "feedback": "Correct: the new coordination mechanism manages retry behavior between FortiGate and the backend."
+        },
+        {
+          "label": "B",
+          "text": "The interface shaper retries each failed test",
+          "feedback": "Interface shaping controls traffic rates, not the test retry scheduler."
+        },
+        {
+          "label": "C",
+          "text": "The administrator must configure a retry cron job",
+          "feedback": "A separate cron job is not the documented replacement."
+        },
+        {
+          "label": "D",
+          "text": "The speed-test server disables all retries",
+          "feedback": "The server does not simply disable all retries."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "stem": "A speed test completes, but production shaping still uses the manual value. What is missing?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The test schedule needs another weekly occurrence",
+          "feedback": "Another schedule does not change which bandwidth source the interface uses."
+        },
+        {
+          "label": "B",
+          "text": "The interface bandwidth source must select measured",
+          "feedback": "Correct: measured values must be selected by inbandwidth-source/outbandwidth-source."
+        },
+        {
+          "label": "C",
+          "text": "The tunnel must switch from IPsec to GRE",
+          "feedback": "Changing tunnel encapsulation is not required for measured bandwidth selection."
+        },
+        {
+          "label": "D",
+          "text": "The test server needs a larger TCP window",
+          "feedback": "TCP window tuning does not select the measured interface bandwidth."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "stem": "A minimum value of 20,000 is intended as kbps. What must be verified?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "The BGP local preference on the WAN member",
+          "feedback": "BGP local preference does not define speed-test min/max units."
+        },
+        {
+          "label": "B",
+          "text": "The policy package's ADOM revision number",
+          "feedback": "ADOM revision numbers are unrelated to the speed-test value interpretation."
+        },
+        {
+          "label": "C",
+          "text": "The speed-test bandwidth-limit unit",
+          "feedback": "Correct: the default unit is kbps, but the configured unit can be percentage."
+        },
+        {
+          "label": "D",
+          "text": "The FortiAnalyzer ADOM timezone",
+          "feedback": "ADOM time zone does not change bandwidth-unit semantics."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "stem": "Which statement correctly describes speed-test traffic in FortiOS 8.0?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "It always uses the ordinary interface shaper",
+          "feedback": "The speed-test traffic does not use the ordinary interface shaper."
+        },
+        {
+          "label": "B",
+          "text": "It bypasses every configured bandwidth limit",
+          "feedback": "It still observes speed-test-specific minimum and maximum settings."
+        },
+        {
+          "label": "C",
+          "text": "It is shaped only by the VPN traffic class",
+          "feedback": "VPN traffic classes are not the only control point."
+        },
+        {
+          "label": "D",
+          "text": "It bypasses normal shaping but respects test caps",
+          "feedback": "Correct: test traffic bypasses ordinary shaping but remains bounded by speed-test min/max controls."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "id": "Q49",
+      "product": "Secure SD-WAN",
+      "stem": "A VPN speed test reports throughput. Which command helps prove shaping consumed it?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "diagnose vpn tunnel list and inspect egress traffic control bandwidth",
+          "feedback": "Correct: tunnel output exposes the egress traffic-control bandwidth applied to the overlay."
+        },
+        {
+          "label": "B",
+          "text": "diagnose debug application ike and inspect proposal selection",
+          "feedback": "IKE proposal output proves negotiation, not the shaping value."
+        },
+        {
+          "label": "C",
+          "text": "diagnose sys ntp status and inspect selected time source",
+          "feedback": "NTP status is unrelated to speed-test shaping."
+        },
+        {
+          "label": "D",
+          "text": "diagnose firewall iprope list and inspect policy order",
+          "feedback": "Policy order does not show measured bandwidth selection."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "id": "Q50",
+      "product": "Secure SD-WAN",
+      "stem": "An operator runs a manual speed test. Does that automatically change shaping?",
+      "choices": [
+        {
+          "label": "A",
+          "text": "Yes, every test forces both bandwidth sources to measured",
+          "feedback": "The interface does not automatically switch its bandwidth source after every test."
+        },
+        {
+          "label": "B",
+          "text": "No, interface source selection still controls effective shaping",
+          "feedback": "Correct: a test can update measured fields, but source selection determines whether shaping uses them."
+        },
+        {
+          "label": "C",
+          "text": "Yes, but only when BGP is disabled on the tunnel",
+          "feedback": "BGP state is not the condition for measured source selection."
+        },
+        {
+          "label": "D",
+          "text": "No, because manual tests never update measured fields",
+          "feedback": "Manual tests can update measured fields; they simply do not guarantee shaping uses them."
+        }
+      ],
+      "correct": "B"
+    }
+  ]
+}
