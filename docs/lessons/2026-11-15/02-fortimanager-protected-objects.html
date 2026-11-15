@@ -1,0 +1,24 @@
+<h3>Purpose and security boundary</h3>
+<p>Protected object permissions add an object-level change-control boundary inside FortiManager. An administrator with the Protected Objects permission can mark selected policy packages, firewall policies, and policy objects as protected. Other administrators who do not have that permission receive read-only access to the protected item. Crucially, they can still select and reference a protected object when building a policy. The feature therefore separates the authority to change a shared object from the authority to consume it.</p>
+<p>This is not the same as ADOM access, workspace mode, policy locking, or a global read-only administrator profile. A user may have normal write access to other objects in the ADOM while being blocked from modifying only the protected subset. Conversely, the protection is not a replacement for an approval workflow: an administrator who has Protected Objects permission can still change the protected item.</p>
+<h3>Enablement and transaction flow</h3>
+<p>FortiManager 8.0 requires two layers to be configured before the feature can be used. First, the global GUI visibility switch must be enabled so the Protected Objects controls are exposed. Second, an administrator profile must include Protected Objects permission and that profile must be assigned to the administrator who will designate protected items. That privileged administrator then edits a policy package, enables the Protected option on a policy, or protects a policy object. The Protected column provides a visible state in the policy table.</p>
+<p>When another administrator opens the protected object, FortiManager suppresses the editable Protected toggle and prevents changes from being saved. The same administrator can still use the object in a policy package. That distinction is operationally important: the object remains part of the configuration graph, but its definition is guarded.</p>
+<pre><code>config system global
+    set gui-object-protect enable
+end
+
+config system admin profile
+    edit "policy-consumer"
+        set protected-objects disable
+    next
+    edit "object-owner"
+        set protected-objects enable
+    next
+end</code></pre>
+<h3>Verification and evidence</h3>
+<p>Verify the global <code>gui-object-protect</code> setting and inspect the administrator profile assigned to the test user; checking an unassigned profile is not sufficient. In Policy &amp; Objects, the protected item should show Enabled in the Protected column. Test with two accounts: the owner account should be able to set or clear protection and edit the object; the consumer account should be able to select the object in a policy but should not see the protection toggle or be able to save a change to the object definition.</p>
+<p>A successful policy install using the protected object proves that the object can be consumed by the package. It does not prove that the object is protected from edits. Conversely, an edit failure alone does not prove the feature is configured correctly; the user may simply lack ordinary ADOM or object permissions. Verify the specific Protected Objects permission and the protected state.</p>
+<h3>Troubleshooting and operational use</h3>
+<p>If the Protected option is missing for every administrator, check <code>gui-object-protect</code> first. If the option is visible to one administrator but not another, compare their assigned admin profiles and confirm the profile is attached to the account in the relevant ADOM context. If an administrator can edit an item that should be protected, verify that the item itself was marked protected and that the administrator does not have the Protected Objects permission. Do not troubleshoot this as a device-side FortiGate policy problem; the control is enforced in the FortiManager management plane.</p>
+<p>Use the feature for baseline objects such as approved address groups, shared service objects, and centrally governed firewall policies. Keep a documented owner group with the ability to protect and unprotect objects, and a separate consumer group that can reference them. Before a major upgrade or role redesign, test both personas because profile variables and global GUI settings are version-sensitive. Protected status does not validate the semantics of the object or guarantee that the resulting policy is safe; it only limits who can modify the protected definition.</p>
