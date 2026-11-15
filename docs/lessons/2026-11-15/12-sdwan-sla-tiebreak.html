@@ -1,0 +1,25 @@
+<h3>Where tie-break occurs</h3>
+<p>An SD-WAN service rule can have multiple members that satisfy the configured performance SLA. Once more than one member is eligible, FortiOS needs a deterministic method to choose among those healthy candidates. The zone-level <code>service-sla-tie-break</code> setting defines that choice. The default <code>cfg-order</code> selects SLA-qualified members in the order they are configured. <code>fib-best-match</code> selects the eligible member whose route best matches the destination using the longest prefix in the forwarding information base (FIB).</p>
+<p>Tie-break is not the same as SLA measurement. The health-check/SLA logic first determines which members qualify; tie-break then chooses among the qualifying members. It is also not a replacement for the SD-WAN service-rule order, policy route, or firewall policy. A packet can match a service rule and still be forwarded differently if the candidate set or FIB lookup differs from the engineer's assumptions.</p>
+<h3>Zone and service-rule configuration</h3>
+<p>The FortiOS 8.0 CLI reference exposes <code>service-sla-tie-break</code> under <code>config system sdwan</code> and <code>config zone</code>. Supported values include <code>cfg-order</code>, <code>fib-best-match</code>, <code>priority</code>, and <code>input-device</code>. At the service-rule level, <code>tie-break zone</code> uses the setting configured on the member's zone; the service can also select a tie-break method directly. Keep the service-level and zone-level configuration aligned so that the effective behavior is predictable.</p>
+<p>With <code>fib-best-match</code>, the FIB route for the destination influences which SLA-qualified member is selected. That makes routing-table contents part of the SD-WAN decision. If the desired member's more-specific route is absent, or if that member is not included in the service's eligible member list, the expected choice cannot occur. Do not assume that a static route visible in a policy-route table is equivalent to a native FIB route.</p>
+<pre><code>config system sdwan
+    config zone
+        edit "virtual-wan-link"
+            set service-sla-tie-break fib-best-match
+        next
+    end
+    config service
+        edit 10
+            set name "business-apps"
+            set tie-break zone
+        next
+    end
+end</code></pre>
+<h3>Selection behavior and evidence</h3>
+<p>The CLI reference defines four behaviors. <code>cfg-order</code> uses configured member order. <code>fib-best-match</code> uses the longest-prefix match in the routing table among SLA-qualified members. <code>priority</code> reselects based on the link-cost-factor. <code>input-device</code> selects by matching the ingress device. These methods solve different design problems: deterministic preference, destination-specific route affinity, cost/quality ranking, or ingress-based symmetry.</p>
+<p>Verify the health-check status first, then inspect the service rule's eligible members and tie-break setting, then inspect the FIB route for the destination. Use the route table display to confirm the best route, and capture packets on candidate interfaces to prove which member carried the session. A route lookup alone does not prove the service rule selected that member; the service-rule and SLA state must also be checked.</p>
+<h3>Troubleshooting and operational caveats</h3>
+<p>If the wrong member is selected, do not immediately change SLA thresholds. Confirm that the expected members are all eligible, that the service rule matches the intended source/destination, and that the tie-break method is applied at the service or zone scope you expect. With FIB best-match, ensure the desired members are referenced by the rule and that the native routing table contains the specific route. A default route can win when no more-specific route exists.</p>
+<p>The recent Community report about implicit-rule spillover after an ingress threshold is exceeded describes a different selection path. It is useful as a contrast: implicit-rule thresholds and session timing are not the same as a zone's SLA tie-break algorithm. Keep the two mechanisms separate when troubleshooting WAN2 not being selected. After changing tie-break behavior, test new sessions to each destination prefix and review existing-session behavior separately.</p>
