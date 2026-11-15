@@ -6537,66 +6537,133 @@
         "date": "2026-11-13",
         "title": "Fragmented GTP-U delivered through an IPsec tunnel and throughput tuning with post-encapsulation fragmentation",
         "url": "https://community.fortinet.com/fortigate-3/fragmented-gtp-u-delivered-through-an-ipsec-tunnel-and-throughput-tuning-with-post-encapsulation-fragmentation-231257",
-        "use": "Direct scenario for the primary lesson; demonstrates downstream fragment capture, post-encapsulation behavior, HPE counters and reassembly memory."
+        "primary_lesson_match": true,
+        "notes": "Inner fragment delivery to GTP-U endpoint; receiver HPE counters and fragment reassembly memory."
+      },
+      {
+        "product": "FortiGate",
+        "date": "2026-10-23; updated 2026-11-12",
+        "title": "Administrator SSO authentication fails after upgrade to FortiOS 7.6.8",
+        "url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
+        "primary_lesson_match": false,
+        "notes": "Separate SSO regression; useful diagnostic boundary between admin identity failure and IPsec fragmentation."
+      },
+      {
+        "product": "FortiGate",
+        "date": "2026-10-16 through 2026-11-10",
+        "title": "FortiGate enters conserve mode after upgrading to FortiOS 7.6.8 (IPSEngine 7.01200)",
+        "url": "https://community.fortinet.com/fortigate-3/fortigate-enters-conserve-mode-after-upgrading-to-fortios-version-7-6-8-ipsengine-7-01200-230996",
+        "primary_lesson_match": false,
+        "notes": "Recent engine/resource regression; not used as primary lesson source."
       },
       {
         "product": "FortiManager",
         "date": "2026-10-23",
         "title": "Install failure on 2 GB RAM FortiGates after FortiManager 7.6.8 upgrade — ssl-ssh-profile udp-not-quic",
         "url": "https://community.fortinet.com/support-forum-92/install-failure-on-2-gb-ram-fortigates-after-fortimanager-7-6-8-upgrade-ssl-ssh-profile-udp-not-quic-230808",
-        "use": "Scenario companion for scheduled package installation; demonstrates per-device schema/firmware validation failure and why schedule creation does not prove install success."
+        "primary_lesson_match": true,
+        "notes": "Per-device install verification failure; schedule creation does not guarantee target compatibility."
       },
       {
         "product": "FortiAnalyzer",
         "date": "2026-11-13",
         "title": "FortiAnalyzer log forwarding stops working after upgrade to 7.6",
         "url": "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
-        "use": "Scenario companion for AI visibility data lineage; Collector-to-Analyzer auth state and certificate CN mismatch can stop source logs before dashboard aggregation."
+        "primary_lesson_match": true,
+        "notes": "Collector-to-Analyzer server-authentication/certificate common-name issue; source pipeline failure before dashboard aggregation."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "date": "2026-11-13",
+        "title": "Analytics database size or range reduced after upgrading FortiAnalyzer to version 7.6 (ClickHouse migration)",
+        "url": "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259",
+        "primary_lesson_match": false,
+        "notes": "ClickHouse migration, compression, date-range verification and archive-backed rebuild; relevant to analytics data completeness but not the AI Access Visibility feature definition."
+      },
+      {
+        "product": "FortiSwitch",
+        "date": "2026-11-13",
+        "title": "FortiSwitch 1xx series IGMP snooping limit reduced in FortiSwitchOS 7.6.6",
+        "url": "https://community.fortinet.com/fortiswitch-36/fortiswitch-1xx-series-igmp-snooping-limit-reduced-in-fortiswitchos-7-6-6-231258",
+        "primary_lesson_match": false,
+        "notes": "Recent 1xx series configuration synchronization issue when more than five VLANs enable IGMP snooping; not the selected clock-source mechanism."
       },
       {
         "product": "FortiAP/Wireless",
         "date": "2026-11-03",
         "title": "FortiAP CAPWAP AP-leave/join behavior with reason AP DTLS peer disconnected",
         "url": "https://community.fortinet.com/fortiap-5/fortiap-capwap-ap-leave-join-behavior-with-reason-ap-dtls-peer-disconnected-231069",
-        "use": "Scenario-only boundary; a CAPWAP keepalive/underlay failure is not the same as disabling VAP broadcast in a WTP profile."
+        "primary_lesson_match": false,
+        "notes": "Control-plane keepalive/DTLS failure; used to distinguish CAPWAP loss from VAP broadcast disable."
+      },
+      {
+        "product": "FortiNAC",
+        "date": "2026-10-22",
+        "title": "Fnac token expiry",
+        "url": "https://community.fortinet.com/support-forum-92/fnac-token-expiry-230742",
+        "primary_lesson_match": false,
+        "notes": "Question about one-minute web-admin MFA token expiry and email delay; not a dashboard-widget scenario."
       },
       {
         "product": "FortiNAC-F",
         "date": "2026-10-29",
         "title": "FortiNAC Disconnect-Request fails with RADIUS Disconnect-NAK",
         "url": "https://community.fortinet.com/fortinac-f-57/fortinac-disconnect-request-fails-with-ruckus-wireless-230980",
-        "use": "Direct session termination scenario; NAS returns Disconnect-NAK when identifying attributes are missing, so session state may remain active."
+        "primary_lesson_match": true,
+        "notes": "NAS rejects disconnect request when session-identifying attributes are absent; session can remain active."
       },
       {
         "product": "FortiAuthenticator",
         "date": "2026-11-13",
         "title": "FortiAuthenticator SSO session failure with NT_STATUS_MORE_PROCESSING_REQUIRED",
         "url": "https://community.fortinet.com/fortiauthenticator-8/fortiauthenticator-sso-session-failure-with-nt-status-more-processing-required-error-231262",
-        "use": "Scenario-only identity compatibility example; do not confuse NTLM signing with SHA-1 certificate signing."
+        "primary_lesson_match": false,
+        "notes": "NTLM compatibility case; kept separate from SHA-1 certificate signature digest deprecation."
       },
       {
         "product": "FortiPAM",
         "date": "2026-11-06",
-        "title": "HTTP 400 Bad Request error after passkey registration and AD password change",
+        "title": "HTTP 400 Bad Request after passkey registration and AD password change",
         "url": "https://community.fortinet.com/fortipam-52/http-400-bad-request-error-231126",
-        "use": "Scenario-only launch-path example; WAD request parsing failure is distinct from auto-provisioned user inactivity/purge lifecycle."
+        "primary_lesson_match": false,
+        "notes": "Secret-launch/WAD request parsing issue; separate from auto-provisioned user lifecycle."
       },
       {
-        "product": "FortiGate",
-        "date": "2026-10-23",
-        "title": "Administrator SSO authentication fails after upgrade to FortiOS 7.6.8",
-        "url": "https://community.fortinet.com/fortigate-3/administrator-sso-authentication-fails-after-upgrade-to-fortios-7-6-8-230826",
-        "use": "Additional recent auth regression; local admin and RADIUS/LDAP/TACACS remain unaffected, so maintain break-glass access."
+        "product": "FortiSIEM",
+        "date": "2026-11-13",
+        "title": "Unable to run queries in Analytics due to CANNOT_CONVERT_TYPE error in ClickHouse",
+        "url": "https://community.fortinet.com/fortisiem-34/unable-to-run-queries-in-analytics-due-to-cannot-convert-type-error-in-clickhouse-231261",
+        "primary_lesson_match": false,
+        "notes": "ClickHouse query metadata type-conversion failure; distinguish analytics query failure from Event Log Integrity checksum status."
+      },
+      {
+        "product": "FortiSIEM",
+        "date": "2026-11-02",
+        "title": "Fix phParser crashes in FortiSIEM 7.6.1",
+        "url": "https://community.fortinet.com/fortisiem-34/fix-phparser-crashes-in-fortisiem-7-6-1-231031",
+        "primary_lesson_match": false,
+        "notes": "Recent parser race-condition workaround across Super, Worker and Collector roles; not an Event Integrity mechanism."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "date": "2026-11-14",
+        "title": "FortiOS 7.4.13 SD-WAN implicit rule spillover not selecting WAN2 despite ingress threshold exceeded",
+        "url": "https://community.fortinet.com/support-forum-92/fortios-7-4-13-sd-wan-implicit-rule-spillover-not-selecting-wan2-despite-ingress-threshold-exceeded-231272",
+        "primary_lesson_match": false,
+        "notes": "Recent member-selection scenario; its implicit-rule threshold and session timing are distinct from scheduled speed tests and measured-bandwidth shaping."
       }
     ],
     "no_directly_matched_recent_scenario_for": [
       "FortiSwitch",
+      "FortiAP/Wireless",
       "FortiNAC",
+      "FortiAuthenticator",
+      "FortiPAM",
       "FortiSIEM",
       "FortiSASE",
       "Secure SD-WAN"
     ],
-    "note": "Twelve product areas were searched. Only articles with verified publication dates from 2026-10-16 through 2026-11-14 are classified as recent. Several older results surfaced in search but were explicitly excluded. Community material remains scenario-only.",
+    "note": "Twelve product areas were searched. Verified recent results include 15 Community/support discussions across eleven product areas; some are scenario-only and not direct matches to the selected mechanism. Older pages with recent crawl dates or comments were excluded.",
     "excluded_recent_misclassifications": [
       {
         "title": "FortiAnalyzer stale Last Log time for 10-15 minutes after reboot",
@@ -6621,6 +6688,32 @@
         "url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193",
         "actual_date": "2026-09-28",
         "reason": "Outside the strict 30-day window."
+      }
+    ],
+    "no_verified_recent_result": [
+      "FortiSASE"
+    ],
+    "excluded_out_of_window": [
+      {
+        "product": "FortiSwitch",
+        "date": "2026-09-25",
+        "title": "SNMPv3 USM time-window error caused by NTP synchronization offset",
+        "url": "https://community.fortinet.com/fortiswitch-36/technical-tip-resolving-snmpv3-error-47-usm-not-in-time-window-due-to-ntp-synchronization-offset-230169",
+        "reason": "Outside 2026-10-16 to 2026-11-14 window."
+      },
+      {
+        "product": "FortiSwitch",
+        "date": "2026-09-28",
+        "title": "FortiSwitch 108 SSH issue",
+        "url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-fortiswitch-108-model-ssh-issue-in-versions-7-6-6-7-6-7-7-6-8-230193",
+        "reason": "Outside the strict rolling 30-day window."
+      },
+      {
+        "product": "FortiSASE",
+        "date": "2026-09-18",
+        "title": "SPA BGP router-ID overlap with tunnel IP",
+        "url": "https://community.fortinet.com/fortisase-58/troubleshooting-tips-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
+        "reason": "Outside the strict rolling 30-day window."
       }
     ]
   },
