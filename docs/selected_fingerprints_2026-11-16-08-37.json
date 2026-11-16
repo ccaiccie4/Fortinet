@@ -101,21 +101,26 @@
     {
       "product": "FortiGate",
       "lesson_subject": "IPS engine update lifecycle, memory-conserve thresholds, and inspection fail-open behavior",
-      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/670437/ips-and-av-engine-version",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/419589/ips-configuration-options",
       "additional_primary_urls": [
-        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/194558/conserve-mode",
-        "https://docs.fortinet.com/document/fortigate/8.0.0/fortios-release-notes/230510/changes-in-default-behavior"
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/146663270/config-ips-global",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/339914554/config-system-global",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/194558/conserve-mode"
       ],
       "scenario_community_url": "https://community.fortinet.com/fortigate-3/fortigate-enters-conserve-mode-after-upgrading-to-fortios-version-7-6-8-ipsengine-7-01200-230996",
       "scenario_date": "2026-10-30",
-      "scenario_relation": "Direct scenario: FortiOS 7.6.8 IPS Engine 7.01200 memory growth and conserve-mode transitions; Fortinet Community reports resolution in IPS Engine 7.01204.",
-      "feature_mechanism_fingerprint": "FDN-delivered IPS engine packages are separate from FortiOS firmware; IPS engine processes flow-based/NGFW traffic. Engine resource growth can cross red/green/extreme memory thresholds; IPS fail-open controls whether new flow-inspected sessions are dropped or passed unscanned.",
-      "workflow_transaction_fingerprint": "FortiGate receives an IPS engine update from FDN -> ipsengine processes new flows -> memory crosses red threshold -> conserve mode changes inspection behavior -> TAC-supported engine package remediation.",
+      "scenario_relation": "Direct IPS Engine 7.01200 memory/conserve case; WAD article is a recent counterexample demonstrating process-specific root-cause isolation.",
+      "feature_mechanism_fingerprint": "FDN-delivered IPS engine packages are separate from FortiOS firmware. IPS raw-socket inspection uses a buffer controlled by socket-size; when the buffer is full, IPS fail-open can pass traffic uninspected if enabled (default is drop), but Nturbo sessions do not support fail-open. A too-small socket buffer increases fail-open events; too-large buffers consume memory. Independently, global red/green/extreme memory thresholds can put the kernel in conserve mode after an IPS engine regression.",
+      "workflow_transaction_fingerprint": "FortiOS install/update -> IPS engine package delivered through FDN -> IPS engine processes flow-based sessions -> raw-socket buffer fills or engine memory grows -> IPS fail-open/drop behavior or global conserve-mode transition -> compare process memory/crashlog/engine version -> TAC-supported engine update.",
       "failure_class": "IPS-engine version regression or resource exhaustion causing conserve mode and reduced inspection / dropped sessions.",
-      "evidence_pattern": "diagnose sys top-mem 20 shows ipsengine as dominant memory consumers; diagnose hardware sysinfo conserve reports mode, used/freeable RAM and red/green/extreme thresholds; get system performance status shows utilization; diagnose debug crashlog read records conserve transitions. High ipsengine memory is correlation, not by itself proof of a leak or root cause.",
-      "remediation_path": "Correlate FortiOS build and IPS engine version; preserve top-mem, performance and crashlog evidence; open Fortinet Support case for the corrected engine (the cited 7.6.8 incident was resolved in IPS Engine 7.01204); use only TAC-distributed manual packages. If a package upload fails with database error, temporarily enable diagnose autoupdate downgrade, upload the support package, then disable the setting. Do not lower conserve thresholds as a substitute for fixing the engine.",
-      "question_fingerprint": "Diagnose ipsengine memory growth and repeated conserve transitions after a FortiOS upgrade; select supported engine remediation without silently bypassing inspection.",
-      "diagram_topology_layout_fingerprint": "FDN update path into IPS engine plus RAM threshold state machine and fail-open/drop branches."
+      "evidence_pattern": "diagnose sys top-mem 20 distinguishes ipsengine from wad; diagnose sys top-all 1 100 3 shows process utilization; diagnose wad memory report and diagnose wad memory track <category> prove WAD allocation behavior; diagnose debug crashlog read | grep 'conserve mode' shows transitions; get system performance status shows memory utilization; IPS CLI socket-size/fail-open values show inspection policy but do not prove the current buffer is full.",
+      "remediation_path": "Identify the process first. For the 7.6.8 IPS Engine 7.01200 case, preserve top-mem/crashlog/performance output and request corrected IPS Engine 7.01204 from TAC; use only support-provided engine files. If database upload fails, temporarily enable diagnose autoupdate downgrade, upload, then disable it. For raw-socket pressure, tune socket-size only after measuring memory and fail-open counters; enabling fail-open is an inspection-bypass decision and does not apply to Nturbo sessions.",
+      "question_fingerprint": "Differentiate IPS Engine 7.01200 memory growth from a WAD FortiGuard-agent leak using process-specific memory evidence, then select the supported recovery.",
+      "diagram_topology_layout_fingerprint": "Two independent failure branches: IPS raw-socket buffer saturation with fail-open/drop choice, and IPS-engine/WAD process memory growth crossing global conserve thresholds; diagnostic fork identifies process before remediation.",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/fortigate-3/fortigate-enters-conserve-mode-due-to-wad-memory-leak-associated-with-fortiguard-agent-231187"
+      ],
+      "scenario_last_updated_date": "2026-11-05"
     },
     {
       "product": "FortiManager",
@@ -124,14 +129,16 @@
       "additional_primary_urls": [
         "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/207444/fortimanager-supports-downgrade-and-roll-back-for-fortiguard-packages-to-allow-setting-a-preferred-package-version-for-devices"
       ],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/install-failure-on-2-gb-ram-fortigates-after-fortimanager-7-6-8-upgrade-ssl-ssh-profile-udp-not-quic-230808",
       "feature_mechanism_fingerprint": "FortiManager local FDS serves a selected To Be Deployed Version per FortiGuard object package; Just Set Preferred Version freezes future package delivery without downgrading devices; Downgrade immediately rolls devices back; 20 object versions retained.",
       "workflow_transaction_fingerprint": "FortiManager receives packages -> administrator selects preferred version -> FortiGate update request is served with pinned package -> optional downgrade changes existing device package.",
       "failure_class": "Uncontrolled signature/object-package drift or unintended package rollback / update freeze.",
       "evidence_pattern": "Receive Status shows current package and To Be Deployed Version; device package version table shows whether device is already newer; FortiManager local FDS role confirms it is the server. A pin does not roll back FortiOS firmware and does not prove the device has installed a package until device state confirms it.",
       "remediation_path": "Select the specific package rather than changing all packages; test on a small device group; use Just Set Preferred Version to stop newer delivery without rolling devices back, or Downgrade only with explicit approval; check 20-version retention and update-server reachability; document how to restore Latest.",
       "question_fingerprint": "Select the package pin action that stops future signature updates but does not immediately downgrade a device already on a later package.",
-      "diagram_topology_layout_fingerprint": "FortiGuard package catalogue -> preferred-version decision -> hold or rollback device branch."
+      "diagram_topology_layout_fingerprint": "FortiGuard package catalogue -> preferred-version decision -> hold or rollback device branch.",
+      "scenario_date": "2026-10-23",
+      "scenario_relation": "Recent adjacent install-verification scenario; not a FortiGuard package rollback case, but demonstrates why scheduled/package deployment intent must be separated from target capability and install result."
     },
     {
       "product": "FortiAnalyzer",
@@ -140,14 +147,16 @@
       "additional_primary_urls": [
         "https://docs.fortinet.com/document/fortianalyzer/7.4.11/administration-guide/776771/geo-redundant-ha"
       ],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
       "feature_mechanism_fingerprint": "Active-active FortiAnalyzer HA lets each member receive logs/archive from directly connected devices and forward to peer and remote server; unicast heartbeat and VRRP 112 traverse L3; cluster VIP requires L2; at least one initial-sync-disabled node is required during formation.",
       "workflow_transaction_fingerprint": "Configure peers and group -> elect primary with initial-sync rule -> establish unicast heartbeat/VRRP -> each member ingests local logs and replicates to peer -> FortiGate server/alt-server failover.",
       "failure_class": "HA formation stuck in initial synchronization, heartbeat/peer failure across routers, or mistaken reliance on an L2 VIP in a routed design.",
       "evidence_pattern": "System Settings > HA role and peer state; FortiAnalyzer HA status; firewall permits VRRP 112 and unicast heartbeat; FortiGate config log fortianalyzer setting shows server/alt-server/fallback-to-primary. A healthy heartbeat alone does not prove each FortiGate forwards to the intended member or that archive data is fully synchronized.",
       "remediation_path": "Disable Initial Sync on at least one node during initial formation; verify group ID/name/password, peer IP and serial numbers; enable unicast heartbeat; permit VRRP 112; omit VIP across L3 and use the peer heartbeat interface; configure reachable server/alt-server addresses and validate log arrival from devices at each site.",
       "question_fingerprint": "Build an active-active HA pair across routed data centers with no shared VLAN; choose heartbeat, VIP, and initial-sync settings.",
-      "diagram_topology_layout_fingerprint": "Two routed sites with local log ingestion, unicast heartbeat/VRRP control and inter-node replication."
+      "diagram_topology_layout_fingerprint": "Two routed sites with local log ingestion, unicast heartbeat/VRRP control and inter-node replication.",
+      "scenario_date": "2026-11-13",
+      "scenario_relation": "Recent adjacent log-forwarding failure caused by server certificate identity mismatch; used to distinguish HA heartbeat/peer replication from end-to-end log forwarding."
     },
     {
       "product": "FortiSwitch",
@@ -156,14 +165,19 @@
       "additional_primary_urls": [
         "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/222614/appendix-a-configuring-the-media-redundancy-protocol"
       ],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/fortiswitch-1xx-series-igmp-snooping-limit-reduced-in-fortiswitchos-7-6-6-231258",
       "feature_mechanism_fingerprint": "MRP ring uses one automanager and client nodes; ring ports are physical or one static trunk and excluded from STP; election chooses lowest numeric priority then lowest MAC; MRP_Test, LinkChange and TopologyChange frames signal ring state; MRP VLAN/domain must match.",
       "workflow_transaction_fingerprint": "Configure VLAN on both ring ports -> apply profile -> configure manager/client role and domain -> manager sends tests -> link failure/recovery produces state frames -> ring reconverges.",
       "failure_class": "Ring disabled or unstable due VLAN/domain mismatch, conflicting manager roles, STP interaction, unsupported MIM/MIC, or overly aggressive custom timers.",
       "evidence_pattern": "get switch mrp settings shows configured role/domain/VLAN/ports/profile; diagnose switch mrp status 1|2 shows live state; diagnose switch mrp stats shows counters; show switch mrp settings/profile verifies effective config. A configured ring does not prove all physical links are up or that the selected model supports MRP.",
       "remediation_path": "Check model feature matrix; ensure MRP VLAN is allowed/native on both ring ports; align domain ID/VLAN/profile across nodes; choose one automanager election model (do not mix manual manager and automanager); keep default 500ms profile until stable; avoid low test intervals that cause flapping; verify ring port state and STP exclusion.",
       "question_fingerprint": "MRP is disabled after VLAN changes; identify the mismatch between MRP vlan-id and ring-port allowed/native VLAN before changing election priority.",
-      "diagram_topology_layout_fingerprint": "Closed MRP ring with elected automanager, client nodes, test frames and topology-change path."
+      "diagram_topology_layout_fingerprint": "Closed MRP ring with elected automanager, client nodes, test frames and topology-change path.",
+      "scenario_date": "2026-11-13",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/fortiswitch-36/fortiswitch-to-fortiswitch-manager-connection-config-228159"
+      ],
+      "scenario_relation": "Recent IGMP snooping scale/firmware scenario is a separate feature; the FortiSwitch Manager L3 connection article was materially updated 2026-10-26. Both are used only as product-area troubleshooting context, not as primary evidence for MRP."
     },
     {
       "product": "FortiAP/Wireless",
@@ -172,16 +186,19 @@
       "additional_primary_urls": [
         "https://docs.fortinet.com/document/fortiap/7.2.5/fortiwifi-and-fortiap-configuration-guide/461028/configuring-layer-2-and-layer-3-roaming"
       ],
-      "scenario_community_url": "https://community.fortinet.com/fortiap-5/preserving-client-ip-addresses-across-ap-group-vlans-with-layer-3-intra-controller-roaming-230748",
-      "scenario_date": "2026-10-22",
-      "scenario_relation": "Adjacent intra-controller bridge-mode roaming across AP-group VLANs; used only to contrast with the primary inter-controller mobility-tunnel/direct-handoff feature.",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/fortiap-capwap-ap-leave-join-behavior-with-reason-ap-dtls-peer-disconnected-231069",
+      "scenario_date": "2026-11-03",
+      "scenario_relation": "Recent CAPWAP DTLS peer-disconnect case is a control-plane diagnostic boundary; intra-controller L3 roaming article (2026-10-22) is an adjacent but distinct mobility scope.",
       "feature_mechanism_fingerprint": "Different FortiGate controllers preserve client IP across VLAN/subnets using inter-controller mobility; bridge-mode roaming offers indirect controller tunnel or direct AP-to-AP mode without NAT; same SSID/security/passphrase and RADIUS dynamic VLAN assignment; idle timeout triggers DHCP rehome.",
       "workflow_transaction_fingerprint": "Client roams to second controller -> traffic remains anchored via mobility tunnel or direct AP path -> client retains old IP -> idle timer triggers rehome and DHCP on destination subnet.",
       "failure_class": "Roaming breaks across controller boundary due peer/tunnel reachability, mismatched SSID/security, RADIUS VLAN assignment, NAT in direct mode, or premature/late rehome expectation.",
       "evidence_pattern": "diagnose wireless-controller wlac -c ha shows L3 roaming peer UP; diagnose wireless-controller wlac -d sta online shows client MAC/IP and l3r state on each controller; compare AP/controller/VLAN/IP before and after roam; packet capture checks direct AP path or controller mobility tunnel. A peer UP state alone does not prove client roam or DHCP rehome.",
       "remediation_path": "Use identical SSID/security/passphrase on both controllers; configure reciprocal peer IPs and l3-roaming enable; choose indirect unless direct AP reachability without NAT is proven; configure RADIUS dynamic VLAN attributes; set and test client-idle-rehome-timeout; correlate client monitor, DHCP, and mobility tunnel state.",
       "question_fingerprint": "A client roams across controllers and keeps its old IP; determine whether the mobility anchor is active or DHCP rehome has failed using peer and l3r state.",
-      "diagram_topology_layout_fingerprint": "Two controllers/APs/subnets with direct vs indirect handoff and timed rehome."
+      "diagram_topology_layout_fingerprint": "Two controllers/APs/subnets with direct vs indirect handoff and timed rehome.",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/fortiap-5/preserving-client-ip-addresses-across-ap-group-vlans-with-layer-3-intra-controller-roaming-230748"
+      ]
     },
     {
       "product": "FortiNAC",
@@ -201,20 +218,22 @@
     },
     {
       "product": "FortiNAC-F",
-      "lesson_subject": "Local RADIUS certificate identity extraction and attribute-ranking precedence for EAP-TLS",
-      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/463215",
-      "additional_primary_urls": [],
+      "lesson_subject": "Local RADIUS EAP-TLS certificate identity extraction and CN/SAN attribute-ranking precedence",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.5/microsoft-entra-id-authentication-cookbook/241831/2-fortinac-local-radius-tls-service-configuration",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/463215"
+      ],
       "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-radius-802-1x-peap-authentication-failures-on-windows-hosts-230556",
       "scenario_date": "2026-10-14",
       "scenario_last_updated_date": "2026-11-04",
-      "scenario_relation": "Materially updated Nov 4; PEAP-MS-CHAPv2 cached-credential failure after Windows KB5127648 is an adjacent EAP-method scenario. It explicitly states client-certificate authentication is unaffected; it is not evidence about certificate attribute ranking.",
-      "feature_mechanism_fingerprint": "FortiNAC-F Local RADIUS can extract host/user identity from certificate CN and SAN fields (UPN, DNS, email) with configurable ranking; Client Certificate Attribute must be enabled to use non-CN values; UPN may need to be populated by the client; allow-spaces controls CN/SAN whitespace. This is identity mapping, not certificate trust/revocation.",
-      "workflow_transaction_fingerprint": "Supplicant presents EAP-TLS client cert -> Local RADIUS validates TLS/trust -> reads candidate identity fields -> ranking chooses first available attribute -> Authentication Source maps identity -> RADIUS authorization/VLAN decision.",
+      "scenario_relation": "Materially updated Nov 4; PEAP-MS-CHAPv2 cached-credential failure after Windows KB5127648 is an adjacent EAP-method scenario. The article says client-certificate authentication is unaffected; it is not evidence about CN/SAN ranking.",
+      "feature_mechanism_fingerprint": "FortiNAC-F Local RADIUS can map an EAP-TLS client certificate to a host/user identity by ranking Common Name and Subject Alternative Name values (UPN, DNS, email). Client Certificate Attribute must be enabled to use non-CN fields; UPN must be present in the certificate; allow-spaces controls whitespace handling. This identity mapping occurs after TLS trust validation and is distinct from certificate revocation checking.",
+      "workflow_transaction_fingerprint": "Supplicant presents EAP-TLS certificate -> Local RADIUS validates chain/TLS -> extracts CN and SAN candidates -> configurable ranking selects first usable identity -> Authentication Source resolves selected name -> RADIUS authorization/VLAN result.",
       "failure_class": "EAP-TLS authentication succeeds at TLS layer but identity mapping selects wrong/empty CN/SAN value, producing unknown host/user or wrong authorization.",
       "evidence_pattern": "Local Server Client Certificate Attribute setting and ranking order; inspect certificate with openssl x509 -in client.pem -noout -subject -ext subjectAltName; compare CN, SAN-UPN, SAN-DNS and SAN-email to the identity recorded by Local RADIUS. TLS success does not prove the intended identity field was selected.",
       "remediation_path": "Enable Client Certificate Attribute when non-CN identity is required; populate the desired SAN (UPN/DNS/email) on the certificate; set ranking deliberately; permit spaces only if required; test machine and user certificates separately and verify the resulting identity before changing VLAN policy.",
-      "question_fingerprint": "TLS succeeds but the endpoint maps to the computer CN instead of the intended SAN-UPN; select the required option and ranking correction.",
-      "diagram_topology_layout_fingerprint": "Certificate with CN and three SAN attributes -> configurable priority ladder -> chosen identity -> auth source and RADIUS policy."
+      "question_fingerprint": "TLS succeeds but the endpoint maps to computer CN rather than intended SAN-UPN; choose the certificate attribute option and ranking correction.",
+      "diagram_topology_layout_fingerprint": "EAP-TLS certificate CN/SAN fields -> configurable ranking ladder -> selected identity -> authentication source -> RADIUS authorization."
     },
     {
       "product": "FortiAuthenticator",
@@ -255,21 +274,26 @@
       "additional_primary_urls": [
         "https://docs.fortinet.com/document/fortisiem/7.5.0/external-systems-configuration-guide/826344/microsoft-entra-id-integration"
       ],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/azure-event-hub-integration-stops-after-a-few-minutes-and-resumes-after-running-test-connectivity-230838",
       "feature_mechanism_fingerprint": "Entra Audit/Sign-in/Provisioning/Device/Group/Policy/Role/Graph events arrive via Azure Event Hub; Risky User Status uses a separate Generic HTTPS Poller against Graph API. Event type prefixes identify each family; initial event arrival can take about 15 minutes and in some cases up to 24 hours.",
       "workflow_transaction_fingerprint": "Entra diagnostics -> Event Hub -> FortiSIEM event ingestion; separate app registration/client ID/tenant ID/secret -> Graph riskyUsers API -> Generic HTTPS Poller -> risk-state events.",
       "failure_class": "Partial identity telemetry because Event Hub categories, shared access policy, tenant/app permissions, poller credentials, or client-secret lifecycle are misconfigured.",
       "evidence_pattern": "Search Resources > Event Types by MS-Entra-* prefixes; inspect Event Hub incoming messages and consumer connection; verify app registration tenant/client IDs, consent and secret validity; distinguish initial ingestion delay from a broken poller. Seeing audit events does not prove Risky User Status collection works because it is a separate poller.",
       "remediation_path": "Configure Event Hub and FortiSIEM ingestion independently from the Graph poller; enable required Entra diagnostic categories; use the correct Event Hub policy; grant required API permissions/admin consent; store and rotate client secret before expiry; verify each event family by its prefix and allow for Azure forwarding latency.",
       "question_fingerprint": "Audit and sign-in events arrive but risky-user state is absent; identify the independent Graph poller credential path.",
-      "diagram_topology_layout_fingerprint": "Two independent telemetry lanes: Event Hub streaming and Graph API poller."
+      "diagram_topology_layout_fingerprint": "Two independent telemetry lanes: Event Hub streaming and Graph API poller.",
+      "scenario_date": "2026-10-26",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/fortisiem-34/troubleshooting-fortisiem-collector-health-showing-eps-as-n-a-230673"
+      ],
+      "scenario_relation": "Direct recent Event Hub integration case: Test Connectivity temporarily restores collection, but high DNS endpoint latency causes repeat interruption; EPS N/A article is a separate collector-health metric boundary."
     },
     {
       "product": "FortiSASE",
       "lesson_subject": "MSSP tenant isolation across FortiCloud OUs, FortiCare accounts, ADOMs, SPA licensing, and ZTNA sync",
-      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.40/unified-sase-for-mssp-architecture-guide/169721/multitenancy",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/unified-sase-for-mssp-architecture-guide/169721",
       "additional_primary_urls": [
-        "https://docs.fortinet.com/document/fortisase/26.1.107/unified-sase-for-mssp-architecture-guide/169721"
+        "https://docs.fortinet.com/document/fortisase/26.1.40/unified-sase-for-mssp-architecture-guide/169721/multitenancy"
       ],
       "scenario_community_url": null,
       "feature_mechanism_fingerprint": "FortiSASE is single-tenant with one instance per FortiCare account/customer child OU; FortiSASE license belongs to child account. SPA hub entitlement is checked in same/root account; FortiManager connector is same/root account with one connection per ADOM; ZTNA telemetry uses EMS Access Key independent of OU hierarchy.",
@@ -288,14 +312,20 @@
         "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
         "https://docs.fortinet.com/document/overlay-as-a-service/latest/deployment-guide/658086/introduction"
       ],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-forticloud-overlay-as-a-service-oaas-portal-task-error-failed-to-delete-the-zone-of-your-device-190472",
       "feature_mechanism_fingerprint": "OaaS is a FortiCloud subscription wizard for regional SD-WAN overlay; each participating FortiGate requires OaaS entitlement. OaaS agent uses FGFM to compare/validate desired FortiOS config and apply it transactionally; failure rolls back all orchestrated changes. ADVPN is an underlying shortcut dependency, not the lesson focus.",
       "workflow_transaction_fingerprint": "FortiGate registers/activates -> OaaS controller sends desired config over FGFM -> agent validates and commits transaction -> status/version/task ID reports outcome -> failure triggers rollback; operator corrects conflict and retries.",
       "failure_class": "OaaS entitlement missing/expired, device not online in FortiCloud, FGFM tunnel unavailable, unsupported FortiOS, configuration validation/apply failure, or rollback after partial orchestration.",
       "evidence_pattern": "System > FortiGuard shows OaaS license state; diagnose test update info includes SWOS entitlement; get oaas status shows account/site/configuration version/sync status/task ID/error; deployment task status shows controller outcome. OaaS license does not prove configuration sync succeeded; ADVPN shortcut presence does not prove OaaS agent transaction succeeded.",
       "remediation_path": "Confirm OaaS/Cloud Advanced entitlement on every participating FortiGate; ensure devices are powered, activated, logged into FortiCloud and FGFM reachable; confirm regional dual-hub topology and site online state; inspect get oaas status and task error; resolve config conflict and redeploy; rely on agent rollback for failed transaction and verify version before retry.",
       "question_fingerprint": "The portal shows a new overlay topology but the spoke still runs its old configuration; use OaaS status and license/FGFM evidence to distinguish desired state from committed transaction.",
-      "diagram_topology_layout_fingerprint": "FortiCloud OaaS controller -> FGFM desired-config transaction -> validate/commit/rollback at FortiGate; ADVPN shown only as downstream dependency."
+      "diagram_topology_layout_fingerprint": "FortiCloud OaaS controller -> FGFM desired-config transaction -> validate/commit/rollback at FortiGate; ADVPN shown only as downstream dependency.",
+      "scenario_date": "2024-11-27",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/support-forum-92/fortios-7-4-13-sd-wan-implicit-rule-spillover-not-selecting-wan2-despite-ingress-threshold-exceeded-231272"
+      ],
+      "scenario_relation": "OaaS portal task error is the direct historical scenario: reserved default service rule ID 1 (oaas_default) conflicts with existing SD-WAN rule ID 1. Nov 14 implicit-rule spillover is a recent adjacent dataplane selection scenario, not OaaS transaction evidence."
     }
-  ]
+  ],
+  "research_notes": "FortiGate and FortiNAC-F candidate subjects were refined to distinguish IPS raw-socket/memory behavior from generic conserve-mode reports, and certificate identity extraction from trust/revocation checks. FortiSASE uses the latest 26.1.107 architecture guide."
 }
