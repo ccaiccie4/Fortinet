@@ -6866,8 +6866,10 @@
     }
   ],
   "selection_gate": {
-    "status": "CLOSED_PENDING_INVENTORY_COMMIT",
-    "note": "No November 16 lesson topic has been selected. Topic selection is prohibited until this inventory is successfully committed and read back."
+    "status": "PASS",
+    "note": "The inventory was committed and read back before topic selection. Twelve candidate topics were selected only after comparison against all 318 historical lesson records and manual mechanism/workflow review.",
+    "selected_fingerprints_path": "docs/selected_fingerprints_2026-11-16-08-37.json",
+    "selected_fingerprints_blob_sha": "eba5d26583e9b8d66406aeb24ef9ae1bc3774ded"
   },
   "rejected_candidates": [],
   "admin_guide_sweep_summary": {
@@ -6882,10 +6884,96 @@
     "directly_matched_recent_scenarios": 0
   },
   "semantic_uniqueness_check": {
-    "status": "NOT_RUN_YET",
+    "status": "PASS",
     "checked_records": 318,
-    "selected_count": 0,
-    "duplicate_mechanisms_found": null,
-    "method": "Will be executed only after inventory commit/read-back and before selecting today's lessons."
+    "selected_count": 12,
+    "duplicate_mechanisms_found": 0,
+    "method": "Per-product semantic fingerprint comparison across subject, feature mechanism, workflow, failure class, evidence, remediation, question and diagram topology; manual review of nearest same-product records. Candidate similarity scores were low and remaining overlaps were generic terms or downstream dependencies, not equivalent mechanisms.",
+    "nearest_match_audit": [
+      {
+        "product": "FortiGate",
+        "selected_subject": "IPS engine update lifecycle, memory-conserve thresholds, and inspection fail-open behavior",
+        "nearest_same_product_subject": "FortiGate — Hashed URL and SNI threat feeds for Web Filter",
+        "jaccard_similarity": 0.071,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiManager",
+        "selected_subject": "Pinning and rolling back FortiGuard object-package versions served by FortiManager",
+        "nearest_same_product_subject": "FortiManager 8.0 recurring policy-package installation scheduling",
+        "jaccard_similarity": 0.088,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "selected_subject": "Geo-redundant active-active HA over routed Layer 3 networks",
+        "nearest_same_product_subject": "OFTP log encryption negotiation: compatible algorithm levels, TLS, and server identity",
+        "jaccard_similarity": 0.086,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiSwitch",
+        "selected_subject": "Media Redundancy Protocol ring roles, election, VLAN requirements, and failure signaling",
+        "nearest_same_product_subject": "FortiSwitch — Dynamic MAC movement telemetry through L2MAC SNMP traps",
+        "jaccard_similarity": 0.063,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiAP/Wireless",
+        "selected_subject": "Layer 3 inter-controller roaming for bridge-mode SSIDs using direct or indirect handoff",
+        "nearest_same_product_subject": "SSID VLAN pooling: AP-group assignment versus tunnel-mode client load balancing",
+        "jaccard_similarity": 0.091,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiNAC",
+        "selected_subject": "Reusable CLI configurations with DO/UNDO lifecycle and port/host variable substitution",
+        "nearest_same_product_subject": "FortiLink CoA disconnect failures: accounting access and return path",
+        "jaccard_similarity": 0.118,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiNAC-F",
+        "selected_subject": "Local RADIUS certificate identity extraction and attribute-ranking precedence for EAP-TLS",
+        "nearest_same_product_subject": "Persistent Agent certificate check: client proof, CA trust, CRL reachability and clock tolerance",
+        "jaccard_similarity": 0.082,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiAuthenticator",
+        "selected_subject": "RADIUS CHAP/MS-CHAPv2 compatibility with local-user password storage cryptography",
+        "nearest_same_product_subject": "SCEP with Microsoft Intune and Entra ID-backed EAP-TLS",
+        "jaccard_similarity": 0.092,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiPAM",
+        "selected_subject": "Role-based separation of secret metadata from decrypted credential and audit-log access",
+        "nearest_same_product_subject": "Remote user groups: LDAP, RADIUS, and SAML membership projection",
+        "jaccard_similarity": 0.095,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiSIEM",
+        "selected_subject": "Microsoft Entra ID ingestion through Azure Event Hub plus Generic HTTPS Poller for risky users",
+        "nearest_same_product_subject": "FortiEMS discovery and endpoint tagging as a ZTNA remediation loop",
+        "jaccard_similarity": 0.07,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "FortiSASE",
+        "selected_subject": "MSSP tenant isolation across FortiCloud OUs, FortiCare accounts, ADOMs, SPA licensing, and ZTNA sync",
+        "nearest_same_product_subject": "FortiSASE — Endpoint-to-endpoint private access through SPA hub and BGP re-advertisement",
+        "jaccard_similarity": 0.068,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "selected_subject": "FortiCloud Overlay-as-a-Service configuration transaction, licensing, and rollback control plane",
+        "nearest_same_product_subject": "Remote-health-check BGP route suppression when every hub-to-spoke overlay is dead",
+        "jaccard_similarity": 0.061,
+        "manual_review": "Different feature/mechanism/workflow; nearest match shares only generic product terms or a downstream dependency, not the selected transaction."
+      }
+    ]
   }
 }
