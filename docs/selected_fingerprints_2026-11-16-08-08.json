@@ -1,0 +1,352 @@
+{
+  "schema_version": "2.0",
+  "created_at_local": "2026-11-16T08:08:03-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-16-08-08.json",
+  "inventory_sha": "0f85e0ec015899b0bab7b517c4030edafb8e5f0c",
+  "discovery_completed_before_lesson_generation": true,
+  "selected_count": 12,
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "IPv6 PCP MAP-controlled DNAT46 mappings in NAT64 deployments",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/908535/configuring-pcp-port-mapping-with-snat-and-dnat",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "PCP MAP request creates a time-bounded inbound mapping in a FortiGate PCP pool with NAT46 enabled; DNAT46 maps an IPv4 service endpoint to an IPv6 client address.",
+      "workflow_transaction_fingerprint": "IPv6 client -> PCP MAP request -> PCP server pool validates client prefix/opcode/lifetime -> mapping installed -> IPv4 service packet hits NAT46 policy -> DNAT46 mapping translates destination -> reply uses mapping until lifetime expiry/recycle.",
+      "failure_class": "PCP request rejected, mapping not created/expired, wrong pool/policy binding, NAT46 disabled or address-family mismatch.",
+      "evidence_pattern": "PCP mapping table/pool state, request opcode and lifetime, policy hit/session tuple, packet capture on IPv6 client and IPv4 service sides; each proves a different stage.",
+      "remediation_path": "Validate client6-prefix, external address/port range, allowed MAP opcode, lifetime bounds, NAT46 enablement, PCP inbound mode and pool on the matching NAT46 firewall policy; retest mapping then data path.",
+      "question_fingerprint": "Differentiate PCP control-plane MAP success from actual DNAT46 data-plane policy/session success.",
+      "diagram_topology_layout_fingerprint": "IPv6 client -> PCP control request -> FortiGate PCP pool -> NAT46/DNAT46 policy -> IPv4 server; separate control and data paths.",
+      "closest_historical_match": "IPv6 prefix delegation IA_PD (2026-11-15)",
+      "similarity_score": 0.055,
+      "uniqueness_decision": "PASS: prefix delegation assigns prefixes to downstream routers; PCP creates per-client port/address mappings and DNAT46 translations. Different protocol, state, transaction, evidence and remediation.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 27,
+        "nearest_record": {
+          "date": "2026-11-13",
+          "subject": "Central SNAT map selection with dynamic external IP-feed source objects",
+          "score": 0.085
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiGuard package version pinning and controlled downgrade semantics",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/756380/choosing-a-preferred-package-version-to-deploy",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager acting as FortiGuard server can hold a selected package object version as the maximum version it will provide; administrators separately choose whether existing devices are downgraded.",
+      "workflow_transaction_fingerprint": "Administrator chooses To Be Deployed Version -> FortiManager retains package revisions (default maximum 20) -> managed FortiGate requests package update -> FortiManager serves pinned version -> if device already has newer version, explicit Just Set Preferred Version or Downgrade decision controls state transition.",
+      "failure_class": "Unexpected signature/application package drift, pinned version not available due retention, or accidental downgrade during version pinning.",
+      "evidence_pattern": "Receive Status package version table, current device package version, selected To Be Deployed Version, device update result and actual package version on FortiGate.",
+      "remediation_path": "Select package under FortiGuard > Packages > Receive Status; distinguish holding a ceiling from forcing rollback; verify the chosen version is retained and test a representative device before broad rollout.",
+      "question_fingerprint": "Distinguish version ceiling from immediate rollback and infer the effect on devices already running newer package versions.",
+      "diagram_topology_layout_fingerprint": "Admin -> FortiManager package repository/version selector -> FortiGate update request -> pinned response; separate hold-only and downgrade branches.",
+      "closest_historical_match": "Policy Blocks reusable rule sets and installation-target boundaries (2026-10-27)",
+      "similarity_score": 0.067,
+      "uniqueness_decision": "PASS: Policy Blocks compose configuration objects; this feature controls FortiGuard package version delivery and rollback semantics. Different objects, control plane and failure evidence.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 22,
+        "nearest_record": {
+          "date": "2026-10-21",
+          "subject": "FortiManager — Retrieve versus policy-package authority",
+          "score": 0.111
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Report Guidance: chart and macro log-availability diagnostics",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/385104/report-guidance",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Report Guidance maps each report chart or macro to device type, log type and required fields, then indicates whether the necessary Analytics logs are available.",
+      "workflow_transaction_fingerprint": "Open report definition -> select Config Recommendation -> Report Guidance enumerates chart/macro requirements -> map device type and log type to required log fields -> availability status shows whether Analytics logs exist -> correct logging/license/time/data-source prerequisites before rerunning report.",
+      "failure_class": "Report renders No Data because required Analytics logs are absent, wrong log type/fields are not sent, logging is disabled, FortiGuard entitlement is missing, or no matching events exist.",
+      "evidence_pattern": "Report Guidance item title, device type, log type, log fields and Analytics logs available flag; compare against actual Analytics log view and source-device logging.",
+      "remediation_path": "Use Report Guidance to isolate missing chart/macro prerequisites; enable required device logging, populate fields, verify license-dependent logs, choose a valid time range and confirm Analytics indexing before rerun.",
+      "question_fingerprint": "Identify which missing prerequisite explains No Data without confusing archive availability with Analytics availability or dataset SQL execution.",
+      "diagram_topology_layout_fingerprint": "Report -> charts/macros -> device/log-type/field requirement matrix -> Analytics log availability -> populated report or No Data.",
+      "closest_historical_match": "Report dataset execution and hcache (2026-11-03)",
+      "similarity_score": 0.07,
+      "uniqueness_decision": "PASS: Dataset execution explains query expansion/execution/cache; Report Guidance is a preflight dependency matrix for chart/macro log availability. Different diagnostic stage and evidence.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-11-13",
+          "subject": "FortiAnalyzer forwarding-mode log export: reliable TCP buffering, filters, exclusions and masking",
+          "score": 0.113
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Energy-efficient Ethernet low-power timing and LLDP 802.3 EEE negotiation",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/861228",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "EEE allows supported twisted-pair copper PHYs to enter low-power idle during quiet periods and return to normal operation when frames arrive; LLDP 802.3 EEE TLV advertises EEE capability/configuration.",
+      "workflow_transaction_fingerprint": "Port auto-negotiates supported speed -> PHY and link partner negotiate EEE capability/timing -> idle periods enter low-power state -> wake timing restores normal signaling -> LLDP profile can advertise EEE configuration.",
+      "failure_class": "EEE absent due forced speed, unsupported SFP/QSFP medium, peer capability mismatch, LLDP TLV not enabled, or wake timing interoperability issue.",
+      "evidence_pattern": "diagnose switch physical-ports eee-status, physical port speed/auto-negotiation state, LLDP profile 802.3 TLV and peer LLDP data; distinguish EEE support from actual negotiated operation.",
+      "remediation_path": "Use auto-negotiation on supported copper port, verify peer EEE support, exclude SFP/QSFP, configure LLDP 802.3 eee-config TLV, inspect EEE status and test link wake under load.",
+      "question_fingerprint": "Distinguish EEE capability advertisement from negotiated low-power operation and identify unsupported media/forced-speed constraints.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch copper PHY <-> peer PHY with LLDP EEE TLV side channel and sleep/wake timing state machine.",
+      "closest_historical_match": "Dynamic VLAN pruning GVRP state and ISL trunk membership (2026-10-28)",
+      "similarity_score": 0.02,
+      "uniqueness_decision": "PASS: VLAN membership pruning is a control-plane membership mechanism; EEE is PHY low-power negotiation/timing. Different layer and evidence.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-10-30",
+          "subject": "LLDP-MED network policy for voice endpoints: VLAN advertisement, QoS TLVs, and port prerequisites",
+          "score": 0.069
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "RADIUS authentication survivability cache for 802.1X enterprise SSIDs",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/995668/radius-authentication-survivability-for-802-1x-ssids",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS wireless controller caches credentials/authorization data for previously authenticated 802.1X clients and can locally reauthenticate them during RADIUS outage for a bounded interval.",
+      "workflow_transaction_fingerprint": "Client authenticates successfully to RADIUS -> required cache attributes and server certificates are present -> FortiGate stores survivability record -> RADIUS becomes unreachable -> reconnect uses cached credential/authorization -> timeout expires -> client is no longer authorized -> RADIUS recovery restores normal server-backed auth.",
+      "failure_class": "Client cannot be cached due missing Fortinet-AS-Credential-Hash/Cisco AVPair, missing CA/server cert, timeout expiry, unsupported EAP mode or SSID option disabled.",
+      "evidence_pattern": "diagnose wpa wpad radius-auth-surviv-cache <SSID>, cache_cnt/expiration/VLAN/EAP type, online station table and server reachability; RADIUS outage alone does not prove local cache eligibility.",
+      "remediation_path": "Configure RADIUS server to return credential hash attribute for EAP-PEAP, import trusted CA and RADIUS server certificate, set wifi-ca-certificate/wifi-certificate, enable survivability and bounded interval on VAP, test reconnect during controlled outage.",
+      "question_fingerprint": "Separate ordinary RADIUS server failure from missing cache prerequisites and determine what the expiry timer means for authorization.",
+      "diagram_topology_layout_fingerprint": "802.1X client -> FortiAP -> FortiGate wireless controller -> RADIUS server; local cache branch on RADIUS outage with timeout expiry.",
+      "closest_historical_match": "EST/SCEP wired certificate bootstrap (2026-10-21)",
+      "similarity_score": 0.056,
+      "uniqueness_decision": "PASS: EST/SCEP bootstraps client certificates; survivability caches previously validated RADIUS credential state for bounded outage reauthentication. Different transaction.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 25,
+        "nearest_record": {
+          "date": "2026-10-21",
+          "subject": "FortiAP/Wireless — EST/SCEP wired certificate bootstrap",
+          "score": 0.102
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Endpoint compliance scan scheduling and host-health state persistence",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/241168/host-health-and-scanning",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC records each Agent, System and Admin scan separately; the currently applicable Agent scan is policy-selected, while failed Admin/System scans can continue to gate access after an Agent policy changes.",
+      "workflow_transaction_fingerprint": "Endpoint becomes eligible under compliance policy -> agent scan runs -> result stored in Host Health and history -> policy may select a different Agent scan -> prior Agent result for superseded scan stops governing current policy, but Admin/System failures remain independent access gates.",
+      "failure_class": "Host remains At Risk after policy change because Admin/System scan failed, current Agent scan is still failed, rescan was not queued/completed, or stale result is misinterpreted.",
+      "evidence_pattern": "Users & Hosts > Hosts > Host Properties > Health; scan type/name/status/current-agent highlight; Show History timestamps and scan detail; ReScan queue result.",
+      "remediation_path": "Identify which scan type is blocking access; verify currently applied Agent scan; inspect Admin/System state separately; queue ReScan and confirm endpoint contact; change scan configuration with awareness that prior failures are not retroactively rewritten.",
+      "question_fingerprint": "Determine whether a host is blocked by the current Agent scan or an independent Admin/System scan after policy change.",
+      "diagram_topology_layout_fingerprint": "Endpoint -> compliance policy -> Agent scan A/B -> Host Health state; parallel Admin and System gates feed network access decision.",
+      "closest_historical_match": "Windows AV compliance using Security-Center provider (2026-11-11)",
+      "similarity_score": 0.042,
+      "uniqueness_decision": "PASS: Windows AV provider lesson is one scan's evidence source; this lesson covers cross-scan state precedence, persistence and policy-change semantics.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-10-28",
+          "subject": "FortiLink CoA disconnect failures: accounting access and return path",
+          "score": 0.107
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F event export pipeline: receiver types, event mapping and internal/external persistence",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/499308/log-events-to-an-external-log-host",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F separates receiver definitions from per-event logging mode; events can be internal, external, or both and are serialized as Syslog CSV/CEF, SNMP traps or FortiAnalyzer OFTP.",
+      "workflow_transaction_fingerprint": "Create receiver in System Communication > Log Receivers -> select protocol/address/port/facility/security string -> map event in Event Management -> event is persisted internally and/or sent externally -> downstream collector parses event type, severity, entity and message fields.",
+      "failure_class": "Event generated but absent externally because event mapping is disabled/wrong, receiver/protocol/port is incorrect, format/receiver is incompatible, or external-only mode loses internal forensic copy.",
+      "evidence_pattern": "Event Management Log state, receiver definition, packet capture to receiver, Syslog/SNMP payload, internal event record and downstream receipt; a database event alone does not prove external forwarding.",
+      "remediation_path": "Verify receiver address/type/port and event mapping; choose Internal & External when local forensic history is required; capture UDP/TCP receiver traffic and validate format fields at collector; avoid assuming External means both.",
+      "question_fingerprint": "Distinguish event generation, internal persistence and remote delivery; identify the evidence needed at each boundary.",
+      "diagram_topology_layout_fingerprint": "Event producer -> event mapping branch -> internal event DB and/or external receiver -> Syslog/SNMP/OFTP collector.",
+      "closest_historical_match": "Trap-driven L2/L3 host learning (2026-10-21)",
+      "similarity_score": 0.037,
+      "uniqueness_decision": "PASS: host-learning traps are inbound switch-to-NAC topology events; this is outbound NAC event export and persistence selection.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 22,
+        "nearest_record": {
+          "date": "2026-10-27",
+          "subject": "FortiNAC-F — NetFlow sessions stop populating after FortiNAC-F 7.6.7",
+          "score": 0.067
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "EAP-TTLS/PAP 2FA: tunneled credential flow, token carriage and challenge limitation",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/125951/extensible-authentication-protocol",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-how-to-resolve-the-eap-authentication-failed-due-to-missing-token-error-when-using-eap-ttls-pap-2fa-authentication-216311",
+      "feature_mechanism_fingerprint": "EAP-TTLS establishes a TLS tunnel to the RADIUS authentication server and carries an inner method such as PAP; challenge-based EAP-TTLS 2FA behavior is version-dependent, with older versions requiring password+OTP concatenation.",
+      "workflow_transaction_fingerprint": "IKEv2/802.1X client starts EAP -> RADIUS EAP server certificate is validated -> TLS tunnel established -> inner PAP credentials are validated against local/remote identity source -> FortiToken factor is checked according to version-supported flow -> Access-Accept/Reject returns to NAS.",
+      "failure_class": "Password validates but 2FA remains partial/expecting token; challenge cannot be presented inside TTLS flow, wrong client EAP support, untrusted server certificate, or incompatible FortiAuthenticator/FortiClient/FortiOS versions.",
+      "evidence_pattern": "RADIUS log shows Remote LDAP user password authenticated, expecting FortiToken, then EAP authentication failed due to missing token; EAP-TTLS Access-Reject; client does not display token prompt.",
+      "remediation_path": "Verify client and server EAP-TTLS support and versions; trust server certificate; check whether 8.0.4+ behavior applies; on versions requiring it use supported password+OTP concatenation; do not use email/SMS OTP where the second factor cannot be received before password submission.",
+      "question_fingerprint": "Identify why password success followed by 'expecting FortiToken' still results in Access-Reject, and choose a version-appropriate token carriage method.",
+      "diagram_topology_layout_fingerprint": "FortiClient EAP initiator -> TLS tunnel to FortiAuthenticator RADIUS -> inner PAP -> LDAP/local password validation -> FortiToken factor -> RADIUS response.",
+      "closest_historical_match": "RADIUS policy selection, top-down precedence, local EAP versus proxy (2026-10-30)",
+      "similarity_score": 0.057,
+      "uniqueness_decision": "PASS: policy selection decides which authentication policy handles the request; this lesson covers TTLS tunnel termination, inner PAP and 2FA token carriage/version constraints.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 22,
+        "nearest_record": {
+          "date": "2026-10-30",
+          "subject": "RADIUS policy selection: request attributes, top-down precedence, and local EAP versus proxy",
+          "score": 0.146
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM glass-breaking mode: emergency secret access expansion, audit and alert controls",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/117972/role",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A role permission can allow a user to enter glass-breaking mode, temporarily extending access beyond normal per-secret/folder permissions to all secrets for exceptional recovery situations.",
+      "workflow_transaction_fingerprint": "Admin role grants Enter Glass Breaking Mode -> authorized operator activates mode during exceptional outage -> access scope expands to all secrets -> event trigger/audit log records activation -> email alert can notify reviewers -> operator exits mode and access returns to normal role/secret permissions.",
+      "failure_class": "Emergency operator cannot activate due missing role permission, broad access is left active too long, activation is not alerted/audited, or maintenance mode is confused with glass-breaking mode.",
+      "evidence_pattern": "Role Admin Settings permission, Glass Breaking Activated trigger, Events/Logs entry and email alert; maintenance mode is a separate process-suspension control.",
+      "remediation_path": "Restrict the permission to a small emergency-admin role, configure Glass Breaking Activated trigger and alert recipients, rehearse controlled activation/deactivation, review event logs and confirm normal secret ACLs apply after exit.",
+      "question_fingerprint": "Differentiate temporary all-secret emergency access from maintenance mode and ordinary secret approval/checkout.",
+      "diagram_topology_layout_fingerprint": "Normal RBAC/secret ACL -> emergency glass-breaking activation -> expanded secret scope -> trigger/audit/alert -> deactivation -> normal ACL restored.",
+      "closest_historical_match": "Approval revocation as a live session-control action (2026-10-30)",
+      "similarity_score": 0.077,
+      "uniqueness_decision": "PASS: approval revocation terminates/controls one authorized session; glass breaking is a role-gated emergency scope expansion across all secrets with separate audit/alert lifecycle.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-11-15",
+          "subject": "FortiPAM 1.9 auto-purging inactive auto-provisioned users (disable then delete)",
+          "score": 0.073
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "PDF report design templates and hierarchical template selection for reports, folders and bundles",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/440096/working-with-report-design-templates",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM PDF report layout is selected from templates assigned at report, folder or bundle scope; template selection uses report-specific then folder then root default precedence.",
+      "workflow_transaction_fingerprint": "Create/edit template -> assign to report, folder or bundle -> run report -> renderer resolves report template first, then current folder template, then root system template -> service-provider deployment applies Global template across customers -> manual PDF export can use Defined or New one-off format.",
+      "failure_class": "PDF report uses unexpected layout due report-level override, folder context ambiguity, root fallback or service-provider scope restriction.",
+      "evidence_pattern": "Report Design Template column, report/folder/bundle assignment, organization/scope in template name, selected folder context and export option (Defined vs New).",
+      "remediation_path": "Inspect template assignment at report/folder/bundle level; verify current folder context; use Super/Global for service-provider templates; select Defined to use hierarchy or New for one-off export.",
+      "question_fingerprint": "Resolve which template wins when report, folder and root templates all exist, and distinguish saved template selection from one-off PDF formatting.",
+      "diagram_topology_layout_fingerprint": "Report run -> report-level template? -> folder template? -> root default -> PDF renderer; bundle and service-provider global scope branches.",
+      "closest_historical_match": "Custom parser precedence and event recognizers (2026-10-27)",
+      "similarity_score": 0.02,
+      "uniqueness_decision": "PASS: parser precedence governs event normalization; this is PDF presentation-template resolution and rendering scope.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-10-27",
+          "subject": "FortiSIEM — Custom parser precedence, event recognizers, and attribute testing",
+          "score": 0.076
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "HTTP/3 QUIC inspection actions in security profile groups",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/219936",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE can inspect HTTP/3 over QUIC for agent and edge-device traffic through SSL inspection settings; policy offers Inspect, Bypass or Block actions and proxy-policy traffic has a separate constraint.",
+      "workflow_transaction_fingerprint": "Client sends QUIC over UDP/443 -> security profile group selects HTTP/3 action -> Inspect passes traffic to inspection features; Bypass permits without inspection; Block drops QUIC so browser commonly falls back to HTTP/2 over TLS/TCP -> proxy-user path may require browser QUIC disablement.",
+      "failure_class": "Security profile does not inspect HTTP/3, traffic bypasses inspection, proxy policy cannot apply same HTTP/3 setting, or QUIC block fails to cause expected fallback.",
+      "evidence_pattern": "Security profile group SSL inspection method, HTTP/3 action, endpoint UDP/443 capture, browser protocol result and inspection logs; browser fallback does not prove deep inspection occurred.",
+      "remediation_path": "Choose Certificate or Deep inspection before configuring HTTP/3 action; scope the profile to agent/edge traffic; for proxy users block QUIC at browser/endpoint or policy layer and verify HTTP/2 fallback; test inspect/bypass/block separately.",
+      "question_fingerprint": "Distinguish Inspect from Bypass and Block, and recognize that proxy-policy traffic is not governed by the agent/edge HTTP/3 action.",
+      "diagram_topology_layout_fingerprint": "Agent/edge QUIC UDP443 -> security profile group -> Inspect/Bypass/Block branches; proxy-user browser QUIC block -> HTTP/2 fallback.",
+      "closest_historical_match": "Secure Browser extension profiles and browser-side controls (2026-11-11)",
+      "similarity_score": 0.1,
+      "uniqueness_decision": "PASS: Secure Browser controls browser extension/identity behavior; HTTP/3 inspection is transport/protocol-specific security inspection and QUIC fallback.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 24,
+        "nearest_record": {
+          "date": "2026-11-12",
+          "subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
+          "score": 0.125
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "IPv6 segmentation across a shared ADVPN overlay using VRF route isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/472687",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS supports multiple IPv6 VRF overlay networks over a single ADVPN overlay, allowing branches to reuse the same prefixes while keeping route tables and shortcut reachability isolated.",
+      "workflow_transaction_fingerprint": "Spoke attaches IPv6 subnets to VRF-specific overlay interfaces -> BGP VPNv6 route exchange/route-reflector client advertises VRF routes -> hub and spoke maintain per-VRF route tables -> ADVPN shortcut forms within the matching VRF -> shared tunnel transport carries isolated tenant traffic without cross-VRF route mixing.",
+      "failure_class": "IPv6 route not imported/advertised, wrong VRF/interface binding, route-reflector/additional-path settings incomplete, shortcut not established, or overlapping prefixes leak across VRF boundary.",
+      "evidence_pattern": "Per-VRF IPv6 routing table, BGP VPNv6 received/advertised routes, neighbor-group RR/activate/additional-path settings, shortcut tunnel state and packet capture showing VRF interface/route selection.",
+      "remediation_path": "Validate VRF assignment on each overlay interface, VPNv6 activation and route-reflector-client settings, additional-path configuration where used, per-VRF prefix advertisements and shortcut formation; test same-prefix isolation between tenants.",
+      "question_fingerprint": "Determine why shared ADVPN transport does not imply shared routing, and isolate missing VPNv6 route reflection from a shortcut/underlay problem.",
+      "diagram_topology_layout_fingerprint": "Two tenants/VRFs with overlapping IPv6 prefixes -> shared ADVPN hub/overlay -> VPNv6 route reflection -> per-VRF shortcuts and isolated route tables.",
+      "closest_historical_match": "Remote-health-check BGP route suppression across dual hubs (2026-11-02)",
+      "similarity_score": 0.061,
+      "uniqueness_decision": "PASS: remote-health-check suppresses hub routes on dead overlays; this lesson isolates IPv6 tenants by VRF over one shared ADVPN transport. Different routing objective and state.",
+      "semantic_check": {
+        "historical_window": "2026-10-17 through 2026-11-15",
+        "same_product_records": 21,
+        "nearest_record": {
+          "date": "2026-11-12",
+          "subject": "Per-packet distribution across aggregate static IPsec tunnels in SD-WAN",
+          "score": 0.106
+        },
+        "manual_mechanism_review": "PASS",
+        "decision": "PASS"
+      }
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "products": [
+      "FortiGate",
+      "FortiManager",
+      "FortiAnalyzer",
+      "FortiSwitch",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiNAC-F",
+      "FortiAuthenticator",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ]
+  }
+}
