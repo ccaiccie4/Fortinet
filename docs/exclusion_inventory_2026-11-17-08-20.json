@@ -10,7 +10,7 @@
     "description": "All actual published Fortinet report/status artifacts in docs/ for the rolling 30-day window, including the earlier 2026-11-17 07:56 report; 11/17 same-day lesson records are exclusions for this later run."
   },
   "discovery_before_topic_selection": true,
-  "generation_started_after_inventory_publication": false,
+  "generation_started_after_inventory_publication": true,
   "provenance": {
     "previous_inventory_path": "docs/exclusion_inventory_2026-11-15-08-26.json",
     "previous_inventory_sha": "04a8ac57331072792e8468b67d8aa26286c46bf4",
@@ -6929,31 +6929,340 @@
       "reason": "Already taught 2026-11-15; avoid tunnel liveness probes and choose split DNS instead."
     }
   ],
-  "selected_candidates": [],
-  "candidate_audit": [],
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Proxy-mode WebSocket frame inspection across AV, IPS, DLP and File Filter",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/245440/enhanced-utm-protection-with-websocket-traffic-inspection",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/copilot-is-not-usable-after-an-upgrade-to-version-7-6-8-while-the-explicit-proxy-is-in-use-230878",
+      "feature_mechanism_fingerprint": "Proxy-mode protocol-options profile enables WebSocket parsing so UTM engines inspect messages inside the upgraded tunnel; it is distinct from HTTP proxy request-length enforcement.",
+      "workflow_transaction_fingerprint": "Client HTTP CONNECT/HTTPS -> proxy TLS inspection -> HTTP Upgrade handshake -> WebSocket frames -> AV/IPS/DLP/File Filter verdict -> allow or block; proxy URI-size validation can fail before the WebSocket stream is established.",
+      "failure_class": "WebSocket not inspected because profile/policy is flow mode or status disabled; proxy denies long URI with HTTP 414; TLS inspection or protocol parsing mismatch.",
+      "evidence_pattern": "Forward-traffic log shows UTM allowed versus proxy denied; browser shows 414; proxy debug identifies URI too long; WebSocket handshake and UTM logs show whether frames reached inspection.",
+      "remediation_path": "Use proxy inspection mode; enable WebSocket in the protocol-options profile; attach the intended AV/IPS/DLP/File Filter profiles; separately tune explicit-proxy max-request-length only when logs prove URI-length rejection.",
+      "question_fingerprint": "Distinguish UTM WebSocket frame inspection from explicit-proxy URI-length denial; identify the stage at which 414 occurs and what the log proves.",
+      "diagram_topology_layout_fingerprint": "Client -> explicit proxy/TLS inspection -> HTTP Upgrade -> WebSocket frame parser -> parallel AV/IPS/DLP/File Filter engines; pre-handshake URI-length rejection side branch.",
+      "selection_reason": "No WebSocket frame-inspection lesson or equivalent proxy URI-stage lesson appears in the 330 historical records; selected from FortiOS 8.0 New Features Guide."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiGuard package version pinning and controlled rollback",
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/c73665fb-c0b3-11f0-8b43-d2943efe5b2f/FortiManager-8.0-New_Features_Guide.pdf",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-fds-connectivity-checking-when-error-message-is-http-1-0-503-service-unavailable-or-http-1-0-504-gateway-timeout-and-why-the-web-proxy-must-be-in-tunnel-mode-for-fortimanager-7-4-and-above-231252",
+      "feature_mechanism_fingerprint": "FortiManager FDS package repository exposes a preferred To Be Deployed Version per FortiGuard package; Just Set Preferred Version prevents future rollout beyond the chosen version, while Downgrade actively returns managed devices already on newer package versions.",
+      "workflow_transaction_fingerprint": "FDS download and repository update -> administrator selects package version -> preferred version stored -> managed FortiGate requests package from local FDS -> device receives pinned version; optional downgrade pushes older package to devices already beyond it.",
+      "failure_class": "FDS download/HTTPS proxy failure, AVIPS service disabled, unsupported TLS/proxy mode, entitlement or package missing, mistaken firmware-version rollback instead of signature-package pinning.",
+      "evidence_pattern": "FortiGuard Packages receive status and version dates; diagnose fmupdate update-status fds; FDS debug shows TLS protocol alert or connect error; proxy logs show 503/504; device package version compared with preferred version.",
+      "remediation_path": "Verify AVIPS service and contract, DNS/FDS reachability and proxy tunnel mode; populate package repository; select preferred version; choose downgrade only when devices must be actively reverted; monitor receive and device install state.",
+      "question_fingerprint": "Differentiate preferred-version pinning from forced downgrade and firmware upgrade; identify FDS connectivity prerequisites before changing package version.",
+      "diagram_topology_layout_fingerprint": "FortiGuard FDS -> FortiManager package repository -> preferred-version selector -> managed FortiGate fleet; separate pin-only and downgrade rollout branches.",
+      "selection_reason": "No FortiGuard package version pinning/rollback mechanism in the 330 historical records; distinct from firmware-template sequencing and policy package installs."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Playbook editor node-level debugging, replay and partial execution",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/664591/playbook-editor-improvements",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/trigger-a-fortigate-automation-from-fortweb-alerts-on-fortianalyzer-using-a-playbook-230700",
+      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 playbook editor adds step-by-step debug, task-output inspection, replay with new input, partial execution from a selected node, Jinja control flow and Branch/Wait/Compare/Switch nodes.",
+      "workflow_transaction_fingerprint": "Alert/event trigger -> playbook input mapping -> ordered task graph -> connector/API action -> downstream decision; debug pauses at each node, replay injects changed input, partial run starts from a selected node.",
+      "failure_class": "Wrong source-device mapping, alert-handler scope limitation, malformed input or Jinja expression, inactive connector, branch condition mismatch, task failure hidden by end-to-end run.",
+      "evidence_pattern": "Per-node input/output and execution state; connector status; trigger payload fields such as groupby1/epip; task result and replay comparison.",
+      "remediation_path": "Separate trigger selection from playbook execution; map the source event to the target FortiGate explicitly; run step-by-step debug; inspect the first incorrect node; replay from that node with corrected input; verify connector active state.",
+      "question_fingerprint": "Distinguish event-trigger/alert-handler scope from cross-device playbook action; choose the earliest node to inspect and when partial replay is safe.",
+      "diagram_topology_layout_fingerprint": "FortiWeb alert -> FortiAnalyzer playbook trigger -> input mapping -> node-by-node debug lane -> FortiGate connector action -> branch/wait/compare outcome; replay bypass lane.",
+      "selection_reason": "The editor's debug/replay/partial-run execution model is distinct from historical on-demand playbook triggering and automation-stitch/alert-handler topics."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Auto-network and automatic ISL topology formation versus CAPWAP FortiLink discovery",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163696",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-preventing-automatic-fortilink-adoption-on-standalone-fortiswitch-in-l2-extended-networks-229855",
+      "feature_mechanism_fingerprint": "FortiSwitch auto-network/auto-ISL creates LACP-active inter-switch trunks and applies management-VLAN defaults; FortiLink CAPWAP access-controller discovery is a separate control-plane advertisement that can still cause remote adoption.",
+      "workflow_transaction_fingerprint": "Factory reset/standalone switch -> LLDP and auto-network detect neighbor -> physical inter-switch links join auto-ISL LAG -> mgmt VLAN 4094/native VLAN and trust/edge defaults apply; separate CAPWAP discovery packets can advertise the switch to a remote FortiGate.",
+      "failure_class": "Unexpected remote FortiLink adoption across L2 extension, VLAN deletion, port/hostname rewrite, loss of standalone config; disabling auto-ISL alone leaves CAPWAP discovery active.",
+      "evidence_pattern": "auto-network/auto-isl and auto-fortilink-discovery values; LLDP neighbor and LACP actor/partner state; CAPWAP discovery traffic; FortiGate switch-controller adoption event; management VLAN 4094.",
+      "remediation_path": "Choose intended standalone or FortiLink mode; disable auto-network/auto-isl and auto-fortilink-discovery as appropriate; disable AC discovery with config switch-controller global set ac-discovery-type disable when remote adoption must be prevented; review LLDP profile.",
+      "question_fingerprint": "Distinguish automatic ISL trunk formation from CAPWAP controller discovery; determine why disabling auto-ISL did not prevent adoption.",
+      "diagram_topology_layout_fingerprint": "Two standalone FortiSwitches auto-form an LACP ISL and management VLAN; separate CAPWAP discovery broadcast crosses L2 extension to remote FortiGate; AC-discovery disable gate.",
+      "selection_reason": "The historical records cover MCLAG/LACP/EVPN and FortiLink adoption, but not the distinct auto-network plus CAPWAP-discovery split and its L2-extended adoption failure."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "RADIUS authentication survivability for previously authenticated 802.1X clients",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/995668",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-debugging-radius-authentication-issues-on-the-fortiap-wifi-207465",
+      "feature_mechanism_fingerprint": "FortiGate/FortiAP caches a RADIUS-provided credential hash for a previously authenticated PEAP client and uses it for local reauthentication during RADIUS unavailability; new or expired clients still need RADIUS.",
+      "workflow_transaction_fingerprint": "802.1X/EAP-PEAP -> RADIUS Access-Request/Challenge/Accept -> credential-hash attribute and server certificate trust cached -> RADIUS outage -> known client reauthenticates locally until cache timeout -> RADIUS recovery or cache expiry returns normal flow.",
+      "failure_class": "Missing hash attribute, untrusted RADIUS CA/server certificate, survivability disabled, cache expired, or false assumption that a new client can authenticate during outage.",
+      "evidence_pattern": "RADIUS Access-Accept contains Fortinet-AS-Credential-Hash or Cisco-AVPair AS-Credential-Hash; PEAP client identity and cache age; wpad station logs; RADIUS packet capture; server connectivity test.",
+      "remediation_path": "Enable survivability on the correct enterprise SSID; configure the hash attribute on RADIUS; import root CA and server certificate; set a bounded cache interval; test known and new clients separately and verify RADIUS recovery.",
+      "question_fingerprint": "Distinguish cached-client reauthentication from new-client authentication; interpret a failed direct RADIUS test during an outage without assuming the cache is broken.",
+      "diagram_topology_layout_fingerprint": "Client -> FortiAP/FortiGate 802.1X authenticator -> RADIUS server with credential-hash return; outage branch to local cache with timeout gate; new-client deny branch.",
+      "selection_reason": "No credential-hash caching or RADIUS outage survivability mechanism appears in the historical wireless lessons; distinct from RadSec transport security."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Kerberos authentication support for FortiNAC Manager and Control Application identities",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/724520/configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-mschapv2-authentication-join-fortinac-in-domain-and-checks-144737",
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 adds Kerberos for admin and user authentication on FNAC-CA and admin authentication on FNAC-M; directory configuration carries the NetBIOS/domain identity used for Kerberos, distinct from LDAP attribute lookup and Winbind MSCHAPv2 trust.",
+      "workflow_transaction_fingerprint": "User/admin enters domain identity -> FortiNAC directory maps realm/NetBIOS context -> KDC issues service ticket -> FortiNAC validates ticket and applies role; LDAP lookup retrieves user/group attributes on a separate path.",
+      "failure_class": "NetBIOS/realm mismatch, KDC DNS or time skew, missing domain trust/SPN, LDAP lookup succeeds but Kerberos ticket authentication fails, or Winbind/MSCHAPv2 path confused with admin login.",
+      "evidence_pattern": "Directory configuration and NetBIOS name; domain/KDC DNS and clock; Kerberos authentication logs; LDAP user lookup success; Winbind trust state and MSCHAPv2 test result.",
+      "remediation_path": "Align the configured NetBIOS/domain identity with the AD domain; verify KDC discovery, time synchronization and service identity; test Kerberos login separately from LDAP search and Winbind/MSCHAPv2 authentication.",
+      "question_fingerprint": "Separate Kerberos admin/user authentication from LDAP attribute lookup and Winbind-backed MSCHAPv2; interpret LDAP success with Kerberos failure.",
+      "diagram_topology_layout_fingerprint": "Admin/user -> FNAC-M/FNAC-CA directory identity -> KDC ticket exchange -> role decision; parallel LDAP attribute lookup and separate Winbind/MSCHAPv2 branch.",
+      "selection_reason": "The 330 historical records include FortiNAC-F Winbind/MSCHAPv2 domain join but not FortiNAC 9.4 Kerberos for FNAC-M/CA admin and user authentication."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Microsoft Entra ID as a native FortiNAC-F authentication source for 802.1X and captive portal",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.5/microsoft-entra-id-authentication-cookbook/181381/microsoft-entra-id-authentication-using-802-1x-with-ttls-pap",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-is-unable-to-import-entra-id-groups-due-to-a-long-description-230752",
+      "feature_mechanism_fingerprint": "FortiNAC-F Service Connector authenticates users against Microsoft Entra ID for local RADIUS TTLS-PAP, captive portal and certificate-based workflows, then maps synchronized remote groups to NAC roles; TTLS-PAP flow does not support MFA.",
+      "workflow_transaction_fingerprint": "Supplicant -> AP/switch -> FortiGate RADIUS client -> FortiNAC-F local RADIUS/TLS -> Entra ID connector token/authentication -> user/group mapping -> Access-Accept and network role; remote-group poll is a separate sync path.",
+      "failure_class": "Connector credentials/permissions or token flow fail, TTLS-PAP MFA assumption, RADIUS TLS trust mismatch, user authenticates but remote group import fails due 255-character description limit.",
+      "evidence_pattern": "Service Connector status and poll output; local RADIUS Access-Request/Accept/Reject; group import debug AzureADApplicationInterface; output.master SQL Data too long for column description; role mapping result.",
+      "remediation_path": "Validate Entra app registration and connector permissions; choose supported auth flow and do not expect MFA with TTLS-PAP; validate RADIUS certificate chain; shorten group descriptions to 255 characters; re-poll and verify group-to-role mapping separately from user authentication.",
+      "question_fingerprint": "Differentiate successful user authentication from failed remote-group synchronization; identify TTLS-PAP MFA limitation and 255-character group description boundary.",
+      "diagram_topology_layout_fingerprint": "Supplicant -> AP/switch -> FortiGate RADIUS -> FortiNAC-F service connector -> Entra ID; side remote-group sync -> NAC role map -> Access-Accept.",
+      "selection_reason": "The historical FortiNAC-F lessons cover SAML SSO, Winbind and device tags but not Entra ID as the direct RADIUS/captive-portal authentication source; the selected focus is TTLS-PAP and group synchronization, not the earlier FortiAuthenticator SCEP/EAP-TLS flow."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Active-passive HA priority override: fail back to healthy preferred node or minimize failovers",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-fortiauthenticator-routing-issue-with-node-specific-gateway-for-high-availability-cluster-227687",
+      "feature_mechanism_fingerprint": "FortiAuthenticator HA election combines node priority with monitored-interface health and a stability period; Priority Override selects either favoring a recovered healthy high-priority node or minimizing additional failovers.",
+      "workflow_transaction_fingerprint": "Active/standby heartbeat and state sync -> monitored interfaces evaluated -> stability timer -> priority override policy selects active node -> authentication services move; node-specific gateway configuration remains a separate per-node routing state.",
+      "failure_class": "Unexpected failback, repeated role changes, interface-count precedence misunderstood, stability timer too short, or authentication node active but default route wrong after reboot.",
+      "evidence_pattern": "HA role/priority, monitored-interface count and state, stability timer, peer heartbeat/sync, authentication request destination, per-node static route and node-specific gateway.",
+      "remediation_path": "Choose the failover policy deliberately; monitor only service-critical interfaces; set a stability interval appropriate to link flaps; verify sync before failback; inspect node-specific gateway and static route independently after role changes.",
+      "question_fingerprint": "Differentiate interface-health precedence from priority, and HA role selection from node-specific routing; select the intended failback policy.",
+      "diagram_topology_layout_fingerprint": "Two FortiAuthenticator nodes with heartbeat/state sync, monitored-interface and stability gates, two priority-override decision paths, and independent per-node gateway routes.",
+      "selection_reason": "No FortiAuthenticator HA priority-override/failback policy appears in the historical inventory; distinct from FortiNAC-F HA and other product HA mechanisms."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Just-in-Time Windows privilege elevation using PowerShell checkout/check-in scripts over WinRM",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/948024/just-in-time-jit-privilege-via-secret-checkout-check-in-powershell",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/how-to-solve-the-jit-access-error-script-execution-failed-continuing-checkin-checkout-stdeer-add-localgroupmemeber-missing-an-argument-for-parameter-231255",
+      "feature_mechanism_fingerprint": "Secret checkout runs a PowerShell script over WinRM to add the mapped user to a privileged local/domain group; check-in runs a paired script to remove membership; script failure warns but does not block checkout/check-in.",
+      "workflow_transaction_fingerprint": "User checks out secret -> FortiPAM resolves target privileged or associated-secret credential -> WinRM remote session -> Add-LocalGroupMember/Add-ADGroupMember -> user signs out/in to refresh token -> check-in -> Remove-LocalGroupMember/Remove-ADGroupMember -> sign out/in again.",
+      "failure_class": "WinRM unavailable, privileged credential resolution fails, user variable empty due Launch secrets with PAM credentials, script command missing Member argument, check-in script not executed, or existing logon token retains elevation.",
+      "evidence_pattern": "Get-Service WinRM returns Running; Test-WSMan reaches target; Secret Event & Video shows script stderr; Add-LocalGroupMember missing Member indicates empty variable; Get-LocalGroupMember shows membership before/after.",
+      "remediation_path": "Enable and test WinRM; verify target privileged account or associated secret; correct variable scope by using explicit secret username or associated-secret context; validate both scripts; verify membership and require sign-out/in after elevation and de-elevation.",
+      "question_fingerprint": "Interpret missing Member argument as variable-resolution failure rather than group-policy denial; distinguish successful checkout from successful script execution and token refresh.",
+      "diagram_topology_layout_fingerprint": "User checkout/check-in -> FortiPAM secret and credential resolver -> WinRM -> PowerShell add/remove group membership; OS token refresh gates before and after.",
+      "selection_reason": "The historical FortiPAM topics cover rotation, checkout, approvals, launchers and migration but not reversible JIT group membership through paired WinRM scripts."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Policy-based and file-based Event Tagging as post-parse enrichment",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/490633/event-tagging",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-216/event-name-overwrite-issue-in-fortisiem-7-5-1-228714",
+      "feature_mechanism_fingerprint": "Event Tagging applies ordered policy-based rules and CSV file-based mappings to Collector-parsed events; later matching rules can overwrite earlier tags, and changes require separate Apply operations.",
+      "workflow_transaction_fingerprint": "Raw event -> parser/normalization -> policy-based tags top-to-bottom -> file-based tags top-to-bottom -> enriched event -> rule/report evaluation; custom parser collisions occur before tag enrichment.",
+      "failure_class": "Wrong tag rule order, file mapping mismatch, saved-but-not-applied rules, later rule overwrites, attempt to repair parser field collision with a tag, reserved system attribute overwritten.",
+      "evidence_pattern": "Raw event and parsed Event Name/Event Type; tag policy order and Apply state; Collector event attributes before/after; CSV key match; parser test versus live event.",
+      "remediation_path": "Validate parser output first; create policy-based or CSV file-based tags on stable parsed keys; order rules intentionally; apply both policy and file-based changes separately; avoid reserved/system-managed fields.",
+      "question_fingerprint": "Distinguish parser normalization from post-parse tags; predict last-match overwrite and identify why a saved rule has no effect until Apply.",
+      "diagram_topology_layout_fingerprint": "Raw source -> Collector parser -> ordered policy tag rules -> ordered CSV tag rules -> enriched event -> analytics/rules; parser-fault side branch before tagging.",
+      "selection_reason": "No FortiSIEM Event Pipeline Event Tagging lesson appears in the 330 records; distinct from parser authoring and incident-rule tags."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Agent-based ZTNA destination objects using IP ranges, subnets and port lists",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/13465/new-features",
+      "scenario_community_url": "https://community.fortinet.com/forticlient-4/ztna-destination-access-is-slow-when-ipv6-is-enabled-on-the-windows-network-adapter-231067",
+      "feature_mechanism_fingerprint": "FortiSASE agent-based ZTNA destination objects can match literal IPs, ranges/CIDR and optional port lists/ranges; destination type controls whether endpoint DNS resolution is required.",
+      "workflow_transaction_fingerprint": "FortiClient agent intercepts app traffic -> destination object match by host/range and port -> FortiSASE policy/PoP steering -> private access path -> SPA/FortiGate gateway -> private application; FQDN match adds DNS proxy resolution before policy match.",
+      "failure_class": "Feature-version or FortiClient version gate, incorrect CIDR/port definition, FQDN resolution delay over IPv6, destination object not referenced by policy, private route/gateway unavailable.",
+      "evidence_pattern": "FortiSASE Feature/Mature version; FortiClient build; destination object type and port list; endpoint DNS query timing; FortiClient log 'Block IPV6 DNS query'; private access gateway route and policy hit.",
+      "remediation_path": "Enable the required Feature version and FortiClient 7.2.8+; define the narrowest valid range/CIDR and port set; use literal IP objects where DNS is not required; validate policy and private path separately.",
+      "question_fingerprint": "Differentiate destination-object matching from DNS resolution; choose IP range versus FQDN when IPv6 DNS proxy delay is observed; preserve least-privilege port scope.",
+      "diagram_topology_layout_fingerprint": "Endpoint FortiClient -> destination object match (CIDR/range/ports or FQDN/DNS) -> FortiSASE policy/PoP -> private gateway -> application; DNS timeout side branch.",
+      "selection_reason": "The inventory includes agentless ZTNA and split DNS, but not agent-based destination IP range/subnet/port matching; the new match object is a distinct policy primitive."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiCloud SD-WAN Overlay-as-a-Service transaction, rollback and spoke verification",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-forticloud-overlay-as-a-service-oaas-portal-task-error-failed-to-delete-the-zone-of-your-device-190472",
+      "feature_mechanism_fingerprint": "FortiCloud OaaS controller communicates with the FortiGate OaaS agent over FGFM, validates and compares target configuration, applies it as a transaction, and rolls back orchestrated changes if any step fails.",
+      "workflow_transaction_fingerprint": "FortiCloud OaaS portal task -> FGFM management tunnel -> FortiGate OaaS agent validates target/current config -> transaction applies SD-WAN zones, members, policies and overlay settings -> commit/sync or rollback -> spoke traffic continues -> get oaas status reports version/task/error.",
+      "failure_class": "OaaS license absent/expired, FGFM tunnel or FortiCloud reachability failure, pre-existing SD-WAN service ID 1 conflict, invalid target config, BGP/IPsec/route/SLA not converged after deployment.",
+      "evidence_pattern": "System > FortiGuard SWOS entitlement; diagnose test update info; get oaas status configuration version/sync status/task ID/error; show system sdwan; BGP summary and IPsec tunnel state.",
+      "remediation_path": "License every participating FortiGate; verify FGFM and FortiCloud reachability; migrate conflicting default service rule ID 1 before OaaS deployment; inspect get oaas status; verify IPsec, BGP, routes, SLAs and policy after commit; retry only after correcting the reported conflict.",
+      "question_fingerprint": "Distinguish portal task failure from successful local config sync; identify default SD-WAN service ID 1 conflict and use transaction/rollback status correctly.",
+      "diagram_topology_layout_fingerprint": "FortiCloud OaaS controller -> FGFM tunnel -> FortiGate OaaS agent -> compare/validate -> transaction apply -> commit or rollback; parallel spoke data plane and verification path.",
+      "selection_reason": "No OaaS controller/agent transaction or rollback lesson appears in the historical records; distinct from FortiManager overlay templates and Fabric Overlay Orchestrator IPAM."
+    }
+  ],
+  "candidate_audit": [
+    {
+      "product": "FortiGate",
+      "subject": "Proxy-mode WebSocket frame inspection across AV, IPS, DLP and File Filter",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "Proxy-mode protocol-options profile enables WebSocket parsing so UTM engines inspect messages inside the upgraded tunnel; it is distinct from HTTP proxy request-length enforcement.",
+      "workflow_fingerprint": "Client HTTP CONNECT/HTTPS -> proxy TLS inspection -> HTTP Upgrade handshake -> WebSocket frames -> AV/IPS/DLP/File Filter verdict -> allow or block; proxy URI-size validation can fail before the WebSocket stream is established.",
+      "selection_reason": "No WebSocket frame-inspection lesson or equivalent proxy URI-stage lesson appears in the 330 historical records; selected from FortiOS 8.0 New Features Guide."
+    },
+    {
+      "product": "FortiManager",
+      "subject": "FortiGuard package version pinning and controlled rollback",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiManager FDS package repository exposes a preferred To Be Deployed Version per FortiGuard package; Just Set Preferred Version prevents future rollout beyond the chosen version, while Downgrade actively returns managed devices already on newer package versions.",
+      "workflow_fingerprint": "FDS download and repository update -> administrator selects package version -> preferred version stored -> managed FortiGate requests package from local FDS -> device receives pinned version; optional downgrade pushes older package to devices already beyond it.",
+      "selection_reason": "No FortiGuard package version pinning/rollback mechanism in the 330 historical records; distinct from firmware-template sequencing and policy package installs."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Playbook editor node-level debugging, replay and partial execution",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiAnalyzer 8.0 playbook editor adds step-by-step debug, task-output inspection, replay with new input, partial execution from a selected node, Jinja control flow and Branch/Wait/Compare/Switch nodes.",
+      "workflow_fingerprint": "Alert/event trigger -> playbook input mapping -> ordered task graph -> connector/API action -> downstream decision; debug pauses at each node, replay injects changed input, partial run starts from a selected node.",
+      "selection_reason": "The editor's debug/replay/partial-run execution model is distinct from historical on-demand playbook triggering and automation-stitch/alert-handler topics."
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "Auto-network and automatic ISL topology formation versus CAPWAP FortiLink discovery",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiSwitch auto-network/auto-ISL creates LACP-active inter-switch trunks and applies management-VLAN defaults; FortiLink CAPWAP access-controller discovery is a separate control-plane advertisement that can still cause remote adoption.",
+      "workflow_fingerprint": "Factory reset/standalone switch -> LLDP and auto-network detect neighbor -> physical inter-switch links join auto-ISL LAG -> mgmt VLAN 4094/native VLAN and trust/edge defaults apply; separate CAPWAP discovery packets can advertise the switch to a remote FortiGate.",
+      "selection_reason": "The historical records cover MCLAG/LACP/EVPN and FortiLink adoption, but not the distinct auto-network plus CAPWAP-discovery split and its L2-extended adoption failure."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "RADIUS authentication survivability for previously authenticated 802.1X clients",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiGate/FortiAP caches a RADIUS-provided credential hash for a previously authenticated PEAP client and uses it for local reauthentication during RADIUS unavailability; new or expired clients still need RADIUS.",
+      "workflow_fingerprint": "802.1X/EAP-PEAP -> RADIUS Access-Request/Challenge/Accept -> credential-hash attribute and server certificate trust cached -> RADIUS outage -> known client reauthenticates locally until cache timeout -> RADIUS recovery or cache expiry returns normal flow.",
+      "selection_reason": "No credential-hash caching or RADIUS outage survivability mechanism appears in the historical wireless lessons; distinct from RadSec transport security."
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Kerberos authentication support for FortiNAC Manager and Control Application identities",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiNAC 9.4 adds Kerberos for admin and user authentication on FNAC-CA and admin authentication on FNAC-M; directory configuration carries the NetBIOS/domain identity used for Kerberos, distinct from LDAP attribute lookup and Winbind MSCHAPv2 trust.",
+      "workflow_fingerprint": "User/admin enters domain identity -> FortiNAC directory maps realm/NetBIOS context -> KDC issues service ticket -> FortiNAC validates ticket and applies role; LDAP lookup retrieves user/group attributes on a separate path.",
+      "selection_reason": "The 330 historical records include FortiNAC-F Winbind/MSCHAPv2 domain join but not FortiNAC 9.4 Kerberos for FNAC-M/CA admin and user authentication."
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Microsoft Entra ID as a native FortiNAC-F authentication source for 802.1X and captive portal",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiNAC-F Service Connector authenticates users against Microsoft Entra ID for local RADIUS TTLS-PAP, captive portal and certificate-based workflows, then maps synchronized remote groups to NAC roles; TTLS-PAP flow does not support MFA.",
+      "workflow_fingerprint": "Supplicant -> AP/switch -> FortiGate RADIUS client -> FortiNAC-F local RADIUS/TLS -> Entra ID connector token/authentication -> user/group mapping -> Access-Accept and network role; remote-group poll is a separate sync path.",
+      "selection_reason": "The historical FortiNAC-F lessons cover SAML SSO, Winbind and device tags but not Entra ID as the direct RADIUS/captive-portal authentication source; the selected focus is TTLS-PAP and group synchronization, not the earlier FortiAuthenticator SCEP/EAP-TLS flow."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Active-passive HA priority override: fail back to healthy preferred node or minimize failovers",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiAuthenticator HA election combines node priority with monitored-interface health and a stability period; Priority Override selects either favoring a recovered healthy high-priority node or minimizing additional failovers.",
+      "workflow_fingerprint": "Active/standby heartbeat and state sync -> monitored interfaces evaluated -> stability timer -> priority override policy selects active node -> authentication services move; node-specific gateway configuration remains a separate per-node routing state.",
+      "selection_reason": "No FortiAuthenticator HA priority-override/failback policy appears in the historical inventory; distinct from FortiNAC-F HA and other product HA mechanisms."
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Just-in-Time Windows privilege elevation using PowerShell checkout/check-in scripts over WinRM",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "Secret checkout runs a PowerShell script over WinRM to add the mapped user to a privileged local/domain group; check-in runs a paired script to remove membership; script failure warns but does not block checkout/check-in.",
+      "workflow_fingerprint": "User checks out secret -> FortiPAM resolves target privileged or associated-secret credential -> WinRM remote session -> Add-LocalGroupMember/Add-ADGroupMember -> user signs out/in to refresh token -> check-in -> Remove-LocalGroupMember/Remove-ADGroupMember -> sign out/in again.",
+      "selection_reason": "The historical FortiPAM topics cover rotation, checkout, approvals, launchers and migration but not reversible JIT group membership through paired WinRM scripts."
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Policy-based and file-based Event Tagging as post-parse enrichment",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "Event Tagging applies ordered policy-based rules and CSV file-based mappings to Collector-parsed events; later matching rules can overwrite earlier tags, and changes require separate Apply operations.",
+      "workflow_fingerprint": "Raw event -> parser/normalization -> policy-based tags top-to-bottom -> file-based tags top-to-bottom -> enriched event -> rule/report evaluation; custom parser collisions occur before tag enrichment.",
+      "selection_reason": "No FortiSIEM Event Pipeline Event Tagging lesson appears in the 330 records; distinct from parser authoring and incident-rule tags."
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Agent-based ZTNA destination objects using IP ranges, subnets and port lists",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiSASE agent-based ZTNA destination objects can match literal IPs, ranges/CIDR and optional port lists/ranges; destination type controls whether endpoint DNS resolution is required.",
+      "workflow_fingerprint": "FortiClient agent intercepts app traffic -> destination object match by host/range and port -> FortiSASE policy/PoP steering -> private access path -> SPA/FortiGate gateway -> private application; FQDN match adds DNS proxy resolution before policy match.",
+      "selection_reason": "The inventory includes agentless ZTNA and split DNS, but not agent-based destination IP range/subnet/port matching; the new match object is a distinct policy primitive."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "FortiCloud SD-WAN Overlay-as-a-Service transaction, rollback and spoke verification",
+      "decision": "SELECTED",
+      "mechanism_fingerprint": "FortiCloud OaaS controller communicates with the FortiGate OaaS agent over FGFM, validates and compares target configuration, applies it as a transaction, and rolls back orchestrated changes if any step fails.",
+      "workflow_fingerprint": "FortiCloud OaaS portal task -> FGFM management tunnel -> FortiGate OaaS agent validates target/current config -> transaction applies SD-WAN zones, members, policies and overlay settings -> commit/sync or rollback -> spoke traffic continues -> get oaas status reports version/task/error.",
+      "selection_reason": "No OaaS controller/agent transaction or rollback lesson appears in the historical records; distinct from FortiManager overlay templates and Fabric Overlay Orchestrator IPAM."
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Workspace-mode lockless device/package creation",
+      "decision": "REJECTED",
+      "reason": "Too close to historical per-policy workspace locking and workflow-mode locking; selected FortiGuard package version control instead."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "RADSec server-side accounting and CA validation",
+      "decision": "REJECTED",
+      "reason": "Substantially overlaps the historical FortiAP RadSec transport lesson; selected HA priority override instead."
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "SCIM service provisioning",
+      "decision": "REJECTED",
+      "reason": "Same SCIM identity-lifecycle mechanism as historical FortiSASE SCIM provisioning; selected JIT PowerShell elevation instead."
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Custom domain/certificate for agentless ZTNA",
+      "decision": "REJECTED",
+      "reason": "Overlaps the historical FortiSASE agentless ZTNA lesson; selected agent-based destination range matching."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "BGP route-map-out-preferable for SLA-aware route tags",
+      "decision": "REJECTED",
+      "reason": "Too close to historical BGP community-to-route-tag translation for dynamic SD-WAN destinations; selected OaaS transaction/rollback."
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "DNS-over-TLS resolver validation",
+      "decision": "REJECTED",
+      "reason": "Same FortiSwitch DNS-over-TLS and CA validation mechanism taught on November 14; selected auto-network/CAPWAP discovery split."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "AI Access Visibility analytics",
+      "decision": "REJECTED",
+      "reason": "Overlaps the historical FortiAnalyzer AI Access Visibility lesson; selected playbook node-debug/replay execution mechanics."
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Armis external device inventory connector",
+      "decision": "REJECTED",
+      "reason": "Too close to prior MDM connector and external device-profiling workflows; selected direct Entra ID authentication and remote-group mapping."
+    }
+  ],
   "selection_gate": {
-    "status": "HISTORICAL INVENTORY BUILT; TOPIC SELECTION NOT YET STARTED",
-    "records": 330,
+    "status": "PASS",
+    "historical_records": 330,
     "report_artifacts": 30,
-    "required_fields": [
-      "product",
-      "lesson_subject",
-      "primary_url",
-      "scenario_community_url",
-      "feature_mechanism_fingerprint",
-      "workflow_transaction_fingerprint",
-      "failure_class",
-      "evidence_pattern",
-      "remediation_path",
-      "question_fingerprint",
-      "diagram_topology_layout_fingerprint"
-    ],
+    "selected_topics": 12,
+    "mandatory_products": 12,
     "all_required_fields_present": true,
-    "same_day_prior_run_included": true
+    "selection_started_after_inventory_published": true,
+    "semantic_uniqueness_reviewed": true,
+    "rejected_near_duplicates": 8
   },
   "limitations": [
     "Historical report HTML was inspected via prior inventory provenance and reconciled with the later 2026-11-15 08:26 report; no 2026-11-16 daily report HTML exists in docs/."
   ],
   "record_count": 330,
-  "same_day_prior_run_records_added": 12
+  "same_day_prior_run_records_added": 12,
+  "topic_selection_started_at_local": "2026-11-17T08:24:00-08:00",
+  "community_sweep_path": "docs/community_sweep_2026-11-17-08-20.json",
+  "admin_guide_sweep_path": "docs/admin_guide_sweep_2026-11-17-08-20.json",
+  "selected_fingerprints_path": "docs/selected_fingerprints_2026-11-17-08-20.json"
 }
