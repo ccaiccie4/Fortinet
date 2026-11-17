@@ -9,7 +9,7 @@
     "rule": "Rolling 30 calendar days before 2026-11-17; inspect actual published Fortinet report HTML on the default branch before selecting today's lesson topics."
   },
   "discovery_before_topic_selection": true,
-  "generation_started_after_inventory_publication": false,
+  "generation_started_after_inventory_publication": true,
   "provenance": {
     "previous_inventory_path": "docs/exclusion_inventory_2026-11-15-08-26.json",
     "previous_inventory_sha": "04a8ac57331072792e8468b67d8aa26286c46bf4",
@@ -6537,19 +6537,601 @@
     }
   ],
   "admin_guide_sweep_summary": {
-    "status": "pending",
-    "note": "Must be completed before topic selection."
+    "status": "COMPLETED",
+    "method": "For each mandatory product, searched current Administration/Configuration/New Features/architecture guides and release-specific documentation. Primary lesson sources below are Fortinet feature/admin docs; Community material is used only for scenario context.",
+    "products": [
+      {
+        "product": "FortiGate",
+        "primary": "FortiOS 8.0 NAT64 policy and DNS64 (DNS proxy)"
+      },
+      {
+        "product": "FortiManager",
+        "primary": "FortiManager 8.0 firmware templates, creation and upgrade execution"
+      },
+      {
+        "product": "FortiAnalyzer",
+        "primary": "FortiAnalyzer 8.0 Analytics and Archive logs"
+      },
+      {
+        "product": "FortiSwitch",
+        "primary": "FortiSwitchOS 8.0 MSTP configuration and terminology"
+      },
+      {
+        "product": "FortiAP/Wireless",
+        "primary": "FortiAP 8.0 Zero-Wait DFS configuration"
+      },
+      {
+        "product": "FortiNAC",
+        "primary": "FortiNAC 9.4 Persistent Agent update"
+      },
+      {
+        "product": "FortiNAC-F",
+        "primary": "FortiNAC-F 7.6 Security Fabric SSO Dynamic Address Tag"
+      },
+      {
+        "product": "FortiAuthenticator",
+        "primary": "FortiAuthenticator 8.0.3 Certificate Revocation Lists and OCSP"
+      },
+      {
+        "product": "FortiPAM",
+        "primary": "FortiPAM 1.9 secure password storage and backup"
+      },
+      {
+        "product": "FortiSIEM",
+        "primary": "FortiSIEM 7.5.1 Collector High Availability / Cluster Config"
+      },
+      {
+        "product": "FortiSASE",
+        "primary": "FortiSASE 26.1.107 Split DNS and DNS redirection rules"
+      },
+      {
+        "product": "Secure SD-WAN",
+        "primary": "FortiOS 8.0 Performance SLA and Link Health Monitor; TWAMP protocol"
+      }
+    ]
   },
   "community_sweep_summary": {
-    "status": "pending",
-    "note": "Must be completed before topic selection."
+    "status": "COMPLETED",
+    "method": "Broad product-area sweeps plus targeted searches for feature-specific technical tips, troubleshooting tips and KBs. Community articles are scenario sources only; none is used as the primary feature specification.",
+    "products": [
+      {
+        "product": "FortiGate",
+        "scenario": "https://community.fortinet.com/fortigate-3/technical-tip-nat64-web-browsing-flow-for-ipv6-hosts-using-dns64-server-196827",
+        "recency": "older than 30 days",
+        "note": "NAT64/DNS64 flow scenario found; no recent NAT64-specific case surfaced."
+      },
+      {
+        "product": "FortiManager",
+        "scenario": "https://community.fortinet.com/fortimanager-27/technical-tip-how-to-create-firmware-template-using-fortimanager-api-225977",
+        "recency": "about 7 months",
+        "note": "Firmware-template JSON API scenario found."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "scenario": "https://community.fortinet.com/fortianalyzer-6/technical-tip-understanding-fortianalyzer-ha-analytics-database-size-differences-228748",
+        "recency": "about 4 months",
+        "note": "HA analytics database size divergence scenario found."
+      },
+      {
+        "product": "FortiSwitch",
+        "scenario": "https://community.fortinet.com/fortiswitch-36/technical-tip-spanning-tree-protocols-on-fortiswitch-145076",
+        "recency": "2023",
+        "note": "STP guard behavior article found; no new 30-day MSTP case surfaced."
+      },
+      {
+        "product": "FortiAP/Wireless",
+        "scenario": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-how-to-debug-radar-detection-issue-on-the-fortiap-wifi-192895",
+        "recency": "2024-12-17",
+        "note": "Radar/NOL diagnostics article found; no recent Zero-Wait DFS-specific case surfaced."
+      },
+      {
+        "product": "FortiNAC",
+        "scenario": "https://community.fortinet.com/fortinac-28/technical-tip-update-persistent-agent-through-fortinac-148698",
+        "recency": "older than 30 days",
+        "note": "Persistent Agent package transfer and TCP/80 scenario found."
+      },
+      {
+        "product": "FortiNAC-F",
+        "scenario": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-troubleshooting-fortigate-vpn-integrations-managed-by-fortinac-169372",
+        "recency": "older than 30 days",
+        "note": "VPN disconnect/syslog/firewall-tag lifecycle scenario found."
+      },
+      {
+        "product": "FortiAuthenticator",
+        "scenario": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-understanding-the-log-message-certificate-import-213559",
+        "recency": "2025-09-04",
+        "note": "Certificate import and CRL event ID 10121 scenario found."
+      },
+      {
+        "product": "FortiPAM",
+        "scenario": "https://community.fortinet.com/fortipam-52/considerations-for-migrating-fortipam-configuration-between-different-platforms-231209",
+        "recency": "2026-11-12 approx",
+        "note": "Very recent cross-platform migration/PDE prerequisites article found."
+      },
+      {
+        "product": "FortiSIEM",
+        "scenario": "https://community.fortinet.com/fortisiem-34/troubleshooting-fortisiem-collector-health-showing-eps-as-n-a-230673",
+        "recency": "about 4 weeks",
+        "note": "Recent Collector EPS=N/A article provides a useful ingest-versus-metric evidence boundary."
+      },
+      {
+        "product": "FortiSASE",
+        "scenario": "https://community.fortinet.com/fortisase-58/technical-tip-difference-between-fortisase-custom-dns-settings-in-public-mode-and-private-mode-225978",
+        "recency": "2026-03-26",
+        "note": "Public versus Private DNS access type scenario found."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "scenario": "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-performance-sla-is-down-though-target-server-is-pingable-109967",
+        "recency": "older than 30 days",
+        "note": "SLA timeout and ping-versus-probe troubleshooting scenario found; TWAMP protocol article also reviewed."
+      }
+    ]
   },
-  "rejected_candidates": [],
-  "selected_candidates": [],
-  "candidate_audit": [],
+  "rejected_candidates": [
+    {
+      "subject": "FortiGate IPv6 prefix delegation",
+      "reason": "Already taught in 2026-11-15 report; IA_PD/IAID workflow is a direct duplicate."
+    },
+    {
+      "subject": "FortiManager recurring policy-package installation",
+      "reason": "Already taught in 2026-11-15 report; different schedule object but same policy-install workflow."
+    },
+    {
+      "subject": "FortiAnalyzer ClickHouse migration / AI Access Visibility",
+      "reason": "Already taught 2026-11-14/15; avoid reusing database migration or dashboard lineage."
+    },
+    {
+      "subject": "FortiAP CCA threshold tuning",
+      "reason": "Already taught 2026-11-15; radio interference threshold mechanism is distinct from DFS but excluded to preserve topic freshness."
+    },
+    {
+      "subject": "FortiNAC-F concurrent-session accounting",
+      "reason": "Already taught 2026-11-15; session limit and RADIUS accounting workflow excluded."
+    },
+    {
+      "subject": "FortiSASE IPsec DPD",
+      "reason": "Already taught 2026-11-15; avoid tunnel liveness probes and choose split DNS instead."
+    }
+  ],
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "NAT64 with DNS64: synthetic AAAA records, IPv4 destination extraction, and the policy/VIP/IP-pool chain",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/443324",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/443324"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-nat64-web-browsing-flow-for-ipv6-hosts-using-dns64-server-196827",
+      "scenario_date": "older than 30 days",
+      "feature_mechanism_fingerprint": "DNS64 intercepts an IPv6 AAAA query, resolves the A record, synthesizes an AAAA using the NAT64 /96 prefix plus the embedded IPv4 address; NAT64 policy translates IPv6 source/destination to IPv4 using a NAT64-enabled IPv4 pool and VIP6 matching the synthetic prefix.",
+      "workflow_transaction_fingerprint": "IPv6 host -> DNS64 proxy AAAA query -> upstream A lookup -> synthetic 64:ff9b::/96 AAAA -> IPv6 packet to FortiGate -> VIP6/policy match -> destination and source translation -> IPv4 egress.",
+      "failure_class": "Synthetic AAAA absent or malformed; DNS proxy not bound to client-facing interface; VIP6 prefix/range mismatch; NAT64 policy not matched; IP pool lacks NAT64; IPv4 route/return path missing.",
+      "evidence_pattern": "Client DNS response shows synthesized AAAA; FortiGate DNS proxy query and DNS64 prefix; VIP6 extip and embedded-ipv4-address; NAT64 policy hit counter/debug flow shows translated destination and source pool address; upstream IPv4 packet capture confirms egress.",
+      "remediation_path": "Enable IPv6 and DNS Database visibility; bind DNS proxy to the IPv6 LAN interface; validate system dns64 prefix and synthesis behavior; create VIP6 for the entire synthetic prefix; use a NAT64-enabled IPv4 pool on valid subnet boundaries; match IPv6 source/destination and nat64 policy; confirm route and return path.",
+      "question_fingerprint": "Synthetic AAAA vs native AAAA; NAT64 VIP6 prefix match; pool nat64 enablement; policy-hit versus DNS-only success.",
+      "diagram_topology_layout_fingerprint": "IPv6-only client -> FortiGate DNS64 proxy -> synthetic AAAA -> NAT64 VIP6 and policy -> NAT64 source pool -> IPv4 Internet server.",
+      "nearest_prior_comparison": "Prior IPv6 prefix-delegation lessons cover ISP IA_PD and downstream address distribution; no prior lesson covers DNS64 synthesis or NAT64 packet translation.",
+      "community_match": "older related flow article; no recent NAT64-specific Community case surfaced in the sweep.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "older related flow article; no recent NAT64-specific Community case surfaced in the sweep.",
+      "nearest_historical_subjects": [
+        "FortiOS 8.0 FortiGuard server preference, RTT-based selection and multi-server load balancing",
+        "FortiOS IPsec pre- versus post-encapsulation fragmentation: GTP-U packet integrity, reassembly and throughput",
+        "IPv6 prefix delegation: IA_PD from the ISP to routed downstream segments"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Firmware templates: scheduled version enforcement, upgrade sequencing, device-offline stop conditions, and HA gates",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/302126/firmware-templates",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/360034/creating-firmware-templates",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/630513/upgrading-firmware"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/technical-tip-how-to-create-firmware-template-using-fortimanager-api-225977",
+      "scenario_date": "2026-04-01 approx",
+      "feature_mechanism_fingerprint": "Firmware Template binds target firmware/platform/version to FortiGate and associated FortiSwitch, FortiAP, and FortiExtender; schedule can be none/once/daily/weekly/on-board; upgrade-path policy, image source, alternate partition and HA-all-members-up gates control execution.",
+      "workflow_transaction_fingerprint": "Create per-product upgrade details -> assign template -> scheduled/manual/on-board trigger -> FortiGate first -> managed FortiSwitches sequentially -> FortiAP -> FortiExtender -> per-device report/history and template adherence status.",
+      "failure_class": "FMWR entitlement missing; image absent or wrong platform; closed-network recommended path cannot be resolved; device offline stops later fabric-device tasks; HA cluster member down blocks upgrade when gate enabled; schedule end-time interrupts unfinished upgrade.",
+      "evidence_pattern": "Device Manager Firmware Template column and preview; firmware upgrade report/history; device task status and current image; FortiGate FMWR contract; FortiSwitch/AP/Extender online state; assigned schedule and end-time; HA member status.",
+      "remediation_path": "Validate entitlement and image source before assignment; import FortiExtender images manually when needed; use upgrade-path tool and import every intermediate image in closed networks; preview device order; confirm every dependency online and HA members up; use maintenance window and review per-device report before re-triggering.",
+      "question_fingerprint": "On-board re-enforcement versus one-time schedule; fabric sequence; offline child-device stop boundary; FMWR contract versus successful task state.",
+      "diagram_topology_layout_fingerprint": "FortiManager firmware template controller -> FortiGate -> sequential FortiSwitch chain -> FortiAP -> FortiExtender; per-device stop edge and independent FortiGate branch.",
+      "nearest_prior_comparison": "Prior FortiManager lessons cover recurring policy-package installation and ADOM/workspace locking; this is a firmware image orchestration state machine across managed fabric devices.",
+      "community_match": "Community API article provides a real firmware-template object-creation/API payload scenario; no recent upgrade-failure article in the 30-day sweep.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community API article provides a real firmware-template object-creation/API payload scenario; no recent upgrade-failure article in the 30-day sweep.",
+      "nearest_historical_subjects": [
+        "FortiManager 8.0 local-user per-device mapping for branch-specific credentials and FortiToken bindings",
+        "FortiManager 8.0 recurring policy-package installation scheduling",
+        "Protected object permissions: controlled editing without breaking policy reuse"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/761825/analytics-and-archive-logs",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/761825/analytics-and-archive-logs"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-understanding-fortianalyzer-ha-analytics-database-size-differences-228748",
+      "scenario_date": "2026-07 approx",
+      "feature_mechanism_fingerprint": "Archive stores original compressed log files; Analytics inserts and indexes the same log into a local SQL/ClickHouse analytics database for Log View, FortiView, incidents and reports. HA synchronizes archive logs, while each node builds its analytics database locally from the archive range available at rebuild time.",
+      "workflow_transaction_fingerprint": "Incoming log -> raw Archive write -> analytics extraction/indexing -> local query/report; HA archive synchronization -> independent node rebuild using selected start date and available archives -> potentially different analytics ranges and database sizes.",
+      "failure_class": "Archive exists but Analytics range is absent; ADOM quota/retention trims source archive; rebuild start dates differ between HA members; archive file roll differences are mistaken for missing logs; analytics database size mismatch is misdiagnosed as HA sync failure.",
+      "evidence_pattern": "Compare same device/log type/time window in raw Archive on both nodes; inspect archive oldest/newest timestamps, ADOM quota and retention, rebuild start date, SQL/ClickHouse size and hcache; equal HA status does not prove equal indexed date ranges.",
+      "remediation_path": "First compare raw archive files for identical device, log type, timestamp and log IDs; check quota/retention before rebuilding; confirm required archives exist on both nodes; rebuild both analytics databases from the same start date within a maintenance window; do not use database size or rolled-file name equality as the sole HA health test.",
+      "question_fingerprint": "Archive synchronization versus local analytics indexing; different rebuild windows; hcache as independent factor; raw-log equality as evidence.",
+      "diagram_topology_layout_fingerprint": "FortiGate log stream forks into raw Archive and local Analytics index; HA sync arrow only for Archive; two independent rebuild pipelines create potentially divergent query ranges.",
+      "nearest_prior_comparison": "Prior FortiAnalyzer lessons cover ClickHouse migration, log forwarding and AI Access Visibility; this lesson is the two-tier Archive-to-Analytics data lifecycle and HA range divergence.",
+      "community_match": "Community HA article is a direct scenario explaining unequal analytics DB size despite healthy archive synchronization.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community HA article is a direct scenario explaining unequal analytics DB size despite healthy archive synchronization.",
+      "nearest_historical_subjects": [
+        "PostgreSQL-to-ClickHouse analytics migration, migration-state validation and archive-backed rebuild boundary",
+        "FortiAnalyzer 8.0 AI Access Visibility dashboard data lineage and evidence boundaries",
+        "IOC rescan lifecycle: FortiGuard TIDB, historical logs, and tagged alerts"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "MSTP topology protection: region consistency, root guard, BPDU guard, and loop guard roles",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/364615",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/364616/mstp-overview-and-terminology",
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/511852/config-switch"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-spanning-tree-protocols-on-fortiswitch-145076",
+      "scenario_date": "2023-09-21",
+      "feature_mechanism_fingerprint": "MSTP maps multiple VLANs to spanning-tree instances within a region identified by region name and revision; root guard rejects superior BPDUs on protected non-root-facing ports; BPDU guard disables edge ports receiving BPDUs; loop protection monitors nondesignated ports for loss of expected BPDUs.",
+      "workflow_transaction_fingerprint": "Region identity and VLAN-to-instance map -> IST/common BPDU exchange -> per-instance root/role calculation -> root-guard/BPDU-guard/loop-protection action on configured port -> topology reconverges or port enters protected state.",
+      "failure_class": "Region name/revision/VLAN map mismatch; rogue superior BPDU changes root path; access port receives BPDU; nondesignated port stops receiving BPDUs; protection feature enabled on wrong port role.",
+      "evidence_pattern": "MSTP region name/revision and instance mapping; port role/state; Root-Inconsistent or BPDU-guard timeout/disabled state; BPDU counters and topology change; verify the port is not the root port before applying root guard.",
+      "remediation_path": "Map VLANs to instances consistently across the region; choose root bridge deliberately; enable root guard only on ports that must not lead to root; enable BPDU guard only on STP-enabled edge ports; enable loop protection on nondesignated ports; verify recovery timer/manual reset behavior before changing production ports.",
+      "question_fingerprint": "Superior BPDU versus any BPDU; root-inconsistent versus edge-port shutdown; loop guard silence; MST region identity and VLAN-instance mapping.",
+      "diagram_topology_layout_fingerprint": "MST region with core root and redundant access paths; distinct port-role callouts for root guard, edge BPDU guard and nondesignated loop guard.",
+      "nearest_prior_comparison": "Prior FortiSwitch lessons cover MCLAG, LACP, routed VLAN OSPF, DNS-over-TLS and FIDO2; no recent lesson covers spanning-tree region/guard semantics.",
+      "community_match": "Community STP article explains root-inconsistent and BPDU-guard edge behavior; no fresh 30-day MSTP-specific case surfaced.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community STP article explains root-inconsistent and BPDU-guard edge behavior; no fresh 30-day MSTP-specific case surfaced.",
+      "nearest_historical_subjects": [
+        "FortiSwitchOS 8.0 DNS-over-TLS and explicit resolver CA validation",
+        "FortiSwitchOS 8.0 automatic system-clock source selection (PTP, NTP, local)",
+        "FIDO2-backed OpenSSH security keys for administrator MFA"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Zero-Wait DFS: pre-cleared backup channels, regulatory-domain modes, and radar-event verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/727635/configuring-zero-wait-dfs",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/727635/configuring-zero-wait-dfs"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-how-to-debug-radar-detection-issue-on-the-fortiap-wifi-192895",
+      "scenario_date": "2024-12-17",
+      "feature_mechanism_fingerprint": "Zero-Wait DFS avoids the normal 60-second CAC interruption by maintaining a pre-cleared alternative: rCAC under FCC/MKK pre-scans a backup channel; Pre-CAC under ETSI scans DFS channels in the background and tracks cleared CAC state. Support is hardware/radio/firmware constrained.",
+      "workflow_transaction_fingerprint": "FortiAP profile radio enables zero-wait-dfs -> controller applies profile -> AP pre-scans backup or DFS channel set -> radar detected on home channel -> AP selects a pre-cleared channel -> service resumes without a new CAC when regulatory conditions permit.",
+      "failure_class": "Feature configured on unsupported AP/radio/firmware; profile not applied; DFS radar causes channel evacuation; NOL blocks recently detected channels; controller event channel value is misleading; backup/pre-CAC state is not ready.",
+      "evidence_pattern": "FortiGate `diagnose wireless-controller wlac -c wtp <serial> | grep zero`; AP `cw_diag -c zwdfs`; `klog | grep Radar`; `rcfg | grep nol`; WiFi event `action=radar-detected`; confirm radio, channel and regulatory domain.",
+      "remediation_path": "Confirm supported FAP-U or QCA F/G/K 4x4/8x8 model and FortiAP 7.6.3+; enable zero-wait-dfs under the correct 5-GHz radio profile; apply profile to AP; validate rCAC/Pre-CAC mode and NOL; inspect radar logs and firmware resolved issues; do not interpret a repeated channel ID in a known logging bug as proof that no channel move occurred.",
+      "question_fingerprint": "60-second CAC avoidance versus no-radar guarantee; rCAC versus Pre-CAC regulatory mode; profile applied versus capability; NOL and misleading event channel ID.",
+      "diagram_topology_layout_fingerprint": "FortiGate WLAN controller/profile -> FortiAP 5-GHz radio -> radar detection -> rCAC backup or ETSI pre-CAC pool -> immediate channel switch and client reassociation.",
+      "nearest_prior_comparison": "Prior FortiAP lessons cover CCA threshold tuning, VAP broadcast control and OpenRoaming; this is a DFS radar/CAC pre-clearance mechanism, not RF contention tuning.",
+      "community_match": "Community radar troubleshooting gives real NOL, klog and WiFi-event evidence and references Zero-Wait DFS.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community radar troubleshooting gives real NOL, klog and WiFi-event evidence and references Zero-Wait DFS.",
+      "nearest_historical_subjects": [
+        "Hotspot 2.0 WBA OpenRoaming ANQP advertisement and RADIUS WBA attributes",
+        "FortiOS 8.0 FortiAP radio VAP-broadcast disable without deleting SSID configuration",
+        "Clear Channel Assessment threshold tuning for high-density radios"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Persistent Agent upgrade state machine: connect-triggered version comparison, retry counters, and port-80 delivery",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/347943/agent-update",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/899557/upgrade-the-persistent-agent"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-update-persistent-agent-through-fortinac-148698",
+      "scenario_date": "2023-10-31 approx",
+      "feature_mechanism_fingerprint": "FortiNAC compares the host Persistent Agent version with the selected target when the agent connects; any version difference can trigger upgrade or downgrade. HTTP port 80 delivers the package; a per-host maximum-attempt counter gates retries; global reset clears counters without re-updating successful hosts.",
+      "workflow_transaction_fingerprint": "Host reconnects and agent communicates -> FortiNAC compares version -> package delivered over TCP/80 -> agent installs -> host reports new version -> success/failure event and retry counter update.",
+      "failure_class": "Host offline or agent not communicating; TCP/80 blocked; max-attempt counter exhausted; endpoint rollback software restores old agent after reboot; downgrade option/target selection conflicts with endpoint compliance agent version.",
+      "evidence_pattern": "Host agent icon/green state and Send Message test; TCP/80 reachability; host current/target versions; Agent Update Failure event; attempt counter; AgentUpdate log shows needsUpdate and updateAttempt; post-reboot version proves persistence.",
+      "remediation_path": "Verify the host is online and agent communication works before resetting counters; allow TCP/80 to FortiNAC; inspect host and target version numbers; disable endpoint rollback software; confirm compliance policy target; reset counters only after correcting cause; test a small host cohort before global rollout.",
+      "question_fingerprint": "Version differs vs newer-only comparison; TCP/80 package path; max attempts versus reset counter; update success versus reboot rollback.",
+      "diagram_topology_layout_fingerprint": "FortiNAC agent-update controller -> connected endpoint version check -> TCP/80 package transfer -> install/reboot -> success/failure event and bounded retry counter.",
+      "nearest_prior_comparison": "Prior FortiNAC-F lesson covers Persistent Agent certificate validation; this is software update trigger, package transport and retry-state behavior.",
+      "community_match": "Community article includes a real blocked-port-80 loading state, green-agent/Send-Message check and update log sequence.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community article includes a real blocked-port-80 loading state, green-agent/Send-Message check and update log sequence.",
+      "nearest_historical_subjects": [
+        "FortiNAC 9.4 REST SMS Gateway request construction, HTTPS provider integration and visibility semantics",
+        "FortiNAC 9.4 dashboard widgets as host-activity, logical-network and RADIUS evidence",
+        "Device profiling rules: ordered rogue evaluation and host lifecycle"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Dynamic Address Tags: REST API logon/logoff synchronization into FortiGate policy objects",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/security-fabric-sso/641230/dynamic-address-tag",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/security-fabric-sso/124711/how-it-works",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/security-fabric-sso/54029/dynamic-address-tag"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-troubleshooting-fortigate-vpn-integrations-managed-by-fortinac-169372",
+      "scenario_date": "2024 approx",
+      "feature_mechanism_fingerprint": "FortiNAC-F acts as a Collector Agent and sends endpoint IP, group and firewall-tag data to FortiGate over REST API; FortiGate maintains dynamic address objects used by source/destination policy matching. Logon triggers include registered connect, user logon, IP change and device status; logoff includes user logoff/disconnect.",
+      "workflow_transaction_fingerprint": "FortiNAC learns registered endpoint and identity -> policy/tag assignment -> REST API logon event to FortiGate -> dynamic address object maps endpoint IP -> firewall policy matches -> logoff/disconnect event removes mapping and policy match.",
+      "failure_class": "Wrong integration method/port; FortiNAC not authorized as Security Fabric member; competing FSSO agents overwrite same endpoint IP; REST/API connectivity failure; stale logon remains until timeout; VPN syslog or agent MAC mapping incomplete.",
+      "evidence_pattern": "FortiNAC logon/logoff event and endpoint IP/group/tag; FortiGate dynamic address list and View Matched Addresses; connector status and REST API path; VPN syslog RemoteAccess object; SSO debug and 300-second collector-disconnect expiry boundary.",
+      "remediation_path": "Choose one integration method consistently: connector-based FSSO tag for non-Fabric or Dynamic Address Tag for Fabric; use the correct port and authorization; avoid multiple agents reporting the same IP; verify logon, IP-change and logoff messages; confirm policy object membership changes before testing traffic; inspect VPN/syslog and Persistent Agent MAC mapping separately.",
+      "question_fingerprint": "Connector-based FSSO versus Dynamic Address Tag; registered versus rogue/offline host; logoff removal; one-agent-per-IP and 300-second collector loss.",
+      "diagram_topology_layout_fingerprint": "Endpoint/VPN -> FortiNAC-F registration and identity collector -> REST API Dynamic Address Tag -> FortiGate dynamic IP object -> firewall policy; logoff removes address mapping.",
+      "nearest_prior_comparison": "Prior FortiNAC-F lessons cover concurrent-session accounting, discovery and persistent-agent certificates; no prior lesson covers REST-driven dynamic address objects and policy re-evaluation.",
+      "community_match": "Community VPN integration case supplies the real host-connect/syslog/firewall-tag removal lifecycle and plugin-debug boundaries.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community VPN integration case supplies the real host-connect/syslog/firewall-tag removal lifecycle and plugin-debug boundaries.",
+      "nearest_historical_subjects": [
+        "Persistent Agent certificate check: client proof, CA trust, CRL reachability and clock tolerance",
+        "FortiNAC-F maximum concurrent sessions with accounting-backed Registered Host and Logged in Host limits",
+        "Network-device discovery with SNMP and recursive CDP expansion"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Certificate revocation services: local/imported CRLs, OCSP responder publishing, and FortiGate client configuration",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/302975/certificate-revocations-lists",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/302975/certificate-revocations-lists"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-understanding-the-log-message-certificate-import-213559",
+      "scenario_date": "2025-09-04",
+      "feature_mechanism_fingerprint": "FortiAuthenticator can import CRLs from external authorities, create a local CRL for its own CA, publish revocation status and answer OCSP queries. A revoked end-entity certificate remains represented in CRL until expiry; OCSP uses a responder URL and selected certificate.",
+      "workflow_transaction_fingerprint": "CA issues end-entity certificate -> certificate revoked -> local CRL updated or external CRL imported/downloaded -> relying party retrieves CRL or sends OCSP request -> certificate status controls authentication/TLS acceptance.",
+      "failure_class": "CRL/CDP unreachable or stale; wrong issuing CA/CRL association; OCSP URL/port or responder certificate mismatch; certificate chain trusted but status check fails; revoked certificate cannot be deleted before expiry.",
+      "evidence_pattern": "Certificate Management CRL entries and issuer; event ID 10121 import success/error; CRL last-update/next-update and download status; FortiGate OCSP server URL and certificate reference; client handshake/revocation result. A trusted chain does not prove certificate is unrevoked.",
+      "remediation_path": "Confirm issuer and certificate serial match the CRL; ensure CDP/OCSP endpoint resolves and is reachable; import or publish the correct CRL; configure FortiGate OCSP server with FortiAuthenticator responder URL and TCP/2560 as documented; retain revoked entries until expiry; validate using known-good and known-revoked certificates.",
+      "question_fingerprint": "Certificate chain validation versus revocation status; local CRL versus imported CRL; OCSP endpoint reachability; delete-disabled revoked cert lifecycle.",
+      "diagram_topology_layout_fingerprint": "CA/CRL source -> FortiAuthenticator CRL store and OCSP responder -> FortiGate/client relying party -> certificate status decision.",
+      "nearest_prior_comparison": "Prior FortiAuthenticator lessons cover SHA-1 removal, SCEP, FSSO and RADIUS; this is the revocation publication/validation plane, not certificate signing or enrollment.",
+      "community_match": "Community certificate-import event article explains log ID 10121 for successful/failed CRL import and CDP troubleshooting.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community certificate-import event article explains log ID 10121 for successful/failed CRL import and CDP troubleshooting.",
+      "nearest_historical_subjects": [
+        "FSSO Mobility Agent NTLM signing compatibility and endpoint-to-FortiAuthenticator identity transaction",
+        "FortiAuthenticator 6.6.7 SHA-1 cryptographic operation removal and certificate migration",
+        "RADIUS accounting proxy: attribute transformation and RSSO fan-out"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Cross-platform configuration migration: private-data-encryption portability, platform identity, and secret capacity",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/831092/secure-password-storage",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/290896/backup"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/considerations-for-migrating-fortipam-configuration-between-different-platforms-231209",
+      "scenario_date": "2026-11-12 approx",
+      "feature_mechanism_fingerprint": "FortiPAM encrypts stored passwords/private keys with a predefined or custom private data encryption key; custom key is 32 hexadecimal characters and is required on another FortiPAM to restore encrypted data. Cross-platform migration requires disabling private-data-encryption on the source before export, preserving product identity and compatible firmware, and ensuring target user-seat capacity.",
+      "workflow_transaction_fingerprint": "Source FortiPAM -> disable PDE if cross-platform migration requires it -> create backup -> adjust platform identifier only as documented for supported target type -> restore to same product type and compatible firmware -> verify license/user capacity, secrets and integrations -> re-enable approved encryption posture.",
+      "failure_class": "Target cannot decrypt secret fields; product-type mismatch (FortiPAM vs FortiSRA); insufficient user-seat capacity; platform identifier mismatch; firmware version mismatch; custom key lost or inconsistent across HA members.",
+      "evidence_pattern": "Backup header platform/build identifier; source/target product type and firmware; private-data-encryption state/key custody; restore warnings; user-seat/license count; sample secret decryption/launch and certificate/private-key use after restore.",
+      "remediation_path": "Confirm supported same-product migration and exact source/target firmware; preserve a pre-change backup; follow the documented source PDE disablement before cross-platform export; modify platform identifier only for the documented target mapping; validate user capacity; restore in a maintenance window and verify representative secrets, private keys, launchers and audit data before cutover.",
+      "question_fingerprint": "Same product type versus platform type; PDE key dependency versus disabling PDE for cross-platform migration; user-seat capacity; restore success versus usable secret decryption.",
+      "diagram_topology_layout_fingerprint": "Source FortiPAM encryption/key boundary -> backup artifact and platform header -> target FortiPAM compatibility gates -> restore -> secret/key validation and application cutover.",
+      "nearest_prior_comparison": "Prior FortiPAM lessons cover ordinary backup/restore and auto-provisioned user lifecycle; this lesson isolates cross-platform identity and private-data-encryption portability.",
+      "community_match": "Very recent Community migration article (published about five days before this run) directly identifies PDE, platform-header, product-type and seat-capacity prerequisites.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Very recent Community migration article (published about five days before this run) directly identifies PDE, platform-header, product-type and seat-capacity prerequisites.",
+      "nearest_historical_subjects": [
+        "Associated-secret credential indirection and Smart Association username resolution",
+        "FortiPAM 1.9 auto-purging inactive auto-provisioned users (disable then delete)",
+        "Remote user groups: LDAP, RADIUS, and SAML membership projection"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Collector High Availability: VRRP VIP ownership, leader/follower priority, and Supervisor job redistribution",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/841876",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/50877/whats-new-in-7-2-5"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/troubleshooting-fortisiem-collector-health-showing-eps-as-n-a-230673",
+      "scenario_date": "2026-10 approx",
+      "feature_mechanism_fingerprint": "Collector HA group uses VRRP with one Leader and one or more Followers on the same network as the VIP; highest-priority eligible Follower takes VIP after Leader node failure; Supervisor redistributes event-pull and performance-monitoring jobs across available Collectors.",
+      "workflow_transaction_fingerprint": "Configure same-org Collector group -> assign Leader/Follower roles and priorities -> bind VIP to Leader -> send logs to VIP -> Leader node failure -> VRRP ownership moves to Follower -> Supervisor reassigns jobs -> recovered node returns as Follower.",
+      "failure_class": "VIP/Collector not on same subnet; multiple/no Leader; priority ordering wrong; VRRP node-level failure not triggered by process-only failure; load balancer health differs from VRRP; stale Collector health metric misread as no ingestion.",
+      "evidence_pattern": "Cluster Config test and saved roles; `cat /etc/keepalived/keepalived.conf` virtual_ipaddress; `ip a` confirms VIP on interface; Collector Health last update/last file received/EPS; `phstatus`, `df -h`, `tcpdump -ni any udp port 514`, phoenix.log and Analytics event presence.",
+      "remediation_path": "Place VIP and Collectors on the same network; select exactly one Leader and higher priority than Followers; test VRRP configuration; verify VIP ownership and packet arrival after failover; confirm Supervisor job redistribution; distinguish process health and EPS telemetry from actual packet/event ingestion before restarting services.",
+      "question_fingerprint": "VRRP node failure versus process failure; VIP ownership versus Supervisor job placement; EPS N/A versus no event ingestion; same-network requirement.",
+      "diagram_topology_layout_fingerprint": "Log sources -> VRRP VIP -> Leader Collector with Follower takeover; Supervisor distributes pull/monitor jobs across the Collector HA group.",
+      "nearest_prior_comparison": "Prior FortiSIEM lessons cover Supervisor/PostgreSQL HA and ClickHouse event integrity; this is Collector-edge ingest continuity and VRRP VIP ownership.",
+      "community_match": "Recent Community Collector-health article provides a concrete EPS=N/A diagnostic boundary: packets received do not prove parsing/Analytics ingestion.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Recent Community Collector-health article provides a concrete EPS=N/A diagnostic boundary: packets received do not prove parsing/Analytics ingestion.",
+      "nearest_historical_subjects": [
+        "Bipartite user-workstation login anomaly detection and dynamic peer communities",
+        "FortiSIEM 7.5 ClickHouse Event Log Integrity checksum validation and status interpretation",
+        "FortiEMS discovery and endpoint tagging as a ZTNA remediation loop"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Split DNS and DNS redirection: domain-selective internal resolution through SPA with Public/Private access type",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/mature-administration-guide/896665",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/896665/dns-redirection-rules",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-spa-deployment-guide-using-bgp-per-overlay/264801/configuring-dns-settings"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-difference-between-fortisase-custom-dns-settings-in-public-mode-and-private-mode-225978",
+      "scenario_date": "2026-03-26",
+      "feature_mechanism_fingerprint": "FortiSASE forwards endpoint DNS to the service and applies implicit rules for external domains plus split-DNS/domain-specific redirection rules for internal domains; Access Type Public uses PoP WAN egress, Private routes query through SPA to internal DNS, with PoP DNS override for regional resolvers.",
+      "workflow_transaction_fingerprint": "Endpoint DNS -> FortiSASE DNS policy lookup -> domain match -> choose internal DNS rule -> Access Type selects public WAN or private SPA path -> internal DNS answer returned through PoP -> endpoint resolves private FQDN.",
+      "failure_class": "Private DNS configured as Public so query exits WAN; internal DNS unreachable behind SPA; missing private-access policy for DNS; loopback-BGP source mismatch; DNS filter blocks local domain; DNS-over-TCP selected against unsupported resolver.",
+      "evidence_pattern": "Split DNS domain match and primary/secondary DNS; Access Type; SPA BGP design and route; private-access policy for UDP/TCP 53; DNS redirection rule hit; Community scenario confirms loopback source and TLS TCP/853 dependency.",
+      "remediation_path": "Create explicit split-DNS rule for internal suffixes; set Private only when DNS server is reachable via SPA; verify BGP route and PoP source path; allow DNS to server in Private Access policy; add URL/DNS filter exception if Newly Observed Domain blocks it; use resolver supporting TCP/853 when selecting DNS-over-TLS.",
+      "question_fingerprint": "Public PoP WAN versus Private SPA path; split DNS versus all-domain implicit rule; loopback-BGP source path; DNS filter versus routing failure.",
+      "diagram_topology_layout_fingerprint": "Remote endpoint -> FortiSASE PoP DNS rule engine -> Public WAN DNS lane or Private SPA/BGP hub -> internal DNS server -> response to endpoint.",
+      "nearest_prior_comparison": "Prior FortiSASE lessons cover EAP-TTLS, IPsec DPD, IPAM and log forwarding; this is domain-selective DNS steering and private resolver reachability.",
+      "community_match": "Community public/private DNS article describes the exact failure when an internal DNS server behind SPA is incorrectly set to Public.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community public/private DNS article describes the exact failure when an internal DNS server behind SPA is incorrectly set to Public.",
+      "nearest_historical_subjects": [
+        "EAP-TTLS LDAP authentication for IKEv2 IPsec agent tunnels",
+        "FortiSASE IP Management custom FortiExtender/LAN Extension control-plane subnet and BGP-save caveat",
+        "IPsec agent-tunnel dead peer detection: idle probes, on-demand probes, and change impact"
+      ],
+      "uniqueness_checked_against_records": 318
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "TWAMP Performance SLA probes: active measurement protocol selection, participants, timeout and link-state decisions",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/867342/performance-sla-overview",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/580649/link-health-monitor"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-performance-sla-is-down-though-target-server-is-pingable-109967",
+      "additional_scenario_urls": [
+        "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-performance-sla-protocols-188836"
+      ],
+      "scenario_date": "2022-2024 approx",
+      "feature_mechanism_fingerprint": "Performance SLA combines health-check probe mode/protocol/server, participating SD-WAN member interfaces, SLA latency/jitter/loss thresholds and link status; TWAMP is a CLI-selectable active probe distinct from ordinary ping and may be absent from GUI protocol choices.",
+      "workflow_transaction_fingerprint": "FortiGate sends TWAMP probe on each configured participant -> receives TWAMP response -> calculates RTT/jitter/loss -> evaluates SLA targets -> link status changes -> failed member routes are removed from load-balancing group only when all configured health checks fail.",
+      "failure_class": "Probe protocol/target mismatch; TWAMP responder unavailable; wrong participant/source interface; probe timeout below real path RTT; health-check interval or SLA thresholds inconsistent with WAN behavior; manual ping succeeds but SLA probe remains dead.",
+      "evidence_pattern": "`diagnose sys sdwan health-check` per member with state/loss/latency/jitter; `exec ping-options interface` and ping are only reachability comparison; packet capture confirms TWAMP request/response; inspect probe-timeout, interval, participants, server and protocol.",
+      "remediation_path": "Use CLI to configure `set protocol twamp` where required; confirm the target supports TWAMP and replies on the selected path; include only relevant SD-WAN members; tune probe timeout/interval to measured RTT without hiding loss; validate SLA status and route membership after each change.",
+      "question_fingerprint": "ICMP ping versus TWAMP SLA; active versus passive mode; all-health-checks-fail removal rule; 500-ms timeout false-dead condition.",
+      "diagram_topology_layout_fingerprint": "FortiGate SD-WAN member links -> TWAMP server/responder -> measured RTT/jitter/loss -> SLA thresholds -> link status -> SD-WAN route/load-balance group.",
+      "nearest_prior_comparison": "Prior SD-WAN lessons cover passive SLA, speed-test scheduling, underlay bandwidth, ISDB and zone tie-break; this is active TWAMP measurement and SLA state evaluation.",
+      "community_match": "Community SLA case shows a pingable target marked dead because the SLA probe timeout was below measured latency; a separate protocol tip lists TWAMP as a CLI-only probe option.",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "scenario_relation": "Community SLA case shows a pingable target marked dead because the SLA probe timeout was below measured latency; a separate protocol tip lists TWAMP as a CLI-only probe option.",
+      "nearest_historical_subjects": [
+        "FortiOS 8.0 SD-WAN ISDB destination identity matching",
+        "FortiOS 8.0 scheduled SD-WAN interface speed tests and measured-bandwidth shaping integration",
+        "Zone service-SLA tie-break: configuration order versus FIB best match"
+      ],
+      "uniqueness_checked_against_records": 318
+    }
+  ],
+  "candidate_audit": [
+    {
+      "product": "FortiGate",
+      "subject": "NAT64 with DNS64: synthetic AAAA records, IPv4 destination extraction, and the policy/VIP/IP-pool chain",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior IPv6 prefix-delegation lessons cover ISP IA_PD and downstream address distribution; no prior lesson covers DNS64 synthesis or NAT64 packet translation.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortigate-3/technical-tip-nat64-web-browsing-flow-for-ipv6-hosts-using-dns64-server-196827"
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Firmware templates: scheduled version enforcement, upgrade sequencing, device-offline stop conditions, and HA gates",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiManager lessons cover recurring policy-package installation and ADOM/workspace locking; this is a firmware image orchestration state machine across managed fabric devices.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortimanager-27/technical-tip-how-to-create-firmware-template-using-fortimanager-api-225977"
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiAnalyzer lessons cover ClickHouse migration, log forwarding and AI Access Visibility; this lesson is the two-tier Archive-to-Analytics data lifecycle and HA range divergence.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortianalyzer-6/technical-tip-understanding-fortianalyzer-ha-analytics-database-size-differences-228748"
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "MSTP topology protection: region consistency, root guard, BPDU guard, and loop guard roles",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiSwitch lessons cover MCLAG, LACP, routed VLAN OSPF, DNS-over-TLS and FIDO2; no recent lesson covers spanning-tree region/guard semantics.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortiswitch-36/technical-tip-spanning-tree-protocols-on-fortiswitch-145076"
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Zero-Wait DFS: pre-cleared backup channels, regulatory-domain modes, and radar-event verification",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiAP lessons cover CCA threshold tuning, VAP broadcast control and OpenRoaming; this is a DFS radar/CAC pre-clearance mechanism, not RF contention tuning.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-how-to-debug-radar-detection-issue-on-the-fortiap-wifi-192895"
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Persistent Agent upgrade state machine: connect-triggered version comparison, retry counters, and port-80 delivery",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiNAC-F lesson covers Persistent Agent certificate validation; this is software update trigger, package transport and retry-state behavior.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortinac-28/technical-tip-update-persistent-agent-through-fortinac-148698"
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Dynamic Address Tags: REST API logon/logoff synchronization into FortiGate policy objects",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiNAC-F lessons cover concurrent-session accounting, discovery and persistent-agent certificates; no prior lesson covers REST-driven dynamic address objects and policy re-evaluation.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-troubleshooting-fortigate-vpn-integrations-managed-by-fortinac-169372"
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "Certificate revocation services: local/imported CRLs, OCSP responder publishing, and FortiGate client configuration",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiAuthenticator lessons cover SHA-1 removal, SCEP, FSSO and RADIUS; this is the revocation publication/validation plane, not certificate signing or enrollment.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-understanding-the-log-message-certificate-import-213559"
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Cross-platform configuration migration: private-data-encryption portability, platform identity, and secret capacity",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiPAM lessons cover ordinary backup/restore and auto-provisioned user lifecycle; this lesson isolates cross-platform identity and private-data-encryption portability.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortipam-52/considerations-for-migrating-fortipam-configuration-between-different-platforms-231209"
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Collector High Availability: VRRP VIP ownership, leader/follower priority, and Supervisor job redistribution",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiSIEM lessons cover Supervisor/PostgreSQL HA and ClickHouse event integrity; this is Collector-edge ingest continuity and VRRP VIP ownership.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortisiem-34/troubleshooting-fortisiem-collector-health-showing-eps-as-n-a-230673"
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Split DNS and DNS redirection: domain-selective internal resolution through SPA with Public/Private access type",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior FortiSASE lessons cover EAP-TTLS, IPsec DPD, IPAM and log forwarding; this is domain-selective DNS steering and private resolver reachability.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortisase-58/technical-tip-difference-between-fortisase-custom-dns-settings-in-public-mode-and-private-mode-225978"
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "TWAMP Performance SLA probes: active measurement protocol selection, participants, timeout and link-state decisions",
+      "uniqueness_result": "PASS — distinct mechanism/workflow fingerprint",
+      "nearest_prior_comparison": "Prior SD-WAN lessons cover passive SLA, speed-test scheduling, underlay bandwidth, ISDB and zone tie-break; this is active TWAMP measurement and SLA state evaluation.",
+      "inventory_records_checked": 318,
+      "community_source": "https://community.fortinet.com/fortigate-3/technical-tip-sd-wan-performance-sla-is-down-though-target-server-is-pingable-109967"
+    }
+  ],
   "selection_gate": {
-    "status": "NOT_STARTED",
-    "rule": "Do not generate lessons until this inventory has been published and both documentation and Community discovery sweeps are recorded."
+    "status": "PASS",
+    "published_before_generation": true,
+    "inventory_path": "docs/exclusion_inventory_2026-11-17.json",
+    "inventory_records_checked": 318,
+    "selected_count": 12,
+    "all_unique": true
   },
   "limitations": [
     "Historical report HTML was inspected via prior inventory provenance and reconciled with the later 2026-11-15 08:26 report; no 2026-11-16 daily report HTML exists in docs/."
