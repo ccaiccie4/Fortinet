@@ -1,0 +1,148 @@
+{
+  "generated_at_local": "2026-11-17T08:24:00-08:00",
+  "window": {
+    "start": "2026-10-18",
+    "end": "2026-11-17",
+    "days": 30
+  },
+  "coverage": [
+    "FortiGate",
+    "FortiManager",
+    "FortiAnalyzer",
+    "FortiSwitch",
+    "FortiAP/Wireless",
+    "FortiNAC",
+    "FortiNAC-F",
+    "FortiAuthenticator",
+    "FortiPAM",
+    "FortiSIEM",
+    "FortiSASE",
+    "Secure SD-WAN"
+  ],
+  "results": [
+    {
+      "product": "FortiGate",
+      "searches": [
+        "site:community.fortinet.com/fortigate-3 WebSocket inspection DLP AV IPS proxy after:2026-10-17",
+        "FortiGate Copilot Explicit Proxy HTTP 414 max-request-length WebSocket"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortigate-3/copilot-is-not-usable-after-an-upgrade-to-version-7-6-8-while-the-explicit-proxy-is-in-use-230878",
+      "article_date": "2026-10-27",
+      "within_30_days": true,
+      "finding": "After 7.6.8, Copilot WebSocket handshakes returned 414; UTM allowed traffic but explicit proxy denied a long URI. This is a proxy-length failure before WebSocket frame inspection, not a UTM block."
+    },
+    {
+      "product": "FortiManager",
+      "searches": [
+        "site:community.fortinet.com/fortimanager-27 FortiGuard FDS proxy mode 503 504 after:2026-10-17",
+        "FortiManager FDS connectivity tunnel mode 443 proxy mode 80"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortimanager-27/fortimanager-fds-connectivity-checking-when-error-message-is-http-1-0-503-service-unavailable-or-http-1-0-504-gateway-timeout-and-why-the-web-proxy-must-be-in-tunnel-mode-for-fortimanager-7-4-and-above-231252",
+      "article_date": "2026-11-13",
+      "within_30_days": true,
+      "finding": "A 503/504 FDS failure with an upstream proxy distinguishes tunnel-mode TCP/443 from proxy-mode TCP/80; AV/IPS service enablement is also required on affected releases."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "searches": [
+        "site:community.fortinet.com/fortianalyzer-6 FortiWeb alert playbook FortiGate action after:2026-10-17"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortianalyzer-6/trigger-a-fortigate-automation-from-fortweb-alerts-on-fortianalyzer-using-a-playbook-230700",
+      "article_date": "2026-10-22",
+      "within_30_days": true,
+      "finding": "FortiWeb-originated alerts need a FortiAnalyzer playbook to trigger action on a different FortiGate; the scenario exposes trigger scope and input mapping boundaries."
+    },
+    {
+      "product": "FortiSwitch",
+      "searches": [
+        "site:community.fortinet.com/fortiswitch-36 auto-network auto-ISL CAPWAP discovery FortiSwitch"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-preventing-automatic-fortilink-adoption-on-standalone-fortiswitch-in-l2-extended-networks-229855",
+      "article_date": "2026-09-09",
+      "within_30_days": false,
+      "finding": "A standalone switch in an L2-extended network can still be adopted because CAPWAP AC discovery remains active after auto-ISL and auto-FortiLink discovery are disabled."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "searches": [
+        "site:community.fortinet.com/fortiap-5 RADIUS 802.1X FortiAP troubleshooting",
+        "FortiAP RADIUS authentication debug wpad station logs"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-debugging-radius-authentication-issues-on-the-fortiap-wifi-207465",
+      "article_date": "2025-06-06",
+      "within_30_days": false,
+      "finding": "The troubleshooting article provides station-filter, wpad debug and UDP/1812/1813 capture evidence to isolate AP, FortiGate, RADIUS server and client failures; no direct recent survivability case surfaced."
+    },
+    {
+      "product": "FortiNAC",
+      "searches": [
+        "site:community.fortinet.com/fortinac-28 Kerberos FortiNAC authentication Winbind MSCHAPv2"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortinac-28/technical-tip-mschapv2-authentication-join-fortinac-in-domain-and-checks-144737",
+      "article_date": "2023-08-04 (updated)",
+      "within_30_days": false,
+      "finding": "The updated domain-join/MSCHAPv2 article demonstrates that LDAP lookup success does not prove Winbind trust or Kerberos authentication; no direct recent Kerberos admin-login case surfaced."
+    },
+    {
+      "product": "FortiNAC-F",
+      "searches": [
+        "site:community.fortinet.com/fortinac-f-57 Entra ID group import description after:2026-10-17"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortinac-f-57/fortinac-is-unable-to-import-entra-id-groups-due-to-a-long-description-230752",
+      "article_date": "2026-10-22",
+      "within_30_days": true,
+      "finding": "Entra ID group import fails when description exceeds 255 characters; AzureADApplicationInterface debug and output.master SQL error identify the exact sync boundary."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "searches": [
+        "site:community.fortinet.com/fortiauthenticator-8 HA node-specific gateway static route"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-fortiauthenticator-routing-issue-with-node-specific-gateway-for-high-availability-cluster-227687",
+      "article_date": "2026-05-22",
+      "within_30_days": false,
+      "finding": "A node-specific gateway can override static routing after reboot; this is a routing dependency that remains separate from HA priority and failback selection."
+    },
+    {
+      "product": "FortiPAM",
+      "searches": [
+        "site:community.fortinet.com/fortipam-52 JIT checkout check-in Add-LocalGroupMember WinRM after:2026-10-17"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortipam-52/how-to-solve-the-jit-access-error-script-execution-failed-continuing-checkin-checkout-stdeer-add-localgroupmemeber-missing-an-argument-for-parameter-231255",
+      "article_date": "2026-11-13",
+      "within_30_days": true,
+      "finding": "When Launch secrets with PAM credentials is used, $[0].$USER can be empty; the resulting missing Member argument is a variable-resolution problem, not an Add-LocalGroupMember permission denial."
+    },
+    {
+      "product": "FortiSIEM",
+      "searches": [
+        "site:community.fortinet.com/fortisiem-34 event name overwritten event type parser FortiSIEM"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortisiem-216/event-name-overwrite-issue-in-fortisiem-7-5-1-228714",
+      "article_date": "2026-07-07",
+      "within_30_days": false,
+      "finding": "A 7.5.1 parser test/live-event discrepancy shows why parser normalization must be validated before post-parse Event Tagging; no recent direct tagging rule case surfaced."
+    },
+    {
+      "product": "FortiSASE",
+      "searches": [
+        "site:community.fortinet.com/fortisase-58 ZTNA destination IPv6 DNS FortiClient after:2026-10-17"
+      ],
+      "scenario_url": "https://community.fortinet.com/forticlient-4/ztna-destination-access-is-slow-when-ipv6-is-enabled-on-the-windows-network-adapter-231067",
+      "article_date": "2026-11-03",
+      "within_30_days": true,
+      "finding": "FQDN-based ZTNA destinations stall when IPv6 DNS is attempted before IPv4 fallback; literal IP destinations avoid the DNS proxy path, clarifying the IP-range feature's operational value."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "searches": [
+        "site:community.fortinet.com/fortigate-3 OaaS failed to delete zone FortiCloud overlay"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-forticloud-overlay-as-a-service-oaas-portal-task-error-failed-to-delete-the-zone-of-your-device-190472",
+      "article_date": "2024-11-27",
+      "within_30_days": false,
+      "finding": "OaaS deployment can fail when a pre-existing SD-WAN service occupies default ID 1; the default oaas_default service needs the ID, so migrate the existing rule before retrying."
+    }
+  ],
+  "coverage_note": "All twelve product areas were queried. Five directly relevant Community scenarios were within the rolling 30-day window; older relevant scenarios are retained where no newer feature-specific case was found and are clearly dated in the report."
+}
