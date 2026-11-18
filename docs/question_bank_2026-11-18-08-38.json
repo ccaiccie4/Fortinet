@@ -1,0 +1,913 @@
+{
+  "generated_at_local": "2026-11-18T08:38:55-08:00",
+  "count": 50,
+  "grading": "One point per question; one correct option; all four options include individual feedback.",
+  "answer_position_counts": [
+    14,
+    13,
+    13,
+    10
+  ],
+  "questions": [
+    {
+      "n": 1,
+      "p": "FortiGate",
+      "q": "After a route change, the first GRE packets use WAN2 but NP7-offloaded packets remain on WAN1. Which design change addresses this?",
+      "c": [
+        "Enable loopback ECMP offload when creating a replacement GRE tunnel.",
+        "Increase the GRE keepalive interval and leave the offload settings unchanged.",
+        "Add a second firewall policy with a higher sequence number for GRE.",
+        "Change the remote gateway address to the next-hop IP of WAN2."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: the creation-time loopback-ecmp-offload option enables ECMP hashing for NP7-offloaded GRE over a software loopback.",
+        "Keepalive controls tunnel liveness, not the ECMP hash path used by offloaded sessions.",
+        "A second policy does not change the GRE tunnel's NP7 ECMP hashing behavior.",
+        "The remote gateway identifies the tunnel peer; it should not be rewritten to chase an underlay next hop."
+      ]
+    },
+    {
+      "n": 2,
+      "p": "FortiGate",
+      "q": "Several inner flows share one GRE tunnel over an aggregate link. Which setting adds inner L4 entropy to the LAG hash?",
+      "c": [
+        "Set lag-hash-gre to gre_inner_l4 and select NPU-GRE on the aggregate.",
+        "Set loopback-ecmp-offload to enable and leave the LAG algorithm unchanged.",
+        "Set the health-check class-id to the aggregate interface's traffic class.",
+        "Disable ASIC offload on every policy that forwards the GRE traffic."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: gre_inner_l4 uses inner transport headers, and NPU-GRE selects that configured hashing behavior for the LAG.",
+        "Loopback ECMP offload enables routed-path hashing for GRE; it does not configure aggregate member hashing.",
+        "A health-check class ID controls shaping for probes, not GRE flow hashing.",
+        "Disabling offload is a legacy workaround, not the desired inner-header LAG distribution design."
+      ]
+    },
+    {
+      "n": 3,
+      "p": "FortiGate",
+      "q": "A GRE tunnel already exists without loopback-ecmp-offload. The CLI rejects changing that option. What is the supported planning response?",
+      "c": [
+        "Clear all sessions and retry the same tunnel object after the route converges.",
+        "Recreate the GRE tunnel with the option enabled and migrate traffic deliberately.",
+        "Change the loopback interface address and retain the existing GRE object.",
+        "Set the LAG algorithm to NPU-GRE, which updates the tunnel property."
+      ],
+      "a": 1,
+      "f": [
+        "Clearing sessions does not make a creation-time GRE property mutable.",
+        "Correct: the guide states the setting cannot be changed after tunnel creation, so plan a replacement tunnel.",
+        "Changing the loopback address does not change the immutable offload setting.",
+        "NPU-GRE configures aggregate hashing and does not rewrite the GRE object's ECMP option."
+      ]
+    },
+    {
+      "n": 4,
+      "p": "FortiGate",
+      "q": "On an older release without loopback GRE ECMP offload, which documented workaround sacrifices hardware acceleration?",
+      "c": [
+        "Increase the route distance of the old WAN until all sessions expire.",
+        "Set the GRE keepalive interval to one second and retain NP7 offload.",
+        "Disable auto-asic-offload in the GRE forwarding firewall policy.",
+        "Disable ECMP globally so the software route cannot change."
+      ],
+      "a": 2,
+      "f": [
+        "Route distance changes the preferred route but does not fix the NP7 offload path behavior.",
+        "Keepalive frequency detects peer reachability; it does not alter ASIC forwarding eligibility.",
+        "Correct: disabling auto-asic-offload avoids the stale fast-path behavior but moves traffic away from NP7 acceleration.",
+        "Disabling ECMP globally is broader than necessary and does not provide the documented targeted workaround."
+      ]
+    },
+    {
+      "n": 5,
+      "p": "FortiManager",
+      "q": "A FortiGate already has a newer signature package. Operations wants to freeze future updates without rolling back that device. Which choice is correct?",
+      "c": [
+        "Choose Downgrade so the device keeps its current package version.",
+        "Set the preferred version and choose Just Set Preferred Version.",
+        "Leave Latest selected and disable policy-package installation schedules.",
+        "Delete the package from FortiManager and let the device retry."
+      ],
+      "a": 1,
+      "f": [
+        "Downgrade actively changes devices that already run a later package version.",
+        "Correct: pin-only changes the future delivery ceiling while leaving a newer installed package untouched.",
+        "Policy-package schedules are separate from FortiGuard object-package version selection.",
+        "Deleting the package does not implement a controlled preferred-version policy and can disrupt updates."
+      ]
+    },
+    {
+      "n": 6,
+      "p": "FortiManager",
+      "q": "The required FortiGuard package is absent from the Receive Status list. What should the administrator check before concluding it is unavailable?",
+      "c": [
+        "Clear Show Used Objects Only, then search the package list again.",
+        "Change the FortiGate ADOM to Advanced Device Mode immediately.",
+        "Reinstall the FortiManager firmware to rebuild all package records.",
+        "Create a new firewall policy package with the same package name."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: the guide instructs administrators to clear Show Used Objects Only before searching for the package.",
+        "ADOM device mode governs device/VDOM assignment, not whether a FortiGuard package is hidden by the filter.",
+        "A firmware reinstall is unnecessary before checking the documented list filter.",
+        "Firewall policy packages are unrelated objects and do not expose FortiGuard package versions."
+      ]
+    },
+    {
+      "n": 7,
+      "p": "FortiManager",
+      "q": "What retention assumption should be checked when designing a rollback plan for FortiGuard object packages?",
+      "c": [
+        "FortiManager stores every historical package version indefinitely by default.",
+        "Each managed FortiGate stores all FortiGuard package versions in its local database.",
+        "Only one package version can be retained for each object type.",
+        "FortiManager retains a maximum of 20 object versions by default."
+      ],
+      "a": 3,
+      "f": [
+        "The documentation does not promise indefinite package history.",
+        "The retention setting described is on FortiManager, not an unlimited local archive on each FortiGate.",
+        "More than one package version is retained; the documented default maximum is 20.",
+        "Correct: confirm the required rollback version is still within the retained version set."
+      ]
+    },
+    {
+      "n": 8,
+      "p": "FortiManager",
+      "q": "After pin-only selection, one device still reports a package version newer than the preferred version. How should this be interpreted?",
+      "c": [
+        "The device is necessarily out of sync and must be reinstalled.",
+        "The preferred version only affects policy packages, not FortiGuard.",
+        "That is expected until an explicit downgrade is selected.",
+        "FortiManager will automatically downgrade it at the next full policy install."
+      ],
+      "a": 2,
+      "f": [
+        "A newer installed version is allowed under the pin-only choice.",
+        "The setting specifically controls FortiGuard package versions served by FortiManager.",
+        "Correct: Just Set Preferred Version does not downgrade already newer devices.",
+        "Policy installation is not the trigger for this FortiGuard package rollback workflow."
+      ]
+    },
+    {
+      "n": 9,
+      "p": "FortiAnalyzer",
+      "q": "The SNMP manager can poll FortiAnalyzer but receives no log-disk alerts. Which configuration path should be checked first?",
+      "c": [
+        "Enable trap delivery for the SNMPv3 user, add its host, and select the event.",
+        "Replace the FortiAnalyzer MIB with the standard MIB-II file only.",
+        "Change the query port from UDP/161 to the trap destination port.",
+        "Restart SQL analytics before testing SNMP event notifications."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: polling and traps are separate; the user needs trap enablement, a notification host, and the event subscription.",
+        "MIB-II alone does not decode Fortinet enterprise events and cannot enable trap delivery.",
+        "UDP/161 is the normal query port; trap delivery normally uses UDP/162 or its configured remote port.",
+        "SQL analytics is unrelated to the SNMP agent's event-subscription configuration."
+      ]
+    },
+    {
+      "n": 10,
+      "p": "FortiAnalyzer",
+      "q": "Which SNMPv3 level protects both message authenticity and payload privacy?",
+      "c": [
+        "No Authentication, No Privacy with a restricted source address.",
+        "Authentication, No Privacy with an SHA-family algorithm.",
+        "Authentication and Privacy with an authentication and encryption algorithm.",
+        "Community-based v1/v2c access with a longer community string."
+      ],
+      "a": 2,
+      "f": [
+        "This level provides neither cryptographic authentication nor payload privacy.",
+        "Authentication protects integrity/identity but does not encrypt the SNMP payload.",
+        "Correct: authentication plus privacy combines message authentication with encryption.",
+        "A longer v1/v2c community string does not provide SNMPv3 privacy."
+      ]
+    },
+    {
+      "n": 11,
+      "p": "FortiAnalyzer",
+      "q": "A manager sends SNMP GET requests and receives responses. Which port pairing is normally expected for query and trap paths?",
+      "c": [
+        "Queries use UDP/162 and traps use UDP/161.",
+        "Queries and traps both use UDP/161 by default.",
+        "Queries use TCP/161 and traps use TCP/162.",
+        "Queries use UDP/161 and traps use UDP/162."
+      ],
+      "a": 3,
+      "f": [
+        "The normal query and trap port roles are reversed in this option.",
+        "The default trap remote port is distinct from the query port.",
+        "The documented SNMP transport is UDP, not this TCP pairing.",
+        "Correct: FortiAnalyzer documents UDP/161 for queries and UDP/162 for traps by default."
+      ]
+    },
+    {
+      "n": 12,
+      "p": "FortiAnalyzer",
+      "q": "Traps arrive but the monitoring console displays raw enterprise OIDs. What dependency is most likely missing?",
+      "c": [
+        "The FortiAnalyzer SQL database needs a new event handler.",
+        "The matching Fortinet Core and FortiAnalyzer MIBs are not loaded.",
+        "The SNMPv3 user needs a second authentication password.",
+        "The managed FortiGate devices need to be assigned to another ADOM."
+      ],
+      "a": 1,
+      "f": [
+        "SQL event handlers do not translate SNMP enterprise OIDs.",
+        "Correct: the manager needs matching vendor MIBs to decode Fortinet-specific objects and traps.",
+        "A second password is not the MIB decoding dependency.",
+        "ADOM assignment does not decode the SNMP trap payload."
+      ]
+    },
+    {
+      "n": 13,
+      "p": "FortiSwitch",
+      "q": "A bound custom command does not run after a differential port configuration change. Which global mode changes that trigger?",
+      "c": [
+        "Set switch-custom-cmd to on-any.",
+        "Set switch-custom-cmd to on-replay.",
+        "Execute the command once with execute switch-controller custom-command.",
+        "Remove the per-switch binding and recreate the script name."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: on-any pushes bound custom commands after any managed-switch configuration change.",
+        "On-replay is the default and waits for a full configuration replay.",
+        "One-time execution is not the persistent trigger for future configuration changes.",
+        "Removing the binding prevents the command from following that switch's configuration lifecycle."
+      ]
+    },
+    {
+      "n": 14,
+      "p": "FortiSwitch",
+      "q": "A custom command was executed once and the setting disappeared after a switch restart. What should have been used?",
+      "c": [
+        "A second one-time execution immediately before the reboot.",
+        "A FortiGate firewall automation stitch with the same command text.",
+        "A bound custom-command entry under the managed-switch serial.",
+        "A new FortiLink VLAN with the script stored as its description."
+      ],
+      "a": 2,
+      "f": [
+        "Repeating a one-time command still does not make it part of managed configuration.",
+        "An automation stitch is not the documented binding mechanism for FortiSwitch custom commands.",
+        "Correct: bind the named command to the managed-switch serial for configuration lifecycle delivery.",
+        "A VLAN description does not store or execute a switch CLI script."
+      ]
+    },
+    {
+      "n": 15,
+      "p": "FortiSwitch",
+      "q": "How are line breaks represented inside the custom command string in the documented FortiGate controller syntax?",
+      "c": [
+        "Use a semicolon after each command and omit the line separators.",
+        "Use the literal %0a sequence between command lines.",
+        "Use a JSON array of commands under config switch-controller custom-command.",
+        "Use a carriage-return escape that the switch controller inserts automatically."
+      ],
+      "a": 1,
+      "f": [
+        "A semicolon is not the documented line-break representation for this command string.",
+        "Correct: the FortiLink guide uses %0a to represent a return/newline in the stored script.",
+        "The documented object stores a command string rather than a JSON command array.",
+        "The guide explicitly demonstrates %0a rather than relying on an automatic carriage return."
+      ]
+    },
+    {
+      "n": 16,
+      "p": "FortiSwitch",
+      "q": "When on-any is selected, at what point are bound custom commands pushed relative to normal managed-switch configuration?",
+      "c": [
+        "Before the controller validates the managed-switch serial number.",
+        "Only after a full configuration replay completes.",
+        "At the same time as each individual configuration command.",
+        "Last, after the other configuration changes have been pushed."
+      ],
+      "a": 3,
+      "f": [
+        "The documented sequence does not place custom commands before target binding validation.",
+        "That describes on-replay behavior, not on-any.",
+        "The guide explicitly states the custom commands are pushed last.",
+        "Correct: on-any triggers after any configuration change and sends the custom commands last."
+      ]
+    },
+    {
+      "n": 17,
+      "p": "FortiAP/Wireless",
+      "q": "A DHCP server must distinguish both the AP/SSID circuit and the individual wireless station. Which Option 82 design fits?",
+      "c": [
+        "Put AP/SSID fields in Circuit ID and client MAC in Remote ID.",
+        "Put client MAC in Circuit ID and use no Remote ID field.",
+        "Put the DHCP scope name in Remote ID and omit Circuit ID.",
+        "Disable insertion and rely on the station's requested IP address."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: Circuit ID carries AP/circuit context, while Remote ID can carry the client MAC.",
+        "This reverses the documented purpose and leaves no distinct remote-host identifier.",
+        "The server's scope name is not the documented FortiAP Remote ID source.",
+        "The requested address does not provide the AP/SSID identity Option 82 is designed to add."
+      ]
+    },
+    {
+      "n": 18,
+      "p": "FortiAP/Wireless",
+      "q": "Which minimum FortiAP firmware requirement applies to the customizable Option 82 feature described in the 8.0 guide?",
+      "c": [
+        "FortiAP 7.4.0 or later on every supported radio.",
+        "FortiAP 7.6.2 or later only for Wi-Fi 7 radios.",
+        "FortiAP 7.6.4 or later.",
+        "FortiAP 8.0.0 only, with no earlier supported firmware."
+      ],
+      "a": 2,
+      "f": [
+        "The source specifies a later minimum than 7.4.0.",
+        "The feature requirement is not limited to Wi-Fi 7 radios in the source.",
+        "Correct: FortiAP firmware 7.6.4 or later is required.",
+        "The guide states 7.6.4 or later, not exclusively 8.0.0."
+      ]
+    },
+    {
+      "n": 19,
+      "p": "FortiAP/Wireless",
+      "q": "Several Circuit ID sub-options are concatenated, but the DHCP server's policy does not match. What should be validated?",
+      "c": [
+        "The WTP profile's radio power setting and DFS channel list.",
+        "The DHCP lease duration and the AP's management address.",
+        "The client's RSSI threshold and roaming preference values.",
+        "The selected Circuit ID fields and the configured delimiter."
+      ],
+      "a": 3,
+      "f": [
+        "Radio power and DFS settings do not determine the Option 82 string format.",
+        "Lease duration and management IP do not explain a Circuit ID parser mismatch.",
+        "RSSI and roaming policy are separate from DHCP relay-agent metadata.",
+        "Correct: the server must parse the exact field combination and delimiter inserted by the VAP."
+      ]
+    },
+    {
+      "n": 20,
+      "p": "FortiAP/Wireless",
+      "q": "What does successful Option 82 insertion prove, and what does it not prove?",
+      "c": [
+        "It proves the DHCP server has granted the client an address.",
+        "It proves metadata was inserted, not that the server selected the intended scope.",
+        "It proves the client completed 802.1X and received a production VLAN.",
+        "It proves the AP has a valid CAPWAP DTLS session to the controller."
+      ],
+      "a": 1,
+      "f": [
+        "Option 82 insertion occurs in the request path before the server's lease decision.",
+        "Correct: inspect the server's received fields and scope decision separately.",
+        "DHCP Option 82 does not prove 802.1X authentication or VLAN authorization.",
+        "CAPWAP control-channel health is independent of the DHCP server's scope selection."
+      ]
+    },
+    {
+      "n": 21,
+      "p": "FortiNAC",
+      "q": "The Groups page shows a nonzero count but returns HTTP 500; output.master repeats recursive group-node calls. What is the likely defect?",
+      "c": [
+        "A missing SNMP community prevents the group table from loading.",
+        "An LDAP realm cannot resolve the current administrator's username.",
+        "The number of groups exceeds the default display threshold only.",
+        "A self-referencing or reciprocal group membership creates a traversal cycle."
+      ],
+      "a": 3,
+      "f": [
+        "SNMP monitoring does not control the Groups hierarchy renderer.",
+        "A realm lookup failure would not explain recursive group-node calls.",
+        "A large group count may slow rendering, but StackOverflowError points to unbounded recursion.",
+        "Correct: the membership graph contains a cycle that prevents recursive traversal from terminating."
+      ]
+    },
+    {
+      "n": 22,
+      "p": "FortiNAC",
+      "q": "Which read-only database condition directly identifies a group that contains itself?",
+      "c": [
+        "PARENT_ID equals CHILD_ID for an active group-membership row.",
+        "The group name appears in two different policy mapping records.",
+        "The group owner field contains the system administrator name.",
+        "The group has more than 2,000 members in the Members column."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: the documented self-reference query checks PARENT_ID = CHILD_ID with active group rows.",
+        "Duplicate policy references do not prove a self-loop in the membership graph.",
+        "Ownership metadata is unrelated to the parent/child relationship.",
+        "A large member count is not equivalent to a self-referential edge."
+      ]
+    },
+    {
+      "n": 23,
+      "p": "FortiNAC",
+      "q": "Which group hierarchy behavior is documented and should be preserved when organizing policy objects?",
+      "c": [
+        "Groups can contain subgroups of any type without restriction.",
+        "Groups are flat lists and cannot contain other groups.",
+        "Groups can contain same-type subgroups and be used for policies or roles.",
+        "Groups automatically inherit every policy assigned to their parent."
+      ],
+      "a": 2,
+      "f": [
+        "The guide describes same-type subgroup membership, not unrestricted cross-type nesting.",
+        "Groups are explicitly documented as able to contain other groups.",
+        "Correct: groups organize like items and can be used to assign policies or roles.",
+        "The source does not define automatic inheritance of every parent policy."
+      ]
+    },
+    {
+      "n": 24,
+      "p": "FortiNAC",
+      "q": "The database contains more than 2,000 valid groups and the UI asks whether to display them. How should this differ from a cycle diagnosis?",
+      "c": [
+        "Treat every delayed list as a Java StackOverflowError.",
+        "Use filters to reduce the displayed set before loading all groups.",
+        "Delete older groups directly from the database to restore the UI.",
+        "Disable group nesting globally and recreate all policy mappings."
+      ],
+      "a": 1,
+      "f": [
+        "A large list prompt is documented behavior and does not itself indicate recursive failure.",
+        "Correct: filter the list when the count threshold prompts for confirmation.",
+        "Direct database deletion is not a safe first-line group-management action.",
+        "Disabling nesting globally is unnecessary and would disrupt valid group structures."
+      ]
+    },
+    {
+      "n": 25,
+      "p": "FortiNAC-F",
+      "q": "An MDM record contains Corporate ownership. Which optional connector feature can map that value into the FortiNAC Host Role?",
+      "c": [
+        "Enable Update Hosts Role on the supported MDM service connector.",
+        "Enable Revalidate Health Status On Connect for every host.",
+        "Enable Automatic Registration Polling and disable role filters.",
+        "Change the endpoint's MAC address to match the MDM Device ID."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: Update Hosts Role uses the MDM Ownership value to determine Host Role.",
+        "Health-status revalidation refreshes compliance state, not the ownership-to-role mapping.",
+        "Automatic polling can ingest records but does not replace the role-update setting.",
+        "The mapping uses MDM ownership data, not a rewritten MAC address."
+      ]
+    },
+    {
+      "n": 26,
+      "p": "FortiNAC-F",
+      "q": "The connector is enabled, but a manually assigned Host Role remains unchanged after MDM polling. What explains this?",
+      "c": [
+        "The MDM connector can update only the logged-on username field.",
+        "The Host Role field is read-only for every registered endpoint.",
+        "The MDM record must include the endpoint's current switch port name.",
+        "Only NAC-Default or unassigned Host Roles are eligible for override."
+      ],
+      "a": 3,
+      "f": [
+        "The connector can update Host Role from ownership when the documented option is enabled.",
+        "The Host Role is a policy attribute and is not universally read-only.",
+        "The switch port name is not the ownership-to-role mapping input.",
+        "Correct: a manually assigned non-default role is protected from automatic override."
+      ]
+    },
+    {
+      "n": 27,
+      "p": "FortiNAC-F",
+      "q": "Which evidence chain best proves that ownership-based role mapping changed network access?",
+      "c": [
+        "MDM connector test passes and the endpoint has an IP address.",
+        "Host View shows Host Role, then profile match, then resulting access policy.",
+        "The MDM portal displays Corporate ownership without checking FortiNAC.",
+        "A successful RADIUS Access-Accept proves the intended role was selected."
+      ],
+      "a": 1,
+      "f": [
+        "A connection test proves API reachability, not the role or policy outcome.",
+        "Correct: verify the host role, the matching profile, and the resulting enforcement separately.",
+        "The source MDM value does not prove FortiNAC ingested or mapped it.",
+        "RADIUS acceptance alone does not prove the expected User/Host Profile matched."
+      ]
+    },
+    {
+      "n": 28,
+      "p": "FortiNAC-F",
+      "q": "Many FortiNAC servers managed by one Manager need the same MDM host records. Which deployment reduces repeated MDM API polling?",
+      "c": [
+        "Configure a separate MDM connector on every managed server.",
+        "Disable MDM polling and rely on endpoint agents to populate ownership.",
+        "Configure the connector on the Manager so it copies records after each poll.",
+        "Configure only the captive portal and let the switch query MDM directly."
+      ],
+      "a": 2,
+      "f": [
+        "Per-server connectors create more polling activity against the MDM service.",
+        "Agent scans do not replace the documented MDM service connector data path.",
+        "Correct: Manager-level polling can copy MDM host records to managed servers after each poll.",
+        "The switch does not directly query the MDM service through the captive portal."
+      ]
+    },
+    {
+      "n": 29,
+      "p": "FortiAuthenticator",
+      "q": "A GCC High tenant fails when FortiAuthenticator's Azure Directory OAuth source calls Graph. Which architecture is documented as the supported alternative?",
+      "c": [
+        "Use the commercial Azure Graph endpoint and change only the OAuth secret.",
+        "Replace SAML with RADIUS accounting proxy for the same browser session.",
+        "Use FortiAuthenticator as a SAML IdP proxy to the Government tenant.",
+        "Disable certificate validation and retain the existing Azure OAuth source."
+      ],
+      "a": 2,
+      "f": [
+        "Changing the secret does not change the hardcoded commercial Graph endpoint.",
+        "RADIUS accounting proxy is not a browser-based SAML federation substitute.",
+        "Correct: the current guide recommends FAC SAML IdP proxying for Azure Government.",
+        "Disabling certificate validation does not resolve the unsupported graph.microsoft.us endpoint."
+      ]
+    },
+    {
+      "n": 30,
+      "p": "FortiAuthenticator",
+      "q": "Which statement correctly describes the two trust boundaries in the FAC SAML proxy design?",
+      "c": [
+        "FAC trusts the upstream Government IdP, then issues an assertion to the downstream SP.",
+        "The downstream SP connects directly to the Government Graph API for group data.",
+        "FAC forwards the upstream assertion unchanged without a downstream IdP relationship.",
+        "The browser authenticates to the SP first, then FAC creates a RADIUS session."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: FAC is a proxying IdP that validates upstream authentication and serves downstream SPs.",
+        "The selected architecture avoids relying on the unsupported commercial OAuth Graph endpoint.",
+        "The downstream SP has its own trust relationship with FortiAuthenticator as IdP.",
+        "The described workflow is SAML federation, not RADIUS accounting."
+      ]
+    },
+    {
+      "n": 31,
+      "p": "FortiAuthenticator",
+      "q": "In the selected Azure Government design, what role does FortiAuthenticator present to the downstream service provider?",
+      "c": [
+        "A RADIUS accounting collector that only forwards Start and Stop packets.",
+        "A SAML Identity Provider that issues the assertion trusted by the SP.",
+        "A DHCP relay agent that inserts Option 82 metadata for the endpoint.",
+        "A FortiManager FortiGuard server that distributes package versions."
+      ],
+      "a": 1,
+      "f": [
+        "RADIUS accounting records are not the SAML assertion interface used by the SP.",
+        "Correct: FortiAuthenticator acts as the downstream SAML IdP while proxying upstream authentication.",
+        "Option 82 is a wireless DHCP relay-agent feature unrelated to SAML.",
+        "FortiGuard package delivery is a separate FortiManager management function."
+      ]
+    },
+    {
+      "n": 32,
+      "p": "FortiAuthenticator",
+      "q": "The upstream redirect succeeds, but the downstream SP rejects the assertion. Which evidence should be checked at the FAC-to-SP boundary?",
+      "c": [
+        "The FortiAnalyzer SNMP trap event list and query port.",
+        "The FortiGate GRE tunnel's loopback-ecmp-offload setting.",
+        "The FortiNAC Host Role and MDM ownership field.",
+        "The assertion issuer, audience, NameID, signature, and ACS values."
+      ],
+      "a": 3,
+      "f": [
+        "SNMP traps do not validate SAML issuer or audience claims.",
+        "GRE offload has no bearing on SAML assertion validation.",
+        "Host Role mapping is not part of the FAC-to-SP SAML trust boundary.",
+        "Correct: inspect the downstream assertion's trust and recipient fields separately from upstream authentication."
+      ]
+    },
+    {
+      "n": 33,
+      "p": "FortiPAM",
+      "q": "Which password changer type supports the reconciliation feature described in FortiPAM 1.9?",
+      "c": [
+        "SSH password changer for any Unix account template.",
+        "Active Directory LDAP password changer.",
+        "Web launcher password changer for browser-based targets.",
+        "Generic REST secret template with an arbitrary target endpoint."
+      ],
+      "a": 1,
+      "f": [
+        "The guide limits password reconciliation to Active Directory LDAP password changers.",
+        "Correct: the feature is explicitly supported for the Active Directory LDAP changer type.",
+        "A launcher is a connection method, not the documented reconciliation engine.",
+        "The feature is not a generic recovery mechanism for arbitrary REST templates."
+      ]
+    },
+    {
+      "n": 34,
+      "p": "FortiPAM",
+      "q": "Why is a separate Reconcile Account configured for an out-of-sync base secret?",
+      "c": [
+        "It acts as the privileged bind identity that can reset the base account password.",
+        "It stores the old password so FortiPAM can retry the same failed login.",
+        "It replaces the base account in every application launcher session.",
+        "It disables the target account until the next scheduled rotation."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: the reconcile account binds with sufficient rights to reset the base account password.",
+        "Reconciliation is a reset path, not merely replaying the old failed credential.",
+        "The reconcile secret does not replace the managed base account in all sessions.",
+        "The feature recovers or resets credentials; it does not inherently disable the account."
+      ]
+    },
+    {
+      "n": 35,
+      "p": "FortiPAM",
+      "q": "What is the behavioral difference between the two Activate on choices?",
+      "c": [
+        "Both modes always run only after an automatic password verification succeeds.",
+        "Reconcile directly waits for a failed check-in; the other mode runs at creation.",
+        "Reconcile directly performs reconciliation instead of a normal change; the other runs after change failure.",
+        "One mode applies only to SSH secrets and the other only to LDAP secrets."
+      ],
+      "a": 2,
+      "f": [
+        "The activation choices are not defined by automatic verification success.",
+        "The source describes direct reconciliation versus reconciliation after password-change failure.",
+        "Correct: the two modes determine whether reconciliation is direct or failure-triggered.",
+        "Both choices are part of the supported Active Directory LDAP password reconciliation workflow."
+      ]
+    },
+    {
+      "n": 36,
+      "p": "FortiPAM",
+      "q": "Which operations can be influenced by the Password Reconciliation configuration?",
+      "c": [
+        "Only manual password changes initiated from the secret details window.",
+        "Only the scheduled password rotation job and never check-in.",
+        "Only verification tests after a user checks out a secret.",
+        "Manual changes, automatic changes, and password changes during secret check-in."
+      ],
+      "a": 3,
+      "f": [
+        "The documented effect extends beyond manual changes.",
+        "Automatic password changes are also included in the documented scope.",
+        "Check-in password changes are explicitly affected by reconciliation configuration.",
+        "Correct: the guide names all three change paths."
+      ]
+    },
+    {
+      "n": 37,
+      "p": "FortiSIEM",
+      "q": "A raw historical event contains an interface name inside a message, but the parser did not create a field. Which query function helps recover one value?",
+      "c": [
+        "EXTRACT applied to the string-valued event attribute with a regex pattern.",
+        "EMA applied to the message field without a time aggregation.",
+        "COUNT DISTINCT applied to the entire raw event payload.",
+        "IF applied to the event timestamp without a comparison expression."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: EXTRACT can pull one value from a string attribute in supported Analytics queries.",
+        "EMA is a moving average and requires numerical input plus time aggregation.",
+        "COUNT DISTINCT aggregates values; it does not parse a missing field from a message.",
+        "IF derives a value from a logical condition and requires an expression."
+      ]
+    },
+    {
+      "n": 38,
+      "p": "FortiSIEM",
+      "q": "An EMA query fails because the result has no supported time bucket. What should be added?",
+      "c": [
+        "A second event parser that writes the average into the raw log.",
+        "A time aggregation field such as receive hour, date, week, or month.",
+        "A rule threshold that converts the query into an EventDB rule.",
+        "A lookup-table function that supplies a static timestamp for each event."
+      ],
+      "a": 1,
+      "f": [
+        "A parser change is not the documented requirement for the EMA query.",
+        "Correct: EMA requires a supported time aggregation field in the query.",
+        "Rules/EventDB are not the supported context for the new query-function set.",
+        "A static timestamp does not create the required time-series aggregation."
+      ]
+    },
+    {
+      "n": 39,
+      "p": "FortiSIEM",
+      "q": "Where should the new query-function pipeline be run according to the release notes?",
+      "c": [
+        "Only in EventDB rules that execute on every incoming event.",
+        "Only in report templates after a PDF has been generated.",
+        "In ClickHouse or Elasticsearch Analytics queries, not EventDB queries or rules.",
+        "In any query engine as long as the function names are capitalized."
+      ],
+      "a": 2,
+      "f": [
+        "The release notes explicitly exclude EventDB queries and rules for the new function set.",
+        "Report rendering is not the query-engine context for these functions.",
+        "Correct: ClickHouse and Elasticsearch Analytics queries are the supported contexts described.",
+        "Function availability is engine-specific; capitalization does not make unsupported contexts valid."
+      ]
+    },
+    {
+      "n": 40,
+      "p": "FortiSIEM",
+      "q": "A nested expression works in ClickHouse but fails in Elasticsearch. What is the best next step?",
+      "c": [
+        "Assume the query cache is stale and restart every Collector.",
+        "Convert all function calls to EventDB syntax and rerun the rule.",
+        "Increase the time window until the nested expression is accepted.",
+        "Check the engine-specific nested-function categories and depth limitations."
+      ],
+      "a": 3,
+      "f": [
+        "A cache restart is not the first diagnostic for a documented scope difference.",
+        "EventDB does not provide the same new query-function support.",
+        "Changing the time window does not resolve unsupported nesting categories.",
+        "Correct: nesting support differs by engine and function category."
+      ]
+    },
+    {
+      "n": 41,
+      "p": "FortiSASE",
+      "q": "A laptop repeatedly starts FortiSASE tunnel attempts before its captive portal has granted Internet access. Which profile setting can cause this?",
+      "c": [
+        "Disable internet check is enabled, bypassing the readiness gate.",
+        "Endpoint connects to FortiSASE VPN is set to Manually.",
+        "The SASE PoP has a shorter IPsec DPD idle interval.",
+        "The endpoint's User/Host Profile has a NAC-Default role."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: enabling Disable internet check starts autoconnect without verifying Internet reachability.",
+        "Manual mode does not initiate automatic tunnel attempts at login.",
+        "DPD monitors an established peer and does not control the pre-connectivity check.",
+        "NAC Host Role is a FortiNAC policy attribute, not the FortiSASE local Internet check."
+      ]
+    },
+    {
+      "n": 42,
+      "p": "FortiSASE",
+      "q": "What happens when Disable internet check is left disabled in an automatic FortiSASE connection profile?",
+      "c": [
+        "FortiClient starts the tunnel immediately regardless of local connectivity.",
+        "FortiClient waits until Internet connectivity is confirmed before autoconnect.",
+        "FortiClient skips authentication and connects to the nearest PoP.",
+        "FortiClient switches to manual mode until the user opens the portal."
+      ],
+      "a": 1,
+      "f": [
+        "Immediate tunnel attempts without a check occur when the Disable internet check toggle is enabled.",
+        "Correct: the default behavior gates autoconnect on confirmed Internet reachability.",
+        "The setting does not bypass the tunnel's authentication process.",
+        "The toggle does not change the profile from automatic to manual mode."
+      ]
+    },
+    {
+      "n": 43,
+      "p": "FortiSASE",
+      "q": "Where is the Internet-check behavior configured for the endpoint?",
+      "c": [
+        "In the FortiAnalyzer SNMPv3 user event-subscription list.",
+        "In the FortiGate SD-WAN performance SLA class profile.",
+        "In the FortiSASE endpoint profile's Connection tab.",
+        "In the FortiPAM secret's password reconciliation settings."
+      ],
+      "a": 2,
+      "f": [
+        "SNMP subscriptions monitor FortiAnalyzer system events, not endpoint connectivity.",
+        "SD-WAN class profiles prioritize probes on WAN egress interfaces.",
+        "Correct: the Connection tab contains the endpoint tunnel autoconnect and Internet-check options.",
+        "Password reconciliation controls managed account credentials, not VPN startup."
+      ]
+    },
+    {
+      "n": 44,
+      "p": "FortiSASE",
+      "q": "A tunnel is already established and then begins failing peer-liveness checks. Is the Internet-check toggle the correct control?",
+      "c": [
+        "Yes; it changes the interval of established tunnel DPD probes.",
+        "Yes; it rewrites the endpoint's SAML assertion audience.",
+        "No; the toggle gates autoconnect before tunnel establishment, not DPD.",
+        "No; it changes the FortiSASE Security PoP's DNS geolocation."
+      ],
+      "a": 2,
+      "f": [
+        "The Internet-check setting is not the DPD timer for an established tunnel.",
+        "SAML audience validation is unrelated to local Internet reachability gating.",
+        "Correct: once a tunnel exists, diagnose DPD and tunnel liveness separately.",
+        "DNS geolocation is not controlled by this endpoint profile toggle."
+      ]
+    },
+    {
+      "n": 45,
+      "p": "Secure SD-WAN",
+      "q": "Which command assigns a health-check's probes to a traffic class?",
+      "c": [
+        "set sla-fail-log-period 30 under the health-check object.",
+        "set class-id 2 under the SD-WAN health-check object.",
+        "set diffservcode 46 under the interface's IPv6 configuration.",
+        "set fortiguard-name to the selected probe destination."
+      ],
+      "a": 1,
+      "f": [
+        "SLA fail-log period controls logging intervals, not packet classification.",
+        "Correct: the class-id parameter assigns the health-check probes to a traffic class.",
+        "Diffservcode marking and IPv6 interface settings are not the documented class-id mapping.",
+        "FortiGuard target selection defines a probe destination, not an egress scheduler class."
+      ]
+    },
+    {
+      "n": 46,
+      "p": "Secure SD-WAN",
+      "q": "What must exist for an SLA probe class ID to receive guaranteed bandwidth during egress congestion?",
+      "c": [
+        "A matching traffic class, shaping-profile entry, and egress profile on the member.",
+        "A second health-check server and a longer probe timeout.",
+        "A BGP community that maps the SLA name to a route tag.",
+        "A firewall policy with a higher sequence number than user traffic."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: the class ID must map to a configured shaping class and an egress shaping profile.",
+        "More probe servers improve destination redundancy, not scheduler bandwidth guarantees.",
+        "BGP route tags influence routing policy and do not create egress class guarantees.",
+        "Policy sequence does not configure the traffic-class scheduler."
+      ]
+    },
+    {
+      "n": 47,
+      "p": "Secure SD-WAN",
+      "q": "Which output best proves that probe packets are entering the intended egress traffic class?",
+      "c": [
+        "diagnose sys sdwan health-check showing state(alive) only.",
+        "get router info routing-table all showing both WAN defaults.",
+        "diagnose netlink interface list showing the class counter increasing.",
+        "show firewall policy showing the SD-WAN rule name."
+      ],
+      "a": 2,
+      "f": [
+        "Health-check state proves probe response, not scheduler classification.",
+        "A routing table shows available routes, not traffic-class counters.",
+        "Correct: netlink output exposes class allocation, priority, and forwarded-byte counters.",
+        "A firewall policy name does not prove which shaping class carried the probes."
+      ]
+    },
+    {
+      "n": 48,
+      "p": "Secure SD-WAN",
+      "q": "The health-check reports packet loss, but the engineer needs to prove the probe class is protected under congestion. What evidence is still needed?",
+      "c": [
+        "Only a successful DNS lookup to the probe server.",
+        "Only a green status arrow in the SD-WAN GUI.",
+        "Only a route-table entry for each SD-WAN member.",
+        "Egress class allocation, priority, and probe-class forwarded-byte counters."
+      ],
+      "a": 3,
+      "f": [
+        "DNS resolution proves name service, not egress scheduling.",
+        "A green status indicator does not prove class assignment or guaranteed bandwidth.",
+        "A route entry does not show the scheduler treatment of probe packets.",
+        "Correct: inspect netlink class bandwidth and counters alongside the health-check metrics."
+      ]
+    },
+    {
+      "n": 49,
+      "p": "Cross-product",
+      "q": "FortiAnalyzer emits a CPU-overuse SNMP trap, but the team claims this proves all incoming FortiGate logs are indexed. Is that conclusion valid?",
+      "c": [
+        "Yes; an appliance trap confirms log ingestion and SQL indexing completed.",
+        "No; the trap proves a system event, so log ingestion and Analytics need separate checks.",
+        "Yes; SNMPv3 traps are generated only after the Analytics database commits each log.",
+        "No; SNMP traps can only be generated by managed FortiGate devices."
+      ],
+      "a": 1,
+      "f": [
+        "A CPU trap is not an end-to-end log-ingestion acknowledgement.",
+        "Correct: system SNMP notifications and log receive/index pipelines are separate evidence paths.",
+        "The SNMP agent emits appliance events; it is not a per-log database commit hook.",
+        "FortiAnalyzer's own SNMP agent can emit traps originating on the appliance."
+      ]
+    },
+    {
+      "n": 50,
+      "p": "Cross-product",
+      "q": "A FortiSASE tunnel does not start while the endpoint is offline. Why is changing DPD not the first troubleshooting step?",
+      "c": [
+        "DPD operates after a tunnel exists; first inspect the endpoint Internet-check gate.",
+        "DPD controls the FortiGate NP7 GRE loopback ECMP hash selection.",
+        "DPD determines whether FortiManager serves Latest or a pinned package.",
+        "DPD assigns FortiNAC Host Roles from the MDM ownership value."
+      ],
+      "a": 0,
+      "f": [
+        "Correct: pre-connectivity gating occurs before tunnel establishment; DPD is a peer-liveness mechanism for an existing tunnel.",
+        "NP7 GRE ECMP hashing is unrelated to FortiSASE endpoint DPD.",
+        "FortiGuard package version selection is a FortiManager management workflow.",
+        "MDM ownership-to-role mapping is a FortiNAC-F policy attribute feature."
+      ]
+    }
+  ]
+}
