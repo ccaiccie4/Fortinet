@@ -1,0 +1,544 @@
+[
+  {
+    "product": "FortiGate",
+    "title": "Proxy ARP on VLAN interfaces: turn intra-VLAN isolation into policy-controlled reachability",
+    "version": "FortiOS 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/597953/gui-support-for-configuring-proxy-arp-on-vlan-interface",
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/801169/blocking-intra-vlan-traffic",
+      "https://docs.fortinet.com/document/fortigate-private-cloud/8.0.0/vmware-esxi-administration-guide/662702/microsegmentation-l2-proxy-arp-with-fortigate-fortiswitch-and-vmware-vcenter"
+    ],
+    "scenario_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-configure-proxy-arp-with-intra-vlan-traffic-blocking-enabled-for-subnet-greater-than-24-215126",
+    "scenario_status": "Older technical tip, outside the rolling window; retained as background only, not represented as a recent case.",
+    "sections": [
+      {
+        "heading": "Why this feature matters",
+        "body": "A conventional switched VLAN lets two hosts in the same IPv4 subnet exchange frames directly after ARP resolution. A FortiGate firewall policy cannot reliably mediate a frame that never reaches the firewall. FortiSwitch intra-VLAN blocking changes that forwarding boundary: client-to-client port forwarding is suppressed and traffic is forced toward the FortiGate. Proxy ARP then lets the FortiGate answer ARP on behalf of selected peer addresses, so a host still sends the peer's IP traffic to the FortiGate MAC. The firewall can inspect the resulting same-interface flow and apply a policy. The combination is a Layer-2 isolation primitive with Layer-3 policy-controlled exceptions, not simply an ARP convenience setting."
+      },
+      {
+        "heading": "Packet and policy mechanics",
+        "body": "The client first broadcasts an ARP request for the destination IPv4 address. A matching proxy-ARP range on the VLAN interface causes the FortiGate to answer with its own interface MAC. The client caches that mapping and emits the IP packet in a frame addressed to the FortiGate. FortiSwitch blocks direct port-to-port forwarding; the packet is delivered to the FortiGate, where the firewall policy decides whether the source and destination are allowed. For same-VLAN communication, ingress and egress can be the same logical VLAN interface. The global allow-traffic-redirect behavior must not bypass the policy check for this design; the FortiSwitch guide explicitly calls for disabling it before blocking intra-VLAN traffic. Proxy ARP only solves the L2 next-hop resolution. It does not authorize the IP conversation, create a route, or replace the firewall policy."
+      },
+      {
+        "heading": "Configuration pattern",
+        "body": "On the FortiGate, edit the VLAN interface and enable Block intra-VLAN traffic (CLI: `set switch-controller-access-vlan enable`). Configure the proxy-ARP address range on that VLAN interface; FortiOS 8.0 adds GUI create/edit/delete support for those ranges. The CLI structure remains useful for review and automation:\n\nconfig system proxy-arp\n    edit 1\n        set interface \"VLAN100\"\n        set ip 10.10.100.2\n        set end-ip 10.10.100.254\n    next\nend\n\nconfig firewall policy\n    edit 100\n        set name \"VLAN100-inspected-east-west\"\n        set srcintf \"VLAN100\"\n        set dstintf \"VLAN100\"\n        set srcaddr \"approved-hosts\"\n        set dstaddr \"approved-services\"\n        set action accept\n        set schedule \"always\"\n        set service \"approved-services\"\n    next\nend\n\nconfig system global\n    set allow-traffic-redirect disable\nend\n\nUse one proxy-ARP entry for each address range that must be represented. The FortiSwitch guide documents up to 256 proxy-ARP entries, with up to 1,024 addresses per entry. Do not copy broad `all` address/service examples into production without narrowing the policy."
+      },
+      {
+        "heading": "Evidence and interpretation",
+        "body": "Check the VLAN interface configuration, proxy-ARP table, and matching firewall policy first. An ARP capture should show the FortiGate answering for the peer address; that proves the proxy is active for that address, not that the later firewall policy accepts the flow. A packet capture showing ingress and egress on the same VLAN interface proves the traffic reached the FortiGate path, but policy logs or counters are needed to prove the rule decision. A successful ping proves only that the test tuple was allowed at that moment; it does not prove all east-west services are controlled. When a host cannot reach a peer, compare its ARP cache, the proxy range, the VLAN's block setting, the policy hit counter, and the return path."
+      },
+      {
+        "heading": "Dependencies and failure boundaries",
+        "body": "The design is IPv4-centric: the FortiSwitch guide states that IPv6 client-to-client traffic is not supported while intra-VLAN blocking is enabled. The feature is not supported when the FortiLink interface is a hardware or software switch. For a FortiLink outage, the `access-vlan-mode` setting can determine fail-open versus fail-close behavior; this is an availability-versus-isolation decision and must be tested with the actual switch topology. A separate microsegmentation deployment guide also calls out disabling ICMP redirects on relevant FortiOS releases; do not confuse that interface setting with the global traffic-redirect policy-bypass control. The GUI enhancement in 8.0 changes how proxy-ARP ranges are configured, not the packet semantics."
+      }
+    ],
+    "evidence": [
+      "ARP reply from the FortiGate for a protected peer proves proxy-ARP coverage only.",
+      "Same-interface VLAN ingress/egress capture proves the packet traversed the FortiGate path.",
+      "Firewall policy log/counter proves the policy decision for the observed tuple.",
+      "A missing ARP reply points to range/interface coverage before it points to policy."
+    ],
+    "troubleshooting": [
+      "No ARP reply: verify the proxy range includes the destination and is bound to the correct VLAN interface.",
+      "ARP resolves but traffic fails: inspect policy match, same-interface handling, and return traffic.",
+      "Traffic still switches directly: verify FortiSwitch intra-VLAN blocking and FortiLink mode.",
+      "IPv6 peer traffic fails: this is a documented feature boundary, not necessarily a broken IPv6 route."
+    ]
+  },
+  {
+    "product": "FortiManager",
+    "title": "IPS package intelligence through the FortiManager JSON API",
+    "version": "FortiManager 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/699084/fortimanager-api-can-be-used-to-get-detailed-info-about-ips",
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/657291"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a recent bulk-retrieve discussion, but it concerns configuration retrieval rather than IPS package introspection and was deliberately not used as this lesson's scenario.",
+    "sections": [
+      {
+        "heading": "Purpose and management-plane boundary",
+        "body": "FortiManager 8.0 exposes detailed IPS package and signature information through the JSON API `um/query/productapi`. This lets automation answer questions that are awkward to resolve from a policy package alone: what a signature ID represents, which signatures exist in a particular IPS package release, how two package releases differ, and how many signatures a release contains. The endpoint is FortiManager's query interface to product/package data. It is not a replacement for policy installation, a FortiGate runtime session lookup, or proof that a managed firewall has already installed the queried package."
+      },
+      {
+        "heading": "Query mechanics",
+        "body": "The API request carries a target path in the `data` parameter. Fortinet documents four useful query forms. A signature lookup uses `/fgd/lookup/ency?source=ips&id=58947`. A package inventory uses `/srvupd/detail/ips/34.089?detail=1&offset=0&limit=10`. A delta query compares two package versions, for example `/srvupd/detail/ips/34.085/34.089?detail=1&offset=0&limit=10`. Pagination changes `offset` and `limit`, such as `offset=20&limit=10`. `detail=1` requests detailed signature information rather than only a compact list. The API consumer should treat the package version as an explicit input and retain the returned version, query parameters, timestamp, and pagination offset with the collected data."
+      },
+      {
+        "heading": "Automation pattern",
+        "body": "A safe inventory job first authenticates to FortiManager using a dedicated API identity, then submits a read-only `get` request to `um/query/productapi` with one of the documented target paths in the data field. For a single signature, record the signature ID and the returned encyclopedia fields. For a package audit, page through the full release list until the reported total has been covered; do not assume the first ten rows are the complete package. For change review, query both old and new package versions and compare the delta output. Keep the package release string as a first-class key: signature IDs alone do not tell an auditor which release was inspected. Store API responses as evidence and redact credentials/session values."
+      },
+      {
+        "heading": "What the result proves—and what it does not",
+        "body": "A successful signature lookup proves FortiManager can retrieve the signature metadata for the requested ID. A version inventory proves what the queried package release contains. A delta query identifies changes between the two package versions. None of those responses proves a particular FortiGate has downloaded or activated that package, that an IPS sensor references the signature, or that traffic has matched it. For device state, separately inspect the managed device's FortiGuard package status and installation/task history. For enforcement, inspect the IPS sensor, policy attachment, and traffic/event evidence."
+      },
+      {
+        "heading": "Troubleshooting and operational controls",
+        "body": "If a query fails, separate API authentication/session failure from an invalid `target` path, malformed package version, unknown signature ID, and pagination mistakes. Start with one known signature ID and a small page limit, then expand to the release inventory. If the first page works but later pages are empty, verify the offset against the total count rather than treating an empty page as proof that the package has no further records. Avoid running an unbounded full inventory on every poll; cache release metadata and query deltas when the package changes. The feature is most useful for change review, vulnerability response, and evidence-backed package governance—not for making policy changes."
+      }
+    ],
+    "evidence": [
+      "A returned encyclopedia record proves metadata lookup for the supplied signature ID.",
+      "A release inventory plus total count and completed pagination proves the queried package was fully enumerated.",
+      "A delta response proves package-content difference, not device installation.",
+      "Managed-device package status is separate evidence from the API's product-data response."
+    ],
+    "troubleshooting": [
+      "Authentication failure: verify API identity, permissions, session lifecycle, and request envelope before changing the target URI.",
+      "Unknown signature: confirm the ID and source=ips query path; do not infer absence from an unrelated endpoint.",
+      "Incomplete inventory: compare returned total with offset/limit coverage and fetch remaining pages.",
+      "Device enforcement question: pivot to managed-device package state and policy/sensor attachment."
+    ]
+  },
+  {
+    "product": "FortiAnalyzer",
+    "title": "Fluentd output profiles to Azure Monitor Logs Ingestion API",
+    "version": "FortiAnalyzer 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api",
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching this specific output-profile integration was verified; the lesson uses the official feature and output-profile documentation.",
+    "sections": [
+      {
+        "heading": "Data path and object model",
+        "body": "FortiAnalyzer 8.0 adds Azure Logs Ingestion as an output-profile type for its Fluentd-based log forwarding. The pipeline has distinct objects: an application registration supplies tenant/client identity and a client secret; a Log Analytics workspace stores the destination table; a Data Collection Endpoint (DCE) provides the ingestion endpoint; a Data Collection Rule (DCR) defines the stream and transformation; a custom table receives the records; and a FortiAnalyzer Output Profile supplies the connection parameters to the log-forwarding configuration. The output profile is a transport/serialization integration. It does not move the FortiAnalyzer's own Analytics/Archive database into Azure."
+      },
+      {
+        "heading": "Schema and ingestion contract",
+        "body": "The custom table must use the `_CL` suffix. The Fortinet example starts with a sample object containing `logtime` and `message`, then applies a DCR transformation: `source | extend TimeGenerated = todatetime(logtime) | project-away logtime`. The transformation creates `TimeGenerated`, which the Azure Logs Ingestion API requires, and removes the temporary `logtime` field. This is a schema contract: a successful TCP/TLS connection is not enough if the DCR stream or table schema does not accept the payload. The application registration must be assigned the `Monitoring Metrics Publisher` role for the DCR."
+      },
+      {
+        "heading": "FortiAnalyzer configuration",
+        "body": "In the Azure portal, create the application registration, Log Analytics workspace, DCE, DCR, and custom table. Record the Tenant ID, Client ID, Client Secret value, DCE URL, DCR ID, and table name. In FortiAnalyzer, navigate to System Settings > Advanced > Log Forwarding > Output Profile, create a profile, set Type to Azure Logs Ingestion, and use the default Fluentd configuration unless a supported customization is required. Populate the six parameters: `tenant_id`, `client_id`, `client_secret`, `dce_url`, `dcr_id`, and `table_name`. Select Validate and Save, then reference the profile from the relevant Log Forwarding configuration. Treat the client secret as a credential: restrict who can read/edit the profile and rotate it through the application-registration process."
+      },
+      {
+        "heading": "Verification layers",
+        "body": "Validation at profile-save time is a configuration/connection check; it does not by itself prove that every expected FortiAnalyzer log type is selected, that the DCR transformation accepts the event schema, or that records are queryable in the destination table. Verify in layers: confirm the output profile validates; confirm the Log Forwarding rule references that profile and matches the intended devices/log types; generate a known test event; then query the custom table for the expected message and `TimeGenerated`. Check the DCR stream/table name and transformation if data arrives with missing fields or is rejected. A missing row can originate before Fluentd (no matching log-forward rule), during transport/authentication, or after ingestion at the DCR/table schema boundary."
+      },
+      {
+        "heading": "Operational design",
+        "body": "Use a dedicated app registration and narrowly scoped role assignment. Keep the DCE/DCR/table identifiers under change control because a typo can produce a valid-looking but nonfunctional destination. Define a test event for each important log family and keep its source device, timestamp, and expected table fields. If the destination is unavailable, do not assume FortiAnalyzer's local logs are missing; the local log store and external output profile are separate paths. Size and retention of the destination workspace are Azure-side decisions and should be monitored independently from FortiAnalyzer disk utilization."
+      }
+    ],
+    "evidence": [
+      "Validate and Save proves the output profile's configuration/connection check, not end-to-end event delivery.",
+      "A matching Log Forwarding rule proves the event is eligible for the output path.",
+      "A destination row with the expected message and TimeGenerated proves ingestion and transformation for that test event.",
+      "DCR transformation errors indicate schema/stream mismatch rather than a FortiAnalyzer Analytics database issue."
+    ],
+    "troubleshooting": [
+      "No destination rows: verify Log Forwarding rule match and selected output profile before changing the Azure workspace.",
+      "Authentication failure: recheck tenant/client/secret and the DCR role assignment.",
+      "Records rejected or missing timestamps: verify the custom table suffix and TimeGenerated transformation.",
+      "Only some log families arrive: test each log type and inspect rule filters and payload schema separately."
+    ]
+  },
+  {
+    "product": "FortiSwitch",
+    "title": "NAC and dynamic-port-policy match retention in hours",
+    "version": "FortiOS/FortiSwitchOS 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/666111/enhance-nac-dpp-port-control-and-qos-poe-support",
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173271/fortiswitch-network-access-control"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching match-period retention was verified; older RADIUS/CoA material was excluded as a different transaction.",
+    "sections": [
+      {
+        "heading": "What match retention controls",
+        "body": "FortiSwitch NAC policies and dynamic port policies (DPPs) classify a device and apply a VLAN or port-level treatment. A match can be retained after the immediate observation that caused it. FortiOS 8.0 makes the retention period configurable in hours rather than only days, with a maximum of 3,072 hours (120 days). `match-period 0` means keep the matched device indefinitely, subject to documented removal events such as a user-configured CLI event or a FortiGate restart. This is a persistence setting for a NAC/DPP match record; it is not an 802.1X session timeout, a DHCP lease, or a RADIUS Session-Timeout."
+      },
+      {
+        "heading": "Dynamic versus override behavior",
+        "body": "The FortiLink guide instructs administrators to change `match-type` from `dynamic` to `override` before setting the explicit `match-period`. That distinction matters: the configured retention is an override to the normal dynamic matching lifecycle. If the match type remains dynamic, an engineer may expect an explicit hour-based hold that is not actually being applied. NAC policies can match MAC address, vendor, device family, device type, operating system, or user. The policy can assign a VLAN or apply port settings. DPP uses a similar policy-rule structure associated with a FortiLink interface."
+      },
+      {
+        "heading": "Configuration",
+        "body": "For a NAC policy, the documented pattern is:\n\nconfig user nac-policy\n    edit \"NACpolicy1\"\n        set match-type override\n        set match-period 3000\n    next\nend\n\nThe same retention concept is available under `config switch-controller dynamic-port-policy`, inside the relevant policy rule. Use a period that matches the operational lifecycle: a short staging period for onboarding, a longer period for managed IoT devices, or 0 only when indefinite retention is deliberate. The release also adds PoE configuration to NAC-enabled managed-switch ports and allows a QoS policy to be applied when the matching device is the only device on the port. Those are separate enforcement actions; they do not change the match-period timer."
+      },
+      {
+        "heading": "How to verify the match",
+        "body": "Inspect the NAC policy/DPP definition and confirm both `match-type override` and the intended `match-period`. Then observe the device in the Matched NAC Devices view and confirm the resulting VLAN/port settings on the managed switch. The 8.0 guide also documents a warning at 95 percent of the maximum number of matched devices and a switch-controller event when the maximum is reached. This is a capacity signal, not proof that a particular device's match has expired. A device that disappears should be correlated with its last match, configured retention, and any explicit removal/restart event."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Retention creates a deliberate trade-off. Too short a period can cause a device to lose its intended NAC treatment after a quiet interval; too long a period can preserve stale classifications after a device changes hands or is repurposed. Review the match source and rule criteria before extending retention to solve a misclassification. If a device shares a port with a downstream switch or multiple endpoints, do not assume the single-device QoS override applies; the documented QoS enhancement is conditional on the matching device being the only device on the port. Coordinate NAC, DPP, PoE and QoS changes with the FortiGate/FortiLink management plane."
+      }
+    ],
+    "evidence": [
+      "Configured match-type and match-period prove the retention policy is explicit.",
+      "Matched NAC Devices and switch port state prove the classification reached the managed-switch enforcement point.",
+      "The 95-percent warning and switch-controller event prove capacity pressure, not per-device expiry.",
+      "A port-level QoS result is only expected under the documented single-device condition."
+    ],
+    "troubleshooting": [
+      "Retention ignored: verify match-type is override before evaluating match-period.",
+      "Device disappears early: check restart/removal events and whether the device was dynamically matched.",
+      "Wrong VLAN: inspect rule criteria and policy ordering rather than increasing retention.",
+      "QoS absent: verify the matched device is the only device on that port and port-setting override is enabled."
+    ]
+  },
+  {
+    "product": "FortiAP/Wireless",
+    "title": "IPv6 as the FortiAP management and CAPWAP transport plane",
+    "version": "FortiOS/FortiAP 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6",
+      "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/434872",
+      "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/13665/whats-new-in-this-release"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case specifically about IPv6 CAPWAP management was verified; the lesson is driven by the FortiOS 8.0 feature and FortiAP configuration guide.",
+    "sections": [
+      {
+        "heading": "Management-plane scope",
+        "body": "FortiOS 8.0 allows a FortiGate wireless controller to manage FortiAP units over IPv6 for major wireless management functions. The scope includes AP-controller discovery, CAPWAP data channels, managed-AP upgrades, and tunnel-mode or bridge-mode SSID connections. This is not merely assigning IPv6 addresses to wireless clients. The controller-to-AP management/control path itself can use IPv6, which matters when the AP management network is IPv6-only or dual-stack."
+      },
+      {
+        "heading": "Discovery and interface prerequisites",
+        "body": "The FortiGate interface that faces the AP management network needs an IPv6 address and the appropriate IPv6 access/advertisement settings. Fortinet documents IPv6 multicast discovery through `config wireless-controller global` and `set discovery-mc-addr6 <IPv6 address>`. A sample address is `FF02::18C`. DHCPv6 discovery is another option: configure DHCPv6 Option 52 to advertise the AP Controller IPv6 address. The FortiGate can provide that DHCPv6 option itself or an AP-reachable third-party DHCPv6 server can provide it. These are alternative discovery methods; do not configure multicast and DHCPv6 assumptions as if they were one mandatory sequence."
+      },
+      {
+        "heading": "Configuration pattern",
+        "body": "An interface example from the guide is:\n\nconfig system interface\n    edit \"port3.66\"\n        config ipv6\n            set ip6-address 2001:18:56:66::1/64\n            set ip6-allowaccess ping fabric\n            set ip6-send-adv enable\n            set ip6-manage-flag enable\n            set ip6-other-flag enable\n        end\n    next\nend\n\nconfig wireless-controller global\n    set discovery-mc-addr6 FF02::18C\nend\n\nFor DHCPv6 discovery, configure option code 52 with type `ip6` and the controller's IPv6 address on the AP-facing DHCPv6 scope. Use the actual AP management prefix and address plan; the example prefix is documentation-only. Confirm that routers, ACLs, and multicast handling allow the chosen discovery method."
+      },
+      {
+        "heading": "CAPWAP data and offload",
+        "body": "The feature is broader than discovery: CAPWAP data channels and managed-AP upgrade/control functions can use IPv6. When the FortiAP is managed over IPv6 on an NP7 or NP7lite FortiGate, CAPWAP data traffic over IPv4 and IPv6 can be offloaded. The documentation explicitly says CAPWAP offload is not supported on NP6/NP6lite FortiGates. Therefore, a successful IPv6 control-plane association does not prove that the expected NPU offload path is available. Platform generation is a separate performance dependency."
+      },
+      {
+        "heading": "Verification and fault isolation",
+        "body": "Validate in layers: first confirm the FortiGate interface IPv6 address and reachability from the AP management VLAN; next verify the AP receives the intended controller address through multicast or DHCPv6 Option 52; then confirm the AP appears as discovered/authorized and the CAPWAP control/data channels are established. A ping to the FortiGate proves IPv6 routing only. It does not prove CAPWAP discovery, certificate/security negotiation, or the data tunnel. If discovery fails, inspect RA/DHCPv6/multicast reachability and the advertised controller address. If discovery works but client traffic fails, inspect the SSID mode, CAPWAP data path, VLAN/bridge design, and offload capability separately."
+      }
+    ],
+    "evidence": [
+      "IPv6 interface address and reachability prove the management network is routable.",
+      "DHCPv6 Option 52 or the configured IPv6 discovery multicast address proves the controller address is being advertised by the chosen method.",
+      "Authorized AP and CAPWAP channel state prove controller association, not client forwarding.",
+      "NP7/NP7lite model evidence is required before expecting CAPWAP data offload."
+    ],
+    "troubleshooting": [
+      "AP not discovered: verify the chosen IPv6 discovery method and AP-facing multicast/DHCPv6 path.",
+      "AP discovered but not authorized: investigate authorization and AP inventory state, not IPv6 routing.",
+      "Control channel up but SSID data fails: inspect CAPWAP data channel, tunnel/bridge mode and VLAN path.",
+      "Offload absent on NP6/NP6lite: this is a documented platform limitation."
+    ]
+  },
+  {
+    "product": "FortiNAC",
+    "title": "NetFlow v5, v9 and IPFIX as device-profiling evidence",
+    "version": "FortiNAC 9.4.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/164904/netflow-support",
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a FortiNAC-F NetFlow collection issue, but that is a different product/collector workflow and was not substituted for a FortiNAC 9.4 scenario.",
+    "sections": [
+      {
+        "heading": "Why flow telemetry helps NAC",
+        "body": "FortiNAC can use NetFlow records as an input to Device Profiling. This is useful when identity signals from DHCP, SNMP, or a persistent endpoint agent are incomplete, or when the observed traffic pattern helps classify a device. The documented versions are NetFlow v5, v9, and v10 (IPFIX). The network device exports flow records to the FortiNAC IP address using listener port 2055. The flow data is then available in Network Sessions and can be consumed by a Device Profiling rule through the Network Traffic Method."
+      },
+      {
+        "heading": "Collection path",
+        "body": "The exporter observes traffic on its interfaces and emits flow records to the configured FortiNAC collector address/port. FortiNAC receives those records and presents the observed network sessions. A profiling rule uses the Network Traffic Method to evaluate the flow-derived evidence as part of device classification. This is metadata collection, not packet capture: it does not provide application payload or prove what a user saw inside an encrypted session. It can provide evidence about endpoints, addresses, protocols, ports, and traffic behavior as represented in the exporter's flow format, but the exact fields depend on the exporter and template."
+      },
+      {
+        "heading": "Configuration and integration",
+        "body": "On the network device, enable the required NetFlow export version and set the export destination to the FortiNAC IP address with listener port 2055. In FortiNAC, create or edit a Device Profiling rule and select the Network Traffic Method. Use the rule's criteria to classify the device only when the available flow attributes are sufficiently discriminating. Do not make a broad rule from a single common destination port; many unrelated endpoints can share that pattern. The FortiNAC 9.4 guide explicitly lists the supported flow versions and the destination/listener contract, while the rule configuration guide defines the Network Traffic Method."
+      },
+      {
+        "heading": "Verification",
+        "body": "Start with the network exporter: confirm it is configured to export to the correct FortiNAC address and port, and verify that routing and ACLs allow the export packets. Then inspect Users & Hosts > Network Sessions for the expected source/destination tuple and recent timestamps. Only after sessions appear should you evaluate the profiling rule. A populated Network Sessions view proves FortiNAC is receiving and parsing flow records; it does not prove the profiling rule matched or automatically registered the host. Confirm the matched rule, the resulting device category, and the registration action separately."
+      },
+      {
+        "heading": "Troubleshooting boundaries",
+        "body": "If no sessions appear, check exporter configuration, source-interface coverage, NetFlow version compatibility, destination address, UDP port 2055 reachability, and time alignment. If sessions appear but the profile does not match, inspect the Network Traffic Method criteria and the actual values present in the flow records. If a host is classified but not registered, inspect the rule's registration behavior; profiling and registration are separate outcomes. The FortiNAC-F product has its own NetFlow listener requirements, so do not copy FortiNAC-F `allowaccess` settings into a legacy FortiNAC 9.4 design without checking the correct product guide."
+      }
+    ],
+    "evidence": [
+      "Network Sessions populated with the expected tuple proves flow records reached and were parsed by FortiNAC.",
+      "A matched profiling rule proves the Network Traffic Method evaluated the observed flow evidence.",
+      "A registered host proves the registration action completed; it is not implied by flow collection alone.",
+      "A packet capture to UDP/2055 proves packets reached the network interface, not that the collector accepted their template."
+    ],
+    "troubleshooting": [
+      "No Network Sessions: verify exporter destination, port 2055, route/ACL and NetFlow version.",
+      "Sessions exist but rule misses: compare rule criteria with actual flow attributes and source/destination direction.",
+      "Profile matches but host remains rogue: inspect automatic/manual registration settings.",
+      "Do not use payload-level conclusions from NetFlow metadata."
+    ]
+  },
+  {
+    "product": "FortiNAC-F",
+    "title": "Endpoint fingerprints: source-ranked identity records and change events",
+    "version": "FortiNAC-F 7.6.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/919798/endpoint-fingerprints",
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/29753"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a September 22 managed-CA upgrade tip, outside the 30-day window and unrelated to endpoint fingerprinting; no direct recent fingerprint scenario was verified.",
+    "sections": [
+      {
+        "heading": "Identity records are observations, not a single immutable host row",
+        "body": "FortiNAC-F continuously collects identity records as hosts connect. Each new fingerprint heard for a MAC address creates a separate record. A device moved from a registration VLAN to a production VLAN may request a new IP address and produce another fingerprint record. If the same MAC and port has records with different operating systems, FortiNAC identifies a likely dual-boot or changed-identity condition and generates the Device Fingerprint Changed event. This is valuable because a changed fingerprint can be a normal lifecycle event, a reimaged endpoint, a dual-boot system, or a sign that a port/MAC assumption is wrong."
+      },
+      {
+        "heading": "Sources, attributes and ranking",
+        "body": "The Endpoint Fingerprints view exposes physical address, device type, operating system, IP address, host name, vendor/OUI, source, rule name, registration state, last-heard time, and creation time. Fingerprint attributes are source-specific. DHCP can expose the parameter list, option list, vendor class, and message type; FortiGuard contributes category/subcategory, OS, vendor, model, and confidence; SNMP exposes queried OIDs/responses; RADIUS exposes request attributes such as User-Name, NAS-IP-Address, EAP type and certificate subject values; HTTP/HTTPS, SSH, TCP, UDP, ONVIF and agent sources can contribute additional evidence. Some attributes require the corresponding FortiNAC-OS `set allowaccess` protocol option to be enabled."
+      },
+      {
+        "heading": "Source precedence and profiling",
+        "body": "Source Rank determines the order in which sources are processed to populate an endpoint's host record. For example, an agent can be ranked first, DHCPv4 second, and Vendor OUI last. This ranking is not the same as deleting lower-ranked fingerprint records: the records remain useful evidence even when another source wins the host-record population decision. A device profiling rule consumes selected methods and attributes to classify the host. The rule can register a device automatically or leave it as a rogue record for manual review. An unknown Vendor OUI can prevent automatic registration even when other fingerprint data exists."
+      },
+      {
+        "heading": "Operational workflow",
+        "body": "When a device unexpectedly changes category, open Endpoint Fingerprints and filter by MAC, port, OS, source, and last-heard time. Compare the creation time and source for each record. Use Show Attributes to inspect the actual evidence, Show Adapters to see adapter associations, and Test Device Profiling Rule to evaluate the rule against the host. Confirm Rule is available to verify that the device still matches its associated rule. Only after the source evidence is understood should the profiling rule or source rank be changed."
+      },
+      {
+        "heading": "Troubleshooting and interpretation",
+        "body": "A Device Fingerprint Changed event proves that a new fingerprint differs from a prior record; it does not prove compromise. Two OS values on the same MAC/port may indicate dual boot, reimaging, a virtualized adapter, or stale inventory. A rogue record proves that FortiNAC observed the endpoint but did not complete the configured automatic-registration condition. If an attribute is blank, verify that the corresponding protocol is enabled and reachable before concluding that the device lacks the attribute. Keep source ranking deliberate: prioritizing a low-confidence source can overwrite a more authoritative host-record value, while deleting historical records removes context needed for later investigations."
+      }
+    ],
+    "evidence": [
+      "Multiple records for one MAC with different OS values support a changed/dual-boot hypothesis, not a compromise conclusion.",
+      "Source and Last Heard identify which discovery method supplied the most recent evidence.",
+      "Rule Name plus Test Device Profiling Rule proves whether the current rule still matches.",
+      "Rogue status proves observation without automatic registration completion."
+    ],
+    "troubleshooting": [
+      "Missing attribute: check the source protocol's FortiNAC-OS allowaccess setting and network reachability.",
+      "Unexpected OS change: compare per-record source, timestamps, DHCP parameters and FortiGuard confidence.",
+      "Host record value overwritten: review Source Rank and the most recent source update.",
+      "Rogue device: inspect registration mode, matched rule, and Vendor OUI recognition."
+    ]
+  },
+  {
+    "product": "FortiAuthenticator",
+    "title": "Separate HA management and heartbeat interfaces",
+    "version": "FortiAuthenticator 8.0.2/8.0.3",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new",
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching the 8.0.2 HA interface separation was verified; the lesson uses the release note and current HA administration guide.",
+    "sections": [
+      {
+        "heading": "Why separate the paths",
+        "body": "FortiAuthenticator 8.0.2 separates the HA management interface from the heartbeat interface. The management interface carries cluster-member communication and can permit administrative access; the heartbeat interface is dedicated to HA synchronization and health monitoring. This separation lets an engineer keep cluster health traffic on a controlled path without forcing administrators to use the same interface or subnet. It also makes it easier to distinguish an administrative reachability issue from an HA peer-liveness issue."
+      },
+      {
+        "heading": "Cluster roles and interfaces",
+        "body": "In active-passive cluster mode, one unit is active and the other is standby, with configuration synchronized between them. The Management interface must be the same physical/logical interface on both nodes, must not already have an IP address assigned, and cannot be used for authentication services. Each node receives a different Management IP address, normally on the same private subnet. Management access can be enabled for SSH, SNMP, the web interface, REST API, and Security Fabric. The new Heartbeat Interface is selected separately and used exclusively for HA sync and health monitoring."
+      },
+      {
+        "heading": "Heartbeat timing and election",
+        "body": "The documented default heartbeat interval is 1,000 milliseconds and the default heartbeat-lost threshold is 6,000 milliseconds. The standby node uses missed heartbeats to determine when the peer is out of service and to trigger failover. The cluster also uses Ethernet broadcasts over UDP/720 for primary/secondary election and ongoing communication; Layer-2 connectivity is mandatory for discovering the other node. Do not assume that a routed management subnet alone is sufficient for cluster discovery. Priority selects the preferred active node when both are healthy, while monitored-interface link state can influence the active/passive decision. Priority override controls whether a recovered high-priority node should take over or whether failovers should be minimized."
+      },
+      {
+        "heading": "Configuration and maintenance",
+        "body": "On each node, open System > Administration > High Availability, enable HA, choose Cluster member, select the Management interface and assign a unique Management IP. Select a separate Heartbeat Interface, then set heartbeat interval/lost threshold if the defaults do not match the design. Configure the same shared IPsec key on both nodes. Select monitored interfaces and choose the priority/priority-override behavior intentionally. When entering maintenance mode, the active node relinquishes the active role. With synchronization enabled it continues receiving configuration updates; without synchronization it stops syncing. After one node becomes active, reconnect to the GUI and finish configuration on the active member; the configuration is copied to standby."
+      },
+      {
+        "heading": "Failure and evidence interpretation",
+        "body": "HA Status should be used to distinguish active/standby role, synchronization state, and peer health. If a peer is not discovered, inspect Layer-2 broadcast reachability and UDP/720 before changing heartbeat thresholds. If the peer is discovered but failover occurs unexpectedly, inspect heartbeat loss, monitored interface link counts, stability period, and priority override. FortiAuthenticator documents that authentication requests in flight during failover are lost and that failover can take 30–180 seconds depending on cluster state. A successful GUI login to the active node does not prove the heartbeat interface is healthy or that standby synchronization is current."
+      }
+    ],
+    "evidence": [
+      "HA Status proves role and synchronization state, not that every external RADIUS client has switched.",
+      "Layer-2/UDP 720 evidence supports peer discovery and election reachability.",
+      "Heartbeat loss and monitored-interface state explain failover decisions; priority alone does not.",
+      "Authentication failures during the documented failover interval may be in-flight requests lost during role change."
+    ],
+    "troubleshooting": [
+      "Peer not discovered: verify L2 adjacency and UDP/720 broadcast path before tuning heartbeat timers.",
+      "Peer discovered but unstable: inspect dedicated heartbeat interface, loss threshold and monitored links.",
+      "Standby out of sync: verify maintenance-mode synchronization setting and active-node configuration state.",
+      "Admin access fails while HA is healthy: inspect Management access and Management IP separately from heartbeat."
+    ]
+  },
+  {
+    "product": "FortiPAM",
+    "title": "API-key rotation is an immediate revocation event",
+    "version": "FortiPAM 1.9.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+      "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/what-s-new"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community incident about FortiPAM API-key rotation was verified; the lesson is based on the FortiPAM 1.9 administration guide.",
+    "sections": [
+      {
+        "heading": "API identity is an operational dependency",
+        "body": "FortiPAM API users provide non-interactive access for automation that reads or changes privileged-access configuration. The API key is therefore a live credential dependency for scripts, orchestration jobs, inventory collectors, and integrations. FortiPAM 1.9 documents an explicit key-regeneration operation in User Management > User List. The key behavior is important: regenerating an API user's key immediately revokes access for API consumers still using the old key. This is not a grace-period rotation in which both old and new secrets remain valid."
+      },
+      {
+        "heading": "Rotation transaction",
+        "body": "The administrator selects the API user, edits the user, opens the Details pane, chooses Re-generate API Key, and confirms Generate. FortiPAM creates a new key and immediately invalidates the old one. The security benefit is deterministic revocation: a leaked key stops working as soon as the operation completes. The operational cost is that every dependent consumer must be updated. If a shared API identity is used by multiple jobs, all of them are affected at once. A rotation should therefore be treated as a coordinated change with an owner, a consumer inventory, a maintenance window where appropriate, and a rollback plan that creates another new key rather than expecting the old key to work."
+      },
+      {
+        "heading": "Safe automation design",
+        "body": "Prefer a dedicated API user for each integration or trust boundary, with the minimum permissions needed for that integration. Keep the key in an approved secret manager and avoid embedding it in scripts, source control, logs, or diagnostic bundles. Before rotation, enumerate consumers and owners. Generate the new key, update the secret store, deploy it to the consumer, and run a read-only test request. Then verify that the old credential no longer authenticates. Do not publish the key in a report or include it in a ticket. If FortiPAM's API log view records the request, correlate the test by API user and time; keep the key value redacted."
+      },
+      {
+        "heading": "What verification proves",
+        "body": "A successful API request after deployment proves the consumer has adopted a working credential and still has sufficient permissions for that operation. A failed request from the old consumer after regeneration is consistent with immediate revocation, but a generic failure can also be caused by a bad URL, network path, or insufficient role. Test the same known-safe request with the new key and confirm the consumer reaches the intended API endpoint. If one integration succeeds and another fails, check whether the failing integration has a separate cached secret, environment variable, or deployment slot."
+      },
+      {
+        "heading": "Failure handling",
+        "body": "If a key is regenerated before all consumers are inventoried, expect an outage for those consumers. Do not weaken API permissions to make a broken integration work. Generate a replacement key, distribute it through the secret-management process, and update each consumer independently. If a key is suspected compromised, immediate regeneration is the correct revocation boundary; the availability impact should be handled through consumer updates, not by keeping the compromised credential valid. Record the key generation time, API user, consumer list, test results, and any failed integrations without recording the secret itself."
+      }
+    ],
+    "evidence": [
+      "A successful known-safe API request after rotation proves the new key is deployed and authorized for that operation.",
+      "A failed old-key request is consistent with immediate revocation but must be separated from network/permission failures.",
+      "API user and request timestamp provide audit correlation without exposing the key.",
+      "One working consumer does not prove every integration has updated its cached secret."
+    ],
+    "troubleshooting": [
+      "All consumers fail immediately after rotation: update secret-store values and restart/reload consumers that cache credentials.",
+      "Only one consumer fails: inspect its deployment slot, environment variable, secret version and API permissions.",
+      "Do not test by pasting the key into logs or tickets; use a read-only API operation.",
+      "If the key is compromised, do not restore the old key; issue a new one and update consumers."
+    ]
+  },
+  {
+    "product": "FortiSIEM",
+    "title": "Machine Learning Workbench: dataset, training, inference and incident outputs",
+    "version": "FortiSIEM 7.5.1 User Guide",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857/whats-new-in-7-0-0",
+      "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community scenario matching the Machine Learning Workbench lifecycle was verified; the lesson uses the FortiSIEM User Guide feature description.",
+    "sections": [
+      {
+        "heading": "The ML workflow is separate from a streaming rule",
+        "body": "FortiSIEM's Machine Learning Workbench builds models from event data already stored in FortiSIEM. The workflow is report → dataset → training → model → scheduled inference. A report selects and shapes the historical events used as training data. The selected task trains a model; an inference job then runs periodically and detects deviations or predicts values. Depending on the task, the result can create incidents or send email. This is different from an in-memory streaming rule that evaluates events as they arrive, and different again from a scheduled report-based rule that executes a rule query over a time interval."
+      },
+      {
+        "heading": "Supported tasks and output semantics",
+        "body": "The Workbench supports Regression, Classification, Anomaly Detection and Forecasting. Classification requires a labeled field in the event data; without labels, the model has no target class to learn. Forecasting sends email rather than creating incidents. Regression predicts a numeric value; classification selects a class; anomaly detection identifies deviations from learned behavior; forecasting estimates a future series. These outputs are not interchangeable. Before building a job, define the question and the event fields that can support it. A model trained on incomplete or poorly normalized data can produce mathematically valid but operationally misleading results."
+      },
+      {
+        "heading": "Execution placement and training behavior",
+        "body": "FortiSIEM documents local execution on the Supervisor/Worker cluster or execution on AWS. The supported tasks and algorithms differ by platform. In local mode, training and inference jobs are distributed across the Supervisor/Worker cluster, so either a Supervisor or Worker can execute the work. An administrator can select a specific algorithm or use Auto mode. Auto mode tries multiple algorithms and parameter sets to find a suitable combination, which can take longer than selecting one known algorithm. Training can be repeated periodically or on demand; model drift and source-data changes should be part of the lifecycle plan."
+      },
+      {
+        "heading": "Built-in login anomaly example",
+        "body": "The built-in login anomaly model uses a bipartite graph between users and workstations. A user node and workstation node are connected by a login edge; the edge weight represents the number of logins during a time interval. The model learns user-to-workstation patterns and dynamic peer groups, then identifies unusual edges. The included job uses a login report and the Bipartite Graph Edge Anomaly algorithm. It must be trained on the organization's own login history and scheduled for periodic inference. An alert is meaningful only in the context of the learned baseline, the selected time interval, and the identity/workstation data quality."
+      },
+      {
+        "heading": "Verification and operational tuning",
+        "body": "Verify the report dataset first: time range, event volume, required attributes, labels for classification, and expected user/workstation coverage. Then inspect training-job status and the selected algorithm/platform. After scheduling inference, confirm the job runs at the intended interval and produces the expected output type—incident or email. A missing incident is not proof that inference failed if the chosen task is Forecasting. A slow Auto-mode training run is not necessarily a cluster fault; it can reflect parameter search. If local jobs compete with ingestion or interactive analytics, review Supervisor/Worker resource use and the query/job schedule. Retrain when source schemas or user behavior materially change."
+      }
+    ],
+    "evidence": [
+      "A report-backed dataset proves the training input exists, not that it is representative.",
+      "Training completion proves a model was produced, not that it detects useful anomalies.",
+      "Inference job success plus its configured output type proves the job executed; Forecasting uses email, not incidents.",
+      "A login anomaly edge is a learned deviation, not a standalone proof of malicious access."
+    ],
+    "troubleshooting": [
+      "Classification job cannot train: verify a labeled field exists in the event dataset.",
+      "No incident appears: confirm the task output type; Forecasting sends email.",
+      "Training is slow in Auto mode: review algorithm/parameter search before assuming cluster failure.",
+      "Unexpected anomalies: inspect report time range, event normalization and user/workstation identity coverage."
+    ]
+  },
+  {
+    "product": "FortiSASE",
+    "title": "Global Cloud Security tunnel authentication and idle timeouts",
+    "version": "FortiSASE 26.1.107",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/360393/global-connection-settings",
+      "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/209451/endpoint-profiles"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching global tunnel timeout behavior was verified; the lesson uses the Feature Administration Guide.",
+    "sections": [
+      {
+        "heading": "Global scope versus endpoint-profile scope",
+        "body": "FortiSASE Global connection settings are common settings that apply to all endpoint profiles, including the Default profile. A change here is not limited to a single user group or custom profile. The Cloud Security tunnel exposes separate Authentication timeout and Idle timeout controls. Authentication timeout is the maximum age of the authenticated tunnel session: the user must reauthenticate when the duration expires, regardless of whether the session is active or idle. Idle timeout is inactivity-based: if no traffic is detected for the configured period, the user is signed out and must reauthenticate to reconnect."
+      },
+      {
+        "heading": "Two clocks, two symptoms",
+        "body": "The authentication timer measures elapsed session age; the idle timer measures absence of traffic. A user actively moving traffic can still hit the authentication timeout. A user with a valid, not-yet-aged session can be disconnected by the idle timeout if no traffic is detected. The documented authentication timeout range is 0 to 259,200 seconds (72 hours); the guide lists the idle timeout as a separate control. Do not diagnose both as generic VPN drops. Compare tunnel start/authentication time with last observed traffic and the configured values."
+      },
+      {
+        "heading": "Configuration and blast radius",
+        "body": "Navigate to Endpoint management > Endpoint profiles, then select Global connection settings from the toolbar. Review the Cloud Security tunnel advanced settings before editing. Because these settings apply across endpoint profiles, a global change can affect users in multiple groups at once. If different departments require different idle or authentication behavior, verify whether the intended control is global or belongs in the endpoint-profile configuration. Record the old values and test with a pilot group before changing a global timeout in production."
+      },
+      {
+        "heading": "Evidence and troubleshooting",
+        "body": "For a disconnect, capture the user's endpoint profile, tunnel start/authentication time, last traffic time, and the configured global values. A disconnect near the authentication timeout with continuous traffic is consistent with session-age expiry. A disconnect after inactivity is consistent with idle timeout. If the tunnel never establishes, these post-connect timers are not the first place to look; investigate Internet reachability, authentication, endpoint profile assignment, and tunnel negotiation. The November 18 autoconnect internet-check feature is a pre-connect readiness gate; this lesson concerns the lifetime of an established Cloud Security tunnel."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Timeouts are security and user-experience controls. Shorter authentication timeouts reduce the lifetime of an authenticated session but increase reauthentication frequency. Shorter idle timeouts release unused sessions sooner but can surprise users with intermittent traffic patterns. A value of zero is within the documented minimum, but confirm the release-specific behavior before treating it as disabled. Do not infer that a tunnel is healthy simply because the endpoint profile is assigned; verify the live tunnel and authentication lifecycle."
+      }
+    ],
+    "evidence": [
+      "Endpoint profile plus Global connection settings proves which global timer values apply.",
+      "Tunnel start/authentication time supports the authentication-timeout hypothesis.",
+      "Last traffic time supports the idle-timeout hypothesis.",
+      "A successful tunnel establishment is separate from post-connect timer behavior."
+    ],
+    "troubleshooting": [
+      "Disconnect while active: compare session age with Authentication timeout.",
+      "Disconnect after inactivity: compare last traffic with Idle timeout.",
+      "Tunnel never connects: troubleshoot reachability/authentication/negotiation before post-connect timers.",
+      "Only one group affected: verify profile assignment and whether a global or profile-specific control changed."
+    ]
+  },
+  {
+    "product": "Secure SD-WAN",
+    "title": "Monthly traffic quota steering for cost-aware SD-WAN members",
+    "version": "FortiOS 8.0.0 SD-WAN New Features Guide",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community scenario specifically matching monthly member quota steering was verified; the lesson uses the official SD-WAN New Features Guide.",
+    "sections": [
+      {
+        "heading": "Quota is a steering input, not a hard policer",
+        "body": "Some SD-WAN underlay circuits have a monthly volume allowance and charge overage fees after the allowance is consumed. FortiOS 8.0 adds a quota limit, billing start day, and overage behavior to SD-WAN members. When accumulated volume on a member exceeds its quota during the billing period, FortiGate can adjust the member's cost, weight, or volume-ratio value so SD-WAN services prefer other members. This changes path selection; it does not inherently drop traffic or shape the interface to a fixed rate. The member remains an SD-WAN candidate, but its selection attributes change."
+      },
+      {
+        "heading": "Member-level accounting and reset",
+        "body": "The feature is configured under `config system sdwan` → `config members`. `quota-limit` is in gigabytes; `billing-start-day` defines the day of the month when volume accounting begins; `overage` enables or disables the overage action; `overage-cost`, `overage-weight`, and `overage-volume-ratio` define the values applied after the quota is exceeded. The documented billing start day range is 1–31. The next billing period resets the accumulated quota state and can make the preferred member attractive again. This means the calendar boundary is part of the forwarding design, not just an accounting report."
+      },
+      {
+        "heading": "Configuration example",
+        "body": "A member can be configured as follows:\n\nconfig system sdwan\n    config members\n        edit 1\n            set interface \"agg1\"\n            set quota-limit 200\n            set billing-start-day 1\n            set overage enable\n            set overage-cost 10\n            set overage-weight 1\n            set overage-volume-ratio 1\n        next\n    end\nend\n\nThe example uses 200 GB for illustration; use the actual provider allowance and billing contract. The Fortinet guide shows `diagnose sys sdwan bill member 1` for quota state. It also shows that SD-WAN services can remain in SLA mode while member cost changes. Therefore, health/SLA eligibility and quota-driven preference are separate inputs."
+      },
+      {
+        "heading": "Verification and evidence",
+        "body": "Use `diagnose sys sdwan bill member <id>` to inspect quota limit, overage enablement, reset day, current bytes, billing-start bytes, used bytes since billing day, and the overage cost/weight/volume-ratio values. Then inspect `diagnose sys sdwan service4` and `service6` to see which members are selected for IPv4 and IPv6 services. A billing diagnostic showing the quota exceeded proves the member's accounting state; it does not prove all services have moved away from it. The SD-WAN service output shows the selected members for the specific service, and a packet sniffer confirms the actual egress interface for the test flow."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Quota steering depends on the member being used by the relevant SD-WAN services and on the chosen cost/weight/volume-ratio behavior. A high SLA score does not necessarily override the configured overage adjustment in the same way for every service mode; verify the service's selection strategy. Configure both IPv4 and IPv6 services deliberately. Fortinet documents HA support for traffic billing and steering, but validate that the active/standby pair is on a compatible release and that quota state is consistent after failover. Monitor the billing reset day and provider contract; a mismatch can cause traffic to remain on the expensive path or move away too early."
+      }
+    ],
+    "evidence": [
+      "`diagnose sys sdwan bill member` proves the member's quota and overage accounting state.",
+      "`diagnose sys sdwan service4/service6` proves selected members for those service objects.",
+      "A sniffer on the test flow proves actual egress, not the entire site's traffic distribution.",
+      "Quota overage changes steering attributes; it is not proof of a hard drop or rate limit."
+    ],
+    "troubleshooting": [
+      "Quota exceeded but path unchanged: inspect overage enablement, cost/weight/volume-ratio and SD-WAN service strategy.",
+      "Unexpected reset: verify billing-start-day and provider billing cycle.",
+      "IPv4 moved but IPv6 did not: inspect service6 separately.",
+      "Quota counter differs from ISP invoice: compare FortiGate accounting scope and provider measurement interval."
+    ]
+  }
+]
