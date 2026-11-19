@@ -1,0 +1,258 @@
+{
+  "generated_at_local": "2026-11-19T08:52:52-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-19-08-52.json",
+  "inventory_sha": "04cb875ee8ff12fe80ac3333e3579c86db0f56b9",
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Proxy ARP on VLAN interfaces: turn intra-VLAN isolation into policy-controlled reachability",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/597953/gui-support-for-configuring-proxy-arp-on-vlan-interface",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-configure-proxy-arp-with-intra-vlan-traffic-blocking-enabled-for-subnet-greater-than-24-215126",
+      "feature_mechanism_fingerprint": "FortiGate proxy-ARP replies for configured IPv4 ranges on a VLAN interface so isolated same-subnet peers send traffic to the FortiGate for policy evaluation.",
+      "workflow_transaction_fingerprint": "client ARP request -> FortiGate proxy-ARP reply -> client sends IP frame to FortiGate MAC -> FortiSwitch intra-VLAN isolation prevents direct peer switching -> same-interface firewall policy permits/denies",
+      "failure_class": "east-west bypass or same-VLAN reachability failure caused by ARP coverage, switch isolation, or same-interface policy path",
+      "evidence_pattern": "ARP reply MAC; same-VLAN ingress/egress capture; firewall policy log/counter; FortiLink mode",
+      "remediation_path": "enable block intra-VLAN; configure proxy-ARP ranges; disable traffic redirect bypass; create narrow same-interface policy; validate IPv4 and FortiLink failure mode",
+      "question_fingerprint": "distinguish proxy-ARP resolution evidence from firewall authorization evidence",
+      "diagram_topology_layout_fingerprint": "two isolated endpoints on one VLAN -> FortiSwitch -> FortiGate proxy-ARP/policy loop -> allowed peer flow",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "IPS package intelligence through the FortiManager JSON API",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/699084/fortimanager-api-can-be-used-to-get-detailed-info-about-ips",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager 8.0 um/query/productapi IPS package/signature encyclopedia, release inventory, version delta and pagination.",
+      "workflow_transaction_fingerprint": "API identity/session -> read-only productapi target -> signature or package query -> offset/limit pagination -> audit record; device install state checked separately",
+      "failure_class": "IPS package inventory or signature metadata query failure/misinterpretation",
+      "evidence_pattern": "signature encyclopedia result; package version; detail=1; total/page coverage; delta response",
+      "remediation_path": "validate API session and target path; query known signature; page complete release; compare versions; separately verify managed-device package state",
+      "question_fingerprint": "separate package metadata from device installation and runtime enforcement",
+      "diagram_topology_layout_fingerprint": "automation client -> FortiManager JSON API -> productapi -> FortiGuard IPS metadata; separate managed FortiGate status branch",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Fluentd output profiles to Azure Monitor Logs Ingestion API",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAnalyzer Fluentd Azure Logs Ingestion output profile with DCE/DCR/custom table and TimeGenerated transformation.",
+      "workflow_transaction_fingerprint": "FortiAnalyzer log-forward rule -> Fluentd output profile -> Azure DCE/DCR -> transform logtime to TimeGenerated -> custom _CL table",
+      "failure_class": "external log delivery/authentication/schema failure",
+      "evidence_pattern": "profile validation; matching forward rule; DCR transformation; destination row and TimeGenerated",
+      "remediation_path": "verify app registration role and six parameters; check log-forward filters; confirm DCR stream/table and required TimeGenerated field; test each log family",
+      "question_fingerprint": "differentiate profile validation from end-to-end DCR ingestion",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer log store/forward rule -> Fluentd profile -> Azure DCE -> DCR transform -> custom Log Analytics table",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "NAC and dynamic-port-policy match retention in hours",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/666111/enhance-nac-dpp-port-control-and-qos-poe-support",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 NAC/DPP explicit matched-device retention in hours via match-type override and match-period 0..3072.",
+      "workflow_transaction_fingerprint": "device observation -> NAC/DPP rule match -> override retention timer -> retained match -> VLAN/port settings; independent PoE/QoS action",
+      "failure_class": "stale or prematurely lost NAC/DPP device match",
+      "evidence_pattern": "match-type, match-period, Matched NAC Devices view, switch port VLAN, 95-percent capacity warning",
+      "remediation_path": "set match-type override before match-period; choose hours based on lifecycle; inspect match/removal/restart events; verify policy result",
+      "question_fingerprint": "distinguish match persistence from 802.1X session timeout and DHCP lease",
+      "diagram_topology_layout_fingerprint": "endpoint -> FortiSwitch port -> NAC/DPP classifier -> match retention store -> VLAN/port treatment",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "IPv6 as the FortiAP management and CAPWAP transport plane",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiGate controller supports IPv6 AP discovery, CAPWAP data channels, AP upgrades and tunnel/bridge SSIDs; IPv6 multicast or DHCPv6 Option 52 discovery.",
+      "workflow_transaction_fingerprint": "AP management interface IPv6 -> multicast or DHCPv6 AC discovery -> FortiGate controller authorization -> CAPWAP control/data -> SSID forwarding",
+      "failure_class": "AP discovery/control-plane reachability or CAPWAP data/offload failure",
+      "evidence_pattern": "IPv6 interface and RA; discovery address/Option 52; AP authorization; CAPWAP channels; NP7/NP7lite model",
+      "remediation_path": "verify IPv6 management prefix and chosen discovery method; inspect multicast/DHCPv6; validate CAPWAP separately; check NP generation for offload",
+      "question_fingerprint": "distinguish IPv6 reachability from controller discovery, CAPWAP data and NPU offload",
+      "diagram_topology_layout_fingerprint": "FortiAP -> IPv6 management VLAN -> FortiGate IPv6 controller/discovery -> CAPWAP tunnel -> SSID bridge/tunnel path",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "NetFlow v5, v9 and IPFIX as device-profiling evidence",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/164904/netflow-support",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 consumes NetFlow v5/v9/IPFIX to expose Network Sessions and feed Device Profiling Network Traffic Method.",
+      "workflow_transaction_fingerprint": "network exporter -> UDP flow export to FortiNAC IP:2055 -> Network Sessions -> profiling rule Network Traffic Method -> classification/registration decision",
+      "failure_class": "flow telemetry absent or insufficient to match a device profile",
+      "evidence_pattern": "export destination/port/version; Network Sessions tuple/time; matched profiling rule; registration state",
+      "remediation_path": "validate exporter, source interfaces, route/ACL and UDP 2055; inspect received sessions; tune rule criteria; verify registration separately",
+      "question_fingerprint": "distinguish flow receipt from profiling match and host registration",
+      "diagram_topology_layout_fingerprint": "network device flow exporter -> FortiNAC listener -> Network Sessions -> device profiling rule -> host classification",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Endpoint fingerprints: source-ranked identity records and change events",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/919798/endpoint-fingerprints",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F stores multiple endpoint fingerprint observations per MAC, ranks sources for host-record population and raises Device Fingerprint Changed on differing OS observations.",
+      "workflow_transaction_fingerprint": "agent/DHCP/FortiGuard/RADIUS/SNMP/etc observation -> per-MAC fingerprint record -> source-rank host population -> profiling rule -> auto-register or rogue -> change event",
+      "failure_class": "endpoint identity drift, source precedence conflict, or unexpected rogue registration",
+      "evidence_pattern": "same MAC/port records; OS/source/creation/last-heard; Device Fingerprint Changed; Rule Name; registration state",
+      "remediation_path": "compare record attributes and source rank; verify protocol allowaccess; test profiling rule; inspect auto/manual registration and OUI",
+      "question_fingerprint": "distinguish identity-change evidence from compromise and host registration",
+      "diagram_topology_layout_fingerprint": "multiple fingerprint sources -> per-MAC record history -> source rank -> host record -> profiling rule -> registered/rogue state",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Separate HA management and heartbeat interfaces",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.2 decouples HA Management interface/IP/access from dedicated Heartbeat Interface for sync and health monitoring.",
+      "workflow_transaction_fingerprint": "active/standby peers -> L2 UDP/720 election/discovery -> dedicated heartbeat monitoring -> monitored-interface/priority decision -> failover -> configuration sync",
+      "failure_class": "HA peer discovery, heartbeat loss, split management reachability or delayed failover",
+      "evidence_pattern": "HA Status; management IP/access; heartbeat interval/lost threshold; UDP/720 L2 reachability; monitored interface states",
+      "remediation_path": "separate management and heartbeat paths; verify L2 discovery; validate shared IPsec key, thresholds, priorities and monitored links",
+      "question_fingerprint": "distinguish administrative reachability from peer discovery/heartbeat health and failover",
+      "diagram_topology_layout_fingerprint": "two FortiAuthenticator nodes with separate management subnet and dedicated heartbeat link; active/standby role",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "API-key rotation is an immediate revocation event",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM API-user key regeneration immediately revokes old credential for all API consumers.",
+      "workflow_transaction_fingerprint": "admin selects API user -> regenerate key -> old key revoked immediately -> secret store updated -> consumers reload -> new request verified",
+      "failure_class": "automation/API integration outage following credential rotation or suspected key compromise",
+      "evidence_pattern": "API user and rotation timestamp; new-key success; old-key failure; consumer deployment/secret version",
+      "remediation_path": "inventory consumers; generate new key; update secret manager and consumers; test read-only operation; do not restore compromised key",
+      "question_fingerprint": "recognize immediate revocation blast radius and consumer coordination",
+      "diagram_topology_layout_fingerprint": "FortiPAM API user/key -> secret manager -> multiple automation consumers; rotation revokes old key and updates each consumer",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Machine Learning Workbench: dataset, training, inference and incident outputs",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857/whats-new-in-7-0-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM ML Workbench report-derived dataset, model training, scheduled inference across regression/classification/anomaly/forecasting.",
+      "workflow_transaction_fingerprint": "event store -> report -> dataset -> training/local Supervisor-Worker or AWS -> model -> scheduled inference -> incident or email",
+      "failure_class": "invalid training data, unsupported task/platform combination, delayed inference or misunderstood output",
+      "evidence_pattern": "report time range/attributes/labels; dataset; training job status; model/algorithm; inference schedule and output type",
+      "remediation_path": "validate data coverage and labels; choose supported platform/task; inspect training/inference jobs; verify incident versus email output; retrain on drift",
+      "question_fingerprint": "distinguish model training, inference and task-specific output from streaming/scheduled rule engines",
+      "diagram_topology_layout_fingerprint": "FortiSIEM event store -> report dataset -> ML training -> model -> scheduled inference -> incident/email",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Global Cloud Security tunnel authentication and idle timeouts",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/360393/global-connection-settings",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE global Cloud Security tunnel authentication timeout and idle timeout are separate timers applied across endpoint profiles.",
+      "workflow_transaction_fingerprint": "endpoint profile -> global connection settings -> authenticated tunnel age timer and no-traffic idle timer -> reauthentication/sign-out",
+      "failure_class": "unexpected remote-user tunnel termination due to session age or inactivity policy",
+      "evidence_pattern": "global timer values; profile assignment; tunnel start/authentication time; last traffic time",
+      "remediation_path": "classify active-session age versus inactivity; verify global blast radius; pilot changed values; investigate tunnel establishment separately",
+      "question_fingerprint": "distinguish authentication timeout from idle timeout and pre-connect internet-check",
+      "diagram_topology_layout_fingerprint": "FortiSASE global settings -> multiple endpoint profiles -> Cloud Security tunnel -> independent age and idle timers",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Monthly traffic quota steering for cost-aware SD-WAN members",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 member-level monthly volume quota and billing start day adjust overage cost/weight/volume-ratio to steer traffic.",
+      "workflow_transaction_fingerprint": "member byte accounting -> billing-period quota check -> overage attributes adjusted -> SD-WAN service member selection -> next billing reset",
+      "failure_class": "unexpected ISP overage or path selection not changing after quota threshold",
+      "evidence_pattern": "diagnose sys sdwan bill member; current/billing-start bytes; overage attributes; service4/service6 selected members; packet sniffer",
+      "remediation_path": "align quota and billing day to contract; enable overage; configure cost/weight/volume ratio; inspect each SD-WAN service and actual egress",
+      "question_fingerprint": "distinguish quota-driven steering from hard policing and SLA health",
+      "diagram_topology_layout_fingerprint": "two WAN members with per-member billing counters -> quota threshold -> cost/weight adjustment -> SLA SD-WAN service chooses alternate path",
+      "report_date": "2026-11-19",
+      "semantic_exclusion_check": {
+        "product_scoped_hits": 0,
+        "decision": "ACCEPT",
+        "method": "Normalized subject + feature/mechanism + workflow/transaction fingerprints compared with every prior lesson record in the published 30-day inventory."
+      }
+    }
+  ],
+  "validation": {
+    "candidate_count": 12,
+    "required_fields": [
+      "product",
+      "lesson_subject",
+      "primary_url",
+      "scenario_community_url",
+      "feature_mechanism_fingerprint",
+      "workflow_transaction_fingerprint",
+      "failure_class",
+      "evidence_pattern",
+      "remediation_path",
+      "question_fingerprint",
+      "diagram_topology_layout_fingerprint"
+    ],
+    "all_required_fields_present": true,
+    "all_product_scoped_overlap_counts_zero": true,
+    "notes": [
+      "FortiNAC 9.4 NetFlow is product-scoped distinct from the 2026-10-27 FortiNAC-F NetFlow collector issue; the two products have separate listener/configuration contracts.",
+      "FortiSASE global tunnel timeouts are distinct from the 2026-11-18 pre-connect Internet-reachability autoconnect gate and 2026-11-15 IPsec DPD.",
+      "No packet-duplication, MLO, FIDO2, RADIUS policy-selection, recurring package-install, playbook, or split-DNS topic was selected because those mechanisms were already present in the inventory."
+    ]
+  }
+}
