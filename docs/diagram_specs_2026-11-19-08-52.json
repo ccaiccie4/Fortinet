@@ -1,0 +1,602 @@
+[
+  {
+    "id": "fg-proxyarp",
+    "product": "FortiGate",
+    "title": "Proxy ARP and same-VLAN policy path",
+    "nodes": [
+      [
+        "Client A",
+        "VLAN 100"
+      ],
+      [
+        "FortiSwitch",
+        "Block peer switching"
+      ],
+      [
+        "FortiGate",
+        "Proxy ARP + policy"
+      ],
+      [
+        "Client B",
+        "Same IPv4 subnet"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "ARP request"
+      ],
+      [
+        1,
+        2,
+        "Forced to firewall"
+      ],
+      [
+        2,
+        3,
+        "Policy-permitted flow"
+      ],
+      [
+        3,
+        2,
+        "Proxy ARP response"
+      ]
+    ]
+  },
+  {
+    "id": "fmg-ips-api",
+    "product": "FortiManager",
+    "title": "IPS metadata query versus device state",
+    "nodes": [
+      [
+        "Automation",
+        "API identity"
+      ],
+      [
+        "FortiManager",
+        "um/query/productapi"
+      ],
+      [
+        "IPS package data",
+        "Signature / delta"
+      ],
+      [
+        "Managed FortiGate",
+        "Installed package state"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "JSON API get"
+      ],
+      [
+        1,
+        2,
+        "Read-only query"
+      ],
+      [
+        2,
+        0,
+        "Metadata result"
+      ],
+      [
+        1,
+        3,
+        "Separate status check"
+      ]
+    ]
+  },
+  {
+    "id": "faz-azure",
+    "product": "FortiAnalyzer",
+    "title": "Fluentd Azure Logs Ingestion pipeline",
+    "nodes": [
+      [
+        "FortiGate logs",
+        "Selected log types"
+      ],
+      [
+        "FortiAnalyzer",
+        "Forward rule + profile"
+      ],
+      [
+        "Fluentd output",
+        "Azure parameters"
+      ],
+      [
+        "DCE / DCR",
+        "Auth + transform"
+      ],
+      [
+        "Log Analytics",
+        "Custom _CL table"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Log receipt"
+      ],
+      [
+        1,
+        2,
+        "Eligible records"
+      ],
+      [
+        2,
+        3,
+        "Ingestion API"
+      ],
+      [
+        3,
+        4,
+        "TimeGenerated schema"
+      ]
+    ]
+  },
+  {
+    "id": "fsw-nac-retention",
+    "product": "FortiSwitch",
+    "title": "NAC/DPP match retention and port treatment",
+    "nodes": [
+      [
+        "Endpoint",
+        "Observed identity"
+      ],
+      [
+        "FortiSwitch",
+        "Port / FortiLink"
+      ],
+      [
+        "NAC or DPP rule",
+        "match-type override"
+      ],
+      [
+        "Retention state",
+        "match-period hours"
+      ],
+      [
+        "Port treatment",
+        "VLAN / PoE / QoS"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Connect"
+      ],
+      [
+        1,
+        2,
+        "Match criteria"
+      ],
+      [
+        2,
+        3,
+        "Retain match"
+      ],
+      [
+        3,
+        4,
+        "Apply settings"
+      ]
+    ]
+  },
+  {
+    "id": "fap-ipv6-capwap",
+    "product": "FortiAP/Wireless",
+    "title": "IPv6 AP discovery and CAPWAP data plane",
+    "nodes": [
+      [
+        "FortiAP",
+        "IPv6 management"
+      ],
+      [
+        "Discovery",
+        "Mcast or DHCPv6 52"
+      ],
+      [
+        "FortiGate AC",
+        "IPv6 CAPWAP"
+      ],
+      [
+        "SSID data path",
+        "Tunnel / bridge"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Find controller"
+      ],
+      [
+        1,
+        2,
+        "AC address"
+      ],
+      [
+        2,
+        3,
+        "Control + data"
+      ]
+    ]
+  },
+  {
+    "id": "fnac-netflow",
+    "product": "FortiNAC",
+    "title": "NetFlow evidence to device profiling",
+    "nodes": [
+      [
+        "Network exporter",
+        "NetFlow v5/v9/IPFIX"
+      ],
+      [
+        "UDP 2055",
+        "FortiNAC listener"
+      ],
+      [
+        "Network Sessions",
+        "Parsed flow tuples"
+      ],
+      [
+        "Profiling rule",
+        "Network Traffic Method"
+      ],
+      [
+        "Host state",
+        "Classified / registered"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Flow export"
+      ],
+      [
+        1,
+        2,
+        "Collector parse"
+      ],
+      [
+        2,
+        3,
+        "Evidence"
+      ],
+      [
+        3,
+        4,
+        "Rule outcome"
+      ]
+    ]
+  },
+  {
+    "id": "fnacf-fingerprint",
+    "product": "FortiNAC-F",
+    "title": "Fingerprint sources, ranking and registration",
+    "nodes": [
+      [
+        "Fingerprint sources",
+        "Agent / DHCP / RADIUS"
+      ],
+      [
+        "Per-MAC history",
+        "Multiple records"
+      ],
+      [
+        "Source Rank",
+        "Host record precedence"
+      ],
+      [
+        "Profiling rule",
+        "Rule test / match"
+      ],
+      [
+        "Host state",
+        "Registered / rogue"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "New observation"
+      ],
+      [
+        1,
+        2,
+        "Populate host fields"
+      ],
+      [
+        2,
+        3,
+        "Evaluate rule"
+      ],
+      [
+        3,
+        4,
+        "Registration action"
+      ]
+    ]
+  },
+  {
+    "id": "fac-ha",
+    "product": "FortiAuthenticator",
+    "title": "Separated HA management and heartbeat paths",
+    "nodes": [
+      [
+        "Active node",
+        "Management IP"
+      ],
+      [
+        "Standby node",
+        "Management IP"
+      ],
+      [
+        "Management network",
+        "Admin / cluster comms"
+      ],
+      [
+        "Heartbeat link",
+        "Sync + health"
+      ],
+      [
+        "Election",
+        "L2 UDP/720"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        2,
+        "Management"
+      ],
+      [
+        1,
+        2,
+        "Management"
+      ],
+      [
+        0,
+        3,
+        "Heartbeat"
+      ],
+      [
+        1,
+        3,
+        "Heartbeat"
+      ],
+      [
+        3,
+        4,
+        "Peer health"
+      ],
+      [
+        4,
+        0,
+        "Active/standby decision"
+      ]
+    ]
+  },
+  {
+    "id": "fpam-api-key",
+    "product": "FortiPAM",
+    "title": "API key rotation and consumer revocation",
+    "nodes": [
+      [
+        "FortiPAM API user",
+        "Current key"
+      ],
+      [
+        "Secret manager",
+        "Versioned secret"
+      ],
+      [
+        "Consumer A",
+        "Automation job"
+      ],
+      [
+        "Consumer B",
+        "Integration"
+      ],
+      [
+        "Regeneration",
+        "Old key revoked"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Store credential"
+      ],
+      [
+        1,
+        2,
+        "Deploy new key"
+      ],
+      [
+        1,
+        3,
+        "Deploy new key"
+      ],
+      [
+        4,
+        0,
+        "Issue replacement"
+      ],
+      [
+        4,
+        2,
+        "Old key fails"
+      ],
+      [
+        4,
+        3,
+        "Old key fails"
+      ]
+    ]
+  },
+  {
+    "id": "fsiem-ml",
+    "product": "FortiSIEM",
+    "title": "Machine Learning Workbench lifecycle",
+    "nodes": [
+      [
+        "Event store",
+        "Historical events"
+      ],
+      [
+        "Report",
+        "Select / shape"
+      ],
+      [
+        "Dataset",
+        "Training input"
+      ],
+      [
+        "Training",
+        "Model build"
+      ],
+      [
+        "Inference",
+        "Scheduled job"
+      ],
+      [
+        "Output",
+        "Incident / email"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Query"
+      ],
+      [
+        1,
+        2,
+        "Create dataset"
+      ],
+      [
+        2,
+        3,
+        "Train"
+      ],
+      [
+        3,
+        4,
+        "Model"
+      ],
+      [
+        4,
+        5,
+        "Task output"
+      ]
+    ]
+  },
+  {
+    "id": "fsase-timeouts",
+    "product": "FortiSASE",
+    "title": "Global tunnel authentication and idle clocks",
+    "nodes": [
+      [
+        "Endpoint profiles",
+        "Default + custom"
+      ],
+      [
+        "Global settings",
+        "Shared values"
+      ],
+      [
+        "Cloud Security tunnel",
+        "Authenticated session"
+      ],
+      [
+        "Age timer",
+        "Reauthenticate"
+      ],
+      [
+        "Idle timer",
+        "Sign out"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Common config"
+      ],
+      [
+        1,
+        2,
+        "Apply"
+      ],
+      [
+        2,
+        3,
+        "Elapsed session age"
+      ],
+      [
+        2,
+        4,
+        "No traffic interval"
+      ]
+    ]
+  },
+  {
+    "id": "sdwan-quota",
+    "product": "Secure SD-WAN",
+    "title": "Monthly quota steering between WAN members",
+    "nodes": [
+      [
+        "WAN member A",
+        "Usage counter"
+      ],
+      [
+        "Quota check",
+        "Billing start day"
+      ],
+      [
+        "Overage attributes",
+        "Cost / weight / ratio"
+      ],
+      [
+        "SD-WAN service",
+        "SLA + selection"
+      ],
+      [
+        "WAN member B",
+        "Alternate path"
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1,
+        "Bytes accumulate"
+      ],
+      [
+        1,
+        2,
+        "Threshold crossed"
+      ],
+      [
+        2,
+        3,
+        "Change preference"
+      ],
+      [
+        3,
+        4,
+        "Select alternate"
+      ]
+    ]
+  }
+]
