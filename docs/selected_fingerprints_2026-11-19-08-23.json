@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-19T08:23:39-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "report_date": "2026-11-19",
+  "selection_rule": "Primary feature/architecture/admin documentation only; Community/KB used only as scenario material; candidates compared against all 321 historical fingerprints in the published 30-day exclusion inventory.",
+  "selected_count": 12,
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "DHCPv6 relay lifecycle: UDP/547 listener, server forwarding, and post-upgrade socket failure",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/959244/dhcpv6-relay",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/dhcpv6-relay-stops-working-after-upgrade-to-fortios-7-6-7-or-7-6-8-231218",
+      "feature_mechanism_fingerprint": "Interface-scoped DHCPv6 relay service uses the dhcp6r process and UDP/547 listener to forward DHCPv6 messages between client-facing and server-facing links; the service is distinct from DHCPv6 client IA_PD and from DHCPv4 smart relay.",
+      "workflow_transaction_fingerprint": "IPv6 client sends DHCPv6 message on UDP/546 to relay; FortiGate interface relay receives it; dhcp6r forwards to configured DHCPv6 server over UDP/547; server response returns to relay and is forwarded to client. If dhcp6r fails to bind UDP/547 after server reconfiguration or reboot, configuration can remain present while forwarding is dead.",
+      "failure_class": "dhcp6r socket bind regression after interface DHCPv6 server changes or reboot",
+      "evidence_pattern": "diagnose sys udpsock6 lacks dhcp6r UDP/547 listener; diagnose debug application dhcp6r -1 reports dhcp6r_socket_list_add() bind(csock): Permission denied; packet capture separates missing relay egress from an unresponsive server.",
+      "remediation_path": "Verify relay configuration and socket listener; toggle dhcp6-relay-service or restart dhcp6r as a temporary workaround; reapply after each triggering change/reboot; plan upgrade to the documented fixed release 7.6.10; verify actual relay packet exchange.",
+      "question_fingerprint": "Given a configured relay with no UDP/547 dhcp6r socket and bind(csock) Permission denied after reboot, identify the relay-process failure rather than an IPv6 route or DHCP scope fault.",
+      "diagram_topology_layout_fingerprint": "Two-subnet IPv6 relay topology: client LAN -> FortiGate relay interface/dhcp6r UDP/547 process -> remote DHCPv6 server; mirrored response path and process-listener evidence callout.",
+      "semantic_uniqueness_decision": "Unique: no DHCPv6 relay or dhcp6r socket-lifecycle lesson exists in the 30-day inventory; distinct from DHCPv4 smart relay and FortiGate prefix delegation."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager IPS metadata API: signature lookup, package-version enumeration, delta queries, and pagination",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/699084/get-detailed-information-about-ips-packages-and-signatures-using-the-api",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Read-only FortiManager JSON-RPC /um/query/productapi endpoint accepts FortiGuard IPS metadata target paths for single-signature lookup, package-version detail enumeration, version-to-version signature deltas, and offset/limit pagination.",
+      "workflow_transaction_fingerprint": "API client authenticates and retains session; submits GET to /um/query/productapi with a target path in data; FortiManager returns IPS package/signature metadata; caller pages through results and compares signature IDs. This query does not install packages or change a managed FortiGate.",
+      "failure_class": "wrong target/version, incomplete pagination, or confusion between metadata query and install task",
+      "evidence_pattern": "JSON-RPC response status and returned data identify the queried package/signatures; offset/limit controls page boundaries; absence of a device-install task or configuration change confirms the operation is read-only.",
+      "remediation_path": "Use the exact documented target path and IPS package version; use offset/limit and continue until the result set is exhausted; deduplicate signature IDs; keep metadata retrieval separate from FortiGuard package deployment and device installation.",
+      "question_fingerprint": "Choose the correct API target to retrieve only IPS signature IDs changed between two package versions, rather than requesting an install preview or a full package download.",
+      "diagram_topology_layout_fingerprint": "Automation client -> FortiManager JSON-RPC session -> /um/query/productapi -> FortiGuard IPS metadata service -> paginated JSON signature records; no device configuration path.",
+      "semantic_uniqueness_decision": "Unique: no historical lesson covers the /um/query/productapi IPS signature metadata endpoint; distinct from 11/07 multi-device install preview and 11/18 package-version pinning."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer 8.0 playbook authoring debugger: node inspection, replay, partial runs, and Jinja control flow",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/664591/playbook-editor-improvements",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-troubleshooting-of-playbooks-207349",
+      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 playbook editor adds step-by-step node execution with pause/input/output inspection, replay against supplied input data, partial restart from a selected node, Branch/Wait/Compare/Switch controls, and Jinja conditions/loops.",
+      "workflow_transaction_fingerprint": "A playbook trigger supplies an execution context; the editor runs a prior task to produce input for the next task; operator executes/pauses individual nodes and inspects each node's output; replay or partial-run starts at a chosen node while preserving upstream outputs; branch/compare/switch controls select downstream paths.",
+      "failure_class": "connector not configured, malformed node input/output, Jinja condition error, or replay of a side-effecting action",
+      "evidence_pattern": "Per-node input/output panes, connector availability state, task timeline/status, and fazwatchd task diagnostics distinguish trigger failure from an individual action failure.",
+      "remediation_path": "Confirm connector configuration and authentication; replay with known input; debug one node at a time; inspect the first node whose output diverges; restart from that node only when upstream state is valid; avoid repeating non-idempotent actions during replay.",
+      "question_fingerprint": "A playbook trigger succeeds but a downstream connector action receives an empty field; identify the node-level input/output inspection and partial replay path rather than rebuilding the event handler.",
+      "diagram_topology_layout_fingerprint": "Trigger -> sequential task nodes -> branch/compare/switch fork -> terminal action; highlighted debugger pause, input/output panes, replay and partial-run entry point.",
+      "semantic_uniqueness_decision": "Unique sub-feature: prior reports covered playbook triggering and event-handler automation, not the 8.0 editor's node-level debugger, replay and partial-run authoring workflow."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch link monitor: multi-server probes, failure timers, and static-route withdrawal/recovery",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163702/link-monitor",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch system link-monitor probes configured IPv4/IPv6 servers using ping or ARP; since 7.4.3 a probe can contain multiple servers; failure/recovery retry counters drive status and optional static-route updates.",
+      "workflow_transaction_fingerprint": "Switch emits periodic probes from srcintf/source IP toward configured server targets; timeout and failtime determine down state; update-static-route controls whether routes are changed; recoverytime determines when the probe returns up. Route updates require a static route with set device and the feature is supported only in the default VRF.",
+      "failure_class": "probe reports down but route remains because static route lacks set device, gateway/interface mismatch, wrong VRF, or probe protocol differs after upgrade",
+      "evidence_pattern": "get system link-monitor and diagnose sys link-monitor status all show target/probe state; config router static reveals set device; link-monitor configuration shows address mode, source interface, server, protocol, gateway and timers.",
+      "remediation_path": "Use default VRF; define srcintf and one or more servers; select ping or ARP intentionally; set gateway/source addresses or allow documented gateway derivation; enable update-static-route; ensure the static route includes set device; tune interval/timeout/failtime/recoverytime and verify route changes.",
+      "question_fingerprint": "A FortiSwitch probe detects an unreachable target but the expected static route remains installed; select the missing static-route device binding rather than increasing retry timers.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch L3 routing plane with one source interface probing two targets; link-monitor state machine feeds a static route install/withdraw path with failure and recovery counters.",
+      "semantic_uniqueness_decision": "Unique: no FortiSwitch link-monitor probe or static-route update lesson appears in the inventory; distinct from FortiGate SD-WAN Performance SLA and FortiSwitch RVI routing."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiAP 8.0 VAP capacity: per-radio 8-to-16 SSID scaling and background-scan constraints",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/636883/increasing-the-number-of-supported-vaps-per-radio",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-error-while-adding-8-ssids-per-client-serving-radios-in-fortiap-profile-error-at-most-7-vaps-can-be-configured-182072",
+      "feature_mechanism_fingerprint": "FortiAP defaults to eight VAPs per radio; selected G/K-series models support up to sixteen when wireless-controller global max-vap-per-radio is set to 16 and the WTP profile assigns the supported VAPs. The model capability and radio resource budget remain authoritative.",
+      "workflow_transaction_fingerprint": "Controller global VAP ceiling -> WTP profile radio -> assigned VAP/SSID set -> model/radio capability check -> AP advertises configured VAPs; background scanning and radio features can consume capacity on models with lower limits.",
+      "failure_class": "profile rejected at per-radio VAP ceiling or extra SSID reduces scanning/airtime capacity",
+      "evidence_pattern": "show wireless-controller global confirms max-vap-per-radio; show wireless-controller wtp-profile confirms VAP assignments per radio; AP model and radio capability determine whether 16 is supported; community example shows at-most-7 error with background scanning/DARRP enabled.",
+      "remediation_path": "Confirm supported G/K model and firmware; set max-vap-per-radio 16 only where supported; add VAPs to the correct WTP-profile radio; keep SSID count to the minimum; when legacy 7/8-VAP errors occur, inspect DARRP/background scanning and voice-enterprise/roaming settings before disabling them.",
+      "question_fingerprint": "An eighth SSID is rejected with at-most-7 VAPs while background scanning is active; identify the scan-resource constraint and model limit instead of assuming the global 16-VAP setting applies to every AP.",
+      "diagram_topology_layout_fingerprint": "Controller global cap -> WTP profile -> one AP with separate radio-1/radio-2 VAP stacks; capacity labels 8 default/16 supported models and background-scan resource gate.",
+      "semantic_uniqueness_decision": "Unique: no previous lesson teaches per-radio VAP count expansion; distinct from 11/15 radio-level VAP broadcast disable and 11/10 802.11k/v roaming mechanics."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 IPv6 support boundary: dual-stack host/portal access versus IPv4-only network-device management",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/168784/ipv6-support",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC supports IPv6 for endpoint Portal and Agent communication, admin UI access, and display of IPv6 addresses in Host/Adapter views; network-device management and Inventory discovery still require IPv4. L3 IPv6 polling is limited to documented vendor/device support.",
+      "workflow_transaction_fingerprint": "IPv6 endpoint reaches FortiNAC eth1 portal/agent services; administrator reaches eth0 UI over IPv6; FortiNAC separately uses IPv4 management addresses for SNMP/CLI discovery of network devices; L3 polling may display IPv6 host addresses only for supported device integrations.",
+      "failure_class": "dual-stack support is incorrectly assumed to include IPv6-only network-device discovery or all vendor L3 polling",
+      "evidence_pattern": "Portal/Agent and admin UI succeed over IPv6 while Inventory discovery fails for an IPv6-only managed switch; Host/Adapter view may display IPv6 addresses; network-device management address and supported L3 poll vendor determine discovery capability.",
+      "remediation_path": "Configure IPv6 on the appropriate eth0/eth1 services for host, portal, agent and admin access; retain IPv4 management addressing for network-device discovery; verify the vendor is supported for L3 IPv6 polling; separate endpoint IPv6 reachability from device-management reachability.",
+      "question_fingerprint": "IPv6 clients can use the portal and agent but a network switch cannot be discovered by IPv6-only management; identify the documented IPv4-only Inventory management boundary.",
+      "diagram_topology_layout_fingerprint": "Dual-stack endpoint and admin workstation connect to FortiNAC eth1/eth0 over IPv6; SNMP/CLI network-device discovery remains IPv4 from FortiNAC to switch/router.",
+      "semantic_uniqueness_decision": "Unique: no FortiNAC IPv6 endpoint/portal versus network-device management boundary is in the inventory; distinct from FortiGate IPv6 routing, DHCPv6 and FortiAP CAPWAP topics."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F 7.6.3 native Microsoft Entra ID authentication for RADIUS 802.1X and portal access",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/release-notes/590876/whats-new-in-fortinac-f-7-6-3",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/unable-to-connect-the-entra-id-cloud-user-in-802-1x-230444",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6.3 can use Microsoft Entra ID as a native authentication source for username/password or certificate authentication in RADIUS 802.1X and portal login; RADIUS virtual-server EAP methods, Entra ID service connector and domain mapping must agree with the endpoint supplicant.",
+      "workflow_transaction_fingerprint": "Endpoint supplicant initiates 802.1X -> access switch/AP sends RADIUS request to FortiNAC-F virtual server -> configured EAP method and authentication source select Entra ID service connector -> cloud identity validation -> Access-Accept/Reject and subsequent NAC policy; portal login uses its own portal authentication flow.",
+      "failure_class": "supplicant EAP method mismatch or hybrid Entra ID identity rejected despite a successful basic credential test",
+      "evidence_pattern": "RADIUS Access-Request followed by Access-Reject; FortiGate basic credential test can succeed without reproducing the full 802.1X exchange; FortiNAC-F RADIUS logs and Windows supplicant profile reveal PEAP-versus-TTLS mismatch.",
+      "remediation_path": "Create the Entra ID service connector and domain mapping; attach it to the intended RADIUS virtual server; enable only supported EAP methods; configure the Windows supplicant to the matching method (the community case identifies TTLS rather than default PEAP); test a real 802.1X exchange and inspect FortiNAC-F RADIUS logs.",
+      "question_fingerprint": "Cloud Entra ID users authenticate in a simple credential test but Windows hybrid users receive RADIUS Access-Reject; identify the supplicant's default PEAP selection versus the documented TTLS configuration.",
+      "diagram_topology_layout_fingerprint": "Windows supplicant -> access switch/AP -> FortiNAC-F RADIUS virtual server -> Entra ID service connector/domain mapping -> Entra ID; accept/reject returns to network access policy.",
+      "semantic_uniqueness_decision": "Unique: 10/25 Winbind MSCHAPv2 covered on-prem AD domain join, while 11/04 SAML covered browser federation; this lesson is cloud-native Entra ID as the RADIUS 802.1X authentication source."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator 8.0.2 TACACS+/RADIUS client groups: reusable policy scope and REST API association",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.2 adds client-group objects for TACACS+ and RADIUS; TACACS+ policies can select individual clients and client groups; REST API exposes client-group, group-client association, and policy-group association endpoints.",
+      "workflow_transaction_fingerprint": "Administrator creates client objects with address/secret; groups selected clients; TACACS+ policy binds one or more client groups plus optional individual clients; incoming NAS address resolves to a client/group scope; matching policy then applies identity source and authorization behavior.",
+      "failure_class": "new NAS is not included in a policy because its client object is missing from the selected group or group-policy association",
+      "evidence_pattern": "Clients > Group membership, TACACS+ policy Chosen Client Groups, API objects under /tacplusclientgroups/, /tacplusgroupclient/, /tacpluspolicygroup/, and RADIUS/TACACS+ authentication logs identify the requesting client and selected policy.",
+      "remediation_path": "Create a distinct client entry with correct address and shared secret; add it to the intended client group; attach the group to the correct policy; validate overlapping IP/subnet definitions and test each NAS; use the documented API endpoints for repeatable bulk management.",
+      "question_fingerprint": "A new switch is configured as a TACACS+ client but the intended policy does not match; identify the missing group-to-policy association rather than changing command authorization rules.",
+      "diagram_topology_layout_fingerprint": "Multiple NAS clients -> reusable TACACS+/RADIUS client groups -> selected policy -> FortiAuthenticator identity source and authorization engine.",
+      "semantic_uniqueness_decision": "Unique: 11/02 covered TACACS+ command authorization; this lesson covers client-group object scope and policy/API associations, not command privilege mapping."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 RADIUS Message-Authenticator: request generation and response validation",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/troubleshooting-tip-how-to-solve-the-packet-does-not-contain-required-message-authenticator-attribute-error-while-connecting-to-fortiauthenticator-as-a-radius-server-199548",
+      "feature_mechanism_fingerprint": "FortiPAM 1.9.0 adds the RADIUS Message-Authenticator attribute to requests and a require-message-authenticator control that is enabled by default to validate the attribute in RADIUS responses.",
+      "workflow_transaction_fingerprint": "FortiPAM sends Access-Request with Message-Authenticator; RADIUS server processes request and returns Access-Accept/Reject; FortiPAM validates the response attribute when require-message-authenticator is enabled; compatibility mode can disable response validation only when the server does not provide the attribute.",
+      "failure_class": "RADIUS interoperability failure because server response omits Message-Authenticator while FortiPAM requires it",
+      "evidence_pattern": "RADIUS debug reports missing/required Message-Authenticator; packet capture shows attribute 80 absent from request or response; FortiPAM config user radius displays require-message-authenticator state.",
+      "remediation_path": "Prefer updating the RADIUS server to return Message-Authenticator and keep validation enabled; confirm FortiPAM 1.9 request support; disable require-message-authenticator only as a documented compatibility exception after security review; retest packet exchange.",
+      "question_fingerprint": "A RADIUS server rejects a FortiPAM connectivity test because the response lacks Message-Authenticator; choose server-side attribute support over permanently weakening validation.",
+      "diagram_topology_layout_fingerprint": "FortiPAM RADIUS client -> RADIUS transport -> server; request and response each show Message-Authenticator attribute and FortiPAM validation gate.",
+      "semantic_uniqueness_decision": "Unique: prior FortiAP RadSec lesson covered TLS transport/certificate trust; this lesson covers RADIUS packet integrity attribute 80 and response validation."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM 7.5.1 report design templates: report/folder/root precedence and organization scope",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/440096/working-with-report-design-templates",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM PDF report templates can be defined per report, per report folder, or per report bundle; report rendering resolves a specific report template first, then its current folder template, then the system-defined root-folder template. Service-provider templates are defined at Super/Global and apply to customers.",
+      "workflow_transaction_fingerprint": "Report is selected from Resources > Reports; Report Design Template column identifies the assigned template; renderer resolves report-specific template, then current folder, then root default; PDF export uses the resolved template when Defined is selected, while New creates a one-off format.",
+      "failure_class": "report export uses unexpected layout due template scope/precedence or wrong organization context",
+      "evidence_pattern": "Report Design Template column shows the assigned template; default name encodes organization and scope; folder context matters when a report appears in multiple folders; Preview and PDF export show rendered output; Super/Global login controls global template editing.",
+      "remediation_path": "Inspect the report's assigned template; create/assign a report-specific template when exact output is required; otherwise verify the current folder template and root fallback; confirm organization/Super-Global scope; preview before scheduled export.",
+      "question_fingerprint": "A report appears in two folders with different templates and exports differently depending on the selected folder; identify current-folder template resolution after the report-specific override.",
+      "diagram_topology_layout_fingerprint": "Resources > Reports hierarchy with report node, two folders and root fallback; arrows show report-specific > current-folder > system root template resolution.",
+      "semantic_uniqueness_decision": "Unique: no FortiSIEM PDF template hierarchy or report-rendering precedence lesson appears in the 30-day inventory; distinct from FortiAnalyzer datasets and report queries."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE BGP MED settings: cross-AS SPA hub comparison and deterministic best-path selection",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/272833/bgp-med-setting",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE 26.1.107 supports BGP always-compare-med and deterministic-med for prefixes advertised by multiple Secure Private Access hubs, including hubs in different ASNs; the feature is select availability and requires FortiCare enablement.",
+      "workflow_transaction_fingerprint": "Multiple SPA hubs advertise the same prefix; default BGP behavior may ignore MED across different neighboring ASNs; always-compare-med forces cross-AS MED comparison; deterministic-med groups routes by neighboring AS before comparing MED to produce stable selection.",
+      "failure_class": "preferred SPA hub is not selected because MED is ignored across different ASNs or comparison is nondeterministic",
+      "evidence_pattern": "Compare received prefix, neighboring AS, MED and selected best path at the Security PoP; BGP MED settings are absent from portal until FortiCare enables the select-availability feature.",
+      "remediation_path": "Request enablement through FortiCare; enable Always Compare MED when cross-AS comparison is intended; enable Deterministic MED for consistent same-prefix comparisons; align MED policy across SPA hubs and verify the selected route after convergence.",
+      "question_fingerprint": "Two SPA hubs in different ASNs advertise the same prefix with different MED values; choose the feature that makes MED participate across AS boundaries rather than changing local preference or AS path.",
+      "diagram_topology_layout_fingerprint": "Two SPA hubs in separate ASNs advertise one prefix to FortiSASE PoP; MED values feed always-compare and deterministic comparison stages before best-path selection.",
+      "semantic_uniqueness_decision": "Unique: no FortiSASE BGP MED comparison lesson appears in the inventory; distinct from FortiSASE split DNS, SPA IP management and FortiGate SD-WAN route-tag topics."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "SD-WAN Overlay-as-a-Service agent: FGFM control tunnel, transactional configuration, and rollback",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/879228/sd-wan-overlay-as-a-service",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-forticloud-overlay-as-a-service-oaas-portal-task-error-failed-to-delete-the-zone-of-your-device-190472",
+      "feature_mechanism_fingerprint": "OaaS agent on a FortiGate spoke communicates with the FortiCloud OaaS controller through the FGFM management tunnel, validates and compares the orchestrated FortiOS configuration, applies it as a transaction, and rolls back all orchestrated changes if any change fails.",
+      "workflow_transaction_fingerprint": "OaaS portal submits a target configuration -> FortiCloud controller sends orchestration over FGFM -> spoke agent validates and compares current/target config -> transaction applies SD-WAN zones/services/routes -> success increments configuration version or failure triggers rollback -> get oaas status exposes task and sync state.",
+      "failure_class": "cloud orchestration task fails because a reserved/default SD-WAN object conflicts with existing configuration or transaction cannot apply",
+      "evidence_pattern": "get oaas status shows account/site/configuration version/target version/task ID/sync status; portal task detail identifies failed field; show system sdwan reveals existing zones and service rule IDs.",
+      "remediation_path": "Inspect task detail and get oaas status; compare running SD-WAN config with orchestrated target; for the documented default-zone failure, migrate the existing service rule away from reserved ID 1 before retrying; verify rollback and successful sync; ensure each FortiGate has the required OaaS license.",
+      "question_fingerprint": "OaaS portal task fails with 'Failed to delete the zone of your device' and system/sdwan target; identify the default service rule ID 1 conflict and migrate the existing service before retry.",
+      "diagram_topology_layout_fingerprint": "FortiCloud OaaS controller -> FGFM management tunnel -> spoke OaaS agent -> validate/compare -> transactional SD-WAN config apply -> commit or rollback branch.",
+      "semantic_uniqueness_decision": "Unique control-plane mechanism: 11/07 Fabric Overlay Orchestrator covered on-box IPAM/overlay formation; OaaS here covers FortiCloud agent-mediated config transaction, FGFM transport and rollback."
+    }
+  ],
+  "semantic_rejections": [
+    {
+      "candidate": "FortiAuthenticator RADSec accounting and mutual TLS",
+      "reason": "Rejected because FortiAP/Wireless 2026-10-29 already taught RADIUS-over-TLS transport and certificate trust; same core RADSec mechanism."
+    },
+    {
+      "candidate": "FortiPAM SCIM user/group lifecycle",
+      "reason": "Rejected because FortiSASE 2026-10-27 already taught SCIM provisioning and identity lifecycle; protocol/workflow fingerprint substantially equivalent."
+    },
+    {
+      "candidate": "FortiNAC Kerberos/Winbind authentication",
+      "reason": "Rejected because FortiNAC-F 2026-10-25 already taught Winbind MSCHAPv2 domain join and Kerberos directory boundary."
+    },
+    {
+      "candidate": "FortiAP Agile Multiband Operation",
+      "reason": "Rejected because FortiNAC-F/FortiAP 2026-11-10 already taught 802.11k/v assisted roaming; overlapping roaming-assistance mechanism."
+    },
+    {
+      "candidate": "FortiSwitch RVI ARP monitor",
+      "reason": "Rejected because FortiSwitch 2026-10-21 RVI and 2026-11-13 OSPF-on-RVI lessons already cover the same routed VLAN interface object and topology."
+    },
+    {
+      "candidate": "FortiNAC-F FortiGuard device-detection taxonomy",
+      "reason": "Rejected because 2026-10-28 IoT fingerprint aggregation and 2026-11-15 device-profiling rules already cover the same device-classification pipeline."
+    },
+    {
+      "candidate": "FortiSASE agentless ZTNA custom domain/certificate",
+      "reason": "Rejected because FortiSASE 2026-11-12 already taught agentless ZTNA private-app proxy access; same access mechanism."
+    },
+    {
+      "candidate": "Secure SD-WAN packet duplication/FEC variants",
+      "reason": "Rejected because 2026-10-21 packet duplication and 2026-11-03 adaptive FEC already cover the same redundancy/repair mechanism."
+    }
+  ]
+}
