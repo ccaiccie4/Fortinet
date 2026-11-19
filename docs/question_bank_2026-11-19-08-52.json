@@ -277,22 +277,22 @@
       "prompt": "The FortiAnalyzer output profile passes Validate and Save, but the destination table remains empty. What should be checked next?",
       "choices": [
         {
-          "text": "Inspect FortiAnalyzer local archive retention settings.",
+          "text": "Inspect FortiAnalyzer archive retention.",
           "correct": false,
           "feedback": "Local archive retention is a separate storage path."
         },
         {
-          "text": "Check the DCR schema and matching forwarding rule.",
+          "text": "Check the DCR schema and forwarding rule.",
           "correct": false,
           "feedback": "Session pickup does not control external log forwarding."
         },
         {
-          "text": "Check the FortiGate session-pickup configuration.",
+          "text": "Check FortiGate session-pickup settings.",
           "correct": true,
           "feedback": "Correct: validate rule eligibility and the DCR stream/schema end to end."
         },
         {
-          "text": "Review the administrator account password-expiry policy.",
+          "text": "Review administrator password-expiry policy.",
           "correct": false,
           "feedback": "Administrator password expiry is not the first explanation for an accepted profile."
         }
@@ -412,12 +412,12 @@
       "prompt": "A NAC-matched device receives the expected VLAN but not the configured QoS treatment. Which documented condition should be checked?",
       "choices": [
         {
-          "text": "The matched device is the only device on the port.",
+          "text": "The matched device is the only endpoint on this port.",
           "correct": false,
           "feedback": "Uplink speed does not satisfy the single-device condition."
         },
         {
-          "text": "The switch uses a ten-gigabit uplink connection.",
+          "text": "The switch uses a ten-gigabit uplink port.",
           "correct": false,
           "feedback": "DHCP relay is not the documented QoS prerequisite."
         },
@@ -741,12 +741,12 @@
           "feedback": "Fingerprint presence alone does not force registration."
         },
         {
-          "text": "A device can be registered only after an SNMP trap.",
+          "text": "A device registers only after an SNMP trap arrives.",
           "correct": false,
           "feedback": "SNMP traps are not a universal registration prerequisite."
         },
         {
-          "text": "Automatic registration requires a matching rule configured for it.",
+          "text": "Automatic registration requires a matching profiling rule.",
           "correct": false,
           "feedback": "Rogue status can represent an observed but unregistered endpoint."
         },
@@ -898,7 +898,7 @@
       "prompt": "Why is a separate API user recommended for each automation integration?",
       "choices": [
         {
-          "text": "It isolates permissions and limits the blast radius of key rotation.",
+          "text": "It isolates permissions and limits key-rotation blast radius.",
           "correct": false,
           "feedback": "A dedicated API user still requires authorization."
         },
@@ -1308,12 +1308,12 @@
           "feedback": "Correct: inspect service6 and confirm actual egress for the test flow."
         },
         {
-          "text": "The IPv6 SD-WAN service selection plus a test-flow capture.",
+          "text": "The IPv6 service selection plus a test-flow capture.",
           "correct": false,
           "feedback": "IPv4 service selection does not prove IPv6 path selection."
         },
         {
-          "text": "The FortiAnalyzer archive-retention and log-forwarding settings.",
+          "text": "The FortiAnalyzer archive and log-forwarding settings.",
           "correct": false,
           "feedback": "Archive retention is unrelated to forwarding member selection."
         },
@@ -1383,10 +1383,7 @@
     "max_answer_choice_length_spread": 3,
     "questions_with_spread_over_two": [
       11,
-      16,
-      28,
-      34,
-      49
+      16
     ]
   }
 }
