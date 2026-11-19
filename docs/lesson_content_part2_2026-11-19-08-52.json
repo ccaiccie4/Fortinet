@@ -1,0 +1,183 @@
+[
+  {
+    "product": "FortiAP/Wireless",
+    "title": "IPv6 as the FortiAP management and CAPWAP transport plane",
+    "version": "FortiOS/FortiAP 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/85710/support-fortiap-management-through-ipv6",
+      "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/434872",
+      "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/13665/whats-new-in-this-release"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case specifically about IPv6 CAPWAP management was verified; the lesson is driven by the FortiOS 8.0 feature and FortiAP configuration guide.",
+    "sections": [
+      {
+        "heading": "Management-plane scope",
+        "body": "FortiOS 8.0 allows a FortiGate wireless controller to manage FortiAP units over IPv6 for major wireless management functions. The scope includes AP-controller discovery, CAPWAP data channels, managed-AP upgrades, and tunnel-mode or bridge-mode SSID connections. This is not merely assigning IPv6 addresses to wireless clients. The controller-to-AP management/control path itself can use IPv6, which matters when the AP management network is IPv6-only or dual-stack."
+      },
+      {
+        "heading": "Discovery and interface prerequisites",
+        "body": "The FortiGate interface that faces the AP management network needs an IPv6 address and the appropriate IPv6 access/advertisement settings. Fortinet documents IPv6 multicast discovery through `config wireless-controller global` and `set discovery-mc-addr6 <IPv6 address>`. A sample address is `FF02::18C`. DHCPv6 discovery is another option: configure DHCPv6 Option 52 to advertise the AP Controller IPv6 address. The FortiGate can provide that DHCPv6 option itself or an AP-reachable third-party DHCPv6 server can provide it. These are alternative discovery methods; do not configure multicast and DHCPv6 assumptions as if they were one mandatory sequence."
+      },
+      {
+        "heading": "Configuration pattern",
+        "body": "An interface example from the guide is:\n\nconfig system interface\n    edit \"port3.66\"\n        config ipv6\n            set ip6-address 2001:18:56:66::1/64\n            set ip6-allowaccess ping fabric\n            set ip6-send-adv enable\n            set ip6-manage-flag enable\n            set ip6-other-flag enable\n        end\n    next\nend\n\nconfig wireless-controller global\n    set discovery-mc-addr6 FF02::18C\nend\n\nFor DHCPv6 discovery, configure option code 52 with type `ip6` and the controller's IPv6 address on the AP-facing DHCPv6 scope. Use the actual AP management prefix and address plan; the example prefix is documentation-only. Confirm that routers, ACLs, and multicast handling allow the chosen discovery method."
+      },
+      {
+        "heading": "CAPWAP data and offload",
+        "body": "The feature is broader than discovery: CAPWAP data channels and managed-AP upgrade/control functions can use IPv6. When the FortiAP is managed over IPv6 on an NP7 or NP7lite FortiGate, CAPWAP data traffic over IPv4 and IPv6 can be offloaded. The documentation explicitly says CAPWAP offload is not supported on NP6/NP6lite FortiGates. Therefore, a successful IPv6 control-plane association does not prove that the expected NPU offload path is available. Platform generation is a separate performance dependency."
+      },
+      {
+        "heading": "Verification and fault isolation",
+        "body": "Validate in layers: first confirm the FortiGate interface IPv6 address and reachability from the AP management VLAN; next verify the AP receives the intended controller address through multicast or DHCPv6 Option 52; then confirm the AP appears as discovered/authorized and the CAPWAP control/data channels are established. A ping to the FortiGate proves IPv6 routing only. It does not prove CAPWAP discovery, certificate/security negotiation, or the data tunnel. If discovery fails, inspect RA/DHCPv6/multicast reachability and the advertised controller address. If discovery works but client traffic fails, inspect the SSID mode, CAPWAP data path, VLAN/bridge design, and offload capability separately."
+      }
+    ],
+    "evidence": [
+      "IPv6 interface address and reachability prove the management network is routable.",
+      "DHCPv6 Option 52 or the configured IPv6 discovery multicast address proves the controller address is being advertised by the chosen method.",
+      "Authorized AP and CAPWAP channel state prove controller association, not client forwarding.",
+      "NP7/NP7lite model evidence is required before expecting CAPWAP data offload."
+    ],
+    "troubleshooting": [
+      "AP not discovered: verify the chosen IPv6 discovery method and AP-facing multicast/DHCPv6 path.",
+      "AP discovered but not authorized: investigate authorization and AP inventory state, not IPv6 routing.",
+      "Control channel up but SSID data fails: inspect CAPWAP data channel, tunnel/bridge mode and VLAN path.",
+      "Offload absent on NP6/NP6lite: this is a documented platform limitation."
+    ]
+  },
+  {
+    "product": "FortiNAC",
+    "title": "NetFlow v5, v9 and IPFIX as device-profiling evidence",
+    "version": "FortiNAC 9.4.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/164904/netflow-support",
+      "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a FortiNAC-F NetFlow collection issue, but that is a different product/collector workflow and was not substituted for a FortiNAC 9.4 scenario.",
+    "sections": [
+      {
+        "heading": "Why flow telemetry helps NAC",
+        "body": "FortiNAC can use NetFlow records as an input to Device Profiling. This is useful when identity signals from DHCP, SNMP, or a persistent endpoint agent are incomplete, or when the observed traffic pattern helps classify a device. The documented versions are NetFlow v5, v9, and v10 (IPFIX). The network device exports flow records to the FortiNAC IP address using listener port 2055. The flow data is then available in Network Sessions and can be consumed by a Device Profiling rule through the Network Traffic Method."
+      },
+      {
+        "heading": "Collection path",
+        "body": "The exporter observes traffic on its interfaces and emits flow records to the configured FortiNAC collector address/port. FortiNAC receives those records and presents the observed network sessions. A profiling rule uses the Network Traffic Method to evaluate the flow-derived evidence as part of device classification. This is metadata collection, not packet capture: it does not provide application payload or prove what a user saw inside an encrypted session. It can provide evidence about endpoints, addresses, protocols, ports, and traffic behavior as represented in the exporter's flow format, but the exact fields depend on the exporter and template."
+      },
+      {
+        "heading": "Configuration and integration",
+        "body": "On the network device, enable the required NetFlow export version and set the export destination to the FortiNAC IP address with listener port 2055. In FortiNAC, create or edit a Device Profiling rule and select the Network Traffic Method. Use the rule's criteria to classify the device only when the available flow attributes are sufficiently discriminating. Do not make a broad rule from a single common destination port; many unrelated endpoints can share that pattern. The FortiNAC 9.4 guide explicitly lists the supported flow versions and the destination/listener contract, while the rule configuration guide defines the Network Traffic Method."
+      },
+      {
+        "heading": "Verification",
+        "body": "Start with the network exporter: confirm it is configured to export to the correct FortiNAC address and port, and verify that routing and ACLs allow the export packets. Then inspect Users & Hosts > Network Sessions for the expected source/destination tuple and recent timestamps. Only after sessions appear should you evaluate the profiling rule. A populated Network Sessions view proves FortiNAC is receiving and parsing flow records; it does not prove the profiling rule matched or automatically registered the host. Confirm the matched rule, the resulting device category, and the registration action separately."
+      },
+      {
+        "heading": "Troubleshooting boundaries",
+        "body": "If no sessions appear, check exporter configuration, source-interface coverage, NetFlow version compatibility, destination address, UDP port 2055 reachability, and time alignment. If sessions appear but the profile does not match, inspect the Network Traffic Method criteria and the actual values present in the flow records. If a host is classified but not registered, inspect the rule's registration behavior; profiling and registration are separate outcomes. The FortiNAC-F product has its own NetFlow listener requirements, so do not copy FortiNAC-F `allowaccess` settings into a legacy FortiNAC 9.4 design without checking the correct product guide."
+      }
+    ],
+    "evidence": [
+      "Network Sessions populated with the expected tuple proves flow records reached and were parsed by FortiNAC.",
+      "A matched profiling rule proves the Network Traffic Method evaluated the observed flow evidence.",
+      "A registered host proves the registration action completed; it is not implied by flow collection alone.",
+      "A packet capture to UDP/2055 proves packets reached the network interface, not that the collector accepted their template."
+    ],
+    "troubleshooting": [
+      "No Network Sessions: verify exporter destination, port 2055, route/ACL and NetFlow version.",
+      "Sessions exist but rule misses: compare rule criteria with actual flow attributes and source/destination direction.",
+      "Profile matches but host remains rogue: inspect automatic/manual registration settings.",
+      "Do not use payload-level conclusions from NetFlow metadata."
+    ]
+  },
+  {
+    "product": "FortiNAC-F",
+    "title": "Endpoint fingerprints: source-ranked identity records and change events",
+    "version": "FortiNAC-F 7.6.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/919798/endpoint-fingerprints",
+      "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/29753"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a September 22 managed-CA upgrade tip, outside the 30-day window and unrelated to endpoint fingerprinting; no direct recent fingerprint scenario was verified.",
+    "sections": [
+      {
+        "heading": "Identity records are observations, not a single immutable host row",
+        "body": "FortiNAC-F continuously collects identity records as hosts connect. Each new fingerprint heard for a MAC address creates a separate record. A device moved from a registration VLAN to a production VLAN may request a new IP address and produce another fingerprint record. If the same MAC and port has records with different operating systems, FortiNAC identifies a likely dual-boot or changed-identity condition and generates the Device Fingerprint Changed event. This is valuable because a changed fingerprint can be a normal lifecycle event, a reimaged endpoint, a dual-boot system, or a sign that a port/MAC assumption is wrong."
+      },
+      {
+        "heading": "Sources, attributes and ranking",
+        "body": "The Endpoint Fingerprints view exposes physical address, device type, operating system, IP address, host name, vendor/OUI, source, rule name, registration state, last-heard time, and creation time. Fingerprint attributes are source-specific. DHCP can expose the parameter list, option list, vendor class, and message type; FortiGuard contributes category/subcategory, OS, vendor, model, and confidence; SNMP exposes queried OIDs/responses; RADIUS exposes request attributes such as User-Name, NAS-IP-Address, EAP type and certificate subject values; HTTP/HTTPS, SSH, TCP, UDP, ONVIF and agent sources can contribute additional evidence. Some attributes require the corresponding FortiNAC-OS `set allowaccess` protocol option to be enabled."
+      },
+      {
+        "heading": "Source precedence and profiling",
+        "body": "Source Rank determines the order in which sources are processed to populate an endpoint's host record. For example, an agent can be ranked first, DHCPv4 second, and Vendor OUI last. This ranking is not the same as deleting lower-ranked fingerprint records: the records remain useful evidence even when another source wins the host-record population decision. A device profiling rule consumes selected methods and attributes to classify the host. The rule can register a device automatically or leave it as a rogue record for manual review. An unknown Vendor OUI can prevent automatic registration even when other fingerprint data exists."
+      },
+      {
+        "heading": "Operational workflow",
+        "body": "When a device unexpectedly changes category, open Endpoint Fingerprints and filter by MAC, port, OS, source, and last-heard time. Compare the creation time and source for each record. Use Show Attributes to inspect the actual evidence, Show Adapters to see adapter associations, and Test Device Profiling Rule to evaluate the rule against the host. Confirm Rule is available to verify that the device still matches its associated rule. Only after the source evidence is understood should the profiling rule or source rank be changed."
+      },
+      {
+        "heading": "Troubleshooting and interpretation",
+        "body": "A Device Fingerprint Changed event proves that a new fingerprint differs from a prior record; it does not prove compromise. Two OS values on the same MAC/port may indicate dual boot, reimaging, a virtualized adapter, or stale inventory. A rogue record proves that FortiNAC observed the endpoint but did not complete the configured automatic-registration condition. If an attribute is blank, verify that the corresponding protocol is enabled and reachable before concluding that the device lacks the attribute. Keep source ranking deliberate: prioritizing a low-confidence source can overwrite a more authoritative host-record value, while deleting historical records removes context needed for later investigations."
+      }
+    ],
+    "evidence": [
+      "Multiple records for one MAC with different OS values support a changed/dual-boot hypothesis, not a compromise conclusion.",
+      "Source and Last Heard identify which discovery method supplied the most recent evidence.",
+      "Rule Name plus Test Device Profiling Rule proves whether the current rule still matches.",
+      "Rogue status proves observation without automatic registration completion."
+    ],
+    "troubleshooting": [
+      "Missing attribute: check the source protocol's FortiNAC-OS allowaccess setting and network reachability.",
+      "Unexpected OS change: compare per-record source, timestamps, DHCP parameters and FortiGuard confidence.",
+      "Host record value overwritten: review Source Rank and the most recent source update.",
+      "Rogue device: inspect registration mode, matched rule, and Vendor OUI recognition."
+    ]
+  },
+  {
+    "product": "FortiAuthenticator",
+    "title": "Separate HA management and heartbeat interfaces",
+    "version": "FortiAuthenticator 8.0.2/8.0.3",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new",
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching the 8.0.2 HA interface separation was verified; the lesson uses the release note and current HA administration guide.",
+    "sections": [
+      {
+        "heading": "Why separate the paths",
+        "body": "FortiAuthenticator 8.0.2 separates the HA management interface from the heartbeat interface. The management interface carries cluster-member communication and can permit administrative access; the heartbeat interface is dedicated to HA synchronization and health monitoring. This separation lets an engineer keep cluster health traffic on a controlled path without forcing administrators to use the same interface or subnet. It also makes it easier to distinguish an administrative reachability issue from an HA peer-liveness issue."
+      },
+      {
+        "heading": "Cluster roles and interfaces",
+        "body": "In active-passive cluster mode, one unit is active and the other is standby, with configuration synchronized between them. The Management interface must be the same physical/logical interface on both nodes, must not already have an IP address assigned, and cannot be used for authentication services. Each node receives a different Management IP address, normally on the same private subnet. Management access can be enabled for SSH, SNMP, the web interface, REST API, and Security Fabric. The new Heartbeat Interface is selected separately and used exclusively for HA sync and health monitoring."
+      },
+      {
+        "heading": "Heartbeat timing and election",
+        "body": "The documented default heartbeat interval is 1,000 milliseconds and the default heartbeat-lost threshold is 6,000 milliseconds. The standby node uses missed heartbeats to determine when the peer is out of service and to trigger failover. The cluster also uses Ethernet broadcasts over UDP/720 for primary/secondary election and ongoing communication; Layer-2 connectivity is mandatory for discovering the other node. Do not assume that a routed management subnet alone is sufficient for cluster discovery. Priority selects the preferred active node when both are healthy, while monitored-interface link state can influence the active/passive decision. Priority override controls whether a recovered high-priority node should take over or whether failovers should be minimized."
+      },
+      {
+        "heading": "Configuration and maintenance",
+        "body": "On each node, open System > Administration > High Availability, enable HA, choose Cluster member, select the Management interface and assign a unique Management IP. Select a separate Heartbeat Interface, then set heartbeat interval/lost threshold if the defaults do not match the design. Configure the same shared IPsec key on both nodes. Select monitored interfaces and choose the priority/priority-override behavior intentionally. When entering maintenance mode, the active node relinquishes the active role. With synchronization enabled it continues receiving configuration updates; without synchronization it stops syncing. After one node becomes active, reconnect to the GUI and finish configuration on the active member; the configuration is copied to standby."
+      },
+      {
+        "heading": "Failure and evidence interpretation",
+        "body": "HA Status should be used to distinguish active/standby role, synchronization state, and peer health. If a peer is not discovered, inspect Layer-2 broadcast reachability and UDP/720 before changing heartbeat thresholds. If the peer is discovered but failover occurs unexpectedly, inspect heartbeat loss, monitored interface link counts, stability period, and priority override. FortiAuthenticator documents that authentication requests in flight during failover are lost and that failover can take 30–180 seconds depending on cluster state. A successful GUI login to the active node does not prove the heartbeat interface is healthy or that standby synchronization is current."
+      }
+    ],
+    "evidence": [
+      "HA Status proves role and synchronization state, not that every external RADIUS client has switched.",
+      "Layer-2/UDP 720 evidence supports peer discovery and election reachability.",
+      "Heartbeat loss and monitored-interface state explain failover decisions; priority alone does not.",
+      "Authentication failures during the documented failover interval may be in-flight requests lost during role change."
+    ],
+    "troubleshooting": [
+      "Peer not discovered: verify L2 adjacency and UDP/720 broadcast path before tuning heartbeat timers.",
+      "Peer discovered but unstable: inspect dedicated heartbeat interface, loss threshold and monitored links.",
+      "Standby out of sync: verify maintenance-mode synchronization setting and active-node configuration state.",
+      "Admin access fails while HA is healthy: inspect Management access and Management IP separately from heartbeat."
+    ]
+  }
+]
