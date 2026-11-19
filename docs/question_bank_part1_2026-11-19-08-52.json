@@ -1,0 +1,677 @@
+[
+  {
+    "id": 1,
+    "product": "FortiGate",
+    "prompt": "A client receives an ARP reply from the FortiGate for a peer address, but TCP still fails. What has the capture actually proved?",
+    "choices": [
+      {
+        "text": "The peer is authorized by the firewall policy.",
+        "correct": false,
+        "feedback": "Authorization is a later policy decision; ARP resolution alone does not prove it."
+      },
+      {
+        "text": "The proxy-ARP range answered for that IPv4 address.",
+        "correct": true,
+        "feedback": "Correct: the FortiGate is answering for the destination address in that range."
+      },
+      {
+        "text": "The FortiSwitch blocked every alternate path.",
+        "correct": false,
+        "feedback": "Switch isolation must be verified separately from the ARP reply."
+      },
+      {
+        "text": "The return route is installed on the FortiGate.",
+        "correct": false,
+        "feedback": "A route is not established by observing an ARP response."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "product": "FortiGate",
+    "prompt": "With intra-VLAN blocking enabled, a same-VLAN packet enters and leaves the FortiGate on the same VLAN interface. Which control prevents the documented traffic-redirect bypass?",
+    "choices": [
+      {
+        "text": "Disable `allow-traffic-redirect` globally.",
+        "correct": true,
+        "feedback": "Correct: the guide calls for disabling this redirect behavior so same-interface traffic is policy checked."
+      },
+      {
+        "text": "Enable proxy ARP on every interface.",
+        "correct": false,
+        "feedback": "Proxy ARP supplies ARP resolution; it does not control the redirect bypass."
+      },
+      {
+        "text": "Change the VLAN to a routed port.",
+        "correct": false,
+        "feedback": "Changing the interface type is not the documented control."
+      },
+      {
+        "text": "Disable DHCP snooping on the switch.",
+        "correct": false,
+        "feedback": "DHCP snooping is unrelated to the firewall policy path."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "product": "FortiGate",
+    "prompt": "An IPv6 host cannot reach another client on a VLAN where intra-VLAN blocking is enabled. What is the most accurate first conclusion?",
+    "choices": [
+      {
+        "text": "The proxy-ARP pool is too small.",
+        "correct": false,
+        "feedback": "Proxy-ARP pool sizing is an IPv4 address-range issue."
+      },
+      {
+        "text": "The policy ID is not synchronized.",
+        "correct": false,
+        "feedback": "Policy synchronization does not explain the documented IPv6 limitation."
+      },
+      {
+        "text": "IPv6 client-to-client traffic is unsupported in this mode.",
+        "correct": true,
+        "feedback": "Correct: the FortiSwitch guide explicitly documents this boundary."
+      },
+      {
+        "text": "The FortiGate needs an IPv6 VIP.",
+        "correct": false,
+        "feedback": "An IPv6 VIP is not a substitute for the unsupported intra-VLAN behavior."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "product": "FortiGate",
+    "prompt": "A design must preserve isolation when FortiLink connectivity is lost. Which setting expresses the intended behavior?",
+    "choices": [
+      {
+        "text": "`set access-vlan-mode fail-open`",
+        "correct": false,
+        "feedback": "Fail-open permits intra-VLAN traffic during the FortiLink outage."
+      },
+      {
+        "text": "`set access-vlan-mode fail-close`",
+        "correct": true,
+        "feedback": "Correct: fail-close keeps intra-VLAN traffic blocked when the FortiGate connection is lost."
+      },
+      {
+        "text": "`set match-period 0`",
+        "correct": false,
+        "feedback": "Match-period controls NAC/DPP record retention, not outage forwarding."
+      },
+      {
+        "text": "`set allow-traffic-redirect enable`",
+        "correct": false,
+        "feedback": "Enabling redirect can undermine the policy-inspection design."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "product": "FortiManager",
+    "prompt": "A `um/query/productapi` request returns an IPS signature description. Which statement is justified?",
+    "choices": [
+      {
+        "text": "The signature is installed on every managed FortiGate.",
+        "correct": false,
+        "feedback": "Package metadata does not prove device installation."
+      },
+      {
+        "text": "The signature matched live traffic in the last hour.",
+        "correct": false,
+        "feedback": "A signature lookup does not report runtime traffic matches."
+      },
+      {
+        "text": "The queried signature metadata was retrieved from product data.",
+        "correct": true,
+        "feedback": "Correct: it proves the requested metadata lookup succeeded."
+      },
+      {
+        "text": "The IPS sensor references the signature in every policy.",
+        "correct": false,
+        "feedback": "Sensor and policy attachment must be checked on the managed device."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "product": "FortiManager",
+    "prompt": "Which target is documented for looking up a single IPS signature by ID?",
+    "choices": [
+      {
+        "text": "`/fgd/lookup/ency?source=ips&id=58947`",
+        "correct": true,
+        "feedback": "Correct: this is the documented encyclopedia lookup form."
+      },
+      {
+        "text": "`/pm/config/adom/root/pkg/ips/58947`",
+        "correct": false,
+        "feedback": "This is not the documented productapi target path."
+      },
+      {
+        "text": "`/sys/status/ips?id=58947`",
+        "correct": false,
+        "feedback": "A system-status path does not perform the encyclopedia lookup."
+      },
+      {
+        "text": "`/fortiguard/ips/install?signature=58947`",
+        "correct": false,
+        "feedback": "The lookup is read-only metadata retrieval, not an install action."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "product": "FortiManager",
+    "prompt": "A package inventory uses `limit=10` and reports more than ten signatures. What is required for a complete audit?",
+    "choices": [
+      {
+        "text": "Repeat the first request until it returns the same page.",
+        "correct": false,
+        "feedback": "Repeating the same offset returns the same first page."
+      },
+      {
+        "text": "Increase the FortiGate IPS engine memory.",
+        "correct": false,
+        "feedback": "Engine memory does not control API pagination."
+      },
+      {
+        "text": "Fetch subsequent pages with the correct offset.",
+        "correct": true,
+        "feedback": "Correct: continue offsets until the reported total is covered."
+      },
+      {
+        "text": "Treat the first ten signatures as representative.",
+        "correct": false,
+        "feedback": "A sample page is not a complete package inventory."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "product": "FortiManager",
+    "prompt": "An engineer needs to identify signatures added or removed between two IPS package releases. Which query is the best fit?",
+    "choices": [
+      {
+        "text": "A single signature encyclopedia lookup.",
+        "correct": false,
+        "feedback": "A single lookup describes one signature, not a release difference."
+      },
+      {
+        "text": "A package-version delta query.",
+        "correct": true,
+        "feedback": "Correct: the documented two-version target returns package delta information."
+      },
+      {
+        "text": "A managed-device reboot history query.",
+        "correct": false,
+        "feedback": "Reboot history is unrelated to package-content comparison."
+      },
+      {
+        "text": "A policy package installation preview.",
+        "correct": false,
+        "feedback": "Install preview evaluates deployment changes, not IPS signature deltas."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "product": "FortiAnalyzer",
+    "prompt": "The Azure Logs Ingestion API requires a `TimeGenerated` field. Which documented DCR transformation supplies it?",
+    "choices": [
+      {
+        "text": "`source | project-away message`",
+        "correct": false,
+        "feedback": "This removes a field but does not create the required timestamp."
+      },
+      {
+        "text": "`source | extend TimeGenerated = todatetime(logtime) | project-away logtime`",
+        "correct": true,
+        "feedback": "Correct: it converts logtime into TimeGenerated and removes the temporary field."
+      },
+      {
+        "text": "`source | summarize count() by TimeGenerated`",
+        "correct": false,
+        "feedback": "This assumes TimeGenerated already exists in the source payload."
+      },
+      {
+        "text": "`source | extend logtime = now() | project message`",
+        "correct": false,
+        "feedback": "This renames no field into the required schema."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "product": "FortiAnalyzer",
+    "prompt": "Which Azure permission is specified for the application registration on the Data Collection Rule?",
+    "choices": [
+      {
+        "text": "Log Analytics Reader",
+        "correct": false,
+        "feedback": "Reader access alone does not grant the documented ingestion role."
+      },
+      {
+        "text": "Monitoring Metrics Publisher",
+        "correct": true,
+        "feedback": "Correct: Fortinet specifies Monitoring Metrics Publisher for the DCR."
+      },
+      {
+        "text": "Storage Blob Data Contributor",
+        "correct": false,
+        "feedback": "Blob storage access is not the Logs Ingestion API role."
+      },
+      {
+        "text": "Security Reader",
+        "correct": false,
+        "feedback": "Security Reader is not the documented DCR ingestion role."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "product": "FortiAnalyzer",
+    "prompt": "The FortiAnalyzer output profile passes Validate and Save, but the destination table remains empty. What should be checked next?",
+    "choices": [
+      {
+        "text": "The FortiAnalyzer local archive retention only.",
+        "correct": false,
+        "feedback": "Local archive retention is a separate storage path."
+      },
+      {
+        "text": "The DCR/table schema and matching Log Forwarding rule.",
+        "correct": true,
+        "feedback": "Correct: validate rule eligibility and the DCR stream/schema end to end."
+      },
+      {
+        "text": "The FortiGate session pickup setting.",
+        "correct": false,
+        "feedback": "Session pickup does not control external log forwarding."
+      },
+      {
+        "text": "The FortiAnalyzer administrator password expiry.",
+        "correct": false,
+        "feedback": "Administrator password expiry is not the first explanation for an accepted profile."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "product": "FortiAnalyzer",
+    "prompt": "Only traffic logs arrive in Azure; event logs do not. Which boundary is most relevant?",
+    "choices": [
+      {
+        "text": "Each log family may require a matching Log Forwarding rule.",
+        "correct": true,
+        "feedback": "Correct: rule filters and selected log types determine which records enter the output path."
+      },
+      {
+        "text": "The DCE can ingest only traffic logs.",
+        "correct": false,
+        "feedback": "The DCE is not inherently limited to traffic logs."
+      },
+      {
+        "text": "The local Analytics database must be rebuilt.",
+        "correct": false,
+        "feedback": "Rebuilding Analytics is unrelated to selecting log families for forwarding."
+      },
+      {
+        "text": "The FortiGate must disable log compression.",
+        "correct": false,
+        "feedback": "Log compression is not the documented cause of per-family forwarding gaps."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "product": "FortiSwitch",
+    "prompt": "A NAC policy has `match-period 48`, but the device does not retain the match for 48 hours. What configuration prerequisite should be checked first?",
+    "choices": [
+      {
+        "text": "The FortiSwitch port speed.",
+        "correct": false,
+        "feedback": "Port speed does not control NAC match retention."
+      },
+      {
+        "text": "The policy `match-type` is set to `override`.",
+        "correct": true,
+        "feedback": "Correct: the FortiLink guide says to switch from dynamic to override before setting match-period."
+      },
+      {
+        "text": "The DHCP lease is also 48 hours.",
+        "correct": false,
+        "feedback": "DHCP lease duration is a separate timer."
+      },
+      {
+        "text": "The RADIUS server has a CoA secret.",
+        "correct": false,
+        "feedback": "CoA secrets are unrelated to the explicit match retention field."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "product": "FortiSwitch",
+    "prompt": "What does `match-period 0` mean in the documented NAC/DPP behavior?",
+    "choices": [
+      {
+        "text": "Expire the match immediately.",
+        "correct": false,
+        "feedback": "Zero is not an immediate-expiry setting here."
+      },
+      {
+        "text": "Retain the match indefinitely until a documented removal event.",
+        "correct": true,
+        "feedback": "Correct: zero means indefinite retention subject to documented removal events."
+      },
+      {
+        "text": "Use the DHCP lease as the retention timer.",
+        "correct": false,
+        "feedback": "The DHCP lease is not the match-period timer."
+      },
+      {
+        "text": "Retain the match for 120 days exactly.",
+        "correct": false,
+        "feedback": "The maximum configured value is 3,072 hours; zero is not 120 days."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "product": "FortiSwitch",
+    "prompt": "A switch-controller warning reports that matched NAC devices have reached 95 percent of the maximum. What does it indicate?",
+    "choices": [
+      {
+        "text": "A particular device's match has expired.",
+        "correct": false,
+        "feedback": "The warning is a capacity signal, not an expiry event."
+      },
+      {
+        "text": "The switch has lost its FortiLink tunnel.",
+        "correct": false,
+        "feedback": "FortiLink loss is not what the 95-percent warning represents."
+      },
+      {
+        "text": "The matched-device capacity is approaching its limit.",
+        "correct": true,
+        "feedback": "Correct: it warns that the matched-device maximum is nearing exhaustion."
+      },
+      {
+        "text": "Every NAC rule has stopped matching.",
+        "correct": false,
+        "feedback": "A capacity warning does not prove all rules stopped evaluating."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "product": "FortiSwitch",
+    "prompt": "A NAC-matched device receives the expected VLAN but not the configured QoS treatment. Which documented condition should be checked?",
+    "choices": [
+      {
+        "text": "The matched device is the only device on the port.",
+        "correct": true,
+        "feedback": "Correct: the QoS enhancement is conditional on the matching device being the only device on the port."
+      },
+      {
+        "text": "The switch is using a 10-Gigabit uplink.",
+        "correct": false,
+        "feedback": "Uplink speed does not satisfy the single-device condition."
+      },
+      {
+        "text": "The VLAN has a DHCP relay configured.",
+        "correct": false,
+        "feedback": "DHCP relay is not the documented QoS prerequisite."
+      },
+      {
+        "text": "The match-period is set to 120 days.",
+        "correct": false,
+        "feedback": "Retention duration does not determine whether port QoS is applied."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "product": "FortiAP/Wireless",
+    "prompt": "An IPv6-only AP management subnet uses multicast discovery. Which FortiGate setting advertises the controller discovery multicast address?",
+    "choices": [
+      {
+        "text": "`set discovery-mc-addr6 <IPv6 address>`",
+        "correct": true,
+        "feedback": "Correct: this sets the IPv6 multicast address used for AP discovery."
+      },
+      {
+        "text": "`set ap-discover enable`",
+        "correct": false,
+        "feedback": "Automatic registration is not the multicast address setting."
+      },
+      {
+        "text": "`set ip6-send-adv disable`",
+        "correct": false,
+        "feedback": "Disabling router advertisements does not configure controller multicast discovery."
+      },
+      {
+        "text": "`set capwap-data-channel clear-text`",
+        "correct": false,
+        "feedback": "Data-channel security mode is unrelated to the discovery address."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "product": "FortiAP/Wireless",
+    "prompt": "A design uses DHCPv6 to tell FortiAP where the controller is. Which option is documented?",
+    "choices": [
+      {
+        "text": "Option 43 with an IPv4 controller address.",
+        "correct": false,
+        "feedback": "Option 43 is not the documented IPv6 controller discovery method here."
+      },
+      {
+        "text": "Option 52 with the AC IPv6 address.",
+        "correct": true,
+        "feedback": "Correct: DHCPv6 Option 52 carries the AC IPv6 address."
+      },
+      {
+        "text": "Option 60 with the AP vendor class.",
+        "correct": false,
+        "feedback": "Option 60 is not the specified controller-address option."
+      },
+      {
+        "text": "Option 82 with the client circuit ID.",
+        "correct": false,
+        "feedback": "Option 82 is unrelated to this FortiAP discovery mechanism."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "product": "FortiAP/Wireless",
+    "prompt": "IPv6 CAPWAP management works on a FortiGate NP6 appliance, but CAPWAP data offload is absent. What is the best interpretation?",
+    "choices": [
+      {
+        "text": "The AP firmware is necessarily corrupted.",
+        "correct": false,
+        "feedback": "The documented platform caveat does not imply AP corruption."
+      },
+      {
+        "text": "The IPv6 address must be removed from the AP.",
+        "correct": false,
+        "feedback": "Removing IPv6 is not required for management to work."
+      },
+      {
+        "text": "NP6/NP6lite does not support this CAPWAP offload.",
+        "correct": true,
+        "feedback": "Correct: CAPWAP offload is supported on NP7/NP7lite, not NP6/NP6lite."
+      },
+      {
+        "text": "The controller multicast address is always invalid.",
+        "correct": false,
+        "feedback": "A working management association makes multicast-address failure less likely."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "product": "FortiAP/Wireless",
+    "prompt": "The AP is discovered and authorized, but clients in a tunnel-mode SSID cannot pass data. Which next check best separates control from data?",
+    "choices": [
+      {
+        "text": "Verify the CAPWAP data channel and SSID forwarding path.",
+        "correct": true,
+        "feedback": "Correct: discovery/authorization does not prove the data tunnel and SSID path work."
+      },
+      {
+        "text": "Change the DHCPv6 Option 52 value first.",
+        "correct": false,
+        "feedback": "Option 52 is relevant when discovery is failing, not after authorization."
+      },
+      {
+        "text": "Increase the controller multicast scope.",
+        "correct": false,
+        "feedback": "Multicast scope is not the first check for an established AP with data failure."
+      },
+      {
+        "text": "Assume the IPv6 management ping proves client forwarding.",
+        "correct": false,
+        "feedback": "A management ping proves reachability only, not client traffic forwarding."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "product": "FortiNAC",
+    "prompt": "A NetFlow exporter is configured but FortiNAC Network Sessions remains empty. Which destination contract should be verified?",
+    "choices": [
+      {
+        "text": "TCP/443 to the FortiNAC GUI.",
+        "correct": false,
+        "feedback": "The GUI port does not receive the documented flow export."
+      },
+      {
+        "text": "UDP flow export to the FortiNAC IP on port 2055.",
+        "correct": true,
+        "feedback": "Correct: the FortiNAC guide specifies its IP address and listener port 2055."
+      },
+      {
+        "text": "UDP/720 broadcasts between HA peers.",
+        "correct": false,
+        "feedback": "UDP/720 is used in a different product's HA discovery context."
+      },
+      {
+        "text": "TCP/22 from the FortiNAC appliance.",
+        "correct": false,
+        "feedback": "SSH reachability does not prove NetFlow export delivery."
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "product": "FortiNAC",
+    "prompt": "What is the strongest limitation to remember when using NetFlow as profiling evidence?",
+    "choices": [
+      {
+        "text": "It contains the full application payload for every session.",
+        "correct": false,
+        "feedback": "NetFlow does not provide full application payload."
+      },
+      {
+        "text": "It proves which user saw a decrypted page.",
+        "correct": false,
+        "feedback": "Flow metadata cannot prove the exact page content seen by a user."
+      },
+      {
+        "text": "It is flow metadata, not packet payload inspection.",
+        "correct": true,
+        "feedback": "Correct: flow records summarize traffic metadata and depend on exporter fields."
+      },
+      {
+        "text": "It automatically registers every observed endpoint.",
+        "correct": false,
+        "feedback": "Profiling and automatic registration are separate outcomes."
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "product": "FortiNAC",
+    "prompt": "Network Sessions shows the expected flow tuple, but the device profiling rule does not match. What is the best next step?",
+    "choices": [
+      {
+        "text": "Inspect Network Traffic Method criteria against the received flow attributes.",
+        "correct": true,
+        "feedback": "Correct: received sessions prove collection; the rule criteria are the next boundary."
+      },
+      {
+        "text": "Change the collector port from 2055 to 443.",
+        "correct": false,
+        "feedback": "Changing the port would likely stop the working flow feed."
+      },
+      {
+        "text": "Rebuild the FortiNAC database immediately.",
+        "correct": false,
+        "feedback": "A database rebuild is disproportionate without evidence of corruption."
+      },
+      {
+        "text": "Assume the exporter has stopped sending records.",
+        "correct": false,
+        "feedback": "The visible sessions contradict the claim that the exporter stopped."
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "product": "FortiNAC",
+    "prompt": "A device matches the Network Traffic Method but remains rogue. Which distinction matters?",
+    "choices": [
+      {
+        "text": "NetFlow v9 cannot create host records.",
+        "correct": false,
+        "feedback": "NetFlow version does not explain registration behavior by itself."
+      },
+      {
+        "text": "The profile match and registration action are separate decisions.",
+        "correct": true,
+        "feedback": "Correct: inspect whether the rule is configured for automatic or manual registration."
+      },
+      {
+        "text": "The FortiNAC IP address must be public.",
+        "correct": false,
+        "feedback": "The collector can receive flows on an internal address."
+      },
+      {
+        "text": "Every matching rule registers devices automatically.",
+        "correct": false,
+        "feedback": "Automatic registration is a rule setting, not a universal consequence."
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "product": "FortiNAC-F",
+    "prompt": "Two endpoint fingerprint records show the same MAC and port but different operating systems. What event should be expected?",
+    "choices": [
+      {
+        "text": "Device Fingerprint Changed.",
+        "correct": true,
+        "feedback": "Correct: the guide describes this event for differing OS fingerprints on the same MAC/port."
+      },
+      {
+        "text": "RADIUS Accounting Stop.",
+        "correct": false,
+        "feedback": "Accounting Stop is a RADIUS session event, not the fingerprint-change event."
+      },
+      {
+        "text": "FortiLink Member Down.",
+        "correct": false,
+        "feedback": "FortiLink state is unrelated to the endpoint identity records."
+      },
+      {
+        "text": "Host Registration Timeout.",
+        "correct": false,
+        "feedback": "The event is not defined as a registration timeout."
+      }
+    ]
+  }
+]
