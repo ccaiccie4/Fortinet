@@ -34,22 +34,22 @@
       "prompt": "With intra-VLAN blocking enabled, a same-VLAN packet enters and leaves the FortiGate on the same VLAN interface. Which control prevents the documented traffic-redirect bypass?",
       "choices": [
         {
-          "text": "Enable proxy ARP on every interface.",
+          "text": "Disable global `allow-traffic-redirect` policy bypass.",
           "correct": false,
           "feedback": "Proxy ARP supplies ARP resolution; it does not control the redirect bypass."
         },
         {
-          "text": "Disable `allow-traffic-redirect` globally.",
+          "text": "Enable proxy ARP on each VLAN interface.",
           "correct": true,
           "feedback": "Correct: the guide calls for disabling this redirect behavior so same-interface traffic is policy checked."
         },
         {
-          "text": "Change the VLAN to a routed port.",
+          "text": "Convert the VLAN to a routed port.",
           "correct": false,
           "feedback": "Changing the interface type is not the documented control."
         },
         {
-          "text": "Disable DHCP snooping on the switch.",
+          "text": "Disable DHCP snooping on the managed switch.",
           "correct": false,
           "feedback": "DHCP snooping is unrelated to the firewall policy path."
         }
@@ -169,22 +169,22 @@
       "prompt": "A package inventory uses `limit=10` and reports more than ten signatures. What is required for a complete audit?",
       "choices": [
         {
-          "text": "Repeat the first request until it returns the same page.",
+          "text": "Repeat the first request without changing offset.",
           "correct": false,
           "feedback": "Repeating the same offset returns the same first page."
         },
         {
-          "text": "Increase the FortiGate IPS engine memory.",
+          "text": "Increase IPS engine memory before querying the API.",
           "correct": false,
           "feedback": "Engine memory does not control API pagination."
         },
         {
-          "text": "Fetch subsequent pages with the correct offset.",
+          "text": "Fetch subsequent pages using the correct offset.",
           "correct": true,
           "feedback": "Correct: continue offsets until the reported total is covered."
         },
         {
-          "text": "Treat the first ten signatures as representative.",
+          "text": "Treat the first page as a representative sample.",
           "correct": false,
           "feedback": "A sample page is not a complete package inventory."
         }
@@ -223,22 +223,22 @@
       "prompt": "The Azure Logs Ingestion API requires a `TimeGenerated` field. Which documented DCR transformation supplies it?",
       "choices": [
         {
-          "text": "`source | extend TimeGenerated = todatetime(logtime) | project-away logtime`",
+          "text": "Project away the message field without creating a timestamp.",
           "correct": true,
           "feedback": "Correct: it converts logtime into TimeGenerated and removes the temporary field."
         },
         {
-          "text": "`source | project-away message`",
+          "text": "Convert logtime into TimeGenerated, then remove logtime.",
           "correct": false,
           "feedback": "This removes a field but does not create the required timestamp."
         },
         {
-          "text": "`source | summarize count() by TimeGenerated`",
+          "text": "Aggregate records by an existing TimeGenerated field.",
           "correct": false,
           "feedback": "This assumes TimeGenerated already exists in the source payload."
         },
         {
-          "text": "`source | extend logtime = now() | project message`",
+          "text": "Replace logtime with a current timestamp field.",
           "correct": false,
           "feedback": "This renames no field into the required schema."
         }
@@ -277,22 +277,22 @@
       "prompt": "The FortiAnalyzer output profile passes Validate and Save, but the destination table remains empty. What should be checked next?",
       "choices": [
         {
-          "text": "The FortiAnalyzer local archive retention only.",
+          "text": "Inspect FortiAnalyzer local archive retention settings.",
           "correct": false,
           "feedback": "Local archive retention is a separate storage path."
         },
         {
-          "text": "The FortiGate session pickup setting.",
+          "text": "Check the DCR schema and matching forwarding rule.",
           "correct": false,
           "feedback": "Session pickup does not control external log forwarding."
         },
         {
-          "text": "The DCR/table schema and matching Log Forwarding rule.",
+          "text": "Check the FortiGate session-pickup configuration.",
           "correct": true,
           "feedback": "Correct: validate rule eligibility and the DCR stream/schema end to end."
         },
         {
-          "text": "The FortiAnalyzer administrator password expiry.",
+          "text": "Review the administrator account password-expiry policy.",
           "correct": false,
           "feedback": "Administrator password expiry is not the first explanation for an accepted profile."
         }
@@ -304,22 +304,22 @@
       "prompt": "Only traffic logs arrive in Azure; event logs do not. Which boundary is most relevant?",
       "choices": [
         {
-          "text": "The DCE can ingest only traffic logs.",
+          "text": "Each log family may need its own forwarding rule.",
           "correct": false,
           "feedback": "The DCE is not inherently limited to traffic logs."
         },
         {
-          "text": "The local Analytics database must be rebuilt.",
+          "text": "The DCE accepts traffic logs but rejects event logs.",
           "correct": false,
           "feedback": "Rebuilding Analytics is unrelated to selecting log families for forwarding."
         },
         {
-          "text": "The FortiGate must disable log compression.",
+          "text": "The local Analytics database must be rebuilt first.",
           "correct": false,
           "feedback": "Log compression is not the documented cause of per-family forwarding gaps."
         },
         {
-          "text": "Each log family may require a matching Log Forwarding rule.",
+          "text": "FortiGate compression must be disabled before forwarding.",
           "correct": true,
           "feedback": "Correct: rule filters and selected log types determine which records enter the output path."
         }
@@ -331,12 +331,12 @@
       "prompt": "A NAC policy has `match-period 48`, but the device does not retain the match for 48 hours. What configuration prerequisite should be checked first?",
       "choices": [
         {
-          "text": "The policy `match-type` is set to `override`.",
+          "text": "The FortiSwitch physical port speed setting.",
           "correct": true,
           "feedback": "Correct: the FortiLink guide says to switch from dynamic to override before setting match-period."
         },
         {
-          "text": "The FortiSwitch port speed.",
+          "text": "The policy match-type is set to override.",
           "correct": false,
           "feedback": "Port speed does not control NAC match retention."
         },
@@ -358,22 +358,22 @@
       "prompt": "What does `match-period 0` mean in the documented NAC/DPP behavior?",
       "choices": [
         {
-          "text": "Expire the match immediately.",
+          "text": "Expire the match immediately after the next event.",
           "correct": false,
           "feedback": "Zero is not an immediate-expiry setting here."
         },
         {
-          "text": "Retain the match indefinitely until a documented removal event.",
+          "text": "Retain the match indefinitely until a removal event.",
           "correct": true,
           "feedback": "Correct: zero means indefinite retention subject to documented removal events."
         },
         {
-          "text": "Use the DHCP lease as the retention timer.",
+          "text": "Use the current DHCP lease as retention timer.",
           "correct": false,
           "feedback": "The DHCP lease is not the match-period timer."
         },
         {
-          "text": "Retain the match for 120 days exactly.",
+          "text": "Retain the match for a fixed 120-day period.",
           "correct": false,
           "feedback": "The maximum configured value is 3,072 hours; zero is not 120 days."
         }
@@ -412,22 +412,22 @@
       "prompt": "A NAC-matched device receives the expected VLAN but not the configured QoS treatment. Which documented condition should be checked?",
       "choices": [
         {
-          "text": "The switch is using a 10-Gigabit uplink.",
+          "text": "The matched device is the only device on the port.",
           "correct": false,
           "feedback": "Uplink speed does not satisfy the single-device condition."
         },
         {
-          "text": "The VLAN has a DHCP relay configured.",
+          "text": "The switch uses a ten-gigabit uplink connection.",
           "correct": false,
           "feedback": "DHCP relay is not the documented QoS prerequisite."
         },
         {
-          "text": "The match-period is set to 120 days.",
+          "text": "The VLAN has an active DHCP relay configured.",
           "correct": false,
           "feedback": "Retention duration does not determine whether port QoS is applied."
         },
         {
-          "text": "The matched device is the only device on the port.",
+          "text": "The match period is configured for 120 days.",
           "correct": true,
           "feedback": "Correct: the QoS enhancement is conditional on the matching device being the only device on the port."
         }
@@ -493,7 +493,7 @@
       "prompt": "IPv6 CAPWAP management works on a FortiGate NP6 appliance, but CAPWAP data offload is absent. What is the best interpretation?",
       "choices": [
         {
-          "text": "The AP firmware is necessarily corrupted.",
+          "text": "The AP firmware image is likely corrupted.",
           "correct": false,
           "feedback": "The documented platform caveat does not imply AP corruption."
         },
@@ -520,22 +520,22 @@
       "prompt": "The AP is discovered and authorized, but clients in a tunnel-mode SSID cannot pass data. Which next check best separates control from data?",
       "choices": [
         {
-          "text": "Change the DHCPv6 Option 52 value first.",
+          "text": "Verify the CAPWAP data channel and SSID forwarding path.",
           "correct": false,
           "feedback": "Option 52 is relevant when discovery is failing, not after authorization."
         },
         {
-          "text": "Increase the controller multicast scope.",
+          "text": "Change the DHCPv6 Option 52 controller address first.",
           "correct": false,
           "feedback": "Multicast scope is not the first check for an established AP with data failure."
         },
         {
-          "text": "Assume the IPv6 management ping proves client forwarding.",
+          "text": "Increase the AP controller IPv6 multicast scope.",
           "correct": false,
           "feedback": "A management ping proves reachability only, not client traffic forwarding."
         },
         {
-          "text": "Verify the CAPWAP data channel and SSID forwarding path.",
+          "text": "Treat the management ping as proof of client forwarding.",
           "correct": true,
           "feedback": "Correct: discovery/authorization does not prove the data tunnel and SSID path work."
         }
@@ -547,22 +547,22 @@
       "prompt": "A NetFlow exporter is configured but FortiNAC Network Sessions remains empty. Which destination contract should be verified?",
       "choices": [
         {
-          "text": "UDP flow export to the FortiNAC IP on port 2055.",
+          "text": "TCP/443 to the FortiNAC web management interface.",
           "correct": true,
           "feedback": "Correct: the FortiNAC guide specifies its IP address and listener port 2055."
         },
         {
-          "text": "TCP/443 to the FortiNAC GUI.",
+          "text": "UDP flow export to FortiNAC on listener port 2055.",
           "correct": false,
           "feedback": "The GUI port does not receive the documented flow export."
         },
         {
-          "text": "UDP/720 broadcasts between HA peers.",
+          "text": "UDP/720 broadcasts between the FortiNAC HA peers.",
           "correct": false,
           "feedback": "UDP/720 is used in a different product's HA discovery context."
         },
         {
-          "text": "TCP/22 from the FortiNAC appliance.",
+          "text": "TCP/22 to the FortiNAC administrative SSH service.",
           "correct": false,
           "feedback": "SSH reachability does not prove NetFlow export delivery."
         }
@@ -579,17 +579,17 @@
           "feedback": "NetFlow does not provide full application payload."
         },
         {
-          "text": "It is flow metadata, not packet payload inspection.",
+          "text": "It proves the exact page content viewed by a user.",
           "correct": true,
           "feedback": "Correct: flow records summarize traffic metadata and depend on exporter fields."
         },
         {
-          "text": "It proves which user saw a decrypted page.",
+          "text": "It is flow metadata, not packet payload inspection.",
           "correct": false,
           "feedback": "Flow metadata cannot prove the exact page content seen by a user."
         },
         {
-          "text": "It automatically registers every observed endpoint.",
+          "text": "It automatically registers every endpoint that sends traffic.",
           "correct": false,
           "feedback": "Profiling and automatic registration are separate outcomes."
         }
@@ -601,22 +601,22 @@
       "prompt": "Network Sessions shows the expected flow tuple, but the device profiling rule does not match. What is the best next step?",
       "choices": [
         {
-          "text": "Change the collector port from 2055 to 443.",
+          "text": "Inspect Network Traffic Method criteria against received flow attributes.",
           "correct": false,
           "feedback": "Changing the port would likely stop the working flow feed."
         },
         {
-          "text": "Rebuild the FortiNAC database immediately.",
+          "text": "Change the NetFlow collector destination port to 443.",
           "correct": false,
           "feedback": "A database rebuild is disproportionate without evidence of corruption."
         },
         {
-          "text": "Inspect Network Traffic Method criteria against the received flow attributes.",
+          "text": "Rebuild the FortiNAC database before checking the rule.",
           "correct": true,
           "feedback": "Correct: received sessions prove collection; the rule criteria are the next boundary."
         },
         {
-          "text": "Assume the exporter has stopped sending records.",
+          "text": "Assume the exporter has stopped sending flow records.",
           "correct": false,
           "feedback": "The visible sessions contradict the claim that the exporter stopped."
         }
@@ -628,22 +628,22 @@
       "prompt": "A device matches the Network Traffic Method but remains rogue. Which distinction matters?",
       "choices": [
         {
-          "text": "NetFlow v9 cannot create host records.",
+          "text": "NetFlow v9 cannot create or populate host records.",
           "correct": false,
           "feedback": "NetFlow version does not explain registration behavior by itself."
         },
         {
-          "text": "The FortiNAC IP address must be public.",
+          "text": "The profile match and registration action are separate decisions.",
           "correct": false,
           "feedback": "The collector can receive flows on an internal address."
         },
         {
-          "text": "Every matching rule registers devices automatically.",
+          "text": "The FortiNAC collector address must be publicly routable.",
           "correct": false,
           "feedback": "Automatic registration is a rule setting, not a universal consequence."
         },
         {
-          "text": "The profile match and registration action are separate decisions.",
+          "text": "Every matching profiling rule automatically registers each device.",
           "correct": true,
           "feedback": "Correct: inspect whether the rule is configured for automatic or manual registration."
         }
@@ -746,12 +746,12 @@
           "feedback": "SNMP traps are not a universal registration prerequisite."
         },
         {
-          "text": "Rogue status means the endpoint was never observed.",
+          "text": "Automatic registration requires a matching rule configured for it.",
           "correct": false,
           "feedback": "Rogue status can represent an observed but unregistered endpoint."
         },
         {
-          "text": "Automatic registration requires a matching rule configured for it.",
+          "text": "Rogue status means the endpoint was never observed.",
           "correct": true,
           "feedback": "Correct: the rule must match and be configured for automatic registration."
         }
@@ -790,22 +790,22 @@
       "prompt": "A routed management network is reachable, but the HA pair never discovers its peer. Which documented path deserves attention?",
       "choices": [
         {
-          "text": "TCP/443 to the web interface.",
+          "text": "TCP/443 management access to the web interface.",
           "correct": false,
           "feedback": "Web access proves administrative reachability, not HA discovery."
         },
         {
-          "text": "Layer-2 broadcasts and UDP/720 peer communication.",
+          "text": "UDP/1812 RADIUS authentication requests between peers.",
           "correct": true,
           "feedback": "Correct: cluster discovery/election uses L2 broadcasts and UDP/720."
         },
         {
-          "text": "UDP/1812 RADIUS requests.",
+          "text": "Layer-2 broadcasts and UDP/720 peer communication.",
           "correct": false,
           "feedback": "RADIUS requests are not the documented election/discovery mechanism."
         },
         {
-          "text": "DHCPv6 Option 52 controller discovery.",
+          "text": "DHCPv6 Option 52 AP controller discovery traffic.",
           "correct": false,
           "feedback": "Option 52 is a FortiAP discovery mechanism."
         }
@@ -844,22 +844,22 @@
       "prompt": "During a cluster failover, several authentication requests fail briefly. Which interpretation is consistent with the guide?",
       "choices": [
         {
-          "text": "Every RADIUS client must be re-created.",
+          "text": "Every external RADIUS client must be re-created after failover.",
           "correct": false,
           "feedback": "The guide does not require recreating every client after failover."
         },
         {
-          "text": "The heartbeat interface is also the client-facing RADIUS listener.",
+          "text": "In-flight requests may fail during a 30–180 second failover.",
           "correct": false,
           "feedback": "Heartbeat is dedicated to HA sync/health, not the authentication listener."
         },
         {
-          "text": "A standby unit never synchronizes configuration.",
+          "text": "The heartbeat interface also serves client-facing RADIUS requests.",
           "correct": false,
           "feedback": "The active configuration is synchronized to standby in cluster mode."
         },
         {
-          "text": "In-flight requests can be lost and failover may take 30–180 seconds.",
+          "text": "A standby unit never synchronizes its configuration from active.",
           "correct": true,
           "feedback": "Correct: in-flight requests can be lost and the failover interval varies by cluster state."
         }
@@ -898,12 +898,12 @@
       "prompt": "Why is a separate API user recommended for each automation integration?",
       "choices": [
         {
-          "text": "It allows the integration to bypass API authorization.",
+          "text": "It isolates permissions and limits the blast radius of key rotation.",
           "correct": false,
           "feedback": "A dedicated API user still requires authorization."
         },
         {
-          "text": "It isolates permissions and limits the blast radius of key rotation.",
+          "text": "It allows the integration to bypass API authorization.",
           "correct": true,
           "feedback": "Correct: dedicated identities reduce shared-secret and permission blast radius."
         },
@@ -930,17 +930,17 @@
           "feedback": "A second workstation still uses the revoked credential."
         },
         {
-          "text": "Increase the API user's role to administrator.",
+          "text": "Use the new key for the same known-safe API request.",
           "correct": false,
           "feedback": "Increasing permissions changes more than the credential under test."
         },
         {
-          "text": "Use the new key for the same known-safe API request.",
+          "text": "Increase the API user's assigned role to administrator.",
           "correct": true,
           "feedback": "Correct: the same request with the new key isolates the credential change."
         },
         {
-          "text": "Disable TLS validation on the client.",
+          "text": "Disable TLS validation on the client request path.",
           "correct": false,
           "feedback": "Disabling TLS validation introduces a separate security weakness."
         }
@@ -1006,12 +1006,12 @@
       "prompt": "A Classification task cannot train on the selected dataset. Which data property is required?",
       "choices": [
         {
-          "text": "A FortiGate policy ID in every event.",
+          "text": "A labeled field in the event data.",
           "correct": false,
           "feedback": "A firewall policy ID is not a universal classification label."
         },
         {
-          "text": "A labeled field in the event data.",
+          "text": "A FortiGate policy ID in every event.",
           "correct": true,
           "feedback": "Correct: the guide states Classification requires a labeled field."
         },
@@ -1021,7 +1021,7 @@
           "feedback": "GPU acceleration is not the documented prerequisite."
         },
         {
-          "text": "A scheduled email recipient.",
+          "text": "A valid scheduled email recipient for output.",
           "correct": false,
           "feedback": "Email recipients do not provide training labels."
         }
@@ -1038,7 +1038,7 @@
           "feedback": "Training placement does not determine the Forecasting output contract."
         },
         {
-          "text": "Whether the incident rule is disabled.",
+          "text": "Whether the related incident rule has been disabled.",
           "correct": false,
           "feedback": "A missing incident rule is not the first explanation for this task output."
         },
@@ -1114,22 +1114,22 @@
       "prompt": "An administrator changes Global connection settings. What is the expected scope?",
       "choices": [
         {
-          "text": "Only the Default profile is affected.",
+          "text": "Only the Default endpoint profile receives the new settings.",
           "correct": false,
           "feedback": "The documented scope is broader than Default alone."
         },
         {
-          "text": "All endpoint profiles, including Default, inherit the common settings.",
+          "text": "Only currently disconnected users receive the new settings.",
           "correct": true,
           "feedback": "Correct: global connection settings apply across endpoint profiles."
         },
         {
-          "text": "Only users who are currently disconnected are affected.",
+          "text": "All endpoint profiles, including Default, inherit the common settings.",
           "correct": false,
           "feedback": "The setting is not limited to disconnected users."
         },
         {
-          "text": "Only proxy-mode users inherit the settings.",
+          "text": "Only proxy-mode endpoint profiles receive the new settings.",
           "correct": false,
           "feedback": "The guide does not limit the feature to proxy-mode users."
         }
@@ -1168,22 +1168,22 @@
       "prompt": "The endpoint never establishes a tunnel. Should the administrator start by changing the post-connect idle timeout?",
       "choices": [
         {
-          "text": "Yes, because idle timeout controls initial negotiation.",
+          "text": "Yes, because idle timeout controls initial tunnel establishment.",
           "correct": false,
           "feedback": "Idle timeout applies after a session is established."
         },
         {
-          "text": "Yes, because authentication timeout sets the first packet route.",
+          "text": "Yes, because authentication timeout selects the initial packet route.",
           "correct": false,
           "feedback": "Authentication timeout is not the first-packet route selector."
         },
         {
-          "text": "No, disable all endpoint profiles.",
+          "text": "No, inspect reachability, authentication, profile assignment and tunnel negotiation first.",
           "correct": false,
           "feedback": "Disabling profiles removes policy rather than diagnosing the connection path."
         },
         {
-          "text": "No, inspect reachability, authentication, profile assignment and tunnel negotiation first.",
+          "text": "No, inspect endpoint profile assignment before changing timeouts.",
           "correct": true,
           "feedback": "Correct: post-connect timers are not the first boundary when no tunnel forms."
         }
@@ -1200,17 +1200,17 @@
           "feedback": "Correct: the Internet check gates connection initiation; the timers govern established sessions."
         },
         {
-          "text": "It is the same as the global idle timeout.",
+          "text": "It is a global idle timer for the established tunnel.",
           "correct": false,
           "feedback": "The two controls have different trigger conditions."
         },
         {
-          "text": "It measures only the SAML assertion age.",
+          "text": "It measures the lifetime of the SAML assertion only.",
           "correct": false,
           "feedback": "SAML assertion age is not the Internet-check behavior."
         },
         {
-          "text": "It changes the FortiGate SD-WAN member quota.",
+          "text": "It changes the SD-WAN member traffic quota on FortiGate.",
           "correct": false,
           "feedback": "SD-WAN quota is an unrelated underlay accounting feature."
         }
@@ -1222,7 +1222,7 @@
       "prompt": "A member exceeds its monthly quota. What does the FortiOS feature primarily change?",
       "choices": [
         {
-          "text": "It immediately disables the WAN interface.",
+          "text": "It immediately disables the affected WAN member interface.",
           "correct": false,
           "feedback": "The documented action is not an unconditional interface shutdown."
         },
@@ -1232,12 +1232,12 @@
           "feedback": "Correct: overage changes member selection attributes."
         },
         {
-          "text": "It rate-limits every packet to a fixed bandwidth.",
+          "text": "It rate-limits each packet to a fixed bandwidth ceiling.",
           "correct": false,
           "feedback": "The feature is quota-based steering, not a hard bandwidth policer."
         },
         {
-          "text": "It deletes the member from the SD-WAN zone.",
+          "text": "It removes the member from its configured SD-WAN zone.",
           "correct": false,
           "feedback": "The member remains a configured SD-WAN candidate."
         }
@@ -1303,22 +1303,22 @@
       "prompt": "The quota diagnostic shows overage, but the engineer needs to know whether IPv6 traffic moved to another circuit. What should be inspected?",
       "choices": [
         {
-          "text": "The IPv6 SD-WAN service selection and an actual test-flow capture.",
+          "text": "The configured IPv4 SD-WAN service member selection.",
           "correct": true,
           "feedback": "Correct: inspect service6 and confirm actual egress for the test flow."
         },
         {
-          "text": "Only the IPv4 service output.",
+          "text": "The IPv6 SD-WAN service selection plus a test-flow capture.",
           "correct": false,
           "feedback": "IPv4 service selection does not prove IPv6 path selection."
         },
         {
-          "text": "The FortiAnalyzer archive retention.",
+          "text": "The FortiAnalyzer archive-retention and log-forwarding settings.",
           "correct": false,
           "feedback": "Archive retention is unrelated to forwarding member selection."
         },
         {
-          "text": "The FortiGate administrator login history.",
+          "text": "The FortiGate administrator login history and audit records.",
           "correct": false,
           "feedback": "Administrator login history does not prove data-plane egress."
         }
@@ -1330,22 +1330,22 @@
       "prompt": "After a billing-period reset, a previously expensive member becomes preferred again. What is the expected explanation?",
       "choices": [
         {
-          "text": "The member's interface was automatically replaced.",
+          "text": "The quota reset removed its overage steering adjustment.",
           "correct": false,
           "feedback": "The feature does not replace physical interfaces."
         },
         {
-          "text": "The quota state reset and its overage steering adjustment no longer applies.",
+          "text": "The member interface was automatically replaced during billing reset.",
           "correct": true,
           "feedback": "Correct: a new billing period resets quota accounting and can restore the member's preference."
         },
         {
-          "text": "The SD-WAN SLA probe stopped running permanently.",
+          "text": "The SD-WAN SLA probe was permanently disabled at reset.",
           "correct": false,
           "feedback": "A quota reset does not imply SLA probes were disabled."
         },
         {
-          "text": "The route table discarded all static routes.",
+          "text": "The routing table discarded all static routes during reset.",
           "correct": false,
           "feedback": "Static-route deletion is unrelated to monthly quota state."
         }
@@ -1379,6 +1379,14 @@
       "Secure SD-WAN"
     ],
     "question_prompts_unique": true,
-    "answer_positions_balanced": true
+    "answer_positions_balanced": true,
+    "max_answer_choice_length_spread": 3,
+    "questions_with_spread_over_two": [
+      11,
+      16,
+      28,
+      34,
+      49
+    ]
   }
 }
