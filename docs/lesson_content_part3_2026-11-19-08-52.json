@@ -1,0 +1,182 @@
+[
+  {
+    "product": "FortiPAM",
+    "title": "API-key rotation is an immediate revocation event",
+    "version": "FortiPAM 1.9.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+      "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/what-s-new"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community incident about FortiPAM API-key rotation was verified; the lesson is based on the FortiPAM 1.9 administration guide.",
+    "sections": [
+      {
+        "heading": "API identity is an operational dependency",
+        "body": "FortiPAM API users provide non-interactive access for automation that reads or changes privileged-access configuration. The API key is therefore a live credential dependency for scripts, orchestration jobs, inventory collectors, and integrations. FortiPAM 1.9 documents an explicit key-regeneration operation in User Management > User List. The key behavior is important: regenerating an API user's key immediately revokes access for API consumers still using the old key. This is not a grace-period rotation in which both old and new secrets remain valid."
+      },
+      {
+        "heading": "Rotation transaction",
+        "body": "The administrator selects the API user, edits the user, opens the Details pane, chooses Re-generate API Key, and confirms Generate. FortiPAM creates a new key and immediately invalidates the old one. The security benefit is deterministic revocation: a leaked key stops working as soon as the operation completes. The operational cost is that every dependent consumer must be updated. If a shared API identity is used by multiple jobs, all of them are affected at once. A rotation should therefore be treated as a coordinated change with an owner, a consumer inventory, a maintenance window where appropriate, and a rollback plan that creates another new key rather than expecting the old key to work."
+      },
+      {
+        "heading": "Safe automation design",
+        "body": "Prefer a dedicated API user for each integration or trust boundary, with the minimum permissions needed for that integration. Keep the key in an approved secret manager and avoid embedding it in scripts, source control, logs, or diagnostic bundles. Before rotation, enumerate consumers and owners. Generate the new key, update the secret store, deploy it to the consumer, and run a read-only test request. Then verify that the old credential no longer authenticates. Do not publish the key in a report or include it in a ticket. If FortiPAM's API log view records the request, correlate the test by API user and time; keep the key value redacted."
+      },
+      {
+        "heading": "What verification proves",
+        "body": "A successful API request after deployment proves the consumer has adopted a working credential and still has sufficient permissions for that operation. A failed request from the old consumer after regeneration is consistent with immediate revocation, but a generic failure can also be caused by a bad URL, network path, or insufficient role. Test the same known-safe request with the new key and confirm the consumer reaches the intended API endpoint. If one integration succeeds and another fails, check whether the failing integration has a separate cached secret, environment variable, or deployment slot."
+      },
+      {
+        "heading": "Failure handling",
+        "body": "If a key is regenerated before all consumers are inventoried, expect an outage for those consumers. Do not weaken API permissions to make a broken integration work. Generate a replacement key, distribute it through the secret-management process, and update each consumer independently. If a key is suspected compromised, immediate regeneration is the correct revocation boundary; the availability impact should be handled through consumer updates, not by keeping the compromised credential valid. Record the key generation time, API user, consumer list, test results, and any failed integrations without recording the secret itself."
+      }
+    ],
+    "evidence": [
+      "A successful known-safe API request after rotation proves the new key is deployed and authorized for that operation.",
+      "A failed old-key request is consistent with immediate revocation but must be separated from network/permission failures.",
+      "API user and request timestamp provide audit correlation without exposing the key.",
+      "One working consumer does not prove every integration has updated its cached secret."
+    ],
+    "troubleshooting": [
+      "All consumers fail immediately after rotation: update secret-store values and restart/reload consumers that cache credentials.",
+      "Only one consumer fails: inspect its deployment slot, environment variable, secret version and API permissions.",
+      "Do not test by pasting the key into logs or tickets; use a read-only API operation.",
+      "If the key is compromised, do not restore the old key; issue a new one and update consumers."
+    ]
+  },
+  {
+    "product": "FortiSIEM",
+    "title": "Machine Learning Workbench: dataset, training, inference and incident outputs",
+    "version": "FortiSIEM 7.5.1 User Guide",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857/whats-new-in-7-0-0",
+      "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community scenario matching the Machine Learning Workbench lifecycle was verified; the lesson uses the FortiSIEM User Guide feature description.",
+    "sections": [
+      {
+        "heading": "The ML workflow is separate from a streaming rule",
+        "body": "FortiSIEM's Machine Learning Workbench builds models from event data already stored in FortiSIEM. The workflow is report → dataset → training → model → scheduled inference. A report selects and shapes the historical events used as training data. The selected task trains a model; an inference job then runs periodically and detects deviations or predicts values. Depending on the task, the result can create incidents or send email. This is different from an in-memory streaming rule that evaluates events as they arrive, and different again from a scheduled report-based rule that executes a rule query over a time interval."
+      },
+      {
+        "heading": "Supported tasks and output semantics",
+        "body": "The Workbench supports Regression, Classification, Anomaly Detection and Forecasting. Classification requires a labeled field in the event data; without labels, the model has no target class to learn. Forecasting sends email rather than creating incidents. Regression predicts a numeric value; classification selects a class; anomaly detection identifies deviations from learned behavior; forecasting estimates a future series. These outputs are not interchangeable. Before building a job, define the question and the event fields that can support it. A model trained on incomplete or poorly normalized data can produce mathematically valid but operationally misleading results."
+      },
+      {
+        "heading": "Execution placement and training behavior",
+        "body": "FortiSIEM documents local execution on the Supervisor/Worker cluster or execution on AWS. The supported tasks and algorithms differ by platform. In local mode, training and inference jobs are distributed across the Supervisor/Worker cluster, so either a Supervisor or Worker can execute the work. An administrator can select a specific algorithm or use Auto mode. Auto mode tries multiple algorithms and parameter sets to find a suitable combination, which can take longer than selecting one known algorithm. Training can be repeated periodically or on demand; model drift and source-data changes should be part of the lifecycle plan."
+      },
+      {
+        "heading": "Built-in login anomaly example",
+        "body": "The built-in login anomaly model uses a bipartite graph between users and workstations. A user node and workstation node are connected by a login edge; the edge weight represents the number of logins during a time interval. The model learns user-to-workstation patterns and dynamic peer groups, then identifies unusual edges. The included job uses a login report and the Bipartite Graph Edge Anomaly algorithm. It must be trained on the organization's own login history and scheduled for periodic inference. An alert is meaningful only in the context of the learned baseline, the selected time interval, and the identity/workstation data quality."
+      },
+      {
+        "heading": "Verification and operational tuning",
+        "body": "Verify the report dataset first: time range, event volume, required attributes, labels for classification, and expected user/workstation coverage. Then inspect training-job status and the selected algorithm/platform. After scheduling inference, confirm the job runs at the intended interval and produces the expected output type—incident or email. A missing incident is not proof that inference failed if the chosen task is Forecasting. A slow Auto-mode training run is not necessarily a cluster fault; it can reflect parameter search. If local jobs compete with ingestion or interactive analytics, review Supervisor/Worker resource use and the query/job schedule. Retrain when source schemas or user behavior materially change."
+      }
+    ],
+    "evidence": [
+      "A report-backed dataset proves the training input exists, not that it is representative.",
+      "Training completion proves a model was produced, not that it detects useful anomalies.",
+      "Inference job success plus its configured output type proves the job executed; Forecasting uses email, not incidents.",
+      "A login anomaly edge is a learned deviation, not a standalone proof of malicious access."
+    ],
+    "troubleshooting": [
+      "Classification job cannot train: verify a labeled field exists in the event dataset.",
+      "No incident appears: confirm the task output type; Forecasting sends email.",
+      "Training is slow in Auto mode: review algorithm/parameter search before assuming cluster failure.",
+      "Unexpected anomalies: inspect report time range, event normalization and user/workstation identity coverage."
+    ]
+  },
+  {
+    "product": "FortiSASE",
+    "title": "Global Cloud Security tunnel authentication and idle timeouts",
+    "version": "FortiSASE 26.1.107",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/360393/global-connection-settings",
+      "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/209451/endpoint-profiles"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching global tunnel timeout behavior was verified; the lesson uses the Feature Administration Guide.",
+    "sections": [
+      {
+        "heading": "Global scope versus endpoint-profile scope",
+        "body": "FortiSASE Global connection settings are common settings that apply to all endpoint profiles, including the Default profile. A change here is not limited to a single user group or custom profile. The Cloud Security tunnel exposes separate Authentication timeout and Idle timeout controls. Authentication timeout is the maximum age of the authenticated tunnel session: the user must reauthenticate when the duration expires, regardless of whether the session is active or idle. Idle timeout is inactivity-based: if no traffic is detected for the configured period, the user is signed out and must reauthenticate to reconnect."
+      },
+      {
+        "heading": "Two clocks, two symptoms",
+        "body": "The authentication timer measures elapsed session age; the idle timer measures absence of traffic. A user actively moving traffic can still hit the authentication timeout. A user with a valid, not-yet-aged session can be disconnected by the idle timeout if no traffic is detected. The documented authentication timeout range is 0 to 259,200 seconds (72 hours); the guide lists the idle timeout as a separate control. Do not diagnose both as generic VPN drops. Compare tunnel start/authentication time with last observed traffic and the configured values."
+      },
+      {
+        "heading": "Configuration and blast radius",
+        "body": "Navigate to Endpoint management > Endpoint profiles, then select Global connection settings from the toolbar. Review the Cloud Security tunnel advanced settings before editing. Because these settings apply across endpoint profiles, a global change can affect users in multiple groups at once. If different departments require different idle or authentication behavior, verify whether the intended control is global or belongs in the endpoint-profile configuration. Record the old values and test with a pilot group before changing a global timeout in production."
+      },
+      {
+        "heading": "Evidence and troubleshooting",
+        "body": "For a disconnect, capture the user's endpoint profile, tunnel start/authentication time, last traffic time, and the configured global values. A disconnect near the authentication timeout with continuous traffic is consistent with session-age expiry. A disconnect after inactivity is consistent with idle timeout. If the tunnel never establishes, these post-connect timers are not the first place to look; investigate Internet reachability, authentication, endpoint profile assignment, and tunnel negotiation. The November 18 autoconnect internet-check feature is a pre-connect readiness gate; this lesson concerns the lifetime of an established Cloud Security tunnel."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Timeouts are security and user-experience controls. Shorter authentication timeouts reduce the lifetime of an authenticated session but increase reauthentication frequency. Shorter idle timeouts release unused sessions sooner but can surprise users with intermittent traffic patterns. A value of zero is within the documented minimum, but confirm the release-specific behavior before treating it as disabled. Do not infer that a tunnel is healthy simply because the endpoint profile is assigned; verify the live tunnel and authentication lifecycle."
+      }
+    ],
+    "evidence": [
+      "Endpoint profile plus Global connection settings proves which global timer values apply.",
+      "Tunnel start/authentication time supports the authentication-timeout hypothesis.",
+      "Last traffic time supports the idle-timeout hypothesis.",
+      "A successful tunnel establishment is separate from post-connect timer behavior."
+    ],
+    "troubleshooting": [
+      "Disconnect while active: compare session age with Authentication timeout.",
+      "Disconnect after inactivity: compare last traffic with Idle timeout.",
+      "Tunnel never connects: troubleshoot reachability/authentication/negotiation before post-connect timers.",
+      "Only one group affected: verify profile assignment and whether a global or profile-specific control changed."
+    ]
+  },
+  {
+    "product": "Secure SD-WAN",
+    "title": "Monthly traffic quota steering for cost-aware SD-WAN members",
+    "version": "FortiOS 8.0.0 SD-WAN New Features Guide",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/809588/control-sd-wan-interface-usage-based-on-monthly-traffic-volume-quota",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/770045/overview"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community scenario specifically matching monthly member quota steering was verified; the lesson uses the official SD-WAN New Features Guide.",
+    "sections": [
+      {
+        "heading": "Quota is a steering input, not a hard policer",
+        "body": "Some SD-WAN underlay circuits have a monthly volume allowance and charge overage fees after the allowance is consumed. FortiOS 8.0 adds a quota limit, billing start day, and overage behavior to SD-WAN members. When accumulated volume on a member exceeds its quota during the billing period, FortiGate can adjust the member's cost, weight, or volume-ratio value so SD-WAN services prefer other members. This changes path selection; it does not inherently drop traffic or shape the interface to a fixed rate. The member remains an SD-WAN candidate, but its selection attributes change."
+      },
+      {
+        "heading": "Member-level accounting and reset",
+        "body": "The feature is configured under `config system sdwan` → `config members`. `quota-limit` is in gigabytes; `billing-start-day` defines the day of the month when volume accounting begins; `overage` enables or disables the overage action; `overage-cost`, `overage-weight`, and `overage-volume-ratio` define the values applied after the quota is exceeded. The documented billing start day range is 1–31. The next billing period resets the accumulated quota state and can make the preferred member attractive again. This means the calendar boundary is part of the forwarding design, not just an accounting report."
+      },
+      {
+        "heading": "Configuration example",
+        "body": "A member can be configured as follows:\n\nconfig system sdwan\n    config members\n        edit 1\n            set interface \"agg1\"\n            set quota-limit 200\n            set billing-start-day 1\n            set overage enable\n            set overage-cost 10\n            set overage-weight 1\n            set overage-volume-ratio 1\n        next\n    end\nend\n\nThe example uses 200 GB for illustration; use the actual provider allowance and billing contract. The Fortinet guide shows `diagnose sys sdwan bill member 1` for quota state. It also shows that SD-WAN services can remain in SLA mode while member cost changes. Therefore, health/SLA eligibility and quota-driven preference are separate inputs."
+      },
+      {
+        "heading": "Verification and evidence",
+        "body": "Use `diagnose sys sdwan bill member <id>` to inspect quota limit, overage enablement, reset day, current bytes, billing-start bytes, used bytes since billing day, and the overage cost/weight/volume-ratio values. Then inspect `diagnose sys sdwan service4` and `service6` to see which members are selected for IPv4 and IPv6 services. A billing diagnostic showing the quota exceeded proves the member's accounting state; it does not prove all services have moved away from it. The SD-WAN service output shows the selected members for the specific service, and a packet sniffer confirms the actual egress interface for the test flow."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Quota steering depends on the member being used by the relevant SD-WAN services and on the chosen cost/weight/volume-ratio behavior. A high SLA score does not necessarily override the configured overage adjustment in the same way for every service mode; verify the service's selection strategy. Configure both IPv4 and IPv6 services deliberately. Fortinet documents HA support for traffic billing and steering, but validate that the active/standby pair is on a compatible release and that quota state is consistent after failover. Monitor the billing reset day and provider contract; a mismatch can cause traffic to remain on the expensive path or move away too early."
+      }
+    ],
+    "evidence": [
+      "`diagnose sys sdwan bill member` proves the member's quota and overage accounting state.",
+      "`diagnose sys sdwan service4/service6` proves selected members for those service objects.",
+      "A sniffer on the test flow proves actual egress, not the entire site's traffic distribution.",
+      "Quota overage changes steering attributes; it is not proof of a hard drop or rate limit."
+    ],
+    "troubleshooting": [
+      "Quota exceeded but path unchanged: inspect overage enablement, cost/weight/volume-ratio and SD-WAN service strategy.",
+      "Unexpected reset: verify billing-start-day and provider billing cycle.",
+      "IPv4 moved but IPv6 did not: inspect service6 separately.",
+      "Quota counter differs from ISP invoice: compare FortiGate accounting scope and provider measurement interval."
+    ]
+  }
+]
