@@ -11,7 +11,7 @@
   "discovery_before_topic_selection": true,
   "topic_selection_started": false,
   "generation_started": false,
-  "generation_started_after_inventory_publication": false,
+  "generation_started_after_inventory_publication": true,
   "provenance": {
     "previous_inventory_path": "docs/exclusion_inventory_2026-11-18-08-38.json",
     "previous_inventory_sha": "63ce418b47dcf993b02d907486f70254f79f4c63",
@@ -19,7 +19,7 @@
     "added_report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
     "added_report_sha": "bf10ab57fa55a178e3a66ea4181b4d58da7bd1bf",
     "added_selected_fingerprints_path": "docs/selected_fingerprints_2026-11-18-08-38.json",
-    "method": "Reconciled the prior 330-record inventory with a direct fetch and inspection of every published report artifact in the October 20–November 18 window. Independently fetched the November 18 report, inspected all twelve lesson sections and source links, and added its twelve complete semantic fingerprints. The current inventory is published and read back before new topic selection.",
+    "method": "Directly fetched and inspected all 30 published report/status HTML artifacts in the October 20–November 18 window, including each report's lesson navigation, full lesson sections, primary links, scenario links and diagrams. Reconciled the 330 prior records with the November 18 report's twelve complete fingerprints. Removed 18 exam-question pseudo-records and three navigation/audit headings from lesson records; retained the October 26 status-only candidate topics as anti-repeat signals and restored their primary/scenario URLs from the published source table. Added the documented FortiAuthenticator docs2 URL and FortiNAC-F Mist integration guide URL where original records had not captured them.",
     "direct_report_fetches_completed": true,
     "actual_report_artifacts_inspected": 30
   },
@@ -206,7 +206,7 @@
     }
   ],
   "actual_report_artifact_count": 30,
-  "historical_lesson_record_count": 342,
+  "historical_lesson_record_count": 333,
   "required_fields": [
     "product",
     "lesson_subject",
@@ -1137,229 +1137,249 @@
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiAnalyzer",
-      "lesson_subject": "Scheduled log aggregation between FortiAnalyzer appliances",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiAnalyzer Security Rating Update: license-gated compliance report pipeline",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/201528/security-rating-update",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/168368/fortiguard-services"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-fsbp-security-rating-report-populate-no-data-219992",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:scheduled-log-aggregation-between-fortianalyzer-appliances",
+      "feature_mechanism_fingerprint": "fortianalyzer-rating-license-log-parser-siemdb-rhsp",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:scheduled-log-aggregation-between-fortianalyzer-appliances",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/201528/security-rating-update ; https://docs.fortinet.com/document/fortianalyzer/7.6.6/administration-guide/168368/fortiguard-services. Scenario source(s): https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-fsbp-security-rating-report-populate-no-data-219992. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiAP/Wireless",
-      "lesson_subject": "Wi-Fi 7 Multi-Link Operation prerequisites and radio support",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiAP/Wireless 6 GHz channel utilization: airtime, regulatory power, and client discovery",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/13665/whats-new-in-this-release",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799/creating-a-fortiap-profile"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/technical-tip-low-rssi-observed-on-the-6-ghz-band-with-fortiap-devices-g-and-k-series-226685",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:wi-fi-7-multi-link-operation-prerequisites-and-radio",
+      "feature_mechanism_fingerprint": "fortiap-6ghz-utilization-psd-psc-rnr-discovery",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:wi-fi-7-multi-link-operation-prerequisites-and-radio",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/13665/whats-new-in-this-release ; https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799/creating-a-fortiap-profile. Scenario source(s): https://community.fortinet.com/fortiap-5/technical-tip-low-rssi-observed-on-the-6-ghz-band-with-fortiap-devices-g-and-k-series-226685. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiAuthenticator",
-      "lesson_subject": "SAML service-provider group filters and multi-value assertion attributes",
-      "primary_url": null,
+      "lesson_subject": "FortiAuthenticator LDAP remote user sync: filter semantics and empty-result deletion risk",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/987701/remote-user-sync-rules-ldap",
       "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-remote-user-sync-rule-log-reading-and-troubleshooting-197979",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:saml-service-provider-group-filters-and-multi-value-assertion",
+      "feature_mechanism_fingerprint": "fortiauthenticator-ldap-filter-empty-response-delete-guard",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:saml-service-provider-group-filters-and-multi-value-assertion",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/987701/remote-user-sync-rules-ldap. Scenario source(s): https://community.fortinet.com/fortiauthenticator-8/technical-tip-remote-user-sync-rule-log-reading-and-troubleshooting-197979. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiGate",
-      "lesson_subject": "DHCP Option 82 address assignment and relay identity matching",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiGate Encrypted DNS over QUIC/HTTP/3: listener modes and inspection boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/960561/fortigate-dns-server",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/42181/dns-over-tls-and-https"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-change-in-quic-handling-behavior-from-v7-4-2-205008",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:dhcp-option-82-address-assignment-and-relay-identity-matching",
+      "feature_mechanism_fingerprint": "fortigate-encrypted-dns-listener-mode-certificate-quic-inspection",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:dhcp-option-82-address-assignment-and-relay-identity-matching",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/960561/fortigate-dns-server ; https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/42181/dns-over-tls-and-https. Scenario source(s): https://community.fortinet.com/fortigate-3/technical-tip-change-in-quic-handling-behavior-from-v7-4-2-205008. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiManager",
-      "lesson_subject": "Automatic post-install CLI scripts and running-versus-managed configuration",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiManager Firmware templates: ordered upgrades, schedule windows, and HA guards",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/302126/firmware-templates",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/360034/creating-firmware-templates",
+        "https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/630513/upgrading-firmware"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-fortimanager-did-not-initiate-a-firmware-upgrade-for-a-fortigate-offline-212915",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:automatic-post-install-cli-scripts-and-running-versus-managed",
+      "feature_mechanism_fingerprint": "fortimanager-firmware-template-sequence-window-ha-guard",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:automatic-post-install-cli-scripts-and-running-versus-managed",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/302126/firmware-templates ; https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/360034/creating-firmware-templates ; https://docs.fortinet.com/document/fortimanager/7.6.7/administration-guide/630513/upgrading-firmware. Scenario source(s): https://community.fortinet.com/fortimanager-27/troubleshooting-tip-fortimanager-did-not-initiate-a-firmware-upgrade-for-a-fortigate-offline-212915. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiNAC",
-      "lesson_subject": "Security-event normalization, rule precedence, and host containment",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiNAC Device profiling rules: ranked evidence, early termination, and registration outcome",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/510340/device-profiling-rules",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/185068/best-practices"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-dhcp-fingerprint-profiling-for-operating-system-os-device-profiling-rule-108343",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:security-event-normalization-rule-precedence-and-host-containment",
+      "feature_mechanism_fingerprint": "fortinac-ranked-profiling-evidence-early-termination-registration",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:security-event-normalization-rule-precedence-and-host-containment",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/510340/device-profiling-rules ; https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/185068/best-practices. Scenario source(s): https://community.fortinet.com/fortinac-28/technical-tip-dhcp-fingerprint-profiling-for-operating-system-os-device-profiling-rule-108343. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiNAC-F",
-      "lesson_subject": "External Only event-forwarding behavior and version-specific defect",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiNAC-F RADIUS-only device support: selectors and legacy-mode boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.7/support-for-radius-only-devices/418014/step-6-create-configuration-selectors",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/configure-fortinac-radius-server-for-device-integration/24304/configure-the-appropriate-server-option-vf7-4"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fortinac-7-6-7-showing-radius-not-enabled-on-device-this-error-229403",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:external-only-event-forwarding-behavior-and-version-specific-defect",
+      "feature_mechanism_fingerprint": "fortinac-f-radius-only-selector-legacy-mode-mab-eap",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:external-only-event-forwarding-behavior-and-version-specific-defect",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortinac-f/7.6.7/support-for-radius-only-devices/418014/step-6-create-configuration-selectors ; https://docs.fortinet.com/document/fortinac-f/7.6.0/configure-fortinac-radius-server-for-device-integration/24304/configure-the-appropriate-server-option-vf7-4. Scenario source(s): https://community.fortinet.com/support-forum-92/fortinac-7-6-7-showing-radius-not-enabled-on-device-this-error-229403. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiPAM",
-      "lesson_subject": "Target-only secret templates and Web Launcher behavior",
-      "primary_url": null,
-      "additional_primary_urls": [],
+      "lesson_subject": "FortiPAM Secret Gateway Chaining: reverse connections across segmented target networks",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide"
+      ],
       "scenario_community_url": null,
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:target-only-secret-templates-and-web-launcher-behavior",
+      "feature_mechanism_fingerprint": "fortipam-secret-gateway-chain-root-identity-reverse-service",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:target-only-secret-templates-and-web-launcher-behavior",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new ; https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide. Scenario source(s): none verified. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiSASE",
-      "lesson_subject": "API-based CASB Data Protection, file-activity rules, and OCR",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "lesson_subject": "FortiSASE ZTNA posture-tag sharing when FortiClient EMS is unreachable",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/420381/endpoint-management-settings",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-release-notes/661728/whats-new"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortisase-58/technical-tip-enforcing-endpoint-compliance-in-fortisase-with-ztna-tags-for-forticlient-antivirus-and-os-versions-213746",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:api-based-casb-data-protection-file-activity-rules-and",
+      "feature_mechanism_fingerprint": "fortisase-direct-client-posture-tag-timeout-ztna-proxy",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:api-based-casb-data-protection-file-activity-rules-and",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/420381/endpoint-management-settings ; https://docs.fortinet.com/document/fortisase/26.1.107/feature-release-notes/661728/whats-new. Scenario source(s): https://community.fortinet.com/fortisase-58/technical-tip-enforcing-endpoint-compliance-in-fortisase-with-ztna-tags-for-forticlient-antivirus-and-os-versions-213746. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiSIEM",
-      "lesson_subject": "Incident clearing conditions and status semantics",
-      "primary_url": null,
-      "additional_primary_urls": [],
+      "lesson_subject": "FortiSIEM Custom Performance Monitors: object mapping, event-type contract, and activation",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/398283/working-with-custom-performance-monitors",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/328303/working-with-event-types",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/release-notes/385743/whats-new-in-7-5-1"
+      ],
       "scenario_community_url": null,
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:incident-clearing-conditions-and-status-semantics",
+      "feature_mechanism_fingerprint": "fortisiem-custom-performance-object-eventtype-apply-discovery",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:incident-clearing-conditions-and-status-semantics",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/398283/working-with-custom-performance-monitors ; https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/328303/working-with-event-types ; https://docs.fortinet.com/document/fortisiem/7.5.1/release-notes/385743/whats-new-in-7-5-1. Scenario source(s): none verified. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "FortiSwitch",
-      "lesson_subject": "STP root guard versus BPDU guard",
-      "primary_url": null,
+      "lesson_subject": "FortiSwitch LLDP-MED network policy: voice VLAN discovery on a shared access port",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/585556/lldp-med",
       "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-configure-voice-vlan-on-fortiswitch-142967",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:stp-root-guard-versus-bpdu-guard",
+      "feature_mechanism_fingerprint": "fortiswitch-lldp-med-voice-policy-tagged-vlan-dhcp",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:stp-root-guard-versus-bpdu-guard",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/585556/lldp-med. Scenario source(s): https://community.fortinet.com/fortigate-3/technical-tip-configure-voice-vlan-on-fortiswitch-142967. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-26",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-26-08-00.html",
       "product": "Secure SD-WAN",
-      "lesson_subject": "Interface migration, zone membership, and route/policy dependencies",
-      "primary_url": null,
+      "lesson_subject": "Secure SD-WAN Local-out routing: steering FortiGate-originated services through SD-WAN",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/848980/local-out-traffic",
       "additional_primary_urls": [],
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-route-local-out-traffic-via-secondary-isp-216382",
       "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "failed-draft candidate:interface-migration-zone-membership-and-route-policy-dependencies",
+      "feature_mechanism_fingerprint": "secure-sdwan-localout-auto-sdwan-specify-source-egress",
       "workflow_transaction_fingerprint": "Candidate topic listed in published status artifact; full validated lesson was not published.",
       "failure_class": "failed-draft candidate; do not treat as fully taught but avoid repeating without explicit semantic distinction",
       "evidence_pattern": "status artifact reports candidate only",
       "remediation_path": "Use as an anti-repeat signal; select a different mechanism and verify against source documentation.",
       "question_fingerprint": "failed-candidate:interface-migration-zone-membership-and-route-policy-dependencies",
       "diagram_topology_layout_fingerprint": "candidate-only; no validated diagram published",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
+      "source_excerpt": "Candidate-only status artifact. Primary source(s): https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/848980/local-out-traffic. Scenario source(s): https://community.fortinet.com/fortigate-3/technical-tip-how-route-local-out-traffic-via-secondary-isp-216382. Full lesson was not published.",
+      "classification": "candidate-only published status artifact; anti-repeat signal, not a completed lesson"
     },
     {
       "report_date": "2026-10-27",
@@ -1383,82 +1403,6 @@
     {
       "report_date": "2026-10-27",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAnalyzer",
-      "lesson_subject": "Q9 · FortiAnalyzer",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q9 · fortianalyzer",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q9 · fortianalyzer",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAnalyzer",
-      "lesson_subject": "Q10 · FortiAnalyzer",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q10 · fortianalyzer",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q10 · fortianalyzer",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAnalyzer",
-      "lesson_subject": "Q11 · FortiAnalyzer",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q11 · fortianalyzer",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q11 · fortianalyzer",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAnalyzer",
-      "lesson_subject": "Q12 · FortiAnalyzer",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q12 · fortianalyzer",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q12 · fortianalyzer",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
       "product": "FortiAP/Wireless",
       "lesson_subject": "FortiAP/Wireless — Rogue AP detection: RF observation, on-wire proof, and suppression",
       "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/501673/monitoring-rogue-aps",
@@ -1473,44 +1417,6 @@
       "question_fingerprint": "scenario:fortiap-wireless-rogue-ap-detection-rf-observation-on-wire; mechanism discrimination and evidence-boundary",
       "diagram_topology_layout_fingerprint": "topology:fortiap-wireless-rogue-ap-detection-rf-observation-on-wire; layout: feature-specific transaction/decision flow",
       "source_excerpt": "FortiAP/Wireless — Rogue AP detection: RF observation, on-wire proof, and suppression Mechanism fingerprint: RF scanning plus LAN/Wi-Fi MAC correlation and monitoring-radio deauthentication RF visibility is not wired proof FortiAP can hear nearby APs, but a detected AP is not automatically a rogue. A neighbor may cause interference without being attached to the organization's wired network. On-wire detection compares MAC addresses observed on the LAN with clients/APs observed on Wi-Fi. Exact MAC matching works when client MACs are visible on the LAN; MAC-adjacency can help when a rogue AP performs NAT because wireless and Ethernet MACs may be numerically close. The default adjacency value is",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAP/Wireless",
-      "lesson_subject": "Q17 · FortiAP/Wireless",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q17 · fortiap/wireless",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q17 · fortiap/wireless",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiAP/Wireless",
-      "lesson_subject": "Q18 · FortiAP/Wireless",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q18 · fortiap/wireless",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q18 · fortiap/wireless",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
       "classification": "historical published lesson"
     },
     {
@@ -1554,82 +1460,6 @@
     {
       "report_date": "2026-10-27",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiGate",
-      "lesson_subject": "Q1 · FortiGate",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q1 · fortigate",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q1 · fortigate",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiGate",
-      "lesson_subject": "Q2 · FortiGate",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q2 · fortigate",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q2 · fortigate",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiGate",
-      "lesson_subject": "Q3 · FortiGate",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q3 · fortigate",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q3 · fortigate",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiGate",
-      "lesson_subject": "Q4 · FortiGate",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q4 · fortigate",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q4 · fortigate",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
       "product": "FortiManager",
       "lesson_subject": "FortiManager — Policy Blocks: reusable rule sets and installation-target boundaries",
       "primary_url": "https://docs.fortinet.com/document/fortimanager/7.6.6/administration-guide/17746/using-policy-blocks",
@@ -1644,82 +1474,6 @@
       "question_fingerprint": "scenario:fortimanager-policy-blocks-reusable-rule-sets-and-installation-target; mechanism discrimination and evidence-boundary",
       "diagram_topology_layout_fingerprint": "topology:fortimanager-policy-blocks-reusable-rule-sets-and-installation-target; layout: feature-specific transaction/decision flow",
       "source_excerpt": "FortiManager — Policy Blocks: reusable rule sets and installation-target boundaries Mechanism fingerprint: independent Policy Block objects and Install On target selection Object model Policy Blocks hold multiple policies so they can be appended to a Policy Package together. FortiManager 7.6.6 documents firewall, proxy, and firewall virtual-wire-pair policies. The feature is hidden until enabled in Policy & Objects → Tools → Feature Visibility → Policy Block. A copied policy becomes an independent object: editing or deleting the original package policy does not update the copy in the block. Targets and package attachment A block's contents and its installation target set are separate. A bloc",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiManager",
-      "lesson_subject": "Q5 · FortiManager",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q5 · fortimanager",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q5 · fortimanager",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiManager",
-      "lesson_subject": "Q6 · FortiManager",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q6 · fortimanager",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q6 · fortimanager",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiManager",
-      "lesson_subject": "Q7 · FortiManager",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q7 · fortimanager",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q7 · fortimanager",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiManager",
-      "lesson_subject": "Q8 · FortiManager",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q8 · fortimanager",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q8 · fortimanager",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
       "classification": "historical published lesson"
     },
     {
@@ -1834,82 +1588,6 @@
       "question_fingerprint": "scenario:fortiswitch-ip-source-guard-and-dhcp-snooping-bindings-and; mechanism discrimination and evidence-boundary",
       "diagram_topology_layout_fingerprint": "topology:fortiswitch-ip-source-guard-and-dhcp-snooping-bindings-and; layout: feature-specific transaction/decision flow",
       "source_excerpt": "FortiSwitch — IP source guard and DHCP snooping: bindings and spoofing enforcement Mechanism fingerprint: per-port IPv4 allowlist from static MAC/IP bindings and DHCP snooping Mechanism and limits IP source guard permits IPv4 traffic on a protected port only when the source address matches a valid binding. Bindings can be static IP/MAC associations or dynamic entries learned through DHCP snooping. The feature is disabled by default and enabled per interface. Static entries take precedence when they conflict with dynamic entries. Fortinet documents a 2,048-entry maximum and notes that the feature does not work with VLAN translation. Configuration order Establish the DHCP snooping trust bounda",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiSwitch",
-      "lesson_subject": "Q13 · FortiSwitch",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q13 · fortiswitch",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q13 · fortiswitch",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiSwitch",
-      "lesson_subject": "Q14 · FortiSwitch",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q14 · fortiswitch",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q14 · fortiswitch",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiSwitch",
-      "lesson_subject": "Q15 · FortiSwitch",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q15 · fortiswitch",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q15 · fortiswitch",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
-      "classification": "historical published lesson"
-    },
-    {
-      "report_date": "2026-10-27",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-27-08-00.html",
-      "product": "FortiSwitch",
-      "lesson_subject": "Q16 · FortiSwitch",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "status/candidate anti-repeat:q16 · fortiswitch",
-      "workflow_transaction_fingerprint": "candidate/status-only artifact; full lesson may not have been published",
-      "failure_class": "candidate not verified as full lesson",
-      "evidence_pattern": "status artifact only",
-      "remediation_path": "Treat as anti-repeat candidate; verify against complete report before semantic comparison.",
-      "question_fingerprint": "status candidate:q16 · fortiswitch",
-      "diagram_topology_layout_fingerprint": "no verified lesson diagram",
-      "source_excerpt": "",
       "classification": "historical published lesson"
     },
     {
@@ -2202,7 +1880,7 @@
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-10-29-08-00.html",
       "product": "FortiAuthenticator",
       "lesson_subject": "SAML IdP signing-certificate auto-rotation: staged trust and timed cutover",
-      "primary_url": null,
+      "primary_url": "https://docs2.fortinet.com/document/fortiauthenticator/6.6.7/administration-guide/864572/general",
       "additional_primary_urls": [],
       "scenario_community_url": null,
       "additional_scenario_urls": [],
@@ -2655,7 +2333,9 @@
       "question_fingerprint": "separate profile construction from forwarding activation and remote ingestion acceptance",
       "diagram_topology_layout_fingerprint": "FortiAnalyzer profile/remote-server chain feeds Azure identity, endpoint, DCR transform, and custom table",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2672,7 +2352,9 @@
       "question_fingerprint": "separate AP management IPv6 from client IPv6 and daemon-restart symptoms from CAPWAP path proof",
       "diagram_topology_layout_fingerprint": "multicast and DHCPv6 discovery converge on controller; CAPWAP control/data then passes through platform offload gate",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2689,7 +2371,9 @@
       "question_fingerprint": "identify protocol transaction-order incompatibility rather than attempting to repair it with an authorization rule",
       "diagram_topology_layout_fingerprint": "TACACS+ client gate followed by authentication stage and separate authorization stage",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2706,7 +2390,9 @@
       "question_fingerprint": "identify the layer boundary represented by Active and error 107",
       "diagram_topology_layout_fingerprint": "route lookup → TCP handshake → BGP OPEN; route/filter/source/VPN branches",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2723,7 +2409,9 @@
       "question_fingerprint": "distinguish manager-side object validity from target-side parser and hardware support",
       "diagram_topology_layout_fingerprint": "one package fans out to heterogeneous targets; capability gate accepts supported models and rejects unsupported branch",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2740,7 +2428,9 @@
       "question_fingerprint": "distinguish missing EAP session state from bad credentials or a generic VLAN assignment error",
       "diagram_topology_layout_fingerprint": "supplicant/authenticator exchange with stateful RADIUS service and failure branch when a response has no matching live EAP context",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2757,7 +2447,9 @@
       "question_fingerprint": "distinguish local database row ID from cross-appliance GUID identity",
       "diagram_topology_layout_fingerprint": "FortiNAC Manager authoritative global object replicated to managed CAs; stale GUID branch blocks synchronization",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2774,7 +2466,9 @@
       "question_fingerprint": "distinguish device trust from API-user authentication and secret authorization",
       "diagram_topology_layout_fingerprint": "endpoint-to-EMS control plane plus endpoint-to-FortiPAM mTLS/API data path with separate identity gates",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2791,7 +2485,9 @@
       "question_fingerprint": "separate service-managed SASE tunnel from endpoint-managed custom tunnel and DNS preference",
       "diagram_topology_layout_fingerprint": "two independent IKEv2 tunnels controlled by endpoint profile; DNS priority selects Windows resolver interface order",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2808,7 +2504,9 @@
       "question_fingerprint": "identify which offline repository artifact and parameter each FortiSIEM component consumes",
       "diagram_topology_layout_fingerprint": "staging repository fans out to Supervisor/Manager, then Workers and Collectors in dependency order",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2825,7 +2523,9 @@
       "question_fingerprint": "distinguish advertisement/link failure from tracked-route failure",
       "diagram_topology_layout_fingerprint": "two switches share VIP/VMAC; tracked upstream destination drives priority reduction and role transition",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-01",
@@ -2842,7 +2542,9 @@
       "question_fingerprint": "distinguish usage quota steering from SLA failure and physical link-down",
       "diagram_topology_layout_fingerprint": "per-member usage counter and monthly reset feed overage decision that modifies member preference before SLA service selection",
       "record_origin": "parsed from actual published 2026-11-01 selected-fingerprint artifact and cross-checked against HTML lesson headings/source links",
-      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates."
+      "uniqueness_check": "Historical exclusion; must reject substantially equivalent current candidates.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-02",
@@ -3707,46 +3409,6 @@
       "report_date": "2026-11-05",
       "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-05-07-58.html",
       "report_sha": "8dfdbfdcb0bfd4b86c2135a317b70b01686ce60f",
-      "product": "FortiGate",
-      "lesson_subject": "Examination navigation",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "examination-navigation | ",
-      "workflow_transaction_fingerprint": "All 50 questions are graded together. Select one answer per question, choose Grade exam , then review the feedback attached to every answer choice. Unanswered questions score zero and still reveal the rationale. Go to the 50-question exam Review discovery and source coverage",
-      "failure_class": "Failure class described in the lesson body; full detail retained in report.",
-      "evidence_pattern": "Feature-specific verification/evidence described in the lesson body.",
-      "remediation_path": "Select one answer per question, choose Grade exam , then review the feedback attached to every answer choice.",
-      "question_fingerprint": "diagnostic discrimination for FortiGate / examination-navigation; distinguish feature state, transaction boundary, and evidence meaning",
-      "diagram_topology_layout_fingerprint": "lesson-specific flow/topology for examination-navigation; extracted from published report section; verify diagram asset if present",
-      "classification": "historical published lesson; parsed from actual GitHub default-branch HTML",
-      "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null."
-    },
-    {
-      "report_date": "2026-11-05",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-05-07-58.html",
-      "report_sha": "8dfdbfdcb0bfd4b86c2135a317b70b01686ce60f",
-      "product": "FortiManager",
-      "lesson_subject": "30-day exclusion and semantic uniqueness audit",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "30-day-exclusion-and-semantic-uniqueness-audit | ",
-      "workflow_transaction_fingerprint": "Before selecting these topics, the run inspected the actual published HTML reports in ccaiccie4/Fortinet/docs for the rolling window 2026-10-06 through 2026-11-04 . The machine-readable inventory contains 168 published lesson records and the required mechanism, workflow, failure, evidence, remediation, question and diagram fingerprints. Status-only artifacts from October 26 and October 27 were checked separately; they are not counted as published lessons. The selection guard rejected candidates whose underlying mechanism/workflow matched an earlier lesson, even where the candidate URL was different. All twelve selected fingerprints passed the comparison. The inventory was written and read back before lesson generation. Product Prior published lessons FortiGate 19 Secure SD-WAN 11 FortiAnalyzer 14 FortiSwitch 14 FortiAP/Wireless 15 FortiNAC 15 FortiNAC-F 12 FortiAuthenticator 13 FortiPAM 14 FortiSIEM 14 FortiSASE 14 FortiManager 13 Open machine-readable 30-day exclusion inventory · Open selected feature/workflow fingerprints LESSON 01 · FortiGate",
-      "failure_class": "The machine-readable inventory contains 168 published lesson records and the required mechanism, workflow, failure, evidence, remediation, question and diagram fingerprints. The selection guard rejected candidates whose underlying mechanism/workflow matched an earlier lesson, even where the candidate URL was different.",
-      "evidence_pattern": "The machine-readable inventory contains 168 published lesson records and the required mechanism, workflow, failure, evidence, remediation, question and diagram fingerprints. Status-only artifacts from October 26 and October 27 were checked separately; they are not counted as published lessons.",
-      "remediation_path": "Before selecting these topics, the run inspected the actual published HTML reports in ccaiccie4/Fortinet/docs for the rolling window 2026-10-06 through 2026-11-04 . The machine-readable inventory contains 168 published lesson records and the required mechanism, workflow, failure, evidence, remediation, question and diagram fingerprints. The selection guard rejected candidates whose underlying mechanism/workflow matched an earlier lesson, even where the candidate URL was different.",
-      "question_fingerprint": "diagnostic discrimination for FortiManager / 30-day-exclusion-and-semantic-uniqueness-audit; distinguish feature state, transaction boundary, and evidence meaning",
-      "diagram_topology_layout_fingerprint": "lesson-specific flow/topology for 30-day-exclusion-and-semantic-uniqueness-audit; extracted from published report section; verify diagram asset if present",
-      "classification": "historical published lesson; parsed from actual GitHub default-branch HTML",
-      "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null."
-    },
-    {
-      "report_date": "2026-11-05",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-05-07-58.html",
-      "report_sha": "8dfdbfdcb0bfd4b86c2135a317b70b01686ce60f",
       "product": "FortiNAC",
       "lesson_subject": "IGMP snooping, proxy, querier and multicast membership",
       "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173274/configuring-igmp-snooping-settings",
@@ -4017,7 +3679,7 @@
       "report_sha": "ff01a8a944077a409a207bf6a6e6d14a84b56b1c",
       "product": "FortiNAC-F",
       "lesson_subject": "FortiNAC-F Mist Service Connector: site polling, inventory creation and controlled migration",
-      "primary_url": null,
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/63149b63-75e0-11ef-8355-fa163e15d75b/FortiNAC-F-7.6.0-Juniper_Mist_Cloud_Integration_Guide.pdf",
       "additional_primary_urls": [],
       "scenario_community_url": null,
       "additional_scenario_urls": [],
@@ -4029,7 +3691,8 @@
       "question_fingerprint": "diagnostic discrimination for FortiNAC-F / fortinac-f-mist-service-connector-site-polling-inventory-creation-and-controlled-migration; distinguish feature state, transaction boundary, and evidence meaning",
       "diagram_topology_layout_fingerprint": "lesson-specific flow/topology for fortinac-f-mist-service-connector-site-polling-inventory-creation-and-controlled-migration; extracted from published report section; verify diagram asset if present",
       "classification": "historical published lesson; parsed from actual GitHub default-branch HTML",
-      "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null."
+      "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null.",
+      "source_excerpt": " Primary source: FortiNAC-F 7.6.0 Juniper Mist Cloud Integration Guide."
     },
     {
       "report_date": "2026-11-07",
@@ -4428,26 +4091,6 @@
       "remediation_path": "io Purpose and architecture FortiNAC-F's vulnerability-scanner integration imports results from Tenable Vulnerability Management or Qualys and associates those results with FortiNAC host records. The scanner performs the assessment; FortiNAC-F polls the vendor API, processes completed scan results, evaluates configured failure thresholds, emits events, and can translate those events into host-security actions. For Tenable, supply a display name, Request URL, and an authentication type.",
       "question_fingerprint": "diagnostic discrimination for FortiAuthenticator / fortinac-f-fortinac-f-7-6-3-vulnerability-scanner-integration-scan-thresholds-to-network-enforcement; distinguish feature state, transaction boundary, and evidence meaning",
       "diagram_topology_layout_fingerprint": "lesson-specific flow/topology for fortinac-f-fortinac-f-7-6-3-vulnerability-scanner-integration-scan-thresholds-to-network-enforcement; extracted from published report section; verify diagram asset if present",
-      "classification": "historical published lesson; parsed from actual GitHub default-branch HTML",
-      "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null."
-    },
-    {
-      "report_date": "2026-11-09",
-      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-09-08-29.html",
-      "report_sha": "e119a3f9f127ed4f381cd78aaa1ea11ce2a234ad",
-      "product": "FortiGate",
-      "lesson_subject": "Contents",
-      "primary_url": null,
-      "additional_primary_urls": [],
-      "scenario_community_url": null,
-      "additional_scenario_urls": [],
-      "feature_mechanism_fingerprint": "contents | ",
-      "workflow_transaction_fingerprint": "FortiGate — FortiOS 8.0 TLS 1.3 IPsec transport over TCP FortiManager — FortiManager 8.0 ADOM upgrade readiness and schema conversion FortiAnalyzer — FortiAnalyzer 8.0 FortiMQ connector and Cloud Fabric Feed enforcement FortiSwitch — FortiSwitch egress QoS: trust maps, queues and schedulers FortiAP/Wireless — FortiAP wireless packet sniffer and browser-streamed PCAP FortiNAC — FortiNAC 9.4 MDM service connectors: host registration, health state and polling fan-out FortiNAC-F — FortiNAC-F 7.6.3 vulnerability-scanner integration: scan thresholds to network enforcement FortiAuthenticator — FortiAuthenticator 8.0 REST API bulk local-user operations and request correlation FortiPAM — FortiPAM 1.9 JIT privilege through secret checkout/check-in FortiSIEM — FortiSIEM Supervisor HA PostgreSQL CMDB replication and Patroni timeline divergence FortiSASE — FortiSASE regional compliance, DNS geolocation and ordered tunnel failover Secure SD-WAN — FortiOS 8.0 scheduled SD-WAN speed tests and interface bandwidth bounds LESSON 01 · FortiOS 8.0.0",
-      "failure_class": "9 JIT privilege through secret checkout/check-in FortiSIEM — FortiSIEM Supervisor HA PostgreSQL CMDB replication and Patroni timeline divergence FortiSASE — FortiSASE regional compliance, DNS geolocation and ordered tunnel failover Secure SD-WAN — FortiOS 8.",
-      "evidence_pattern": "Feature-specific verification/evidence described in the lesson body.",
-      "remediation_path": "Remediation path described in the lesson body; consult the linked report section.",
-      "question_fingerprint": "diagnostic discrimination for FortiGate / contents; distinguish feature state, transaction boundary, and evidence meaning",
-      "diagram_topology_layout_fingerprint": "lesson-specific flow/topology for contents; extracted from published report section; verify diagram asset if present",
       "classification": "historical published lesson; parsed from actual GitHub default-branch HTML",
       "extraction_note": "Primary and scenario URLs extracted from links within the lesson's h2 section; missing links remain null."
     },
@@ -5823,7 +5466,8 @@
       "remediation_path": "check version-specific migration status and storage capacity; preserve archive; rebuild only per supported procedure and maintenance window",
       "question_fingerprint": "distinguish archive retention from analytics indexing and migration completion",
       "diagram_topology_layout_fingerprint": "FortiGate OFTP -> FortiAnalyzer archive files -> migration state -> ClickHouse analytics tables; PostgreSQL control metadata",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5842,7 +5486,8 @@
       "remediation_path": "align roaming consortium/NAI realm/provider settings, verify AP profile, capture ANQP and RADIUS exchange, validate returned policy",
       "question_fingerprint": "separate discovery advertisement from authentication and authorization",
       "diagram_topology_layout_fingerprint": "roaming client -> AP beacon/ANQP -> provider selection -> EAP/RADIUS WBA attributes -> WLAN authorization",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5859,7 +5504,8 @@
       "remediation_path": "verify supported agent/FAC versions and NTLM signing policy; collect agent/FAC logs; apply documented compatibility fix rather than weakening unrelated authentication",
       "question_fingerprint": "distinguish network transport from NTLM challenge/signing and FSSO mapping",
       "diagram_topology_layout_fingerprint": "Windows endpoint -> Mobility Agent -> FortiAuthenticator -> domain identity correlation -> FortiGate FSSO",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5878,7 +5524,8 @@
       "remediation_path": "verify license and DNS/server selection, compare RTT across servers, confirm service reachability and load-balancing configuration",
       "question_fingerprint": "distinguish reachability from selection quality; RTT preference versus load balancing",
       "diagram_topology_layout_fingerprint": "FortiGate -> FortiGuard server candidates -> RTT probes -> preferred/weighted selection -> service request",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5895,7 +5542,8 @@
       "remediation_path": "validate mapping scope and device assignment, update per-device credential/token, preview install and test access",
       "question_fingerprint": "shared user object versus per-device credential binding and target install",
       "diagram_topology_layout_fingerprint": "FortiManager user object -> per-device mapping -> branch FortiGate -> local authentication/token",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5914,7 +5562,8 @@
       "remediation_path": "validate provider credentials, endpoint, phone format, payload mapping, TLS and provider delivery logs",
       "question_fingerprint": "distinguish FortiNAC trigger, provider API acceptance and carrier delivery",
       "diagram_topology_layout_fingerprint": "FortiNAC notification -> REST SMS gateway -> HTTPS provider API -> carrier -> recipient",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5933,7 +5582,8 @@
       "remediation_path": "repair CA chain, allow CRL URLs, correct time/NTP and policy scope; retest agent and policy result",
       "question_fingerprint": "separate certificate possession from chain trust, revocation and time validity",
       "diagram_topology_layout_fingerprint": "endpoint agent certificate -> CA chain -> CRL service -> time validation -> FortiNAC-F compliance decision",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5950,7 +5600,8 @@
       "remediation_path": "verify association object, field mapping, reference lifecycle and access permissions; test with least-privileged user",
       "question_fingerprint": "target metadata versus source-of-truth credential indirection",
       "diagram_topology_layout_fingerprint": "target secret -> Smart Association -> credential secret -> launcher resolution -> privileged session",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5967,7 +5618,8 @@
       "remediation_path": "validate EAP-TTLS settings, LDAP CA/credentials/base DN, private path route and server reachability",
       "question_fingerprint": "outer IKE security association versus inner EAP-TTLS and LDAP identity check",
       "diagram_topology_layout_fingerprint": "FortiClient -> IKEv2/EAP-TTLS -> FortiSASE auth -> LDAP/SPA private path -> access decision",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -5986,7 +5638,8 @@
       "remediation_path": "verify identity normalization and login coverage, review graph/peer group and threshold, tune only after checking expected travel/shared workstations",
       "question_fingerprint": "graph-based peer community inference versus static allowlist or simple login-time anomaly",
       "diagram_topology_layout_fingerprint": "login events -> bipartite user/workstation graph -> peer communities -> anomaly scoring -> incident",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -6003,7 +5656,8 @@
       "remediation_path": "check resolver supports DoT, TCP/853, trust CA and name identity; keep cleartext only as explicit temporary compatibility choice",
       "question_fingerprint": "encrypted DNS transport versus authenticated resolver identity",
       "diagram_topology_layout_fingerprint": "FortiSwitch DNS client -> TLS/853 -> resolver certificate chain -> DNS query/response",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-14",
@@ -6023,7 +5677,8 @@
       "remediation_path": "verify ISDB service identity and update, rule order, destination fields, member SLA eligibility and session re-evaluation",
       "question_fingerprint": "destination service identity versus application signature and URL category",
       "diagram_topology_layout_fingerprint": "packet destination -> ISDB identity match -> ordered SD-WAN rule -> eligible member -> WAN",
-      "classification": "historical published lesson"
+      "classification": "historical published lesson",
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-15",
@@ -6562,7 +6217,9 @@
       "question_fingerprint": "Synthetic AAAA vs native AAAA; NAT64 VIP6 prefix match; pool nat64 enablement; policy-hit versus DNS-only success.",
       "diagram_topology_layout_fingerprint": "IPv6-only client -> FortiGate DNS64 proxy -> synthetic AAAA -> NAT64 VIP6 and policy -> NAT64 source pool -> IPv4 Internet server.",
       "classification": "historical published lesson",
-      "scenario_relation": "older related flow article; no recent NAT64-specific Community case surfaced in the sweep."
+      "scenario_relation": "older related flow article; no recent NAT64-specific Community case surfaced in the sweep.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6579,7 +6236,9 @@
       "question_fingerprint": "On-board re-enforcement versus one-time schedule; fabric sequence; offline child-device stop boundary; FMWR contract versus successful task state.",
       "diagram_topology_layout_fingerprint": "FortiManager firmware template controller -> FortiGate -> sequential FortiSwitch chain -> FortiAP -> FortiExtender; per-device stop edge and independent FortiGate branch.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community API article provides a real firmware-template object-creation/API payload scenario; no recent upgrade-failure article in the 30-day sweep."
+      "scenario_relation": "Community API article provides a real firmware-template object-creation/API payload scenario; no recent upgrade-failure article in the 30-day sweep.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6596,7 +6255,9 @@
       "question_fingerprint": "Archive synchronization versus local analytics indexing; different rebuild windows; hcache as independent factor; raw-log equality as evidence.",
       "diagram_topology_layout_fingerprint": "FortiGate log stream forks into raw Archive and local Analytics index; HA sync arrow only for Archive; two independent rebuild pipelines create potentially divergent query ranges.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community HA article is a direct scenario explaining unequal analytics DB size despite healthy archive synchronization."
+      "scenario_relation": "Community HA article is a direct scenario explaining unequal analytics DB size despite healthy archive synchronization.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6613,7 +6274,9 @@
       "question_fingerprint": "Superior BPDU versus any BPDU; root-inconsistent versus edge-port shutdown; loop guard silence; MST region identity and VLAN-instance mapping.",
       "diagram_topology_layout_fingerprint": "MST region with core root and redundant access paths; distinct port-role callouts for root guard, edge BPDU guard and nondesignated loop guard.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community STP article explains root-inconsistent and BPDU-guard edge behavior; no fresh 30-day MSTP-specific case surfaced."
+      "scenario_relation": "Community STP article explains root-inconsistent and BPDU-guard edge behavior; no fresh 30-day MSTP-specific case surfaced.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6630,7 +6293,9 @@
       "question_fingerprint": "60-second CAC avoidance versus no-radar guarantee; rCAC versus Pre-CAC regulatory mode; profile applied versus capability; NOL and misleading event channel ID.",
       "diagram_topology_layout_fingerprint": "FortiGate WLAN controller/profile -> FortiAP 5-GHz radio -> radar detection -> rCAC backup or ETSI pre-CAC pool -> immediate channel switch and client reassociation.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community radar troubleshooting gives real NOL, klog and WiFi-event evidence and references Zero-Wait DFS."
+      "scenario_relation": "Community radar troubleshooting gives real NOL, klog and WiFi-event evidence and references Zero-Wait DFS.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6647,7 +6312,9 @@
       "question_fingerprint": "Version differs vs newer-only comparison; TCP/80 package path; max attempts versus reset counter; update success versus reboot rollback.",
       "diagram_topology_layout_fingerprint": "FortiNAC agent-update controller -> connected endpoint version check -> TCP/80 package transfer -> install/reboot -> success/failure event and bounded retry counter.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community article includes a real blocked-port-80 loading state, green-agent/Send-Message check and update log sequence."
+      "scenario_relation": "Community article includes a real blocked-port-80 loading state, green-agent/Send-Message check and update log sequence.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6664,7 +6331,9 @@
       "question_fingerprint": "Connector-based FSSO versus Dynamic Address Tag; registered versus rogue/offline host; logoff removal; one-agent-per-IP and 300-second collector loss.",
       "diagram_topology_layout_fingerprint": "Endpoint/VPN -> FortiNAC-F registration and identity collector -> REST API Dynamic Address Tag -> FortiGate dynamic IP object -> firewall policy; logoff removes address mapping.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community VPN integration case supplies the real host-connect/syslog/firewall-tag removal lifecycle and plugin-debug boundaries."
+      "scenario_relation": "Community VPN integration case supplies the real host-connect/syslog/firewall-tag removal lifecycle and plugin-debug boundaries.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6681,7 +6350,9 @@
       "question_fingerprint": "Certificate chain validation versus revocation status; local CRL versus imported CRL; OCSP endpoint reachability; delete-disabled revoked cert lifecycle.",
       "diagram_topology_layout_fingerprint": "CA/CRL source -> FortiAuthenticator CRL store and OCSP responder -> FortiGate/client relying party -> certificate status decision.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community certificate-import event article explains log ID 10121 for successful/failed CRL import and CDP troubleshooting."
+      "scenario_relation": "Community certificate-import event article explains log ID 10121 for successful/failed CRL import and CDP troubleshooting.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6698,7 +6369,9 @@
       "question_fingerprint": "Same product type versus platform type; PDE key dependency versus disabling PDE for cross-platform migration; user-seat capacity; restore success versus usable secret decryption.",
       "diagram_topology_layout_fingerprint": "Source FortiPAM encryption/key boundary -> backup artifact and platform header -> target FortiPAM compatibility gates -> restore -> secret/key validation and application cutover.",
       "classification": "historical published lesson",
-      "scenario_relation": "Very recent Community migration article (published about five days before this run) directly identifies PDE, platform-header, product-type and seat-capacity prerequisites."
+      "scenario_relation": "Very recent Community migration article (published about five days before this run) directly identifies PDE, platform-header, product-type and seat-capacity prerequisites.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6715,7 +6388,9 @@
       "question_fingerprint": "VRRP node failure versus process failure; VIP ownership versus Supervisor job placement; EPS N/A versus no event ingestion; same-network requirement.",
       "diagram_topology_layout_fingerprint": "Log sources -> VRRP VIP -> Leader Collector with Follower takeover; Supervisor distributes pull/monitor jobs across the Collector HA group.",
       "classification": "historical published lesson",
-      "scenario_relation": "Recent Community Collector-health article provides a concrete EPS=N/A diagnostic boundary: packets received do not prove parsing/Analytics ingestion."
+      "scenario_relation": "Recent Community Collector-health article provides a concrete EPS=N/A diagnostic boundary: packets received do not prove parsing/Analytics ingestion.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6732,7 +6407,9 @@
       "question_fingerprint": "Public PoP WAN versus Private SPA path; split DNS versus all-domain implicit rule; loopback-BGP source path; DNS filter versus routing failure.",
       "diagram_topology_layout_fingerprint": "Remote endpoint -> FortiSASE PoP DNS rule engine -> Public WAN DNS lane or Private SPA/BGP hub -> internal DNS server -> response to endpoint.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community public/private DNS article describes the exact failure when an internal DNS server behind SPA is incorrectly set to Public."
+      "scenario_relation": "Community public/private DNS article describes the exact failure when an internal DNS server behind SPA is incorrectly set to Public.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
     },
     {
       "report_date": "2026-11-17",
@@ -6749,7 +6426,237 @@
       "question_fingerprint": "ICMP ping versus TWAMP SLA; active versus passive mode; all-health-checks-fail removal rule; 500-ms timeout false-dead condition.",
       "diagram_topology_layout_fingerprint": "FortiGate SD-WAN member links -> TWAMP server/responder -> measured RTT/jitter/loss -> SLA thresholds -> link status -> SD-WAN route/load-balance group.",
       "classification": "historical published lesson",
-      "scenario_relation": "Community SLA case shows a pingable target marked dead because the SLA probe timeout was below measured latency; a separate protocol tip lists TWAMP as a CLI-only probe option."
+      "scenario_relation": "Community SLA case shows a pingable target marked dead because the SLA probe timeout was below measured latency; a separate protocol tip lists TWAMP as a CLI-only probe option.",
+      "additional_primary_urls": [],
+      "additional_scenario_urls": []
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiGate",
+      "lesson_subject": "NP7-offloaded GRE over software loopback: ECMP hashing, inner-header LAG distribution, and creation-time enablement",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/993126/improvements-for-np7-offloaded-gre-tunnels",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-underlay-route-change-behavior-for-gre-tunnel-formed-using-loopback-in-np7-model-161163",
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "NP7 GRE session fast-path ECMP over a software loopback; optional inner L3/L4 header inputs for LAG hashing through lag-hash-gre and NPU-GRE; loopback-ecmp-offload is a GRE-object creation-time choice.",
+      "workflow_transaction_fingerprint": "Create loopback and GRE tunnel with ECMP offload enabled -> route to remote GRE endpoint may change among underlay WANs -> NP7 hashes offloaded sessions across the available path set -> LAG may hash using inner packet headers -> verify actual egress distribution and offload behavior.",
+      "failure_class": "After underlay route change, initial software-forwarded packets use the new route but offloaded GRE traffic remains pinned to the old path or is unevenly distributed across LAG members.",
+      "evidence_pattern": "Routing table shows new preferred route; uplink capture sees first packets on new WAN then later offloaded packets on old WAN; diagnose sys session list shows offload; tunnel creation config shows loopback-ecmp-offload; LAG config and NPU counters show hash distribution.",
+      "remediation_path": "On supported NP7/FortiOS builds create a replacement GRE tunnel with loopback-ecmp-offload enable (cannot be changed after creation); optionally set lag-hash-gre and aggregate algorithm NPU-GRE. On older releases, disable auto-asic-offload on the GRE policy as a throughput-costly workaround.",
+      "question_fingerprint": "Underlay route preference changes from ISP1 to ISP2; first software packets move to ISP2 but established NP7-offloaded GRE packets continue on ISP1. Identify the creation-time tunnel option that enables ECMP hashing for loopback GRE offload.",
+      "diagram_topology_layout_fingerprint": "Two WAN underlay paths converge on FortiGate NP7; software loopback anchors GRE tunnel; NP7 offload path fans GRE sessions across ECMP next hops; inner L3/L4 header inputs feed LAG hash; remote GRE endpoint at far side.",
+      "source_excerpt": "NP7 GRE session fast-path ECMP over a software loopback; optional inner L3/L4 header inputs for LAG hashing through lag-hash-gre and NPU-GRE; loopback-ecmp-offload is a GRE-object creation-time choice. Create loopback and GRE tunnel with ECMP offload enabled -> route to remote GRE endpoint may change among underlay WANs -> NP7 hashes offloaded sessions across the available path set -> LAG may hash using inner packet headers -> verify actual egress distribution and offload behavior. Routing table shows new preferred route; uplink capture sees first packets on new WAN then later offloaded packets on old WAN; diagnose sys session list shows offload; tunnel creation config shows loopback-ecmp-offload; LAG config and NPU counters show hash distribution.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiManager",
+      "lesson_subject": "FortiGuard package version pinning versus immediate downgrade for managed FortiGates",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/756380/choosing-a-preferred-package-version-to-deploy",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiManager acting as FortiGuard server selects the To Be Deployed Version for individual FortiGuard object packages; policy has two independent outcomes: freeze future delivery at the preferred version or actively downgrade devices already running later versions.",
+      "workflow_transaction_fingerprint": "Device requests FortiGuard package -> FortiManager serves preferred package version instead of Latest -> administrator chooses Just Set Preferred Version or Downgrade -> device version state and future package eligibility diverge accordingly.",
+      "failure_class": "Signature/object behavior drifts after package update, or an administrator assumes selecting an older preferred version automatically rolls back devices when only the future delivery ceiling was changed.",
+      "evidence_pattern": "FortiGuard > Packages > Receive Status shows current and To Be Deployed Version; managed-device table shows installed package versions; confirmation dialog distinguishes Just Set Preferred Version from Downgrade; subsequent package request behavior confirms the ceiling.",
+      "remediation_path": "Search package with Show Used Objects Only cleared, select Change, choose version, then deliberately choose pin-only or immediate downgrade. Inventory the affected devices, confirm compatibility, and remember FortiManager retains at most 20 object versions by default.",
+      "question_fingerprint": "A managed FortiGate is already on a newer application-signature package; operations wants to prevent future updates but does not want an immediate rollback. Choose the correct FortiManager action and predict the device state.",
+      "diagram_topology_layout_fingerprint": "FortiManager FortiGuard package repository and preferred-version selector feed multiple managed FortiGates; a decision branch distinguishes version ceiling only from active downgrade of newer installed packages.",
+      "source_excerpt": "FortiManager acting as FortiGuard server selects the To Be Deployed Version for individual FortiGuard object packages; policy has two independent outcomes: freeze future delivery at the preferred version or actively downgrade devices already running later versions. Device requests FortiGuard package -> FortiManager serves preferred package version instead of Latest -> administrator chooses Just Set Preferred Version or Downgrade -> device version state and future package eligibility diverge accordingly. FortiGuard > Packages > Receive Status shows current and To Be Deployed Version; managed-device table shows installed package versions; confirmation dialog distinguishes Just Set Preferred Version from Downgrade; subsequent package request behavior confirms the ceiling.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiAnalyzer",
+      "lesson_subject": "SNMPv3 monitoring and event traps for FortiAnalyzer system health",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/709730/snmp-agent",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-get-snmp-information-per-adom-for-fortianalyzer-and-fortimanager-215781",
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiAnalyzer system SNMP agent exposes queryable system information and emits event traps; SNMPv3 user security level independently controls authentication/privacy, query port and trap port, notification hosts, and selected event subscriptions; proprietary MIBs decode Fortinet OIDs.",
+      "workflow_transaction_fingerprint": "Enable SNMP agent -> create SNMPv3 user with auth/no-privacy or auth+privacy -> configure notification hosts and SNMP event set -> SNMP manager polls on UDP/161 and receives traps on configured UDP/162 -> MIB database translates enterprise OIDs.",
+      "failure_class": "Monitoring polls work but traps are absent, or traps arrive but are undecodable/misinterpreted because user security, notification host, event selection, transport port, or MIB version is mismatched.",
+      "evidence_pattern": "SNMP agent enabled; v3 user security level and notification host list; query/trap status; manager-side authentication/packet capture; event-specific trap OID decoded using matching FORTINET-CORE and FortiAnalyzer MIBs.",
+      "remediation_path": "Enable the agent; create an SNMPv3 user using SHA-family authentication and AES privacy where supported; enable queries/traps separately; add the manager as a notification host; select required events; load matching MIBs; test poll and trap paths independently.",
+      "question_fingerprint": "A monitoring platform can poll FortiAnalyzer but receives no CPU/memory/log-disk notifications. Determine which SNMPv3 settings and evidence separate a successful GET path from trap delivery.",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer SNMP agent at center; SNMP manager polling path on UDP/161 and asynchronous trap path on UDP/162; SNMPv3 user security envelope; MIB decoder on manager; event sources feeding trap selection.",
+      "source_excerpt": "FortiAnalyzer system SNMP agent exposes queryable system information and emits event traps; SNMPv3 user security level independently controls authentication/privacy, query port and trap port, notification hosts, and selected event subscriptions; proprietary MIBs decode Fortinet OIDs. Enable SNMP agent -> create SNMPv3 user with auth/no-privacy or auth+privacy -> configure notification hosts and SNMP event set -> SNMP manager polls on UDP/161 and receives traps on configured UDP/162 -> MIB database translates enterprise OIDs. SNMP agent enabled; v3 user security level and notification host list; query/trap status; manager-side authentication/packet capture; event-specific trap OID decoded using matching FORTINET-CORE and FortiAnalyzer MIBs.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiLink custom-command lifecycle: bind per-switch scripts and control on-replay versus on-any push timing",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173262/executing-custom-fortiswitch-scripts",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiGate switch-controller stores generic FortiSwitch CLI commands, binds named custom commands to a managed-switch serial, and controls replay timing with switch-custom-cmd on-replay/on-any; bound commands are pushed last after controller-generated configuration.",
+      "workflow_transaction_fingerprint": "Define command under switch-controller custom-command -> bind command-name under target managed-switch serial -> set global push mode -> any relevant managed-switch config change triggers a push under on-any -> controller applies standard config then executes custom command last.",
+      "failure_class": "A bound script appears in controller configuration but does not execute after a differential switch configuration update because the default on-replay mode waits for a full configuration replay; locally controlled settings may also overwrite an unbound one-time command.",
+      "evidence_pattern": "show switch-controller custom-command; managed-switch serial's config custom-command binding; switch-custom-cmd global value; controller push output showing command after other config; switch-side show/diagnostic confirms target setting.",
+      "remediation_path": "Create the command with %0a line separators, bind it to the exact switch serial, set on-any when it must follow every configuration change, and verify the push output. Prefer binding over one-time execution for persistence; avoid commands whose settings are controller-owned unless the guide permits them.",
+      "question_fingerprint": "A custom command is bound to a FortiSwitch, but a port VLAN change is pushed without the script. Identify the default push mode and the setting that executes bound commands after any switch configuration change.",
+      "diagram_topology_layout_fingerprint": "FortiGate FortiLink controller -> managed-switch serial and command binding; configuration event -> standard switch config push -> custom command executes last; switch local state returns verification.",
+      "source_excerpt": "FortiGate switch-controller stores generic FortiSwitch CLI commands, binds named custom commands to a managed-switch serial, and controls replay timing with switch-custom-cmd on-replay/on-any; bound commands are pushed last after controller-generated configuration. Define command under switch-controller custom-command -> bind command-name under target managed-switch serial -> set global push mode -> any relevant managed-switch config change triggers a push under on-any -> controller applies standard config then executes custom command last. show switch-controller custom-command; managed-switch serial's config custom-command binding; switch-custom-cmd global value; controller push output showing command after other config; switch-side show/diagnostic confirms target setting.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Custom DHCP Option 82 construction per VAP: Circuit ID and Remote ID sub-options",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/190059/dhcp-snooping-and-option-82-data-insertion",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "Wireless-controller VAP inserts DHCP relay-agent Option 82 metadata; Circuit ID can concatenate selected AP/SSID/VLAN/profile fields with a configurable delimiter, while Remote ID can carry client MAC; this is a VAP-level identity tag, not an IP address assignment mechanism.",
+      "workflow_transaction_fingerprint": "Client associates to VAP -> DHCP request traverses AP/bridge path -> FortiAP inserts configured Option 82 Circuit-ID/Remote-ID sub-options -> upstream DHCP server/policy uses those fields for scope or authorization -> DHCP reply returns to client.",
+      "failure_class": "DHCP server receives requests but cannot distinguish AP, SSID, VLAN, or client because Option 82 insertion is disabled, the wrong sub-options are selected, or the delimiter/expected server parser does not match.",
+      "evidence_pattern": "VAP configuration shows dhcp-option82-insertion and selected circuit/remote fields; WTP profile binds the VAP to radio; DHCP packet capture shows Option 82 sub-options and delimiter; server logs show received circuit/remote identifiers.",
+      "remediation_path": "Use FortiAP firmware 7.6.4 or later; enable insertion on the VAP; select only the AP/SSID/VLAN/profile identifiers the DHCP policy expects; set a stable delimiter; include client MAC as Remote ID if needed; apply the VAP through a WTP profile and inspect a DHCP capture.",
+      "question_fingerprint": "Wireless DHCP requests reach the server, but all users land in the same scope because the server cannot distinguish SSID and AP. Select the VAP-level Option 82 composition that exposes both AP/SSID context and client identity.",
+      "diagram_topology_layout_fingerprint": "Wireless station -> FortiAP radio/VAP -> DHCP request with Option 82 Circuit ID (AP/SSID/VLAN/profile) and Remote ID (client MAC) -> relay/underlay -> DHCP server scope policy.",
+      "source_excerpt": "Wireless-controller VAP inserts DHCP relay-agent Option 82 metadata; Circuit ID can concatenate selected AP/SSID/VLAN/profile fields with a configurable delimiter, while Remote ID can carry client MAC; this is a VAP-level identity tag, not an IP address assignment mechanism. Client associates to VAP -> DHCP request traverses AP/bridge path -> FortiAP inserts configured Option 82 Circuit-ID/Remote-ID sub-options -> upstream DHCP server/policy uses those fields for scope or authorization -> DHCP reply returns to client. VAP configuration shows dhcp-option82-insertion and selected circuit/remote fields; WTP profile binds the VAP to radio; DHCP packet capture shows Option 82 sub-options and delimiter; server logs show received circuit/remote identifiers.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiNAC",
+      "lesson_subject": "Nested group hierarchy as a directed acyclic graph: detect and remove reciprocal membership cycles",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/81184/groups",
+      "additional_primary_urls": [],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-resolving-http-status-500-when-loading-fortinac-groups-due-to-circular-group-membership-230478",
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiNAC groups are typed containers that may contain same-type subgroups and feed host/user policies and roles; membership is a directed graph; reciprocal or self-referential active edges create unbounded recursive traversal during group-tree rendering.",
+      "workflow_transaction_fingerprint": "Create typed group -> add members or same-type subgroups -> resolve membership for UI/policy use -> group hierarchy traversal recursively expands descendants -> cycle causes repeated node traversal and stack exhaustion -> remove one offending edge and rebuild the hierarchy.",
+      "failure_class": "System > Groups returns HTTP 500/Load Groups Error while group count remains nonzero; recursive GroupActions processing terminates with java.lang.StackOverflowError due to a self-loop or reciprocal group membership.",
+      "evidence_pattern": "Groups page shows count but no rows; browser request to GroupActions.jsp fails; output.master contains repeated getGroupJSONObjectFromNode calls; read-only bsc.GroupMember query identifies PARENT_ID=CHILD_ID or reciprocal active elementClass=11 edges.",
+      "remediation_path": "Use Group Member Of and Show Members to inspect hierarchy where possible; if the UI is broken, collect logs and use only the documented read-only SQL diagnostics via execute db-shell; remove one reciprocal/self edge through supported group administration or TAC-guided repair; reload Groups and validate policy references.",
+      "question_fingerprint": "The FortiNAC Groups page shows 691 groups but no rows, and output.master repeats recursive group-node calls before StackOverflowError. Identify the graph defect and the safest first diagnostic.",
+      "diagram_topology_layout_fingerprint": "Directed group graph with Group A -> Group B and Group B -> Group A cycle; side panel shows recursive UI traversal and stack overflow; remediation removes one directed edge to produce an acyclic hierarchy.",
+      "source_excerpt": "FortiNAC groups are typed containers that may contain same-type subgroups and feed host/user policies and roles; membership is a directed graph; reciprocal or self-referential active edges create unbounded recursive traversal during group-tree rendering. Create typed group -> add members or same-type subgroups -> resolve membership for UI/policy use -> group hierarchy traversal recursively expands descendants -> cycle causes repeated node traversal and stack exhaustion -> remove one offending edge and rebuild the hierarchy. Groups page shows count but no rows; browser request to GroupActions.jsp fails; output.master contains repeated getGroupJSONObjectFromNode calls; read-only bsc.GroupMember query identifies PARENT_ID=CHILD_ID or reciprocal active elementClass=11 edges.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiNAC-F",
+      "lesson_subject": "MDM Device Ownership to Host Role mapping and downstream NAC policy selection",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/422594/mdm-servers",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "Optional Update Hosts Role setting maps the MDM record's Device Ownership value into FortiNAC Host Role; role override is restricted to hosts whose role is NAC-Default or unset; roles become User/Host Profile filters and can affect downstream access policy.",
+      "workflow_transaction_fingerprint": "Endpoint is identified and MDM service connector retrieves its record -> ownership attribute is read -> FortiNAC updates Host Role only when current role is default/unassigned -> User/Host Profile matches the role -> endpoint compliance/network access policy determines enforcement.",
+      "failure_class": "MDM shows a corporate/personal ownership value but FortiNAC policy continues to treat the endpoint as default or assigns the wrong access profile because role override is disabled, the connector lacks ownership data, or a manually assigned non-default role blocks override.",
+      "evidence_pattern": "MDM service connector Update Hosts Role setting; Host View Host Role and Managed By MDM/OT fields; source MDM ownership value; profile match and resulting Network Access Policy/VLAN; connector Last Successful Poll.",
+      "remediation_path": "Enable Update Hosts Role only on supported connectors; verify the MDM record contains a recognized ownership value and that the connector poll succeeded; clear an intentional stale non-default role if policy permits; confirm Host Role updates and the User/Host Profile match before testing VLAN/policy enforcement.",
+      "question_fingerprint": "An Intune-managed endpoint reports Corporate ownership, but FortiNAC still matches the NAC-Default profile. Determine the connector option, the non-default-role override boundary, and the correct evidence chain.",
+      "diagram_topology_layout_fingerprint": "MDM platform -> FortiNAC MDM service connector -> host record; Device Ownership maps to Host Role -> User/Host Profile -> Network Access Policy -> switch/VLAN enforcement; override gate protects manually assigned roles.",
+      "source_excerpt": "Optional Update Hosts Role setting maps the MDM record's Device Ownership value into FortiNAC Host Role; role override is restricted to hosts whose role is NAC-Default or unset; roles become User/Host Profile filters and can affect downstream access policy. Endpoint is identified and MDM service connector retrieves its record -> ownership attribute is read -> FortiNAC updates Host Role only when current role is default/unassigned -> User/Host Profile matches the role -> endpoint compliance/network access policy determines enforcement. MDM service connector Update Hosts Role setting; Host View Host Role and Managed By MDM/OT fields; source MDM ownership value; profile match and resulting Network Access Policy/VLAN; connector Last Successful Poll.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator SAML IdP proxy architecture for Azure Government upstream identity providers",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/817031/saml-idp",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiAuthenticator acts as the SAML IdP presented to downstream service providers while proxying authentication to an upstream Azure Government tenant; this avoids the commercial Azure OAuth Graph endpoint limitation (graph.microsoft.com versus Azure Government graph.microsoft.us) and preserves a FAC-controlled federation boundary.",
+      "workflow_transaction_fingerprint": "Browser reaches FAC SAML IdP/SP portal -> FAC selects the configured remote SAML proxy realm -> browser is redirected to upstream Azure Government IdP -> upstream authenticates user and returns assertion to FAC -> FAC maps identity/attributes and issues its own SAML assertion to the downstream SP.",
+      "failure_class": "Azure Government identity integration fails when a feature relies on FortiAuthenticator's Azure Directory OAuth source hardcoded to graph.microsoft.com, or when remote SAML metadata, realm binding, portal URL, or SP trust is inconsistent.",
+      "evidence_pattern": "Remote SAML server type Proxy and imported upstream IdP metadata/certificate; realm user source; FAC SAML IdP portal and default certificate; browser redirect chain; assertion issuer/audience/NameID and FAC logs; OAuth documentation identifies unsupported graph.microsoft.us endpoint for Azure Government.",
+      "remediation_path": "Do not configure Azure Government as the commercial Azure Directory OAuth source. Use FAC as SAML IdP proxy: configure the remote SAML server with current government-tenant metadata and certificate, bind a realm, enable the FAC SAML IdP portal, configure the downstream SP, and validate issuer/audience/NameID and group mapping end to end.",
+      "question_fingerprint": "A GCC High tenant is selected as FortiAuthenticator's Azure Directory OAuth source, but group lookup fails because the endpoint is graph.microsoft.com. Choose the supported FAC federation architecture for Azure Government.",
+      "diagram_topology_layout_fingerprint": "Browser -> FortiAuthenticator SAML IdP portal -> upstream Azure Government SAML IdP -> assertion back to FortiAuthenticator -> downstream SAML service provider; trust metadata/certificates at both federation edges.",
+      "source_excerpt": "FortiAuthenticator acts as the SAML IdP presented to downstream service providers while proxying authentication to an upstream Azure Government tenant; this avoids the commercial Azure OAuth Graph endpoint limitation (graph.microsoft.com versus Azure Government graph.microsoft.us) and preserves a FAC-controlled federation boundary. Browser reaches FAC SAML IdP/SP portal -> FAC selects the configured remote SAML proxy realm -> browser is redirected to upstream Azure Government IdP -> upstream authenticates user and returns assertion to FAC -> FAC maps identity/attributes and issues its own SAML assertion to the downstream SP. Remote SAML server type Proxy and imported upstream IdP metadata/certificate; realm user source; FAC SAML IdP portal and default certificate; browser redirect chain; assertion issuer/audience/NameID and FAC logs; OAuth documentation identifies unsupported graph.microsoft.us endpoint for Azure Government.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiPAM",
+      "lesson_subject": "Active Directory LDAP password reconciliation using a privileged reconcile secret",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "A base account secret can use a separate privileged reconcile account as the bind identity for resetting the base password when it cannot change its own password or its stored password is out of sync; activation can be direct or only after a password-change failure; feature is limited to Active Directory LDAP password changers.",
+      "workflow_transaction_fingerprint": "Password change/verification/check-in begins -> password changer attempts normal base-account password update -> configured activation condition determines whether reconciliation runs -> privileged reconcile secret binds to directory and resets base account password -> FortiPAM stores/validates the new secret value.",
+      "failure_class": "Password rotation or check-in fails because the base account lacks password-reset rights or FortiPAM's stored credential is already out of sync with Active Directory; a normal password change cannot recover the account.",
+      "evidence_pattern": "Secret template password changer type is Active Directory LDAP; Password Reconciliation enabled; Reconcile Account reference; Activate on mode; password changer task result; target AD account state and FortiPAM Verify Password result.",
+      "remediation_path": "Create a separate privileged AD account secret with only the required reset rights, reference it as Reconcile Account, choose Reconcile directly or Upon Password Change Failure based on the recovery policy, test against a controlled out-of-sync account, and verify the new password at both AD and FortiPAM.",
+      "question_fingerprint": "An AD service account's password is out of sync and the base account cannot reset its own password. Select the FortiPAM mechanism that uses a separate privileged bind identity and the appropriate activation point.",
+      "diagram_topology_layout_fingerprint": "FortiPAM base secret/password changer -> Active Directory LDAP target; separate privileged reconcile secret binds to AD and resets base account; manual/automatic/check-in triggers converge on reconciliation decision.",
+      "source_excerpt": "A base account secret can use a separate privileged reconcile account as the bind identity for resetting the base password when it cannot change its own password or its stored password is out of sync; activation can be direct or only after a password-change failure; feature is limited to Active Directory LDAP password changers. Password change/verification/check-in begins -> password changer attempts normal base-account password update -> configured activation condition determines whether reconciliation runs -> privileged reconcile secret binds to directory and resets base account password -> FortiPAM stores/validates the new secret value. Secret template password changer type is Active Directory LDAP; Password Reconciliation enabled; Reconcile Account reference; Activate on mode; password changer task result; target AD account state and FortiPAM Verify Password result.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Analytics query functions: extraction, normalization, aggregation and moving averages",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/909482/functions-in-analytics",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "FortiSIEM Analytics query expressions add EXTRACT, IF, string normalization, conversion, advanced aggregates, and SMA/EMA; engine and context scope differ—functions are available in ClickHouse/Elasticsearch queries, with nesting limits and no support for EventDB queries/rules as described in release notes.",
+      "workflow_transaction_fingerprint": "Select ClickHouse or Elasticsearch query -> filter raw events -> extract or normalize fields -> convert types/derive conditional values -> group and aggregate -> apply time-bucket SMA/EMA -> render result; unsupported engine/context rejects or omits function behavior.",
+      "failure_class": "Query errors or misleading results occur when a function is used in EventDB/rules, nesting exceeds engine-specific limits, EXTRACT pattern returns the wrong type, or SMA/EMA lacks a supported time aggregation field.",
+      "evidence_pattern": "Query engine selected; function availability and nesting error; raw event field versus EXTRACT output; group-by and time-bucket fields; sample rows and result type; comparison against raw event data.",
+      "remediation_path": "Run advanced function queries only in supported ClickHouse/Elasticsearch Analytics contexts; use EXTRACT for a single missing value from historical raw logs; normalize strings before grouping; convert numeric values explicitly; provide hourly/daily/weekly/monthly receive-time aggregation for EMA/SMA; keep nesting within documented engine limits.",
+      "question_fingerprint": "A historical raw event contains an interface identifier embedded in a message, and the engineer needs a normalized per-hour trend. Choose the supported query engine and sequence of EXTRACT, string normalization, conversion, and EMA.",
+      "diagram_topology_layout_fingerprint": "Raw event stream -> ClickHouse/Elasticsearch query engine -> EXTRACT/IF/string/conversion stage -> group-by aggregates -> time-bucket SMA/EMA -> Analytics output; EventDB/rules branch marked unsupported.",
+      "source_excerpt": "FortiSIEM Analytics query expressions add EXTRACT, IF, string normalization, conversion, advanced aggregates, and SMA/EMA; engine and context scope differ—functions are available in ClickHouse/Elasticsearch queries, with nesting limits and no support for EventDB queries/rules as described in release notes. Select ClickHouse or Elasticsearch query -> filter raw events -> extract or normalize fields -> convert types/derive conditional values -> group and aggregate -> apply time-bucket SMA/EMA -> render result; unsupported engine/context rejects or omits function behavior. Query engine selected; function availability and nesting error; raw event field versus EXTRACT output; group-by and time-bucket fields; sample rows and result type; comparison against raw event data.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "FortiSASE",
+      "lesson_subject": "FortiClient internet-reachability gate before FortiSASE VPN autoconnect",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/mature-administration-guide/921669/connection",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "Endpoint profile controls VPN autoconnect and Disable internet check; with the check enabled/setting left disabled, autoconnect waits until Internet connectivity is confirmed; enabling Disable internet check bypasses the readiness gate and starts autoconnect even when Internet is unavailable.",
+      "workflow_transaction_fingerprint": "User logs in or endpoint profile triggers auto-connect -> FortiClient evaluates local Internet reachability unless the check is disabled -> when reachable, client initiates FortiSASE SIA/IPsec tunnel -> authentication and PoP connection proceed; bypass mode attempts tunnel initiation without the precheck.",
+      "failure_class": "Tunnel appears not to start on a captive-portal/offline network when the Internet check gate is active, or clients repeatedly attempt a tunnel before local Internet connectivity when the gate is disabled.",
+      "evidence_pattern": "Endpoint profile Connection tab shows automatic/manual mode and Disable internet check state; endpoint local connectivity test; FortiClient connection log timestamps relative to network readiness; SASE tunnel/authentication logs distinguish precheck from post-connect failure.",
+      "remediation_path": "Keep Disable internet check off for normal connectivity-gated autoconnect; use manual connection when the user must complete captive-portal onboarding; enable the bypass only for a deliberate deployment that needs an immediate tunnel attempt; verify profile assignment and endpoint behavior.",
+      "question_fingerprint": "A laptop on hotel Wi-Fi starts repeated FortiSASE tunnel attempts before the captive portal has granted Internet access. Identify the endpoint-profile toggle that bypasses the pre-connectivity gate.",
+      "diagram_topology_layout_fingerprint": "Endpoint/FortiClient -> Internet reachability decision gate -> FortiSASE SIA tunnel -> Security PoP; bypass branch skips the gate and attempts tunnel establishment while offline.",
+      "source_excerpt": "Endpoint profile controls VPN autoconnect and Disable internet check; with the check enabled/setting left disabled, autoconnect waits until Internet connectivity is confirmed; enabling Disable internet check bypasses the readiness gate and starts autoconnect even when Internet is unavailable. User logs in or endpoint profile triggers auto-connect -> FortiClient evaluates local Internet reachability unless the check is disabled -> when reachable, client initiates FortiSASE SIA/IPsec tunnel -> authentication and PoP connection proceed; bypass mode attempts tunnel initiation without the precheck. Endpoint profile Connection tab shows automatic/manual mode and Disable internet check state; endpoint local connectivity test; FortiClient connection log timestamps relative to network readiness; SASE tunnel/authentication logs distinguish precheck from post-connect failure.",
+      "classification": "historical published lesson"
+    },
+    {
+      "report_date": "2026-11-18",
+      "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-18-08-38.html",
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Traffic-class assignment and guaranteed bandwidth for SD-WAN performance SLA probes",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/941705/classifying-sla-probes-for-traffic-prioritization",
+      "additional_primary_urls": [],
+      "scenario_community_url": null,
+      "additional_scenario_urls": [],
+      "feature_mechanism_fingerprint": "A health-check's class-id maps SLA probe packets into a firewall traffic-class and egress shaping-profile entry; configured priority and guaranteed-bandwidth percentage protect probes during congestion so health measurement does not falsely report a failed path because probes were starved.",
+      "workflow_transaction_fingerprint": "Define traffic-class IDs -> map IDs in shaping-profile with priority/guaranteed/max bandwidth -> bind egress shaping profile and outbandwidth to participating interfaces -> assign class-id to SD-WAN health-check -> probe packets traverse the egress scheduler -> class counters and SLA metrics validate behavior.",
+      "failure_class": "Production traffic congestion starves low-priority SLA probes, causing false packet loss/latency and unnecessary SD-WAN failover or link flapping even though the underlay is usable.",
+      "evidence_pattern": "health-check shows latency/loss; `diagnose netlink interface list` displays class bandwidth allocation, priority and counters; class counter increments for the probe class; `diagnose sys sdwan health-check` confirms probe state and measured metrics.",
+      "remediation_path": "Create a dedicated traffic class, assign a high or medium priority and realistic guaranteed bandwidth in a shaping profile, attach it to each egress interface, set the health-check class-id, and verify the class counter increases under congestion. Do not give probes unbounded priority or confuse class-id with DSCP marking.",
+      "question_fingerprint": "During busy-hour egress congestion, SLA probes lose packets while user traffic remains usable, causing path flaps. Choose the class-id and shaping-profile mechanism that protects measurement traffic and the counter that proves it.",
+      "diagram_topology_layout_fingerprint": "SD-WAN health-check probe -> class-id mapping -> firewall traffic class -> egress shaping profile on each WAN member -> priority/guaranteed bandwidth scheduler -> WAN link; probe result returns to SLA member-selection logic.",
+      "source_excerpt": "A health-check's class-id maps SLA probe packets into a firewall traffic-class and egress shaping-profile entry; configured priority and guaranteed-bandwidth percentage protect probes during congestion so health measurement does not falsely report a failed path because probes were starved. Define traffic-class IDs -> map IDs in shaping-profile with priority/guaranteed/max bandwidth -> bind egress shaping profile and outbandwidth to participating interfaces -> assign class-id to SD-WAN health-check -> probe packets traverse the egress scheduler -> class counters and SLA metrics validate behavior. health-check shows latency/loss; `diagnose netlink interface list` displays class bandwidth allocation, priority and counters; class counter increments for the probe class; `diagnose sys sdwan health-check` confirms probe state and measured metrics.",
+      "classification": "historical published lesson"
     },
     {
       "report_date": "2026-11-18",
@@ -6981,13 +6888,20 @@
     }
   ],
   "inventory_validation": {
-    "all_required_fields_present": false,
+    "all_required_fields_present": true,
+    "all_lesson_primary_urls_resolved": true,
     "scenario_url_field_present": true,
     "product_count": 12,
     "report_path_count": 27,
-    "records_added_from_2026_11_18": 12
+    "report_artifact_count": 30,
+    "removed_exam_question_records": 18,
+    "removed_nonlesson_navigation_records": 3,
+    "retained_candidate_only_records": 12,
+    "current_2026_11_18_records": 12,
+    "selected_topics_not_yet_started": true
   },
   "limitations": [
-    "The October 31 artifact is a status-only HTML and contributes no lesson records; it is included in the inspected artifact list."
+    "October 26 and October 31 are status-only artifacts; October 26 candidates are retained as anti-repeat signals but were not completed lessons.",
+    "Some historical reports did not verify a directly relevant Community scenario; scenario_community_url is null where none was published or verified."
   ]
 }
