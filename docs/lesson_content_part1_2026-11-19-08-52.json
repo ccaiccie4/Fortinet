@@ -1,0 +1,183 @@
+[
+  {
+    "product": "FortiGate",
+    "title": "Proxy ARP on VLAN interfaces: turn intra-VLAN isolation into policy-controlled reachability",
+    "version": "FortiOS 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/597953/gui-support-for-configuring-proxy-arp-on-vlan-interface",
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/801169/blocking-intra-vlan-traffic",
+      "https://docs.fortinet.com/document/fortigate-private-cloud/8.0.0/vmware-esxi-administration-guide/662702/microsegmentation-l2-proxy-arp-with-fortigate-fortiswitch-and-vmware-vcenter"
+    ],
+    "scenario_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-configure-proxy-arp-with-intra-vlan-traffic-blocking-enabled-for-subnet-greater-than-24-215126",
+    "scenario_status": "Older technical tip, outside the rolling window; retained as background only, not represented as a recent case.",
+    "sections": [
+      {
+        "heading": "Why this feature matters",
+        "body": "A conventional switched VLAN lets two hosts in the same IPv4 subnet exchange frames directly after ARP resolution. A FortiGate firewall policy cannot reliably mediate a frame that never reaches the firewall. FortiSwitch intra-VLAN blocking changes that forwarding boundary: client-to-client port forwarding is suppressed and traffic is forced toward the FortiGate. Proxy ARP then lets the FortiGate answer ARP on behalf of selected peer addresses, so a host still sends the peer's IP traffic to the FortiGate MAC. The firewall can inspect the resulting same-interface flow and apply a policy. The combination is a Layer-2 isolation primitive with Layer-3 policy-controlled exceptions, not simply an ARP convenience setting."
+      },
+      {
+        "heading": "Packet and policy mechanics",
+        "body": "The client first broadcasts an ARP request for the destination IPv4 address. A matching proxy-ARP range on the VLAN interface causes the FortiGate to answer with its own interface MAC. The client caches that mapping and emits the IP packet in a frame addressed to the FortiGate. FortiSwitch blocks direct port-to-port forwarding; the packet is delivered to the FortiGate, where the firewall policy decides whether the source and destination are allowed. For same-VLAN communication, ingress and egress can be the same logical VLAN interface. The global allow-traffic-redirect behavior must not bypass the policy check for this design; the FortiSwitch guide explicitly calls for disabling it before blocking intra-VLAN traffic. Proxy ARP only solves the L2 next-hop resolution. It does not authorize the IP conversation, create a route, or replace the firewall policy."
+      },
+      {
+        "heading": "Configuration pattern",
+        "body": "On the FortiGate, edit the VLAN interface and enable Block intra-VLAN traffic (CLI: `set switch-controller-access-vlan enable`). Configure the proxy-ARP address range on that VLAN interface; FortiOS 8.0 adds GUI create/edit/delete support for those ranges. The CLI structure remains useful for review and automation:\n\nconfig system proxy-arp\n    edit 1\n        set interface \"VLAN100\"\n        set ip 10.10.100.2\n        set end-ip 10.10.100.254\n    next\nend\n\nconfig firewall policy\n    edit 100\n        set name \"VLAN100-inspected-east-west\"\n        set srcintf \"VLAN100\"\n        set dstintf \"VLAN100\"\n        set srcaddr \"approved-hosts\"\n        set dstaddr \"approved-services\"\n        set action accept\n        set schedule \"always\"\n        set service \"approved-services\"\n    next\nend\n\nconfig system global\n    set allow-traffic-redirect disable\nend\n\nUse one proxy-ARP entry for each address range that must be represented. The FortiSwitch guide documents up to 256 proxy-ARP entries, with up to 1,024 addresses per entry. Do not copy broad `all` address/service examples into production without narrowing the policy."
+      },
+      {
+        "heading": "Evidence and interpretation",
+        "body": "Check the VLAN interface configuration, proxy-ARP table, and matching firewall policy first. An ARP capture should show the FortiGate answering for the peer address; that proves the proxy is active for that address, not that the later firewall policy accepts the flow. A packet capture showing ingress and egress on the same VLAN interface proves the traffic reached the FortiGate path, but policy logs or counters are needed to prove the rule decision. A successful ping proves only that the test tuple was allowed at that moment; it does not prove all east-west services are controlled. When a host cannot reach a peer, compare its ARP cache, the proxy range, the VLAN's block setting, the policy hit counter, and the return path."
+      },
+      {
+        "heading": "Dependencies and failure boundaries",
+        "body": "The design is IPv4-centric: the FortiSwitch guide states that IPv6 client-to-client traffic is not supported while intra-VLAN blocking is enabled. The feature is not supported when the FortiLink interface is a hardware or software switch. For a FortiLink outage, the `access-vlan-mode` setting can determine fail-open versus fail-close behavior; this is an availability-versus-isolation decision and must be tested with the actual switch topology. A separate microsegmentation deployment guide also calls out disabling ICMP redirects on relevant FortiOS releases; do not confuse that interface setting with the global traffic-redirect policy-bypass control. The GUI enhancement in 8.0 changes how proxy-ARP ranges are configured, not the packet semantics."
+      }
+    ],
+    "evidence": [
+      "ARP reply from the FortiGate for a protected peer proves proxy-ARP coverage only.",
+      "Same-interface VLAN ingress/egress capture proves the packet traversed the FortiGate path.",
+      "Firewall policy log/counter proves the policy decision for the observed tuple.",
+      "A missing ARP reply points to range/interface coverage before it points to policy."
+    ],
+    "troubleshooting": [
+      "No ARP reply: verify the proxy range includes the destination and is bound to the correct VLAN interface.",
+      "ARP resolves but traffic fails: inspect policy match, same-interface handling, and return traffic.",
+      "Traffic still switches directly: verify FortiSwitch intra-VLAN blocking and FortiLink mode.",
+      "IPv6 peer traffic fails: this is a documented feature boundary, not necessarily a broken IPv6 route."
+    ]
+  },
+  {
+    "product": "FortiManager",
+    "title": "IPS package intelligence through the FortiManager JSON API",
+    "version": "FortiManager 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/699084/fortimanager-api-can-be-used-to-get-detailed-info-about-ips",
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/657291"
+    ],
+    "scenario_url": null,
+    "scenario_status": "The Community sweep found a recent bulk-retrieve discussion, but it concerns configuration retrieval rather than IPS package introspection and was deliberately not used as this lesson's scenario.",
+    "sections": [
+      {
+        "heading": "Purpose and management-plane boundary",
+        "body": "FortiManager 8.0 exposes detailed IPS package and signature information through the JSON API `um/query/productapi`. This lets automation answer questions that are awkward to resolve from a policy package alone: what a signature ID represents, which signatures exist in a particular IPS package release, how two package releases differ, and how many signatures a release contains. The endpoint is FortiManager's query interface to product/package data. It is not a replacement for policy installation, a FortiGate runtime session lookup, or proof that a managed firewall has already installed the queried package."
+      },
+      {
+        "heading": "Query mechanics",
+        "body": "The API request carries a target path in the `data` parameter. Fortinet documents four useful query forms. A signature lookup uses `/fgd/lookup/ency?source=ips&id=58947`. A package inventory uses `/srvupd/detail/ips/34.089?detail=1&offset=0&limit=10`. A delta query compares two package versions, for example `/srvupd/detail/ips/34.085/34.089?detail=1&offset=0&limit=10`. Pagination changes `offset` and `limit`, such as `offset=20&limit=10`. `detail=1` requests detailed signature information rather than only a compact list. The API consumer should treat the package version as an explicit input and retain the returned version, query parameters, timestamp, and pagination offset with the collected data."
+      },
+      {
+        "heading": "Automation pattern",
+        "body": "A safe inventory job first authenticates to FortiManager using a dedicated API identity, then submits a read-only `get` request to `um/query/productapi` with one of the documented target paths in the data field. For a single signature, record the signature ID and the returned encyclopedia fields. For a package audit, page through the full release list until the reported total has been covered; do not assume the first ten rows are the complete package. For change review, query both old and new package versions and compare the delta output. Keep the package release string as a first-class key: signature IDs alone do not tell an auditor which release was inspected. Store API responses as evidence and redact credentials/session values."
+      },
+      {
+        "heading": "What the result proves—and what it does not",
+        "body": "A successful signature lookup proves FortiManager can retrieve the signature metadata for the requested ID. A version inventory proves what the queried package release contains. A delta query identifies changes between the two package versions. None of those responses proves a particular FortiGate has downloaded or activated that package, that an IPS sensor references the signature, or that traffic has matched it. For device state, separately inspect the managed device's FortiGuard package status and installation/task history. For enforcement, inspect the IPS sensor, policy attachment, and traffic/event evidence."
+      },
+      {
+        "heading": "Troubleshooting and operational controls",
+        "body": "If a query fails, separate API authentication/session failure from an invalid `target` path, malformed package version, unknown signature ID, and pagination mistakes. Start with one known signature ID and a small page limit, then expand to the release inventory. If the first page works but later pages are empty, verify the offset against the total count rather than treating an empty page as proof that the package has no further records. Avoid running an unbounded full inventory on every poll; cache release metadata and query deltas when the package changes. The feature is most useful for change review, vulnerability response, and evidence-backed package governance—not for making policy changes."
+      }
+    ],
+    "evidence": [
+      "A returned encyclopedia record proves metadata lookup for the supplied signature ID.",
+      "A release inventory plus total count and completed pagination proves the queried package was fully enumerated.",
+      "A delta response proves package-content difference, not device installation.",
+      "Managed-device package status is separate evidence from the API's product-data response."
+    ],
+    "troubleshooting": [
+      "Authentication failure: verify API identity, permissions, session lifecycle, and request envelope before changing the target URI.",
+      "Unknown signature: confirm the ID and source=ips query path; do not infer absence from an unrelated endpoint.",
+      "Incomplete inventory: compare returned total with offset/limit coverage and fetch remaining pages.",
+      "Device enforcement question: pivot to managed-device package state and policy/sensor attachment."
+    ]
+  },
+  {
+    "product": "FortiAnalyzer",
+    "title": "Fluentd output profiles to Azure Monitor Logs Ingestion API",
+    "version": "FortiAnalyzer 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/766404/fortianalyzer-fluentd-supports-the-azure-monitor-log-ingestion-api",
+      "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching this specific output-profile integration was verified; the lesson uses the official feature and output-profile documentation.",
+    "sections": [
+      {
+        "heading": "Data path and object model",
+        "body": "FortiAnalyzer 8.0 adds Azure Logs Ingestion as an output-profile type for its Fluentd-based log forwarding. The pipeline has distinct objects: an application registration supplies tenant/client identity and a client secret; a Log Analytics workspace stores the destination table; a Data Collection Endpoint (DCE) provides the ingestion endpoint; a Data Collection Rule (DCR) defines the stream and transformation; a custom table receives the records; and a FortiAnalyzer Output Profile supplies the connection parameters to the log-forwarding configuration. The output profile is a transport/serialization integration. It does not move the FortiAnalyzer's own Analytics/Archive database into Azure."
+      },
+      {
+        "heading": "Schema and ingestion contract",
+        "body": "The custom table must use the `_CL` suffix. The Fortinet example starts with a sample object containing `logtime` and `message`, then applies a DCR transformation: `source | extend TimeGenerated = todatetime(logtime) | project-away logtime`. The transformation creates `TimeGenerated`, which the Azure Logs Ingestion API requires, and removes the temporary `logtime` field. This is a schema contract: a successful TCP/TLS connection is not enough if the DCR stream or table schema does not accept the payload. The application registration must be assigned the `Monitoring Metrics Publisher` role for the DCR."
+      },
+      {
+        "heading": "FortiAnalyzer configuration",
+        "body": "In the Azure portal, create the application registration, Log Analytics workspace, DCE, DCR, and custom table. Record the Tenant ID, Client ID, Client Secret value, DCE URL, DCR ID, and table name. In FortiAnalyzer, navigate to System Settings > Advanced > Log Forwarding > Output Profile, create a profile, set Type to Azure Logs Ingestion, and use the default Fluentd configuration unless a supported customization is required. Populate the six parameters: `tenant_id`, `client_id`, `client_secret`, `dce_url`, `dcr_id`, and `table_name`. Select Validate and Save, then reference the profile from the relevant Log Forwarding configuration. Treat the client secret as a credential: restrict who can read/edit the profile and rotate it through the application-registration process."
+      },
+      {
+        "heading": "Verification layers",
+        "body": "Validation at profile-save time is a configuration/connection check; it does not by itself prove that every expected FortiAnalyzer log type is selected, that the DCR transformation accepts the event schema, or that records are queryable in the destination table. Verify in layers: confirm the output profile validates; confirm the Log Forwarding rule references that profile and matches the intended devices/log types; generate a known test event; then query the custom table for the expected message and `TimeGenerated`. Check the DCR stream/table name and transformation if data arrives with missing fields or is rejected. A missing row can originate before Fluentd (no matching log-forward rule), during transport/authentication, or after ingestion at the DCR/table schema boundary."
+      },
+      {
+        "heading": "Operational design",
+        "body": "Use a dedicated app registration and narrowly scoped role assignment. Keep the DCE/DCR/table identifiers under change control because a typo can produce a valid-looking but nonfunctional destination. Define a test event for each important log family and keep its source device, timestamp, and expected table fields. If the destination is unavailable, do not assume FortiAnalyzer's local logs are missing; the local log store and external output profile are separate paths. Size and retention of the destination workspace are Azure-side decisions and should be monitored independently from FortiAnalyzer disk utilization."
+      }
+    ],
+    "evidence": [
+      "Validate and Save proves the output profile's configuration/connection check, not end-to-end event delivery.",
+      "A matching Log Forwarding rule proves the event is eligible for the output path.",
+      "A destination row with the expected message and TimeGenerated proves ingestion and transformation for that test event.",
+      "DCR transformation errors indicate schema/stream mismatch rather than a FortiAnalyzer Analytics database issue."
+    ],
+    "troubleshooting": [
+      "No destination rows: verify Log Forwarding rule match and selected output profile before changing the Azure workspace.",
+      "Authentication failure: recheck tenant/client/secret and the DCR role assignment.",
+      "Records rejected or missing timestamps: verify the custom table suffix and TimeGenerated transformation.",
+      "Only some log families arrive: test each log type and inspect rule filters and payload schema separately."
+    ]
+  },
+  {
+    "product": "FortiSwitch",
+    "title": "NAC and dynamic-port-policy match retention in hours",
+    "version": "FortiOS/FortiSwitchOS 8.0.0",
+    "primary_urls": [
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/666111/enhance-nac-dpp-port-control-and-qos-poe-support",
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173271/fortiswitch-network-access-control"
+    ],
+    "scenario_url": null,
+    "scenario_status": "No recent Community case matching match-period retention was verified; older RADIUS/CoA material was excluded as a different transaction.",
+    "sections": [
+      {
+        "heading": "What match retention controls",
+        "body": "FortiSwitch NAC policies and dynamic port policies (DPPs) classify a device and apply a VLAN or port-level treatment. A match can be retained after the immediate observation that caused it. FortiOS 8.0 makes the retention period configurable in hours rather than only days, with a maximum of 3,072 hours (120 days). `match-period 0` means keep the matched device indefinitely, subject to documented removal events such as a user-configured CLI event or a FortiGate restart. This is a persistence setting for a NAC/DPP match record; it is not an 802.1X session timeout, a DHCP lease, or a RADIUS Session-Timeout."
+      },
+      {
+        "heading": "Dynamic versus override behavior",
+        "body": "The FortiLink guide instructs administrators to change `match-type` from `dynamic` to `override` before setting the explicit `match-period`. That distinction matters: the configured retention is an override to the normal dynamic matching lifecycle. If the match type remains dynamic, an engineer may expect an explicit hour-based hold that is not actually being applied. NAC policies can match MAC address, vendor, device family, device type, operating system, or user. The policy can assign a VLAN or apply port settings. DPP uses a similar policy-rule structure associated with a FortiLink interface."
+      },
+      {
+        "heading": "Configuration",
+        "body": "For a NAC policy, the documented pattern is:\n\nconfig user nac-policy\n    edit \"NACpolicy1\"\n        set match-type override\n        set match-period 3000\n    next\nend\n\nThe same retention concept is available under `config switch-controller dynamic-port-policy`, inside the relevant policy rule. Use a period that matches the operational lifecycle: a short staging period for onboarding, a longer period for managed IoT devices, or 0 only when indefinite retention is deliberate. The release also adds PoE configuration to NAC-enabled managed-switch ports and allows a QoS policy to be applied when the matching device is the only device on the port. Those are separate enforcement actions; they do not change the match-period timer."
+      },
+      {
+        "heading": "How to verify the match",
+        "body": "Inspect the NAC policy/DPP definition and confirm both `match-type override` and the intended `match-period`. Then observe the device in the Matched NAC Devices view and confirm the resulting VLAN/port settings on the managed switch. The 8.0 guide also documents a warning at 95 percent of the maximum number of matched devices and a switch-controller event when the maximum is reached. This is a capacity signal, not proof that a particular device's match has expired. A device that disappears should be correlated with its last match, configured retention, and any explicit removal/restart event."
+      },
+      {
+        "heading": "Operational caveats",
+        "body": "Retention creates a deliberate trade-off. Too short a period can cause a device to lose its intended NAC treatment after a quiet interval; too long a period can preserve stale classifications after a device changes hands or is repurposed. Review the match source and rule criteria before extending retention to solve a misclassification. If a device shares a port with a downstream switch or multiple endpoints, do not assume the single-device QoS override applies; the documented QoS enhancement is conditional on the matching device being the only device on the port. Coordinate NAC, DPP, PoE and QoS changes with the FortiGate/FortiLink management plane."
+      }
+    ],
+    "evidence": [
+      "Configured match-type and match-period prove the retention policy is explicit.",
+      "Matched NAC Devices and switch port state prove the classification reached the managed-switch enforcement point.",
+      "The 95-percent warning and switch-controller event prove capacity pressure, not per-device expiry.",
+      "A port-level QoS result is only expected under the documented single-device condition."
+    ],
+    "troubleshooting": [
+      "Retention ignored: verify match-type is override before evaluating match-period.",
+      "Device disappears early: check restart/removal events and whether the device was dynamically matched.",
+      "Wrong VLAN: inspect rule criteria and policy ordering rather than increasing retention.",
+      "QoS absent: verify the matched device is the only device on that port and port-setting override is enabled."
+    ]
+  }
+]
