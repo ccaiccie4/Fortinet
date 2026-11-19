@@ -1,0 +1,1383 @@
+{
+  "generated_at_local": "2026-11-19T08:52:52-08:00",
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "prompt": "A client receives an ARP reply from the FortiGate for a peer address, but TCP still fails. What has the capture actually proved?",
+      "choices": [
+        {
+          "text": "The peer is authorized by the firewall policy.",
+          "correct": false,
+          "feedback": "Authorization is a later policy decision; ARP resolution alone does not prove it."
+        },
+        {
+          "text": "The proxy-ARP range answered for that IPv4 address.",
+          "correct": true,
+          "feedback": "Correct: the FortiGate is answering for the destination address in that range."
+        },
+        {
+          "text": "The FortiSwitch blocked every alternate path.",
+          "correct": false,
+          "feedback": "Switch isolation must be verified separately from the ARP reply."
+        },
+        {
+          "text": "The return route is installed on the FortiGate.",
+          "correct": false,
+          "feedback": "A route is not established by observing an ARP response."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "prompt": "With intra-VLAN blocking enabled, a same-VLAN packet enters and leaves the FortiGate on the same VLAN interface. Which control prevents the documented traffic-redirect bypass?",
+      "choices": [
+        {
+          "text": "Disable `allow-traffic-redirect` globally.",
+          "correct": true,
+          "feedback": "Correct: the guide calls for disabling this redirect behavior so same-interface traffic is policy checked."
+        },
+        {
+          "text": "Enable proxy ARP on every interface.",
+          "correct": false,
+          "feedback": "Proxy ARP supplies ARP resolution; it does not control the redirect bypass."
+        },
+        {
+          "text": "Change the VLAN to a routed port.",
+          "correct": false,
+          "feedback": "Changing the interface type is not the documented control."
+        },
+        {
+          "text": "Disable DHCP snooping on the switch.",
+          "correct": false,
+          "feedback": "DHCP snooping is unrelated to the firewall policy path."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "prompt": "An IPv6 host cannot reach another client on a VLAN where intra-VLAN blocking is enabled. What is the most accurate first conclusion?",
+      "choices": [
+        {
+          "text": "The proxy-ARP pool is too small.",
+          "correct": false,
+          "feedback": "Proxy-ARP pool sizing is an IPv4 address-range issue."
+        },
+        {
+          "text": "The policy ID is not synchronized.",
+          "correct": false,
+          "feedback": "Policy synchronization does not explain the documented IPv6 limitation."
+        },
+        {
+          "text": "IPv6 client-to-client traffic is unsupported in this mode.",
+          "correct": true,
+          "feedback": "Correct: the FortiSwitch guide explicitly documents this boundary."
+        },
+        {
+          "text": "The FortiGate needs an IPv6 VIP.",
+          "correct": false,
+          "feedback": "An IPv6 VIP is not a substitute for the unsupported intra-VLAN behavior."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "prompt": "A design must preserve isolation when FortiLink connectivity is lost. Which setting expresses the intended behavior?",
+      "choices": [
+        {
+          "text": "`set access-vlan-mode fail-open`",
+          "correct": false,
+          "feedback": "Fail-open permits intra-VLAN traffic during the FortiLink outage."
+        },
+        {
+          "text": "`set access-vlan-mode fail-close`",
+          "correct": true,
+          "feedback": "Correct: fail-close keeps intra-VLAN traffic blocked when the FortiGate connection is lost."
+        },
+        {
+          "text": "`set match-period 0`",
+          "correct": false,
+          "feedback": "Match-period controls NAC/DPP record retention, not outage forwarding."
+        },
+        {
+          "text": "`set allow-traffic-redirect enable`",
+          "correct": false,
+          "feedback": "Enabling redirect can undermine the policy-inspection design."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "product": "FortiManager",
+      "prompt": "A `um/query/productapi` request returns an IPS signature description. Which statement is justified?",
+      "choices": [
+        {
+          "text": "The signature is installed on every managed FortiGate.",
+          "correct": false,
+          "feedback": "Package metadata does not prove device installation."
+        },
+        {
+          "text": "The signature matched live traffic in the last hour.",
+          "correct": false,
+          "feedback": "A signature lookup does not report runtime traffic matches."
+        },
+        {
+          "text": "The queried signature metadata was retrieved from product data.",
+          "correct": true,
+          "feedback": "Correct: it proves the requested metadata lookup succeeded."
+        },
+        {
+          "text": "The IPS sensor references the signature in every policy.",
+          "correct": false,
+          "feedback": "Sensor and policy attachment must be checked on the managed device."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "prompt": "Which target is documented for looking up a single IPS signature by ID?",
+      "choices": [
+        {
+          "text": "`/fgd/lookup/ency?source=ips&id=58947`",
+          "correct": true,
+          "feedback": "Correct: this is the documented encyclopedia lookup form."
+        },
+        {
+          "text": "`/pm/config/adom/root/pkg/ips/58947`",
+          "correct": false,
+          "feedback": "This is not the documented productapi target path."
+        },
+        {
+          "text": "`/sys/status/ips?id=58947`",
+          "correct": false,
+          "feedback": "A system-status path does not perform the encyclopedia lookup."
+        },
+        {
+          "text": "`/fortiguard/ips/install?signature=58947`",
+          "correct": false,
+          "feedback": "The lookup is read-only metadata retrieval, not an install action."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "prompt": "A package inventory uses `limit=10` and reports more than ten signatures. What is required for a complete audit?",
+      "choices": [
+        {
+          "text": "Repeat the first request until it returns the same page.",
+          "correct": false,
+          "feedback": "Repeating the same offset returns the same first page."
+        },
+        {
+          "text": "Increase the FortiGate IPS engine memory.",
+          "correct": false,
+          "feedback": "Engine memory does not control API pagination."
+        },
+        {
+          "text": "Fetch subsequent pages with the correct offset.",
+          "correct": true,
+          "feedback": "Correct: continue offsets until the reported total is covered."
+        },
+        {
+          "text": "Treat the first ten signatures as representative.",
+          "correct": false,
+          "feedback": "A sample page is not a complete package inventory."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "prompt": "An engineer needs to identify signatures added or removed between two IPS package releases. Which query is the best fit?",
+      "choices": [
+        {
+          "text": "A single signature encyclopedia lookup.",
+          "correct": false,
+          "feedback": "A single lookup describes one signature, not a release difference."
+        },
+        {
+          "text": "A package-version delta query.",
+          "correct": true,
+          "feedback": "Correct: the documented two-version target returns package delta information."
+        },
+        {
+          "text": "A managed-device reboot history query.",
+          "correct": false,
+          "feedback": "Reboot history is unrelated to package-content comparison."
+        },
+        {
+          "text": "A policy package installation preview.",
+          "correct": false,
+          "feedback": "Install preview evaluates deployment changes, not IPS signature deltas."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "product": "FortiAnalyzer",
+      "prompt": "The Azure Logs Ingestion API requires a `TimeGenerated` field. Which documented DCR transformation supplies it?",
+      "choices": [
+        {
+          "text": "`source | project-away message`",
+          "correct": false,
+          "feedback": "This removes a field but does not create the required timestamp."
+        },
+        {
+          "text": "`source | extend TimeGenerated = todatetime(logtime) | project-away logtime`",
+          "correct": true,
+          "feedback": "Correct: it converts logtime into TimeGenerated and removes the temporary field."
+        },
+        {
+          "text": "`source | summarize count() by TimeGenerated`",
+          "correct": false,
+          "feedback": "This assumes TimeGenerated already exists in the source payload."
+        },
+        {
+          "text": "`source | extend logtime = now() | project message`",
+          "correct": false,
+          "feedback": "This renames no field into the required schema."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "prompt": "Which Azure permission is specified for the application registration on the Data Collection Rule?",
+      "choices": [
+        {
+          "text": "Log Analytics Reader",
+          "correct": false,
+          "feedback": "Reader access alone does not grant the documented ingestion role."
+        },
+        {
+          "text": "Monitoring Metrics Publisher",
+          "correct": true,
+          "feedback": "Correct: Fortinet specifies Monitoring Metrics Publisher for the DCR."
+        },
+        {
+          "text": "Storage Blob Data Contributor",
+          "correct": false,
+          "feedback": "Blob storage access is not the Logs Ingestion API role."
+        },
+        {
+          "text": "Security Reader",
+          "correct": false,
+          "feedback": "Security Reader is not the documented DCR ingestion role."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "prompt": "The FortiAnalyzer output profile passes Validate and Save, but the destination table remains empty. What should be checked next?",
+      "choices": [
+        {
+          "text": "The FortiAnalyzer local archive retention only.",
+          "correct": false,
+          "feedback": "Local archive retention is a separate storage path."
+        },
+        {
+          "text": "The DCR/table schema and matching Log Forwarding rule.",
+          "correct": true,
+          "feedback": "Correct: validate rule eligibility and the DCR stream/schema end to end."
+        },
+        {
+          "text": "The FortiGate session pickup setting.",
+          "correct": false,
+          "feedback": "Session pickup does not control external log forwarding."
+        },
+        {
+          "text": "The FortiAnalyzer administrator password expiry.",
+          "correct": false,
+          "feedback": "Administrator password expiry is not the first explanation for an accepted profile."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "prompt": "Only traffic logs arrive in Azure; event logs do not. Which boundary is most relevant?",
+      "choices": [
+        {
+          "text": "Each log family may require a matching Log Forwarding rule.",
+          "correct": true,
+          "feedback": "Correct: rule filters and selected log types determine which records enter the output path."
+        },
+        {
+          "text": "The DCE can ingest only traffic logs.",
+          "correct": false,
+          "feedback": "The DCE is not inherently limited to traffic logs."
+        },
+        {
+          "text": "The local Analytics database must be rebuilt.",
+          "correct": false,
+          "feedback": "Rebuilding Analytics is unrelated to selecting log families for forwarding."
+        },
+        {
+          "text": "The FortiGate must disable log compression.",
+          "correct": false,
+          "feedback": "Log compression is not the documented cause of per-family forwarding gaps."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "product": "FortiSwitch",
+      "prompt": "A NAC policy has `match-period 48`, but the device does not retain the match for 48 hours. What configuration prerequisite should be checked first?",
+      "choices": [
+        {
+          "text": "The FortiSwitch port speed.",
+          "correct": false,
+          "feedback": "Port speed does not control NAC match retention."
+        },
+        {
+          "text": "The policy `match-type` is set to `override`.",
+          "correct": true,
+          "feedback": "Correct: the FortiLink guide says to switch from dynamic to override before setting match-period."
+        },
+        {
+          "text": "The DHCP lease is also 48 hours.",
+          "correct": false,
+          "feedback": "DHCP lease duration is a separate timer."
+        },
+        {
+          "text": "The RADIUS server has a CoA secret.",
+          "correct": false,
+          "feedback": "CoA secrets are unrelated to the explicit match retention field."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "prompt": "What does `match-period 0` mean in the documented NAC/DPP behavior?",
+      "choices": [
+        {
+          "text": "Expire the match immediately.",
+          "correct": false,
+          "feedback": "Zero is not an immediate-expiry setting here."
+        },
+        {
+          "text": "Retain the match indefinitely until a documented removal event.",
+          "correct": true,
+          "feedback": "Correct: zero means indefinite retention subject to documented removal events."
+        },
+        {
+          "text": "Use the DHCP lease as the retention timer.",
+          "correct": false,
+          "feedback": "The DHCP lease is not the match-period timer."
+        },
+        {
+          "text": "Retain the match for 120 days exactly.",
+          "correct": false,
+          "feedback": "The maximum configured value is 3,072 hours; zero is not 120 days."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "prompt": "A switch-controller warning reports that matched NAC devices have reached 95 percent of the maximum. What does it indicate?",
+      "choices": [
+        {
+          "text": "A particular device's match has expired.",
+          "correct": false,
+          "feedback": "The warning is a capacity signal, not an expiry event."
+        },
+        {
+          "text": "The switch has lost its FortiLink tunnel.",
+          "correct": false,
+          "feedback": "FortiLink loss is not what the 95-percent warning represents."
+        },
+        {
+          "text": "The matched-device capacity is approaching its limit.",
+          "correct": true,
+          "feedback": "Correct: it warns that the matched-device maximum is nearing exhaustion."
+        },
+        {
+          "text": "Every NAC rule has stopped matching.",
+          "correct": false,
+          "feedback": "A capacity warning does not prove all rules stopped evaluating."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "prompt": "A NAC-matched device receives the expected VLAN but not the configured QoS treatment. Which documented condition should be checked?",
+      "choices": [
+        {
+          "text": "The matched device is the only device on the port.",
+          "correct": true,
+          "feedback": "Correct: the QoS enhancement is conditional on the matching device being the only device on the port."
+        },
+        {
+          "text": "The switch is using a 10-Gigabit uplink.",
+          "correct": false,
+          "feedback": "Uplink speed does not satisfy the single-device condition."
+        },
+        {
+          "text": "The VLAN has a DHCP relay configured.",
+          "correct": false,
+          "feedback": "DHCP relay is not the documented QoS prerequisite."
+        },
+        {
+          "text": "The match-period is set to 120 days.",
+          "correct": false,
+          "feedback": "Retention duration does not determine whether port QoS is applied."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "product": "FortiAP/Wireless",
+      "prompt": "An IPv6-only AP management subnet uses multicast discovery. Which FortiGate setting advertises the controller discovery multicast address?",
+      "choices": [
+        {
+          "text": "`set discovery-mc-addr6 <IPv6 address>`",
+          "correct": true,
+          "feedback": "Correct: this sets the IPv6 multicast address used for AP discovery."
+        },
+        {
+          "text": "`set ap-discover enable`",
+          "correct": false,
+          "feedback": "Automatic registration is not the multicast address setting."
+        },
+        {
+          "text": "`set ip6-send-adv disable`",
+          "correct": false,
+          "feedback": "Disabling router advertisements does not configure controller multicast discovery."
+        },
+        {
+          "text": "`set capwap-data-channel clear-text`",
+          "correct": false,
+          "feedback": "Data-channel security mode is unrelated to the discovery address."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "prompt": "A design uses DHCPv6 to tell FortiAP where the controller is. Which option is documented?",
+      "choices": [
+        {
+          "text": "Option 43 with an IPv4 controller address.",
+          "correct": false,
+          "feedback": "Option 43 is not the documented IPv6 controller discovery method here."
+        },
+        {
+          "text": "Option 52 with the AC IPv6 address.",
+          "correct": true,
+          "feedback": "Correct: DHCPv6 Option 52 carries the AC IPv6 address."
+        },
+        {
+          "text": "Option 60 with the AP vendor class.",
+          "correct": false,
+          "feedback": "Option 60 is not the specified controller-address option."
+        },
+        {
+          "text": "Option 82 with the client circuit ID.",
+          "correct": false,
+          "feedback": "Option 82 is unrelated to this FortiAP discovery mechanism."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "prompt": "IPv6 CAPWAP management works on a FortiGate NP6 appliance, but CAPWAP data offload is absent. What is the best interpretation?",
+      "choices": [
+        {
+          "text": "The AP firmware is necessarily corrupted.",
+          "correct": false,
+          "feedback": "The documented platform caveat does not imply AP corruption."
+        },
+        {
+          "text": "The IPv6 address must be removed from the AP.",
+          "correct": false,
+          "feedback": "Removing IPv6 is not required for management to work."
+        },
+        {
+          "text": "NP6/NP6lite does not support this CAPWAP offload.",
+          "correct": true,
+          "feedback": "Correct: CAPWAP offload is supported on NP7/NP7lite, not NP6/NP6lite."
+        },
+        {
+          "text": "The controller multicast address is always invalid.",
+          "correct": false,
+          "feedback": "A working management association makes multicast-address failure less likely."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "prompt": "The AP is discovered and authorized, but clients in a tunnel-mode SSID cannot pass data. Which next check best separates control from data?",
+      "choices": [
+        {
+          "text": "Verify the CAPWAP data channel and SSID forwarding path.",
+          "correct": true,
+          "feedback": "Correct: discovery/authorization does not prove the data tunnel and SSID path work."
+        },
+        {
+          "text": "Change the DHCPv6 Option 52 value first.",
+          "correct": false,
+          "feedback": "Option 52 is relevant when discovery is failing, not after authorization."
+        },
+        {
+          "text": "Increase the controller multicast scope.",
+          "correct": false,
+          "feedback": "Multicast scope is not the first check for an established AP with data failure."
+        },
+        {
+          "text": "Assume the IPv6 management ping proves client forwarding.",
+          "correct": false,
+          "feedback": "A management ping proves reachability only, not client traffic forwarding."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "product": "FortiNAC",
+      "prompt": "A NetFlow exporter is configured but FortiNAC Network Sessions remains empty. Which destination contract should be verified?",
+      "choices": [
+        {
+          "text": "TCP/443 to the FortiNAC GUI.",
+          "correct": false,
+          "feedback": "The GUI port does not receive the documented flow export."
+        },
+        {
+          "text": "UDP flow export to the FortiNAC IP on port 2055.",
+          "correct": true,
+          "feedback": "Correct: the FortiNAC guide specifies its IP address and listener port 2055."
+        },
+        {
+          "text": "UDP/720 broadcasts between HA peers.",
+          "correct": false,
+          "feedback": "UDP/720 is used in a different product's HA discovery context."
+        },
+        {
+          "text": "TCP/22 from the FortiNAC appliance.",
+          "correct": false,
+          "feedback": "SSH reachability does not prove NetFlow export delivery."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "prompt": "What is the strongest limitation to remember when using NetFlow as profiling evidence?",
+      "choices": [
+        {
+          "text": "It contains the full application payload for every session.",
+          "correct": false,
+          "feedback": "NetFlow does not provide full application payload."
+        },
+        {
+          "text": "It proves which user saw a decrypted page.",
+          "correct": false,
+          "feedback": "Flow metadata cannot prove the exact page content seen by a user."
+        },
+        {
+          "text": "It is flow metadata, not packet payload inspection.",
+          "correct": true,
+          "feedback": "Correct: flow records summarize traffic metadata and depend on exporter fields."
+        },
+        {
+          "text": "It automatically registers every observed endpoint.",
+          "correct": false,
+          "feedback": "Profiling and automatic registration are separate outcomes."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "prompt": "Network Sessions shows the expected flow tuple, but the device profiling rule does not match. What is the best next step?",
+      "choices": [
+        {
+          "text": "Inspect Network Traffic Method criteria against the received flow attributes.",
+          "correct": true,
+          "feedback": "Correct: received sessions prove collection; the rule criteria are the next boundary."
+        },
+        {
+          "text": "Change the collector port from 2055 to 443.",
+          "correct": false,
+          "feedback": "Changing the port would likely stop the working flow feed."
+        },
+        {
+          "text": "Rebuild the FortiNAC database immediately.",
+          "correct": false,
+          "feedback": "A database rebuild is disproportionate without evidence of corruption."
+        },
+        {
+          "text": "Assume the exporter has stopped sending records.",
+          "correct": false,
+          "feedback": "The visible sessions contradict the claim that the exporter stopped."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "prompt": "A device matches the Network Traffic Method but remains rogue. Which distinction matters?",
+      "choices": [
+        {
+          "text": "NetFlow v9 cannot create host records.",
+          "correct": false,
+          "feedback": "NetFlow version does not explain registration behavior by itself."
+        },
+        {
+          "text": "The profile match and registration action are separate decisions.",
+          "correct": true,
+          "feedback": "Correct: inspect whether the rule is configured for automatic or manual registration."
+        },
+        {
+          "text": "The FortiNAC IP address must be public.",
+          "correct": false,
+          "feedback": "The collector can receive flows on an internal address."
+        },
+        {
+          "text": "Every matching rule registers devices automatically.",
+          "correct": false,
+          "feedback": "Automatic registration is a rule setting, not a universal consequence."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC-F",
+      "prompt": "Two endpoint fingerprint records show the same MAC and port but different operating systems. What event should be expected?",
+      "choices": [
+        {
+          "text": "Device Fingerprint Changed.",
+          "correct": true,
+          "feedback": "Correct: the guide describes this event for differing OS fingerprints on the same MAC/port."
+        },
+        {
+          "text": "RADIUS Accounting Stop.",
+          "correct": false,
+          "feedback": "Accounting Stop is a RADIUS session event, not the fingerprint-change event."
+        },
+        {
+          "text": "FortiLink Member Down.",
+          "correct": false,
+          "feedback": "FortiLink state is unrelated to the endpoint identity records."
+        },
+        {
+          "text": "Host Registration Timeout.",
+          "correct": false,
+          "feedback": "The event is not defined as a registration timeout."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "prompt": "A fingerprint attribute is blank, but other sources identify the host. What should be checked before concluding the endpoint lacks that attribute?",
+      "choices": [
+        {
+          "text": "Whether the corresponding protocol is enabled and reachable.",
+          "correct": true,
+          "feedback": "Correct: some attributes require the relevant FortiNAC-OS allowaccess protocol option and network reachability."
+        },
+        {
+          "text": "Whether the DHCP lease is longer than one day.",
+          "correct": false,
+          "feedback": "Lease duration does not enable an attribute collector."
+        },
+        {
+          "text": "Whether the host is in the production VLAN.",
+          "correct": false,
+          "feedback": "VLAN placement alone does not explain an unavailable protocol attribute."
+        },
+        {
+          "text": "Whether the endpoint uses a static IP address.",
+          "correct": false,
+          "feedback": "Static addressing does not rule out other fingerprint sources."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "prompt": "What does Source Rank control in endpoint fingerprint processing?",
+      "choices": [
+        {
+          "text": "Which record is permanently deleted.",
+          "correct": false,
+          "feedback": "Source Rank does not delete historical fingerprint records."
+        },
+        {
+          "text": "The order sources populate the host record.",
+          "correct": true,
+          "feedback": "Correct: it prioritizes sources for host-record population."
+        },
+        {
+          "text": "The order switches assign access VLANs.",
+          "correct": false,
+          "feedback": "VLAN assignment is a policy result, not source ranking."
+        },
+        {
+          "text": "The interval between fingerprint scans.",
+          "correct": false,
+          "feedback": "The field is not a scan interval."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "prompt": "A fingerprint record is present, but the host remains rogue. Which explanation is consistent with the guide?",
+      "choices": [
+        {
+          "text": "A fingerprint always auto-registers unless DHCP fails.",
+          "correct": false,
+          "feedback": "Fingerprint presence alone does not force registration."
+        },
+        {
+          "text": "A device can be registered only after an SNMP trap.",
+          "correct": false,
+          "feedback": "SNMP traps are not a universal registration prerequisite."
+        },
+        {
+          "text": "Automatic registration requires a matching rule configured for it.",
+          "correct": true,
+          "feedback": "Correct: the rule must match and be configured for automatic registration."
+        },
+        {
+          "text": "Rogue status means the endpoint was never observed.",
+          "correct": false,
+          "feedback": "Rogue status can represent an observed but unregistered endpoint."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "product": "FortiAuthenticator",
+      "prompt": "What is the design purpose of separating the Management interface from the Heartbeat Interface?",
+      "choices": [
+        {
+          "text": "To place administrative access and HA health/synchronization on distinct paths.",
+          "correct": true,
+          "feedback": "Correct: the management path is decoupled from the dedicated heartbeat path."
+        },
+        {
+          "text": "To move RADIUS authentication to the heartbeat subnet.",
+          "correct": false,
+          "feedback": "The heartbeat interface is not the authentication-service interface."
+        },
+        {
+          "text": "To make both nodes active for every authentication request.",
+          "correct": false,
+          "feedback": "The cluster member role remains active-passive."
+        },
+        {
+          "text": "To remove the need for Layer-2 peer discovery.",
+          "correct": false,
+          "feedback": "The separate heartbeat does not remove the documented L2 discovery requirement."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "prompt": "A routed management network is reachable, but the HA pair never discovers its peer. Which documented path deserves attention?",
+      "choices": [
+        {
+          "text": "TCP/443 to the web interface.",
+          "correct": false,
+          "feedback": "Web access proves administrative reachability, not HA discovery."
+        },
+        {
+          "text": "UDP/1812 RADIUS requests.",
+          "correct": false,
+          "feedback": "RADIUS requests are not the documented election/discovery mechanism."
+        },
+        {
+          "text": "Layer-2 broadcasts and UDP/720 peer communication.",
+          "correct": true,
+          "feedback": "Correct: cluster discovery/election uses L2 broadcasts and UDP/720."
+        },
+        {
+          "text": "DHCPv6 Option 52 controller discovery.",
+          "correct": false,
+          "feedback": "Option 52 is a FortiAP discovery mechanism."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "prompt": "What do the default heartbeat values represent?",
+      "choices": [
+        {
+          "text": "1,000 ms interval and 6,000 ms lost threshold.",
+          "correct": true,
+          "feedback": "Correct: these are the documented default heartbeat interval and lost threshold."
+        },
+        {
+          "text": "6,000 ms interval and 1,000 ms lost threshold.",
+          "correct": false,
+          "feedback": "The two values are reversed."
+        },
+        {
+          "text": "30-second interval and 60-second lost threshold.",
+          "correct": false,
+          "feedback": "Thirty seconds is the monitored-interface stability default, not the heartbeat pair."
+        },
+        {
+          "text": "100 ms interval and 300 ms lost threshold.",
+          "correct": false,
+          "feedback": "These are not the documented defaults."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "prompt": "During a cluster failover, several authentication requests fail briefly. Which interpretation is consistent with the guide?",
+      "choices": [
+        {
+          "text": "Every RADIUS client must be re-created.",
+          "correct": false,
+          "feedback": "The guide does not require recreating every client after failover."
+        },
+        {
+          "text": "In-flight requests can be lost and failover may take 30–180 seconds.",
+          "correct": true,
+          "feedback": "Correct: in-flight requests can be lost and the failover interval varies by cluster state."
+        },
+        {
+          "text": "The heartbeat interface is also the client-facing RADIUS listener.",
+          "correct": false,
+          "feedback": "Heartbeat is dedicated to HA sync/health, not the authentication listener."
+        },
+        {
+          "text": "A standby unit never synchronizes configuration.",
+          "correct": false,
+          "feedback": "The active configuration is synchronized to standby in cluster mode."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "product": "FortiPAM",
+      "prompt": "What happens to consumers still using the old FortiPAM API key after regeneration?",
+      "choices": [
+        {
+          "text": "They continue working until the next reboot.",
+          "correct": false,
+          "feedback": "The documented behavior is not deferred until reboot."
+        },
+        {
+          "text": "They receive a warning but remain authenticated.",
+          "correct": false,
+          "feedback": "The guide describes immediate revocation, not a warning grace period."
+        },
+        {
+          "text": "Their old credential is immediately revoked.",
+          "correct": true,
+          "feedback": "Correct: consumers using the old key lose API access immediately."
+        },
+        {
+          "text": "They are automatically issued the new key.",
+          "correct": false,
+          "feedback": "FortiPAM does not distribute the new secret to every consumer automatically."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "prompt": "Why is a separate API user recommended for each automation integration?",
+      "choices": [
+        {
+          "text": "It isolates permissions and limits the blast radius of key rotation.",
+          "correct": true,
+          "feedback": "Correct: dedicated identities reduce shared-secret and permission blast radius."
+        },
+        {
+          "text": "It allows the integration to bypass API authorization.",
+          "correct": false,
+          "feedback": "A dedicated API user still requires authorization."
+        },
+        {
+          "text": "It makes all API keys valid after revocation.",
+          "correct": false,
+          "feedback": "Regeneration revokes the old key regardless of user count."
+        },
+        {
+          "text": "It removes the need to store credentials securely.",
+          "correct": false,
+          "feedback": "Credentials still require approved secret storage."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "prompt": "An old-key request fails after rotation. What additional test best distinguishes expected revocation from a network or permission issue?",
+      "choices": [
+        {
+          "text": "Retry the old key from a second workstation.",
+          "correct": false,
+          "feedback": "A second workstation still uses the revoked credential."
+        },
+        {
+          "text": "Use the new key for the same known-safe API request.",
+          "correct": true,
+          "feedback": "Correct: the same request with the new key isolates the credential change."
+        },
+        {
+          "text": "Increase the API user's role to administrator.",
+          "correct": false,
+          "feedback": "Increasing permissions changes more than the credential under test."
+        },
+        {
+          "text": "Disable TLS validation on the client.",
+          "correct": false,
+          "feedback": "Disabling TLS validation introduces a separate security weakness."
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "prompt": "A key is suspected compromised. What is the correct recovery principle?",
+      "choices": [
+        {
+          "text": "Keep the old key valid until every consumer is updated.",
+          "correct": false,
+          "feedback": "Keeping a compromised key valid defeats the revocation objective."
+        },
+        {
+          "text": "Disable API logging so the secret is not recorded.",
+          "correct": false,
+          "feedback": "Logging should be retained with secrets redacted."
+        },
+        {
+          "text": "Restore the old key if one integration fails.",
+          "correct": false,
+          "feedback": "The old credential is no longer a safe recovery path."
+        },
+        {
+          "text": "Revoke it immediately and update consumers with a new key.",
+          "correct": true,
+          "feedback": "Correct: revoke, distribute a replacement securely, and verify each consumer."
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "product": "FortiSIEM",
+      "prompt": "Which sequence describes the Machine Learning Workbench lifecycle?",
+      "choices": [
+        {
+          "text": "Inference -> report -> training -> dataset -> model.",
+          "correct": false,
+          "feedback": "Inference requires a trained model and prepared dataset first."
+        },
+        {
+          "text": "Report -> dataset -> training -> model -> scheduled inference.",
+          "correct": true,
+          "feedback": "Correct: the report creates the dataset used to train the model before inference."
+        },
+        {
+          "text": "Event rule -> incident -> parser -> report -> model.",
+          "correct": false,
+          "feedback": "This mixes unrelated event-rule and parser operations."
+        },
+        {
+          "text": "Collector discovery -> rule installation -> training -> email.",
+          "correct": false,
+          "feedback": "Collector discovery is not the Workbench training sequence."
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "prompt": "A Classification task cannot train on the selected dataset. Which data property is required?",
+      "choices": [
+        {
+          "text": "A labeled field in the event data.",
+          "correct": true,
+          "feedback": "Correct: the guide states Classification requires a labeled field."
+        },
+        {
+          "text": "A FortiGate policy ID in every event.",
+          "correct": false,
+          "feedback": "A firewall policy ID is not a universal classification label."
+        },
+        {
+          "text": "A Supervisor node with GPU acceleration.",
+          "correct": false,
+          "feedback": "GPU acceleration is not the documented prerequisite."
+        },
+        {
+          "text": "A scheduled email recipient.",
+          "correct": false,
+          "feedback": "Email recipients do not provide training labels."
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "prompt": "A Forecasting inference job completes but creates no incident. What should be checked first?",
+      "choices": [
+        {
+          "text": "Whether the model was trained on a Worker node.",
+          "correct": false,
+          "feedback": "Training placement does not determine the Forecasting output contract."
+        },
+        {
+          "text": "Whether the incident rule is disabled.",
+          "correct": false,
+          "feedback": "A missing incident rule is not the first explanation for this task output."
+        },
+        {
+          "text": "Whether the task is Forecasting, which sends email instead.",
+          "correct": true,
+          "feedback": "Correct: Forecasting sends email rather than creating incidents."
+        },
+        {
+          "text": "Whether the event database has been rebuilt.",
+          "correct": false,
+          "feedback": "Database rebuild is not required merely because a forecast produced email."
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "prompt": "Why can Auto mode take longer than selecting a known algorithm?",
+      "choices": [
+        {
+          "text": "It waits for every Collector to restart.",
+          "correct": false,
+          "feedback": "Collector restarts are not the reason documented for Auto-mode duration."
+        },
+        {
+          "text": "It tries multiple algorithms and parameter sets.",
+          "correct": true,
+          "feedback": "Correct: algorithm/parameter search adds training time."
+        },
+        {
+          "text": "It always trains on AWS before local inference.",
+          "correct": false,
+          "feedback": "The guide does not say Auto mode always runs on AWS first."
+        },
+        {
+          "text": "It creates an incident for every source event.",
+          "correct": false,
+          "feedback": "Auto mode does not create one incident per source event."
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "product": "FortiSASE",
+      "prompt": "A user is actively transferring data when the tunnel disconnects at a consistent session age. Which timer best fits?",
+      "choices": [
+        {
+          "text": "Idle timeout.",
+          "correct": false,
+          "feedback": "Idle timeout depends on the absence of traffic."
+        },
+        {
+          "text": "Authentication timeout.",
+          "correct": true,
+          "feedback": "Correct: authentication timeout expires by session age even when active."
+        },
+        {
+          "text": "Internet reachability check.",
+          "correct": false,
+          "feedback": "Internet reachability check is a pre-connect gate."
+        },
+        {
+          "text": "IPsec DPD retry interval.",
+          "correct": false,
+          "feedback": "DPD is a peer-liveness mechanism, not the Cloud Security tunnel age timer."
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "prompt": "An administrator changes Global connection settings. What is the expected scope?",
+      "choices": [
+        {
+          "text": "Only the Default profile is affected.",
+          "correct": false,
+          "feedback": "The documented scope is broader than Default alone."
+        },
+        {
+          "text": "Only users who are currently disconnected are affected.",
+          "correct": false,
+          "feedback": "The setting is not limited to disconnected users."
+        },
+        {
+          "text": "All endpoint profiles, including Default, inherit the common settings.",
+          "correct": true,
+          "feedback": "Correct: global connection settings apply across endpoint profiles."
+        },
+        {
+          "text": "Only proxy-mode users inherit the settings.",
+          "correct": false,
+          "feedback": "The guide does not limit the feature to proxy-mode users."
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "prompt": "A user disconnects after no traffic is detected, well before the maximum session age. Which timer should be examined?",
+      "choices": [
+        {
+          "text": "Idle timeout.",
+          "correct": true,
+          "feedback": "Correct: idle timeout is inactivity-based."
+        },
+        {
+          "text": "Authentication timeout.",
+          "correct": false,
+          "feedback": "Authentication timeout is based on elapsed authenticated session age."
+        },
+        {
+          "text": "SAML assertion audience.",
+          "correct": false,
+          "feedback": "SAML audience affects authentication assertion validation, not inactivity."
+        },
+        {
+          "text": "FortiGate route-map preference.",
+          "correct": false,
+          "feedback": "Route-map preference does not control Cloud Security tunnel idle state."
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "prompt": "The endpoint never establishes a tunnel. Should the administrator start by changing the post-connect idle timeout?",
+      "choices": [
+        {
+          "text": "Yes, because idle timeout controls initial negotiation.",
+          "correct": false,
+          "feedback": "Idle timeout applies after a session is established."
+        },
+        {
+          "text": "Yes, because authentication timeout sets the first packet route.",
+          "correct": false,
+          "feedback": "Authentication timeout is not the first-packet route selector."
+        },
+        {
+          "text": "No, inspect reachability, authentication, profile assignment and tunnel negotiation first.",
+          "correct": true,
+          "feedback": "Correct: post-connect timers are not the first boundary when no tunnel forms."
+        },
+        {
+          "text": "No, disable all endpoint profiles.",
+          "correct": false,
+          "feedback": "Disabling profiles removes policy rather than diagnosing the connection path."
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "product": "FortiSASE",
+      "prompt": "How does the November 18 Internet-check autoconnect gate differ from this lesson's timers?",
+      "choices": [
+        {
+          "text": "It is a pre-connect readiness check, not an established-session lifetime timer.",
+          "correct": true,
+          "feedback": "Correct: the Internet check gates connection initiation; the timers govern established sessions."
+        },
+        {
+          "text": "It is the same as the global idle timeout.",
+          "correct": false,
+          "feedback": "The two controls have different trigger conditions."
+        },
+        {
+          "text": "It measures only the SAML assertion age.",
+          "correct": false,
+          "feedback": "SAML assertion age is not the Internet-check behavior."
+        },
+        {
+          "text": "It changes the FortiGate SD-WAN member quota.",
+          "correct": false,
+          "feedback": "SD-WAN quota is an unrelated underlay accounting feature."
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "prompt": "A member exceeds its monthly quota. What does the FortiOS feature primarily change?",
+      "choices": [
+        {
+          "text": "It immediately disables the WAN interface.",
+          "correct": false,
+          "feedback": "The documented action is not an unconditional interface shutdown."
+        },
+        {
+          "text": "It adjusts cost, weight or volume-ratio to steer service selection.",
+          "correct": true,
+          "feedback": "Correct: overage changes member selection attributes."
+        },
+        {
+          "text": "It rate-limits every packet to a fixed bandwidth.",
+          "correct": false,
+          "feedback": "The feature is quota-based steering, not a hard bandwidth policer."
+        },
+        {
+          "text": "It deletes the member from the SD-WAN zone.",
+          "correct": false,
+          "feedback": "The member remains a configured SD-WAN candidate."
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "prompt": "Why is `billing-start-day` operationally important?",
+      "choices": [
+        {
+          "text": "It defines when monthly usage accounting resets.",
+          "correct": true,
+          "feedback": "Correct: the billing period starts on the configured day of the month."
+        },
+        {
+          "text": "It sets the SLA latency threshold.",
+          "correct": false,
+          "feedback": "Latency thresholds are Performance SLA settings."
+        },
+        {
+          "text": "It chooses the BGP router ID.",
+          "correct": false,
+          "feedback": "BGP router ID is unrelated to billing-cycle accounting."
+        },
+        {
+          "text": "It changes the interface's MTU.",
+          "correct": false,
+          "feedback": "MTU does not define the quota reset boundary."
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "prompt": "Which command provides member quota and overage accounting details?",
+      "choices": [
+        {
+          "text": "`diagnose sys sdwan service4`",
+          "correct": false,
+          "feedback": "service4 shows selected members for IPv4 services, not the billing ledger."
+        },
+        {
+          "text": "`diagnose sys sdwan health-check`",
+          "correct": false,
+          "feedback": "Health-check output focuses on SLA state."
+        },
+        {
+          "text": "`diagnose sys sdwan bill member <id>`",
+          "correct": true,
+          "feedback": "Correct: the bill member command exposes quota and overage fields."
+        },
+        {
+          "text": "`get router info bgp summary`",
+          "correct": false,
+          "feedback": "BGP summary does not show the SD-WAN billing counters."
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "product": "Secure SD-WAN",
+      "prompt": "The quota diagnostic shows overage, but the engineer needs to know whether IPv6 traffic moved to another circuit. What should be inspected?",
+      "choices": [
+        {
+          "text": "Only the IPv4 service output.",
+          "correct": false,
+          "feedback": "IPv4 service selection does not prove IPv6 path selection."
+        },
+        {
+          "text": "The IPv6 SD-WAN service selection and an actual test-flow capture.",
+          "correct": true,
+          "feedback": "Correct: inspect service6 and confirm actual egress for the test flow."
+        },
+        {
+          "text": "The FortiAnalyzer archive retention.",
+          "correct": false,
+          "feedback": "Archive retention is unrelated to forwarding member selection."
+        },
+        {
+          "text": "The FortiGate administrator login history.",
+          "correct": false,
+          "feedback": "Administrator login history does not prove data-plane egress."
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "product": "Secure SD-WAN",
+      "prompt": "After a billing-period reset, a previously expensive member becomes preferred again. What is the expected explanation?",
+      "choices": [
+        {
+          "text": "The quota state reset and its overage steering adjustment no longer applies.",
+          "correct": true,
+          "feedback": "Correct: a new billing period resets quota accounting and can restore the member's preference."
+        },
+        {
+          "text": "The member's interface was automatically replaced.",
+          "correct": false,
+          "feedback": "The feature does not replace physical interfaces."
+        },
+        {
+          "text": "The SD-WAN SLA probe stopped running permanently.",
+          "correct": false,
+          "feedback": "A quota reset does not imply SLA probes were disabled."
+        },
+        {
+          "text": "The route table discarded all static routes.",
+          "correct": false,
+          "feedback": "Static-route deletion is unrelated to monthly quota state."
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "question_count": 50,
+    "unique_ids": true,
+    "choice_count": 200,
+    "exactly_one_correct": true,
+    "all_feedback_present": true,
+    "answer_distribution": {
+      "A": 17,
+      "B": 19,
+      "C": 13,
+      "D": 1
+    },
+    "products": [
+      "FortiGate",
+      "FortiManager",
+      "FortiAnalyzer",
+      "FortiSwitch",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiNAC-F",
+      "FortiAuthenticator",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ],
+    "question_prompts_unique": true
+  }
+}
