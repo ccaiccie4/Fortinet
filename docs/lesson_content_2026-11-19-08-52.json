@@ -50,7 +50,7 @@
     "title": "IPS package intelligence through the FortiManager JSON API",
     "version": "FortiManager 8.0.0",
     "primary_urls": [
-      "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/699084/fortimanager-api-can-be-used-to-get-detailed-info-about-ips",
+      "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/699084/get-detailed-information-about-ips-packages-and-signatures-using-the-api",
       "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/657291"
     ],
     "scenario_url": null,
@@ -62,7 +62,7 @@
       },
       {
         "heading": "Query mechanics",
-        "body": "The API request carries a target path in the `data` parameter. Fortinet documents four useful query forms. A signature lookup uses `/fgd/lookup/ency?source=ips&id=58947`. A package inventory uses `/srvupd/detail/ips/34.089?detail=1&offset=0&limit=10`. A delta query compares two package versions, for example `/srvupd/detail/ips/34.085/34.089?detail=1&offset=0&limit=10`. Pagination changes `offset` and `limit`, such as `offset=20&limit=10`. `detail=1` requests detailed signature information rather than only a compact list. The API consumer should treat the package version as an explicit input and retain the returned version, query parameters, timestamp, and pagination offset with the collected data."
+        "body": "The API request carries a target path in the `data` parameter. Fortinet documents four useful query forms. A signature lookup uses `/fgd/lookup/ency?source=ips&id=58947`. A package inventory uses `/srvupd/detail/ips/34.089?detail=1&offset=0&limit=10`. A delta query compares two package versions, for example `/srvupd/detail/ips/34.085/34.089?detail=1&offset=0&limit=10`. Pagination changes `offset` and `limit`, such as `offset=20&limit=10`. `detail=1` requests detailed signature information rather than only a compact list. The API consumer should treat the package version as an explicit input and retain the returned version, query parameters, timestamp, and pagination offset with the collected data. Additional documented targets support total signature counts (`/srvupd/count-detail/ips/34.099`), counts between releases (`/srvupd/count-detail/ips/34.080/34.089`), latest package summaries (`/srvupd/summary?types=ips&limit=10`), and signature change history (`/srvupd/history/ips/58389`). These let a collector validate pagination, detect new package releases, and explain a signature's history without confusing package metadata with runtime policy state."
       },
       {
         "heading": "Automation pattern",
@@ -140,8 +140,8 @@
     "title": "NAC and dynamic-port-policy match retention in hours",
     "version": "FortiOS/FortiSwitchOS 8.0.0",
     "primary_urls": [
-      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/666111/enhance-nac-dpp-port-control-and-qos-poe-support",
-      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173271/fortiswitch-network-access-control"
+      "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173271/fortiswitch-network-access-control",
+      "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/666111/enhance-nac-dpp-port-control-and-qos-poe-support"
     ],
     "scenario_url": null,
     "scenario_status": "No recent Community case matching match-period retention was verified; older RADIUS/CoA material was excluded as a different transaction.",
@@ -321,8 +321,8 @@
     "title": "Separate HA management and heartbeat interfaces",
     "version": "FortiAuthenticator 8.0.2/8.0.3",
     "primary_urls": [
-      "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new",
-      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability"
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/122076/high-availability",
+      "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/release-notes/568509/whats-new"
     ],
     "scenario_url": null,
     "scenario_status": "No recent Community case matching the 8.0.2 HA interface separation was verified; the lesson uses the release note and current HA administration guide.",
