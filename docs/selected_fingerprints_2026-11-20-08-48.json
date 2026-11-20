@@ -1,0 +1,257 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-20T08:48:06-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-20-08-48.json",
+  "historical_records_compared": 366,
+  "same_day_prior_candidate_records_compared": 12,
+  "selected_candidate_count": 12,
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "FortiGate 8.0 direct SCIM groups and certificate-SAN-based IPsec authorization",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/712894/direct-scim-group-integration-and-scim-authorization-based-on-the-ztna-peer-certificate",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 consumes SCIM-synchronized users and groups directly in firewall policy objects; for certificate-authenticated IPsec, the ZTNA peer certificate SAN is matched against a selected SCIM user attribute (email, user-name, display-name, or external-id).",
+      "workflow_transaction_fingerprint": "FortiAuthenticator/IdP provisions SCIM users and groups to FortiGate -> FortiGate stores SCIM attributes -> SAML-authenticated sessions or certificate-authenticated IPsec users are associated with SCIM groups -> firewall policy evaluates the SCIM group; SCIM cascade follows IdP changes.",
+      "failure_class": "Identity synchronization mismatch, group lookup failure, or certificate-SAN-to-SCIM-attribute mismatch.",
+      "evidence_pattern": "Use `diagnose test scim list-users <scim-client>` to prove provisioned attributes; `diagnose firewall auth list` to prove user/group association; `diagnose vpn ike ztna tunnels` to prove certificate-authenticated tunnel identity; traffic logs should show the expected `user` and `group`. A valid IKE tunnel alone does not prove correct group authorization.",
+      "remediation_path": "Verify SCIM base URL, client credentials, status and cascade; align group/user attribute types with IdP values; ensure the certificate SAN field and SCIM attribute use the same identity; confirm the firewall policy references the SCIM group. Treat `diagnose test scim del-db` as a controlled recovery action, not routine refresh.",
+      "question_fingerprint": "Differentiate SCIM provisioning, SAML authentication, certificate validation, SAN-to-user matching, and final firewall group-policy selection from the evidence each stage produces.",
+      "diagram_topology_layout_fingerprint": "Two parallel identity paths converge on FortiGate policy: IdP/FortiAuthenticator SCIM provisioning into SCIM database and client certificate/SAML authentication into session identity; group association feeds a firewall policy with distinct evidence checkpoints.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No SCIM group or certificate-SAN-to-SCIM authorization workflow appears in the exclusion inventory. Earlier SAML and user-group lessons use different identity synchronization and policy-mapping mechanisms."
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager 8.0 Fabric Authorization Templates: serial-prefix model provisioning and automatic replacement",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/671187/fabric-authorization-templates",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A Fabric Authorization Template defines eligible FortiAP, FortiSwitch and FortiExtender serial prefixes, device counts, FortiLink interface or extension type, and optional device profiles; FortiManager creates model Fabric-device records and replaces them with matching real devices when they appear.",
+      "workflow_transaction_fingerprint": "Create template -> generate against target FortiGate(s) or attach to a Device Blueprint -> install configuration to FortiGate -> model Fabric devices appear in Device Manager -> matching real devices arrive and replace model records in top-to-bottom prefix order until configured count is consumed.",
+      "failure_class": "New Fabric device remains unauthorized, model device is not replaced, or expected profile assignment is absent because of prefix/count/order, ADOM management-mode, or install-state mismatch.",
+      "evidence_pattern": "Inspect Fabric Authorization Template prefix and count rows, Device Manager model-versus-real device entries, Config Status=Modified before install, target FortiGate installation result, and Central Management settings. A generated model record does not prove the physical device has connected or been authorized.",
+      "remediation_path": "Validate serial prefix and count ordering; verify the target FortiGate selection and install; enable Central Management for FortiSwitch/FortiAP in ADOM settings if profile fields are required; confirm the real device serial matches an unused prefix entry.",
+      "question_fingerprint": "Determine whether a missing real-device replacement is caused by serial-prefix ordering, exhausted device count, missing FortiGate installation, or ADOM Per Device Mode hiding profile assignment.",
+      "diagram_topology_layout_fingerprint": "FortiManager template and Device Blueprint feed ordered serial-prefix/count slots; generated model FortiAP/FortiSwitch/FortiExtender records are installed to FortiGate and replaced by arriving physical devices, with an ADOM Central Management gate.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No prior lesson covers Fabric Authorization Template serial-prefix replacement and multi-product authorization. Earlier provisioning/template lessons cover different policy or device configuration objects."
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer 8.0 Anomaly Login Report: FortiAuthenticator event ingestion and ZTNA alert-handler pipeline",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/926442/anomaly-login-report",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "The global Anomaly Login Report is populated by the predefined ZTNA Login Anomaly Detection alert handler, which consumes normalized FortiAuthenticator authentication events and exposes suspicious login patterns through report datasets, macros and charts.",
+      "workflow_transaction_fingerprint": "FortiAuthenticator emits authentication events -> FortiAnalyzer receives and normalizes Fabric logs -> ZTNA Login Anomaly Detection handler evaluates rules -> alerts appear in Alerts pane -> Anomaly Login Report queries handler output through the `incidennt-Anomaly-Login` dataset and report template/charts/macros.",
+      "failure_class": "Report is empty or incomplete because FortiAuthenticator event logs are absent, unnormalized, or not triggering the predefined handler; report assets may exist while alert generation does not.",
+      "evidence_pattern": "Check normalized Fabric log type and FortiAuthenticator data source, event subtype Authentication and event profile fields such as AUTH_FAIL; inspect Alerts pane for handler rule, then verify the global report, template, charts, macros and dataset. Presence of raw FAC logs alone does not prove an alert handler fired.",
+      "remediation_path": "Onboard FortiAuthenticator event logs, verify normalization and timestamps, enable and test the ZTNA Login Anomaly Detection handler, inspect rule thresholds and alert messages, then validate the report dataset/template assets and run the report over a known time window.",
+      "question_fingerprint": "Identify the missing pipeline stage when FortiAuthenticator logs are present but the Anomaly Login Report has no matching alert-derived rows.",
+      "diagram_topology_layout_fingerprint": "FortiAuthenticator authentication event stream enters FortiAnalyzer normalization, branches through ZTNA anomaly alert rules to Alerts, and feeds a report dataset/macros/charts/template; raw-log visibility is shown separately from alert output.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No Anomaly Login Report or ZTNA login alert-handler workflow appears in prior records. FortiData incident ingestion and AI access visibility use different event sources and report pipelines."
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch MAC learning-limit shutdown: violation timer, recording and reset lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/287002",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/fortiswitch-port-remains-active-and-does-not-generate-logs-when-learning-limit-action-shutdown-is-set-230941",
+      "feature_mechanism_fingerprint": "FortiSwitch limits dynamically learned MAC addresses per physical port or VLAN; on a physical port, `learning-limit-action shutdown` can disable the interface when the configured limit is exceeded, while global violation recording and `mac-violation-timer` govern evidence and recovery.",
+      "workflow_transaction_fingerprint": "Dynamic MAC learning populates the forwarding table -> configured per-port limit is exceeded -> violation recording/logging captures the first offending MAC for that interface -> configured shutdown action disables the physical port -> timer expiry or explicit reset clears the shutdown state and violation record.",
+      "failure_class": "Learning limit is exceeded but the port remains active and no violation log is visible because violation recording is disabled or timer/action prerequisites are incomplete.",
+      "evidence_pattern": "Inspect `show switch interface`, `get switch mac-limit-violations all`, `execute log display`, global `log-mac-limit-violations` and `mac-violation-timer`; distinguish dynamic MAC event logging (`log-mac-event`) from learning-limit violation recording. A silent log alone does not prove no MAC limit was exceeded.",
+      "remediation_path": "Enable global MAC-limit violation recording, set a nonzero violation timer consistent with the desired shutdown/recovery behavior, configure a 1-128 learning limit and `learning-limit-action shutdown` on a supported physical port, then verify violation evidence and reset behavior.",
+      "question_fingerprint": "Distinguish a configured learning limit from an active shutdown-and-recording path when a port remains up and no event is visible.",
+      "diagram_topology_layout_fingerprint": "Endpoint MAC population enters a FortiSwitch physical-port learning counter; threshold decision branches to violation recorder/log and shutdown state, with timer-expiry/manual-reset paths returning the port to service.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "Prior sticky-MAC and MAC-movement lessons concern persistence or location changes; none covers learning-limit violation shutdown, timer behavior and violation recording."
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiAP 8.0 automated location positioning: static LoWi, GPS and 802.11mc RTT trilateration",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/444765",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Automated FortiAP location positioning selects the first available source in priority order: user-configured Static LoWi, built-in GNSS/GPS, then Location Wireless Interface calculation using IEEE 802.11mc Wi-Fi Round Trip Time and 3D trilateration.",
+      "workflow_transaction_fingerprint": "Controller-provided static coordinates override other sources; otherwise the AP uses GNSS coordinates; if neither is available, an initiator AP measures RTT to at least four responder APs with known positions and calculates its own 3D location.",
+      "failure_class": "AP location is missing, stale or inaccurate because the selected source is not the expected one, responder count/reference positions are insufficient, or 802.11mc capability is unavailable.",
+      "evidence_pattern": "Check `lowi-pos-type` to identify the active source; on FortiAP inspect `wcfg | grep lowi`, `wcfg | grep 802.11mc`, and `rcfg | grep 802.11mc`; compare known responder coordinates and configured static latitude/longitude/altitude. A reported source type proves selection, not coordinate accuracy.",
+      "remediation_path": "Confirm FortiOS/FortiAP 8.0 support and radio capability; remove unintended static override when automatic positioning is desired; ensure four responder APs have trusted positions plus one initiator; validate coordinate error and source selection before relying on location-sensitive services.",
+      "question_fingerprint": "Determine why an AP reports a static position instead of a LoWi-calculated position, or why LoWi cannot calculate without enough known responder APs.",
+      "diagram_topology_layout_fingerprint": "Three-level location-source priority gate (Static LoWi, GPS, Wi-Fi RTT) feeds a 3D trilateration block where one initiator measures four known responders; output includes coordinate and uncertainty evidence.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No LoWi, 802.11mc positioning or location-source precedence lesson appears in the inventory. Earlier 6 GHz/AFC radio lessons address channel selection rather than positioning calculation."
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC host-state IP ACL enforcement: DNS-based isolation while retaining the same client address",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/565262/apply-a-host-based-configuration-via-the-model-configuration",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC host-based CLI configurations add or remove a host IP address from an ACL stored on a Layer-3 switch/router according to the host's registration, authentication, remediation or dead-end state; DNS reachability changes while DHCP addressing remains stable.",
+      "workflow_transaction_fingerprint": "Host connects and FortiNAC evaluates state -> model configuration applies host-specific ACL to the Layer-3 device -> ACL permits/denies access to FortiNAC DNS versus production DNS -> registration/remediation completes -> host-state transition runs the undo CLI configuration and updates ACL to allow production DNS.",
+      "failure_class": "Host remains isolated or is misidentified because IP changed before registration completed, DNS transition is incomplete, DHCP lease is too short, or ACL configuration was applied to an unsupported modeled topology.",
+      "evidence_pattern": "Use FortiNAC Applied ACLs to inspect name, MAC, IP, CLI and host; inspect CLI Task Success/Failure and Data Substitution Success/Failure; verify L3 device model and DHCP lease/IP stability. Successful L2 polling alone does not prove host-state ACL execution.",
+      "remediation_path": "Use a Layer-3 device with VLAN Switching and MAC Filtering disabled for this design; do not model downstream switches; keep the regular DHCP server and stable lease; include FortiNAC DNS in production DHCP options; configure host-state CLI/undo actions and enable Dissolvable Agent Renew IP when required to clear cached portal state.",
+      "question_fingerprint": "Diagnose why a registered host remains on the isolation page even though FortiNAC changed its state, separating stale IP substitution, DNS list, browser cache and ACL undo execution.",
+      "diagram_topology_layout_fingerprint": "Client with stable DHCP lease traverses an L3 device ACL; host-state controller selects FortiNAC DNS for isolation/registration then switches ACL to production DNS after state transition, with an explicit undo path and Applied ACL evidence panel.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No host-based IP ACL state-transition lesson appears in prior records. Earlier NAC VLAN, DNS and port-name lessons use different enforcement and synchronization mechanisms."
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F L2 polling of static MAC entries: Secure Ports model configuration and host-to-interface reconciliation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortiswitch-fortilink-integration/571767/how-it-works",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-displays-incorrect-switch-port-link-status-due-to-static-mac-address-entries-231201",
+      "feature_mechanism_fingerprint": "FortiNAC-F endpoint visibility combines RADIUS notifications, SNMP traps, L2 MAC-address-table reads and L3 ARP-cache reads; the default FortiSwitch L2 query can exclude STATIC entries, so Secure Ports model awareness is required when authenticated endpoints are represented as static MAC entries.",
+      "workflow_transaction_fingerprint": "802.1X/MAB RADIUS authentication creates or marks a static MAC entry on FortiSwitch -> FortiNAC-F performs L2 polling -> default query filters STATIC rows -> host-to-interface association is incomplete -> enabling Secure Ports for the modeled switch allows the expected static-MAC interpretation -> a new L2 poll refreshes location/status.",
+      "failure_class": "FortiNAC-F shows Not Connected or wrong port association while the physical switch port is up because static MAC entries are excluded from the L2 polling result.",
+      "evidence_pattern": "Compare physical interface/link state and switch MAC table entry type with FortiNAC-F Model Configuration and L2 poll output; the default `MacAddressTableDynamic` command contains `exclude STATIC|static`; confirm RADIUS authentication and then run Poll Now after Secure Ports is enabled.",
+      "remediation_path": "In the FortiNAC-F switch model, enable the Secure Ports option for devices using static port-security MAC entries, apply the model configuration, and trigger L2 polling; confirm host-to-port mapping and link state. Do not disable switch port security merely to make the MAC appear dynamic.",
+      "question_fingerprint": "Explain why an authenticated endpoint can be present as a STATIC MAC on an operational switch port yet appear disconnected in FortiNAC-F, and identify the correct model/polling correction.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch RADIUS authentication creates a STATIC MAC entry; L2 polling branches through a dynamic-only filter or Secure Ports-aware model path into FortiNAC-F host-to-interface mapping, with physical link state shown independently.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "Earlier host-learning and trap-driven MAC lessons cover event notification and dynamic location learning. This lesson isolates static-entry filtering in the L2 polling query and Secure Ports model option."
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator 8.0 FSSO exclusion of Windows AD computer accounts using object-type lookup",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/563028/fortiauthenticator-8-0-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0 adds an FSSO Methods option that detects account names ending in `$`, queries Active Directory to determine whether each is a computer or user object, and excludes computer accounts from SSO while retaining genuine user identities.",
+      "workflow_transaction_fingerprint": "Windows logon event reaches the configured FSSO method -> FAC detects a `$`-suffixed account -> AD object lookup distinguishes computer from user -> computer-account event is excluded from IP-to-user mapping -> valid user logon continues through normal FSSO mapping.",
+      "failure_class": "Machine-account logons pollute FSSO user-IP mappings or override the intended interactive user identity, leading to incorrect identity-based policy selection.",
+      "evidence_pattern": "Inspect FortiAuthenticator FSSO method settings and logs, compare the event account with the AD object type, and verify the resulting user/IP mapping on the consuming FortiGate. A trailing `$` alone is not sufficient evidence that the account is a computer; the feature performs an AD lookup.",
+      "remediation_path": "Enable Exclude Windows AD computer accounts from SSO under Fortinet SSO > Settings > Methods; verify AD lookup reachability and permissions; test both computer and user objects; confirm the active FSSO method. Do not confuse this setting with Collector Agent Ignore User List or RDP Logon Override.",
+      "question_fingerprint": "Distinguish a real AD computer account from a user account with a `$` suffix and determine whether the FAC FSSO method should exclude it.",
+      "diagram_topology_layout_fingerprint": "Windows logon event enters FortiAuthenticator FSSO method, `$` suffix gate triggers AD object lookup, computer and user branches separate, and only user identity proceeds to IP-to-user mapping and FortiGate policy.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "Prior FAC FSSO lessons concern RDP logon override and user/group filtering. This 8.0 mechanism uses AD object-type lookup to exclude computer accounts."
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM Web Telnet proxy launcher: unsolicited NAWS negotiation bytes and legacy raw-line login failure",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/354559/agentless-mode",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/web-telnet-launcher-fails-to-login-to-legacy-devices-231282",
+      "feature_mechanism_fingerprint": "FortiPAM Web Telnet is a browser-based launcher supported in Agentless mode and always uses the proxy path; a version-specific launcher defect can emit IAC SB NAWS window-size subnegotiation bytes before WILL/DO NAWS negotiation.",
+      "workflow_transaction_fingerprint": "Browser launches a Web Telnet secret -> FortiPAM proxy opens TCP to the target and manages credential injection -> Telnet option negotiation occurs -> legacy raw-line server fails to strip unsolicited IAC SB NAWS bytes and treats them as username characters -> login is rejected despite valid credentials.",
+      "failure_class": "Web Telnet login fails with Access denied or Too many characters on legacy Telnet servers while a direct FortiPAM CLI `execute telnet` session succeeds.",
+      "evidence_pattern": "Compare Web Telnet with CLI Telnet to the same host/port; confirm secret Telnet service, target port and user permission; packet capture should show IAC SB NAWS immediately after TCP handshake without prior WILL/DO negotiation; target username parsing may include control bytes.",
+      "remediation_path": "Validate Telnet service/port and secret permissions first; if direct CLI Telnet succeeds but Web Telnet fails, isolate the launcher negotiation behavior rather than changing credentials; check the running FortiPAM branch's resolved-issue notes and apply the vendor fix when available, or use an approved alternate launcher.",
+      "question_fingerprint": "Determine why correct credentials fail only through Web Telnet when the target is a legacy raw-line server and the direct CLI Telnet path succeeds.",
+      "diagram_topology_layout_fingerprint": "Browser Web Telnet session traverses FortiPAM proxy to a legacy Telnet server; TCP handshake is followed by premature IAC SB NAWS bytes, contaminating the username buffer before normal WILL/DO negotiation.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "Prior FortiPAM topics cover access authentication and launcher process matching. Neither addresses Telnet protocol option negotiation or legacy server line parsing."
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Visual Report Designer: PDF object model, template inheritance and upgrade migration boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "The Visual Report Designer is a WYSIWYG PDF layout editor built from cover pages, table of contents, report sections and objects; report templates can be assigned at report, folder or bundle scope with report-level precedence, then folder, then root system template.",
+      "workflow_transaction_fingerprint": "Create or run a report from its search conditions and display columns -> resolve the applicable design template by report/folder/root precedence -> render sections and objects into PDF -> preview or generate; pre-7.0 custom templates assigned to report folders block first-login template migration because folder templates are not supported in the 7.0 designer.",
+      "failure_class": "Report-template migration stalls after upgrade or PDF layout changes because a folder-level custom template or unsupported legacy subsection/PDF placement is present.",
+      "evidence_pattern": "Inspect Report Design Template column at report/folder/bundle levels, pre-upgrade folder assignments, first-login migration message, preview versus generated PDF, and object hierarchy. A report query can succeed while PDF rendering/template migration fails.",
+      "remediation_path": "Before upgrading, audit every report folder for custom design templates and remove folder-level assignments; retain report-level or bundle-level templates; after upgrade rebuild layouts with supported sections/objects, preview the PDF and verify attachments are placed at the end.",
+      "question_fingerprint": "Identify why first login after a FortiSIEM upgrade remains stuck on template migration and which template scope must be removed before retry.",
+      "diagram_topology_layout_fingerprint": "Report data query feeds a template-resolution tree (report, folder, root); selected template renders cover, TOC, sections and objects to PDF, while a separate pre-7.0 folder-template migration gate can block first login.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "No Visual Report Designer or PDF template hierarchy lesson appears in the inventory. Prior FortiSIEM Investigation and ML lessons cover analytics workflows, not PDF layout/migration."
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE Remote Browser Isolation for proxy users: policy match, remote rendering and instance-level quota",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/374370",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE RBI isolates selected proxy-user web sessions in a remote container and streams rendered content to the endpoint; a top-down proxy policy with Action=Isolate selects traffic, while session controls and an instance-level isolation-data entitlement govern use.",
+      "workflow_transaction_fingerprint": "Proxy endpoint uses hosted PAC and proxy certificate -> user authenticates through configured proxy SSO/LDAP/RADIUS -> web request matches an RBI proxy policy -> FortiSASE renders the site in an isolated remote environment -> browser displays RBI indicator and Internet Access Traffic log records Action=Isolate.",
+      "failure_class": "RBI is unavailable or traffic is not isolated because subscription/PoP/proxy prerequisites are missing, policy order is wrong, CSP_REPORT inspection breaks SSO, or instance-level isolation data quota is exceeded.",
+      "evidence_pattern": "Check Advanced/Comprehensive remote-user subscription, Fortinet Security PoP deployment, proxy enablement, policy order above Allow-All, browser RBI indicator and Operations > Logs > Traffic > Internet Access Traffic showing the matching policy and Action=Isolate; monitor maximum sessions and isolation data usage.",
+      "remediation_path": "Confirm select availability and prerequisites; enable proxy and RBI; install/distribute hosted PAC and proxy certificate; put the isolate policy above broad allow policies; use certificate inspection rather than deep inspection for the CSP_REPORT policy with SWG SSO; monitor the instance quota because exhaustion blocks isolation traffic for all users.",
+      "question_fingerprint": "Determine why a proxy-authenticated user reaches a malicious category site without isolation, separating policy ordering, missing subscription, CSP_REPORT inspection and exhausted instance quota.",
+      "diagram_topology_layout_fingerprint": "Proxy endpoint and SSO feed FortiSASE top-down proxy policy; matching category traffic branches to remote browser container and pixel stream, with session/file controls and instance-level quota gate plus traffic-log evidence.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "Prior FortiSASE lessons cover authenticated onboarding, ZTNA destinations and agent-based private access. RBI is a separate proxy-user remote-rendering and quota-controlled security path."
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiCloud Overlay-as-a-Service: license-gated dual-hub ADVPN provisioning and generated SD-WAN control plane",
+      "primary_url": "https://docs.fortinet.com/document/overlay-as-a-service/latest/deployment-guide/658086/introduction",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiCloud OaaS provisions a geo-redundant dual-hub FortiGate SD-WAN overlay and spokes using ADVPN; each spoke needs an OaaS license, and the service generates IPsec overlay, BGP, policy routing, SD-WAN zone, Performance SLA, SD-WAN rule, address and firewall-policy configuration.",
+      "workflow_transaction_fingerprint": "Register OaaS licenses -> prepare FortiGate WAN/LAN interfaces and internet reachability -> define region and dual hubs in OaaS -> add branch/datacenter site, ISP underlay and LAN subnet -> deploy generated configuration -> hub informs spokes of better spoke-to-spoke path -> ADVPN shortcut forms -> monitor tasks, tunnels, BGP, SLA and SD-WAN rules.",
+      "failure_class": "Site deployment fails or traffic remains hub-routed because license/device state, interface prerequisites, ISP NAT-T reachability, BGP, generated policy, or ADVPN shortcut formation is incomplete.",
+      "evidence_pattern": "Verify OaaS license on each spoke, FortiGate online state in OaaS, deployment Task Status, WAN/LAN interface eligibility, UDP/500 and UDP/4500 reachability, IPsec tunnel state, BGP routes, Performance SLA, SD-WAN rule and spoke-to-spoke ADVPN communication. A green portal task does not alone prove end-to-end shortcut forwarding.",
+      "remediation_path": "Validate one license per spoke and FortiOS 7.4.4+; remove WAN/LAN interfaces from conflicting zones/policies and avoid switch/aggregate member ports; allow IKE/NAT-T; deploy in stages and verify generated tunnel, BGP, SLA and policy objects before troubleshooting application traffic.",
+      "question_fingerprint": "Separate OaaS orchestration success from IPsec underlay reachability, BGP route exchange, SLA health and final ADVPN shortcut formation.",
+      "diagram_topology_layout_fingerprint": "FortiCloud OaaS control plane provisions two geo-redundant FortiGate hubs and branch/DC spokes; each spoke has ISP underlay, IPsec/ADVPN tunnels, BGP and SD-WAN SLA/rules, with direct spoke shortcut and a separate task-status verification rail.",
+      "uniqueness_check": {
+        "history_records_compared": 366,
+        "same_day_prior_candidate_records_compared": 12,
+        "semantic_match_count": 0,
+        "result": "unique",
+        "manual_semantic_review": "The nearest prior SD-WAN lessons cover ADVPN IPv6/VRF data-plane separation and FortiGuard SLA targets. OaaS is a distinct cloud orchestration, licensing and generated-configuration lifecycle."
+      }
+    }
+  ],
+  "validation": {
+    "all_12_mandatory_products_present": true,
+    "new_feature_mechanism_fingerprints": true,
+    "all_required_fingerprint_fields_present": true,
+    "all_semantic_uniqueness_checks_passed": true
+  }
+}
