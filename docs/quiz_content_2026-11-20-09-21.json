@@ -11,19 +11,19 @@
       "correct": 2,
       "choices": [
         {
-          "text": "The route has been installed in the FIB after policy routing.",
+          "text": "The route must be installed in the FIB after policy routing.",
           "feedback": "The FIB is not the evaluation table for conditional-advertisement predicates."
         },
         {
-          "text": "The peer has accepted the default route in its Adj-RIB-In.",
+          "text": "The peer must accept the default route in its Adj-RIB-In.",
           "feedback": "Peer acceptance is downstream of the local condition evaluation."
         },
         {
-          "text": "The default route is present in the BGP RIB as learned or originated.",
+          "text": "The prefix must be present in the BGP RIB.",
           "feedback": "Conditional route maps are evaluated against the BGP RIB, not every kernel route."
         },
         {
-          "text": "The neighbor has a negotiated four-octet AS capability.",
+          "text": "The neighbor must negotiate a four-octet AS capability.",
           "feedback": "That capability does not make a static-only prefix visible to the BGP condition map."
         }
       ]
@@ -35,19 +35,19 @@
       "correct": 0,
       "choices": [
         {
-          "text": "The advertisement is suppressed because the configured conditions are conjunctive.",
+          "text": "Suppress it; every configured condition must pass.",
           "feedback": "All configured condition maps must satisfy the selected condition type; one false condition blocks the gate."
         },
         {
-          "text": "The advertisement is sent because one condition matched.",
+          "text": "It is sent because one configured condition matched.",
           "feedback": "The condition list is not an OR list; one match is insufficient."
         },
         {
-          "text": "The advertisement is sent only if both peers are established.",
+          "text": "It is sent when both peers are established.",
           "feedback": "Peer state matters, but it does not replace the AND evaluation."
         },
         {
-          "text": "The route map with the lower sequence number overrides the other map.",
+          "text": "The lower-sequence route map overrides the other map.",
           "feedback": "Sequence order is internal to a route map; it does not turn multiple condition maps into precedence rules."
         }
       ]
@@ -71,7 +71,7 @@
           "feedback": "The mismatch is an address-family/RIB issue, not a peer-state exception."
         },
         {
-          "text": "It is absent from the IPv6 RIB and therefore fails an exist condition.",
+          "text": "It is absent from the IPv6 RIB.",
           "feedback": "Without cross-family evaluation, the IPv4 route is not found in the IPv6 RIB."
         }
       ]
@@ -83,19 +83,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "The condition route map.",
+          "text": "The condition route map defines the predicate that gates export.",
           "feedback": "It describes the route predicate used to decide whether advertisement is allowed."
         },
         {
-          "text": "The advertise route map.",
+          "text": "The advertise route map defines which routes are eligible for export.",
           "feedback": "It defines what is eligible to be advertised after the condition gate passes."
         },
         {
-          "text": "The neighbor route reflector client flag.",
+          "text": "The neighbor route-reflector flag controls reflection, not conditional export eligibility.",
           "feedback": "That changes BGP reflection behavior, not the conditional export payload."
         },
         {
-          "text": "The local preference attribute.",
+          "text": "Local preference selects paths inside the AS, not export content.",
           "feedback": "Local preference influences path selection inside an AS, not the conditional advertise-map definition."
         }
       ]
@@ -131,19 +131,19 @@
       "correct": 3,
       "choices": [
         {
-          "text": "HUB_IPSec_Recommended.",
+          "text": "HUB_IPSec_Recommended is intended for a hub overlay endpoint.",
           "feedback": "That template is for the hub role in a site-to-site overlay design."
         },
         {
-          "text": "Branch_IPSec_Recommended.",
+          "text": "Branch_IPSec_Recommended is intended for a branch overlay endpoint.",
           "feedback": "That template is intended for a branch role, not the FortiClient remote-access client template."
         },
         {
-          "text": "FortiGate-HA-Recommended.",
+          "text": "FortiGate-HA-Recommended describes a cluster redundancy deployment template.",
           "feedback": "HA templates do not define the FortiClient dial-up VPN workflow."
         },
         {
-          "text": "FCT_IPsec_Recommended.",
+          "text": "FCT_IPsec_Recommended is intended for FortiClient remote-access VPN.",
           "feedback": "This is the recommended template intended for FortiClient VPN tunnels."
         }
       ]
@@ -155,19 +155,19 @@
       "correct": 0,
       "choices": [
         {
-          "text": "Restore the device/template assignment or remove stale references after checking consumers.",
+          "text": "Restore template assignment or clear stale interface references.",
           "feedback": "The generated interface and its consumers must remain consistent with the template assignment scope."
         },
         {
-          "text": "Delete the VDOM and recreate the VPN interface.",
+          "text": "Delete the VDOM and recreate the VPN interface from scratch.",
           "feedback": "That is destructive and does not address the missing template ownership."
         },
         {
-          "text": "Change the IKE proposal until preview succeeds.",
+          "text": "Change IKE proposals to force the preview to pass.",
           "feedback": "IKE proposals are unrelated to a FortiManager object-reference/install-preview failure."
         },
         {
-          "text": "Disable the FortiGate management tunnel.",
+          "text": "Disable the management tunnel on the FortiGate.",
           "feedback": "Management reachability does not resolve the missing template-generated interface reference."
         }
       ]
@@ -203,19 +203,19 @@
       "correct": 0,
       "choices": [
         {
-          "text": "Active-passive only.",
+          "text": "Active-passive only is the supported supervisor HA mode.",
           "feedback": "The supervisor feature explicitly excludes active-active operation."
         },
         {
-          "text": "Active-active with split member ownership.",
+          "text": "Active-active with split member ownership is not supported here.",
           "feedback": "The documented supervisor design uses one active control owner."
         },
         {
-          "text": "Active-active with shared Fabric Settings.",
+          "text": "Active-active with shared Fabric Settings remains unsupported for supervisors.",
           "feedback": "Configuration synchronization does not imply concurrent member control."
         },
         {
-          "text": "Standalone with manual member failover.",
+          "text": "Standalone manual failover is not the documented HA design.",
           "feedback": "The new feature is an HA pair, not a manual-only recovery procedure."
         }
       ]
@@ -251,19 +251,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "Member authorization state.",
+          "text": "Member authorization state shows whether a device is trusted.",
           "feedback": "Authorization is a member-management action, not the supervisor synchronization indicator."
         },
         {
-          "text": "Supervisor Data Sync.",
+          "text": "Supervisor Data Sync shows whether Fabric settings reached standby.",
           "feedback": "This supervisor-specific column reports synchronization state."
         },
         {
-          "text": "Report Worker queue depth.",
+          "text": "Report Worker queue depth measures report backlog, not HA replication.",
           "feedback": "That measures report processing, not Fabric supervisor replication."
         },
         {
-          "text": "FortiView session count.",
+          "text": "FortiView session count measures visibility, not supervisor synchronization.",
           "feedback": "A view count does not prove supervisor configuration synchronization."
         }
       ]
@@ -287,7 +287,7 @@
           "feedback": "The Fabric Settings are synchronized and member reconnection is automatic."
         },
         {
-          "text": "Members automatically reconnect to the new primary and data sync follows.",
+          "text": "Members reconnect automatically to the promoted supervisor.",
           "feedback": "That is the documented supervisor failover sequence."
         }
       ]
@@ -323,19 +323,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "Priority allocation with lower-numbered ports disabled first.",
+          "text": "Priority allocation can shed higher-numbered ports first under shortage.",
           "feedback": "Priority mode sheds higher-numbered ports first when more power is needed."
         },
         {
-          "text": "First-come, first-served allocation.",
+          "text": "FCFS preserves connected devices and denies new devices without budget.",
           "feedback": "FCFS preserves connected devices and denies new devices when budget is insufficient."
         },
         {
-          "text": "FCFS with a critical-priority override on all ports.",
+          "text": "FCFS with critical priority on every port changes the policy.",
           "feedback": "FCFS does not use the same priority ordering as priority allocation."
         },
         {
-          "text": "Dynamic guard band disabled globally.",
+          "text": "Disabling guard bands risks overcommit and is not FCFS behavior.",
           "feedback": "Removing the reservation is not the documented FCFS behavior and risks overcommit."
         }
       ]
@@ -347,19 +347,19 @@
       "correct": 2,
       "choices": [
         {
-          "text": "The global policy always wins.",
+          "text": "Global policy always wins over a port-specific allocation setting.",
           "feedback": "The guide states the physical-port setting takes precedence."
         },
         {
-          "text": "The newest LLDP advertisement wins.",
+          "text": "The newest LLDP advertisement cannot select the PoE allocation mode.",
           "feedback": "LLDP does not choose the PoE allocation policy."
         },
         {
-          "text": "The physical-port setting takes precedence.",
+          "text": "Physical-port configuration overrides the global allocation setting.",
           "feedback": "Per-port configuration overrides the global allocation setting."
         },
         {
-          "text": "The endpoint's negotiated power class wins.",
+          "text": "The endpoint power class affects reservation, not policy precedence.",
           "feedback": "Power class affects reservation, not policy precedence."
         }
       ]
@@ -371,19 +371,19 @@
       "correct": 3,
       "choices": [
         {
-          "text": "get switch poe inline only.",
+          "text": "get switch poe inline shows switch-level power capacity only.",
           "feedback": "That is a switch-level capacity view, not the per-port status evidence."
         },
         {
-          "text": "diagnose switch lldp neighbors port12.",
+          "text": "diagnose switch lldp neighbors port12 shows neighbor discovery data only.",
           "feedback": "LLDP neighbor data does not prove the PSE is delivering power."
         },
         {
-          "text": "get system performance status.",
+          "text": "get system performance status shows resource use, not port power.",
           "feedback": "System performance does not show the port's PoE electrical state."
         },
         {
-          "text": "diagnose switch poe status port12.",
+          "text": "diagnose switch poe status port12 shows per-port power delivery.",
           "feedback": "The per-port output reports power state, PD type, class, voltage, current, and priority."
         }
       ]
@@ -419,19 +419,19 @@
       "correct": 2,
       "choices": [
         {
-          "text": "One initiator and two responders.",
+          "text": "One initiator and two responders are insufficient for full 3D positioning.",
           "feedback": "Two ranges are insufficient for the documented 3D trilateration design."
         },
         {
-          "text": "Three initiators and one responder.",
+          "text": "Three initiators and one responder do not meet the minimum topology.",
           "feedback": "The design requires one initiator and multiple known-position responders."
         },
         {
-          "text": "One initiator and four known-position responders.",
+          "text": "One initiator and four known-position responders meet the documented minimum.",
           "feedback": "Four responders plus one initiator provide the documented five-AP minimum."
         },
         {
-          "text": "Two initiators and two GPS-only APs.",
+          "text": "Two initiators and two GPS-only APs do not satisfy the design.",
           "feedback": "The calculation needs four responders and one initiator."
         }
       ]
@@ -447,15 +447,15 @@
           "feedback": "Fortinet restricts the 802.11mc measurement configuration to 5 GHz for accuracy and reliability."
         },
         {
-          "text": "On every 2.4-GHz radio only.",
+          "text": "On every 2.4-GHz radio only, regardless of the AP profile.",
           "feedback": "The documented configuration does not use 2.4 GHz for RTT measurement."
         },
         {
-          "text": "On the 6-GHz radio only.",
+          "text": "On the 6-GHz radio only, regardless of the AP model.",
           "feedback": "The 8.0 guide specifies 5 GHz for 802.11mc measurement."
         },
         {
-          "text": "On the Ethernet uplink interface.",
+          "text": "On the Ethernet uplink interface of the managed AP.",
           "feedback": "802.11mc is a wireless RTT capability, not an Ethernet setting."
         }
       ]
@@ -491,19 +491,19 @@
       "correct": 2,
       "choices": [
         {
-          "text": "The LDAP server password is necessarily incorrect.",
+          "text": "The LDAP bind password is necessarily incorrect.",
           "feedback": "LDAP queries can succeed while an AD-specific domain join fails."
         },
         {
-          "text": "FreeIPA must be configured with a different NetBIOS short name.",
+          "text": "FreeIPA needs a different NetBIOS short name.",
           "feedback": "The documented Join Domain operation performs a Samba AD join, which FreeIPA does not accept."
         },
         {
-          "text": "Winbind Join Domain is an Active Directory join, not a generic LDAP/Kerberos bind.",
+          "text": "Winbind Join Domain performs an AD-specific join.",
           "feedback": "Keep directory synchronization and AD domain membership as separate integration paths."
         },
         {
-          "text": "FortiNAC must be changed to local-only authentication.",
+          "text": "FortiNAC must switch to local-only authentication.",
           "feedback": "LDAP-based user/group functions can remain available without Winbind AD join."
         }
       ]
@@ -515,7 +515,7 @@
       "correct": 0,
       "choices": [
         {
-          "text": "To perform the AD join without retaining the administrator password in the workflow.",
+          "text": "The keytab supplies domain-join credentials without the admin password.",
           "feedback": "The keytab supplies principal key material for the domain-join operation."
         },
         {
@@ -523,7 +523,7 @@
           "feedback": "A keytab does not replace directory synchronization."
         },
         {
-          "text": "To encrypt all RADIUS Access-Requests between switches and FortiNAC.",
+          "text": "To encrypt RADIUS Access-Requests between switches and FortiNAC.",
           "feedback": "That is not the documented purpose of the Winbind keytab."
         },
         {
@@ -539,19 +539,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "Kerberos realm name.",
+          "text": "Kerberos realm name stores the DNS-style domain name.",
           "feedback": "The Kerberos realm is the DNS-style domain name."
         },
         {
-          "text": "Domain NetBIOS name.",
+          "text": "Domain NetBIOS name stores the short identifier CORP.",
           "feedback": "The NetBIOS domain is the short name; the realm is corp.example.com."
         },
         {
-          "text": "Domain controller hostname.",
+          "text": "Domain controller hostname identifies the controller, not the domain short name.",
           "feedback": "That field expects a controller host name or supported selector."
         },
         {
-          "text": "Local appliance FQDN.",
+          "text": "Local appliance FQDN identifies FortiNAC, not the AD realm.",
           "feedback": "The local appliance name is not the domain's short NetBIOS identifier."
         }
       ]
@@ -575,7 +575,7 @@
           "feedback": "The successful search proves that request completed."
         },
         {
-          "text": "That the appliance is joined to AD and Kerberos authentication works.",
+          "text": "AD membership and Kerberos remain unproven.",
           "feedback": "LDAP reachability is separate from Winbind domain trust and ticket validation."
         }
       ]
@@ -787,7 +787,7 @@
           "feedback": "Logging the token does not replay it in the change request."
         },
         {
-          "text": "Extract the token into $CSRFTOKEN and send it where the API expects it.",
+          "text": "Extract and replay the token as $CSRFTOKEN.",
           "feedback": "The changer can extract the CSRF token and reuse it in the subsequent request."
         },
         {
@@ -803,19 +803,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "Execute.",
+          "text": "Execute sends the configured HTTP request to the target API.",
           "feedback": "Execute is the request-sending step; response matching and token extraction belong in Expect."
         },
         {
-          "text": "Expect.",
+          "text": "Expect evaluates the response and can extract cookies or tokens.",
           "feedback": "Expect validates response status/body and can extract cookies or tokens."
         },
         {
-          "text": "Verifier only.",
+          "text": "Verifier confirms the new credential works against the target.",
           "feedback": "The verifier proves the final credential; it is not the response-matching step."
         },
         {
-          "text": "Jump.",
+          "text": "Jump changes the next command after a configured condition matches.",
           "feedback": "Jump controls sequence branching rather than response evaluation itself."
         }
       ]
@@ -839,7 +839,7 @@
           "feedback": "The verifier is the independent safety check for the new credential."
         },
         {
-          "text": "Parse the correct nested JSON path and require the target's success condition.",
+          "text": "Parse nested JSON and require the target's success value.",
           "feedback": "The Web-API changer supports multi-layer JSON parsing; use the actual response structure."
         }
       ]
@@ -875,19 +875,19 @@
       "correct": 0,
       "choices": [
         {
-          "text": "The report-specific template.",
+          "text": "The report-specific template wins over folder scope.",
           "feedback": "Report-level assignment has the highest precedence."
         },
         {
-          "text": "The folder template because it contains more reports.",
+          "text": "The folder template wins because it contains more reports.",
           "feedback": "Folder scope is used only when the report has no specific template."
         },
         {
-          "text": "The root system template because it is always authoritative.",
+          "text": "The root system template always overrides custom templates.",
           "feedback": "Root is the final fallback when report and folder templates are absent."
         },
         {
-          "text": "The most recently modified template regardless of scope.",
+          "text": "The newest modified template wins regardless of scope.",
           "feedback": "Template resolution is based on scope precedence, not modification time."
         }
       ]
@@ -1043,7 +1043,7 @@
       "correct": 3,
       "choices": [
         {
-          "text": "DNS requests are always blocked when FortiGuard is unreachable.",
+          "text": "DNS requests are blocked whenever FortiGuard becomes unreachable.",
           "feedback": "Fail-closed would deny requests when rating fails; fail-open deliberately permits them."
         },
         {
@@ -1051,11 +1051,11 @@
           "feedback": "The option permits DNS requests when FortiGuard rating fails."
         },
         {
-          "text": "The resolver switches automatically to proxy mode.",
+          "text": "The resolver automatically switches to proxy mode.",
           "feedback": "Proxy mode is outside the supported DNS Filter path, not an alternate DNS failover behavior."
         },
         {
-          "text": "DNS requests are allowed during FortiGuard rating failure and a log is recorded.",
+          "text": "Requests are allowed during rating failure and a log is recorded.",
           "feedback": "Fail-open is an availability choice that permits DNS when rating services fail."
         }
       ]
@@ -1067,19 +1067,19 @@
       "correct": 2,
       "choices": [
         {
-          "text": "15 seconds.",
+          "text": "15 seconds is an example value, not the default timer.",
           "feedback": "Fifteen seconds is an example value, not the default."
         },
         {
-          "text": "30 seconds.",
+          "text": "30 seconds is not the factory default for the service.",
           "feedback": "The default is zero seconds, so no extra delay applies until an administrator configures one."
         },
         {
-          "text": "0 seconds.",
+          "text": "Zero seconds is the documented default.",
           "feedback": "Without an explicit value, there is no additional recovery hold-down."
         },
         {
-          "text": "120 seconds.",
+          "text": "120 seconds is within the range but not the default.",
           "feedback": "The timer range is much broader and defaults to zero."
         }
       ]
@@ -1139,19 +1139,19 @@
       "correct": 3,
       "choices": [
         {
-          "text": "get router info bgp summary.",
+          "text": "get router info bgp summary shows BGP peer and route state.",
           "feedback": "BGP summary does not show the SD-WAN member hold timer."
         },
         {
-          "text": "diagnose vpn ike gateway list.",
+          "text": "diagnose vpn ike gateway list shows IKE tunnel state only.",
           "feedback": "IKE state does not show service-member priority timing."
         },
         {
-          "text": "diagnose sys sdwan health-check.",
+          "text": "diagnose sys sdwan health-check shows probe results, not service timer.",
           "feedback": "Health-check output measures probe state, not the service hold-down fields."
         },
         {
-          "text": "diagnose sys sdwan service4 showing Hold down time, Hold start, and now.",
+          "text": "diagnose sys sdwan service4 shows timer and member state.",
           "feedback": "The service diagnostic exposes the timer and selected-member state."
         }
       ]
@@ -1163,19 +1163,19 @@
       "correct": 1,
       "choices": [
         {
-          "text": "Disable all DNS filtering and route the host directly to production.",
+          "text": "Disable DNS filtering and route the host to production.",
           "feedback": "That removes the isolation control rather than correcting the specific DNS dependency."
         },
         {
-          "text": "Add the required IdP FQDN and CNAME targets to Allowed Domains and verify production DNS.",
+          "text": "Allowlist IdP and CNAME names; verify production DNS.",
           "feedback": "The allowlist causes FortiNAC to forward the name while the host remains in isolation."
         },
         {
-          "text": "Change the endpoint's default gateway to the FortiNAC service interface.",
+          "text": "Change the endpoint gateway to the FortiNAC interface.",
           "feedback": "FortiNAC supplies the isolation DNS response but does not route the endpoint's subsequent traffic."
         },
         {
-          "text": "Add the IdP to the FortiNAC host registration group only.",
+          "text": "Add the IdP to the host registration group only.",
           "feedback": "Registration state does not change the DNS proxy allowlist."
         }
       ]
