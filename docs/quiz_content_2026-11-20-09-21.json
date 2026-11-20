@@ -476,7 +476,7 @@
         },
         {
           "text": "The AP is using manually entered coordinates.",
-          "feedback": "Static position is a different source value."
+          "feedback": "Static position is a separate source value and does not prove that 802.11mc ranging completed."
         },
         {
           "text": "The active coordinates came from the AP's GNSS source.",
@@ -660,7 +660,7 @@
       "choices": [
         {
           "text": "A required antivirus update domain.",
-          "feedback": "That is a normal use case for the allowlist."
+          "feedback": "A vendor update domain is a legitimate allowlist target when an isolated host needs that service."
         },
         {
           "text": "A production DNS server IP address.",
@@ -804,7 +804,7 @@
       "choices": [
         {
           "text": "Execute.",
-          "feedback": "Execute sends the HTTP request."
+          "feedback": "Execute is the request-sending step; response matching and token extraction belong in Expect."
         },
         {
           "text": "Expect.",
@@ -976,7 +976,7 @@
         },
         {
           "text": "The request is redirected to the block portal.",
-          "feedback": "That is the local Block action."
+          "feedback": "Block is the local action that redirects the DNS response to the block portal."
         },
         {
           "text": "The request bypasses FortiGuard category evaluation.",
@@ -1044,7 +1044,7 @@
       "choices": [
         {
           "text": "DNS requests are always blocked when FortiGuard is unreachable.",
-          "feedback": "That describes fail-closed behavior."
+          "feedback": "Fail-closed would deny requests when rating fails; fail-open deliberately permits them."
         },
         {
           "text": "Only local domain entries continue to resolve.",
@@ -1052,7 +1052,7 @@
         },
         {
           "text": "The resolver switches automatically to proxy mode.",
-          "feedback": "DNS Filter is not supported for proxy mode."
+          "feedback": "Proxy mode is outside the supported DNS Filter path, not an alternate DNS failover behavior."
         },
         {
           "text": "DNS requests are allowed during FortiGuard rating failure and a log is recorded.",
@@ -1072,7 +1072,7 @@
         },
         {
           "text": "30 seconds.",
-          "feedback": "The documented default is zero."
+          "feedback": "The default is zero seconds, so no extra delay applies until an administrator configures one."
         },
         {
           "text": "0 seconds.",
@@ -1172,7 +1172,7 @@
         },
         {
           "text": "Change the endpoint's default gateway to the FortiNAC service interface.",
-          "feedback": "FortiNAC is not the isolation VLAN router."
+          "feedback": "FortiNAC supplies the isolation DNS response but does not route the endpoint's subsequent traffic."
         },
         {
           "text": "Add the IdP to the FortiNAC host registration group only.",
