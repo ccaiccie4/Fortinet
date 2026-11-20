@@ -64,13 +64,13 @@
     },
     {
       "name": "index update/read-back",
-      "status": "PENDING",
-      "detail": "Index update and read-back occur after report validation."
+      "status": "PASS",
+      "detail": "docs/index.html updated with the 09:21 report as the latest entry and read back successfully; current read-back SHA 6f999f5cb3fc93da2b862c7803279bccca23e30b."
     },
     {
       "name": "GitHub Pages verification",
-      "status": "PENDING",
-      "detail": "Public report and index URLs will be checked after index update."
+      "status": "FAIL / UNCONFIRMED",
+      "detail": "The public report and index URLs were inaccessible through the page checker. Runtime urllib check failed with [Errno -3] Temporary failure in name resolution; repository writes are confirmed, public Pages reachability is not."
     },
     {
       "name": "email",
@@ -129,5 +129,20 @@
       "path": "docs/quiz_content_2026-11-20-09-21.json",
       "sha": "1a310d4219e317a0ac0c0bc8726c09111fd1135b"
     }
-  }
+  },
+  "publication": {
+    "report_write": "PASS",
+    "report_readback_sha": "d57df1ada45e206f2f0a59c56c766f3b0c5b2472",
+    "index_write": "PASS",
+    "index_readback_sha": "6f999f5cb3fc93da2b862c7803279bccca23e30b",
+    "github_pages": "FAILED_OR_UNCONFIRMED",
+    "github_pages_error": "URLs inaccessible via page checker; runtime DNS resolution failed: [Errno -3] Temporary failure in name resolution",
+    "email": "NOT_ATTEMPTED_DISABLED"
+  },
+  "remediation": [
+    "Retry GitHub Pages report and index URLs after DNS reachability returns.",
+    "If still inaccessible, inspect repository Pages deployment workflow and docs-root configuration.",
+    "Retry direct Fortinet Document Library page access; 11 of 12 direct opens returned HTTP 403.",
+    "Continue product-area Community/KB searches for fresh feature-specific scenarios; do not replace missing matches with unrelated articles."
+  ]
 }
