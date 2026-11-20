@@ -1,0 +1,271 @@
+{
+  "generated_at_local": "2026-11-20T09:21:31-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-20-09-21.json",
+  "inventory_record_count": 366,
+  "report_artifacts_reviewed": 32,
+  "topic_selection_after_inventory": true,
+  "selected_count": 12,
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "BGP conditional advertisement: multi-condition AND logic, exist/non-exist semantics, and cross-family IPv4/IPv6 RIB evaluation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/168660/bgp-conditional-advertisement",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-bgp-conditional-advertisement-example-in-a-bgp-multi-home-setup-94929",
+      "feature_mechanism_fingerprint": "Neighbor-scoped conditional advertisement evaluates one or more condition route maps against BGP RIB; multiple maps are conjunctive; exist/non-exist gates advertisement; cross-family matching is disabled by default and controlled by cross-family-conditional-adv.",
+      "workflow_transaction_fingerprint": "BGP route learned/originated -> condition route-map match against BGP RIB -> AND evaluation -> advertise-map sent or suppressed to a specific neighbor; IPv4/IPv6 RIB selection changes when cross-family option is enabled.",
+      "failure_class": "Route unexpectedly advertised or suppressed because condition route is absent from BGP RIB, route-map family mismatches, condition-type is inverted, or multiple conditions are not all satisfied.",
+      "evidence_pattern": "get router info bgp neighbors; get router info bgp network; get router info6 routing-table bgp; neighbor Conditional advertise-map cond-state per map; diagnose ip router command show-vrf root show running router bgp.",
+      "remediation_path": "Ensure condition prefixes are BGP-learned or BGP-originated; correct prefix/AS-path/route-map match; set exist or non-exist intentionally; enable cross-family-conditional-adv only when cross-family conditions are required; re-check neighbor advertised routes.",
+      "question_fingerprint": "Given a dual-stack peer and two condition route maps with mixed address families, predict whether an advertised prefix is sent when one map is absent from the selected RIB and explain the cond-state output.",
+      "diagram_topology_layout_fingerprint": "Dual-upstream FortiGate with primary/backup eBGP peers, IPv4 and IPv6 route-map condition nodes feeding an AND gate, per-neighbor advertise-map output; two RIB lanes and one cross-family toggle.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "BGP neighbor transport establishment (2026-11-01)",
+          "BGP VRF route leaking (2026-11-03)",
+          "BGP community-to-route-tag translation (2026-11-10)",
+          "Graceful BGP shutdown (2026-11-11)"
+        ],
+        "reason": "Conditional advertisement is a distinct per-neighbor route-origination gate based on BGP RIB predicates; none of the compared lessons teaches conditional route-map evaluation or cross-family condition semantics."
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager FCT_IPsec_Recommended template: activation, parameter binding, assignment scope, and installation",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/959026/recommended-ipsec-templates",
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-ipsec-template-install-does-not-show-in-install-preview-215175",
+      "feature_mechanism_fingerprint": "Factory recommended FCT_IPsec_Recommended provisioning template is activated into an editable generated template using outgoing interface, IPv4 client range, netmask, and pre-shared key; resulting object is assigned to managed devices/groups and installed.",
+      "workflow_transaction_fingerprint": "Factory template -> Activate and set parameters -> generated Activate_FCT_IPsec_Recommended object -> optional edit/clone/template-group -> device or device-group assignment -> install to FortiGate -> remote-access IPsec objects appear in device configuration.",
+      "failure_class": "Template activation succeeds but the tunnel is absent from install preview or installation because the template is unassigned, generated interface is referenced by another object, or the device/group assignment scope is inconsistent.",
+      "evidence_pattern": "FortiManager Provisioning Templates > IPsec Tunnel generated template, assigned devices/groups, install preview diff, install task log; FortiGate config vpn ipsec phase1-interface and phase2-interface plus interface/address object references.",
+      "remediation_path": "Keep the template assigned to every target that consumes its generated interface; verify parameter values and address-object types; inspect interface references before deleting or replacing the template; preview and install after scope correction.",
+      "question_fingerprint": "A FortiClient VPN template is activated and visible but the expected phase1 interface is missing from one target's install preview; identify the assignment/reference boundary to inspect before changing phase1 settings.",
+      "diagram_topology_layout_fingerprint": "FortiManager template library -> activation parameter form -> generated template object -> assignment fan-out to two FortiGate devices -> install-preview/configuration boundary.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "SD-WAN overlay template generation (2026-10-29)",
+          "CLI template timing (2026-10-28)",
+          "FortiSwitch per-device template overrides (2026-11-13)"
+        ],
+        "reason": "The selected lesson is limited to the factory FortiClient remote-access IPsec template and its generated-object/assignment lifecycle, not ADVPN/SD-WAN overlay generation or CLI-template timing."
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer Fabric Supervisor HA: active-passive supervisor, delayed member reconnection, and supervisor data synchronization",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/954277/fortianalyzer-fabric-supervisor-ha",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-ha-preemption-208899",
+      "feature_mechanism_fingerprint": "FortiAnalyzer Fabric Supervisor HA is active-passive only; Fabric Settings sync to secondary, but the secondary does not establish member connections until promoted; on failover members reconnect to the new primary and data sync follows.",
+      "workflow_transaction_fingerprint": "Primary supervisor owns member control connections -> Fabric Settings replicate to secondary -> secondary remains disconnected from members -> primary failure/election -> secondary promoted -> members automatically reconnect -> data sync converges.",
+      "failure_class": "Supervisor failover appears incomplete because the secondary is not expected to maintain member connections before promotion, supervisor data sync is incomplete, or preemption/role expectations cause unexpected primary re-election.",
+      "evidence_pattern": "System Settings > HA Cluster Status and Supervisor Data Sync column; System Settings > Fabric Management > Fabric Settings topology on both nodes; member connection state before and after promotion; read-only/disabled member-management actions on secondary.",
+      "remediation_path": "Use active-passive only; verify matching group credentials, peer identities and initial synchronization; wait for Supervisor Data Sync; validate member reconnection after promotion; account for preemption and upgrade behavior before forcing another failover.",
+      "question_fingerprint": "A secondary supervisor shows the replicated Fabric topology but no direct member connections before failover; determine whether this is a fault or the documented standby boundary.",
+      "diagram_topology_layout_fingerprint": "Two supervisor nodes in active-passive pair above three Fabric members; primary has control-plane arrows to members, secondary receives configuration sync only; arrows switch after failover.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "FortiAnalyzer Fabric member HA (2026-10-24)",
+          "FortiAnalyzer HA preemption is a scenario source only"
+        ],
+        "reason": "The historical member-HA lesson concerns a member appliance's attachment to a supervisor; this lesson concerns redundancy of the supervisor control plane itself and the deferred member reconnection behavior."
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch PoE power admission: dynamic guard band, AF/AT reservation, priority allocation, and FCFS precedence",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/861226/configuring-power-over-ethernet-on-a-port",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Dynamic guard band reserves expected device-class power before enabling a PoE port (AF 15.4 W, AT 36 W); power allocation can be priority-based or first-come-first-served; lower-numbered ports have higher priority and physical-port policy overrides global policy.",
+      "workflow_transaction_fingerprint": "PoE device detection/classification -> guard-band reservation -> available power admission check -> port power-on or denial; under priority mode higher-priority ports retain power and higher-numbered ports shed first; FCFS preserves already-powered endpoints.",
+      "failure_class": "New endpoint remains unpowered despite a nominally available budget, or lower-priority ports lose power during a budget shortage because guard-band reservation and allocation mode are misunderstood.",
+      "evidence_pattern": "Switch > Physical Ports PoE status/priority; per-port PoE state and allocated power; global versus physical-port allocation configuration; switch PoE budget and event/log evidence.",
+      "remediation_path": "Check device class and AF/AT reservation, compare total available budget with guard-band reservations, verify global and per-port allocation modes, assign critical endpoints higher priority, and avoid connecting PoE PSE-to-PSE copper links without disabling PoE on both ports.",
+      "question_fingerprint": "A new AT-powered AP does not turn on while lower-numbered critical devices remain active; infer the dynamic guard-band and port-priority behavior rather than treating it as an LLDP or VLAN fault.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch PoE power-budget pool feeding per-port AF/AT guard-band reservations, priority queue tiers, and port power states; a separate global-versus-port override callout.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "FortiSwitch ingress/prelookup/egress ACL pipeline (2026-10-25)",
+          "STP root/BPDU guard (2026-10-26)",
+          "FortiSwitch MCLAG (2026-11-04)"
+        ],
+        "reason": "No prior lesson in the inventory covers PoE power admission, guard-band reservations, or priority-based power shedding."
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Automated FortiAP location positioning: Static LoWi, GNSS priority, and 802.11mc RTT trilateration",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/444765/configuring-automated-fortiap-location-positioning",
+      "scenario_community_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-6-ghz-channel-detection-on-fortiap-g-and-k-series-228402",
+      "feature_mechanism_fingerprint": "FortiAP location source precedence is user-entered Static LoWi, then built-in GNSS, then LoWi calculation using IEEE 802.11mc RTT; trilateration requires at least four known-position responders plus one initiator; RTT measurement is configured on 5 GHz.",
+      "workflow_transaction_fingerprint": "Known responder APs publish/serve known coordinates -> initiator sends 802.11mc RTT measurement requests -> distances to responders are collected -> 3D trilateration calculates position -> controller records lowi-pos-type and coordinate error bounds.",
+      "failure_class": "Location is missing or inaccurate because no four usable responders exist, responder coordinates are unknown/uncertain, 802.11mc is disabled or configured on an unsupported band, or a higher-priority static/GNSS source masks calculated LoWi.",
+      "evidence_pattern": "diagnose wireless-controller wlac -c wtp <serial> showing lowi-pos-type, latitude/longitude/altitude and error bounds; FortiAP rcfg/wcfg showing 802.11mc enabled and operational initiator/responder role.",
+      "remediation_path": "Verify source precedence; establish at least four accurately positioned responders and one initiator; enable 802.11mc on 5 GHz; confirm operational role and coordinate uncertainty; clear or correct stale static position when automatic calculation is intended.",
+      "question_fingerprint": "An initiator reports LoWi but its coordinate error remains large after deployment; identify responder count and known-coordinate quality as the limiting evidence, not RF client association.",
+      "diagram_topology_layout_fingerprint": "Five-AP indoor floor plan: four fixed responder nodes with known XYZ coordinates around one initiator; RTT range circles intersect at 3D trilateration point; source-precedence stack Static > GNSS > LoWi.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "Clear Channel Assessment threshold tuning (2026-11-15)",
+          "Zero-Wait DFS (2026-11-17)",
+          "IPsec data-channel offload (2026-11-11)"
+        ],
+        "reason": "Location estimation through 802.11mc RTT and coordinate-source precedence is a distinct positioning workflow, not radio-channel, CAPWAP, or data-channel security behavior."
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC 9.4 Kerberos authentication through Local Winbind: domain join, keytab use, and identity boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-winbind-domain-join-fails-against-a-freeipa-server-230354",
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 adds Kerberos support for user/admin authentication on FortiNAC-CA and admin authentication on FNAC-M; Local Winbind requires domain join and can use an uploaded Kerberos keytab instead of retaining a domain-join administrator password.",
+      "workflow_transaction_fingerprint": "FortiNAC local Winbind configuration -> NetBIOS/domain/realm/DC selection -> AD domain join using credentials or keytab -> Winbind service identity material available -> Kerberos-enabled authentication path consumes the joined-domain context; LDAP directory remains a separate user/group synchronization path.",
+      "failure_class": "Domain join reports misleading joined status or fails at AD discovery because NetBIOS name, Kerberos realm, DC hostname, time synchronization, keytab principal or directory type is wrong; non-AD LDAP/Kerberos services are incorrectly treated as AD join targets.",
+      "evidence_pattern": "Winbind status and join logs; local Winbind configuration fields; domain controller discovery/join result; keytab principal and realm alignment; recent Community scenario shows FreeIPA is not an AD join target.",
+      "remediation_path": "Use an AD-compatible domain join for Winbind; keep NetBIOS short name separate from DNS Kerberos realm; use a valid keytab principal where supported; align NTP with domain controllers; use LDAP-only integration for non-AD directories rather than attempting Samba AD join.",
+      "question_fingerprint": "FortiNAC can query LDAP users but Winbind domain join fails against a FreeIPA server; determine which function requires AD join and which functions continue through LDAP.",
+      "diagram_topology_layout_fingerprint": "FortiNAC appliance with separate LDAP directory sync and Winbind/AD trust paths; keytab/credential input to domain join; Kerberos auth consumers; FreeIPA shown on LDAP-only path with no AD join arrow.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "FortiNAC LDAP authentication cache (2026-11-03)",
+          "FortiNAC RADIUS group ingestion (2026-11-03)",
+          "FortiNAC-F machine-auth RBAC (2026-10-29)"
+        ],
+        "reason": "The selected mechanism is Winbind/AD domain trust and Kerberos service identity, not LDAP cache reuse, RADIUS group attributes, or endpoint RBAC."
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F isolation DNS proxy and Allowed Domains: captive redirection versus production DNS forwarding",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/106164/allowed-domains",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-domain-resolution-in-isolation-networks-161245",
+      "feature_mechanism_fingerprint": "In isolation VLANs, FortiNAC Service Network Interface (port2/eth1) is supplied as the client DNS server; unlisted domains resolve to the isolation interface/captive path, while Allowed Domains are proxied to configured production DNS servers; the appliance is not a router.",
+      "workflow_transaction_fingerprint": "Isolated host receives DHCP with FortiNAC service-interface DNS -> sends DNS query to FortiNAC -> allowed-domain match -> forward query to production DNS -> return production answer; no match -> return isolation-interface address to preserve captive/registration flow.",
+      "failure_class": "Isolated endpoint cannot reach update, certificate-validation, identity-provider or domain-controller endpoints because required FQDN/CNAME is not allowlisted, production DNS forwarding is wrong, or the FortiNAC FQDN/domain conflicts with the isolation DNS zone.",
+      "evidence_pattern": "named.log PassThru entries grouped by queried domain; dig @<FortiNAC-port2-IP> <fqdn>; Allowed Domains list and production DNS IP; endpoint DNS answer; DHCP option showing FortiNAC service-interface DNS.",
+      "remediation_path": "Identify failed names from named.log; add only required parent or exact domains and CNAME targets; configure reachable production DNS IPs; avoid wildcards and leading-dot names; do not add the FortiNAC FQDN's parent domain; flush client DNS and reconnect to isolation VLAN.",
+      "question_fingerprint": "A quarantined endpoint receives an IP address but cannot validate an external identity-provider certificate; use the DNS query log and allowlist transaction to determine why the captive path is returned.",
+      "diagram_topology_layout_fingerprint": "Isolation VLAN host -> FortiNAC port2 DNS proxy -> decision diamond Allowed Domains? -> production DNS forward/answer branch or captive isolation-IP branch; separate routed path to external service.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "FortiNAC captive portal state machine (2026-11-03)",
+          "FortiNAC SMS gateway integration (2026-11-08)",
+          "FortiGate transparent conditional DNS forwarding (2026-11-08)"
+        ],
+        "reason": "This lesson covers FortiNAC-F's DNS proxy/allowlist decision in isolation networks, not portal identity state, SMS, or FortiGate zone-based DNS forwarding."
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "TACACS+ post-auth authorization: privilege levels, shell-command argument controls, non-shell services, and cached authorization sessions",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.2/administration-guide/254905/creating-authorization-rules",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/technical-tip-tacacs-session-duration-228849",
+      "feature_mechanism_fingerprint": "TACACS+ authorization objects define user/group rules, privilege level 0-15, non-shell service permissions and shell-command argument allow/deny lists; successful authentication creates an authorization session defaulting to 28,800 seconds, during which changed rules are not re-evaluated.",
+      "workflow_transaction_fingerprint": "TACACS+ authentication success -> authorization session established -> rule resolved from user/group -> service and shell command authorization request -> allowed command/arguments and privilege level returned -> subsequent command requests use session until expiry.",
+      "failure_class": "Changed command permissions appear ineffective because an existing 8-hour authorization session retains prior policy, or command is denied because the shell-command object or argument match is incomplete.",
+      "evidence_pattern": "Authentication > TACACS+ Service > Authorization rules/services/shell commands; TACACS+ authorization logs; session-duration policy value; request command and argument strings compared with allowed/denied argument sets.",
+      "remediation_path": "Test with a fresh TACACS+ session or temporarily reduce the authorization-session duration to 120-36000 seconds; scope rules to user/group; define explicit default permissions; validate exact command and argument strings; restore intended session duration after testing.",
+      "question_fingerprint": "A TACACS+ user keeps executing a command that was removed from the allowed set minutes ago; identify the authorization-session cache lifetime rather than changing the client match policy.",
+      "diagram_topology_layout_fingerprint": "Network device -> FortiAuthenticator authentication -> cached authorization-session object -> group/user rule -> service and shell-command argument decision -> permit/deny response.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "TACACS+ client-policy binding and authentication-before-authorization (2026-11-01)"
+        ],
+        "reason": "The earlier lesson covers client/policy selection and authentication sequencing; this lesson covers post-auth command-level authorization objects, argument evaluation, and authorization-session caching."
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM Web-API password changer: CSRF token extraction, nested JSON parsing, response expectations, and branchable changer sequences",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/485608/password-changers",
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/troubleshooting-tip-azure-ad-password-changer-fails-when-autogenerated-passwords-contain-unsupported-special-characters-in-fortipam-227467",
+      "feature_mechanism_fingerprint": "Web-API password changer executes ordered HTTP requests; Expect steps validate status/body and can extract cookies or tokens from headers/body/cookies; CSRF cookie extraction stores $CSRFTOKEN; multi-layer JSON response parsing supports nested response fields; Expect can branch to a command number.",
+      "workflow_transaction_fingerprint": "Authenticate to target API -> capture session cookie/CSRF token -> submit password-change request with extracted token and new secret -> parse nested JSON/status response -> branch or continue -> verifier confirms the target accepted the new credential before FortiPAM marks change successful.",
+      "failure_class": "Password rotation reports HTTP 400 or false success because CSRF token was not extracted or replayed, JSON response nesting is parsed incorrectly, or the verifier accepts a response that does not prove credential change.",
+      "evidence_pattern": "FortiPAM changer step execution and HTTP status/body; extracted token location/key; cookie/header values; response-body match; command-step sequence and verifier result; WAD password-changer debug categories when needed.",
+      "remediation_path": "Separate Execute and Expect steps; extract CSRF token from the correct response location and key; reference $CSRFTOKEN in the subsequent request; parse the correct nested JSON path; require explicit success code/body; verify by authenticating with the new credential.",
+      "question_fingerprint": "A Web-API password changer authenticates and receives HTTP 200, but the password remains unchanged; determine which token-extraction or response-verification boundary is missing.",
+      "diagram_topology_layout_fingerprint": "FortiPAM changer state machine with HTTP Execute -> HTTP Expect/token extraction -> HTTP Execute/password update -> HTTP Expect/branch decision -> independent verifier; token/cookie feedback arrow.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "Active Directory LDAP password reconciliation (2026-11-18)",
+          "API-key rotation immediate revocation (2026-11-19)",
+          "Secret credential association (2026-11-14)"
+        ],
+        "reason": "The selected lesson is the Web-API password changer's HTTP transaction and CSRF/JSON response state machine, not LDAP reconciliation, API-key revocation, or secret indirection."
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Visual Report Designer: template scope precedence, PDF layout objects, upgrade migration, and report-folder limitation",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857/whats-new-in-7-0-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Visual PDF Report Designer builds templates from cover page, table of contents, sections/pages, text/images/charts/report tables/attachments; report-specific template overrides folder template, which overrides root system template; Service Provider templates are Super/Global scoped.",
+      "workflow_transaction_fingerprint": "Create/edit template at report, folder, or bundle scope -> save template assignment -> report generation resolves most-specific applicable template -> PDF rendering; first login after 7.0 upgrade migrates pre-7.0 templates and normalizes multi-chart layout.",
+      "failure_class": "Custom PDF design is not applied because a higher-precedence report template overrides folder/root template, or first-login migration stalls because unsupported custom folder templates remain; old subsections are not supported.",
+      "evidence_pattern": "Resources > Reports Report Design Template column; report/folder/bundle assignment; PDF Preview; migration error 'Another User is updating all Report Templates on this machine'; exported PDF page/section layout.",
+      "remediation_path": "Inspect template assignment at report, folder, and root scopes; remove custom templates from folders before upgrade; retain supported report- and bundle-level templates; preview generated PDF and reassign at the correct scope.",
+      "question_fingerprint": "A report bundle renders with the default design despite a custom folder template, and an upgrade migration reports another user updating templates; determine precedence and unsupported folder-template migration boundary.",
+      "diagram_topology_layout_fingerprint": "Three-level template precedence stack (report > folder > root) feeding PDF renderer; side panel for cover/TOC/sections/objects; upgrade migration path with unsupported folder-template branch.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "Analytics query functions (2026-11-18)",
+          "Machine Learning Workbench (2026-11-19)",
+          "Incident Investigation Workspace (2026-11-20 morning)"
+        ],
+        "reason": "Report presentation-template inheritance and PDF migration are separate from query execution, model training, and incident graph investigation."
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "FortiSASE DNS Filter: local-domain precedence, FortiGuard fallback, DNS translation, captive-portal exception, and rating-error fail-open",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/130214/dns-filter",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-dns-resolution-fails-when-the-authoritative-dns-server-domain-is-blocked-by-dns-filter-230110",
+      "feature_mechanism_fingerprint": "DNS Filter evaluates local domain filters before FortiGuard category rating; local allow bypasses category evaluation, monitor continues to FortiGuard, block redirects; DNS translation rewrites returned IP; rating-error option can fail open; edge captive portal requires DNS support exception.",
+      "workflow_transaction_fingerprint": "Client DNS query -> local domain filter match/action -> if no local terminal action, FortiGuard rating -> allow/monitor/block portal -> optional DNS translation of resolved IP -> DNS response and DNS Filter log.",
+      "failure_class": "An allowed domain still fails because its authoritative DNS server hostname is independently blocked; DNS translation returns wrong address due to mask; edge captive portal SSO fails because captive-dns-exempt policy lacks DNS Filter or Edge device captive portal support.",
+      "evidence_pattern": "Operations > Logs > Security > DNS Filter query/response entries; local domain rule action and category action; FortiGuard rating error log; DNS answer before/after translation; captive-dns-exempt policy profile group.",
+      "remediation_path": "Allow the delegated authoritative nameserver domain as well as the requested domain; verify local allow/monitor/block precedence; validate original/translated IP and mask; configure edge DNS exemption and captive-portal support; decide explicitly whether rating failure should fail open.",
+      "question_fingerprint": "A domain is locally allowed but still fails resolution because its NS hostnames fall into a blocked FortiGuard category; identify the independent DNS queries and policy precedence.",
+      "diagram_topology_layout_fingerprint": "Client resolver -> local domain filter decision -> FortiGuard category-rating branch -> block portal/allow/monitor; optional DNS translation stage; edge captive DNS exemption side path.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "FortiGate transparent conditional DNS forwarding (2026-11-08)",
+          "FortiSASE split DNS and DNS redirection (2026-11-17)"
+        ],
+        "reason": "The selected lesson is security-profile DNS filtering and response translation, not zone-based DNS forwarding or private-domain split resolution."
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "ADVPN shortcut recovery hold-down: low-priority reintegration, service-strategy selection, and SLA-mode boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/390189/hold-down-time-to-support-sd-wan-service-strategies",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-hold-down-timer-not-applicable-for-sla-mode-215278",
+      "feature_mechanism_fingerprint": "When an ADVPN shortcut or primary hub-spoke VPN recovers, the SD-WAN service can keep that member at low priority until hold-down-time expires; default is zero and valid range is 0-10000000 seconds; hold-down is tied to service-strategy behavior and is not a universal SLA-mode delay.",
+      "workflow_transaction_fingerprint": "Tunnel fails -> member removed/less preferred -> tunnel recovers -> shortcut re-enters service candidate set at low priority -> hold-down timer runs -> member returns to normal strategy ranking after expiry.",
+      "failure_class": "Recovered shortcut immediately attracts traffic and flaps, or operator expects hold-down to delay SLA-mode failback when the documented strategy does not apply; wrong service mode is diagnosed as tunnel instability.",
+      "evidence_pattern": "diagnose sys sdwan service4/service output showing Hold down time, Hold start, current time, member alive/selected state; tunnel status and Performance SLA state; config system sdwan config service set hold-down-time.",
+      "remediation_path": "Confirm service strategy and feature applicability; set a measured hold-down value on the relevant service; compare member selection before and after expiry; do not expect the timer to solve failed SLA measurements or apply where the mode does not support it.",
+      "question_fingerprint": "An ADVPN shortcut repeatedly becomes preferred immediately after recovery, but the service uses an SLA strategy; determine whether the configured hold-down timer is applicable before tuning its value.",
+      "diagram_topology_layout_fingerprint": "Hub-and-spoke with primary and shortcut tunnels; failure removes shortcut, recovery reinserts it into low-priority quarantine timer, then strategy ranking resumes; separate SLA-mode applicability callout.",
+      "uniqueness_assessment": {
+        "verdict": "UNIQUE",
+        "compared_with": [
+          "ADVPN 2.0 edge discovery and path management (2026-10-29)",
+          "Remote-health-check BGP route suppression (2026-11-02)",
+          "TWAMP Performance SLA probes (2026-11-17)"
+        ],
+        "reason": "The focus is post-recovery member priority suppression and timer applicability, not shortcut discovery, route withdrawal, or probe measurement."
+      }
+    }
+  ]
+}
