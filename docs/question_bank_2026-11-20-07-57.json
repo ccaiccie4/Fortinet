@@ -1,0 +1,906 @@
+{
+  "schema_version": "1.1",
+  "report_date": "2026-11-20",
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "stem": "A bulk transfer improves after switching to BBR, while the SYN/SYN-ACK still negotiate window scaling. Which mechanism changed?",
+      "options": [
+        "The receiver's advertised window ceiling",
+        "The firewall policy's traffic shaper",
+        "The sender's congestion-control model",
+        "The TCP MSS advertised by the client"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "Window scaling is negotiated in the handshake and is independent of the congestion algorithm.",
+        "A shaper controls rate; it was held constant in this comparison.",
+        "Correct: BBR changes congestion-control behavior using bottleneck bandwidth and RTT estimates.",
+        "MSS controls segment size, not the congestion-control model."
+      ]
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "stem": "A proxied download stalls near a small receive-window limit. The capture shows no window-scale option in the handshake. What should be investigated first?",
+      "options": [
+        "TCP option handling and endpoint window scaling",
+        "The FortiGate BBR/CUBIC selection",
+        "The SD-WAN member health-check threshold",
+        "The server's TLS certificate chain"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: missing window scaling can cap the usable TCP receive window; it is not a BBR diagnosis.",
+        "Changing BBR cannot restore a missing window-scale negotiation.",
+        "SD-WAN health checks do not explain a negotiated TCP receive-window ceiling.",
+        "TLS trust affects session establishment, not the TCP receive-window option."
+      ]
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "stem": "Which statement is accurate about the FortiOS 8.0 congestion-control setting?",
+      "options": [
+        "It is configured independently on each firewall policy",
+        "It changes TCP window scaling for all clients",
+        "It selects an algorithm only for UDP flows",
+        "It is a system-global CUBIC/BBR choice"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "The setting is global rather than a per-policy control.",
+        "Window scaling remains a separate TCP handshake option.",
+        "UDP has no TCP congestion-control algorithm selection.",
+        "Correct: FortiOS exposes a system-global choice between CUBIC and BBR."
+      ]
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "stem": "A BBR test has high retransmissions and the same poor throughput as CUBIC. Which next action is most defensible?",
+      "options": [
+        "Increase the BBR interval until loss disappears",
+        "Find the loss or queueing source on the path",
+        "Disable TCP window scaling on both endpoints",
+        "Move the flow to an unrelated SD-WAN zone"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "There is no BBR interval that repairs a lossy physical path.",
+        "Correct: congestion control cannot create capacity or repair drops; identify the loss source.",
+        "Disabling window scaling would reduce the receive window and can worsen throughput.",
+        "Changing zones without evidence alters the path and invalidates the comparison."
+      ]
+    },
+    {
+      "id": 5,
+      "product": "FortiGate",
+      "stem": "A controlled A/B test is being prepared for CUBIC versus BBR. Which test design best isolates the algorithm?",
+      "options": [
+        "Change MTU and shaper during each run",
+        "Use different servers and transfer sizes",
+        "Keep endpoints, path, load and duration constant",
+        "Compare one idle run with one busy run"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "Changing MTU and shaping introduces confounding variables.",
+        "Different servers and file sizes make throughput comparisons unreliable.",
+        "Correct: keep the path and workload fixed so the congestion-control selection is the variable.",
+        "Different congestion levels prevent attributing the result to the algorithm."
+      ]
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "stem": "FortiManager and a FortiSASE instance are registered under the same FortiCare account. What is required for onboarding?",
+      "options": [
+        "A FortiManager Key generated in a separate tenant",
+        "The FortiManager Key can be left blank",
+        "A dedicated FortiManager ADOM per tunnel",
+        "A shared SAML signing certificate between tenants"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "A key is not required when both products share the same FortiCare account.",
+        "Correct: the documented same-account case permits the FortiManager Key field to remain blank.",
+        "ADOM placement is an administrative choice, not a tunnel prerequisite.",
+        "SAML signing certificates are not the FortiManager-to-SASE management association key."
+      ]
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "stem": "A SASE instance is under a different FortiCare account but the same FortiCloud child-OU tree. Which onboarding step applies?",
+      "options": [
+        "Move both products into one ADOM first",
+        "Use the old Fabric View connector",
+        "Generate a FortiManager Key in SASE Central Management Settings",
+        "Create a second FortiManager appliance for the tenant"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "ADOM grouping does not establish the account/OU association.",
+        "The FortiSASE Connector was removed from Fabric View in this workflow.",
+        "Correct: a key is generated when accounts differ but remain in the same OU hierarchy.",
+        "Multiple SASE instances can be managed by one FortiManager when prerequisites are met."
+      ]
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "stem": "Three isolated FortiSASE instances appear under one FortiManager ADOM. What does that prove?",
+      "options": [
+        "They are separate managed-device objects in one administrative group",
+        "Their user databases and security PoPs are merged",
+        "Traffic can pass between the three tenant networks",
+        "One FortiCare account owns all three SASE licenses"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: ADOM membership groups management objects; it does not merge SASE tenants.",
+        "FortiSASE instances remain isolated environments.",
+        "ADOM membership does not create data-plane connectivity.",
+        "The architecture guide describes one FortiSASE instance per FortiCare account."
+      ]
+    },
+    {
+      "id": 9,
+      "product": "FortiManager",
+      "stem": "A FortiSASE device cannot be added and the FortiManager Key is valid. Which prerequisite should be checked next?",
+      "options": [
+        "The FortiGate BGP router ID",
+        "The FortiAnalyzer SIEM database",
+        "The SASE tenant's Central Management enablement",
+        "The switch auto-network management VLAN"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "A BGP router ID is unrelated to SASE management onboarding.",
+        "FortiAnalyzer's database does not authorize the FortiSASE device.",
+        "Correct: Central Management must be enabled; select availability may require Support enablement.",
+        "FortiSwitch native VLAN settings do not control FortiSASE registration."
+      ]
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "stem": "A FortiData Risk Record is visible in Log Browse and Logs > All, but no Event Monitor alert exists. What is missing?",
+      "options": [
+        "The FortiData device registration",
+        "The raw Xlog transport path",
+        "The SIEM database insertion",
+        "A custom event handler for Risk Record logs"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "Registration is already evidenced by the received/queryable record.",
+        "Raw transport is already evidenced by Log Browse.",
+        "Database insertion is already evidenced by Logs > All.",
+        "Correct: the default handler triggers Issue logs; Risk Record needs a custom handler."
+      ]
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "stem": "A FortiData Xlog file appears in Log Browse but the same incident cannot be found in Logs > All. Which stage needs investigation?",
+      "options": [
+        "SIEM database insertion and parsing",
+        "The Event Monitor notification email",
+        "The FortiSASE tenant key",
+        "The endpoint's RADIUS survivability cache"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: raw receipt is proven; the next stage is insertion into siemdb.",
+        "Event Monitor is downstream of SIEM insertion and handler evaluation.",
+        "FortiSASE tenant keys are unrelated to FortiAnalyzer ingestion.",
+        "RADIUS cache is unrelated to FortiData Xlog processing."
+      ]
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "stem": "Which FortiData incident type is covered by the predefined Ingested External Alerts handler by default?",
+      "options": [
+        "Risk Record only",
+        "Issue logs",
+        "Integration Event only",
+        "All three types without configuration"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "Risk Record is supported for ingestion but requires a custom handler for alerting.",
+        "Correct: the predefined handler is enabled by default for Issue logs.",
+        "Integration Event requires a custom event handler for alerting.",
+        "The three types are supported in the database, but default alert mapping is narrower."
+      ]
+    },
+    {
+      "id": 13,
+      "product": "FortiAnalyzer",
+      "stem": "What does a FortiData record in Logs > All prove that a raw file in Log Browse does not?",
+      "options": [
+        "The FortiData license is current",
+        "An Event Monitor alert has been created",
+        "The record has been inserted into siemdb",
+        "A custom handler exists for every incident type"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "License state is a separate entitlement check.",
+        "An alert is a downstream event-handler result.",
+        "Correct: Logs > All is the SIEM database query view.",
+        "A database record does not prove a custom handler is configured."
+      ]
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "stem": "A port cannot be added to a manual trunk. The generated trunk shows auto-isl 1 and includes that port. What is the likely cause?",
+      "options": [
+        "Auto-topology currently owns the port",
+        "The port has an invalid STP edge setting",
+        "The switch lacks a FortiManager ADOM",
+        "The port has no LLDP neighbor information"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: auto-ISL owns discovered peer links and can prevent manual trunk membership.",
+        "STP edge is a generated ISL property, not the ownership cause.",
+        "FortiManager ADOM membership is unrelated to switch trunk membership.",
+        "Auto-topology uses peer discovery; an active generated trunk is already visible."
+      ]
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "stem": "Which design check is explicitly required when selecting the auto-network mgmt-vlan?",
+      "options": [
+        "It must match the FortiGate's WAN VLAN",
+        "It must be the same as the default SVI",
+        "It must not reuse an existing SVI VLAN",
+        "It must be outside the allowed VLAN range"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "The guide does not require a WAN VLAN match.",
+        "The guide explicitly warns against using the same VLAN for mgmt-vlan and an SVI.",
+        "Correct: avoid a duplicate management VLAN/SVI identity.",
+        "The allowed VLAN range for the ISL is 1 through 4094."
+      ]
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "stem": "A standalone FortiSwitch was factory-reset and unexpectedly formed an ISL. Which explanation fits the documented defaults?",
+      "options": [
+        "Factory reset disables auto-network",
+        "Auto-topology is enabled after factory reset",
+        "Only FortiManager can create ISL trunks",
+        "ISL formation requires manual LACP mode"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The documented default is enabled, not disabled.",
+        "Correct: auto-network is enabled after factory reset in standalone mode.",
+        "Auto-topology can create the ISL locally without FortiManager.",
+        "The generated ISL uses LACP-active automatically."
+      ]
+    },
+    {
+      "id": 17,
+      "product": "FortiSwitch",
+      "stem": "Which attribute set describes the generated auto-ISL switch interface?",
+      "options": [
+        "Native VLAN 1, DHCP snooping untrusted, STP edge enabled",
+        "LACP passive, VLANs 10-100, STP edge enabled",
+        "Manual LACP, routed-only VLANs, DHCP snooping disabled",
+        "LACP-active, allowed VLANs 1-4094, DHCP snooping trusted"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "The native VLAN is determined by mgmt-vlan, not always VLAN 1.",
+        "The generated trunk is LACP-active and STP edge is disabled.",
+        "The interface is an ISL with a defined VLAN list, not routed-only.",
+        "Correct: these are documented generated-ISL properties."
+      ]
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "stem": "RADIUS is unreachable. An employee's previously authenticated station reconnects, but a new laptop cannot join. What explains the difference?",
+      "options": [
+        "The new laptop is on the wrong AP radio",
+        "The old station bypassed all SSID policy",
+        "Only previously authenticated clients have cached credentials",
+        "The new laptop must use a different VLAN"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "The scenario does not establish a radio problem.",
+        "Survivability does not bypass all SSID policy.",
+        "Correct: the local cache supports previously authenticated stations, not first-time authentication.",
+        "A VLAN change does not create a missing authentication cache entry."
+      ]
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "stem": "For EAP-PEAP survivability, which RADIUS response detail is required by the guide?",
+      "options": [
+        "Fortinet-AS-Credential-Hash or Cisco-AVPair AS-Credential-Hash",
+        "A DHCP Option 82 remote-ID with the AP serial",
+        "A BGP community that identifies the SSID",
+        "An IPsec VPN-ID carrying the wireless VRF"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: the credential-hash attribute is required for the documented PEAP cache behavior.",
+        "DHCP relay metadata does not provide the PEAP credential hash.",
+        "BGP communities do not populate the wireless survivability cache.",
+        "VPN-ID/IPIP is an SD-WAN segmentation mechanism."
+      ]
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "stem": "A cached station remains online after a direct RADIUS test fails. Which interpretation is correct?",
+      "options": [
+        "The RADIUS server has recovered fully",
+        "The test command proves the cache is empty",
+        "The SSID has switched to open authentication",
+        "The station may be using its local survivability entry"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "The direct test failed, so server recovery is not proven.",
+        "The cache must be inspected separately.",
+        "Survivability does not convert the SSID to open authentication.",
+        "Correct: the client and direct test exercise different authentication paths."
+      ]
+    },
+    {
+      "id": 21,
+      "product": "FortiAP/Wireless",
+      "stem": "The station's cache entry has expired. What should happen during a continued RADIUS outage?",
+      "options": [
+        "It receives unlimited cached authorization",
+        "It is no longer authorized by the fallback",
+        "It is moved automatically to the guest VLAN",
+        "It becomes a local RADIUS server for peers"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The interval is bounded; authorization is not unlimited.",
+        "Correct: after the configured interval expires, the cached station is no longer authorized.",
+        "The guide does not describe an automatic guest-VLAN transition.",
+        "A wireless client never becomes the RADIUS server through this feature."
+      ]
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "stem": "A switch-side description changes, but FortiNAC keeps its old label after routine polling. Which setting explains this behavior?",
+      "options": [
+        "Preserve Port Names remains enabled",
+        "The switch has no IP address",
+        "The RADIUS accounting port is blocked",
+        "The FortiNAC server has no SAML certificate"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: preservation is enabled by default and keeps FortiNAC's label authoritative.",
+        "The scenario concerns an already modeled switch interface.",
+        "RADIUS accounting is unrelated to port-description synchronization.",
+        "SAML certificates do not control switch interface labels."
+      ]
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "stem": "The operator wants switch descriptions to replace FortiNAC labels. Which action matches the documented behavior?",
+      "options": [
+        "Restart only the switch's RADIUS process",
+        "Run L2 polling repeatedly without changing settings",
+        "Disable Preserve Port Names at the intended scope, then resync",
+        "Delete every port group before the next poll"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "The RADIUS process does not control interface description refresh.",
+        "Routine L2 polling is not the documented description-overwrite trigger.",
+        "Correct: disable preservation globally or per device and run Resync Interfaces.",
+        "Deleting port groups is unnecessary and risks losing operational grouping."
+      ]
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "stem": "A chassis module is inserted and FortiNAC re-indexes interfaces. What secondary effect should be checked?",
+      "options": [
+        "The FortiSASE invitation code",
+        "The BBR congestion algorithm",
+        "The FortiAuthenticator license timer",
+        "Manual port-group associations on recreated interface models"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "Endpoint enrollment codes are unrelated to switch model indexing.",
+        "TCP congestion control is unrelated to FortiNAC interface models.",
+        "VM license validation is unrelated to chassis interface indexing.",
+        "Correct: re-indexing may delete/recreate interface models and affect manual groups."
+      ]
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC",
+      "stem": "Which statement best distinguishes L2 polling from Resync Interfaces?",
+      "options": [
+        "Both operations always rebuild the full interface model",
+        "L2 polling learns state/MAC/VLAN; resync refreshes interface model data",
+        "Resync Interfaces only validates RADIUS shared secrets",
+        "L2 polling updates all port descriptions regardless of preservation"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The operations have different scope; they are not interchangeable.",
+        "Correct: L2 polling is state-oriented; resync reads interface information and descriptions under the configured preservation behavior.",
+        "RADIUS shared secrets are not the purpose of interface resync.",
+        "Port-description updates depend on Preserve Port Names and resync/service restart."
+      ]
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "stem": "A cloud-managed switch exposes RADIUS but no SNMP or CLI. Which FortiNAC-F release first supports the documented RADIUS-only model?",
+      "options": [
+        "7.4.0",
+        "7.6.5",
+        "7.6.7",
+        "7.2.2"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "The guide specifies 7.6.7 and later.",
+        "The documented minimum is not 7.6.5.",
+        "Correct: RADIUS-only device support is available in FortiNAC-F 7.6.7+.",
+        "7.2.2 predates the feature."
+      ]
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "stem": "A RADIUS response must include VLAN-specific attributes and RFC5176 CoA behavior. Which object should be checked?",
+      "options": [
+        "The SSO Address Group",
+        "The Response Attribute Configuration",
+        "The switch's SNMP read community",
+        "The FortiGate auto-ISL trunk"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "SSO address groups are used for SSO/VPN configuration, not RADIUS response attributes.",
+        "Correct: Response Attribute Configurations define returned attributes and RFC5176 mode.",
+        "RADIUS-only devices do not require SNMP management credentials.",
+        "Auto-ISL is unrelated to FortiNAC RADIUS response construction."
+      ]
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "stem": "The Device Migration page shows Legacy Mode as N/A for a RADIUS-only device. What does that mean?",
+      "options": [
+        "The device cannot be placed in selector mode",
+        "The device has no RADIUS server configured",
+        "The device must be moved to global legacy mode",
+        "The device does not support legacy mode"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "N/A does not mean selector mode is unavailable.",
+        "RADIUS configuration must still be checked separately.",
+        "Global legacy mode is a system migration state, not a device requirement.",
+        "Correct: RADIUS-only devices cannot enable the legacy device-bound mode."
+      ]
+    },
+    {
+      "id": 29,
+      "product": "FortiNAC-F",
+      "stem": "An administrator wants to test one migrated device. Which action should occur before disabling Global Legacy Mode?",
+      "options": [
+        "Create/review selectors and test devices individually",
+        "Disable Global Legacy Mode, then build selectors",
+        "Delete all legacy model configurations immediately",
+        "Turn on legacy mode for every RADIUS-only device"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: migrate and test devices individually; disable the global control only after all required selectors are ready.",
+        "The guide warns the global action is irreversible and removes the migration wizard.",
+        "Deleting model configuration before selector creation can lose device-bound configuration.",
+        "RADIUS-only devices cannot enable legacy mode."
+      ]
+    },
+    {
+      "id": 30,
+      "product": "FortiNAC-F",
+      "stem": "Two selectors match the same device, one specific and one broad. What is the safest design?",
+      "options": [
+        "Put the broad selector above all specific rules",
+        "Disable every selector except the broad rule",
+        "Rely on alphabetical selector-name order",
+        "Rank the specific selector ahead of the broad match"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "A broad rule can capture traffic before the intended specific rule.",
+        "Disabling all specific rules defeats the reusable selector model.",
+        "The guide uses selector rank/conditions, not alphabetical names.",
+        "Correct: ensure the specific rule wins before a broad catch-all."
+      ]
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "stem": "The FortiAuthenticator GUI works, but RADIUS and SAML authentication stop after a long Internet outage. What should be checked first?",
+      "options": [
+        "The AP's survivability cache",
+        "The FortiManager ADOM lock",
+        "The subscription license's FDN validation state",
+        "The FortiSwitch auto-network mgmt-vlan"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "Wireless cache state does not explain platform-wide authentication service shutdown.",
+        "ADOM locks do not control FortiAuthenticator licensing.",
+        "Correct: loss of update.fortiguard.net validation for 30 days disables the subscription license and halts authentication.",
+        "The switch management VLAN is unrelated to VM subscription validation."
+      ]
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "stem": "How should subscription licensing be handled in an active/passive FortiAuthenticator HA pair?",
+      "options": [
+        "Install separate subscription files on both nodes",
+        "Use one perpetual license on the active node only",
+        "Mix perpetual active with subscription passive",
+        "Copy the active license file to every unrelated VM"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: each HA member requires its own subscription VM license file.",
+        "The guide says mixing perpetual and subscription licenses in one pair is unsupported.",
+        "A mixed licensing model is explicitly unsupported.",
+        "Licensing is per HA member, not a license shared with unrelated VMs."
+      ]
+    },
+    {
+      "id": 33,
+      "product": "FortiAuthenticator",
+      "stem": "Which command reports subscription entitlement information fetched from FortiGuard/FDN?",
+      "options": [
+        "get system license-info",
+        "diagnose system updated info",
+        "diagnose system updated status",
+        "diagnose debug application radiusd 3"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "This shows local license information rather than FDN-fetched status.",
+        "This displays runtime update information.",
+        "Correct: the documented command displays license information fetched from FDN.",
+        "The documented update daemon debug command is not a radiusd command."
+      ]
+    },
+    {
+      "id": 34,
+      "product": "FortiAuthenticator",
+      "stem": "A 6.6.7 VM must be upgraded and a subscription license is available. What is the safe prerequisite?",
+      "options": [
+        "Apply the 8.0 subscription license before any upgrade",
+        "Upgrade to FortiAuthenticator 8.0.0 or later first",
+        "Mix a perpetual license on the active node",
+        "Disable FDN validation for the migration window"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The subscription VM license requires 8.0.0 or later.",
+        "Correct: upgrade to a supported release before applying the subscription license.",
+        "Mixing license types in HA is unsupported.",
+        "The feature requires FDN validation; disabling it is not the documented migration path."
+      ]
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "stem": "A user is logged into FortiPAM but cannot open a secret until re-authenticating. Which control is responsible?",
+      "options": [
+        "Access Authentication on the secret policy",
+        "The target's password changer interval",
+        "The SSH filter profile only",
+        "The FortiPAM ADOM assignment"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: Access Authentication is a separate step-up gate at secret access/launch time.",
+        "Password changing manages credentials, not user step-up authentication.",
+        "SSH filtering blocks commands after launch; it does not gate secret viewing.",
+        "ADOM is not the FortiPAM secret-access control in this workflow."
+      ]
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "stem": "A policy needs immediate-use re-authentication with no long access window. Which duration is documented for that behavior?",
+      "options": [
+        "60 minutes",
+        "180 minutes",
+        "0 minutes",
+        "30 minutes"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "60 minutes is the documented default, not immediate-use duration.",
+        "180 minutes is the upper end of the documented range.",
+        "Correct: zero indicates short-lived authentication for immediate use.",
+        "Thirty minutes is a possible configured duration, not the special zero value."
+      ]
+    },
+    {
+      "id": 37,
+      "product": "FortiPAM",
+      "stem": "A user signed in through remote RADIUS/LDAP reaches the Access Authentication dialog. Which documented option applies?",
+      "options": [
+        "Authenticate using the target's SSH key",
+        "Authenticate using FortiPAM login credentials",
+        "Reuse the last approval decision",
+        "Skip the step-up check automatically"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The target's SSH key is a target credential, not the FortiPAM step-up credential.",
+        "Correct: remote RADIUS/LDAP users can select PAM login credentials for this authentication step.",
+        "Approval is a separate workflow and does not satisfy re-authentication.",
+        "The feature requires authentication; it does not silently skip the check."
+      ]
+    },
+    {
+      "id": 38,
+      "product": "FortiPAM",
+      "stem": "A folder policy enables Access Authentication, but one secret opens without a prompt. What should be inspected?",
+      "options": [
+        "The target's default gateway",
+        "The global FortiPAM NTP server",
+        "The session recording video",
+        "The secret-level Session Security override"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "The target gateway affects reachability, not policy inheritance.",
+        "NTP may affect time-based tokens but is not the first inheritance check.",
+        "Recording is a separate session security control.",
+        "Correct: the secret can override the folder policy's Access Authentication setting."
+      ]
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "stem": "An investigation graph connects an incident to a host and user. What does the edge establish by itself?",
+      "options": [
+        "A proven causal chain from user to host",
+        "A navigable relationship in FortiSIEM context",
+        "That both entities share the same process",
+        "That the incident is a confirmed true positive"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "Graph proximity does not prove causality.",
+        "Correct: the graph organizes identified incident/entity relationships for investigation.",
+        "The edge does not prove a shared process without event evidence.",
+        "Incident resolution still requires analyst evidence and classification."
+      ]
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "stem": "An analyst needs to see how related incidents unfolded over time. Which workspace function is most useful?",
+      "options": [
+        "The Timeline panel with ordered playback",
+        "The FortiAuthenticator license view",
+        "The FortiSwitch auto-ISL status icon",
+        "The SASE invitation-code page"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: timeline ordering and playback show when incidents occurred in the selected window.",
+        "Licensing is unrelated to incident chronology.",
+        "The switch icon is unrelated to SIEM investigation.",
+        "Invitation codes are unrelated to incident chronology."
+      ]
+    },
+    {
+      "id": 41,
+      "product": "FortiSIEM",
+      "stem": "A host node is selected and the analyst needs device context and further related incidents. What is the next step?",
+      "options": [
+        "Clear the root incident immediately",
+        "Change the incident severity without evidence",
+        "Open entity details/context and expand related objects",
+        "Delete the host from the CMDB"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "Clearing before reviewing evidence can destroy the investigation trail.",
+        "Severity changes do not provide entity context.",
+        "Correct: inspect the node sidebar/context and selectively add related entities/incidents.",
+        "Deleting the CMDB entity removes useful context rather than investigating it."
+      ]
+    },
+    {
+      "id": 42,
+      "product": "FortiSIEM",
+      "stem": "A backend PostgreSQL query confirms an incident row exists, but the workspace graph differs. What is the best interpretation?",
+      "options": [
+        "The graph is always identical to raw SQL output",
+        "The incident must be a false positive",
+        "The SQL result proves every graph edge",
+        "Compare scope, time window and relationship expansion"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "The graph adds context and relationship logic beyond a raw row query.",
+        "Database existence does not classify the incident as false positive.",
+        "A row query does not prove the graph's full relationship logic.",
+        "Correct: compare filters, time range, organization scope and expansion choices."
+      ]
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "stem": "Authenticated onboarding is not visible in the FortiSASE portal. What prerequisite may be missing?",
+      "options": [
+        "A FortiSwitch auto-ISL configuration",
+        "A FortiManager ADOM lock",
+        "A FortiAuthenticator subscription file",
+        "Fortinet Support enablement for select availability"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "Switch topology is unrelated to SASE onboarding enablement.",
+        "An ADOM lock does not expose the SASE feature.",
+        "FortiAuthenticator licensing does not enable the SASE feature.",
+        "Correct: authenticated onboarding is select availability and may require Support enablement."
+      ]
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "stem": "After authenticated onboarding is enabled, an endpoint still uses its old invitation code. What is expected?",
+      "options": [
+        "The old code remains valid indefinitely",
+        "The new code replaces the old registration code",
+        "The endpoint bypasses SAML automatically",
+        "The endpoint is converted to a FortiNAC host"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The feature rotates the invitation code; old codes are no longer valid for new registration.",
+        "Correct: onboarding generates a new code that must be distributed to endpoints/installers.",
+        "SAML authentication is the new gate, not an automatic bypass.",
+        "FortiNAC is a separate product and is not the migration target."
+      ]
+    },
+    {
+      "id": 45,
+      "product": "FortiSASE",
+      "stem": "An Entra ID user belongs to more than 150 groups. What should be checked in the SAML assertion?",
+      "options": [
+        "The asserted group count and scoped group claim",
+        "The FortiGate BBR algorithm",
+        "The FortiSwitch native VLAN",
+        "The FortiPAM secret checkout duration"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: the guide documents a 150-group assertion limit; scope claims to required groups.",
+        "TCP congestion control does not affect SAML group assertions.",
+        "Switch VLAN configuration is unrelated to SAML claims.",
+        "Secret checkout is a FortiPAM control."
+      ]
+    },
+    {
+      "id": 46,
+      "product": "FortiSASE",
+      "stem": "A previously enrolled endpoint fails after authenticated onboarding rollout. Which migration item is most likely stale?",
+      "options": [
+        "Its local DHCP lease timer",
+        "The FortiAnalyzer event handler",
+        "The EMM installer invitation code",
+        "The FortiSIEM graph layout"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "A DHCP lease is not the endpoint registration invitation code.",
+        "FortiAnalyzer handlers do not update endpoint installers.",
+        "Correct: EMM-distributed installers must be updated with the current invitation code/configuration.",
+        "Graph layout is unrelated to endpoint onboarding."
+      ]
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "stem": "Two tenants share one IPsec overlay but use separate VRFs. Which encapsulation preserves VRF identity through the tunnel?",
+      "options": [
+        "GRE over UDP without a VPN ID",
+        "A single global route table for both tenants",
+        "VPN-ID/IPIP encapsulation",
+        "A shared DHCP relay identifier"
+      ],
+      "correct_index": 2,
+      "feedback": [
+        "The documented segmentation feature uses VPN-ID/IPIP, not generic GRE.",
+        "A single route table removes the required VRF separation.",
+        "Correct: VPN-ID/IPIP carries the VRF identity through the shared tunnel.",
+        "DHCP relay identifiers do not carry VRF identity in the IPsec overlay."
+      ]
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "stem": "VRF-A at spoke 1 must reach VRF-A at spoke 2 but never VRF-B. What should the design enforce?",
+      "options": [
+        "Consistent VRF identity and per-VRF route exchange",
+        "A shared default route imported into every VRF",
+        "A route leak between all tenant VRFs",
+        "One tunnel interface address reused as every loopback"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: consistent VRF IDs and route policy preserve same-VRF reachability and cross-VRF isolation.",
+        "A shared default route can create unintended cross-tenant reachability.",
+        "Unrestricted route leaking defeats the isolation requirement.",
+        "Loopback IPv6 exchange is separate from reusing one address for all tenants."
+      ]
+    },
+    {
+      "id": 49,
+      "product": "Secure SD-WAN",
+      "stem": "A health check traverses a multi-VRF tunnel but reaches the wrong tenant's server. Which setting should be reviewed?",
+      "options": [
+        "The FortiPAM Access Authentication duration",
+        "The FortiGate global BBR selection",
+        "The FortiSwitch auto-network mgmt-vlan",
+        "The health check's VRF and source address"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "Secret access duration is unrelated to SD-WAN probes.",
+        "TCP congestion control does not select the health-check VRF.",
+        "The switch management VLAN is unrelated to the routed overlay probe.",
+        "Correct: set the health-check VRF and source so the hub forwards it in the same VRF."
+      ]
+    },
+    {
+      "id": 50,
+      "product": "Secure SD-WAN",
+      "stem": "A FortiGate itself cannot source a local-out probe through the VPN-ID/IPIP segmented overlay. What limitation applies?",
+      "options": [
+        "VPN-ID/IPIP is supported only for local-out traffic",
+        "The feature applies to forwarded traffic, not local-out traffic",
+        "IPv6 segmentation requires a separate tunnel per tenant",
+        "BGP must be disabled on all spokes"
+      ],
+      "correct_index": 1,
+      "feedback": [
+        "The guide states the opposite: local-out traffic is not supported by this encapsulation.",
+        "Correct: the documented VPN-ID/IPIP segmentation applies to forwarding traffic only.",
+        "The design is specifically intended to share one overlay across VRFs.",
+        "BGP route exchange is part of the multi-VRF design."
+      ]
+    }
+  ]
+}
