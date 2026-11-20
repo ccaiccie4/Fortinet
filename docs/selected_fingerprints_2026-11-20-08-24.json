@@ -49,30 +49,30 @@
     },
     {
       "product": "FortiAnalyzer",
-      "lesson_subject": "FortiData SIEM Xlog ingestion and incident-event handling",
-      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/990511/fortidata-incident-support",
-      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-fortianalyzer-receive-new-logs-but-stop-inserting-logs-215082",
-      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 recognizes FortiData devices and ingests their SIEM Xlog records into the SIEM database; Issue, Risk Record and Integration Event are distinct supported log types with different default event-handler behavior.",
-      "workflow_transaction_fingerprint": "Add FortiData device in Device Manager -> receive Xlog files -> inspect Log Browse -> insert records into siemdb/All logs -> default Ingested External Alerts handler evaluates Issue records -> Event Monitor alert; custom handlers are required for other supported record types.",
-      "failure_class": "Device is registered but Xlogs do not arrive; raw files arrive but database insertion is stalled; logs are present but no alert appears because only Issue logs are covered by the predefined handler.",
-      "evidence_pattern": "Log Browse proves raw Xlog receipt; All logs proves SIEM database insertion; Event Monitor alert proves event-handler processing; absence of an alert for Risk Record or Integration Event does not prove ingestion failure.",
-      "remediation_path": "Separate transport, raw-file receipt, SIEM database insertion and event-handler evaluation; confirm the FortiData device is added, inspect Log Browse and All logs, then create custom event handlers for non-Issue types.",
-      "question_fingerprint": "Distinguish an ingestion failure from an expected no-alert outcome when a FortiData Risk Record is visible in Log Browse but not in Event Monitor.",
-      "diagram_topology_layout_fingerprint": "FortiData device -> SIEM Xlog transport -> FortiAnalyzer Log Browse -> siemdb/All logs -> default/custom event handlers -> Event Monitor.",
+      "lesson_subject": "FortiAnalyzer NTPv4 authenticated time synchronization using SHA-256 keys",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/746858/fortianalyzer-supports-ntpv4-with-sha-256-encryption",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-how-to-fix-fortianalyzer-ntp-high-latency-221539",
+      "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 NTPv4 client authenticates server responses using a shared SHA-256 key and matching key ID/key format; Chrony server key entry must exactly match the FortiAnalyzer key material.",
+      "workflow_transaction_fingerprint": "Configure Chrony allow/bind/keyfile and key ID -> configure FortiAnalyzer NTP server address, authentication, SHA-256, key format, key and key ID -> NTPv4 authenticated exchange -> daemon selects server and synchronizes clock -> diagnose system ntp status reports synchronization.",
+      "failure_class": "Key ID mismatch; hex/ASCII format mismatch; key bytes differ; Chrony keyfile is not enabled; server bind/allow excludes FortiAnalyzer; NTP path or latency prevents timely synchronization.",
+      "evidence_pattern": "`diagnose system ntp status` shows selected server, stratum, reach, last receive and offset; packet capture confirms NTP exchange; synchronized status proves time acquisition but does not by itself prove the configured key was rotated or all peers use the same source.",
+      "remediation_path": "Match key ID, SHA-256 algorithm and exact key representation on both systems; confirm Chrony keyfile and client allow/bind; verify UDP/123 reachability and inspect NTP status/offset before relying on timestamps.",
+      "question_fingerprint": "Diagnose a FortiAnalyzer that can reach its Chrony NTP server but fails authenticated synchronization because the server key ID or key format differs.",
+      "diagram_topology_layout_fingerprint": "FortiAnalyzer NTP client -> UDP/123 authenticated NTPv4 exchange -> Chrony server key ID/SHA-256 table -> clock discipline and status evidence.",
       "semantic_uniqueness": "No substantially equivalent mechanism was found for this product in the 30-day published-report inventory."
     },
     {
       "product": "FortiSwitch",
-      "lesson_subject": "Zero-touch management: auto-topology, auto-network, MSTP and ICL behavior",
-      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/657004/zero-touch-management",
-      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-good-practices-for-a-standalone-fortiswitch-155141",
-      "feature_mechanism_fingerprint": "FortiSwitch zero-touch defaults combine VLAN 1 native access, DHCP on management/internal interfaces, auto-topology, FortiLink auto-discovery and FortiLAN Cloud; topology detection selects L2 MSTP/native-VLAN behavior or L3 static ICL behavior.",
-      "workflow_transaction_fingerprint": "Factory boot -> obtain DHCP parameters -> advertise/discover controller and neighbors -> detect L2 or L3 topology -> apply MSTP instances 0/15 and native VLAN 4094 for L2 or create static ICL for L3 -> form ISL/management topology.",
-      "failure_class": "Unintended auto-ISL or topology formation; dual DHCP default gateways create ECMP and steer management/FortiLink incorrectly; operator mistakes a discovery indicator for an active ISL.",
-      "evidence_pattern": "Blue auto-network icon indicates active ISL trunk in FortiSwitchOS 8.0; topology view and LLDP neighbors reveal adjacency; DHCP/default-route state explains management path selection; MSTP instances/native VLAN reveal L2 auto-topology behavior.",
-      "remediation_path": "Design the management/internal DHCP gateway roles, disable default gateway on the interface not used for management when both use DHCP, disable auto-topology only when required by the design, and validate the actual ISL and MSTP state.",
-      "question_fingerprint": "Identify why a newly booted FortiSwitch creates unexpected L2 topology or loses FortiLink reachability when both management and internal DHCP interfaces install default routes.",
-      "diagram_topology_layout_fingerprint": "Factory switch boot -> DHCP and discovery -> topology decision split to L2 MSTP/native VLAN 4094 or L3 static ICL -> FortiLink/ISL.",
+      "lesson_subject": "Managed FortiSwitch administrator trusted-host policies: FortiLink auto-assignment and synchronization boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/173280/optional-fortilink-configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-unable-to-synchronize-configuration-for-managed-fortiswitch-224900",
+      "feature_mechanism_fingerprint": "FortiOS 8.0 managed FortiSwitch admin security policies restrict switch management access to configured IPv4/IPv6 trusted hosts; FortiLink `set auto` can add the FortiLink source addresses automatically under supported L2 FortiLink designs.",
+      "workflow_transaction_fingerprint": "Create switch-controller security-policy admin object -> choose auto or explicit trusthost/ip6-trusthost entries -> apply policy to managed switch admin account -> FortiGate FortiLink source performs REST API login -> config push/sync succeeds only if source address matches trusthost list.",
+      "failure_class": "FortiLink subnet omitted from trusted hosts; NAT changes the source address so auto-assignment is wrong; L3 FortiLink ignores auto; FortiGate config push fails REST API authentication despite switch being reachable.",
+      "evidence_pattern": "`execute switch-controller get-sync-status all` shows CONFIG/MAC-SYNC state; FortiLink interface address and route identify management source; switch `config system admin` trusthost list confirms allowed sources; REST API login success and subsequent config sync prove management-plane access.",
+      "remediation_path": "Include the actual FortiLink source subnet in trusted hosts, disable auto and enter explicit addresses when NAT is present, configure trusted hosts manually for L3 FortiLink, and re-check synchronization before disabling any management access.",
+      "question_fingerprint": "Identify why a managed FortiSwitch is reachable but FortiGate configuration synchronization fails after an administrator adds restrictive trusted hosts.",
+      "diagram_topology_layout_fingerprint": "FortiGate FortiLink source IP -> managed FortiSwitch admin trusted-host policy -> REST API authentication -> configuration synchronization state.",
       "semantic_uniqueness": "No substantially equivalent mechanism was found for this product in the 30-day published-report inventory."
     },
     {
@@ -203,7 +203,23 @@
       "FortiPAM single secret to multiple target hosts (covered 2026-11-12)",
       "FortiSIEM ClickHouse Event Log Integrity (covered 2026-11-15)",
       "FortiSASE agentless ZTNA bookmark portal/private application flow (covered 2026-11-12)",
-      "Secure SD-WAN passive application-specific SLA measurement (covered 2026-11-13)"
+      "Secure SD-WAN passive application-specific SLA measurement (covered 2026-11-13)",
+      "FortiAnalyzer FortiData SIEM Xlog ingestion (duplicate of the 2026-11-20 07:57 report's FortiData incident ingestion lesson)",
+      "FortiSwitch zero-touch auto-topology/auto-ISL (duplicate of the 2026-11-20 07:57 report's auto-topology and auto-ISL lifecycle lesson)"
+    ],
+    "same_day_replacements": [
+      {
+        "product": "FortiAnalyzer",
+        "rejected": "FortiData Xlog ingestion",
+        "replacement": "FortiAnalyzer NTPv4 authenticated time synchronization using SHA-256 keys",
+        "reason": "The earlier same-day run taught the same Xlog-to-siemdb-to-event-handler pipeline; authenticated NTPv4 with SHA-256 is a distinct system-time mechanism."
+      },
+      {
+        "product": "FortiSwitch",
+        "rejected": "Zero-touch auto-topology/auto-ISL",
+        "replacement": "Managed FortiSwitch administrator trusted-host policies: FortiLink auto-assignment and synchronization boundaries",
+        "reason": "The earlier same-day run taught the same LLDP/auto-ISL topology formation; administrator trusted-host policy is a separate management-plane access-control mechanism."
+      }
     ]
   }
 }
