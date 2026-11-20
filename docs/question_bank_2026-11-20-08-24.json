@@ -1,0 +1,921 @@
+{
+  "title": "Fortinet Enterprise Networking & Security — Daily Examination",
+  "date": "2026-11-20",
+  "question_count": 50,
+  "graded": true,
+  "choice_feedback_count": 200,
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "question": "A maintenance window is planned on one eBGP path. The backup path must become preferred before the peer session closes. What should the receiving peer do?",
+      "choices": [
+        "Match the gshut community and lower local preference on those routes",
+        "Increase the hold timer and wait for the neighbor to reset",
+        "Apply a route map that removes every route from the peer",
+        "Disable BFD and rely on the default BGP keepalive timer"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the receiver recognizes the well-known graceful-shutdown community and de-preferences the marked path before withdrawal.",
+        "Changing hold timers delays failure detection but does not drain traffic onto an alternate path.",
+        "Removing every route is an abrupt withdrawal, not a controlled preference transition.",
+        "BFD is a separate liveness detector; disabling it alone does not implement graceful route draining."
+      ]
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "question": "A team wants to drain traffic temporarily but keep the BGP session established. Which graceful-shutdown behavior fits?",
+      "choices": [
+        "Graceful mode closes the session after the configured delay",
+        "Graceful-soft mode de-preferences routes and restores preference later",
+        "A route refresh immediately removes every route from the peer",
+        "Graceful restart preserves stale routes after a control-plane restart"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Graceful mode is intended to close the peer session after the drain interval.",
+        "Correct: graceful-soft keeps the session up, temporarily lowers preference, then restores it after the delay.",
+        "A route refresh is not the graceful-shutdown state machine and does not perform this timed drain.",
+        "Graceful restart addresses restart recovery and stale-route retention, not planned route draining."
+      ]
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "question": "During a drain, the BGP summary reports `In gshut`. Which additional evidence best confirms traffic can move to the backup?",
+      "choices": [
+        "The peer uptime counter continues increasing",
+        "The marked route has gshut community and lower local preference than the alternate",
+        "The interface reports carrier up and full duplex",
+        "The neighbor's configured keepalive interval matches the remote value"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Peer uptime alone does not show that route preference changed or that a backup exists.",
+        "Correct: the community and lower local preference show the intended route de-preference; confirm the alternate is best in the routing table.",
+        "Carrier state proves physical link state, not BGP best-path selection.",
+        "Matching keepalive values show timer agreement, not route-drain completion."
+      ]
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "question": "A site has only one usable upstream route. The operator enables graceful shutdown and waits for the delay. What is the likely outcome?",
+      "choices": [
+        "Traffic remains on the old path because gshut pins the route",
+        "The route is copied into the local routing table as a backup",
+        "The receiver synthesizes an alternate route from the community value",
+        "The route is withdrawn after the drain and traffic loses its only path"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The community does not pin traffic to a path; it changes route preference.",
+        "A backup route must already exist and be eligible; graceful shutdown does not clone routes.",
+        "The gshut community is a signal, not a route-generation instruction.",
+        "Correct: without an eligible alternate, closing the session removes the only path and can cause an outage."
+      ]
+    },
+    {
+      "id": 5,
+      "product": "FortiManager",
+      "question": "A password-type object already exists in the ADOM. During import from a PDE-enabled FortiGate, the goal is to retain the live device password. What should the operator enter?",
+      "choices": [
+        "Leave the existing-object password field blank to preserve the current device value",
+        "Enter the object name again so FortiManager can decrypt the value",
+        "Enter a random value and let the next install reconcile it",
+        "Delete the ADOM object before importing the device configuration"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the documented blank choice preserves the current FortiGate password for an existing object.",
+        "Object names do not decrypt private data or recover the secret.",
+        "A random value changes the intended credential and can break dependent services.",
+        "Deleting the object is unnecessary and can break references or policy packages."
+      ]
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "question": "A newly discovered password-type object appears in the FortiManager import wizard. Which action completes the documented import handling?",
+      "choices": [
+        "Skip every password prompt because PDE objects are imported automatically",
+        "Use the ADOM name as the password for all imported objects",
+        "Provide the password for each new password-type object when prompted",
+        "Disable private data encryption on the FortiGate before every import"
+      ],
+      "correct": 2,
+      "feedback": [
+        "Skipping the prompt can leave the imported object without the required secret value.",
+        "The ADOM name is unrelated to the device's password-type object value.",
+        "Correct: the import flow prompts for the secret material for each new password-type object.",
+        "Disabling PDE is not required by the documented FortiManager 8.0 import workflow."
+      ]
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "question": "The import finishes, but a later install preview shows an unexpected object change. Which review is most useful before pushing?",
+      "choices": [
+        "Check the device serial number only and proceed if it matches",
+        "Review duplicate-object resolution, object references and the install preview delta",
+        "Re-enter every secret in the ADOM without checking object references",
+        "Run a firmware upgrade so the import database is rebuilt"
+      ],
+      "correct": 1,
+      "feedback": [
+        "A matching serial number does not explain an unexpected object or secret delta.",
+        "Correct: duplicate handling, references and the install preview reveal what will actually be installed.",
+        "Blindly re-entering secrets may overwrite correct values and still leave bad references.",
+        "A firmware upgrade is unrelated to the object import transaction."
+      ]
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "question": "An engineer assumes importing a PDE-protected object automatically rotates the password on the managed FortiGate. Which statement is accurate?",
+      "choices": [
+        "Importing the object always forces a password change on the source device",
+        "The password is converted into plaintext and stored in the ADOM",
+        "The import process disables the device's PDE setting after synchronization",
+        "Import handles the object value; device credential changes remain a separate install decision"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The source device password is not automatically rotated just because the object was imported.",
+        "The documented workflow does not describe plaintext conversion as the import result.",
+        "The import feature does not disable the FortiGate's PDE setting.",
+        "Correct: distinguish object import and secret handling from the later device installation/change transaction."
+      ]
+    },
+    {
+      "id": 9,
+      "product": "FortiAnalyzer",
+      "question": "A FortiData Risk Record is visible in Log Browse but does not create an Event Monitor alert. What is the best next step?",
+      "choices": [
+        "Create a custom event handler for the Risk Record log type",
+        "Reinstall the FortiData device because Log Browse is only a cache",
+        "Increase the FortiAnalyzer log disk quota before checking handlers",
+        "Disable the Ingested External Alerts handler and restart the SIEM database"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the predefined handler triggers on FortiData Issue logs; Risk Record and Integration Event need custom handlers.",
+        "Log Browse visibility proves raw receipt, not that the device is misregistered.",
+        "Disk quota is not the first explanation when the raw record is already visible.",
+        "Disabling the default handler removes the existing Issue alert path and does not add Risk Record handling."
+      ]
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "question": "Which FortiData incident type is handled by the predefined Ingested External Alerts event handler?",
+      "choices": [
+        "Integration Event records from every FortiData connector",
+        "Risk Record logs only after manual normalization",
+        "Issue logs received from the FortiData device",
+        "Every Xlog record after it is inserted into siemdb"
+      ],
+      "correct": 2,
+      "feedback": [
+        "Integration Event logs require their own custom event-handler logic.",
+        "Risk Record logs are supported, but are not the default handler's documented trigger.",
+        "Correct: the predefined handler is enabled by default and triggers alerts from FortiData Issue logs.",
+        "Database insertion does not automatically turn every Xlog type into an alert."
+      ]
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "question": "FortiData Xlog files are visible in Log Browse, but the records are absent from Logs > All. Which boundary should be investigated?",
+      "choices": [
+        "The Event Monitor notification destination",
+        "The SIEM database insertion stage after raw-file receipt",
+        "The FortiData device's physical power supply",
+        "The browser cache used by the FortiAnalyzer administrator"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Notification delivery occurs after event-handler processing and does not explain missing database records.",
+        "Correct: Log Browse proves raw receipt; Logs > All depends on insertion into siemdb.",
+        "Power loss is unlikely when new Xlog files are already arriving.",
+        "Browser cache does not control server-side insertion into siemdb."
+      ]
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "question": "An Issue log creates an Event Monitor alert. What does that result prove most directly?",
+      "choices": [
+        "All three FortiData incident types have default alert rules",
+        "Every Xlog field was normalized into every report schema",
+        "The FortiData device is now authorized to change FortiGate policies",
+        "The Issue record reached the configured event-handler path"
+      ],
+      "correct": 3,
+      "feedback": [
+        "Risk Record and Integration Event still need custom handlers.",
+        "An alert does not prove every field is available in every report schema.",
+        "FortiData alerting does not automatically grant policy-change authority on FortiGate.",
+        "Correct: the alert proves that the Issue record reached and matched the event-handler path."
+      ]
+    },
+    {
+      "id": 13,
+      "product": "FortiSwitch",
+      "question": "FortiGate can reach a managed FortiSwitch, but configuration synchronization fails after trusted hosts were restricted. What should be checked first?",
+      "choices": [
+        "Add the actual FortiLink source subnet to the switch administrator's trusted hosts",
+        "Disable FortiLink discovery so the switch uses its management interface",
+        "Replace the switch admin account with a local read-only account",
+        "Change the switch native VLAN to match the FortiLink subnet"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: FortiGate uses its FortiLink source address for REST API login and configuration pushes.",
+        "Disabling discovery does not repair a trusted-host source mismatch.",
+        "A read-only account cannot complete the required configuration synchronization.",
+        "The trusted-host list is an administrator source restriction, not a native-VLAN mapping."
+      ]
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "question": "A managed switch uses Layer-3 FortiLink. The administrator enables `set auto` in the admin security policy. What should they expect?",
+      "choices": [
+        "FortiLink addresses are always inferred from the first DHCP lease",
+        "The policy creates a new default route for the switch",
+        "Auto assignment is ignored for Layer-3 FortiLink; trusted hosts must be entered manually",
+        "The switch falls back to standalone administrator authentication"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The documented behavior does not infer trusted hosts from an arbitrary DHCP lease.",
+        "Trusted-host assignment does not create a routing entry.",
+        "Correct: FortiLink auto-assignment is ignored for Layer-3 FortiLink, so enter the allowed addresses explicitly.",
+        "Layer-3 FortiLink does not force the switch into standalone mode."
+      ]
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "question": "A FortiSwitch is managed through a NAT path. Why can automatic trusted-host assignment block FortiGate management?",
+      "choices": [
+        "The FortiLink interface stops sending REST API requests after NAT is detected",
+        "The address pushed automatically may not match the source address seen by the switch",
+        "IPv6 trusted hosts are disabled whenever IPv4 NAT is present",
+        "The switch converts every FortiLink address into a VLAN interface"
+      ],
+      "correct": 1,
+      "feedback": [
+        "NAT does not automatically stop REST API requests; it changes the source identity seen downstream.",
+        "Correct: the auto-populated address may be wrong across NAT, so explicit trusted hosts are safer.",
+        "IPv6 trusted-host configuration is not disabled merely because IPv4 NAT exists.",
+        "Trusted-host assignment does not convert addresses into VLAN interfaces."
+      ]
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "question": "`execute switch-controller get-sync-status all` shows the switch online but CONFIG remains unsynchronized. What is the most relevant test?",
+      "choices": [
+        "Check whether the switch has enough PoE budget for the FortiGate",
+        "Replace the FortiLink interface with a standalone trunk",
+        "Clear the switch MAC table and wait for STP convergence",
+        "Verify FortiLink source IP is allowed by the switch admin trusted-host list"
+      ],
+      "correct": 3,
+      "feedback": [
+        "PoE budget does not explain an authenticated configuration-push failure.",
+        "Replacing FortiLink changes the design without addressing the management access list.",
+        "MAC learning and STP convergence are separate from the REST API login boundary.",
+        "Correct: the FortiLink source must pass trusted-host validation before configuration synchronization succeeds."
+      ]
+    },
+    {
+      "id": 17,
+      "product": "FortiAP/Wireless",
+      "question": "A FortiAP is connected to a switch port using 802.1X. The switch blocks CAPWAP traffic until authentication succeeds. Which component must authenticate first?",
+      "choices": [
+        "The FortiAP wired-uplink supplicant",
+        "Every wireless client using the AP's SSID",
+        "The FortiGate controller using the AP's radio MAC",
+        "The AP's CAPWAP tunnel after it receives an IP address"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the FortiAP itself acts as the 802.1X supplicant on its wired LAN port.",
+        "Wireless-client authentication happens after the AP has joined and advertises the SSID.",
+        "The controller is not the supplicant on the access switch port.",
+        "CAPWAP cannot traverse a port that is still blocking non-EAP traffic."
+      ]
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "question": "A FortiAP profile uses EAP-TLS, but the wired switch port remains unauthorized. Which check is most specific to the AP supplicant?",
+      "choices": [
+        "Verify the client SSID's RADIUS VLAN attribute",
+        "Change the AP's radio band to 5 GHz only",
+        "Inspect CA, client certificate and private-key material with `cw_diag -c wan1x`",
+        "Disable CAPWAP encryption on the FortiGate controller"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The wireless SSID VLAN attribute is not the AP's wired-uplink EAP-TLS credential.",
+        "Changing the radio band does not fix certificate-based wired authentication.",
+        "Correct: the AP supplicant requires valid trust and client credential material; the command exposes the installed certificate state.",
+        "CAPWAP encryption is downstream of wired-port authorization and is not the first failure boundary."
+      ]
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "question": "`cw_diag -c wan1x` reports `Port Status: Authorized`. What has been proven?",
+      "choices": [
+        "The AP has joined the correct FortiGate and is serving clients",
+        "The wired 802.1X supplicant has been authorized by the access network",
+        "Every wireless client has completed its own 802.1X exchange",
+        "The AP's radio channels have passed DARRP optimization"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Authorization on the wired port does not prove controller discovery or join completion.",
+        "Correct: the supplicant's wired access-control transaction succeeded.",
+        "Wireless clients authenticate separately through the SSID's security configuration.",
+        "DARRP is a radio-channel planning process, not wired-port authorization."
+      ]
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "question": "Which statement correctly distinguishes FortiAP uplink 802.1X from client 802.1X on an SSID?",
+      "choices": [
+        "Both authenticate the same wireless station and share one EAP transaction",
+        "Uplink 802.1X occurs only after the AP has joined its controller",
+        "The switch authenticates the FortiGate controller through the AP radio",
+        "Uplink 802.1X authenticates the AP device before normal wired traffic is admitted"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The AP and wireless station are different supplicants in different authentication transactions.",
+        "Uplink authentication is required before ordinary AP traffic and controller join can proceed.",
+        "The access switch sees the AP's wired supplicant, not the FortiGate controller through radio.",
+        "Correct: the AP authenticates as a wired endpoint before its normal traffic is allowed."
+      ]
+    },
+    {
+      "id": 21,
+      "product": "FortiNAC",
+      "question": "An IPv6-only workstation reaches the FortiNAC portal and runs the agent, but an IPv6-only switch is absent from Inventory. What explains the difference?",
+      "choices": [
+        "IPv6 is supported for endpoint portal/agent access, while device discovery still needs IPv4",
+        "FortiNAC disables IPv6 whenever an endpoint uses an agent",
+        "The portal translates every IPv6 address into a discovered switch record",
+        "Inventory discovery requires an IPv4 address on the network device"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: FortiNAC supports IPv6 endpoint communication but its network-device management/discovery path still requires IPv4.",
+        "Agent use does not disable IPv6 endpoint access.",
+        "Portal access does not synthesize managed network-device inventory records.",
+        "This is the documented limitation: network devices in Inventory need IPv4 management reachability."
+      ]
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "question": "Which FortiNAC interface roles are documented for IPv6 portal/agent access and administrative UI access?",
+      "choices": [
+        "eth0 for portal and eth1 for administrative UI",
+        "eth1 for inventory discovery and eth0 for switch polling",
+        "eth1 for portal/agent traffic and eth0 for administrative UI",
+        "Both interfaces are restricted to IPv4 while only host records use IPv6"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The roles are reversed in this option.",
+        "Inventory discovery remains an IPv4 management function; it is not the eth1 portal role.",
+        "Correct: eth1 supports portal/agent communication and eth0 supports the admin UI over IPv6.",
+        "FortiNAC supports IPv6 on both interfaces for the documented endpoint/admin paths."
+      ]
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "question": "An IPv6 address appears in Host View and Adapter View. What is the safest interpretation?",
+      "choices": [
+        "The switch inventory is now fully manageable over IPv6",
+        "The endpoint record contains IPv6 address information; device discovery is a separate capability",
+        "Every L3 polling vendor now supports IPv6 device management",
+        "The FortiNAC admin UI must have moved to the endpoint's address"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Host address display does not imply switch discovery or management.",
+        "Correct: host/adapter visibility proves endpoint address handling, not IPv6-only network-device inventory support.",
+        "The guide lists specific L3 polling support and does not claim universal IPv6 management.",
+        "The endpoint's address and the admin UI's interface address are separate identities."
+      ]
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "question": "A campus wants IPv6-only workstations but retains IPv4 management for switches. Which design matches the documented support boundary?",
+      "choices": [
+        "Move the portal to eth0 and disable the IPv4 management network",
+        "Use IPv6 for all Inventory polling and rely on the agent for switch discovery",
+        "Convert every switch management address into an IPv6 link-local address",
+        "Keep endpoint portal/agent paths dual-stack while retaining IPv4 device-management addresses"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The documented portal path is eth1; moving it does not remove the Inventory IPv4 requirement.",
+        "The agent does not replace network-device management/discovery.",
+        "Link-local addressing does not provide the required managed-device reachability.",
+        "Correct: endpoint access may use IPv6 while the separate Inventory device-management plane retains IPv4."
+      ]
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC-F",
+      "question": "A TEAP client authenticates to local RADIUS. Which sequence describes the protocol's two main phases?",
+      "choices": [
+        "TLS establishes an outer protected tunnel, then inner EAP methods authenticate identities",
+        "Inner MSCHAPv2 completes first, then TLS encrypts the finished RADIUS packet",
+        "The client sends a PAC before the server validates its certificate",
+        "The RADIUS server proxies every TEAP exchange to an external server"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: TEAP first establishes the TLS tunnel, then conducts inner authentication and authorization conversation.",
+        "The inner method is protected by the outer tunnel, not completed before it.",
+        "PAC use is part of fast resumption/provisioning behavior, not a substitute for the initial TLS phase.",
+        "FortiNAC-F local RADIUS can process TEAP without proxying the EAP exchange externally."
+      ]
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "question": "The outer TEAP TLS handshake succeeds, but the user authentication fails inside the tunnel. Where should troubleshooting focus?",
+      "choices": [
+        "The switch's native VLAN and spanning-tree root priority",
+        "The AP's CAPWAP controller discovery address",
+        "The configured inner EAP method and Winbind/AD dependency",
+        "The FortiNAC Manager's N+1 secondary CA promotion state"
+      ],
+      "correct": 2,
+      "feedback": [
+        "A native VLAN issue may affect access after authentication, not inner EAP credential validation.",
+        "CAPWAP is unrelated to this wired RADIUS TEAP exchange.",
+        "Correct: inner EAP-MSCHAPv2/EAP-TLS and the configured directory/Winbind path are the next transaction stage.",
+        "N+1 CA promotion is a separate availability mechanism."
+      ]
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "question": "A TEAP deployment uses PAC-based fast reauthentication. What does the PAC opaque key protect?",
+      "choices": [
+        "The switch's RADIUS shared secret and VLAN assignment",
+        "The PAC contents so they remain confidential and tamper-resistant",
+        "The FortiNAC Manager database backup and synchronization queue",
+        "The client certificate's public key during the initial TLS handshake"
+      ],
+      "correct": 1,
+      "feedback": [
+        "The RADIUS shared secret and VLAN attributes are not the PAC opaque-key payload.",
+        "Correct: the opaque key encrypts and validates the 32-byte PAC used for protected session resumption.",
+        "Manager database backup is unrelated to TEAP PAC handling.",
+        "The TLS handshake validates certificates independently of the PAC opaque key."
+      ]
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "question": "The TEAP exchange completes successfully, but the endpoint lands in the isolation VLAN. What is the next boundary to inspect?",
+      "choices": [
+        "Increase the TLS record size until the VLAN changes",
+        "Replace the PAC opaque key without checking authentication logs",
+        "Disable the secondary inner EAP method for every user",
+        "Review the matched Network Access Policy and its VLAN authorization"
+      ],
+      "correct": 3,
+      "feedback": [
+        "TLS record size does not select the authorized VLAN.",
+        "PAC changes are not justified when the TEAP exchange already completes.",
+        "Disabling secondary authentication may weaken policy and does not correct VLAN mapping.",
+        "Correct: successful authentication and network authorization are separate; inspect the matched policy and VLAN decision."
+      ]
+    },
+    {
+      "id": 29,
+      "product": "FortiAuthenticator",
+      "question": "A RADSec client opens TLS to FortiAuthenticator but the handshake is rejected before RADIUS processing. Which trust check is decisive?",
+      "choices": [
+        "The client certificate must chain to a configured Local CA or Trusted CA",
+        "The RADIUS shared secret must equal the TLS server certificate password",
+        "The client must use the same hostname as the FortiAuthenticator appliance",
+        "The accounting packet must contain an Access-Accept attribute"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: FortiAuthenticator validates the RADSec client's certificate against configured Local or Trusted CAs.",
+        "The RADIUS shared secret is separate from TLS client-certificate validation.",
+        "The certificate identity and configured trust matter; identical hostnames are not the rule.",
+        "Accounting is processed after the TLS session and decryption, not used to validate the handshake."
+      ]
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "question": "Which server-side setting and port are central to the documented RADSec listener setup?",
+      "choices": [
+        "Use the EAP server certificate on UDP/1812 only",
+        "Enable plain RADIUS on UDP/1645 and disable TLS",
+        "Select the RADSec server certificate and use the configured RADSec service port",
+        "Configure a wildcard EAP certificate and listen on TCP/443"
+      ],
+      "correct": 2,
+      "feedback": [
+        "EAP server certificates are distinct from the RADSec server certificate.",
+        "Plain UDP RADIUS is not the RADSec TLS listener.",
+        "Correct: the RADSec server certificate is configured separately; the default RADSec port is 2083.",
+        "FortiAuthenticator does not support wildcard certificates for the EAP server, and TCP/443 is not the default RADSec port."
+      ]
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "question": "FortiAuthenticator 8.0 supports RADIUS accounting over RADSec, but a FortiSwitch integration does not send accounting or CoA over RADSec. What is the correct conclusion?",
+      "choices": [
+        "The FortiAuthenticator feature is disabled whenever a switch is managed",
+        "Client interoperability must be checked; server support does not guarantee every client message type",
+        "The FortiSwitch should send accounting as a TLS certificate extension",
+        "The RADIUS daemon must be replaced with a second RADSec service"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Management state does not globally disable FortiAuthenticator RADSec accounting.",
+        "Correct: the server can support accounting while a specific client integration has narrower support.",
+        "Accounting is a RADIUS message, not a certificate extension.",
+        "The existing RADIUS daemon processes decrypted requests; replacing it is not required."
+      ]
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "question": "A design proposes 700 simultaneous RADSec clients to one FortiAuthenticator. Which documented capacity fact matters?",
+      "choices": [
+        "The default listener is limited to 50 clients",
+        "RADSec uses one TLS connection for every RADIUS attribute",
+        "The client count is unlimited when accounting is enabled",
+        "The documented maximum is 500 simultaneous RADSec clients"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The documented maximum is not 50.",
+        "RADIUS attributes do not each require separate TLS sessions.",
+        "Accounting support does not remove the documented client capacity.",
+        "Correct: the guide states a maximum of 500 simultaneous RADSec clients."
+      ]
+    },
+    {
+      "id": 33,
+      "product": "FortiPAM",
+      "question": "A privileged Java client runs as `java.exe`, but its launch arguments uniquely identify the application. Which matcher is most appropriate?",
+      "choices": [
+        "Command Line matcher with a tested regular expression",
+        "Default matcher using the initial executable only",
+        "Window Title matcher using the Windows user name",
+        "Process ID matcher using the value from yesterday's session"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: command-line matching can distinguish Java applications that share java.exe but use different arguments.",
+        "Default executable tracking is the behavior this scenario has outgrown.",
+        "A user name is not a window-title signature.",
+        "Process IDs change between launches and are not the documented matcher type."
+      ]
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "question": "An administrator changes a launcher from Default to Window Title matching. Which capture behavior is enforced?",
+      "choices": [
+        "Only the matched window is recorded and child processes are ignored",
+        "The secret is converted into an agentless session",
+        "Multiprocess Mode and full-screen recording are forced enabled",
+        "The launcher stops recording until the user checks out the secret"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The documented safety behavior is broader process-tree and full-screen capture, not window-only capture.",
+        "The matcher does not change FortiPAM into agentless mode.",
+        "Correct: non-default matchers force multiprocess observation and full-screen recording to preserve the audit trail.",
+        "Secret checkout is unrelated to the process matcher setting."
+      ]
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "question": "A Windows application renames its window during startup, while its command line remains stable. Which matcher is the safer choice?",
+      "choices": [
+        "Window Title with a regex that matches the transient title",
+        "Command Line with a regex tied to stable launch arguments",
+        "Default matching against the initial process name only",
+        "A fixed process ID copied from the launcher configuration"
+      ],
+      "correct": 1,
+      "feedback": [
+        "A changing title makes a title-based regex brittle.",
+        "Correct: stable command-line arguments provide a better signature for this application.",
+        "Default matching is less useful when the process tree changes or spawns children.",
+        "A process ID is runtime-specific and should not be configured as an application identity."
+      ]
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "question": "A Window Title regex matches both the privileged client and an unrelated support tool. What is the best correction?",
+      "choices": [
+        "Disable full-screen recording so fewer processes are visible",
+        "Change the target secret password and relaunch the session",
+        "Switch to Default matching without validating the process tree",
+        "Anchor and narrow the regex against actual runtime window titles"
+      ],
+      "correct": 3,
+      "feedback": [
+        "Reducing recording scope weakens audit coverage and does not correct the matcher.",
+        "A target password does not affect window-title matching.",
+        "Returning to Default may restore the original false negative.",
+        "Correct: test the regex against real titles and constrain it to the intended application."
+      ]
+    },
+    {
+      "id": 37,
+      "product": "FortiSIEM",
+      "question": "A Windows Agent is online in CMDB, but no certificate lifecycle events appear. Which deployment step is most often missed?",
+      "choices": [
+        "Associate the certificate-monitoring template with the host and Apply it",
+        "Restart the Windows host after every certificate scan",
+        "Create a FortiSIEM collector for UDP/514 certificate syslog",
+        "Change the Windows host's DNS suffix to the event type name"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the Supervisor distributes monitoring policies only after template association and Apply.",
+        "The documented workflow does not require rebooting for each certificate scan.",
+        "Certificate monitoring is delivered by the Windows Agent, not a generic syslog collector.",
+        "DNS suffixes do not control the agent's certificate event types."
+      ]
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "question": "Which event type should an analyst search for when a monitored Windows certificate is approaching expiration?",
+      "choices": [
+        "AO-WUA-Certificate-Removed",
+        "AO-WUA-Certificate-Added",
+        "AO-WUA-Certificate-Expiring",
+        "AO-WUA-Registry-Modified"
+      ],
+      "correct": 2,
+      "feedback": [
+        "Removed indicates a certificate was deleted, not that it is nearing expiry.",
+        "Added indicates a new certificate was detected.",
+        "Correct: AO-WUA-Certificate-Expiring identifies the certificate approaching its configured expiration window.",
+        "Registry modification is a different monitoring event family."
+      ]
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "question": "A host reports certificate additions and removals but no expiration alerts. What should be reviewed first?",
+      "choices": [
+        "The FortiGate SD-WAN Performance SLA target list",
+        "The certificate monitor template's expiry window and the exact AO-WUA event family",
+        "The FortiSIEM incident graph layout and node colors",
+        "The Windows Agent's TCP segmentation offload setting"
+      ],
+      "correct": 1,
+      "feedback": [
+        "SD-WAN target selection has no role in Windows certificate lifecycle monitoring.",
+        "Correct: expiration thresholds are configurable, and the event family distinguishes expiring from added/removed.",
+        "Investigation graph layout does not create the underlying certificate event.",
+        "TSO is unrelated to certificate monitoring policy."
+      ]
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "question": "The security team wants alerts 21 days before a Windows certificate expires. Which setting aligns with the documented feature?",
+      "choices": [
+        "A fixed 90-day certificate renewal window",
+        "A Windows Event Log subscription for every registry key",
+        "A daily PowerShell job that exports the certificate store",
+        "A configurable 7-to-30-day certificate expiry window"
+      ],
+      "correct": 3,
+      "feedback": [
+        "Ninety days is outside the documented configurable 7-30 day window.",
+        "Registry subscriptions are not the certificate-monitoring control.",
+        "A custom script is not required for the documented agent feature.",
+        "Correct: 21 days is within the documented configurable expiration range."
+      ]
+    },
+    {
+      "id": 41,
+      "product": "FortiSASE",
+      "question": "An administrator defines an agent-based ZTNA destination as a CIDR subnet, but the instance uses an older default FortiClient baseline. What requirement should be checked?",
+      "choices": [
+        "Feature-version eligibility and default FortiClient 7.2.8 or later",
+        "The FortiSASE portal's custom domain certificate and DNS CNAME",
+        "The FortiGate BGP graceful-shutdown community on the gateway",
+        "The FortiNAC Inventory IPv4 address of the remote endpoint"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: the feature requires the Feature version and default FortiClient 7.2.8 or later.",
+        "Custom domain/certificate is an agentless ZTNA feature, not the agent-based subnet requirement.",
+        "BGP graceful shutdown is unrelated to endpoint destination objects.",
+        "FortiNAC Inventory address requirements do not control FortiSASE ZTNA host definitions."
+      ]
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "question": "A private application is reachable through an agent-based ZTNA destination object, but users can connect to more ports than intended. What should be tightened?",
+      "choices": [
+        "The FortiClient endpoint display name",
+        "The FortiSASE instance's NTP server list",
+        "The destination object's port list or port range",
+        "The FortiNAC endpoint's IPv6 portal address"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The endpoint display name does not define the network service scope.",
+        "NTP settings do not determine allowed application ports.",
+        "Correct: narrow the destination port list/range to the services that users require.",
+        "FortiNAC portal addressing is unrelated to FortiSASE ZTNA destination port enforcement."
+      ]
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "question": "Which deployment description correctly identifies agent-based rather than agentless ZTNA?",
+      "choices": [
+        "Browser bookmark access through a custom-domain portal only",
+        "FortiClient on the endpoint receives destination and gateway policy",
+        "A switch port authenticates an AP using EAP-PEAP",
+        "A RADIUS server proxies every private application connection"
+      ],
+      "correct": 1,
+      "feedback": [
+        "A browser bookmark portal describes the agentless access pattern.",
+        "Correct: agent-based ZTNA relies on FortiClient endpoint configuration and the destination object.",
+        "This is wired 802.1X for a FortiAP, not ZTNA.",
+        "RADIUS authentication is not the data-plane proxy for every private application connection."
+      ]
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "question": "The destination subnet and port scope look correct in the console, but one managed endpoint cannot access the application. What is the next configuration check?",
+      "choices": [
+        "Rebuild the FortiGate BGP neighbor table",
+        "Disable the endpoint firewall and retest without policy",
+        "Change the FortiSASE tenant's billing region",
+        "Confirm the endpoint profile assigns the correct ZTNA gateway and destination"
+      ],
+      "correct": 3,
+      "feedback": [
+        "BGP state does not establish the endpoint's ZTNA application assignment.",
+        "Disabling endpoint protection is not a supported first diagnostic step.",
+        "Billing region does not determine destination assignment to a client profile.",
+        "Correct: the endpoint must receive the destination through the assigned profile and gateway."
+      ]
+    },
+    {
+      "id": 45,
+      "product": "Secure SD-WAN",
+      "question": "The FortiGuard SLA database cannot be downloaded or updated on a new FortiGate. Which prerequisite should be verified?",
+      "choices": [
+        "A valid SD-WAN Underlay and Application Monitoring license",
+        "A FortiNAC-F TEAP license and local RADIUS certificate",
+        "A FortiPAM launcher process matcher profile",
+        "A FortiSwitch admin trusted-host security policy"
+      ],
+      "correct": 0,
+      "feedback": [
+        "Correct: FortiGate requires the SD-WAN Underlay and Application Monitoring license for the SLA database.",
+        "TEAP licensing and RADIUS certificates are unrelated to FortiGuard SLA targets.",
+        "FortiPAM launcher matching does not control SD-WAN licensing.",
+        "Switch administrator trusted hosts do not affect the FortiGate SLA database entitlement."
+      ]
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "question": "The Performance SLA table shows a green up arrow beside a probe server, but the service rule still avoids that member. What does the arrow prove?",
+      "choices": [
+        "The member meets every latency, jitter and loss threshold",
+        "The application is reachable through every SD-WAN zone",
+        "The probe server is responding, not that the SLA thresholds are met",
+        "The service rule has selected that member for all sessions"
+      ],
+      "correct": 2,
+      "feedback": [
+        "A responding server does not imply the measured quality meets the configured thresholds.",
+        "The arrow does not prove reachability through every zone or application path.",
+        "Correct: server response and SLA quality are separate states.",
+        "The service rule may still choose another member based on quality and strategy."
+      ]
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "question": "An engineer selects a FortiGuard SLA target for a SaaS service. Which additional configuration makes the measurement meaningful?",
+      "choices": [
+        "Enable the database and assume every member is automatically tested",
+        "Choose the protocol, participating SD-WAN members and quality thresholds",
+        "Create a static route to the FortiGuard database server only",
+        "Set the SLA name to the SaaS provider's registered trademark"
+      ],
+      "correct": 1,
+      "feedback": [
+        "Enabling the database supplies targets, not the full health-check definition.",
+        "Correct: protocol, participants and thresholds determine what is measured and how steering uses it.",
+        "A static route to the database server does not define the application probe path.",
+        "The SLA name is descriptive metadata, not a steering input."
+      ]
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "question": "A FortiGuard target is unreachable from one member, while a second configured server responds. What is the most useful interpretation?",
+      "choices": [
+        "The FortiGuard database automatically disables the entire SD-WAN zone",
+        "The green arrow on the second server proves all members meet the SLA",
+        "The health check should be deleted because it has two servers",
+        "Investigate the failing member path and evaluate the active server's quality metrics"
+      ],
+      "correct": 3,
+      "feedback": [
+        "The database does not disable a whole zone just because one target fails.",
+        "A responding server does not prove every member meets quality thresholds.",
+        "Two-server health checks are supported to help separate server failure from link failure.",
+        "Correct: inspect the affected member path and the latency/loss/jitter measured against the active server."
+      ]
+    },
+    {
+      "id": 49,
+      "product": "Cross-product",
+      "question": "During a maintenance window, an engineer compares FortiGate graceful BGP shutdown with BFD. Which distinction is correct?",
+      "choices": [
+        "Both mechanisms advertise gshut and lower the peer's local preference",
+        "Graceful shutdown drains route preference; BFD detects liveness and can tear down a session",
+        "BFD preserves the route while graceful shutdown immediately withdraws it",
+        "Graceful shutdown changes interface carrier state while BFD changes VLAN membership"
+      ],
+      "correct": 1,
+      "feedback": [
+        "BFD does not advertise the gshut community or perform the route-preference drain.",
+        "Correct: gshut is a planned routing-policy signal; BFD is a fast failure detector.",
+        "The functions are reversed; BFD detects liveness and graceful shutdown changes route preference.",
+        "Neither mechanism changes Ethernet carrier state or VLAN membership as its core function."
+      ]
+    },
+    {
+      "id": 50,
+      "product": "Cross-product",
+      "question": "A team sees an IPv6 endpoint register with FortiNAC and an AP authenticate to an access switch. Which statement keeps the two mechanisms separate?",
+      "choices": [
+        "Both events are the same RADIUS transaction and share one client identity",
+        "FortiNAC IPv6 support proves every switch can be discovered without IPv4",
+        "FortiNAC endpoint IPv6 access and FortiAP wired-uplink 802.1X are separate control paths",
+        "FortiAP uplink authentication is completed by the FortiNAC portal over IPv6"
+      ],
+      "correct": 2,
+      "feedback": [
+        "The endpoint and AP are distinct devices and use different access-control flows.",
+        "IPv6 endpoint support does not remove the documented IPv4 network-device discovery requirement.",
+        "Correct: FortiNAC handles endpoint portal/agent reachability, while FortiAP 802.1X authenticates the AP's wired uplink.",
+        "The AP's uplink EAP transaction is between the AP, switch authenticator and RADIUS server, not the NAC portal."
+      ]
+    }
+  ],
+  "validation": {
+    "exactly_50": true,
+    "each_question_four_choices": true,
+    "each_question_four_feedbacks": true,
+    "answer_position_distribution": [
+      12,
+      14,
+      12,
+      12
+    ],
+    "unique_question_texts": true
+  }
+}
