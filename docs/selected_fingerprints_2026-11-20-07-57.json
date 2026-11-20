@@ -1,0 +1,267 @@
+{
+  "schema_version": "3.1",
+  "generated_at_local": "2026-11-20T07:57:18-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-20-07-57.json",
+  "historical_records_compared": 354,
+  "selected_candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "TCP congestion control with BBR: bottleneck-bandwidth and RTT model versus CUBIC",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/840778/tcp-congestion-control-enhancement-with-bbr",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/slow-downloads-through-the-explicit-web-proxy-when-tcp-option-is-disabled-230907",
+      "feature_mechanism_fingerprint": "FortiOS global TCP congestion-control selector changes the congestion-avoidance algorithm from default CUBIC to model-based BBR using bottleneck bandwidth and round-trip propagation time estimates.",
+      "workflow_transaction_fingerprint": "A new TCP flow negotiates TCP options; FortiGate forwards/proxies data and the sender's congestion-control algorithm adjusts its sending rate as ACK/RTT and delivery-rate observations evolve. Algorithm is selected globally, not by SD-WAN rule.",
+      "failure_class": "Throughput degradation under congestion or high bandwidth-delay product; false attribution of receive-window limitation to congestion control.",
+      "evidence_pattern": "Compare identical transfers and path conditions with BBR and CUBIC; capture SYN/SYN-ACK window-scale negotiation separately; compare RTT, retransmissions, delivered rate and throughput. A 65,535-byte window with no scaling is not evidence of BBR failure.",
+      "remediation_path": "Validate TCP option negotiation and policy/proxy behavior first; then set config system global set tcp-congestion-control bbr, run controlled repeatable tests, and revert to cubic if the workload/path performs worse.",
+      "question_fingerprint": "Given equal RTT and link capacity but different congestion behavior, identify which observation distinguishes a BBR bottleneck model from a TCP receive-window cap.",
+      "diagram_topology_layout_fingerprint": "Two parallel TCP transfer paths through one FortiGate with a global algorithm selector, receiver ACK/RTT feedback loop, and a separate SYN-option/window-scaling diagnostic callout.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-30 SNAT source-port preservation",
+          "2026-11-15 IPsec fragmentation"
+        ],
+        "rejected_near_match": "2026-10-27 explicit-proxy TCP window-scaling failure is a TCP-option/window-size mechanism, not congestion-control selection; use only as a contrast scenario.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager 8.0 management of multiple FortiSASE instances as managed devices",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/433432/fortimanager-support-fortisase-multitenancy",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager Device Manager treats multiple FortiSASE instances as distinct managed-device objects; onboarding authorization is based on shared FortiCare account or shared FortiCloud OU/sub-OU plus a FortiManager Key.",
+      "workflow_transaction_fingerprint": "FortiSASE Central Management is enabled; FortiManager adds a FortiSASE device object; tenant identity and FortiManager Key establish the management relationship; instances can be placed in one ADOM while remaining separate SASE environments.",
+      "failure_class": "Tenant onboarding rejected because account/OU relationships or Central Management/key prerequisites are inconsistent; accidental conflation of tenant identity with ADOM grouping.",
+      "evidence_pattern": "Check Central Management state, FortiCare account and OU hierarchy, generated FortiManager Key, Device Manager managed-device entry, and ADOM placement. Presence in one ADOM proves centralized inventory, not that the SASE tenants share policy or data planes.",
+      "remediation_path": "Enable Central Management with FortiCare Support if required; confirm the exact FortiCloud account/OU relationship; generate and supply a FortiManager Key only for a different account in the same OU hierarchy; add each SASE instance separately and validate its device status.",
+      "question_fingerprint": "Three SASE instances belong to separate child OUs but share one parent organization; determine when the FortiManager Key is required and what ADOM membership does not imply.",
+      "diagram_topology_layout_fingerprint": "FortiManager Device Manager above three isolated FortiSASE tenant clouds, with FortiCloud root/child OU trust boundary and one ADOM inventory grouping.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-18 FortiGuard package pinning",
+          "2026-11-14 local-user per-device mapping"
+        ],
+        "rejected_near_match": "2026-10-27 FortiSASE SCIM provisioning manages user lifecycle, not FortiManager-to-SASE tenant control-plane onboarding.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiData incident ingestion: SIEM Xlog, siemdb insertion and event-handler boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/990511/fortidata-incident-support",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAnalyzer registers FortiData FDTxxxxxx as a supported device, ingests SIEM Xlog files, exposes raw files in Log Browse, inserts normalized incident records into siemdb, and maps Issue logs to a predefined external-alert handler.",
+      "workflow_transaction_fingerprint": "FortiData sends Xlog -> FortiAnalyzer Log Browse receives raw file -> SIEM database insertion makes records queryable in Logs > All -> default handler evaluates Issue records -> Event Monitor alert; Risk Record and Integration Event require custom handlers.",
+      "failure_class": "Raw log received but no SIEM query result or alert; incorrect assumption that all external incident types automatically trigger Event Monitor.",
+      "evidence_pattern": "Correlate Device Manager registration, Log Browse raw file presence, Logs > All siemdb records by incident type, and Event Monitor handler output. Raw file visibility proves transport, not database insertion or alert generation.",
+      "remediation_path": "Register the FDT device; confirm Xlog delivery and parsing; validate siemdb visibility; inspect the enabled Ingested External Alerts handler for Issue logs; create and test custom handlers for Risk Record and Integration Event.",
+      "question_fingerprint": "A FortiData Risk Record is visible in Log Browse and Logs > All but no Event Monitor alert exists; identify the missing processing stage.",
+      "diagram_topology_layout_fingerprint": "FortiData source branching into raw Log Browse and siemdb, then Issue-only default event handler to Event Monitor, with separate custom-handler branches for Risk Record and Integration Event.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-19 Fluentd Azure ingestion",
+          "2026-11-17 Analytics versus Archive pipeline",
+          "2026-11-07 FortiAI alert triage"
+        ],
+        "rejected_near_match": "This is not Fluentd forwarding or FortiAI triage: it is native FortiData Xlog registration, SIEM DB ingestion and incident-type-specific alert mapping.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Auto-topology and auto-ISL lifecycle: LLDP discovery, LACP-active trunk creation and VLAN side effects",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163696",
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/troubleshooting-tip-unable-to-add-fortiswitch-ports-to-a-manual-trunk-when-ports-are-members-of-an-auto-isl-trunk-230417",
+      "feature_mechanism_fingerprint": "FortiSwitch auto-network discovers peer links and automatically forms one LACP-active ISL trunk per switch pair; additional physical links to the same peer are enrolled in the existing auto-ISL.",
+      "workflow_transaction_fingerprint": "LLDP/peer discovery identifies the adjacent switch; auto-network creates an ISL trunk and logical switch interface; management VLAN becomes native, VLANs 1-4094 are allowed, DHCP snooping is trusted, and STP edge is disabled.",
+      "failure_class": "Manual trunk creation fails because ports are already owned by auto-ISL; unintended native VLAN or topology behavior after factory reset or zero-touch initialization.",
+      "evidence_pattern": "show switch trunk reveals auto-isl 1 and member ports; Switch > Interfaces blue icon indicates active ISL; inspect mgmt-vlan, native VLAN, allowed VLANs, DHCP snooping and STP edge attributes.",
+      "remediation_path": "Decide whether auto-topology is intended; set mgmt-vlan distinct from an existing SVI; use LLDP profile with auto-isl disabled on selected ports or disable auto-network and auto-fortilink-discovery; when repurposing an auto-ISL member, move the generated trunk to an unused port before creating a manual trunk.",
+      "question_fingerprint": "A port pair rejects manual LACP membership with entry-not-found even after deleting the auto-ISL; identify the ownership state and safe transition sequence.",
+      "diagram_topology_layout_fingerprint": "Two FortiSwitches with two physical peer links feeding one auto-generated LACP ISL trunk, a shared management/native VLAN and explicit STP/DHCP-snooping attributes.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-04 MCLAG ICL split-brain prevention",
+          "2026-11-13 LACP aggregator selection",
+          "2026-10-29 BGP EVPN multihoming"
+        ],
+        "rejected_near_match": "Auto-ISL is LLDP-driven peer discovery and automatic trunk ownership, not MCLAG peer state, EVPN DF election, or manual LACP hash/aggregator selection.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "RADIUS authentication survivability for 802.1X SSIDs: local credential-hash cache and bounded outage window",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/995668/radius-authentication-survivability-for-802-1x-ssids",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS wireless controller locally re-authenticates previously authenticated wireless clients from a bounded RADIUS survivability cache when the RADIUS server becomes unreachable; EAP-PEAP requires the Fortinet-AS-Credential-Hash or Cisco-AVPair AS-Credential-Hash attribute.",
+      "workflow_transaction_fingerprint": "Initial RADIUS authentication and certificate trust populate a per-SSID cache; on RADIUS outage, previously authenticated station reconnects use cached credential material until radius-auth-surviv-intv expires; after expiry the station is no longer authorized; recovered RADIUS resumes normal authentication.",
+      "failure_class": "Wireless outage during RADIUS unavailability; false belief that survivability authenticates first-time clients or provides indefinite local RADIUS service.",
+      "evidence_pattern": "diagnose wpa wpad radius-auth-surviv-cache <ssid> shows cached STA, expiration, VLAN, EAP type and user; wlac -d sta online proves station remains online; direct authserver test can fail while cached station reconnects successfully.",
+      "remediation_path": "Import the RADIUS root CA and server certificate, bind them globally, configure the VAP with survivability enabled and a 3600-864000-second timeout, ensure PEAP credential-hash attribute is returned, and test outage/recovery with a previously authenticated client.",
+      "question_fingerprint": "During a RADIUS outage an existing station reconnects but a new station cannot; identify why this is expected and which cache field controls the remaining authorization window.",
+      "diagram_topology_layout_fingerprint": "FortiAP VAP and wireless controller with RADIUS server, certificate trust, per-SSID cache, existing client reconnect path, blocked first-time client path, and timeout/recovery transitions.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-29 RadSec WPA2/WPA3 Enterprise",
+          "2026-11-07 EAP-TEAP",
+          "2026-11-18 DHCP Option 82"
+        ],
+        "rejected_near_match": "This is a local cached-authentication outage mechanism, not RadSec transport, EAP method selection, or DHCP relay metadata.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Preserve Port Names and interface-model reconciliation: switch descriptions, Resync Interfaces and model rebuild boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/285900/device-properties",
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/fnac-inventory-sync-229354",
+      "feature_mechanism_fingerprint": "FortiNAC 9.4 Preserve Port Names is a global or per-device control determining whether switch port names/labels are retained in the FortiNAC database or refreshed from switch interface data during a resync.",
+      "workflow_transaction_fingerprint": "FortiNAC builds port display names from switch name, ifName and ifDescription; routine resync updates interface status; disabling Preserve Port Names allows descriptions to update on service restart or Resync Interfaces; chassis/stack re-index can delete/recreate interface models and affect manual port groups.",
+      "failure_class": "Port labels or descriptions remain stale despite switch-side changes; operators confuse L2 poll with interface model retrieval or unintentionally lose port-group associations after re-indexing.",
+      "evidence_pattern": "Compare switch ifName/ifDescr with FortiNAC Inventory Ports view; inspect global Network Device and per-device Preserve Port Names setting; verify whether Resync Interfaces ran and whether the switch port sequence changed.",
+      "remediation_path": "Keep Preserve Port Names enabled when FortiNAC labels are authoritative; disable globally or per device only when switch-side descriptions should overwrite; run Resync Interfaces or restart services; after chassis/stack changes review port groups because re-index may recreate interface models.",
+      "question_fingerprint": "A switch description changes but FortiNAC still shows the old label after L2 polling; determine which setting and refresh operation govern description synchronization.",
+      "diagram_topology_layout_fingerprint": "Switch interface table (ifName/ifDescr) feeding FortiNAC device model and Ports view through a Preserve Port Names gate, with separate L2 status-poll and full interface-resync paths.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-24 L2/L3 polling MAC/ARP reconciliation",
+          "2026-11-15 device profiling rules"
+        ],
+        "rejected_near_match": "This focuses on interface-description ownership and model re-indexing, not endpoint MAC/IP learning or host profiling.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "RADIUS-only device support in 7.6.7: reusable configuration objects, selectors and state-based access control",
+      "primary_url": "https://fortinetweb.s3.amazonaws.com/docs.fortinet.com/v2/attachments/d4e94e0b-7d20-11f1-a18e-02356ffb40d9/FortiNAC-F_7.6.7-Support_for_RADIUS_only_device_guide.pdf",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-configuring-basic-friend-or-foe-access-control-in-fortinac-f-230609",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6.7+ supports devices that communicate exclusively through RADIUS without SNMP/CLI, using reusable logical-network, RADIUS-server, response-attribute, VLAN-mapping and SSO/VPN configuration objects selected by ordered selectors.",
+      "workflow_transaction_fingerprint": "Device RADIUS Access-Request supplies identity/attributes; selector rules choose server/response/VLAN/SSO objects; state-based access-control membership/group-action rules decide registration isolation or production access; RADIUS response attributes and CoA drive enforcement.",
+      "failure_class": "RADIUS-only device remains unmanaged or receives wrong VLAN because selector configuration, rule rank, device legacy mode, VLAN mapping or RADIUS server/response attributes are inconsistent.",
+      "evidence_pattern": "Confirm device is 7.6.7+, Device Legacy Mode is off, RADIUS Access-Request reaches FortiNAC, selector ranks select the intended objects, VLAN 11/77 mapping is correct, and Port Changes records the applied VLAN and reason.",
+      "remediation_path": "Create reusable logical networks and RADIUS/response/VLAN/SSO objects; add specific selectors above broad matches; configure state-based access-control rules; migrate a test device out of Legacy Mode without disabling Global Legacy Mode; verify RADIUS and VLAN behavior before scaling.",
+      "question_fingerprint": "A cloud-managed switch sends RADIUS requests but FortiNAC cannot poll it; identify the 7.6.7 selector-based object chain and the legacy-mode migration hazard.",
+      "diagram_topology_layout_fingerprint": "RADIUS-only switch/cloud device to FortiNAC-F with ordered selector stack selecting reusable RADIUS, response, logical VLAN and SSO objects, then state-based access-control branch to Registration or Production VLAN.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-30 Legacy RADIUS Proxy to Virtual Proxy migration",
+          "2026-11-08 FortiLink credential planes",
+          "2026-11-13 IP phone voice VLAN provisioning"
+        ],
+        "rejected_near_match": "This is a new selector/object architecture for devices without SNMP/CLI, not RADIUS proxy migration, FortiLink management credentials, or phone-specific VLAN refresh.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Subscription VM license lifecycle: FDN entitlement refresh, 30-day validation loss and authentication shutdown",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.1/administration-guide/265987/subscription-vm-license",
+      "scenario_community_url": "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-error-image-validation-failed-the-current-image-model-number-is-different-from-the-appliance-s-when-trying-to-upgrade-vm-from-firmware-version-6-6-7-229670",
+      "feature_mechanism_fingerprint": "FortiAuthenticator-VM subscription license retrieves entitlements from update.fortiguard.net over TCP/443; loss of entitlement validation for 30 days disables the license, lowers user limit to unlicensed VM limits and halts authentication while retaining administrator UI access.",
+      "workflow_transaction_fingerprint": "License file upload triggers reboot; active node retrieves subscription entitlements from FDN; HA pair requires separate subscription files and uses the lower entitlement if active/passive differ; periodic validation failure is logged with remaining grace-day messages.",
+      "failure_class": "RADIUS/SAML/other authentication services stop while GUI remains reachable; license status appears disabled after FDN reachability loss; mixed perpetual/subscription HA pair or pre-8.0 subscription image causes migration/upgrade faults.",
+      "evidence_pattern": "get system license-info shows local license; diagnose system updated status shows FDN-fetched entitlement; diagnose system updated info shows runtime update state; Logging > Log Access shows 4-hour/2-day/30-day validation countdown; verify TCP/443 to update.fortiguard.net.",
+      "remediation_path": "Use FortiAuthenticator 8.0.0+; ensure DNS and outbound TCP/443 to update.fortiguard.net; install separate subscription licenses on both HA nodes; keep entitlement levels aligned; restore reachability before the 30-day validation window expires; do not apply subscription VM license to 6.6.7 before upgrading to 8.0.x.",
+      "question_fingerprint": "FortiAuthenticator GUI remains accessible but RADIUS and SAML both stop after a WAN outage; identify the subscription entitlement timer and the exact CLI evidence to distinguish license failure from authentication configuration.",
+      "diagram_topology_layout_fingerprint": "FortiAuthenticator active/passive HA pair with separate subscription files, outbound TCP/443 entitlement path to FDN, shared authentication service consumers and 30-day validation timer leading to auth halt while admin GUI remains up.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-19 separate HA management/heartbeat interfaces",
+          "2026-11-13 FSSO filtering"
+        ],
+        "rejected_near_match": "This is VM subscription entitlement validation and service gating, not HA interface topology, FSSO identity filtering, or certificate lifecycle.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Access Authentication: policy-level step-up gate for secret viewing and launch",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/769846/creating-a-policy",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 Access Authentication is an additional authentication gate independent of initial FortiPAM login, configurable at folder policy and overridable per secret, with remote-server choice, 0-180-minute duration and optional owner bypass.",
+      "workflow_transaction_fingerprint": "User opens or launches a secret; policy/secret setting requires re-authentication; successful step-up creates a bounded access window reflected by Access Authentication Status; remote RADIUS/LDAP users may authenticate with FortiPAM login credentials for this step.",
+      "failure_class": "User can sign in to FortiPAM but cannot view/edit/launch a protected secret; access window expires; owner bypass or per-secret override weakens inherited folder policy.",
+      "evidence_pattern": "Inspect folder policy Access Authentication, secret Session Security override, selected remote server, duration and bypass; check Access Authentication Status remaining time and warning text on an unauthenticated secret.",
+      "remediation_path": "Enable Access Authentication in the folder policy, set a suitable duration and server, leave owner bypass disabled unless explicitly approved, verify per-secret overrides, and test both secret editing and launcher execution for local and remote RADIUS/LDAP users.",
+      "question_fingerprint": "A user has a valid FortiPAM session and launch permission but a protected secret refuses to open; identify the separate step-up transaction and its policy inheritance.",
+      "diagram_topology_layout_fingerprint": "FortiPAM login session branches to secret-folder policy and per-secret override, then step-up authentication to remote/local auth source, bounded access timer and separate edit/launch gates.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-30 approval revocation",
+          "2026-11-10 tiered secret approval",
+          "2026-11-15 remote user group projection"
+        ],
+        "rejected_near_match": "This is a second authentication gate at secret access time, not approval workflow, group membership, or session revocation.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Incident Investigation Workspace: undirected incident/entity graph, timeline playback and contextual expansion",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/588857",
+      "scenario_community_url": "https://community.fortinet.com/fortisiem-34/backend-postgresql-queries-for-incident-investigation-230935",
+      "feature_mechanism_fingerprint": "FortiSIEM Analytics > Investigation creates an undirected graph rooted at an incident with host/IP, user, process and file entities; related incidents/entities can be recursively added and viewed in Force or Bipartite layout.",
+      "workflow_transaction_fingerprint": "Load Incident ID -> query related entities and incidents from event database/CMDB/context -> graph nodes and edges are built -> timeline orders incident occurrences -> investigator expands entities, runs reports/reputation lookups, invokes connectors/playbooks, remediates or creates a case.",
+      "failure_class": "Analyst treats a graph edge as causal proof, uses an incomplete time range, or cannot reconcile graph evidence with incident counts and backend PostgreSQL records.",
+      "evidence_pattern": "Incident graph proves configured relationship/context, not causality; timeline proves temporal order; node sidebar and triggering events provide underlying evidence; backend phoenixdb queries validate incident existence/count/status but do not reproduce the graph's full relationship logic.",
+      "remediation_path": "Start with root Incident ID and bounded time window; inspect triggering events and entity details; expand Related Incidents/Entities selectively; compare timeline order with raw events; use backend queries for count/status discrepancies; record conclusions in a case rather than treating graph proximity as proof.",
+      "question_fingerprint": "An incident graph shows a user, host and two related incidents connected; determine which evidence establishes temporal order and which additional step is required before asserting causality.",
+      "diagram_topology_layout_fingerprint": "Root incident node connected to host/IP, user, process and file entities; expanded related-incident nodes; a parallel timeline rail ordered by event time and a contextual evidence sidebar.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-14 bipartite login anomaly detection",
+          "2026-11-19 ML Workbench"
+        ],
+        "rejected_near_match": "The investigation graph is analyst-driven incident/entity correlation, not the trained bipartite login-anomaly model or ML dataset/inference pipeline.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Authenticated onboarding: SAML SP gate, invitation-code rotation and managed-endpoint migration",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/506026/authenticated-onboarding",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE Management service becomes a SAML Service Provider and requires user authentication through an external IdP before a managed endpoint can register; enabling the feature generates a new invitation code and invalidates previously issued codes after migration.",
+      "workflow_transaction_fingerprint": "Endpoint installer connects using invitation code -> management service redirects/authenticates through configured IdP -> SAML assertion returns to FortiSASE SP -> authenticated user/endpoint registration proceeds; existing endpoints are migrated and prompted to re-authenticate; EMM installers must be refreshed.",
+      "failure_class": "Endpoint with a valid old invitation code is rejected or repeatedly re-prompts after activation; Entra group mapping fails when assertion exceeds 150 groups; preconfigured EMM installers retain stale invitation code.",
+      "evidence_pattern": "Verify select-availability enablement, SAML Entity ID/ACS/SSO URL/certificate, user/group assignment, Domain identification claim, current invitation code, installer version and endpoint re-authentication/migration status.",
+      "remediation_path": "Request FortiCare enablement; configure SAML SP/IdP metadata and signing certificate; use Include associated domain and username claim for Entra ID where required; filter groups to <=150 asserted memberships; redistribute updated installers and complete endpoint reboot/re-authentication before deleting legacy invitation code.",
+      "question_fingerprint": "An endpoint has the correct old invitation code but cannot register after authenticated onboarding is enabled; identify the SAML gate, code rotation and migration sequence.",
+      "diagram_topology_layout_fingerprint": "FortiClient endpoint and installer connect to FortiSASE Management SP, redirect to Entra ID/IdP, return signed SAML assertion, rotate invitation code, migrate existing endpoints and update EMM installer branch.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-10-27 FortiSASE SCIM provisioning",
+          "2026-11-12 agentless ZTNA"
+        ],
+        "rejected_near_match": "SCIM provisioning synchronizes directory lifecycle; this feature gates endpoint registration through SAML SP authentication and rotates the management invitation code.",
+        "result": "unique"
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "IPv6 segmentation over a shared SD-WAN/ADVPN overlay using VPN-ID/IPIP and per-VRF route separation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/472687",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 supports IPv6 over L3 VPN segmentation within one shared IPsec/ADVPN overlay; VPN-ID/IPIP encapsulation carries VRF identity so identical or overlapping tenant subnets remain isolated across hub/spokes.",
+      "workflow_transaction_fingerprint": "Spoke classifies packet into local VRF -> multi-VRF IPsec encapsulation carries VPN ID -> hub/spoke decapsulates into matching VRF -> BGP exchanges VRF-specific routes and loopback IPv6 reachability via exchange-ip-addr6 -> ADVPN shortcut remains within same VRF.",
+      "failure_class": "Cross-tenant route leakage or blackholing when VRF ID, VPN-ID encapsulation, BGP route-target/VRF import-export or IPv6 loopback exchange is inconsistent.",
+      "evidence_pattern": "Validate VRF table membership and routes, IPsec phase1 encapsulation vpn-id-ipip, BGP neighbor/route exchange, exchange-ip-addr6 loopback reachability, VRF-aware health-check source/VRF and same-VRF versus cross-VRF ping tests.",
+      "remediation_path": "Build consistent VRF IDs and route targets at hub/spokes; enable vpn-id-ipip on participating phase1 interfaces; exchange loopback IPv6 addresses; configure VRF-aware SD-WAN health checks; verify route import/export and shortcut formation separately for each VRF.",
+      "question_fingerprint": "Two branches share one ADVPN overlay and use overlapping IPv6 prefixes for two departments; identify which encapsulation and route-exchange controls preserve same-VRF reachability without cross-VRF access.",
+      "diagram_topology_layout_fingerprint": "Hub with one shared ADVPN overlay to two dual-VRF spokes; parallel VRF-A and VRF-B logical lanes carried by VPN-ID/IPIP, with IPv6 loopbacks/BGP and same-VRF shortcuts but no cross-VRF edges.",
+      "uniqueness_check": {
+        "matched_history": [
+          "2026-11-03 BGP route leaking between VRFs",
+          "2026-10-29 SD-WAN overlay templates",
+          "2026-11-07 Fabric Overlay Orchestrator"
+        ],
+        "rejected_near_match": "This is data-plane VRF isolation across a shared IPv6-capable overlay, not route leaking between VRFs or automated overlay provisioning.",
+        "result": "unique"
+      }
+    }
+  ]
+}
