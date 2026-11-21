@@ -1,12 +1,12 @@
 {
   "generated_at_local": "2026-11-21T08:31:13-08:00",
-  "question_count": 48,
-  "choice_count": 192,
+  "question_count": 50,
+  "choice_count": 200,
   "correct_answer_distribution": {
-    "0": 14,
+    "0": 15,
     "1": 13,
     "2": 12,
-    "3": 9
+    "3": 10
   },
   "questions": [
     {
@@ -871,6 +871,42 @@
         "These are related but separate monitoring stages.",
         "Collector receipt and rule execution are distinct.",
         "Host role and timer configuration are separate policy inputs."
+      ]
+    },
+    {
+      "id": 49,
+      "product": "FortiGate",
+      "question": "A key-chain entry exists on both BGP peers, but one peer's accept-lifetime expired yesterday. What is the likely result?",
+      "choices": [
+        "The receiver may reject segments using that key despite the key still appearing in configuration",
+        "The receiver will accept the key until the BGP hold timer expires",
+        "The sender will automatically select a route-map with matching lifetime",
+        "The peer will keep the TCP session and only suppress IPv4 UPDATE messages"
+      ],
+      "correct_index": 0,
+      "feedback": [
+        "Correct: the receive key must be within its accept lifetime when the peer authenticates traffic.",
+        "The BGP hold timer is not a substitute for key acceptance validity.",
+        "Route-map selection is unrelated to key-chain lifetime.",
+        "TCP-AO failure affects the transport, not only one address family."
+      ]
+    },
+    {
+      "id": 50,
+      "product": "FortiAnalyzer",
+      "question": "After authenticated NTPv4 is working, which security property has SHA-256 keyed authentication added?",
+      "choices": [
+        "Confidentiality of the time payload against passive packet capture",
+        "Encryption of all FortiAnalyzer log records before storage",
+        "Mutual authentication of every device sending logs to FortiAnalyzer",
+        "Integrity and origin authentication of the NTP time messages"
+      ],
+      "correct_index": 3,
+      "feedback": [
+        "NTP keyed authentication does not hide the time payload.",
+        "The setting does not encrypt stored logs.",
+        "Log-source authentication is a separate ingestion/security control.",
+        "Correct: the shared key authenticates the time message and protects its integrity."
       ]
     }
   ]
