@@ -114,7 +114,7 @@
         },
         {
           "heading": "The evidence pipeline",
-          "body": "The critical prerequisite is explicit: FortiAuthenticator event logs must be present in FortiAnalyzer so the predefined ZTNA Login Anomaly Detection alert handler can trigger. The report is global and is located under Reports > Report Definitions > All Reports in the Fabric Reports folder. The associated template, charts, macros, and dataset are separately visible in Templates, Chart Library, Macro Library, and Datasets. The documented dataset identifier is `incidennt-Anomaly-Login` (note the spelling in the guide). A report with no rows can therefore indicate a missing source log, an alert handler that did not trigger, or a report-object/data-source issue—not necessarily a clean environment."
+          "body": "The critical prerequisite is explicit: FortiAuthenticator event logs must be present in FortiAnalyzer so the predefined ZTNA Login Anomaly Detection alert handler can trigger. The report is global and is located under Reports > Report Definitions > All Reports in the Fabric Reports folder. The associated template, charts, macros, and dataset are separately visible in Templates, Chart Library, Macro Library, and Datasets. The documented dataset identifier is `incidennt-Anomaly-Login` (note the spelling in the guide). A report with no rows can therefore indicate a missing source log, an alert handler that did not trigger, or a report-object/data-source issue—not necessarily a clean environment. The predefined handler uses normalized Fabric logs from FortiAuthenticator. For example, the documented ZTNA Login Anomaly Detection rules can flag failed authentication to three or more services within 10 minutes, successful authentication from three or more geo locations within 10 minutes, or successful authentication from five or more different host IPs within 10 minutes. The handler's filters include `Data Source Type = FortiAuthenticator`, `Event Sub Type = Authentication`, and the relevant AUTH_OK/AUTH_FAIL event profile; the user identifier must meet the documented UEBA threshold."
         },
         {
           "heading": "End-to-end workflow",
@@ -126,7 +126,7 @@
         },
         {
           "heading": "A recent status-lag scenario",
-          "body": "A recent FortiAnalyzer Community tip describes a post-reboot interval where Device Manager may show a managed FortiGate as down and Last Log Received as stale for roughly 10–15 minutes even though the FortiGate has reconnected and is sending logs. The documented checks include `execute log fortianalyzer test-connectivity` and `get log fortianalyzer setting status` on FortiGate, `diagnose test application oftpd 3` on FortiAnalyzer to list devices sending logs, and `diagnose fortilogd lograte` to inspect receive rate. If the display remains stale beyond 30 minutes, investigate connectivity, device authorization, and fortilogd. This matters because a stale status widget is not proof that the report's source logs are absent."
+          "body": "A recent FortiAnalyzer Community tip describes a post-reboot interval where Device Manager may show a managed FortiGate as down and Last Log Received as stale for roughly 10–15 minutes even though the FortiGate has reconnected and is sending logs. The documented checks include `execute log fortianalyzer test-connectivity` and `get log fortianalyzer setting status` on FortiGate, `diagnose test application oftpd 3` on FortiAnalyzer to list devices sending logs, and `diagnose fortilogd lograte` to inspect receive rate. If the display remains stale beyond 30 minutes, investigate connectivity, device authorization, and fortilogd. This matters because a stale status widget is not proof that the report's source logs are absent. The Oct 5, 2026 Community tip is outside the strict 30-day window, so it is historical context rather than a recent discovery. It explicitly says the GUI delay is expected and no configuration change is required during the 10–15 minute refresh interval."
         },
         {
           "heading": "What each signal proves",
@@ -138,7 +138,8 @@
         "Confirm FortiAuthenticator event logs are present in FortiAnalyzer.",
         "Verify the predefined ZTNA Login Anomaly Detection alert handler has triggered.",
         "Inspect the `incidennt-Anomaly-Login` dataset before changing report templates.",
-        "After reboot, compare OFTP state and receive rate with the stale GUI status; allow 10–15 minutes for refresh."
+        "After reboot, compare OFTP state and receive rate with the stale GUI status; allow 10–15 minutes for refresh.",
+        "The documented handler thresholds (for example, three geolocations or five endpoints in ten minutes) prove the report is based on specific normalized identity events, not generic traffic volume."
       ],
       "dependencies": [
         "The report requires FortiAuthenticator event logs; generic FortiGate traffic logs alone are not the documented prerequisite.",
@@ -298,11 +299,11 @@
       "sections": [
         {
           "heading": "Failure mechanism",
-          "body": "The recent FortiNAC-F Community case describes a directory configured with Security Protocol None on TCP/389. FortiNAC-F uses an LDAP simple bind in that mode. When Active Directory requires LDAP signing, the domain controller rejects the unsigned simple bind with `Strong(er) authentication required`; every account can fail, including Domain Admins. The article notes that LDAP signing is the default for new Windows Server 2025 AD deployments. The failure is therefore a transport/authentication-policy mismatch, not evidence that all user passwords are wrong."
+          "body": "The recent FortiNAC-F Community case describes a directory configured with Security Protocol None on TCP/389. FortiNAC-F uses an LDAP simple bind in that mode. When Active Directory requires LDAP signing, the domain controller rejects the unsigned simple bind with `Strong(er) authentication required`; every account can fail, including Domain Admins. The article notes that LDAP signing is the default for new Windows Server 2025 AD deployments. The failure is therefore a transport/authentication-policy mismatch, not evidence that all user passwords are wrong. The Community article also makes a critical separation: Winbind domain join uses Kerberos and SMB, while the LDAP directory connection uses a separate LDAP simple bind with the configured LDAP Login and LDAP Password. A successful domain join therefore does not prove that the LDAP bind meets the domain controller's signing policy."
         },
         {
           "heading": "FortiNAC-F connection choices",
-          "body": "The FortiNAC-F 7.6 administration guide documents three Security Protocol options: None, SSL, and STARTTLS. None uses TCP/389. SSL uses LDAPS, normally TCP/636. STARTTLS begins on TCP/389 and upgrades the connection to TLS before the LDAP bind. The guide requires a CA certificate for SSL or STARTTLS and says it must be stored on the appliance under `/bsc/campusMgr/`. It also documents that the secondary directory server must be specified by FQDN when SSL or STARTTLS is selected."
+          "body": "The FortiNAC-F 7.6 administration guide documents three Security Protocol options: None, SSL, and STARTTLS. None uses TCP/389. SSL uses LDAPS, normally TCP/636. STARTTLS begins on TCP/389 and upgrades the connection to TLS before the LDAP bind. The guide requires a CA certificate for SSL or STARTTLS and says it must be stored on the appliance under `/bsc/campusMgr/`. It also documents that the secondary directory server must be specified by FQDN when SSL or STARTTLS is selected. The FortiNAC-F requirements guide also requires TLS 1.2 or TLS 1.3 to be enabled on the LDAP directory when SSL/TLS is selected."
         },
         {
           "heading": "Why the name matters",
@@ -310,11 +311,11 @@
         },
         {
           "heading": "Secure remediation",
-          "body": "Keep LDAP signing enforcement enabled on the domain controller. Configure the FortiNAC-F directory with SSL/TCP 636 or STARTTLS/TCP 389, use the DC FQDN in the Name field, enable Connect by Name, and import the issuing CA chain into the FortiNAC-F keystore. Confirm the domain controller has a valid server-authentication certificate and listens on the selected port. Then use Validate Credentials and run a directory synchronization. The Community article warns that disabling signing at the domain controller weakens security for all LDAP clients and should be only a temporary, approved workaround."
+          "body": "Keep LDAP signing enforcement enabled on the domain controller. Configure the FortiNAC-F directory with SSL/TCP 636 or STARTTLS/TCP 389, use the DC FQDN in the Name field, enable Connect by Name, and import the issuing CA chain into the FortiNAC-F keystore. Confirm the domain controller has a valid server-authentication certificate and listens on the selected port. Then use Validate Credentials and run a directory synchronization. The Community article warns that disabling signing at the domain controller weakens security for all LDAP clients and should be only a temporary, approved workaround. On the FortiNAC-F CLI, the Community article reproduces the same simple bind with `ldapsearch -x -LLL -H ldap://dc01.example.local:389 -D \"svc_fortinac@example.local\" -W -b \"DC=example,DC=local\" -s base \"(objectClass=*)\"`. A signing-policy rejection returns LDAP result code 8 (`Strong(er) authentication required`); invalid credentials instead return result code 49 with data 52e. This distinction prevents a password reset from being used to mask a transport-policy failure."
         },
         {
           "heading": "Evidence and interpretation",
-          "body": "`openssl s_client -connect dc01.example.local:636 -showcerts </dev/null` shows whether the LDAPS endpoint presents a certificate chain; it does not prove FortiNAC-F trusts that chain or that the bind account has search permissions. For STARTTLS, use an LDAP-aware test that performs the StartTLS upgrade (the Community article suggests repeating the ldapsearch test with `-ZZ`). A successful TLS handshake proves the transport is protected and the server certificate can be examined; it does not prove the bind DN, password, search base, referrals, or attribute mappings are correct. FortiNAC's Credential Status and subsequent sync results provide the application-level checks."
+          "body": "`openssl s_client -connect dc01.example.local:636 -showcerts </dev/null` shows whether the LDAPS endpoint presents a certificate chain; it does not prove FortiNAC-F trusts that chain or that the bind account has search permissions. For STARTTLS, use an LDAP-aware test that performs the StartTLS upgrade (the Community article suggests repeating the ldapsearch test with `-ZZ`). A successful TLS handshake proves the transport is protected and the server certificate can be examined; it does not prove the bind DN, password, search base, referrals, or attribute mappings are correct. FortiNAC's Credential Status and subsequent sync results provide the application-level checks. If the issuing CA must be imported manually, the FortiNAC-F keystore guide uses `keytool -import -trustcacerts` and stores the keystore under `/bsc/campusMgr/`; it notes the keystore is cached on startup and recommends restarting FortiNAC after changes. Follow the current Fortinet procedure for the deployed build and do not expose keystore passwords in change records."
         },
         {
           "heading": "Avoid the false fix",
@@ -326,12 +327,15 @@
         "A `Strong(er) authentication required` error on TCP/389 with Security Protocol None points to LDAP signing enforcement.",
         "`openssl s_client` displays the LDAPS certificate chain but does not prove FortiNAC-F trusts it.",
         "FortiNAC-F Credential Status `Credentials Verified` validates the configured directory credential path.",
-        "Successful directory synchronization proves more than a TLS handshake: search branches and mappings must also work."
+        "Successful directory synchronization proves more than a TLS handshake: search branches and mappings must also work.",
+        "LDAP result code 8 indicates signing/TLS policy rejection; result code 49 with data 52e indicates invalid bind identity or password.",
+        "A successful Winbind domain join does not prove the separate LDAP simple bind succeeds."
       ],
       "dependencies": [
         "SSL/LDAPS normally uses TCP/636; STARTTLS upgrades TCP/389.",
         "SSL/STARTTLS require a trusted CA certificate in the FortiNAC-F keystore.",
-        "The DC FQDN must match its certificate name; the secondary server must be an FQDN for SSL/STARTTLS."
+        "The DC FQDN must match its certificate name; the secondary server must be an FQDN for SSL/STARTTLS.",
+        "TLS 1.2 or TLS 1.3 must be enabled on the LDAP directory; the keystore is cached on startup."
       ],
       "question": "FortiNAC-F validates no LDAP account against a Windows Server 2025 DC and reports Strong(er) authentication required on TCP/389. What is the durable remediation?"
     },
@@ -494,11 +498,11 @@
         },
         {
           "heading": "BGP per overlay preserves client visibility",
-          "body": "The FortiSASE guide describes BGP per-overlay routing: the branch FortiGate establishes an iBGP session per overlay with the Branch On-ramp location. The On-ramp location learns routes to local networks behind the branch device. This design allows the PoP to see the original client source IP behind the branch FortiGate. BGP configuration is shared with Secure Private Access (SPA); configure the SPA network settings before deploying a Branch On-ramp location, although SPA service connections can be created afterward."
+          "body": "The FortiSASE guide describes BGP per-overlay routing: the branch FortiGate establishes an iBGP session per overlay with the Branch On-ramp location. The On-ramp location learns routes to local networks behind the branch device. This design allows the PoP to see the original client source IP behind the branch FortiGate. BGP configuration is shared with Secure Private Access (SPA); configure the SPA network settings before deploying a Branch On-ramp location, although SPA service connections can be created afterward. Current FortiSASE common-use-case documentation states that only iBGP is supported between FortiGate branch devices and the Branch On-ramp PoP. BGP is not supported when third-party branch devices are used; those deployments require static routing."
         },
         {
           "heading": "Static routing changes the source identity",
-          "body": "If static routing is used on the branch FortiGate, source NAT must be configured on the branch firewall policy destined for the On-ramp location so reply traffic can route back. In this design, the On-ramp location sees the tunnel interface IP address rather than the original client IP. This is a meaningful observability and policy difference: source-based controls and logs at the PoP may identify the branch tunnel instead of the individual endpoint. Choose static+SNAT only when that trade-off is acceptable."
+          "body": "If static routing is used on the branch FortiGate, source NAT must be configured on the branch firewall policy destined for the On-ramp location so reply traffic can route back. In this design, the On-ramp location sees the tunnel interface IP address rather than the original client IP. This is a meaningful observability and policy difference: source-based controls and logs at the PoP may identify the branch tunnel instead of the individual endpoint. Choose static+SNAT only when that trade-off is acceptable. The current guide also describes the Branch On-ramp Location subscription as supporting 2–20 On-ramp PoPs depending on seats, 1 Gbps shared bandwidth per selected PoP for up to 2,000 simultaneous dialup IPsec connections, and 50 TB of annual transfer based on the stated 50-Mbps business-hours model. The subscription must be purchased multiple times if expected bandwidth exceeds 1 Gbps for a PoP. Confirm the current ordering guide and tenant entitlement because these are subscription-version details."
         },
         {
           "heading": "Licensing and scale are versioned",
@@ -519,7 +523,8 @@
       "dependencies": [
         "SPA network/BGP configuration must be created before deploying Branch On-ramp.",
         "The branch IPsec device centralizes endpoints; individual FortiClient is not required for this use case.",
-        "License, location count, PoP throughput, simultaneous connections, and data-transfer entitlements are release-specific."
+        "License, location count, PoP throughput, simultaneous connections, and data-transfer entitlements are release-specific.",
+        "Current FortiSASE common-use-case documentation: FortiGate branch devices use iBGP per overlay; third-party branch devices require static routing."
       ],
       "question": "The FortiSASE PoP must see each workstation's original source IP behind a branch edge. Which routing design should be selected?"
     },
