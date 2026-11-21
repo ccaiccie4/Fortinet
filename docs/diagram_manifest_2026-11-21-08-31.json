@@ -1,0 +1,414 @@
+{
+  "generated_at_local": "2026-11-21T08:31:13-08:00",
+  "diagram_count": 12,
+  "format_requirements": {
+    "svg": "one standalone SVG per lesson",
+    "drawio": "one editable draw.io XML per lesson"
+  },
+  "diagram_specs": [
+    {
+      "product": "FortiGate",
+      "slug": "FortiGate",
+      "title": "TCP-AO protected BGP transport",
+      "nodes": [
+        "FortiGate A\nBGP neighbor",
+        "Key-chain\nID + algorithm\nsend/accept lifetime",
+        "TCP-AO\nsegment authentication",
+        "FortiGate B\nmatching key-chain",
+        "BGP FSM\nOPEN / UPDATE"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Mismatch: key ID / secret / algorithm / lifetime -> TCP transport rejected"
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "slug": "FortiManager",
+      "title": "Task Monitor and Event Log retention",
+      "nodes": [
+        "Task Monitor\nEvent Log",
+        "Local log disk",
+        "Age evaluator\nlog-max-days",
+        "Midnight purge\nolder records",
+        "Quota fallback\nwhen value = 0"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "notes": [
+        "Scope is local task/event records, not ADOM revisions or external archives"
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "slug": "FortiAnalyzer",
+      "title": "Authenticated NTPv4 with SHA-256",
+      "nodes": [
+        "FortiAnalyzer\nNTP client",
+        "Key ID 123\nSHA-256 key",
+        "NTPv4\nauthenticated exchange",
+        "Linux Chrony\nkey file",
+        "Clock synchronized\nstatus check"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Key ID or key-format mismatch -> authentication fails despite UDP reachability"
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "slug": "FortiSwitch",
+      "title": "IP conflict detection ARP paths",
+      "nodes": [
+        "FortiSwitch\nsystem interface IP",
+        "Passive ARP\nremote claim",
+        "Active GARP\nboot / link-up / IP change",
+        "Conflict detector",
+        "System log\nSNMP trap"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Scope: claims matching switch system-interface IPs; not every host-to-host duplicate"
+      ]
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "slug": "FortiAP",
+      "title": "Dynamic captive portal URL from ISE",
+      "nodes": [
+        "Wireless station\nassociate",
+        "FortiAP / FortiGate\nTunnel VAP auth-mac",
+        "RADIUS Access-Accept\nattribute 27 URL",
+        "Cisco ISE\nauthorization profile",
+        "Browser portal\nthen AuthorizedGuest"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Verify group=unregistered / cp_authed=no then AuthorizedGuest / cp_authed=yes"
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "slug": "FortiNAC",
+      "title": "Authentication policy timer state machine",
+      "nodes": [
+        "Host + user\n+ location",
+        "Ordered User/Host\nProfile matching",
+        "Authentication\nconfiguration timers",
+        "Production VLAN\ngrace / offline hold",
+        "Authentication VLAN\nreauth / timeout"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "notes": [
+        "Catch-all policy must be last; first matching profile wins"
+      ]
+    },
+    {
+      "product": "FortiNAC-F",
+      "slug": "FortiNAC-F",
+      "title": "EAP-TTLS/PAP to Microsoft Entra ID",
+      "nodes": [
+        "Windows supplicant\nEAP-TTLS / PAP",
+        "Access switch\n802.1X / RADIUS",
+        "FortiNAC-F Local\nRADIUS TLS",
+        "Entra ID service\nconnector / mapping",
+        "Access-Accept\nNAC VLAN decision"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "TTLS-PAP flow does not support MFA; connector test does not prove EAP method"
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "slug": "FortiAuthenticator",
+      "title": "TACACS client groups and policy binding",
+      "nodes": [
+        "Registered TACACS\nclient objects",
+        "Reusable client\ngroups",
+        "TACACS+ policy\nclient/group selector",
+        "Identity source\nand authorization",
+        "TACACS+ response\nto device"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Groups select policy scope; each client still has its own address and shared secret"
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "slug": "FortiPAM",
+      "title": "Approval notification through Microsoft Graph",
+      "nodes": [
+        "FortiPAM approval\nrequest state",
+        "OAuth token\nEntra application",
+        "Microsoft Graph\nmail API",
+        "Dedicated M365\nmailbox",
+        "Approver notification\nFortiPAM approval"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Email delivery is separate from approval state and secret authorization"
+      ]
+    },
+    {
+      "product": "FortiSIEM",
+      "slug": "FortiSIEM",
+      "title": "Windows Agent certificate monitoring pipeline",
+      "nodes": [
+        "Monitor template\ncertificate stores",
+        "Host-to-template\nassociation + Apply",
+        "Windows Agent\nstore watcher",
+        "Certificate events\nAdded / Removed /\nExpiring / Expired",
+        "FortiSIEM Collector\nrules and reports"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Store event does not prove certificate chain trust or service binding"
+      ]
+    },
+    {
+      "product": "FortiSASE",
+      "slug": "FortiSASE",
+      "title": "Agent-based ZTNA range and port matching",
+      "nodes": [
+        "FortiClient endpoint\nassigned profile",
+        "ZTNA connection rule\nprivate application",
+        "IP range / CIDR\nport list / range",
+        "FortiGate ZTNA\ngateway",
+        "Protected application\nsubnet"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Range/port-list support requires FortiClient Windows 7.2.8+ and Feature version"
+      ]
+    },
+    {
+      "product": "Secure SD-WAN",
+      "slug": "SecureSDWAN",
+      "title": "SD-WAN SLA priority to BGP MED",
+      "nodes": [
+        "Spoke overlay\nmembers 1 / 2",
+        "Remote health-check\nSLA priorities",
+        "BGP neighbor\nroute-metric -> MED",
+        "Hub-1 / Hub-2\neBGP advertisement",
+        "External router\nMED comparison"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "notes": [
+        "Check both hubs' advertised MED and the external router's best-path policy"
+      ]
+    }
+  ]
+}
