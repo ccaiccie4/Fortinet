@@ -14,10 +14,10 @@
       "product": "FortiGate",
       "question": "A peer answers ICMP, but its BGP session stays Active immediately after TCP-AO was enabled. What should be compared first?",
       "choices": [
-        "The neighbor's prefix-list order and route-map sequence",
-        "The key ID, algorithm, secret and lifetime on both key-chains",
-        "The BGP hold timer and graceful-restart stale-path interval",
-        "The remote peer's advertised networks and next-hop attributes"
+        "The neighbor's prefix-list order and route-map sequence for this same transaction.",
+        "The key ID, algorithm, secret and lifetime on both key-chains.",
+        "The BGP hold timer and graceful-restart stale-path interval within the selected policy scope.",
+        "The remote peer's advertised networks and next-hop attributes for the same device and service."
       ],
       "correct_index": 1,
       "feedback": [
@@ -32,10 +32,10 @@
       "product": "FortiGate",
       "question": "During a coordinated key rotation, one peer begins sending with a new key before the other accepts it. Which change prevents an avoidable outage?",
       "choices": [
-        "Increase the BGP keepalive interval on both peers",
-        "Disable TCP-AO until all route filters are synchronized",
-        "Create a second neighbor with a different remote AS",
-        "Overlap the receiver's accept lifetime with the sender's new key"
+        "Increase the BGP keepalive interval on both peers at the receiving system.",
+        "Disable TCP-AO until all route filters are synchronized within the selected policy scope.",
+        "Create a second neighbor with a different remote AS.",
+        "Overlap the receiver's accept lifetime with the sender's new key."
       ],
       "correct_index": 3,
       "feedback": [
@@ -50,10 +50,10 @@
       "product": "FortiGate",
       "question": "The TCP-AO diagnostic shows alg=aes128 and matching send/receive IDs. What does this evidence establish?",
       "choices": [
-        "The TCP-AO key context is active for the displayed peer",
-        "All expected BGP prefixes are installed in the routing table",
-        "The remote peer selected the intended route-map sequence",
-        "The neighbor's next hop is reachable through the preferred WAN"
+        "The TCP-AO key context is active for the displayed peer.",
+        "All expected BGP prefixes are installed in the routing table.",
+        "The remote peer selected the intended route-map sequence before the next control-plane stage.",
+        "The neighbor's next hop is reachable through the preferred WAN."
       ],
       "correct_index": 0,
       "feedback": [
@@ -68,10 +68,10 @@
       "product": "FortiManager",
       "question": "An engineer sets log-max-days to five and Task Monitor rows older than five days disappear after midnight. What is the expected interpretation?",
       "choices": [
-        "The device configuration revisions were compacted by ADOM cleanup",
-        "The remote FortiAnalyzer deleted the corresponding archived logs",
-        "The local Task Monitor and Event Log age limit was applied",
-        "The completed install jobs were rolled back by scheduled maintenance"
+        "The device configuration revisions were compacted by ADOM cleanup for the same device and service.",
+        "The remote FortiAnalyzer deleted the corresponding archived logs before the next control-plane stage.",
+        "The local Task Monitor and Event Log age limit was applied.",
+        "The completed install jobs were rolled back by scheduled maintenance."
       ],
       "correct_index": 2,
       "feedback": [
@@ -86,10 +86,10 @@
       "product": "FortiManager",
       "question": "A FortiManager administrator changes log-max-days from 30 to 0. Which retention behavior returns?",
       "choices": [
-        "All local task and event records become permanent",
-        "Retention returns to the disk-quota-driven default behavior",
-        "Only failed install tasks are retained until the next reboot",
-        "Task Monitor is disabled while Event Log remains active"
+        "All local task and event records become permanent.",
+        "Retention returns to the disk-quota-driven default behavior.",
+        "Only failed install tasks are retained until the next reboot.",
+        "Task Monitor is disabled while Event Log remains active."
       ],
       "correct_index": 1,
       "feedback": [
@@ -104,10 +104,10 @@
       "product": "FortiManager",
       "question": "The audit team needs 90 days of install history, but local disk is constrained. What is the safest design?",
       "choices": [
-        "Set one day and rely on the task list to reconstruct history",
-        "Set zero and assume the quota guarantees ninety days",
-        "Increase log-max-days without checking local disk capacity",
-        "Export relevant task and event records to approved central storage"
+        "Set one day and rely on the task list to reconstruct history.",
+        "Set zero and assume the quota guarantees ninety days.",
+        "Increase log-max-days without checking local disk capacity at the receiving system.",
+        "Export relevant task and event records to approved central storage."
       ],
       "correct_index": 3,
       "feedback": [
@@ -122,10 +122,10 @@
       "product": "FortiAnalyzer",
       "question": "Chrony receives NTP packets from FortiAnalyzer, but synchronization fails after SHA-256 authentication is enabled. What should be checked first?",
       "choices": [
-        "The matching key ID and exact key representation on both systems",
-        "The ADOM quota and analytic-to-archive storage ratio",
-        "The FortiAnalyzer report dataset cache and hcache settings",
-        "The device log forwarding policy and syslog transport port"
+        "The matching key ID and exact key representation on both systems.",
+        "The ADOM quota and analytic-to-archive storage ratio at the receiving system.",
+        "The FortiAnalyzer report dataset cache and hcache settings within the selected policy scope.",
+        "The device log forwarding policy and syslog transport port for the same device and service."
       ],
       "correct_index": 0,
       "feedback": [
@@ -140,10 +140,10 @@
       "product": "FortiAnalyzer",
       "question": "The FortiAnalyzer uses key ID 123 with a hexadecimal SHA-256 key. Which Chrony entry matches that configuration?",
       "choices": [
-        "222 SHA256 somepassword",
-        "123 SHA256 HEX:<matching-hex-key>",
-        "123 MD5 <matching-hex-key>",
-        "123 SHA256 <hex-key-as-ascii-text>"
+        "222 SHA256 somepassword.",
+        "123 SHA256 HEX:<matching-hex-key>.",
+        "123 MD5 <matching-hex-key>.",
+        "123 SHA256 <hex-key-as-ascii-text>."
       ],
       "correct_index": 1,
       "feedback": [
@@ -158,10 +158,10 @@
       "product": "FortiAnalyzer",
       "question": "A packet capture shows bidirectional UDP/123 traffic. What does that observation fail to prove?",
       "choices": [
-        "That the Chrony server has a route to FortiAnalyzer",
-        "That the NTP client has a configured server object",
-        "That the keyed SHA-256 authentication check succeeded",
-        "That the firewall permits the NTP transport packets"
+        "That the Chrony server has a route to FortiAnalyzer.",
+        "That the NTP client has a configured server object.",
+        "That the keyed SHA-256 authentication check succeeded.",
+        "That the firewall permits the NTP transport packets."
       ],
       "correct_index": 2,
       "feedback": [
@@ -176,10 +176,10 @@
       "product": "FortiSwitch",
       "question": "A FortiSwitch logs an ARP claim for its own management IP from another MAC. Which detection path explains the event?",
       "choices": [
-        "Passive observation of a broadcast ARP ownership claim",
-        "DHCP snooping binding validation on an untrusted access port",
-        "Dynamic ARP inspection against the VLAN's DHCP database",
-        "A gratuitous ARP probe sent after a port changed to up"
+        "Passive observation of a broadcast ARP ownership claim.",
+        "DHCP snooping binding validation on an untrusted access port.",
+        "Dynamic ARP inspection against the VLAN's DHCP database.",
+        "A gratuitous ARP probe sent after a port changed to up."
       ],
       "correct_index": 0,
       "feedback": [
@@ -194,10 +194,10 @@
       "product": "FortiSwitch",
       "question": "After a switch interface comes up, FortiSwitch sends gratuitous ARP and receives a reply for its configured IP. What should happen?",
       "choices": [
-        "The switch should silently replace its interface IP with the reply source",
-        "The switch should clear the ARP table and restart DHCP snooping",
-        "The switch should move the interface into a quarantine VLAN",
-        "The switch should log an IP conflict and raise an SNMP trap"
+        "The switch should silently replace its interface IP with the reply source.",
+        "The switch should clear the ARP table and restart DHCP snooping.",
+        "The switch should move the interface into a quarantine VLAN for this same transaction.",
+        "The switch should log an IP conflict and raise an SNMP trap."
       ],
       "correct_index": 3,
       "feedback": [
@@ -212,10 +212,10 @@
       "product": "FortiSwitch",
       "question": "Two ordinary endpoints duplicate an address, but neither address belongs to a FortiSwitch system interface. No IP-conflict event appears. What is the best conclusion?",
       "choices": [
-        "The switch has proven that both endpoints use unique addresses",
-        "The feature may not cover this host-to-host duplicate pair",
-        "The SNMP trap receiver must be changing the ARP source IP",
-        "The switch must be running DAI on every access VLAN"
+        "The switch has proven that both endpoints use unique addresses.",
+        "The feature may not cover this host-to-host duplicate pair.",
+        "The SNMP trap receiver must be changing the ARP source IP.",
+        "The switch must be running DAI on every access VLAN."
       ],
       "correct_index": 1,
       "feedback": [
@@ -230,10 +230,10 @@
       "product": "FortiAP/Wireless",
       "question": "A tunnel-mode guest SSID completes MAC RADIUS authentication but always sends users to a static portal. Which RADIUS item is missing?",
       "choices": [
-        "A Class attribute containing the endpoint's IPv4 gateway",
-        "A Called-Station-Id attribute containing the AP radio name",
-        "Fortinet-Captive-Portal-URL vendor attribute 27 in Access-Accept",
-        "A DHCP Option 82 suboption containing the guest VLAN name"
+        "A Class attribute containing the endpoint's IPv4 gateway.",
+        "A Called-Station-Id attribute containing the AP radio name.",
+        "Fortinet-Captive-Portal-URL vendor attribute 27 in Access-Accept.",
+        "A DHCP Option 82 suboption containing the guest VLAN name."
       ],
       "correct_index": 2,
       "feedback": [
@@ -248,10 +248,10 @@
       "product": "FortiAP/Wireless",
       "question": "The ISE profile returns attribute 27, but FortiOS does not use the dynamic URL. Which VAP condition should be verified?",
       "choices": [
-        "Tunnel-mode captive portal with portal-type auth-mac and dynamic redirect enabled",
-        "Bridge-mode SSID with portal-type external-auth and local bridging enabled",
-        "Open SSID with MAC filtering disabled and DHCP relay option 82 enabled",
-        "WPA3 enterprise SSID with EAP-TLS and a static external web address"
+        "Tunnel-mode captive portal with portal-type auth-mac and dynamic redirect enabled.",
+        "Bridge-mode SSID with portal-type external-auth and local bridging enabled.",
+        "Open SSID with MAC filtering disabled and DHCP relay option 82 enabled.",
+        "WPA3 enterprise SSID with EAP-TLS and a static external web address."
       ],
       "correct_index": 0,
       "feedback": [
@@ -266,10 +266,10 @@
       "product": "FortiAP/Wireless",
       "question": "Before a guest signs in, the station shows group=unregistered and cp_authed=no. What does this state establish?",
       "choices": [
-        "The station has completed portal login and Internet access",
-        "The station has passed MAC RADIUS authentication but remains unauthenticated to the portal",
-        "The station failed wireless association and has no RADIUS session",
-        "The station has received an authorized VLAN from the DHCP server"
+        "The station has completed portal login and Internet access within the selected policy scope.",
+        "The station has passed MAC RADIUS authentication but remains unauthenticated to the portal.",
+        "The station failed wireless association and has no RADIUS session before the next control-plane stage.",
+        "The station has received an authorized VLAN from the DHCP server in this deployment."
       ],
       "correct_index": 1,
       "feedback": [
@@ -284,10 +284,10 @@
       "product": "FortiAP/Wireless",
       "question": "A guest reaches the ISE portal and logs in, but cannot browse the Internet. The station is AuthorizedGuest and cp_authed=yes. What is the next check?",
       "choices": [
-        "The FortiAP channel utilization and radio retry counters",
-        "The ISE dictionary vendor ID and attribute number again",
-        "The RADIUS shared secret rotation interval",
-        "The firewall policy allowing the AuthorizedGuest group to the Internet"
+        "The FortiAP channel utilization and radio retry counters for the same device and service.",
+        "The ISE dictionary vendor ID and attribute number again.",
+        "The RADIUS shared secret rotation interval in this deployment.",
+        "The firewall policy allowing the AuthorizedGuest group to the Internet."
       ],
       "correct_index": 3,
       "feedback": [
@@ -302,10 +302,10 @@
       "product": "FortiNAC",
       "question": "A laptop disconnects for eight minutes and reconnects without another challenge. Its offline retention timer is ten minutes. Why is this expected?",
       "choices": [
-        "The prior authenticated state is retained until the offline timer expires",
-        "The reauthentication frequency is disabled on every policy",
-        "The production grace timer is restarted whenever a switch is polled",
-        "The RADIUS server cached the password for ten minutes"
+        "The prior authenticated state is retained until the offline timer expires.",
+        "The reauthentication frequency is disabled on every policy in this deployment.",
+        "The production grace timer is restarted whenever a switch is polled.",
+        "The RADIUS server cached the password for ten minutes at the receiving system."
       ],
       "correct_index": 0,
       "feedback": [
@@ -320,10 +320,10 @@
       "product": "FortiNAC",
       "question": "A broad catch-all User/Host Profile is placed above a specific contractor profile. Which outcome is most likely?",
       "choices": [
-        "The contractor profile receives higher precedence because it is narrower",
-        "Both policies are merged and their timers are averaged",
-        "The catch-all matches first and shadows the contractor policy below it",
-        "FortiNAC ignores both policies and uses the portal default"
+        "The contractor profile receives higher precedence because it is narrower.",
+        "Both policies are merged and their timers are averaged for this same transaction.",
+        "The catch-all matches first and shadows the contractor policy below it.",
+        "FortiNAC ignores both policies and uses the portal default within the selected policy scope."
       ],
       "correct_index": 2,
       "feedback": [
@@ -338,10 +338,10 @@
       "product": "FortiNAC",
       "question": "RADIUS logs show Access-Accept, but the endpoint is placed in the authentication VLAN. What should be examined next?",
       "choices": [
-        "The RADIUS shared secret on every network device",
-        "The FortiNAC Policy Details matched profile, configuration and assessment log",
-        "The external directory password expiry policy only",
-        "The switch's LLDP neighbor table and PoE budget"
+        "The RADIUS shared secret on every network device for this same transaction.",
+        "The FortiNAC Policy Details matched profile, configuration and assessment log.",
+        "The external directory password expiry policy only within the selected policy scope.",
+        "The switch's LLDP neighbor table and PoE budget for the same device and service."
       ],
       "correct_index": 1,
       "feedback": [
@@ -356,10 +356,10 @@
       "product": "FortiNAC",
       "question": "A user waits too long to authenticate and is moved from production to the authentication VLAN. Which timer controls this transition?",
       "choices": [
-        "Time Offline before Deauthentication",
-        "Reauthentication Frequency",
-        "Time in Production before Authentication",
-        "RADIUS accounting interim-update interval"
+        "Time Offline before Deauthentication.",
+        "Reauthentication Frequency within the selected policy scope.",
+        "Time in Production before Authentication.",
+        "RADIUS accounting interim-update interval."
       ],
       "correct_index": 2,
       "feedback": [
@@ -374,10 +374,10 @@
       "product": "FortiNAC",
       "question": "A host has no matching authentication policy and is deauthenticated after about ten minutes. What design change prevents an undefined policy result?",
       "choices": [
-        "Create a catch-all profile and place it at the end of the policy list",
-        "Increase the RADIUS server timeout to fifteen minutes",
-        "Disable the authentication VLAN on every managed switch",
-        "Move all user profiles above all host profiles alphabetically"
+        "Create a catch-all profile and place it at the end of the policy list.",
+        "Increase the RADIUS server timeout to fifteen minutes for the same device and service.",
+        "Disable the authentication VLAN on every managed switch before the next control-plane stage.",
+        "Move all user profiles above all host profiles alphabetically in this deployment for this same transaction."
       ],
       "correct_index": 0,
       "feedback": [
@@ -392,10 +392,10 @@
       "product": "FortiNAC-F",
       "question": "The Entra connector test succeeds, but Windows immediately fails 802.1X. The supplicant is using PEAP while the FortiNAC-F design expects TTLS-PAP. What is the best correction?",
       "choices": [
-        "Change the Entra tenant ID to the FortiNAC management IP",
-        "Increase the RADIUS retransmit count on the switch",
-        "Disable the Local RADIUS TLS certificate check",
-        "Configure the Windows supplicant for EAP-TTLS with PAP"
+        "Change the Entra tenant ID to the FortiNAC management IP.",
+        "Increase the RADIUS retransmit count on the switch.",
+        "Disable the Local RADIUS TLS certificate check.",
+        "Configure the Windows supplicant for EAP-TTLS with PAP."
       ],
       "correct_index": 3,
       "feedback": [
@@ -410,10 +410,10 @@
       "product": "FortiNAC-F",
       "question": "Why is EAP-TTLS/PAP with Microsoft Entra ID unsuitable when the access policy mandates MFA?",
       "choices": [
-        "The inner PAP password is sent outside the TLS tunnel",
-        "The documented Entra TTLS-PAP flow does not support MFA",
-        "The FortiSwitch authenticator cannot forward EAP packets",
-        "The Entra service connector only accepts machine certificates"
+        "The inner PAP password is sent outside the TLS tunnel.",
+        "The documented Entra TTLS-PAP flow does not support MFA.",
+        "The FortiSwitch authenticator cannot forward EAP packets for this same transaction.",
+        "The Entra service connector only accepts machine certificates."
       ],
       "correct_index": 1,
       "feedback": [
@@ -428,10 +428,10 @@
       "product": "FortiNAC-F",
       "question": "A certificate-based Entra service connector returns Unauthorized. Which distinction is important before replacing the EAP server certificate?",
       "choices": [
-        "The Entra connector uses the Remote API certificate target, not the Local RADIUS EAP target",
-        "The RADIUS shared secret must be copied into the certificate SAN",
-        "The Windows supplicant must switch from TTLS to open authentication",
-        "The portal FQDN must equal the switch's management IP address"
+        "The Entra connector uses the Remote API certificate target, not the Local RADIUS EAP target.",
+        "The RADIUS shared secret must be copied into the certificate SAN for this same transaction.",
+        "The Windows supplicant must switch from TTLS to open authentication at the receiving system.",
+        "The portal FQDN must equal the switch's management IP address within the selected policy scope."
       ],
       "correct_index": 0,
       "feedback": [
@@ -446,10 +446,10 @@
       "product": "FortiNAC-F",
       "question": "An Entra connector poll succeeds, but a user is not in a remote group until after authenticating through FortiNAC. What does this indicate?",
       "choices": [
-        "The remote group object is corrupted and must be recreated",
-        "The switch is not sending DHCP Option 82",
-        "Group membership synchronization is separate from the user's authentication event",
-        "The Entra app has no permission to read any user objects"
+        "The remote group object is corrupted and must be recreated.",
+        "The switch is not sending DHCP Option 82 at the receiving system.",
+        "Group membership synchronization is separate from the user's authentication event.",
+        "The Entra app has no permission to read any user objects."
       ],
       "correct_index": 2,
       "feedback": [
@@ -464,10 +464,10 @@
       "product": "FortiAuthenticator",
       "question": "A new switch is visible as a TACACS+ client, but the intended policy does not match it. What relationship should be inspected?",
       "choices": [
-        "The switch's SNMP location and sysObjectID values",
-        "The client object's group membership and that group's policy selection",
-        "The RADIUS accounting port and interim-update timer",
-        "The FortiToken push notification setting for local users"
+        "The switch's SNMP location and sysObjectID values at the receiving system.",
+        "The client object's group membership and that group's policy selection.",
+        "The RADIUS accounting port and interim-update timer for the same device and service.",
+        "The FortiToken push notification setting for local users before the next control-plane stage."
       ],
       "correct_index": 1,
       "feedback": [
@@ -482,10 +482,10 @@
       "product": "FortiAuthenticator",
       "question": "A TACACS+ client group contains five devices. Which statement remains true about their client identity?",
       "choices": [
-        "The group replaces all member addresses with one shared subnet",
-        "Every member inherits the group's single shared secret",
-        "The group itself becomes the TACACS+ server identity source",
-        "Each client still requires its own registered address and shared secret"
+        "The group replaces all member addresses with one shared subnet.",
+        "Every member inherits the group's single shared secret for the same device and service.",
+        "The group itself becomes the TACACS+ server identity source before the next control-plane stage.",
+        "Each client still requires its own registered address and shared secret."
       ],
       "correct_index": 3,
       "feedback": [
@@ -500,10 +500,10 @@
       "product": "FortiAuthenticator",
       "question": "A policy includes the correct TACACS+ client group, but no request reaches policy evaluation. What should be checked at the appliance first?",
       "choices": [
-        "Whether TACACS+ service is enabled on the receiving network interface",
-        "Whether the FortiAuthenticator RADIUS client group is empty",
-        "Whether the external switch has an LLDP neighbor entry",
-        "Whether the user account has a default Framed-IP-Address attribute"
+        "Whether TACACS+ service is enabled on the receiving network interface.",
+        "Whether the FortiAuthenticator RADIUS client group is empty before the next control-plane stage.",
+        "Whether the external switch has an LLDP neighbor entry.",
+        "Whether the user account has a default Framed-IP-Address attribute."
       ],
       "correct_index": 0,
       "feedback": [
@@ -518,10 +518,10 @@
       "product": "FortiAuthenticator",
       "question": "An automation script must associate TACACS+ clients with groups through the REST API. Which endpoint family is relevant?",
       "choices": [
-        "/radiusaccounting/ and /radacctclient/",
-        "/tacplusclientgroups/ and /tacplusgroupclient/",
-        "/samlsp/ and /samlidp/",
-        "/fortitoken/ and /otpusers/"
+        "/radiusaccounting/ and /radacctclient/.",
+        "/tacplusclientgroups/ and /tacplusgroupclient/.",
+        "/samlsp/ and /samlidp/.",
+        "/fortitoken/ and /otpusers/."
       ],
       "correct_index": 1,
       "feedback": [
@@ -536,10 +536,10 @@
       "product": "FortiPAM",
       "question": "An approval request remains pending, but approvers receive no email after switching to Graph. Which diagnostic order best separates the failure domains?",
       "choices": [
-        "Change the secret's target IP, then restart the RDP proxy",
-        "Recreate the approver role, then disable approval requirements",
-        "Check OAuth token, Graph permission/consent, mailbox access, then FortiPAM notification settings",
-        "Increase the password changer retry count and reset the target password"
+        "Change the secret's target IP, then restart the RDP proxy.",
+        "Recreate the approver role, then disable approval requirements for this same transaction.",
+        "Check OAuth token, Graph permission/consent, mailbox access, then FortiPAM notification settings.",
+        "Increase the password changer retry count and reset the target password."
       ],
       "correct_index": 2,
       "feedback": [
@@ -554,10 +554,10 @@
       "product": "FortiPAM",
       "question": "The Graph token request succeeds, but sending to the configured mailbox is denied. Which missing control is most likely?",
       "choices": [
-        "The Exchange service principal lacks access to the dedicated mailbox",
-        "The FortiPAM secret has no SSH launcher assigned",
-        "The target server is missing a local administrator account",
-        "The FortiPAM approval policy has no time-to-live value"
+        "The Exchange service principal lacks access to the dedicated mailbox.",
+        "The FortiPAM secret has no SSH launcher assigned at the receiving system.",
+        "The target server is missing a local administrator account.",
+        "The FortiPAM approval policy has no time-to-live value for the same device and service."
       ],
       "correct_index": 0,
       "feedback": [
@@ -572,10 +572,10 @@
       "product": "FortiPAM",
       "question": "Which Microsoft Graph permission and consent step does the FortiPAM 1.9 guide document for the approval mailbox integration?",
       "choices": [
-        "User.Read delegated permission without tenant consent",
-        "Mail.Send permission on the approver's personal account only",
-        "Directory.Read.All with no mailbox permission",
-        "Mail.ReadWrite with administrator consent"
+        "User.Read delegated permission without tenant consent.",
+        "Mail.Send permission on the approver's personal account only.",
+        "Directory.Read.All with no mailbox permission.",
+        "Mail.ReadWrite with administrator consent."
       ],
       "correct_index": 3,
       "feedback": [
@@ -590,10 +590,10 @@
       "product": "FortiPAM",
       "question": "A Graph email is delivered successfully. What does that prove about the privileged secret request?",
       "choices": [
-        "The approver has automatically been granted the secret",
-        "The email transport worked, but FortiPAM still controls approval state",
-        "The target password was rotated by the email service",
-        "The user has bypassed the secret checkout policy"
+        "The approver has automatically been granted the secret within the selected policy scope.",
+        "The email transport worked, but FortiPAM still controls approval state.",
+        "The target password was rotated by the email service.",
+        "The user has bypassed the secret checkout policy in this deployment."
       ],
       "correct_index": 1,
       "feedback": [
@@ -608,10 +608,10 @@
       "product": "FortiSIEM",
       "question": "A Windows certificate expires, but no FortiSIEM event appears. The template exists. What should be verified next?",
       "choices": [
-        "The Windows firewall default route and DNS suffix",
-        "The event correlation rule severity and notification recipient",
-        "The Host-to-Template Association and whether Apply distributed it",
-        "The FortiGate SSL inspection profile on the endpoint subnet"
+        "The Windows firewall default route and DNS suffix.",
+        "The event correlation rule severity and notification recipient.",
+        "The Host-to-Template Association and whether Apply distributed it.",
+        "The FortiGate SSL inspection profile on the endpoint subnet."
       ],
       "correct_index": 2,
       "feedback": [
@@ -626,10 +626,10 @@
       "product": "FortiSIEM",
       "question": "Which event type indicates that a monitored Windows certificate store contains a certificate approaching its configured expiry threshold?",
       "choices": [
-        "AO-WUA-Certificate-Expiring",
-        "AO-WUA-Certificate-Removed",
-        "AO-WUA-Certificate-Added",
-        "AO-WUA-Certificate-Expired"
+        "AO-WUA-Certificate-Expiring.",
+        "AO-WUA-Certificate-Removed.",
+        "AO-WUA-Certificate-Added.",
+        "AO-WUA-Certificate-Expired."
       ],
       "correct_index": 0,
       "feedback": [
@@ -644,10 +644,10 @@
       "product": "FortiSIEM",
       "question": "A certificate-removed event appears for LocalMachine. What conclusion is justified from that event alone?",
       "choices": [
-        "The certificate chain was untrusted by every application",
-        "The private key was compromised and exported",
-        "The service binding was automatically moved to another certificate",
-        "The agent detected removal from the configured certificate store"
+        "The certificate chain was untrusted by every application.",
+        "The private key was compromised and exported for this same transaction.",
+        "The service binding was automatically moved to another certificate.",
+        "The agent detected removal from the configured certificate store."
       ],
       "correct_index": 3,
       "feedback": [
@@ -662,10 +662,10 @@
       "product": "FortiSIEM",
       "question": "The Windows Agent is installed and online, but certificate events are absent. Which configuration belongs on the FortiSIEM side?",
       "choices": [
-        "A separate Windows scheduled task for each certificate store",
-        "A monitor template with stores/operations and a host association",
-        "A new SNMP trap receiver for the Windows certificate service",
-        "A custom parser for every certificate issuer's subject name"
+        "A separate Windows scheduled task for each certificate store.",
+        "A monitor template with stores/operations and a host association.",
+        "A new SNMP trap receiver for the Windows certificate service.",
+        "A custom parser for every certificate issuer's subject name."
       ],
       "correct_index": 1,
       "feedback": [
@@ -680,10 +680,10 @@
       "product": "FortiSASE",
       "question": "A subnet-based ZTNA private application is configured, but endpoints run FortiClient Windows 7.2.7. What is the immediate compatibility issue?",
       "choices": [
-        "Range/CIDR and port-list support requires Windows FortiClient 7.2.8 or later",
-        "The ZTNA gateway must use UDP port 1812 for every application",
-        "The application must be converted to an agentless custom domain",
-        "The FortiGate gateway must disable all SAML authentication"
+        "Range/CIDR and port-list support requires Windows FortiClient 7.2.8 or later.",
+        "The ZTNA gateway must use UDP port 1812 for every application.",
+        "The application must be converted to an agentless custom domain.",
+        "The FortiGate gateway must disable all SAML authentication before the next control-plane stage."
       ],
       "correct_index": 0,
       "feedback": [
@@ -698,10 +698,10 @@
       "product": "FortiSASE",
       "question": "The private application object is visible in FortiSASE, but traffic still bypasses the intended ZTNA rule. What binding is missing?",
       "choices": [
-        "A DHCP reservation for the application subnet",
-        "A BGP route-map on the Security PoP",
-        "A ZTNA connection rule in the endpoint profile referencing that application",
-        "A FortiAnalyzer report dataset for the application gateway"
+        "A DHCP reservation for the application subnet within the selected policy scope.",
+        "A BGP route-map on the Security PoP for the same device and service.",
+        "A ZTNA connection rule in the endpoint profile referencing that application.",
+        "A FortiAnalyzer report dataset for the application gateway in this deployment."
       ],
       "correct_index": 2,
       "feedback": [
@@ -716,10 +716,10 @@
       "product": "FortiSASE",
       "question": "An administrator enables ZTNA encryption. Which traffic leg does this setting control?",
       "choices": [
-        "The original server-to-database traffic inside the private subnet",
-        "The FortiClient-to-ZTNA-application-gateway connection",
-        "The Entra ID OAuth token exchange between cloud services",
-        "The IPsec tunnel between two unrelated branch FortiGates"
+        "The original server-to-database traffic inside the private subnet.",
+        "The FortiClient-to-ZTNA-application-gateway connection.",
+        "The Entra ID OAuth token exchange between cloud services.",
+        "The IPsec tunnel between two unrelated branch FortiGates."
       ],
       "correct_index": 1,
       "feedback": [
@@ -734,10 +734,10 @@
       "product": "FortiSASE",
       "question": "An enterprise is approaching the documented ZTNA connection-rule ceiling. Which limit should guide design review?",
       "choices": [
-        "3,200 private application objects across all tenants",
-        "320,000 gateway connections per FortiGate",
-        "32,000 ZTNA connection rules in FortiSASE",
-        "320 ZTNA rules per endpoint profile"
+        "3,200 private application objects across all tenants.",
+        "320,000 gateway connections per FortiGate.",
+        "32,000 ZTNA connection rules in FortiSASE.",
+        "320 ZTNA rules per endpoint profile."
       ],
       "correct_index": 2,
       "feedback": [
@@ -752,10 +752,10 @@
       "product": "Secure SD-WAN",
       "question": "A spoke uses route-metric priority. Which SLA values drive the BGP MED mapping?",
       "choices": [
-        "The member's priority-in-sla and priority-out-sla values",
-        "The BGP hold timer and keepalive multiplier",
-        "The overlay interface MTU and TCP MSS clamp",
-        "The hub's local preference and route-reflector cluster ID"
+        "The member's priority-in-sla and priority-out-sla values.",
+        "The BGP hold timer and keepalive multiplier.",
+        "The overlay interface MTU and TCP MSS clamp.",
+        "The hub's local preference and route-reflector cluster ID."
       ],
       "correct_index": 0,
       "feedback": [
@@ -770,10 +770,10 @@
       "product": "Secure SD-WAN",
       "question": "A design wants the BGP neighbor selected according to health-check preferable/unpreferable route-map behavior. Which route-metric mode matches that intent?",
       "choices": [
-        "priority",
-        "lowest-cost",
-        "preferable",
-        "round-robin"
+        "priority.",
+        "lowest-cost.",
+        "preferable.",
+        "round-robin."
       ],
       "correct_index": 2,
       "feedback": [
@@ -788,10 +788,10 @@
       "product": "Secure SD-WAN",
       "question": "Both hubs advertise the same spoke prefix, but the external router selects Hub-2 despite Hub-1 having a lower MED. What should be examined?",
       "choices": [
-        "The FortiAP radio channel plan and DFS state",
-        "The FortiNAC host registration VLAN",
-        "The external router's higher-precedence BGP attributes and policy",
-        "The FortiManager task monitor retention window"
+        "The FortiAP radio channel plan and DFS state.",
+        "The FortiNAC host registration VLAN within the selected policy scope.",
+        "The external router's higher-precedence BGP attributes and policy.",
+        "The FortiManager task monitor retention window before the next control-plane stage."
       ],
       "correct_index": 2,
       "feedback": [
@@ -806,10 +806,10 @@
       "product": "Secure SD-WAN",
       "question": "The spoke's health-check output shows a healthy overlay. What additional evidence is required to prove the intended MED reached the external network?",
       "choices": [
-        "The hub's advertised-routes output for the spoke prefix",
-        "The spoke's wireless station table",
-        "The FortiAnalyzer NTP synchronization status",
-        "The FortiPAM approval email delivery log"
+        "The hub's advertised-routes output for the spoke prefix.",
+        "The spoke's wireless station table for the same device and service.",
+        "The FortiAnalyzer NTP synchronization status before the next control-plane stage.",
+        "The FortiPAM approval email delivery log in this deployment."
       ],
       "correct_index": 0,
       "feedback": [
@@ -824,10 +824,10 @@
       "product": "Secure SD-WAN",
       "question": "The neighbor's member list omits the overlay that should carry the preferred path. What is the likely effect?",
       "choices": [
-        "The external router will infer the missing member from its AS path",
-        "The MED mapping cannot reflect the omitted member's SLA priority",
-        "The hub will automatically create a new iBGP neighbor for that member",
-        "The health-check will rewrite the spoke's route distinguisher"
+        "The external router will infer the missing member from its AS path.",
+        "The MED mapping cannot reflect the omitted member's SLA priority.",
+        "The hub will automatically create a new iBGP neighbor for that member.",
+        "The health-check will rewrite the spoke's route distinguisher for this same transaction."
       ],
       "correct_index": 1,
       "feedback": [
@@ -842,10 +842,10 @@
       "product": "Cross-product",
       "question": "FortiGate TCP-AO diagnostics show a valid authenticated peer, while BGP advertises no expected prefixes. Which investigation boundary is correct?",
       "choices": [
-        "Continue changing the TCP-AO key until prefixes appear",
-        "Treat the authenticated transport as proof of correct route policy",
-        "Disable BGP authentication and rebuild the neighbor from scratch",
-        "Move to BGP address-family, policy and route-selection verification"
+        "Continue changing the TCP-AO key until prefixes appear.",
+        "Treat the authenticated transport as proof of correct route policy.",
+        "Disable BGP authentication and rebuild the neighbor from scratch.",
+        "Move to BGP address-family, policy and route-selection verification."
       ],
       "correct_index": 3,
       "feedback": [
@@ -860,10 +860,10 @@
       "product": "Cross-product",
       "question": "A FortiNAC user passes RADIUS authentication, and a FortiSIEM certificate event is present. Which evidence should not be conflated?",
       "choices": [
-        "RADIUS identity acceptance versus FortiNAC network-access policy decision",
-        "Certificate expiry event versus Windows certificate store selection",
-        "FortiSIEM collector receipt versus correlation-rule execution",
-        "FortiNAC host role versus authentication configuration timer"
+        "RADIUS identity acceptance versus FortiNAC network-access policy decision.",
+        "Certificate expiry event versus Windows certificate store selection.",
+        "FortiSIEM collector receipt versus correlation-rule execution at the receiving system.",
+        "FortiNAC host role versus authentication configuration timer."
       ],
       "correct_index": 0,
       "feedback": [
@@ -878,10 +878,10 @@
       "product": "FortiGate",
       "question": "A key-chain entry exists on both BGP peers, but one peer's accept-lifetime expired yesterday. What is the likely result?",
       "choices": [
-        "The receiver may reject segments using that key despite the key still appearing in configuration",
-        "The receiver will accept the key until the BGP hold timer expires",
-        "The sender will automatically select a route-map with matching lifetime",
-        "The peer will keep the TCP session and only suppress IPv4 UPDATE messages"
+        "The receiver may reject segments using that key despite the key still appearing in configuration.",
+        "The receiver will accept the key until the BGP hold timer expires at the receiving system.",
+        "The sender will automatically select a route-map with matching lifetime within the selected policy scope.",
+        "The peer will keep the TCP session and only suppress IPv4 UPDATE messages for the same device and service."
       ],
       "correct_index": 0,
       "feedback": [
@@ -896,10 +896,10 @@
       "product": "FortiAnalyzer",
       "question": "After authenticated NTPv4 is working, which security property has SHA-256 keyed authentication added?",
       "choices": [
-        "Confidentiality of the time payload against passive packet capture",
-        "Encryption of all FortiAnalyzer log records before storage",
-        "Mutual authentication of every device sending logs to FortiAnalyzer",
-        "Integrity and origin authentication of the NTP time messages"
+        "Confidentiality of the time payload against passive packet capture.",
+        "Encryption of all FortiAnalyzer log records before storage.",
+        "Mutual authentication of every device sending logs to FortiAnalyzer.",
+        "Integrity and origin authentication of the NTP time messages."
       ],
       "correct_index": 3,
       "feedback": [
@@ -909,5 +909,309 @@
         "Correct: the shared key authenticates the time message and protects its integrity."
       ]
     }
-  ]
+  ],
+  "correct_choice_length_review": [
+    {
+      "id": 1,
+      "correct": 10,
+      "distractor_min": 11,
+      "distractor_max": 14
+    },
+    {
+      "id": 2,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 13
+    },
+    {
+      "id": 3,
+      "correct": 10,
+      "distractor_min": 10,
+      "distractor_max": 13
+    },
+    {
+      "id": 4,
+      "correct": 11,
+      "distractor_min": 10,
+      "distractor_max": 15
+    },
+    {
+      "id": 5,
+      "correct": 7,
+      "distractor_min": 8,
+      "distractor_max": 10
+    },
+    {
+      "id": 6,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 12
+    },
+    {
+      "id": 7,
+      "correct": 11,
+      "distractor_min": 11,
+      "distractor_max": 15
+    },
+    {
+      "id": 8,
+      "correct": 3,
+      "distractor_min": 3,
+      "distractor_max": 3
+    },
+    {
+      "id": 9,
+      "correct": 7,
+      "distractor_min": 8,
+      "distractor_max": 9
+    },
+    {
+      "id": 10,
+      "correct": 8,
+      "distractor_min": 8,
+      "distractor_max": 11
+    },
+    {
+      "id": 11,
+      "correct": 12,
+      "distractor_min": 11,
+      "distractor_max": 14
+    },
+    {
+      "id": 12,
+      "correct": 9,
+      "distractor_min": 10,
+      "distractor_max": 11
+    },
+    {
+      "id": 13,
+      "correct": 6,
+      "distractor_min": 8,
+      "distractor_max": 10
+    },
+    {
+      "id": 14,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 12
+    },
+    {
+      "id": 15,
+      "correct": 13,
+      "distractor_min": 14,
+      "distractor_max": 15
+    },
+    {
+      "id": 16,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 14
+    },
+    {
+      "id": 17,
+      "correct": 11,
+      "distractor_min": 11,
+      "distractor_max": 13
+    },
+    {
+      "id": 18,
+      "correct": 11,
+      "distractor_min": 10,
+      "distractor_max": 14
+    },
+    {
+      "id": 19,
+      "correct": 10,
+      "distractor_min": 12,
+      "distractor_max": 14
+    },
+    {
+      "id": 20,
+      "correct": 5,
+      "distractor_min": 4,
+      "distractor_max": 7
+    },
+    {
+      "id": 21,
+      "correct": 14,
+      "distractor_min": 13,
+      "distractor_max": 16
+    },
+    {
+      "id": 22,
+      "correct": 8,
+      "distractor_min": 7,
+      "distractor_max": 10
+    },
+    {
+      "id": 23,
+      "correct": 9,
+      "distractor_min": 8,
+      "distractor_max": 11
+    },
+    {
+      "id": 24,
+      "correct": 15,
+      "distractor_min": 14,
+      "distractor_max": 15
+    },
+    {
+      "id": 25,
+      "correct": 10,
+      "distractor_min": 10,
+      "distractor_max": 12
+    },
+    {
+      "id": 26,
+      "correct": 10,
+      "distractor_min": 11,
+      "distractor_max": 13
+    },
+    {
+      "id": 27,
+      "correct": 11,
+      "distractor_min": 10,
+      "distractor_max": 14
+    },
+    {
+      "id": 28,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 13
+    },
+    {
+      "id": 29,
+      "correct": 3,
+      "distractor_min": 3,
+      "distractor_max": 3
+    },
+    {
+      "id": 30,
+      "correct": 11,
+      "distractor_min": 10,
+      "distractor_max": 12
+    },
+    {
+      "id": 31,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 14
+    },
+    {
+      "id": 32,
+      "correct": 4,
+      "distractor_min": 5,
+      "distractor_max": 8
+    },
+    {
+      "id": 33,
+      "correct": 10,
+      "distractor_min": 9,
+      "distractor_max": 13
+    },
+    {
+      "id": 34,
+      "correct": 8,
+      "distractor_min": 8,
+      "distractor_max": 9
+    },
+    {
+      "id": 35,
+      "correct": 1,
+      "distractor_min": 1,
+      "distractor_max": 1
+    },
+    {
+      "id": 36,
+      "correct": 9,
+      "distractor_min": 8,
+      "distractor_max": 11
+    },
+    {
+      "id": 37,
+      "correct": 9,
+      "distractor_min": 9,
+      "distractor_max": 10
+    },
+    {
+      "id": 38,
+      "correct": 10,
+      "distractor_min": 10,
+      "distractor_max": 13
+    },
+    {
+      "id": 39,
+      "correct": 11,
+      "distractor_min": 11,
+      "distractor_max": 13
+    },
+    {
+      "id": 40,
+      "correct": 3,
+      "distractor_min": 8,
+      "distractor_max": 9
+    },
+    {
+      "id": 41,
+      "correct": 6,
+      "distractor_min": 5,
+      "distractor_max": 7
+    },
+    {
+      "id": 42,
+      "correct": 6,
+      "distractor_min": 7,
+      "distractor_max": 8
+    },
+    {
+      "id": 43,
+      "correct": 1,
+      "distractor_min": 1,
+      "distractor_max": 1
+    },
+    {
+      "id": 44,
+      "correct": 8,
+      "distractor_min": 8,
+      "distractor_max": 11
+    },
+    {
+      "id": 45,
+      "correct": 8,
+      "distractor_min": 9,
+      "distractor_max": 11
+    },
+    {
+      "id": 46,
+      "correct": 10,
+      "distractor_min": 12,
+      "distractor_max": 12
+    },
+    {
+      "id": 47,
+      "correct": 8,
+      "distractor_min": 8,
+      "distractor_max": 10
+    },
+    {
+      "id": 48,
+      "correct": 8,
+      "distractor_min": 7,
+      "distractor_max": 10
+    },
+    {
+      "id": 49,
+      "correct": 15,
+      "distractor_min": 15,
+      "distractor_max": 19
+    },
+    {
+      "id": 50,
+      "correct": 9,
+      "distractor_min": 8,
+      "distractor_max": 9
+    }
+  ],
+  "average_correct_words": 8.78,
+  "average_distractor_words": 9.899999999999999
 }
