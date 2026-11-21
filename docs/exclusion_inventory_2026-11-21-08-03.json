@@ -10,7 +10,7 @@
   },
   "discovery_before_topic_selection": true,
   "inventory_exists_before_topic_selection": true,
-  "topic_selection_started": false,
+  "topic_selection_started": true,
   "generation_started": false,
   "provenance": {
     "previous_inventory_path": "docs/exclusion_inventory_2026-11-20-09-21.json",
@@ -5836,5 +5836,97 @@
       }
     }
   ],
-  "missing_required_field_records": 0
+  "missing_required_field_records": 0,
+  "selected_candidate_count": 12,
+  "selected_candidate_products": [
+    "FortiGate",
+    "FortiManager",
+    "FortiAnalyzer",
+    "FortiSwitch",
+    "FortiAP/Wireless",
+    "FortiNAC",
+    "FortiNAC-F",
+    "FortiAuthenticator",
+    "FortiPAM",
+    "FortiSIEM",
+    "FortiSASE",
+    "Secure SD-WAN"
+  ],
+  "selected_subjects": [
+    "Enhanced multicast session identity for wildcard-VLAN virtual wire pairs",
+    "Authenticated NTPv4 time synchronization with SHA-256 keys",
+    "Layer-3 geo-redundant active-active FortiAnalyzer HA",
+    "DCBX negotiation, ETS priority groups, and priority-based flow control",
+    "Dynamic captive-portal redirect URLs from RADIUS Access-Accept",
+    "RADIUS identity normalization and LDAP domain matching for user-to-policy resolution",
+    "Local RADIUS EAP-TLS certificate revocation is OCSP-only",
+    "TACACS+ client groups as reusable policy targets and REST-managed objects",
+    "Reusable Guest Instruction Profiles attached to secrets",
+    "Dynamic IP watchlists populated by username-to-IP lookup",
+    "Source IP anchoring for user/group- and country-specific egress NAT",
+    "Session-affine SD-WAN load balancing using source-IP and source-destination-IP hash modes"
+  ],
+  "selected_candidate_uniqueness_checks": [
+    {
+      "product": "FortiGate",
+      "subject": "Enhanced multicast session identity for wildcard-VLAN virtual wire pairs",
+      "assessment": "No prior 30-day lesson teaches VWP multicast session-key composition; prior multicast lessons cover TTL, PIM/BSR, and shapers, not VLAN-aware session identity."
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Authenticated NTPv4 time synchronization with SHA-256 keys",
+      "assessment": "No previous 30-day FortiManager lesson covers NTP authentication or time-source integrity; prior topics cover device workflows, templates, and control-plane features."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "subject": "Layer-3 geo-redundant active-active FortiAnalyzer HA",
+      "assessment": "Prior FortiAnalyzer coverage includes active-passive Fabric Supervisor HA; this lesson is a distinct active-active data-plane/log-ingestion architecture across Layer 3 sites."
+    },
+    {
+      "product": "FortiSwitch",
+      "subject": "DCBX negotiation, ETS priority groups, and priority-based flow control",
+      "assessment": "No prior 30-day FortiSwitch lesson covers DCBX, ETS, PFC, or lossless Ethernet; previous topics cover MACsec, STP, PTP, mirroring, and PoE."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "Dynamic captive-portal redirect URLs from RADIUS Access-Accept",
+      "assessment": "No previous 30-day FortiAP lesson covers RADIUS-supplied dynamic portal URLs; prior portal content concerns other captive-portal controls and does not teach attribute-27 redirect selection."
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "RADIUS identity normalization and LDAP domain matching for user-to-policy resolution",
+      "assessment": "Prior FortiNAC lessons cover RADIUS event export, dashboards, role precedence and policy order; none covers username canonicalization, EAP identity privacy, or exact LDAP domain matching."
+    },
+    {
+      "product": "FortiNAC-F",
+      "subject": "Local RADIUS EAP-TLS certificate revocation is OCSP-only",
+      "assessment": "No previous 30-day FortiNAC-F lesson covers local RADIUS certificate revocation. FortiAuthenticator CRL handling is a different product workflow and is not reused."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "subject": "TACACS+ client groups as reusable policy targets and REST-managed objects",
+      "assessment": "No previous 30-day FortiAuthenticator lesson covers TACACS+ client-group abstraction or its REST associations; prior lessons cover TACACS authorization and HA/licensing."
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Reusable Guest Instruction Profiles attached to secrets",
+      "assessment": "No previous 30-day FortiPAM lesson covers guest instruction profiles or resource reuse; prior PAM lessons cover gateways, RDP, backups and JIT."
+    },
+    {
+      "product": "FortiSIEM",
+      "subject": "Dynamic IP watchlists populated by username-to-IP lookup",
+      "assessment": "No previous 30-day FortiSIEM lesson covers dynamic watchlist enrichment or user-to-IP mapping; prior lessons cover investigation graphs, ML workbench and query functions."
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Source IP anchoring for user/group- and country-specific egress NAT",
+      "assessment": "No previous 30-day FortiSASE lesson covers source IP anchoring; prior topics cover DNS, tunnel readiness, IPAM control-plane subnet and DEM."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "subject": "Session-affine SD-WAN load balancing using source-IP and source-destination-IP hash modes",
+      "assessment": "Prior SD-WAN lessons cover underlay-bandwidth steering, quota steering, per-packet IPsec aggregate, SLA probe classes and ADVPN; this lesson isolates source-identity hash affinity rather than bandwidth measurement or quota logic."
+    }
+  ],
+  "selection_timestamp_local": "2026-11-21T08:07:00-08:00"
 }
