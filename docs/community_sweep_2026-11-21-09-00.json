@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-21T09:00:48-08:00",
+  "window": "2026-10-22 through 2026-11-21",
+  "method": "Product-area and product-specific Fortinet Community/KB/TAC searches were run for all twelve mandatory targets. Recent means published or materially updated in the rolling 30-day window; older useful cases are explicitly labeled historical and are not represented as recent.",
+  "targets": [
+    {
+      "product": "FortiGate",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-10-29",
+          "title": "Websites not loading with Deep Inspection - 400 Bad Request",
+          "url": "https://community.fortinet.com/support-forum-92/websites-not-loading-with-deep-inspection-400-bad-request-230973/index2.html",
+          "relevance": "Directly supports the proxy-mode strict-web-check and ALPN lesson. Staff workaround on Oct 31: disable strict-web-check; if HTTP/2 sites still fail, set supported-alpn http1-1; flow mode unaffected in the reported case.",
+          "selected_scenario": true
+        }
+      ]
+    },
+    {
+      "product": "FortiManager",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-11-03",
+          "title": "Custom FortiManager admin can't push switch config",
+          "url": "https://community.fortinet.com/support-forum-92/custom-fortiminager-admin-can-t-push-switch-config-231062",
+          "relevance": "Recent role/authorization troubleshooting scenario. Thread also exposed dmworker crashes and a RADIUS/TACACS clarification; no confirmed single root cause, so it is used as a diagnostic boundary, not proof that a new profile permission caused the failure.",
+          "selected_scenario": true
+        }
+      ]
+    },
+    {
+      "product": "FortiAnalyzer",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-10-05",
+          "title": "Devices show down and Last Log time stale for 10-15 minutes after reboot",
+          "url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+          "relevance": "Useful but outside the 30-day window. Kept as historical diagnostic context for distinguishing GUI freshness lag from missing FAC event ingestion.",
+          "selected_scenario": false,
+          "age_status": "outside_30_days"
+        }
+      ]
+    },
+    {
+      "product": "FortiSwitch",
+      "searched": true,
+      "recent_findings": [],
+      "disposition": "No directly matched recent FortiSwitch Community technical tip was verified for the selected DNS-cache unit-change mechanism. The primary lesson is documentation-driven; no unrelated post was promoted as a scenario."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-10-12",
+          "last_material_activity": "2026-11-18",
+          "title": "FortiAP 231K remaining offline when managed by a FortiGate",
+          "url": "https://community.fortinet.com/fortiap-5/fortiap-231k-remaining-offline-when-managed-by-a-fortigate-230498",
+          "relevance": "The page was materially updated Nov 18 and includes a current trace showing SULKING/DTLS_SETUP and certificate error 19 due to missing self-signed CA certificates. Used for the control-channel DTLS trust scenario.",
+          "selected_scenario": true
+        }
+      ]
+    },
+    {
+      "product": "FortiNAC",
+      "searched": true,
+      "recent_findings": [],
+      "historical_findings": [
+        {
+          "date": "2024-02-19",
+          "title": "Create and use a keytab file to join FortiNAC in the domain",
+          "url": "https://community.fortinet.com/fortinac-f-57/technical-tip-create-and-use-a-keytab-file-to-join-fortinac-in-the-domain-159332",
+          "relevance": "Historical supporting context only; clarifies keytab/domain-join behavior, not a recent Kerberos login incident."
+        }
+      ],
+      "disposition": "No directly matched recent FortiNAC (legacy CA/Manager) Kerberos scenario was verified."
+    },
+    {
+      "product": "FortiNAC-F",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-11-20",
+          "title": "LDAP directory Validate Credentials fails when the domain controller requires LDAP signing",
+          "url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-ldap-directory-validate-credentials-fails-for-all-accounts-when-the-domain-controller-requires-ldap-signing-231418",
+          "relevance": "Very recent and directly used. TCP/389 simple bind receives result code 8 / Strong(er) authentication required when AD requires signing; LDAPS or STARTTLS is the secure remediation.",
+          "selected_scenario": true
+        },
+        {
+          "date": "2026-10-26",
+          "title": "Upgrading FortiNAC-F CAs in an N+1 Failover Group when primaries are missing from Manager Server List",
+          "url": "https://community.fortinet.com/fortinac-f-57/upgrading-fortinac-f-cas-in-an-n-1-failover-group-when-primaries-are-missing-from-the-manager-server-list-230854",
+          "relevance": "Recent secondary discovery finding; retained for future uniqueness-aware lesson selection and not promoted to today's primary lesson.",
+          "selected_scenario": false
+        }
+      ]
+    },
+    {
+      "product": "FortiAuthenticator",
+      "searched": true,
+      "recent_findings": [
+        {
+          "date": "2026-11-16",
+          "title": "HTTP 500 error during OAuth authorization after upgrading to FortiAuthenticator 6.6.10",
+          "url": "https://community.fortinet.com/fortiauthenticator-8/http-500-error-during-oauth-authorization-after-upgrading-fortiauthenticator-to-version-6-6-10-231281",
+          "relevance": "Directly used. Non-imported remote LDAP user triggers RemoteLdapSessionUser.fac_groups AttributeError at /api/v1/oauth/authorize/; fixed in 6.6.12 and 8.0.5.",
+          "selected_scenario": true
+        }
+      ]
+    },
+    {
+      "product": "FortiPAM",
+      "searched": true,
+      "recent_findings": [],
+      "historical_findings": [
+        {
+          "date": "2026-03-11",
+          "title": "Connection error when using FortiPAM native launchers",
+          "url": "https://community.fortinet.com/fortipam-52/technical-tip-a-connection-error-that-occurs-when-using-the-fortipam-native-launchers-225049",
+          "relevance": "Historical diagnostic boundary: native launcher TLS trust-store failure is separate from process matching."
+        }
+      ],
+      "disposition": "No directly matched recent process-matcher scenario was verified."
+    },
+    {
+      "product": "FortiSIEM",
+      "searched": true,
+      "recent_findings": [],
+      "historical_findings": [
+        {
+          "date": "2026-05-26",
+          "title": "GUI displays 504 Gateway timeout during large queries",
+          "url": "https://community.fortinet.com/fortisiem-34/technical-tip-fortisiem-gui-displays-504-gateway-timeout-during-large-queries-227742",
+          "relevance": "Historical query-capacity scenario; not used as a Rule Tags scenario."
+        }
+      ],
+      "disposition": "No directly matched recent Rule Tags scenario was verified."
+    },
+    {
+      "product": "FortiSASE",
+      "searched": true,
+      "recent_findings": [],
+      "historical_findings": [
+        {
+          "date": "2026-09-18",
+          "title": "SPA BGP flapping due to Router ID overlap with tunnel IP",
+          "url": "https://community.fortinet.com/fortisase-58/troubleshooting-tip-fortisase-spa-bgp-flapping-due-to-router-id-overlap-with-the-tunnel-ip-230003",
+          "relevance": "Historical BGP-per-overlay routing scenario, outside 30 days; not used as Branch On-ramp primary evidence."
+        },
+        {
+          "date": "2026-06-29",
+          "title": "FortiSASE VeloCloud/Arista Branch On-ramp configuration",
+          "url": "https://community.fortinet.com/fortisase-58/technical-tip-fortisase-velocloud-arista-branch-on-ramp-bor-configuration-228592",
+          "relevance": "Historical interworking scenario; useful only for matching IPsec parameters."
+        }
+      ],
+      "disposition": "No directly matched recent Branch On-ramp scenario was verified."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "searched": true,
+      "recent_findings": [],
+      "disposition": "No directly matched recent Community scenario was verified for ToS-based packet duplication/de-duplication. The lesson is driven by the FortiOS 8.0 SD-WAN New Features Guide."
+    }
+  ]
+}
