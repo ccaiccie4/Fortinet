@@ -108,17 +108,17 @@
     },
     {
       "product": "FortiNAC-F",
-      "lesson_subject": "FortiNAC-F N+1 failover groups: shared standby promotion, CA state, and upgrade sequencing",
-      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/356252/ca-management; https://docs.fortinet.com/document/fortinac-f/7.6.0/n-1-failover-group-and-load-balancing/669333/key-configuration-on-fortinac-m; https://docs.fortinet.com/document/fortinac-f/7.6.0/n-1-failover-group-and-load-balancing/465756/validate",
-      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/upgrading-fortinac-f-cas-in-an-n-1-failover-group-when-primaries-are-missing-from-the-manager-server-list-230854",
-      "scenario_age_status": "Recent: published Oct 26, 2026",
-      "feature_mechanism_fingerprint": "FortiNAC Manager groups multiple Primary CAs behind one Secondary CA; each secondary can have up to five primaries; Secondary is Standby until a primary fails, then Promoted; backup IP can be shared, independent, or None/load-balancer-based.",
-      "workflow_transaction_fingerprint": "Manager registers Secondary first -> enable N+1 and set Secondary role -> add matching-firmware Primaries and assign Secondary CA -> failure detection promotes Secondary for one primary -> recovered Primary must be manually resumed; Manager coordinates CA inventory/synchronization.",
-      "failure_class": "Failover/upgrade orchestration mismatch: Manager Server List omits primaries or version mismatch prevents promotion/synchronization.",
-      "evidence_pattern": "CA Management should show Primaries Running and Secondary Standby; after failover Secondary Promoted; community upgrade case showed only Secondary in Server List, with Known Issue 1072240 and identical admin credentials requirement.",
-      "remediation_path": "Check same firmware on primary/secondary, same admin user/password on each CA, complete allowed serial-number list, and healthy sync; upgrade primaries individually from each primary GUI, then Manager last when Manager push cannot target primaries; never upgrade standby secondary independently.",
-      "question_fingerprint": "Choose the safe upgrade order when an N+1 group is healthy in CA Management but primary nodes are missing from Manager Server List.",
-      "diagram_topology_layout_fingerprint": "FortiNAC Manager above N primary CAs and one shared secondary; show Standby -> Promoted failover and manual Resume Control."
+      "lesson_subject": "FortiNAC-F LDAP signing enforcement: why TCP/389 simple binds fail and how LDAPS or STARTTLS restores secure directory access",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/724520/configuration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-ldap-directory-validate-credentials-fails-for-all-accounts-when-the-domain-controller-requires-ldap-signing-231418",
+      "scenario_age_status": "Very recent: published Nov 20, 2026 (one day before run)",
+      "feature_mechanism_fingerprint": "FortiNAC-F directory connection supports Security Protocol None, SSL, and STARTTLS; TCP/389 simple bind without TLS is rejected by AD domain controllers enforcing LDAP signing; TLS-protected simple binds are accepted while signing enforcement remains enabled.",
+      "workflow_transaction_fingerprint": "FortiNAC-F opens LDAP TCP session -> sends simple bind over cleartext 389 or upgrades with StartTLS/starts LDAPS 636 -> DC evaluates LDAP signing/TLS requirement -> bind and credential validation -> directory synchronization and user/host mapping.",
+      "failure_class": "Directory bind security-policy mismatch: Active Directory rejects cleartext simple bind with Strong(er) authentication required when LDAP signing is required.",
+      "evidence_pattern": "Community case reports Validate Credentials failing for every account; `openssl s_client -connect dc01.example.local:636 -showcerts` validates LDAPS certificate presentation; FortiNAC directory Security Protocol must be SSL/STARTTLS, Name must match certificate FQDN, Connect by Name should be enabled; Validate Credentials and subsequent directory sync succeed.",
+      "remediation_path": "Keep AD LDAP signing requirement enabled; configure FortiNAC-F for LDAPS TCP/636 or STARTTLS TCP/389; install issuing CA in FortiNAC keystore under `/bsc/campusMgr/`; use the directory FQDN and Connect by Name; validate credentials and directory synchronization; avoid weakening domain-controller signing policy except as a temporary approved workaround.",
+      "question_fingerprint": "Choose the secure fix for FortiNAC-F simple-bind rejection by an AD domain controller requiring LDAP signing, distinguishing TCP/389 cleartext from STARTTLS and LDAPS.",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F LDAP client -> TCP/389 cleartext rejected branch vs STARTTLS upgrade/TCP/636 LDAPS trusted TLS branch -> Active Directory DC -> credential validation/synchronization."
     },
     {
       "product": "FortiAuthenticator",
@@ -196,6 +196,15 @@
     "FortiPAM Multiple Target Address rejected because it was taught on 2026-11-12.",
     "FortiAuthenticator CMPv2 retained as a discovery candidate but replaced with OAuth IAM/OIDC identity-source behavior because a current 6.6.10 OAuth failure was found in Community.",
     "FortiGate DHCP templates replaced with a recent proxy-mode deep-inspection/ALPN case supported by Fortinet proxy SSL-inspection and web-proxy documentation.",
-    "FortiSwitch DNS cache limit is deliberately separated from the recent DoT trust-validation lesson: the subject is the 8.0 change from entry count to KB memory budget, not transport encryption."
+    "FortiSwitch DNS cache limit is deliberately separated from the recent DoT trust-validation lesson: the subject is the 8.0 change from entry count to KB memory budget, not transport encryption.",
+    "FortiNAC-F N+1 failover was retained as a high-value Community sweep finding but not selected as the primary lesson; the Nov 20 LDAP-signing failure offered a more recent, directly actionable scenario with matching official LDAP connection settings."
+  ],
+  "additional_recent_community_findings": [
+    {
+      "product": "FortiNAC-F",
+      "url": "https://community.fortinet.com/fortinac-f-57/upgrading-fortinac-f-cas-in-an-n-1-failover-group-when-primaries-are-missing-from-the-manager-server-list-230854",
+      "date": "2026-10-26",
+      "finding": "N+1 upgrade sequencing and missing primary CA entries in Manager Server List; retained as secondary sweep finding."
+    }
   ]
 }
