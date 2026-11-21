@@ -108,13 +108,13 @@
     {
       "product": "FortiSwitch",
       "slug": "FortiSwitch",
-      "title": "IP conflict detection ARP paths",
+      "title": "FortiSwitch signed configuration backup verification",
       "nodes": [
-        "FortiSwitch\nsystem interface IP",
-        "Passive ARP\nremote claim",
-        "Active GARP\nboot / link-up / IP change",
-        "Conflict detector",
-        "System log\nSNMP trap"
+        "FortiSwitch A\ncreates backup",
+        "Device signature\nprovenance + integrity",
+        "Backup file\nprotected copy",
+        "Restore on same\nFortiSwitch A",
+        "Verification result\naccept / warn / reject"
       ],
       "edges": [
         [
@@ -122,12 +122,8 @@
           1
         ],
         [
-          0,
-          2
-        ],
-        [
           1,
-          3
+          2
         ],
         [
           2,
@@ -139,7 +135,7 @@
         ]
       ],
       "notes": [
-        "Scope: claims matching switch system-interface IPs; not every host-to-host duplicate"
+        "Foreign-device or modified file is unverified; log mode accepts with warning, reject mode blocks restore"
       ]
     },
     {
