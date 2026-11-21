@@ -245,7 +245,7 @@
     "quiz_validation": "PASS",
     "fortinet_documentation_direct_open": "PARTIAL — 12 of 12 direct page opens returned HTTP 403; indexed official content was available",
     "community_scenarios": "PARTIAL — 12 product areas searched; no exact selected-mechanism scenario within strict 30-day window; near-window and older examples are labeled",
-    "github_pages": "UNVERIFIED — web verifier reported both public URLs inaccessible; direct HTTP check failed at DNS resolution for ccaiccie4.github.io",
+    "github_pages": "UNVERIFIED — two post-publication web-open attempts on the report URL and index URL returned inaccessible/internal-error results; a direct HTTP check failed at DNS resolution for ccaiccie4.github.io. Repository publication/read-back remains confirmed.",
     "email": "NOT ATTEMPTED — disabled",
     "scheduler": "UNCHANGED — no pause, deletion, reschedule or automation-setting change"
   },
@@ -258,5 +258,23 @@
     "Retry Pages verification when DNS/public access is available; repository files are confirmed on GitHub.",
     "If Pages remains unavailable, use the GitHub repository report link and check Pages deployment settings outside this run.",
     "Email retry is not applicable while email remains disabled."
+  ],
+  "github_pages_attempts": [
+    {
+      "attempt": 1,
+      "method": "web open",
+      "result": "report and index URLs inaccessible"
+    },
+    {
+      "attempt": 2,
+      "method": "web open after final report/index updates",
+      "report_result": "inaccessible",
+      "index_result": "inaccessible"
+    },
+    {
+      "attempt": 3,
+      "method": "direct HTTP check",
+      "result": "temporary DNS name-resolution failure before request"
+    }
   ]
 }
