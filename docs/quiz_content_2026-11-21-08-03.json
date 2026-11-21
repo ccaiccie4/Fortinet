@@ -1,0 +1,1106 @@
+{
+  "generated_at_local": "2026-11-21T08:03:21-08:00",
+  "report_path": "docs/Fortinet_Daily_Study_Quiz_2026-11-21-08-03.html",
+  "questions": [
+    [
+      "A VWP carries the same multicast source and group on VLAN 50 and VLAN 60. What prevents the sessions from aliasing?",
+      2,
+      [
+        [
+          "Use one shared multicast session and add both VLANs as egress interfaces",
+          "A shared session loses the ingress VLAN context and cannot isolate policy state."
+        ],
+        [
+          "Change the multicast group address on the second VLAN",
+          "That changes the application group rather than fixing session identity."
+        ],
+        [
+          "Include ingress interface and VLAN ID in the multicast session key",
+          "The enhanced key separates otherwise identical multicast tuples by ingress context."
+        ],
+        [
+          "Disable multicast offload on every VWP member",
+          "Offload changes visibility and performance, not the session-key design."
+        ]
+      ]
+    ],
+    [
+      "Two mcast-session rows show the same source/group but different indev and vlanid values. What does this establish?",
+      1,
+      [
+        [
+          "It proves every receiver has joined the multicast group",
+          "Receiver membership needs IGMP or application-side evidence."
+        ],
+        [
+          "It shows FortiOS is maintaining distinct VLAN-scoped sessions",
+          "Different session IDs and VLAN/interface fields demonstrate separate session identity."
+        ],
+        [
+          "It proves the upstream switch is forwarding all multicast frames",
+          "The FortiGate table cannot prove forwarding beyond its own interfaces."
+        ],
+        [
+          "It confirms the multicast policy is accepting every packet",
+          "Session presence alone does not establish policy outcome or packet delivery."
+        ]
+      ]
+    ],
+    [
+      "VLAN 60 multicast is missing while VLAN 50 works. Which check should come first?",
+      3,
+      [
+        [
+          "Replace the multicast group with a new address",
+          "Changing the group hides the VLAN-specific cause instead of isolating it."
+        ],
+        [
+          "Disable all VLAN filtering on the switch fabric",
+          "That broadens the Layer 2 domain and can create a larger fault."
+        ],
+        [
+          "Enable PIM on every VWP interface",
+          "A transparent VWP session issue does not automatically require multicast routing."
+        ],
+        [
+          "Verify VWP wildcard-VLAN state, allowed VLANs and multicast policy interfaces",
+          "The VLAN tag must be admitted and match the intended policy path."
+        ]
+      ]
+    ],
+    [
+      "A CPU-side capture is empty but the multicast session shows NPU offload. What is the best interpretation?",
+      0,
+      [
+        [
+          "The capture alone does not prove a drop; correlate NPU/session counters and a correct-interface capture",
+          "Offloaded traffic may not appear as expected in a CPU-side capture."
+        ],
+        [
+          "The session table must be stale and can be ignored",
+          "The session fields are useful evidence even when packet capture is limited."
+        ],
+        [
+          "The multicast receiver must be offline",
+          "Receiver state cannot be inferred from one local capture."
+        ],
+        [
+          "The VLAN tag is being stripped by the VWP",
+          "A missing capture does not identify VLAN-tag handling as the cause."
+        ]
+      ]
+    ],
+    [
+      "Chrony responds to FortiManager but NTP authentication fails. What should be compared first?",
+      2,
+      [
+        [
+          "DNS search suffix and the FortiManager hostname",
+          "Name resolution is not the primary issue if the selected server is reachable."
+        ],
+        [
+          "The management interface MTU and TCP MSS",
+          "NTP uses UDP and this does not validate the authentication key."
+        ],
+        [
+          "Key ID, SHA-256 algorithm, key encoding and exact shared key",
+          "The authenticated NTP contract requires all four values to match."
+        ],
+        [
+          "The ADOM database version and policy package checksum",
+          "Those are unrelated to the NTP client authentication exchange."
+        ]
+      ]
+    ],
+    [
+      "What does diagnose system ntp status provide?",
+      1,
+      [
+        [
+          "Proof that all FortiGate devices have synchronized to FortiManager",
+          "It reports FortiManager's NTP server state, not downstream device time."
+        ],
+        [
+          "NTP server information used to assess synchronization",
+          "It is the documented FortiManager verification command for NTP status."
+        ],
+        [
+          "A packet-level trace of every UDP/123 request and response",
+          "A status display is not a packet capture."
+        ],
+        [
+          "A report of all Chrony key-file entries on the Linux server",
+          "The server key file must be checked on the Chrony host."
+        ]
+      ]
+    ],
+    [
+      "Why can the same visible key string fail when one side uses HEX and the other ASCII?",
+      0,
+      [
+        [
+          "The key bytes differ because the formats decode the string differently",
+          "The encoding is part of the authentication contract, not a cosmetic label."
+        ],
+        [
+          "SHA-256 automatically changes its digest length for ASCII keys",
+          "SHA-256 output length is fixed; the key input is what differs."
+        ],
+        [
+          "NTP key IDs are derived from the DNS name",
+          "The key ID is configured and must match on both systems."
+        ],
+        [
+          "Chrony accepts only hexadecimal keys for all NTP versions",
+          "Fortinet documents both hexadecimal and ASCII key examples."
+        ]
+      ]
+    ],
+    [
+      "Why protect FortiManager's time source with authentication?",
+      3,
+      [
+        [
+          "It encrypts all FortiManager management sessions",
+          "NTP authentication does not replace HTTPS or SSH protection."
+        ],
+        [
+          "It synchronizes every FortiGate policy package automatically",
+          "Time sync does not install or synchronize configuration."
+        ],
+        [
+          "It makes the NTP server authoritative for all network devices",
+          "The setting configures FortiManager's own NTP client."
+        ],
+        [
+          "It protects event ordering, scheduled operations and time-sensitive checks",
+          "Accurate, trusted time improves correlation and operational correctness."
+        ]
+      ]
+    ],
+    [
+      "Two FortiAnalyzer data centers are connected only by routed WAN. Which HA mode fits the documented geo design?",
+      1,
+      [
+        [
+          "Active-passive with a shared Layer-2 VIP stretched across sites",
+          "The documented routed geo design does not require a Layer-2 VIP."
+        ],
+        [
+          "Active-active with unicast heartbeat and no cross-site VIP",
+          "The active-active geo design supports Layer-3 peer connectivity."
+        ],
+        [
+          "Standalone nodes with manual daily log copy",
+          "Manual copying is not the documented HA architecture."
+        ],
+        [
+          "Active-passive with multicast heartbeat over the WAN",
+          "The documented design uses unicast heartbeat for geo HA."
+        ]
+      ]
+    ],
+    [
+      "Both FortiAnalyzer nodes have Initial Sync enabled during first cluster formation and the cluster stalls. What is the documented correction?",
+      0,
+      [
+        [
+          "Disable Initial Sync on at least one node during initial formation",
+          "The primary is elected from nodes with Initial Sync disabled."
+        ],
+        [
+          "Enable a cluster VIP on both nodes before forming the group",
+          "A VIP is optional and requires Layer-2 connectivity."
+        ],
+        [
+          "Change the group name on the secondary to force election",
+          "The group identity must match across cluster members."
+        ],
+        [
+          "Disable log forwarding until the cluster becomes active",
+          "That does not resolve the initial synchronization election condition."
+        ]
+      ]
+    ],
+    [
+      "Which network protocol must be permitted between routed FortiAnalyzer geo-HA members?",
+      2,
+      [
+        [
+          "UDP/123 for NTP",
+          "NTP may be required operationally but it is not the documented VRRP requirement."
+        ],
+        [
+          "TCP/443 for the GUI",
+          "GUI access does not carry the VRRP heartbeat."
+        ],
+        [
+          "IP protocol 112 for VRRP",
+          "Fortinet specifies that VRRP must pass between the members."
+        ],
+        [
+          "UDP/514 for syslog",
+          "Syslog transport is separate from the HA peer requirement."
+        ]
+      ]
+    ],
+    [
+      "What should a FortiGate use when both geo-HA FortiAnalyzer members are reachable?",
+      3,
+      [
+        [
+          "Only the secondary address with fallback disabled",
+          "That prevents the documented primary/alternate recovery behavior."
+        ],
+        [
+          "A VIP that spans both data centers even without Layer 2",
+          "The guide says a VIP requires Layer-2 connectivity."
+        ],
+        [
+          "A single random peer chosen by DNS round robin",
+          "This is not the documented FortiGate alternate-server configuration."
+        ],
+        [
+          "Primary and alternate FortiAnalyzer addresses with fallback enabled",
+          "This gives the FortiGate an explicit alternate and return-to-primary behavior."
+        ]
+      ]
+    ],
+    [
+      "Which FortiSwitchOS models are documented for DCBX, ETS and PFC in 8.0.0?",
+      0,
+      [
+        [
+          "FS-T1024E, FS-T1024F-FPOE, FS-2048F, FS-3032E and FS-3032G",
+          "These are the five models listed in the 8.0.0 release notes."
+        ],
+        [
+          "Every FortiSwitch model with a 10-Gigabit uplink",
+          "The feature has an explicit model list and is not universal."
+        ],
+        [
+          "Only the 100-series desktop switches",
+          "The release notes list high-density data-center models."
+        ],
+        [
+          "Any switch that supports LLDP-MED",
+          "LLDP support alone does not imply DCBX/ETS/PFC support."
+        ]
+      ]
+    ],
+    [
+      "Which LLDP DCBX TLVs are involved in the FortiSwitch 8.0 feature?",
+      1,
+      [
+        [
+          "VLAN Name, Port Description, and Management Address only",
+          "Those are LLDP information elements, not the four DCBX TLVs."
+        ],
+        [
+          "ETS configuration, ETS recommendation, PFC configuration and application priority",
+          "These four TLVs exchange the relevant lossless-Ethernet behavior."
+        ],
+        [
+          "STP root, LACP system ID, and MACsec cipher suite",
+          "Those belong to other control-plane features."
+        ],
+        [
+          "DHCP relay, ARP inspection, and IGMP snooping",
+          "Those do not negotiate DCBX priority behavior."
+        ]
+      ]
+    ],
+    [
+      "What is a key ETS configuration constraint?",
+      2,
+      [
+        [
+          "Every queue must have strict priority and unlimited bandwidth",
+          "ETS supports weighted groups as well as strict-priority groups."
+        ],
+        [
+          "PFC must be enabled on every priority group",
+          "A design needs both PFC-enabled and non-PFC/lossy classes."
+        ],
+        [
+          "The configured ETS priority-group rates must total 100 percent",
+          "The scheduler allocates guaranteed bandwidth across the groups."
+        ],
+        [
+          "The same CoS queue must belong to several priority groups",
+          "Each queue is assigned to a single priority group."
+        ]
+      ]
+    ],
+    [
+      "What trust model is required on a DCBX interface?",
+      3,
+      [
+        [
+          "Trust IP DSCP and Dot1p simultaneously for the same interface",
+          "Fortinet says the DCBX interface does not trust both at once."
+        ],
+        [
+          "Trust only the physical port speed and ignore CoS",
+          "DCBX relies on priority classification, not just link speed."
+        ],
+        [
+          "Use a static route map to classify RoCE packets",
+          "Routing policy does not replace Layer 2 CoS mapping."
+        ],
+        [
+          "Use the 802.1p map profile and align both DCBX peers",
+          "Fortinet documents Dot1p trust and DCBX on both ends."
+        ]
+      ]
+    ],
+    [
+      "Where does the dynamic captive-portal URL come from?",
+      0,
+      [
+        [
+          "The Fortinet-Captive-Portal-URL vendor attribute in RADIUS Access-Accept",
+          "The controller reads attribute 27 from the authorization response."
+        ],
+        [
+          "A DHCP option returned before the client associates",
+          "The documented mechanism is a RADIUS Access-Accept attribute."
+        ],
+        [
+          "A CoA Disconnect-Request sent after portal authentication",
+          "CoA is a separate session-control transaction."
+        ],
+        [
+          "A static URL stored in the AP's radio profile",
+          "The feature is intended to use a per-session returned URL."
+        ]
+      ]
+    ],
+    [
+      "Which VAP configuration is required by the documented dynamic redirect feature?",
+      2,
+      [
+        [
+          "Bridge mode with portal-type set to captive-portal-mac",
+          "Fortinet documents a tunnel-mode captive portal VAP."
+        ],
+        [
+          "Tunnel mode with portal-type set to auth-mac and dynamic redirect enabled",
+          "Those are the required VAP conditions in the configuration guide."
+        ],
+        [
+          "Tunnel mode with portal disabled and a static URL",
+          "The captive portal must be enabled for this flow."
+        ],
+        [
+          "Mesh mode with WPA3-Enterprise and RADIUS CoA",
+          "Mesh and WPA mode do not define this redirect feature."
+        ]
+      ]
+    ],
+    [
+      "The browser always receives the same portal URL. What evidence is most useful?",
+      1,
+      [
+        [
+          "A channel utilization chart from the serving AP",
+          "RF utilization does not explain the authorization response URL."
+        ],
+        [
+          "The Access-Accept contents for two users and the VAP dynamic-redirect setting",
+          "This compares the policy-supplied URL with the controller feature state."
+        ],
+        [
+          "The DHCP lease duration and default gateway metric",
+          "Those do not contain the RADIUS portal URL."
+        ],
+        [
+          "The FortiAP firmware image checksum only",
+          "Firmware integrity does not show whether attribute 27 was returned."
+        ]
+      ]
+    ],
+    [
+      "Why is the returned URL not equivalent to a CoA message?",
+      3,
+      [
+        [
+          "Both messages are identical RADIUS attributes with different names",
+          "Access-Accept and CoA have different transaction roles."
+        ],
+        [
+          "CoA carries the portal HTML while Access-Accept carries credentials",
+          "The documented dynamic URL is in Access-Accept attribute 27."
+        ],
+        [
+          "The URL is selected by DHCP after the client authenticates",
+          "The policy engine returns it in the RADIUS authorization response."
+        ],
+        [
+          "Access-Accept supplies the redirect target; CoA changes an existing authorization state",
+          "The messages serve different points in the session lifecycle."
+        ]
+      ]
+    ],
+    [
+      "FortiNAC RADIUS logs show anonymous and LDAP policy matching fails. What should be checked first?",
+      2,
+      [
+        [
+          "Rebuild the switch topology and change the authentication VLAN",
+          "The visible username and directory mapping should be inspected first."
+        ],
+        [
+          "Disable LDAP synchronization across every directory",
+          "That removes identity data instead of correcting its representation."
+        ],
+        [
+          "The exact identity received, endpoint identity privacy and LDAP domain format",
+          "A username/domain mismatch can prevent directory user resolution."
+        ],
+        [
+          "Move the catch-all policy to the top of the list",
+          "A catch-all can hide the identity failure and broaden access."
+        ]
+      ]
+    ],
+    [
+      "How does FortiNAC treat a configured LDAP domain name?",
+      0,
+      [
+        [
+          "It requires an exact domain match when the login supplies a domain",
+          "The guide states that domain names must match exactly."
+        ],
+        [
+          "It accepts any child domain automatically",
+          "A configured example.com does not match it.example.com."
+        ],
+        [
+          "It strips all domain suffixes before every lookup",
+          "The parsing rules preserve and evaluate domain components."
+        ],
+        [
+          "It falls back to every directory after a mismatch",
+          "A configured mismatching domain causes immediate authentication failure."
+        ]
+      ]
+    ],
+    [
+      "What is the risk when multiple LDAP directories have no domain configured?",
+      1,
+      [
+        [
+          "FortiNAC always queries them in administrator-defined order",
+          "The guide says the processing order cannot be controlled."
+        ],
+        [
+          "The first directory that authenticates the user is used",
+          "Different role or access attributes across directories can change results."
+        ],
+        [
+          "The user is forced to authenticate locally",
+          "Multiple directories are still used for authentication."
+        ],
+        [
+          "Duplicate user IDs are automatically merged into one identity",
+          "Unique identifier mappings are needed to avoid collisions."
+        ]
+      ]
+    ],
+    [
+      "What does RADIUS/LDAP authentication mean in FortiNAC?",
+      3,
+      [
+        [
+          "LDAP validates the password while RADIUS only registers the host",
+          "The documented order is RADIUS validation and LDAP user data."
+        ],
+        [
+          "RADIUS and LDAP must return identical group lists before any record is created",
+          "The feature separates credential validation from user registration data."
+        ],
+        [
+          "LDAP replaces the RADIUS server for every authentication",
+          "RADIUS remains the credential validation source."
+        ],
+        [
+          "RADIUS validates credentials while LDAP supplies user registration data",
+          "The guide notes a local user record may still be created if LDAP lacks the user."
+        ]
+      ]
+    ],
+    [
+      "A client certificate has a CDP but no OCSP URI. Why can Local RADIUS reject it?",
+      0,
+      [
+        [
+          "Local RADIUS uses OCSP and does not use the CDP/CRL path",
+          "The documented Local RADIUS revocation method is OCSP from certificate AIA."
+        ],
+        [
+          "The certificate must include two CDP URLs for redundancy",
+          "The limitation is the absence of an OCSP responder URL."
+        ],
+        [
+          "The client must use PEAP without TLS",
+          "The issue is revocation-source support, not the EAP method choice."
+        ],
+        [
+          "FortiNAC-F cannot validate any corporate CA",
+          "It can validate client certificates against trusted root certificates."
+        ]
+      ]
+    ],
+    [
+      "Where must the endpoint CA chain be installed for Local RADIUS EAP-TLS?",
+      2,
+      [
+        [
+          "Server Certificates under the Local RADIUS Server target",
+          "Server certificates are not automatically added to endpoint trust."
+        ],
+        [
+          "General Trusted CA only",
+          "The specific Local RADIUS trust target is required."
+        ],
+        [
+          "RADIUS Endpoint Trust [radius] under Trusted Certificates",
+          "That target is used to validate Local RADIUS EAP-TLS client certificates."
+        ],
+        [
+          "SAML Trust (Admin) for administrator logins",
+          "That target is for administrative SAML identity, not EAP-TLS endpoints."
+        ]
+      ]
+    ],
+    [
+      "Why must OCSP reachability be tested on both FortiNAC-F HA nodes?",
+      1,
+      [
+        [
+          "Both nodes query OCSP for every request simultaneously",
+          "The control node performs the query, including after failover."
+        ],
+        [
+          "The in-control node may change after failover and must reach the responder",
+          "DNS/HTTP reachability and trust chain must exist on the takeover node."
+        ],
+        [
+          "The secondary node stores the CRL instead of the primary",
+          "Local RADIUS does not use CRL imports as its revocation method."
+        ],
+        [
+          "OCSP uses VRRP and therefore needs a Layer-2 cluster",
+          "OCSP is an HTTP-based status query to the responder URL."
+        ]
+      ]
+    ],
+    [
+      "CRL checking is mandatory in the PKI design. What is the supported alternative?",
+      3,
+      [
+        [
+          "Disable certificate validation on Local RADIUS",
+          "That removes the revocation control rather than meeting the requirement."
+        ],
+        [
+          "Import the CRL into the Local RADIUS trust target",
+          "The Local RADIUS flow has no documented CRL import option."
+        ],
+        [
+          "Add the CDP URL to the FortiNAC-F Local Service page",
+          "The Local RADIUS service does not expose a CDP field."
+        ],
+        [
+          "Terminate EAP-TLS on a CRL-capable external RADIUS server and proxy from FortiNAC-F",
+          "This moves revocation checking to a RADIUS service that supports CRL validation."
+        ]
+      ]
+    ],
+    [
+      "What is the main benefit of TACACS+ client groups in FortiAuthenticator 8.0.2?",
+      2,
+      [
+        [
+          "They replace all individual TACACS+ client definitions",
+          "The clients still exist as individual network-device objects."
+        ],
+        [
+          "They automatically create a new identity realm for each subnet",
+          "Client grouping is a policy-target abstraction."
+        ],
+        [
+          "They let one policy target a reusable set of network-device clients",
+          "This avoids selecting hundreds of devices individually."
+        ],
+        [
+          "They convert TACACS+ requests into RADIUS requests",
+          "The feature does not change the protocol."
+        ]
+      ]
+    ],
+    [
+      "How can a TACACS+ policy target devices after client groups are created?",
+      0,
+      [
+        [
+          "Select individual clients, client groups, or both in the policy",
+          "FortiAuthenticator supports a combination of those policy targets."
+        ],
+        [
+          "Select only the end-user LDAP group",
+          "The group here contains TACACS+ clients, not users."
+        ],
+        [
+          "Bind the group to a FortiGate firewall policy",
+          "TACACS+ client groups are consumed by FortiAuthenticator policies."
+        ],
+        [
+          "Add the group name to the TACACS+ shared secret",
+          "Membership is configured as an object relationship."
+        ]
+      ]
+    ],
+    [
+      "Which username formats are documented for TACACS+ policy identity?",
+      1,
+      [
+        [
+          "Only user@domain.com",
+          "The policy supports multiple realm separators."
+        ],
+        [
+          "username@realm, realm\\username, and realm/username",
+          "These are the documented input formats."
+        ],
+        [
+          "Only NetBIOS\\host\\user",
+          "That is not the complete supported list."
+        ],
+        [
+          "IP-address/username and MAC-address/username",
+          "Those are device identifiers, not the policy username formats."
+        ]
+      ]
+    ],
+    [
+      "Which API resource manages TACACS+ client-to-group associations?",
+      3,
+      [
+        [
+          "/radiusclientgroups/",
+          "That endpoint is not the documented TACACS+ association resource."
+        ],
+        [
+          "/tacpluspolicy/",
+          "The policy object is separate from group membership."
+        ],
+        [
+          "/tacplusrealms/",
+          "Realm configuration is not client-group membership."
+        ],
+        [
+          "/tacplusgroupclient/",
+          "FortiAuthenticator documents this endpoint for client/group associations."
+        ]
+      ]
+    ],
+    [
+      "What is an Instruction Profile in FortiPAM 1.9?",
+      2,
+      [
+        [
+          "A replacement credential stored inside the secret",
+          "Credentials remain in the secret object."
+        ],
+        [
+          "A policy that grants guests permission to check out all secrets",
+          "Access authorization is separate from instruction content."
+        ],
+        [
+          "A reusable formatted guidance object that can be attached to secrets",
+          "The profile is independent of the secret and can be reused."
+        ],
+        [
+          "A session-recording format that stores terminal video",
+          "Recording is a separate FortiPAM function."
+        ]
+      ]
+    ],
+    [
+      "When is Instruction Resources Allocation (%) required to be greater than zero?",
+      0,
+      [
+        [
+          "When uploading or inserting instruction-profile images and videos",
+          "Media resources require allocated storage."
+        ],
+        [
+          "For every text-only instruction profile",
+          "The requirement is specifically for resource uploads/media."
+        ],
+        [
+          "Only when rotating a secret password",
+          "Password rotation is unrelated to instruction media."
+        ],
+        [
+          "Only when enabling TACACS+ authentication",
+          "TACACS+ is a separate product workflow."
+        ]
+      ]
+    ],
+    [
+      "How does a secret display its Guest Instruction profile?",
+      1,
+      [
+        [
+          "The profile is inferred from the secret's folder name",
+          "The secret has an explicit Guest Instruction field."
+        ],
+        [
+          "Attach the profile in the secret's Settings tab",
+          "The secret references the reusable profile through that field."
+        ],
+        [
+          "Add the profile as a new credential field",
+          "The instructions are not part of the credential material."
+        ],
+        [
+          "Set the guest's LDAP group to the profile name",
+          "The profile is attached to the secret, not the directory group."
+        ]
+      ]
+    ],
+    [
+      "What does attaching an instruction profile not do?",
+      3,
+      [
+        [
+          "Render the formatted guidance during guest checkout",
+          "Rendering the guidance is the intended behavior."
+        ],
+        [
+          "Allow the same profile to be reused by several secrets",
+          "Reuse is explicitly supported."
+        ],
+        [
+          "Display referenced media in the instruction content",
+          "Media can be inserted when resources are allocated."
+        ],
+        [
+          "Grant the guest permission to access the secret",
+          "The guest must still be authorized to visit/check out the secret."
+        ]
+      ]
+    ],
+    [
+      "A FortiSIEM rule event has a username but no IP. Which action can populate an IP watchlist?",
+      2,
+      [
+        [
+          "Resolve the username by querying DNS PTR records only",
+          "DNS reverse lookup does not provide the documented identity mapping."
+        ],
+        [
+          "Copy the IP from the last event for that username",
+          "That can target a stale address after DHCP or VPN changes."
+        ],
+        [
+          "Use LookupIpByUser in the Watch List Edit action",
+          "The function resolves the current mapping from Identity and Location."
+        ],
+        [
+          "Create a static watchlist entry from the username string",
+          "An IP watchlist needs a resolved address."
+        ]
+      ]
+    ],
+    [
+      "What data source does LookupIpByUser use?",
+      0,
+      [
+        [
+          "The Identity and Location database's username-to-IP mapping",
+          "That is the documented lookup source."
+        ],
+        [
+          "The FortiGate routing table on the collector",
+          "Routing tables do not map a user identity to a current endpoint IP."
+        ],
+        [
+          "The SIEM's DNS cache only",
+          "The feature is based on Identity and Location data."
+        ],
+        [
+          "The Windows user profile's last logon timestamp",
+          "A timestamp alone does not resolve a network address."
+        ]
+      ]
+    ],
+    [
+      "The user moves from IP A to IP B. What should the dynamic watchlist do?",
+      1,
+      [
+        [
+          "Keep IP A until an administrator deletes it manually",
+          "The feature is designed to update when the offending user changes IP."
+        ],
+        [
+          "Update the watchlist to the user's new IP",
+          "The documented behavior follows the current user-to-IP mapping."
+        ],
+        [
+          "Add every IP in the user's subnet",
+          "The lookup resolves the mapped address, not an entire subnet."
+        ],
+        [
+          "Disable the rule because DHCP changed the endpoint",
+          "Address changes are an intended dynamic-watchlist use case."
+        ]
+      ]
+    ],
+    [
+      "Another user is assigned the old IP. What should happen to that IP in the watchlist?",
+      3,
+      [
+        [
+          "The IP should remain because it was once associated with the offender",
+          "That would risk blocking a different user."
+        ],
+        [
+          "The IP should be converted to a hostname entry",
+          "The watchlist is IP-based."
+        ],
+        [
+          "The IP should be duplicated under both users",
+          "The documented behavior removes the reassigned address."
+        ],
+        [
+          "The IP should be removed from the offender's watchlist",
+          "FortiSIEM accounts for another user taking that address."
+        ]
+      ]
+    ],
+    [
+      "What does a FortiSASE source IP anchor control?",
+      0,
+      [
+        [
+          "The dedicated public IP used for SNAT based on user/group or country criteria",
+          "The anchor selects a deterministic egress address at the PoP."
+        ],
+        [
+          "The private IP assigned to the endpoint's Wi-Fi adapter",
+          "That is local endpoint addressing, not PoP egress NAT."
+        ],
+        [
+          "The city shown in an IP geolocation database only",
+          "Geolocation metadata is distinct from source NAT selection."
+        ],
+        [
+          "The identity provider used to authenticate the remote user",
+          "Authentication is a separate prerequisite and policy input."
+        ]
+      ]
+    ],
+    [
+      "Which source criterion granularity is documented for remote-user anchoring?",
+      2,
+      [
+        [
+          "City-level user matching only",
+          "The guide distinguishes city-level IP geolocation from source matching."
+        ],
+        [
+          "Individual device MAC address at the PoP",
+          "The documented source criteria are user/group or country."
+        ],
+        [
+          "Country-level association or user/group selection",
+          "Country is the location criterion; user groups provide finer identity selection."
+        ],
+        [
+          "Autonomous system number and BGP community",
+          "Those are routing attributes, not the anchoring criteria."
+        ]
+      ]
+    ],
+    [
+      "How is source IP anchoring initially deployed?",
+      1,
+      [
+        [
+          "By adding a public IP in the local FortiClient profile",
+          "The feature is provisioned on the FortiSASE backend."
+        ],
+        [
+          "Through a FortiCare request with license and PoP/user mapping details",
+          "The deployment guide requires backend implementation and sufficient IP licensing."
+        ],
+        [
+          "By creating a normal firewall VIP on the branch FortiGate",
+          "The anchor is applied at the FortiSASE security PoP."
+        ],
+        [
+          "By changing the endpoint's default route to a public address",
+          "The endpoint still tunnels to the PoP; the PoP applies SNAT."
+        ]
+      ]
+    ],
+    [
+      "A destination sees the wrong egress IP for one user group. What is the strongest verification?",
+      3,
+      [
+        [
+          "Check the endpoint Wi-Fi RSSI and roaming history",
+          "Wireless RF does not prove PoP NAT selection."
+        ],
+        [
+          "Check only the public IP geolocation website",
+          "Geolocation metadata may lag and does not prove policy match."
+        ],
+        [
+          "Check whether the user can resolve the SaaS hostname",
+          "DNS resolution does not prove the selected SNAT address."
+        ],
+        [
+          "Compare the user's group/country criteria, PoP anchor and observed egress IP",
+          "This follows the policy selection through the actual data path."
+        ]
+      ]
+    ],
+    [
+      "A banking application requires a stable egress member for each client/destination pair. Which hash is best?",
+      2,
+      [
+        [
+          "Round-robin across every eligible WAN",
+          "Round-robin changes member selection sequentially."
+        ],
+        [
+          "Measured-volume-based distribution",
+          "Volume balancing can reweight paths as traffic totals change."
+        ],
+        [
+          "Source-dest-ip-based",
+          "The same source/destination pair is kept on the same member."
+        ],
+        [
+          "Inbandwidth steering",
+          "That selects by available inbound bandwidth, not pair identity."
+        ]
+      ]
+    ],
+    [
+      "What is the distinction between source-ip-based and source-dest-ip-based?",
+      0,
+      [
+        [
+          "One pins all destinations for a source; the other pins each source/destination pair",
+          "The hash key has different granularity."
+        ],
+        [
+          "One uses TCP ports and the other uses UDP ports",
+          "These modes are IP-based, not transport-port hashes."
+        ],
+        [
+          "One selects only SLA-failed links and the other selects healthy links",
+          "Eligibility is a separate strategy decision."
+        ],
+        [
+          "One is for IPv6 only and the other is for IPv4 only",
+          "Both can be used with the relevant SD-WAN service family."
+        ]
+      ]
+    ],
+    [
+      "What does weight-based load balancing primarily distribute by?",
+      1,
+      [
+        [
+          "Total packet bytes per WAN",
+          "Measured-volume mode uses traffic volume."
+        ],
+        [
+          "The number of sessions on each member relative to configured weights",
+          "Weight-based mode uses session-count ratios."
+        ],
+        [
+          "The source country of each remote user",
+          "That is a FortiSASE anchoring criterion."
+        ],
+        [
+          "The latency of each Performance SLA probe only",
+          "SLA latency is an eligibility/quality input, not the weight count."
+        ]
+      ]
+    ],
+    [
+      "In an SLA load-balancing rule, what does the SLA strategy decide?",
+      3,
+      [
+        [
+          "Which source IP address is used for SNAT",
+          "SNAT is handled by the firewall policy/NAT configuration."
+        ],
+        [
+          "Which RADIUS group authenticates the user",
+          "RADIUS identity is unrelated to SD-WAN member selection."
+        ],
+        [
+          "How many sessions are created per application",
+          "The strategy does not define session creation."
+        ],
+        [
+          "Which members are eligible based on the configured SLA",
+          "Hash mode then distributes flows among the selected members."
+        ]
+      ]
+    ],
+    [
+      "Which command pair best separates link eligibility from actual service selection?",
+      0,
+      [
+        [
+          "diagnose sys sdwan health-check status and diagnose sys sdwan service4 <id>",
+          "The first shows probe/SLA state; the second shows service mode and selected members."
+        ],
+        [
+          "get system status and diagnose debug application httpsd",
+          "Those do not show SD-WAN probe and service selection."
+        ],
+        [
+          "diagnose firewall iprope list and execute ping",
+          "They do not expose the full SD-WAN service decision."
+        ],
+        [
+          "show system interface and get router info bgp summary",
+          "Those provide interface/routing context but not the service's selected members."
+        ]
+      ]
+    ],
+    [
+      "What does source-IP hashing not guarantee after a member failure?",
+      2,
+      [
+        [
+          "That the same client will normally hash consistently while the member set is stable",
+          "That is the purpose of source-IP affinity."
+        ],
+        [
+          "That a new flow from the same source uses the same selected member in steady state",
+          "This is the documented source-IP behavior."
+        ],
+        [
+          "That the public egress IP remains identical after route/NAT/member changes",
+          "Hash affinity is not a persistent public-IP reservation."
+        ],
+        [
+          "That different sources can be distributed across different members",
+          "Different source addresses can hash to different members."
+        ]
+      ]
+    ]
+  ]
+}
