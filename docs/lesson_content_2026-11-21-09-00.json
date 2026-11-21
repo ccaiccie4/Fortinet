@@ -1,0 +1,574 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-21T09:00:48-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-21-09-00.json",
+  "selection_path": "docs/selected_fingerprints_2026-11-21-09-00.json",
+  "lesson_count": 12,
+  "required_product_coverage": true,
+  "lessons": [
+    {
+      "id": "fortigate-proxy-alpn",
+      "product": "FortiGate",
+      "title": "Proxy-mode deep inspection: HTTP conformance, ALPN, and HTTP/2 fallback",
+      "primary": "https://docs.fortinet.com/document/fortigate/7.4.3/administration-guide/710924/http-2-support-in-proxy-mode-ssl-inspection",
+      "community": "https://community.fortinet.com/support-forum-92/websites-not-loading-with-deep-inspection-400-bad-request-230973/index2.html",
+      "summary": "A proxy-mode 400 response can be caused by HTTP message validation or ALPN negotiation rather than a denied firewall policy or an untrusted certificate. FortiGate exposes two separate controls that must be tested independently.",
+      "sections": [
+        {
+          "heading": "Purpose and packet path",
+          "body": "In proxy-based inspection, FortiGate terminates the client-side TLS session, applies the selected SSL/SSH inspection profile, and establishes or manages the upstream connection. HTTP/2 support in proxy mode uses the Application-Layer Protocol Negotiation (ALPN) extension in the TLS ClientHello. The proxy must preserve or constrain the protocol offer consistently with the upstream server and the inspection path. A site that works in flow mode but returns HTTP 400 in proxy mode is therefore a useful discriminator: the packet can pass the firewall policy while the proxy's HTTP handling rejects a request or changes protocol negotiation."
+        },
+        {
+          "heading": "ALPN is a protocol-selection control",
+          "body": "The `supported-alpn` setting lives under `config firewall ssl-ssh-profile`. `all` forwards supported ALPN extensions other than SPDY and is the default in the cited guide. `http1-1` forwards only HTTP/1.1 ALPN; when the client offers HTTP/2 or SPDY, FortiGate strips that ALPN value from the forwarded ClientHello. `http2` does the inverse for HTTP/1.1 and SPDY. `none` strips ALPN from the forwarded ClientHello. These settings do not simply enable or disable inspection; they alter what application protocol the upstream TLS peer can negotiate. A forced HTTP/1.1 test can isolate an HTTP/2 interoperability problem, but it is not a universal fix for applications that require HTTP/2."
+        },
+        {
+          "heading": "Strict web checking is a separate HTTP-layer gate",
+          "body": "`config web-proxy global` contains `strict-web-check`. The CLI reference describes it as blocking sites that send incorrect headers that do not conform to HTTP/1.1. It operates after the proxy has parsed the HTTP message; it is not the same control as the TLS ALPN offer. Consequently, a change to `supported-alpn` and a change to `strict-web-check` test different hypotheses. Disabling strict checking may allow a nonconforming origin to work, but it relaxes validation for the web-proxy service and should be treated as a controlled compatibility exception, not a blanket security recommendation."
+        },
+        {
+          "heading": "Configuration and a controlled test",
+          "body": "Capture the current profile and global proxy state before testing. Use one affected destination and one test client. First record the baseline with the production inspection profile. Next test an ALPN constraint on a cloned SSL/SSH profile; only after that should you test the web-proxy strictness setting. The Community case reported that disabling strict web checking restored affected sites in proxy mode; for sites still returning 400, the author also tested `supported-alpn http1-1`. The report notes that the issue did not affect flow-mode policies. Keep those as separate experiments so that a successful result identifies the failing layer rather than masking two variables at once."
+        },
+        {
+          "heading": "Evidence: what it proves and what it does not",
+          "body": "An incoming/outgoing packet capture showing the ClientHello ALPN extension before and after FortiGate proves which protocol advertisement was forwarded; it does not prove that the upstream application accepted the resulting request. A repeatable 400 only with proxy mode and deep inspection narrows the issue to the proxy/inspection path; it does not prove that `strict-web-check` is the cause. A successful test after forcing HTTP/1.1 supports an ALPN/protocol compatibility hypothesis. A successful test after disabling strict checking supports an HTTP conformance hypothesis. Neither result proves that the origin is standards-compliant."
+        },
+        {
+          "heading": "Operational guidance",
+          "body": "Use the smallest possible scope: clone the profile, apply it to a narrow policy or destination set, test representative HTTP/1.1 and HTTP/2 sites, and compare client-side and upstream captures. Keep an exception list and a rollback value. If the site still fails, collect the exact response, TLS version, ALPN offers, proxy-mode policy, SSL profile, and FortiOS build before changing more settings. The current Community discussion concerned FortiOS 7.4.13 and included an ALPN workaround; validate the behavior against the deployed release because proxy parser and protocol handling can change between maintenance builds."
+        }
+      ],
+      "config": "config firewall ssl-ssh-profile\n    edit \"deep-inspection-test\"\n        set supported-alpn all\n    next\nend\n\nconfig web-proxy global\n    set strict-web-check enable\nend\n\n# Controlled compatibility test only:\nconfig firewall ssl-ssh-profile\n    edit \"deep-inspection-test\"\n        set supported-alpn http1-1\n    next\nend",
+      "evidence": [
+        "Compare proxy-mode and flow-mode behavior with the same destination and security profile.",
+        "Capture the client and forwarded ClientHello to inspect ALPN values.",
+        "Record whether the origin returns HTTP 400 before and after a one-variable test.",
+        "A successful HTTP/1.1 test points to protocol negotiation; it does not prove the origin's HTTP/2 implementation is healthy."
+      ],
+      "dependencies": [
+        "The HTTP/2 proxy-inspection guide describes TLS 1.2 and TLS 1.3 with ALPN.",
+        "`strict-web-check` is a global web-proxy control; assess blast radius before changing it.",
+        "The Community workaround is release-specific and should be validated on the deployed FortiOS build."
+      ],
+      "question": "A proxy-mode deep-inspection policy returns HTTP 400 for selected sites while flow mode works. Which two independent controls should be isolated first?"
+    },
+    {
+      "id": "fortimanager-rbac",
+      "product": "FortiManager",
+      "title": "FortiManager 8.0 admin profiles: granular device-configuration and routing permissions",
+      "primary": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/500426/admin-profile-adds-granular-control-on-device-manager-interface-log-report-security-fabric-and-routing",
+      "community": "https://community.fortinet.com/support-forum-92/custom-fortiminager-admin-can-t-push-switch-config-231062",
+      "summary": "FortiManager 8.0 splits broad device-configuration rights into domain-specific permissions. Existing custom profiles can lose effective access to newly separated areas after upgrade unless those rights are explicitly reviewed.",
+      "sections": [
+        {
+          "heading": "Why the permission split matters",
+          "body": "FortiManager is both a configuration database and a deployment control plane. A custom administrator may be able to view a device, edit a policy package, or use some Device Manager pages while still lacking the privilege to change a particular managed-device configuration area. FortiManager 8.0 separates the previous Manage Device Configurations permission into Interface, Log & Report, Security Fabric, and Others, and adds a separate Routing permission alongside the existing SD-WAN permission. This changes the meaning of a broad legacy permission: access to the device object is not equivalent to authorization for every configuration domain."
+        },
+        {
+          "heading": "Permission-to-object mapping",
+          "body": "The Interface permission controls Network > Interfaces and Network > DHCP Servers. It also controls BGP Templates and Static Route Templates, plus managed-device Network > Static Routes, Policy Routes, RIP, BGP, OSPF, Routing Objects, and Multicast. The other sub-permissions cover their respective device-configuration menus. SD-WAN retains its permission level through upgrade. The important distinction is between the menu/domain that an administrator edits and the later installation action that deploys the change. A successful GUI login or the ability to edit one domain does not prove that another domain is writable or that the device is an eligible install target."
+        },
+        {
+          "heading": "Upgrade migration is a security boundary",
+          "body": "Fortinet documents that when upgrading to 8.0.0, Interface, Log & Report, Security Fabric, and Routing are set to None for existing custom permission profiles. The Others permission follows the former Manage Device Configurations value. For example, a custom profile that previously had Read-Write on Manage Device Configurations can arrive at 8.0 with Others still Read-Write but Interface, Log & Report, Security Fabric, and Routing all None. SD-WAN keeps its prior permission. This is a deliberate least-privilege outcome; do not assume the old aggregate permission silently grants every new sub-permission."
+        },
+        {
+          "heading": "Configuration",
+          "body": "Create or edit a profile under System Settings > Admin Profiles. Set each domain to Read-Write, Read, or None according to the operator's actual job. The CLI exposes `device-config`, `device-interface`, `device-log`, `device-fabric`, `device-route`, and `device-wan-link-load-balance`. Use a role matrix: network-interface operators may need Interface read-write; routing engineers may need Routing; auditors may need read-only; SOC operators may need Log & Report read-only. Avoid granting all domains simply because a user needs one specific switch or routing task."
+        },
+        {
+          "heading": "Troubleshooting a failed push",
+          "body": "A recent Community discussion described a custom administrator who could not push FortiSwitch configuration while another administrator could. The thread did not establish that the new permission split was the root cause, so treat it as a diagnostic prompt rather than proof. Compare the failing and working admin profiles field by field, identify the exact object and Device Manager menu involved, and distinguish profile authorization from template assignment, device authorization, policy-package target eligibility, and device connectivity. Capture the failure message and FortiManager debug only after identifying the permission domain."
+        },
+        {
+          "heading": "Verification and rollback",
+          "body": "After changing a profile, log in with the test administrator and verify only the intended configuration pages become editable. Test a harmless change in a lab or controlled device group, then confirm the install preview and target list. Read back the saved profile in CLI and retain the original profile definition for rollback. A successful profile save proves only that the permission object was accepted; a successful device install proves the full authorization and deployment path worked. Re-run this audit after upgrades because the permission model can evolve."
+        }
+      ],
+      "config": "config system admin profile\n    edit \"network-operator\"\n        set device-config read\n        set device-interface read-write\n        set device-log read\n        set device-fabric none\n        set device-route read-write\n        set device-wan-link-load-balance read\n    next\nend",
+      "evidence": [
+        "Compare the exact profile fields for a working and failing administrator.",
+        "Check whether the blocked menu belongs to Interface, Log & Report, Security Fabric, Others, Routing, or SD-WAN.",
+        "A visible device proves inventory access, not write authorization for every configuration domain.",
+        "An install target error can also be caused by device state or template assignment; do not attribute every push failure to RBAC."
+      ],
+      "dependencies": [
+        "The 8.0 permission migration sets new granular rights to None in existing custom profiles.",
+        "SD-WAN retains its prior permission level during the documented migration.",
+        "Provisioning-template, managed-device, and install-target privileges should be tested separately."
+      ],
+      "question": "After upgrading to FortiManager 8.0, a custom profile still has Others=Read-Write but cannot edit interfaces. Which permission changed?"
+    },
+    {
+      "id": "fortianalyzer-anomaly-login",
+      "product": "FortiAnalyzer",
+      "title": "Anomaly Login Report: ZTNA alert-handler and FortiAuthenticator event dependencies",
+      "primary": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/926442/anomaly-login-report",
+      "community": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+      "summary": "The global report is not a self-contained detector. It depends on FortiAuthenticator event logs, a predefined ZTNA Login Anomaly Detection alert handler, and a chain of report datasets and objects.",
+      "sections": [
+        {
+          "heading": "What the report detects",
+          "body": "The FortiAnalyzer 8.0 Anomaly Login Report summarizes ZTNA activity involving remote users and devices accessing office resources. The documented behavior includes concurrent access from multiple devices, unusual login locations or times, access to atypical resources, and abnormal data transfers. The report groups these as suspicious activity or potential security breaches. This is a correlation/reporting view across identity and access events, not a replacement for the underlying authentication logs or the policy decision that allowed a session."
+        },
+        {
+          "heading": "The evidence pipeline",
+          "body": "The critical prerequisite is explicit: FortiAuthenticator event logs must be present in FortiAnalyzer so the predefined ZTNA Login Anomaly Detection alert handler can trigger. The report is global and is located under Reports > Report Definitions > All Reports in the Fabric Reports folder. The associated template, charts, macros, and dataset are separately visible in Templates, Chart Library, Macro Library, and Datasets. The documented dataset identifier is `incidennt-Anomaly-Login` (note the spelling in the guide). A report with no rows can therefore indicate a missing source log, an alert handler that did not trigger, or a report-object/data-source issue—not necessarily a clean environment."
+        },
+        {
+          "heading": "End-to-end workflow",
+          "body": "A remote-user or endpoint event is generated by the identity/access system. FortiAuthenticator forwards its event log to FortiAnalyzer. The predefined ZTNA alert handler evaluates the event and creates the data consumed by the report dataset. The report template combines dataset results with charts and macros, then renders a PDF. The analyst should be able to move from a chart point to the underlying alerts and logs; that traceability is what makes the report operationally useful."
+        },
+        {
+          "heading": "Validate ingestion before interpreting absence",
+          "body": "Start at the source: confirm FortiAuthenticator is configured to send the required event logs and that FortiAnalyzer is receiving them. Then inspect the alert-handler configuration and recent triggers. Next verify that the dataset has records and that the report template, chart, and macro objects are present. Run the global report over a window known to contain ZTNA logins. Do not begin by rebuilding report databases or editing macros when the source event never arrived."
+        },
+        {
+          "heading": "A recent status-lag scenario",
+          "body": "A recent FortiAnalyzer Community tip describes a post-reboot interval where Device Manager may show a managed FortiGate as down and Last Log Received as stale for roughly 10–15 minutes even though the FortiGate has reconnected and is sending logs. The documented checks include `execute log fortianalyzer test-connectivity` and `get log fortianalyzer setting status` on FortiGate, `diagnose test application oftpd 3` on FortiAnalyzer to list devices sending logs, and `diagnose fortilogd lograte` to inspect receive rate. If the display remains stale beyond 30 minutes, investigate connectivity, device authorization, and fortilogd. This matters because a stale status widget is not proof that the report's source logs are absent."
+        },
+        {
+          "heading": "What each signal proves",
+          "body": "A registered/up OFTP connection proves the transport relationship is up; it does not prove that the correct FAC event type is present. An increasing FortiAnalyzer receive rate proves log traffic is arriving; it does not prove the ZTNA alert handler matched. A populated anomaly dataset proves the report data path has records; it does not prove every suspicious event was detected. Preserve source logs, alert-handler evidence, dataset rows, and report output together when investigating a false negative."
+        }
+      ],
+      "config": "# FortiGate-side connectivity checks after a FortiAnalyzer reboot\nexecute log fortianalyzer test-connectivity\nget log fortianalyzer setting status\n\n# FortiAnalyzer-side checks\n diagnose test application oftpd 3\n diagnose fortilogd lograte\n\n# Report objects\nReports > Report Definitions > All Reports > Fabric Reports\nReports > Report Definitions > Templates\nReports > Report Definitions > Chart Library\nReports > Report Definitions > Macro Library\nReports > Report Definitions > Datasets",
+      "evidence": [
+        "Confirm FortiAuthenticator event logs are present in FortiAnalyzer.",
+        "Verify the predefined ZTNA Login Anomaly Detection alert handler has triggered.",
+        "Inspect the `incidennt-Anomaly-Login` dataset before changing report templates.",
+        "After reboot, compare OFTP state and receive rate with the stale GUI status; allow 10–15 minutes for refresh."
+      ],
+      "dependencies": [
+        "The report requires FortiAuthenticator event logs; generic FortiGate traffic logs alone are not the documented prerequisite.",
+        "The alert handler and report objects are separate stages.",
+        "The 10–15 minute post-reboot status lag is a documented Community observation, not a guarantee for every build."
+      ],
+      "question": "Anomaly Login Report is empty immediately after a FortiAnalyzer reboot. What must be verified before concluding that no ZTNA anomalies occurred?"
+    },
+    {
+      "id": "fortiswitch-dns-cache",
+      "product": "FortiSwitch",
+      "title": "FortiSwitchOS 8.0 DNS cache limit: entries become a KB memory budget",
+      "primary": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/500379/config-system",
+      "community": null,
+      "summary": "FortiSwitchOS 8.0 changes the meaning of `dns-cache-limit`. An old entry-count assumption becomes a memory-size limit, while TTL remains an independent control.",
+      "sections": [
+        {
+          "heading": "Why a switch needs a resolver",
+          "body": "FortiSwitch uses DNS for several device-originated functions, including email alerts and URL blocking. The `config system dns` object controls resolver addresses, source IP, protocol, cache lifetime, negative-response caching, and the cache-size ceiling. This is not a client VLAN DNS service; it is the switch's own resolver behavior. A switch can have working Layer 2 forwarding while a management function that depends on a hostname fails because the switch cannot resolve the name."
+        },
+        {
+          "heading": "The 8.0 semantic change",
+          "body": "Before FortiSwitchOS 8.0, `dns-cache-limit` specified the maximum number of entries and the 7.6.4 CLI reference lists a default of 5000. In 8.0, it specifies the maximum DNS cache memory in KB, with a range of 1 to 1,023 KB and a default of 512 KB. The number is no longer a count of records. Treating the old value as if it still meant entries is an upgrade hazard: an administrator reading `dns-cache-limit 500` in 8.0 must interpret it as a 500-KB memory budget, not 500 cached names."
+        },
+        {
+          "heading": "Cache size and TTL solve different problems",
+          "body": "`dns-cache-ttl` controls how long an answer remains in cache; the documented default is 1800 seconds. `dns-cache-limit` controls the memory budget. A short TTL can cause frequent re-resolution even when memory is available. A small memory budget can cause cache pressure even when TTL is long. `cache-notfound-responses` independently controls whether negative answers are cached and is disabled by default. Do not change all three settings together when troubleshooting intermittent name resolution."
+        },
+        {
+          "heading": "Configuration example",
+          "body": "Set a deliberate memory budget after reviewing the current firmware and workload. For example, a 512-KB budget with a 900-second TTL is a valid configuration shape; the numeric values must be chosen for the environment. The resolver protocol is separately `cleartext` or `dot`; DNS over TLS uses TCP/853 and can validate a configured server CA certificate. That transport-security feature is separate from cache budgeting and is not the subject of this lesson."
+        },
+        {
+          "heading": "Verification and diagnosis",
+          "body": "Read back `show system dns` and record firmware version, primary/secondary resolver, source IP, protocol, cache limit, TTL, and negative-cache setting. If email alerts or URL blocking fail, first test whether the switch can reach the resolver from the configured source interface and whether the resolver answers the requested name. Then examine whether a change to TTL or cache memory alters repeated lookups. The CLI reference does not document a dedicated cache-occupancy command in the cited section, so do not invent one or treat a successful `show` as proof of cache hit rate."
+        },
+        {
+          "heading": "Upgrade discipline",
+          "body": "During a 7.6-to-8.0 upgrade review, explicitly revisit the stored `dns-cache-limit` value. Do not copy an old numeric setting into a new build without translating its meaning. Keep the change record with the before/after unit interpretation, use a maintenance window if DNS-dependent management services are critical, and verify both positive and negative name lookups after the upgrade. The most important operational lesson is that a configuration line can remain syntactically valid while its unit semantics change."
+        }
+      ],
+      "config": "config system dns\n    set primary 172.91.112.53\n    set secondary 172.91.112.52\n    set dns-cache-limit 512\n    set dns-cache-ttl 900\n    set cache-notfound-responses disable\n    set protocol cleartext\nend",
+      "evidence": [
+        "`show system dns` confirms the configured value but not cache hit rate.",
+        "The 8.0 CLI reference defines the limit in KB (1–1023; default 512).",
+        "The 7.6.4 CLI reference defines the old limit as entry count (default 5000).",
+        "Test the dependent switch function and resolver reachability separately from cache sizing."
+      ],
+      "dependencies": [
+        "The DNS cache limit is distinct from DNS-over-TLS transport selection and CA validation.",
+        "TTL and negative-response caching are separate controls.",
+        "Do not assume the firmware upgrade automatically translates an old entry count into an equivalent memory budget."
+      ],
+      "question": "A FortiSwitch is upgraded from 7.6 to 8.0 and retains `dns-cache-limit 500`. What does 500 represent now?"
+    },
+    {
+      "id": "fortiap-capwap-dtls",
+      "product": "FortiAP/Wireless",
+      "title": "CAPWAP control-channel DTLS trust: diagnosing AP join loops",
+      "primary": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/746425/data-channel-security-clear-text-dtls-and-ipsec-vpn",
+      "community": "https://community.fortinet.com/fortiap-5/fortiap-231k-remaining-offline-when-managed-by-a-fortigate-230498",
+      "summary": "A FortiAP can discover a controller and still fail to join because the CAPWAP control-channel DTLS certificate chain cannot be validated. This is different from a data-channel encryption-profile mismatch.",
+      "sections": [
+        {
+          "heading": "Separate control and data channels",
+          "body": "After a FortiAP joins a FortiGate, a CAPWAP tunnel carries two logically different channels. The control channel manages the AP and is always encrypted with DTLS. The data channel carries client traffic and can be clear-text, DTLS, or IPsec VPN according to the WTP profile. The distinction is operationally important: a failure in the control-channel DTLS handshake occurs before the AP is fully joined and before its data-channel policy can carry client traffic. Changing `dtls-policy` for the data channel does not repair a missing trust anchor in the control-channel certificate chain."
+        },
+        {
+          "heading": "Join sequence and failure boundary",
+          "body": "The AP first discovers a controller through static, DHCP, DNS, FortiEdge Cloud, multicast, or broadcast methods. It then establishes the CAPWAP control relationship and validates the controller certificate during DTLS setup. Only after the control channel is established can the controller authorize the AP and assign a WTP profile. A recent FortiAP-231K Community case showed the AP repeatedly transitioning between SULKING and DTLS_SETUP. The AP debug included `cwDtlsCertVerify` and `self-signed certificate in certificate chain`; the article identified missing self-signed CA certificates on the AP as the cause."
+        },
+        {
+          "heading": "Evidence before configuration changes",
+          "body": "On the AP, `wcfg | grep fsm-state` exposes the state machine. A repeated SULKING/DTLS_SETUP cycle is evidence of a join-stage failure, not proof of a VLAN or SSID problem. The Community article also recommends checking the CA file with `cw_diag -c cert Fortinet_CA1.cer`; no output in the reported case indicated the required certificate was absent. Correlate the AP model, AP firmware, FortiGate model/firmware, certificate chain, and timestamp in the debug. Do not infer that UDP/5246 or 5247 is blocked solely because the AP remains offline."
+        },
+        {
+          "heading": "Recovery path in the reported case",
+          "body": "The article identifies a FortiAP-231K trust-store issue with certain FortiGate E-Series controllers. The documented workaround was to load a specific fix image (build 4708) and then upgrade to a GA release of 7.4 or 7.6; it lists 7.6.6/8.0.1 or later as fixed versions. Because the fix image is support-provided, follow the article's TAC process rather than sourcing an unofficial image. After the AP joins, verify its authorization state and assigned WTP profile before testing SSIDs."
+        },
+        {
+          "heading": "Data-channel encryption and performance",
+          "body": "The WTP profile's `dtls-policy` controls the data channel. `clear-text` offers the highest throughput and can permit CAPWAP data offload on supported FortiGate hardware. `dtls-enabled` encrypts the data channel but FortiGate DTLS data encryption cannot be hardware-accelerated in the documented path, so throughput can be significantly lower; `dtls-in-kernel` moves encryption/decryption to the AP OS kernel. `ipsec-vpn` and `ipsec-vpn-sn` establish an IPsec tunnel for CAPWAP data; the latter includes the AP serial number. The AP and FortiGate data-channel settings must agree."
+        },
+        {
+          "heading": "Configuration and post-join checks",
+          "body": "For remote branches whose CAPWAP data traverses an untrusted network, choose DTLS or IPsec for the data channel after confirming the performance budget. `ipsec-offload` controls AP-side IPsec offload for the IPsec modes. Verify the AP is authorized, the profile is assigned, the control channel remains stable, and client data traffic flows. A green AP status proves the management tunnel is up; it does not prove every SSID, VLAN, or data-channel encryption choice is correct."
+        }
+      ],
+      "config": "config wireless-controller wtp-profile\n    edit \"branch-ap-profile\"\n        set dtls-policy ipsec-vpn\n        set ipsec-offload enable\n    next\nend\n\n# FortiAP-side data-channel setting example\ncfg -a AP_DATA_CHAN_SEC=ipsec\ncfg -c\n\n# Join-state / certificate checks\nwcfg | grep fsm-state\ncw_diag -c cert Fortinet_CA1.cer",
+      "evidence": [
+        "SULKING/DTLS_SETUP loop localizes the failure to discovery/join rather than SSID client authentication.",
+        "`cwDtlsCertVerify` with certificate error 19 supports a trust-chain hypothesis.",
+        "A missing `Fortinet_CA1.cer` on the affected AP supports the specific Community root cause.",
+        "After join, validate data-channel policy independently; control-channel success does not prove client traffic encryption."
+      ],
+      "dependencies": [
+        "Control-channel DTLS is always encrypted; data-channel encryption is separately configurable.",
+        "DTLS data encryption can reduce throughput; IPsec offload behavior depends on hardware/model.",
+        "The fix-image procedure is model/build-specific and should be performed through Fortinet Support."
+      ],
+      "question": "A FortiAP discovers its controller but loops through DTLS_SETUP and SULKING with a certificate error. Which path should be checked first?"
+    },
+    {
+      "id": "fortinac-kerberos",
+      "product": "FortiNAC",
+      "title": "FortiNAC 9.4 Kerberos authentication: NetBIOS and Winbind alignment",
+      "primary": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/965487/whats-new-in-fortinac-9-4; https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/724520/configuration; https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/670285/local-winbind-configuration",
+      "community": "https://community.fortinet.com/fortinac-f-57/technical-tip-create-and-use-a-keytab-file-to-join-fortinac-in-the-domain-159332",
+      "summary": "FortiNAC 9.4 adds Kerberos support to specific admin and user authentication surfaces. The directory's NetBIOS name must match the domain NetBIOS name in the Winbind configuration; it is not interchangeable with the DNS realm.",
+      "sections": [
+        {
+          "heading": "Feature scope",
+          "body": "FortiNAC 9.4 adds Kerberos support for administrator and user authentication on FortiNAC-CA, and administrator authentication on FortiNAC Manager (FNAC-M). This is a scoped authentication capability, not a blanket replacement for every LDAP, RADIUS, portal, or host-authentication flow. When Kerberos is selected, the LDAP directory configuration uses a NetBIOS name field representing the Active Directory domain NetBIOS name. Fortinet explicitly requires that value to match a domain NetBIOS name from a configured Winbind instance under Network > RADIUS > Winbind."
+        },
+        {
+          "heading": "Three names that must not be confused",
+          "body": "The Winbind configuration contains a local NetBIOS name for the FortiNAC Samba server, a domain NetBIOS name for the AD domain, and a Kerberos realm name in DNS-style form. For example, the domain NetBIOS name might be `CORP` while the Kerberos realm is `corp.example.com`. The domain controller hostname is another field and can list multiple servers or `*` for dynamic selection. A common failure is entering the DNS domain where the NetBIOS domain is expected, or matching the LDAP directory to a different Winbind instance."
+        },
+        {
+          "heading": "Authentication flow",
+          "body": "The user or administrator presents credentials to the FortiNAC authentication surface. FortiNAC resolves the configured directory and the NetBIOS name; the corresponding Winbind domain configuration supplies the Kerberos realm and domain-controller path. Winbind must be joined to the domain for its authentication function. The join can use an account name and password or a keytab file where supported. The Community keytab tip explains that a keytab can be used to join the domain without repeatedly entering the admin account password; this is a domain-join credential mechanism, not a substitute for correct NetBIOS/realm mapping."
+        },
+        {
+          "heading": "Configuration sequence",
+          "body": "Create or review the Winbind configuration first: set the local NetBIOS name, domain NetBIOS name, Kerberos realm, domain controller hostname(s), and domain-join method. Then edit the LDAP directory under System > Settings > Authentication > LDAP and set the NetBIOS name to the matching domain value. Complete the directory connection, user/group attributes, search branches, and selected groups as required. FortiNAC uses the directory connection for lookups and synchronization as well as authentication; a successful bind does not prove that the Kerberos path is aligned."
+        },
+        {
+          "heading": "Troubleshooting by boundary",
+          "body": "If only one surface fails, identify whether the failure is FortiNAC-CA user authentication, CA admin authentication, or Manager admin authentication; do not assume they share identical scope. Compare the LDAP directory NetBIOS value with every Winbind instance's domain NetBIOS name. Confirm the realm spelling, domain-controller reachability, and domain-join status. If authentication works on CA but not Manager, remember the 9.4 feature scope is different for the two appliances. If LDAP credential validation succeeds but Kerberos login fails, that is evidence that basic directory connectivity works; it does not prove the Kerberos exchange succeeded."
+        },
+        {
+          "heading": "Operational caveats",
+          "body": "A high-availability deployment has local and secondary NetBIOS identity fields; the Winbind guide describes a secondary HA NetBIOS name. Plan those names consistently before failover. Use a dedicated least-privilege join account or approved keytab workflow and protect the keytab as a credential. When rotating domain credentials or changing domain controllers, revalidate Winbind and the LDAP directory mapping rather than relying only on a green directory status."
+        }
+      ],
+      "config": "# Winbind values (illustrative)\nNetwork > RADIUS > Winbind\nLocal NetBIOS Name: NAC01\nDomain NetBIOS Name: CORP\nKerberos Realm Name: corp.example.com\nDomain Controller Hostname: dc01.corp.example.com\n\n# LDAP directory\nSystem > Settings > Authentication > LDAP\nNetBIOS name: CORP",
+      "evidence": [
+        "The LDAP directory NetBIOS name must match a configured Winbind domain NetBIOS name.",
+        "The DNS-style Kerberos realm and the short NetBIOS domain are different values.",
+        "Successful LDAP credential validation proves directory connectivity, not the Kerberos exchange.",
+        "Test CA user/admin and Manager admin authentication separately because feature scope differs."
+      ],
+      "dependencies": [
+        "FortiNAC 9.4 feature scope: CA admin/user auth and Manager admin auth.",
+        "Winbind must be joined to the domain for Winbind authentication.",
+        "Keytab is a domain-join credential option where supported; protect it as a secret."
+      ],
+      "question": "FortiNAC 9.4 Kerberos login fails while LDAP lookup works. Which two domain identifiers must be compared first?"
+    },
+    {
+      "id": "fortinacf-ldap-signing",
+      "product": "FortiNAC-F",
+      "title": "LDAP signing enforcement: move FortiNAC-F simple binds to LDAPS or STARTTLS",
+      "primary": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/724520/configuration",
+      "community": "https://community.fortinet.com/fortinac-f-57/fortinac-f-ldap-directory-validate-credentials-fails-for-all-accounts-when-the-domain-controller-requires-ldap-signing-231418",
+      "summary": "A domain controller that requires LDAP signing rejects FortiNAC-F's simple bind over cleartext TCP/389. The secure fix is TLS-protected LDAP, not weakening the domain-controller policy.",
+      "sections": [
+        {
+          "heading": "Failure mechanism",
+          "body": "The recent FortiNAC-F Community case describes a directory configured with Security Protocol None on TCP/389. FortiNAC-F uses an LDAP simple bind in that mode. When Active Directory requires LDAP signing, the domain controller rejects the unsigned simple bind with `Strong(er) authentication required`; every account can fail, including Domain Admins. The article notes that LDAP signing is the default for new Windows Server 2025 AD deployments. The failure is therefore a transport/authentication-policy mismatch, not evidence that all user passwords are wrong."
+        },
+        {
+          "heading": "FortiNAC-F connection choices",
+          "body": "The FortiNAC-F 7.6 administration guide documents three Security Protocol options: None, SSL, and STARTTLS. None uses TCP/389. SSL uses LDAPS, normally TCP/636. STARTTLS begins on TCP/389 and upgrades the connection to TLS before the LDAP bind. The guide requires a CA certificate for SSL or STARTTLS and says it must be stored on the appliance under `/bsc/campusMgr/`. It also documents that the secondary directory server must be specified by FQDN when SSL or STARTTLS is selected."
+        },
+        {
+          "heading": "Why the name matters",
+          "body": "TLS server authentication validates the certificate presented by the domain controller. FortiNAC-F should connect using the directory FQDN that matches the certificate's subject alternative name. The guide's Connect by Name option uses the configured Name field rather than the Primary IP address; it is automatically checked when STARTTLS is selected. Connecting by IP when the certificate is issued to a DNS name can create a name-validation failure even after the CA is trusted. Trust-chain validation and hostname validation are separate checks."
+        },
+        {
+          "heading": "Secure remediation",
+          "body": "Keep LDAP signing enforcement enabled on the domain controller. Configure the FortiNAC-F directory with SSL/TCP 636 or STARTTLS/TCP 389, use the DC FQDN in the Name field, enable Connect by Name, and import the issuing CA chain into the FortiNAC-F keystore. Confirm the domain controller has a valid server-authentication certificate and listens on the selected port. Then use Validate Credentials and run a directory synchronization. The Community article warns that disabling signing at the domain controller weakens security for all LDAP clients and should be only a temporary, approved workaround."
+        },
+        {
+          "heading": "Evidence and interpretation",
+          "body": "`openssl s_client -connect dc01.example.local:636 -showcerts </dev/null` shows whether the LDAPS endpoint presents a certificate chain; it does not prove FortiNAC-F trusts that chain or that the bind account has search permissions. For STARTTLS, use an LDAP-aware test that performs the StartTLS upgrade (the Community article suggests repeating the ldapsearch test with `-ZZ`). A successful TLS handshake proves the transport is protected and the server certificate can be examined; it does not prove the bind DN, password, search base, referrals, or attribute mappings are correct. FortiNAC's Credential Status and subsequent sync results provide the application-level checks."
+        },
+        {
+          "heading": "Avoid the false fix",
+          "body": "Changing the AD GPO to stop requiring signing can make a cleartext bind succeed, but it lowers the domain controller's security posture for every client. If used at all, it should be time-limited, coordinated with the AD team, and reversed after LDAPS/STARTTLS is deployed. Change the GPO rather than a local registry value because Group Policy can rewrite the registry at refresh. The durable fix is encrypted LDAP with a trusted CA and matching server name."
+        }
+      ],
+      "config": "# FortiNAC-F LDAP directory settings\nSystem > Settings > Authentication > LDAP\nSecurity Protocol: SSL (TCP/636) or STARTTLS (TCP/389)\nName: dc01.example.local\nConnect by Name: Enabled\nSecondary Server: dc02.example.local (FQDN required for SSL/STARTTLS)\nCA certificate: import issuing CA into /bsc/campusMgr/\n\n# Validate the LDAPS certificate presented by the DC\nopenssl s_client -connect dc01.example.local:636 -showcerts </dev/null",
+      "evidence": [
+        "A `Strong(er) authentication required` error on TCP/389 with Security Protocol None points to LDAP signing enforcement.",
+        "`openssl s_client` displays the LDAPS certificate chain but does not prove FortiNAC-F trusts it.",
+        "FortiNAC-F Credential Status `Credentials Verified` validates the configured directory credential path.",
+        "Successful directory synchronization proves more than a TLS handshake: search branches and mappings must also work."
+      ],
+      "dependencies": [
+        "SSL/LDAPS normally uses TCP/636; STARTTLS upgrades TCP/389.",
+        "SSL/STARTTLS require a trusted CA certificate in the FortiNAC-F keystore.",
+        "The DC FQDN must match its certificate name; the secondary server must be an FQDN for SSL/STARTTLS."
+      ],
+      "question": "FortiNAC-F validates no LDAP account against a Windows Server 2025 DC and reports Strong(er) authentication required on TCP/389. What is the durable remediation?"
+    },
+    {
+      "id": "fortiauthenticator-oauth-iam",
+      "product": "FortiAuthenticator",
+      "title": "OAuth IAM login and OIDC claims: identity-source routing and remote-user failure",
+      "primary": "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/760429/fortiauthenticator-6-6-0; https://docs.fortinet.com/document/fortiauthenticator/6.6.3/administration-guide/271141/policies",
+      "community": "https://community.fortinet.com/fortiauthenticator-8/http-500-error-during-oauth-authorization-after-upgrading-fortiauthenticator-to-version-6-6-10-231281",
+      "summary": "FortiAuthenticator 6.6 adds an IAM sign-in path and IAM-specific OIDC claims to OAuth relying parties. A recent 6.6.10 defect shows why identity-source selection and imported-remote-user state must be checked before changing client parameters.",
+      "sections": [
+        {
+          "heading": "OAuth policy and relying party are separate objects",
+          "body": "The OAuth policy defines the login portal and the identity sources that can authenticate the user. The relying party defines the client application and the claims returned to it. FortiAuthenticator 6.6 adds an IAM login option to the policy Identity sources tab. When enabled, the login page offers a Sign-in as IAM user link and a customizable IAM login page. The relying party can include OIDC claims for IAM account name, IAM account alias, and IAM username when using Authorization Code, with or without PKCE."
+        },
+        {
+          "heading": "Authorization-code transaction",
+          "body": "The client redirects the browser to `/oauth/authorize/` with its client identifier, redirect URI, response type, scopes, and policy context. The user selects the applicable sign-in route. If IAM login is enabled, the user authenticates with IAM account name/alias and IAM username. FortiAuthenticator returns an authorization code to the relying party's redirect URI. The client exchanges the code at `/oauth/token/`; the token response can include the new `iam_account` and `iam_user` fields. OIDC claims are not simply copied from a login screen: they are selected in the relying-party configuration and returned according to the grant flow."
+        },
+        {
+          "heading": "PKCE and client type",
+          "body": "FortiAuthenticator 6.6 also adds Authorization Code with PKCE for Public clients. The documented flow requires `code_challenge_method` and `code_challenge` at `/oauth/authorize/`, then `code_verifier` at `/oauth/token/`. FortiAuthenticator rejects the token request if the SHA-256 digest of the verifier does not match the challenge issued with the authorization code. PKCE binds the code exchange to the client instance without relying on a client secret embedded in a public application. Do not confuse a PKCE mismatch with an identity-source failure."
+        },
+        {
+          "heading": "Recent 6.6.10 failure boundary",
+          "body": "A Community report published Nov 16 describes HTTP 500 at `/api/v1/oauth/authorize/` after upgrading to FortiAuthenticator 6.6.10. The traceback includes `AttributeError: 'RemoteLdapSessionUser' object has no attribute 'fac_groups'`. The reported root cause is a non-imported remote LDAP user attempting to access an OAuth authorization page; the affected build cannot handle that object in this path. The article identifies fixes in 6.6.12 and 8.0.5. This is a server-side defect, not a reason to rotate the OAuth client secret or rewrite redirect URIs without evidence."
+        },
+        {
+          "heading": "Configuration and verification",
+          "body": "Create or edit the policy under Authentication > OAuth Service > Policies. Select the intended identity sources and enable IAM login only if IAM users should be offered. In the relying party, choose Authorization Code or Authorization Code with PKCE according to client type, then select only the IAM claims the application needs. Test an IAM user, an imported LDAP user, and—where relevant—a non-imported remote LDAP user on a fixed build. Capture the HTTP status, endpoint, server traceback, authorization code redirect, token exchange result, and claims returned."
+        },
+        {
+          "heading": "Operational implications",
+          "body": "Identity-source choice is a security and user-experience decision. Exposing an IAM login link does not automatically make all LDAP users valid IAM users. Claim minimization reduces unnecessary identity data release. After upgrades, validate both authorization and token endpoints; a successful login page render does not prove the token endpoint or claim mapping works. If the server returns the documented 6.6.10 traceback, upgrade to a fixed release rather than weakening the relying party."
+        }
+      ],
+      "config": "# OAuth policy\nAuthentication > OAuth Service > Policies\nIdentity sources: select the required user sources\nIAM login: enable only when IAM sign-in is required\n\n# Relying party\nAuthentication > OAuth Service > Relying Party\nGrant: Authorization code (or Authorization code with PKCE for Public clients)\nClaims: IAM account name / alias / IAM username as required\n\n# PKCE request fields\n/oauth/authorize/: code_challenge_method, code_challenge\n/oauth/token/: code_verifier",
+      "evidence": [
+        "HTTP 500 at `/api/v1/oauth/authorize/` plus `RemoteLdapSessionUser.fac_groups` traceback identifies the 6.6.10 defect.",
+        "A redirect URI mismatch normally produces a protocol/client error, not the documented Python AttributeError.",
+        "The presence of `iam_account` and `iam_user` in token output proves those fields are returned; it does not prove the app validates them correctly.",
+        "PKCE verifier mismatch is a token-exchange failure distinct from identity-source selection."
+      ],
+      "dependencies": [
+        "IAM login is disabled by default in the policy until enabled.",
+        "IAM claims are configured on the relying party and are tied to Authorization Code.",
+        "The Community issue lists fixed versions 6.6.12 and 8.0.5."
+      ],
+      "question": "FortiAuthenticator 6.6.10 returns HTTP 500 from `/oauth/authorize/` for a non-imported remote LDAP user with a `fac_groups` traceback. What should be checked first?"
+    },
+    {
+      "id": "fortipam-process-matcher",
+      "product": "FortiPAM",
+      "title": "FortiPAM 1.9 launcher process matcher: robust process identity with recording guarantees",
+      "primary": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/467076/launcher-process-matcher",
+      "community": "https://community.fortinet.com/fortipam-52/technical-tip-a-connection-error-that-occurs-when-using-the-fortipam-native-launchers-225049",
+      "summary": "The 1.9 process matcher handles Java applications and IDEs that spawn child processes or change window titles. Custom matching deliberately forces multiprocess observation and full-screen recording.",
+      "sections": [
+        {
+          "heading": "Why executable-name tracking is insufficient",
+          "body": "A simple application may launch one executable and keep one stable window. Java applications, database IDEs, and complex engineering tools often start a generic runtime such as `java.exe`, spawn child processes, or rename their window after login. Tracking only the first executable can associate the session with the wrong process or stop following the actual target application. FortiPAM 1.9 adds a matcher that identifies the main process by the initial launch process, a GUI window title, or a command-line string."
+        },
+        {
+          "heading": "Matcher types",
+          "body": "Default uses the initial launch process and is appropriate for simple single-binary applications. Window Title applies a regular expression to the GUI window title; the documented example is a stable prefix such as `Vision Client - *`. Command Line applies a regular expression to the process execution string, which is useful when the executable is generic but the arguments identify the application. The choice should be based on the most stable discriminator in the real process tree, not on whichever field is easiest to copy from one test run."
+        },
+        {
+          "heading": "Security behavior is coupled to custom matching",
+          "body": "When `proc-matcher-type` is not Default, FortiPAM forces Multiprocess Mode to Enable and Full-screen Recording to Enable. The reason is explicit: FortiClient must observe the whole process tree to find the match, and full-screen recording is needed because the matched window can change or be part of a larger Java environment. These are not optional cosmetic preferences. Disabling either can undermine the process-identification and audit assumptions of a custom matcher."
+        },
+        {
+          "heading": "Configuration example",
+          "body": "The CLI hides `proc-matcher-pattern` when the matcher type is Default. For a stable window-title application, define the process matcher type and a regular expression, while keeping the mandatory audit settings enabled. Test the expression against the title as it appears before and after authentication, and against the child-process launch sequence. A pattern that matches the login window but not the working window can cause the audit trail to follow the wrong process."
+        },
+        {
+          "heading": "Verification and failure isolation",
+          "body": "Validate the matcher with the actual application build, user profile, and launcher. Confirm that the process tree is observed, that the regex matches the intended child or title, and that full-screen recording is generated for the entire privileged session. If a native launcher fails to connect while WebSSH or WebRDP works, investigate the launcher transport separately. A Community tip describes a native-launcher TLS trust failure caused by the FortiPAM server CA missing from the endpoint trust store; that is not a process-matcher defect."
+        },
+        {
+          "heading": "Operational guardrails",
+          "body": "Prefer a narrow, anchored expression over a broad pattern that could match unrelated applications. Re-test after application upgrades because command-line arguments and window titles can change. Review recording storage and retention because full-screen recording is forced for custom matching. Keep the secret-to-application mapping and the matcher regex under change control. A correct matcher proves the process was identified; it does not prove the target host's own authentication or network path succeeded."
+        }
+      ],
+      "config": "config os_app\n    edit 1\n        set multipleprocess enable\n        set fullscreen-record enable\n        set proc-matcher-type window-title\n        set proc-matcher-pattern \"^Vision Client.*\"\n    next\nend",
+      "evidence": [
+        "Default matches the initial launch process; Window Title and Command Line use regular expressions.",
+        "A custom matcher forces `multipleprocess enable` and `fullscreen-record enable`.",
+        "Test regex against the full application lifecycle, not just the first launch window.",
+        "Native launcher TLS errors are separate from process matching and require endpoint trust-store checks."
+      ],
+      "dependencies": [
+        "FortiPAM 1.9.0 launcher process matcher feature.",
+        "Custom matchers require FortiClient to observe the full process tree.",
+        "Full-screen recording is forced to preserve audit coverage when the window/process changes."
+      ],
+      "question": "A Java IDE launches as `java.exe`, spawns child processes, and changes its window title. Which matcher and audit settings should be used?"
+    },
+    {
+      "id": "fortisiem-rule-tags",
+      "product": "FortiSIEM",
+      "title": "FortiSIEM 7.4 Rule Tags: rule-action metadata for incident and case search",
+      "primary": "https://docs.fortinet.com/document/fortisiem/7.4.0/user-guide/232919/rule-tags",
+      "community": null,
+      "summary": "Rule tags classify incidents and cases based on the correlation rules that generated them. They are attached to rule actions, not inferred from raw event fields.",
+      "sections": [
+        {
+          "heading": "Purpose and object model",
+          "body": "FortiSIEM 7.4 introduces a tag layer that connects rule logic to analyst-facing incident and case workflows. System-level tags are associated with appropriate built-in rules. Administrators can create user-defined tags and associate them with rules that trigger incidents. A tag is therefore metadata attached to a rule's output, not a parser field and not a free-form label added after an incident has been generated."
+        },
+        {
+          "heading": "Create and attach tags",
+          "body": "Create user-defined tags under Admin > Settings > Analytics > Rule Tags. The tag has a name, color, and optional description. The Scope column distinguishes System tags from User-defined tags. After creation, the tag becomes available in the Tags drop-down when creating or editing a rule. In the rule workflow, the association is made in Step 3: Define Actions. A tag that exists in the Rule Tags table but is not attached to the rule will not appear on incidents generated by that rule."
+        },
+        {
+          "heading": "How tags reach incidents and cases",
+          "body": "When an event matches a correlation rule, the rule action creates or updates an incident. The associated tag is displayed in the Tag column on the Incidents List View or Cases List View, and in the selected incident or case sidebar. Analysts can search for incidents using Incident Tag and for cases using Tag. This is useful for grouping incidents by operational intent, detection family, or response workflow without changing the underlying event parser or correlation condition."
+        },
+        {
+          "heading": "Search semantics and lifecycle",
+          "body": "The search field differs between incidents and cases: use Incident Tag for incident searches and Tag for case searches. System tags cannot be deleted; user-defined tags can be edited or deleted. A tag's presence in the Rule Tags table proves only that the metadata object exists. It does not prove a rule uses it, that the rule fired, or that the generated incident was promoted into a case."
+        },
+        {
+          "heading": "Troubleshooting a missing tag",
+          "body": "Start with the incident and identify the rule that generated it. Open the rule and inspect Step 3: Define Actions to confirm the tag association. Confirm the rule is enabled and that the event actually matched. Then inspect the incident list's Tag column and sidebar. If the tag is visible on an incident but not a case, inspect the case creation/association path and use the correct search field. Do not troubleshoot event ingestion or parser mapping until you have confirmed the rule action."
+        },
+        {
+          "heading": "Operational design",
+          "body": "Use a controlled tag vocabulary: a small number of durable labels is easier to search and report than many near-duplicates. Document tag meaning in the description and assign ownership for lifecycle. Do not encode severity twice if the built-in severity field already serves that purpose. A tag can help triage and search, but it does not change rule matching, incident severity, or remediation actions unless those are separately configured in the rule."
+        }
+      ],
+      "config": "Admin > Settings > Analytics > Rule Tags\n    New -> Tag, Color, Description -> Save\n\nResources > Rules > Edit Rule > Step 3: Define Actions\n    Tag: select one or more tags\n\nSearch:\n    Incidents: Incident Tag\n    Cases: Tag",
+      "evidence": [
+        "The Scope column distinguishes system tags from user-defined tags.",
+        "The rule's Step 3 Define Actions proves whether the tag is attached to the generating rule.",
+        "Incident and Case list columns/sidebar prove the tag reached the record.",
+        "A tag object alone does not prove a rule fired or a case was created."
+      ],
+      "dependencies": [
+        "System tags cannot be deleted; user-defined tags can be edited/deleted.",
+        "The rule must have an incident action configured before it can be saved.",
+        "Incident and case search use different field names."
+      ],
+      "question": "A tag exists in Rule Tags but is absent from incidents created by a rule. Which configuration point should be checked first?"
+    },
+    {
+      "id": "fortisase-branch-onramp",
+      "product": "FortiSASE",
+      "title": "Branch On-ramp: IPsec aggregation, BGP-per-overlay routing, and FWaaS return paths",
+      "primary": "https://docs.fortinet.com/document/fortisase/25.3.57/architecture-guide/213023/site-based-remote-users-using-branch-on-ramp",
+      "community": "https://community.fortinet.com/fortisase-58/technical-tip-fortisase-velocloud-arista-branch-on-ramp-bor-configuration-228592",
+      "summary": "Branch On-ramp centralizes site traffic through an IPsec branch edge into FortiSASE FWaaS. The choice between BGP per overlay and static routing changes source-IP visibility and return-path requirements.",
+      "sections": [
+        {
+          "heading": "Architecture and purpose",
+          "body": "Branch On-ramp is designed for sites where a branch IPsec device centralizes remote-user connectivity to FortiSASE firewall-as-a-service. Endpoints use the branch IPsec device as their default gateway; they do not need individual FortiClient installation or browser proxy configuration. Multiple branch devices can establish IPsec connections to a Branch On-ramp security PoP. This makes the branch edge the aggregation point and the FortiSASE PoP the security enforcement point."
+        },
+        {
+          "heading": "IPsec and policy flow",
+          "body": "Create an IPsec tunnel between the certified branch device and the selected Branch On-ramp location. After the tunnel is up, configure profile groups and policies to control traffic arriving from branch devices. A working IKE/Phase 2 tunnel is necessary but not sufficient: route exchange and return traffic must be correct, and the security policy must permit the intended traffic. A tunnel byte counter that increases proves packets traverse the tunnel; it does not prove the correct internal prefixes are reachable or that the return path is symmetric."
+        },
+        {
+          "heading": "BGP per overlay preserves client visibility",
+          "body": "The FortiSASE guide describes BGP per-overlay routing: the branch FortiGate establishes an iBGP session per overlay with the Branch On-ramp location. The On-ramp location learns routes to local networks behind the branch device. This design allows the PoP to see the original client source IP behind the branch FortiGate. BGP configuration is shared with Secure Private Access (SPA); configure the SPA network settings before deploying a Branch On-ramp location, although SPA service connections can be created afterward."
+        },
+        {
+          "heading": "Static routing changes the source identity",
+          "body": "If static routing is used on the branch FortiGate, source NAT must be configured on the branch firewall policy destined for the On-ramp location so reply traffic can route back. In this design, the On-ramp location sees the tunnel interface IP address rather than the original client IP. This is a meaningful observability and policy difference: source-based controls and logs at the PoP may identify the branch tunnel instead of the individual endpoint. Choose static+SNAT only when that trade-off is acceptable."
+        },
+        {
+          "heading": "Licensing and scale are versioned",
+          "body": "The FortiSASE 25.3.89 release notes describe Branch On-ramp support with Standard subscription for new and upgraded instances, with an additional Advanced Branch On-ramp subscription required on a Standard instance. They document up to 1 Gbps per On-ramp security PoP and up to 2,000 simultaneous dialup IPsec connections, plus 50 TB of annual data transfer based on 50 Mbps business-hours usage; data transfer is aggregated at account level and shared (250 GB per user). Treat these as release-specific entitlement/capacity values and confirm the active tenant subscription and current release notes before designing scale."
+        },
+        {
+          "heading": "Troubleshooting the overlay",
+          "body": "Verify the IPsec phase 1/phase 2 status and byte counters, then inspect the BGP neighbor per overlay and learned routes. The FortiSASE guide notes the IPsec wizard does not include every BGP setting; configure AS number, router ID, neighbor IP, and per-overlay peering. If static routing is used, verify source NAT and return routes. A Community interworking tip for VeloCloud/Arista highlights matching IKEv2, encryption, DH groups, peer ID, tunnel interface IP, and remote subnets. Use it as an interoperability example, not as a replacement for the Fortinet architecture guide."
+        }
+      ],
+      "config": "# Branch FortiGate: BGP per overlay (conceptual fields)\nconfig router bgp\n    set as <branch-as>\n    set router-id <unique-router-id>\n    config neighbor\n        edit <on-ramp-peer-ip>\n            set remote-as <on-ramp-as>\n        next\n    end\nend\n\n# Static-routing alternative requires source NAT on the branch policy\n# so return traffic can route back to the branch tunnel device.",
+      "evidence": [
+        "IPsec phase1/phase2 green and increasing byte counters prove tunnel transport, not route reachability.",
+        "BGP per-overlay neighbor and learned prefixes prove route exchange to branch LANs.",
+        "With BGP per overlay, the PoP can see original client source IPs.",
+        "With static routing plus SNAT, the PoP sees the branch tunnel interface IP."
+      ],
+      "dependencies": [
+        "SPA network/BGP configuration must be created before deploying Branch On-ramp.",
+        "The branch IPsec device centralizes endpoints; individual FortiClient is not required for this use case.",
+        "License, location count, PoP throughput, simultaneous connections, and data-transfer entitlements are release-specific."
+      ],
+      "question": "The FortiSASE PoP must see each workstation's original source IP behind a branch edge. Which routing design should be selected?"
+    },
+    {
+      "id": "sdwan-tos-duplication",
+      "product": "Secure SD-WAN",
+      "title": "ToS-based packet duplication and de-duplication matching",
+      "primary": "https://docs.fortinet.com/document/fortigate/8.0.0/sd-wan-new-features/293842/tos-based-sd-wan-duplication-matching",
+      "community": null,
+      "summary": "FortiOS 8.0 adds an 8-bit ToS value and mask to SD-WAN duplication rules. The source replicates only matching traffic and the remote edge suppresses the corresponding duplicates.",
+      "sections": [
+        {
+          "heading": "Purpose",
+          "body": "Packet duplication sends selected traffic over more than one SD-WAN member or overlay to improve resilience for applications that cannot tolerate loss. At the receiving edge, de-duplication prevents the replicated copies from being delivered to the destination as separate application packets. FortiOS 8.0 adds ToS matching to the duplication rule so an administrator can target a marked traffic class rather than duplicate every packet matching only addresses, interfaces, and service."
+        },
+        {
+          "heading": "How ToS matching works",
+          "body": "The `config system sdwan config duplication` object now includes `set tos` and `set tos-mask`. Both are 8-bit hexadecimal values. The ToS value is the bit pattern to match after applying the mask; the mask identifies which bits are evaluated. With `tos 0x77` and `tos-mask 0xff`, all eight bits must match exactly. A less restrictive mask can match a class of ToS values, but it must be designed intentionally; do not assume the field is DSCP-only because the documented match is the 8-bit ToS byte."
+        },
+        {
+          "heading": "Source and destination roles",
+          "body": "The Fortinet example configures FGT_A with an SD-WAN zone, four members, a duplication rule matching source/destination addresses, source interface, service, and ToS 0x77, and `packet-duplication force`. FGT_B has corresponding zone members and a de-duplication rule matching the same traffic with `packet-de-duplication enable`. The source and destination rules are not interchangeable: one creates copies, the other suppresses duplicates. Their selectors must align so that the remote edge recognizes the replicated flow."
+        },
+        {
+          "heading": "Testing the match",
+          "body": "The documented example sends IPv4 and IPv6 ping traffic with ToS 0x00 and shows normal reachability without duplication because the rule matches 0x77. It then sends ping with ToS 0x77 to demonstrate duplication and de-duplication. On Linux, `ping -Q 0x77` sets the ToS byte for the test. A successful ping alone proves reachability; it does not prove duplication. To prove the rule matched, correlate the test value with the configured `tos`/`tos-mask` and inspect packet captures or platform counters that show replicated copies and remote suppression."
+        },
+        {
+          "heading": "Common failure modes",
+          "body": "If traffic is not duplicated, check the ToS byte at ingress, mask, source/destination addresses, source/destination interfaces, service, SD-WAN zone membership, and duplication maximum. If traffic is duplicated but not suppressed, compare the de-duplication selectors and the remote direction. A different mask, service, or address object can make the remote rule miss even when the source replicates correctly. IPv4 and IPv6 selectors should be validated independently."
+        },
+        {
+          "heading": "Operational design",
+          "body": "Use duplication only for the traffic classes that need it; replication consumes bandwidth and can amplify congestion if applied too broadly. Ensure the member/overlay diversity is real and that the destination edge sees both copies. Use exact masks for strict classes and document the packet-marking owner. Test the default/nonmatching ToS value as well as the matching value so that unrelated traffic is not accidentally duplicated."
+        }
+      ],
+      "config": "config system sdwan\n    config duplication\n        edit 1\n            set srcaddr \"172.16.205.0\"\n            set dstaddr \"172.16.202.0\"\n            set srcintf \"port5\"\n            set service \"PING\"\n            set tos 0x77\n            set tos-mask 0xff\n            set packet-duplication force\n        next\n    end\nend\n\n# Remote edge uses corresponding selectors and:\n# set packet-de-duplication enable\n\n# Linux test traffic\nping 172.16.202.2 -Q 0x00\nping 172.16.202.2 -Q 0x77",
+      "evidence": [
+        "ToS 0x00 should not match a rule for 0x77/0xff.",
+        "ToS 0x77 should match the exact 8-bit rule.",
+        "Compare source duplication and remote de-duplication selectors, including IPv4/IPv6 objects.",
+        "Ping success proves reachability, not packet replication or suppression."
+      ],
+      "dependencies": [
+        "SD-WAN duplication maximum and zone-member count constrain replication.",
+        "The mask applies to the 8-bit ToS value after masking.",
+        "Replication consumes bandwidth; de-duplication must be configured on the receiving edge."
+      ],
+      "question": "A duplication rule matches `tos 0x77` with `tos-mask 0xff`. Which test packet should match exactly?"
+    }
+  ]
+}
