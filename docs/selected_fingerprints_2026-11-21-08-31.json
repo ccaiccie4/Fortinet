@@ -47,16 +47,16 @@
     },
     {
       "product": "FortiSwitch",
-      "lesson_subject": "FortiSwitch IP conflict detection: passive ARP ownership claims, active gratuitous-ARP probes, logs, and SNMP traps",
-      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163701/ip-conflict-detection",
+      "lesson_subject": "FortiSwitch signed configuration backups: same-device provenance and tamper verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163698/backup",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "Global IP conflict detection uses two ARP observations: passive broadcast ARP claims matching a FortiSwitch system-interface IP, and active gratuitous ARP probes on boot/interface-up/IP-change; conflict creates system log and SNMP trap.",
-      "workflow_transaction_fingerprint": "Enable global detect-ip-conflict -> switch observes ARP claim or emits gratuitous ARP after qualifying event -> conflicting owner replies or claims same interface IP -> switch records conflict and raises SNMP trap.",
-      "failure_class": "Duplicate address intermittently disrupts switch management or routing, but operators assume the feature scans every endpoint or mistake a silent host-to-host duplicate for a monitored system-interface collision.",
-      "evidence_pattern": "System event log with interface/IP conflict, SNMP trap, packet capture of ARP claim or gratuitous-ARP probe/reply; absence of a log does not prove no duplicate exists elsewhere in the VLAN.",
-      "remediation_path": "Identify the conflicting MAC and interface; correct static addressing or DHCP scope overlap; verify global detection state and SNMP receiver; do not substitute this feature for DHCP snooping, DAI or an IPAM audit.",
-      "question_fingerprint": "A duplicate IP is reported for a FortiSwitch management address; determine which ARP observation triggers the switch event and what address scope is actually covered.",
-      "diagram_topology_layout_fingerprint": "FortiSwitch system interface and two endpoint MACs on a shared L2 segment; passive ARP claim and active gratuitous-ARP probe arrows converge on conflict log/SNMP trap."
+      "feature_mechanism_fingerprint": "FortiSwitchOS 8.0 signs configuration backups with device-specific provenance; restore verifies the file was created by the same switch and has not been modified; verify-config log accepts and warns, reject blocks unverified files; signature does not encrypt the backup.",
+      "workflow_transaction_fingerprint": "Switch saves configuration/revision backup -> switch signs file -> backup is stored/exported -> restore reads file -> local verifier checks source-device provenance and file integrity -> log mode accepts with warning or reject mode blocks.",
+      "failure_class": "Restore fails on replacement switch or edited backup because provenance/integrity cannot be verified; operators mistake the security rejection for a corrupt file or disable verification globally.",
+      "evidence_pattern": "verify-config read-back; restore warning in log mode; restore rejection in reject mode; successful same-device restore of unmodified backup; backup source switch and file hash.",
+      "remediation_path": "Preserve original signed file and hash; distinguish same-device restore from cross-device migration; use supported migration procedure for replacement units; enforce reject where appropriate and document controlled exceptions.",
+      "question_fingerprint": "A replacement switch rejects an intact backup from a decommissioned peer; explain same-device signature provenance and the log/reject policy.",
+      "diagram_topology_layout_fingerprint": "Source switch signs config backup -> stored signed file -> restore on same device -> provenance/integrity verifier -> accept; foreign or altered file branch to warn/reject."
     },
     {
       "product": "FortiAP/Wireless",
