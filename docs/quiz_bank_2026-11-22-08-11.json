@@ -33,20 +33,20 @@
       "question": "Which statement correctly distinguishes the two outbound route-map fields?",
       "choices": [
         {
-          "text": "The normal map is always used; the preferred map only changes local forwarding.",
-          "feedback": "The normal map is the fallback advertisement filter; the preferred map applies when the peer is preferred."
+          "text": "The normal map stays active while the preferred map changes local forwarding.",
+          "feedback": "Outbound maps filter advertisements; they do not select the FortiGate's local WAN path."
         },
         {
-          "text": "The normal map is the fallback filter; the preferred map is used when the peer is preferred.",
-          "feedback": "This is the documented distinction between route-map-out and route-map-out-preferable."
+          "text": "The normal map is fallback; the preferred map applies when SD-WAN marks the peer preferred.",
+          "feedback": "This is the documented selection rule for the two outbound BGP map fields."
         },
         {
-          "text": "The preferred map applies only to IPv6; the normal map applies only to IPv4.",
-          "feedback": "IPv4 and IPv6 each have separate normal and preferred fields."
+          "text": "The preferred map is for IPv6 only; the normal map is for IPv4 only.",
+          "feedback": "IPv4 and IPv6 each have normal and preferred outbound map fields."
         },
         {
-          "text": "The preferred map controls inbound routes; the normal map controls redistribution.",
-          "feedback": "Both fields are outbound BGP neighbor policy, not inbound filtering."
+          "text": "The preferred map filters inbound routes; the normal map handles redistribution policy.",
+          "feedback": "Inbound filtering and redistribution use different route-map attachment points."
         }
       ],
       "correct_index": 1
@@ -129,20 +129,20 @@
       "question": "What does a successful Global Policy Package assignment prove?",
       "choices": [
         {
-          "text": "The ADOM version is irrelevant to assignment eligibility.",
-          "feedback": "Only compatible ADOM versions are offered for assignment."
+          "text": "The ADOM version is irrelevant because global packages ignore version compatibility.",
+          "feedback": "FortiManager restricts assignment to compatible ADOM versions."
         },
         {
-          "text": "Every managed FortiGate has already received the new header and footer.",
-          "feedback": "Device installation is a separate action and must be verified."
+          "text": "Every managed FortiGate has already received the new header and footer rules.",
+          "feedback": "Assignment synchronizes the ADOM model; a device install is still required."
         },
         {
-          "text": "The global objects were automatically copied from each FortiGate.",
-          "feedback": "Global objects are managed in the Global Database and are not reconstructed this way."
+          "text": "Global objects were copied back automatically from each managed FortiGate device.",
+          "feedback": "Global Database objects are not reconstructed from managed device configuration."
         },
         {
-          "text": "The package has been synchronized into the ADOM model, not necessarily installed on devices.",
-          "feedback": "Assignment and installation are separate stages; device policy still needs an install."
+          "text": "The package is synchronized into the ADOM, but device installation remains separate.",
+          "feedback": "Assignment and installation are distinct operations."
         }
       ],
       "correct_index": 3
@@ -177,20 +177,20 @@
       "question": "After unassigning a global policy package, why is a device installation still required?",
       "choices": [
         {
-          "text": "The ADOM version must be downgraded before removal.",
-          "feedback": "Version compatibility is unrelated to removing installed global policy."
+          "text": "Downgrade the ADOM version before removing the assigned global package.",
+          "feedback": "Version downgrade is not the device-side removal mechanism."
         },
         {
-          "text": "The global package is deleted from the Global Database only after reboot.",
-          "feedback": "Unassignment and deletion are separate from device reboot behavior."
+          "text": "The Global Database deletes the package only after a managed-device reboot.",
+          "feedback": "A reboot is not the documented removal workflow."
         },
         {
-          "text": "The device must receive the resulting policy that removes the previously installed global rules.",
-          "feedback": "Unassignment changes the FortiManager model; the managed firewall still needs the removal installed."
+          "text": "The device must receive an install that removes previously installed global rules.",
+          "feedback": "Unassignment changes the FortiManager model; install removes the device policy."
         },
         {
-          "text": "The FortiGate must re-import its configuration into the Global Database.",
-          "feedback": "Global header/footer rules cannot be retrieved from the managed device."
+          "text": "The FortiGate must re-import its configuration into Global Database first.",
+          "feedback": "Global header/footer policies cannot be retrieved from the managed device."
         }
       ],
       "correct_index": 2
@@ -201,20 +201,20 @@
       "question": "An analyst selects two values in the Explorer Source quick filter and receives zero results. What is the most likely interpretation?",
       "choices": [
         {
-          "text": "The timeline chart has hidden the underlying related-alert table.",
-          "feedback": "Timeline visibility does not change the filter logic."
+          "text": "The timeline view hides related alerts whenever multiple filters are selected.",
+          "feedback": "Timeline visibility is separate from the quick-filter result set."
         },
         {
-          "text": "The values are combined with OR, so the log database is unavailable.",
-          "feedback": "The documented behavior is AND, not OR."
+          "text": "The filter uses OR, and the empty result proves that log ingestion stopped.",
+          "feedback": "Multiple quick-filter values are combined with AND."
         },
         {
-          "text": "The alert handler has been automatically disabled.",
-          "feedback": "Quick-filter selection does not disable an alert handler."
+          "text": "The alert handler was disabled automatically when the filter was selected.",
+          "feedback": "Selecting a filter does not disable the handler."
         },
         {
-          "text": "The filters are combined with AND, so the selection narrowed the result set.",
-          "feedback": "FortiAnalyzer documents AND semantics for multiple quick-filter selections."
+          "text": "The quick filters combine with AND, further narrowing the alert result set.",
+          "feedback": "Multiple selected values narrow the result set using AND semantics."
         }
       ],
       "correct_index": 3
@@ -225,20 +225,20 @@
       "question": "The Explorer timeline is blank immediately after an 8.0 upgrade, while related alerts are visible. What should be checked first?",
       "choices": [
         {
-          "text": "Rebuild the FortiAnalyzer SQL database.",
-          "feedback": "Visible related alerts show that the pane is returning alert records."
+          "text": "Rebuild the FortiAnalyzer database to restore the missing timeline chart.",
+          "feedback": "The documented default is a disabled timeline view, not a database fault."
         },
         {
-          "text": "Enable the timeline in View Options; it is disabled by default in 8.0.",
-          "feedback": "The 8.0 Explorer change disables the timeline by default to make room for filters and related alerts."
+          "text": "Enable the timeline in View Options; FortiAnalyzer 8.0 disables it by default.",
+          "feedback": "The 8.0 Explorer timeline is disabled by default."
         },
         {
-          "text": "Reinstall all FortiGate log-forwarding policies.",
-          "feedback": "A disabled timeline view is not evidence of failed log forwarding."
+          "text": "Reinstall FortiGate log-forwarding policies to repopulate the timeline chart.",
+          "feedback": "Visible related alerts show that the Explorer already has alert records."
         },
         {
-          "text": "Change the alert handler group-by fields to include severity.",
-          "feedback": "Group-by affects source/target attribution, not whether the timeline view is enabled."
+          "text": "Change the alert-handler group-by fields to add a timeline dimension.",
+          "feedback": "Group-by fields affect Source/Target meaning, not timeline visibility."
         }
       ],
       "correct_index": 1
@@ -249,20 +249,20 @@
       "question": "An alert's Source field shows a username and Target shows a server. What determines those labels?",
       "choices": [
         {
-          "text": "The order in which logs arrived at FortiAnalyzer.",
-          "feedback": "Arrival order does not define the Source/Target semantics."
+          "text": "The order in which the triggering log records arrived at FortiAnalyzer.",
+          "feedback": "Arrival order does not define the alert's Source and Target labels."
         },
         {
-          "text": "The physical ingress and egress interfaces on the FortiGate.",
-          "feedback": "The fields may represent identities or assets rather than packet interfaces."
+          "text": "The physical ingress and egress interfaces on the source FortiGate.",
+          "feedback": "Those fields may represent identities or assets rather than packet interfaces."
         },
         {
-          "text": "The group-by fields configured in the alert handler that triggered the alert.",
-          "feedback": "FortiAnalyzer assigns Source and Target based on the alert handler's group-by fields."
+          "text": "The alert handler's configured group-by fields define Source and Target labels.",
+          "feedback": "The handler determines which attributes populate those fields."
         },
         {
-          "text": "The endpoint's current default gateway.",
-          "feedback": "Gateway selection does not define alert-handler group-by fields."
+          "text": "The endpoint's current default gateway and routing table entries.",
+          "feedback": "Routing state does not define the alert handler's group-by fields."
         }
       ],
       "correct_index": 2
@@ -369,20 +369,20 @@
       "question": "Which statement about IGMP snooping is correct for FortiSwitch VXLAN?",
       "choices": [
         {
-          "text": "It is unsupported in the underlay but can be supported on access VLANs on eligible models.",
-          "feedback": "The guide distinguishes the underlay restriction from model-dependent access-VLAN support."
+          "text": "Underlay snooping is unsupported; eligible access VLANs can use IGMP snooping.",
+          "feedback": "FortiSwitch distinguishes the unsupported underlay from model-dependent access-VLAN support."
         },
         {
-          "text": "It must be enabled on every underlay router for VXLAN to work.",
-          "feedback": "The guide says IGMP snooping is not supported in VXLAN underlay networks."
+          "text": "Enable IGMP snooping on every underlay router to support VXLAN flooding.",
+          "feedback": "IGMP snooping is not supported in the VXLAN underlay network."
         },
         {
-          "text": "It is required for unicast VXLAN tunnels.",
-          "feedback": "Unicast VXLAN does not require IGMP snooping."
+          "text": "Unicast VXLAN tunnels require IGMP snooping to learn remote MAC addresses.",
+          "feedback": "Remote MAC learning and unicast VXLAN do not require underlay IGMP snooping."
         },
         {
-          "text": "It replaces the VNI-to-VLAN mapping.",
-          "feedback": "The VNI/VLAN mapping is configured separately."
+          "text": "IGMP snooping replaces the local VNI-to-VLAN mapping on each switch.",
+          "feedback": "VNI and VLAN mapping remains an explicit VXLAN interface setting."
         }
       ],
       "correct_index": 0
@@ -393,20 +393,20 @@
       "question": "A G-series AP does not offer channels 169, 173, or 177. What prerequisite should be checked first?",
       "choices": [
         {
-          "text": "Change the FortiGate system DNS server.",
-          "feedback": "DNS does not control the AP profile's available channels."
+          "text": "Change the FortiGate system DNS server to refresh the AP channel list.",
+          "feedback": "DNS does not control the regulatory channel set."
         },
         {
-          "text": "Increase the 2.4 GHz transmit power to maximum.",
-          "feedback": "2.4 GHz power does not enable 5 GHz UNII-4 channels."
+          "text": "Increase 2.4 GHz transmit power before enabling additional 5 GHz channels.",
+          "feedback": "Transmit power does not enable UNII-4 channel availability."
         },
         {
-          "text": "Enable WPA3 Enterprise on the SSID.",
-          "feedback": "Authentication mode does not determine the radio's regulatory channel list."
+          "text": "Enable WPA3 Enterprise on the SSID before selecting UNII-4 channels.",
+          "feedback": "SSID authentication does not determine the AP radio channel list."
         },
         {
-          "text": "Confirm the AP is in Single 5G platform mode and the country permits UNII-4.",
-          "feedback": "UNII-4 is unavailable in Dual 5G mode and some countries do not allow it."
+          "text": "Confirm Single 5G mode and a country code that permits UNII-4.",
+          "feedback": "UNII-4 requires the supported platform mode and a permissive regulatory domain."
         }
       ],
       "correct_index": 3
@@ -417,20 +417,20 @@
       "question": "Dedicated Scan is disabled on a supported Single-5G profile. What additional setting exposes UNII-4?",
       "choices": [
         {
-          "text": "Enable Dynamic VLAN assignment on the SSID.",
-          "feedback": "VLAN assignment does not control the radio channel list."
+          "text": "Enable Dynamic VLAN assignment on the SSID before editing radio channels.",
+          "feedback": "Dynamic VLAN does not expose the radio's UNII-4 channel group."
         },
         {
           "text": "Enable the UNII-4 5GHz band option in the FortiAP profile.",
-          "feedback": "The guide documents this explicit toggle when Dedicated Scan is disabled."
+          "feedback": "With Dedicated Scan disabled, the profile exposes this explicit control."
         },
         {
-          "text": "Set the AP to Dual 5G mode.",
+          "text": "Set the AP to Dual 5G mode to expose the additional UNII-4 channels.",
           "feedback": "Dual 5G mode makes UNII-4 unavailable."
         },
         {
-          "text": "Enable 802.11r fast roaming.",
-          "feedback": "Fast roaming is unrelated to regulatory channel availability."
+          "text": "Enable 802.11r fast roaming to unlock the UNII-4 channel list.",
+          "feedback": "Fast roaming does not control the radio's regulatory channel set."
         }
       ],
       "correct_index": 1
@@ -465,20 +465,20 @@
       "question": "The profile shows UNII-4 enabled. What does that not prove?",
       "choices": [
         {
-          "text": "That Radio 3's channel list is affected.",
-          "feedback": "The documented trade-off is a consequence of enabling UNII-4."
+          "text": "That Radio 3 will retain its UNII-5 and UNII-6 channel options.",
+          "feedback": "Enabling UNII-4 removes those channel groups from Radio 3."
         },
         {
-          "text": "That the profile contains a UNII-4 setting.",
-          "feedback": "The profile display does prove the setting is configured."
+          "text": "That the controller profile contains the UNII-4 enable setting.",
+          "feedback": "The profile display proves configuration, not AP runtime behavior."
         },
         {
-          "text": "That the AP has received the profile and is transmitting on an allowed channel.",
-          "feedback": "Controller configuration alone does not prove AP operational state or regulatory acceptance."
+          "text": "That the AP received the profile and is transmitting on a permitted channel.",
+          "feedback": "Operational state must be verified on the AP and in the regulatory domain."
         },
         {
-          "text": "That the selected model is a G-series device.",
-          "feedback": "The profile's model selection can show the intended platform, though not actual radio operation."
+          "text": "That the selected FortiAP model belongs to the supported G-series family.",
+          "feedback": "A profile selection alone does not prove the deployed hardware model."
         }
       ],
       "correct_index": 2
@@ -513,20 +513,20 @@
       "question": "Which response is the strongest first verification for HSTS behavior?",
       "choices": [
         {
-          "text": "Rebuild the FortiNAC host inventory.",
-          "feedback": "Host inventory does not verify the browser's HSTS policy."
+          "text": "Rebuild the FortiNAC host inventory to refresh browser security headers.",
+          "feedback": "Host inventory does not verify the Admin GUI's HTTPS response."
         },
         {
-          "text": "Clear the browser cache and disable certificate validation.",
-          "feedback": "That hides the browser state and weakens security without fixing TLS."
+          "text": "Clear browser HSTS state and disable certificate validation temporarily.",
+          "feedback": "That hides the symptom and weakens TLS validation without fixing the cause."
         },
         {
-          "text": "Run a RADIUS Access-Request to the switch.",
-          "feedback": "RADIUS does not show the Admin GUI's HTTP security header."
+          "text": "Send a RADIUS Access-Request to confirm the Admin GUI's HTTPS behavior.",
+          "feedback": "RADIUS does not expose the web response header or certificate."
         },
         {
-          "text": "Inspect the HTTPS response header and certificate SAN/chain for the canonical hostname.",
-          "feedback": "HSTS is delivered over HTTPS and depends on a working trusted TLS endpoint."
+          "text": "Inspect the HTTPS response header and certificate chain for the canonical hostname.",
+          "feedback": "This verifies HSTS delivery and the TLS endpoint used by the browser."
         }
       ],
       "correct_index": 3
@@ -537,20 +537,20 @@
       "question": "Why can a certificate hostname mismatch become more visible after HSTS is enabled?",
       "choices": [
         {
-          "text": "The browser stops checking the certificate chain after caching HSTS.",
-          "feedback": "HSTS does not bypass TLS certificate validation."
+          "text": "The browser stops validating the certificate after it caches HSTS.",
+          "feedback": "HSTS enforces HTTPS but does not bypass certificate validation."
         },
         {
-          "text": "HSTS changes the certificate's subject alternative names automatically.",
-          "feedback": "HSTS does not modify certificates."
+          "text": "HSTS automatically adds the GUI hostname to the certificate SAN list.",
+          "feedback": "The certificate must already contain the correct subject alternative name."
         },
         {
-          "text": "The browser will not silently fall back to insecure HTTP when HTTPS validation fails.",
-          "feedback": "HSTS enforces HTTPS, so a bad certificate becomes a hard connection failure."
+          "text": "The browser will not fall back to insecure HTTP when HTTPS validation fails.",
+          "feedback": "HSTS makes certificate defects a hard HTTPS failure rather than a downgrade."
         },
         {
-          "text": "The browser sends the administrator password in the HSTS header.",
-          "feedback": "The header contains transport policy, not credentials."
+          "text": "The browser sends administrator credentials inside the HSTS response header.",
+          "feedback": "The header carries transport policy, not user credentials."
         }
       ],
       "correct_index": 2
@@ -897,20 +897,20 @@
       "question": "A high-risk score appears for a user. What is the correct operational interpretation?",
       "choices": [
         {
-          "text": "Ignore the score because it cannot be used for triage.",
-          "feedback": "The dashboard and drill-down are intended to support prioritization."
+          "text": "Ignore the score because composite risk values cannot prioritize investigations.",
+          "feedback": "FortiSIEM provides the score and factor drill-down specifically for prioritization."
         },
         {
-          "text": "Immediately disable the account without reviewing any evidence.",
-          "feedback": "Containment should be based on the underlying incidents and response policy."
+          "text": "Disable the account immediately without reviewing its incident evidence.",
+          "feedback": "Containment should be based on the underlying incident evidence and response policy."
         },
         {
-          "text": "Assume the identity mapping and asset context are always correct.",
-          "feedback": "Incorrect CMDB mapping can distort the score."
+          "text": "Assume the identity mapping and asset context are correct without checking.",
+          "feedback": "Incorrect CMDB or identity mapping can distort the score."
         },
         {
-          "text": "Use the drill-down factors to prioritize investigation; the score alone is not proof of compromise.",
-          "feedback": "The score is a composite prioritization signal, not a deterministic verdict."
+          "text": "Use factor drill-down to prioritize investigation; the score alone is not compromise proof.",
+          "feedback": "A composite score guides triage but is not a deterministic verdict."
         }
       ],
       "correct_index": 3
@@ -969,20 +969,20 @@
       "question": "The FortiSASE profile shows Allow FIDO authentication, but FIDO is not offered to the user. Which prerequisite is essential?",
       "choices": [
         {
-          "text": "The endpoint must disable all SAML authentication.",
-          "feedback": "FIDO is used in the SAML identity flow."
+          "text": "Disable SAML authentication so FortiClient can offer FIDO directly.",
+          "feedback": "FIDO is part of the configured SAML identity flow."
         },
         {
-          "text": "The endpoint must use a static IPv4 address and DHCP relay.",
-          "feedback": "IP addressing is not the FIDO profile prerequisite."
+          "text": "Use a static IPv4 address and DHCP relay before enabling passkeys.",
+          "feedback": "Address assignment is not the FIDO profile prerequisite."
         },
         {
-          "text": "The tunnel must use UDP port 4789.",
-          "feedback": "4789 is the VXLAN port, not the SAML/FIDO requirement."
+          "text": "Set the custom tunnel to UDP port 4789 before enabling FIDO2.",
+          "feedback": "4789 is the VXLAN port and is unrelated to the SAML browser prerequisite."
         },
         {
-          "text": "Authenticate with SSO and Use FortiClient built-in browser for SAML must also be enabled.",
-          "feedback": "The FIDO option is available only when those SSO and embedded-browser settings are enabled."
+          "text": "Enable SSO authentication and FortiClient's embedded SAML browser.",
+          "feedback": "Both SSO and the embedded browser are prerequisites for the FIDO option."
         }
       ],
       "correct_index": 3
@@ -1041,20 +1041,20 @@
       "question": "What does the embedded FortiClient browser contribute to this FIDO flow?",
       "choices": [
         {
-          "text": "It provides the SAML user-agent path in which the Entra FIDO2 challenge occurs.",
-          "feedback": "The guide requires the embedded browser when FIDO authentication is enabled."
+          "text": "It supplies the SAML user-agent path where the Entra FIDO2 challenge occurs.",
+          "feedback": "The embedded browser carries the SAML identity flow and passkey challenge."
         },
         {
-          "text": "It performs the IPsec encryption and key exchange itself.",
-          "feedback": "The browser handles SAML authentication, not the IPsec cryptographic data plane."
+          "text": "It performs IPsec encryption and IKE key exchange inside the browser.",
+          "feedback": "Tunnel cryptography is handled by FortiClient, not the browser."
         },
         {
-          "text": "It replaces the Entra ID identity provider.",
-          "feedback": "Entra ID remains the configured FIDO2/SAML identity provider."
+          "text": "It replaces Entra ID as the configured SAML identity provider.",
+          "feedback": "Entra remains the identity provider and performs the FIDO2 challenge."
         },
         {
-          "text": "It assigns the endpoint's SD-WAN member.",
-          "feedback": "The browser does not select the WAN member."
+          "text": "It selects the endpoint's SD-WAN member during tunnel startup.",
+          "feedback": "The browser does not choose the endpoint's WAN member."
         }
       ],
       "correct_index": 0
@@ -1065,20 +1065,20 @@
       "question": "Why does BGP on loopback reduce hub scale compared with BGP per overlay?",
       "choices": [
         {
-          "text": "It removes the need for every spoke to advertise its LAN prefixes.",
-          "feedback": "Spoke LAN prefixes are still advertised to the hub."
+          "text": "It removes the need for spokes to advertise LAN prefixes to their hubs.",
+          "feedback": "Spoke LAN routes are still advertised; the reduction is in session count."
         },
         {
-          "text": "Each spoke forms one iBGP session per hub rather than a session for every overlay tunnel.",
-          "feedback": "The loopback design reduces the number of BGP sessions and hub routing updates."
+          "text": "Each spoke keeps one iBGP session per hub instead of one per overlay tunnel.",
+          "feedback": "Loopback peering reduces the number of overlay-specific BGP sessions."
         },
         {
-          "text": "It moves all BGP sessions to the physical WAN interfaces.",
-          "feedback": "BGP on loopback terminates on stable loopback addresses."
+          "text": "It moves every BGP session onto the physical WAN interface addresses.",
+          "feedback": "BGP on loopback uses stable loopback identities, not physical WAN addresses."
         },
         {
-          "text": "It replaces ADVPN shortcut discovery with static routes.",
-          "feedback": "Dynamic BGP and ADVPN remain separate but cooperating mechanisms."
+          "text": "It replaces ADVPN shortcut discovery with manually configured static routes.",
+          "feedback": "ADVPN shortcut discovery remains a separate mechanism."
         }
       ],
       "correct_index": 1
@@ -1089,20 +1089,20 @@
       "question": "What does Dynamic BGP add to an ADVPN shortcut?",
       "choices": [
         {
-          "text": "An automatic replacement for all SD-WAN health checks.",
+          "text": "It replaces the need for all SD-WAN underlay health checks.",
           "feedback": "ADVPN 2.0 still uses underlay link-health criteria."
         },
         {
-          "text": "A second IPsec tunnel between each spoke and every hub.",
-          "feedback": "Dynamic BGP is about route exchange over the shortcut, not adding hub tunnels."
+          "text": "It creates a second IPsec tunnel from each spoke to every hub.",
+          "feedback": "Dynamic BGP forms a spoke-to-spoke session over the shortcut."
         },
         {
-          "text": "A static default route on every FortiGate interface.",
-          "feedback": "Default-route reachability may be a prerequisite, but it is not the Dynamic BGP feature."
+          "text": "It installs a static default route on every FortiGate interface.",
+          "feedback": "A default route may be needed for reachability but is not Dynamic BGP."
         },
         {
-          "text": "A direct BGP session between the two spokes over the shortcut for route exchange.",
-          "feedback": "The feature dynamically forms a spoke-to-spoke BGP session and avoids hub route reflection."
+          "text": "It forms a direct spoke-to-spoke BGP session over the shortcut for route exchange.",
+          "feedback": "This is the route-exchange behavior added by Dynamic BGP."
         }
       ],
       "correct_index": 3
@@ -1137,20 +1137,20 @@
       "question": "Why should the SLA server not be the remote BGP peer loopback in the documented ADVPN design?",
       "choices": [
         {
-          "text": "The SLA engine requires a multicast address for every peer.",
-          "feedback": "The issue is route persistence, not multicast addressing."
+          "text": "The SLA engine requires a multicast target for each spoke peer.",
+          "feedback": "The issue is route persistence to the health-check destination, not multicast."
         },
         {
-          "text": "The peer loopback cannot be advertised in BGP.",
-          "feedback": "The loopback is specifically used as a stable BGP identity."
+          "text": "The peer loopback cannot be advertised through the overlay BGP process.",
+          "feedback": "The loopback is intended to provide a stable BGP identity."
         },
         {
-          "text": "A kernel route to the health-check target can keep BGP traffic pinned to the same tunnel after SLA failure.",
-          "feedback": "The Community article warns that the health-check route can persist and influence the BGP path."
+          "text": "A persistent kernel route to the health-check target can pin BGP traffic after SLA failure.",
+          "feedback": "The Community scenario warns that the route can keep the control session on the same tunnel."
         },
         {
-          "text": "The BGP peer must use UDP port 4789 for health checks.",
-          "feedback": "4789 is the VXLAN UDP port, unrelated to BGP peer health checks."
+          "text": "The BGP peer must use UDP 4789 for all SLA probes.",
+          "feedback": "BGP uses TCP; 4789 is the VXLAN UDP port."
         }
       ],
       "correct_index": 2
@@ -1161,20 +1161,20 @@
       "question": "A spoke cannot trigger a shortcut for a destination in another VRF. Which route check is most relevant?",
       "choices": [
         {
-          "text": "Verify the FortiAnalyzer Explorer timeline setting.",
-          "feedback": "The Explorer timeline is unrelated to shortcut initiation."
+          "text": "Verify hub loopback reachability and BGP next-hop resolution in the PE VRF.",
+          "feedback": "This is plausible but does not prove the spoke has a route in the VRF that must trigger the shortcut."
         },
         {
-          "text": "Verify the FortiAP UNII-4 channel plan.",
-          "feedback": "Wireless channel allocation does not affect VRF route reachability."
+          "text": "Verify the ADVPN shortcut idle timer and BGP neighbor keepalive values.",
+          "feedback": "Those timers affect session lifecycle after a shortcut exists, not initial reachability."
         },
         {
-          "text": "Verify the FortiPAM SCIM profile mapping.",
-          "feedback": "Identity provisioning does not establish the overlay route."
+          "text": "Verify the local route map and BGP community policy for the remote prefix.",
+          "feedback": "Route-map policy affects route advertisement after reachability is established."
         },
         {
-          "text": "Verify hub/default-route reachability in the VRF that must reach the hub to trigger shortcut creation.",
-          "feedback": "The Community example shows that a default route in one VRF may not provide reachability for another VRF."
+          "text": "Verify hub/default-route reachability in the VRF that must trigger shortcut creation.",
+          "feedback": "The required hub reachability must exist in the VRF where shortcut initiation occurs."
         }
       ],
       "correct_index": 3
