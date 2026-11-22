@@ -1,0 +1,1507 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-22T08:41:03-08:00",
+  "count": 50,
+  "questions": [
+    {
+      "number": 1,
+      "question": "A VPNv4 route is reflected but its next hop remains an unreachable PE. Which control targets that address family?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Enable next-hop-self on all unicast peers.",
+          "correct": false,
+          "feedback": "This affects ordinary next-hop behavior, not VPNv4 route reflection."
+        },
+        {
+          "letter": "B",
+          "text": "Enable next-hop-self-rr-vpnv4 for the RR client.",
+          "correct": true,
+          "feedback": "Correct: the AF-specific RR setting rewrites VPNv4 NEXT_HOP."
+        },
+        {
+          "letter": "C",
+          "text": "Change the route-target import list.",
+          "correct": false,
+          "feedback": "Route targets control VPN membership, not the transport next hop."
+        },
+        {
+          "letter": "D",
+          "text": "Redistribute the VPN route globally.",
+          "correct": false,
+          "feedback": "Redistribution changes route sources and may leak routes; it does not rewrite the reflected attribute."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "question": "A whole PE group needs VPNv6 next-hop rewriting, while other clients stay unchanged. Where should the setting live?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Globally under router bgp.",
+          "correct": false,
+          "feedback": "A global change is broader than the intended peer population."
+        },
+        {
+          "letter": "B",
+          "text": "On the receiver's static route.",
+          "correct": false,
+          "feedback": "A static route may restore reachability but does not implement the RR attribute policy."
+        },
+        {
+          "letter": "C",
+          "text": "On the matching neighbor group.",
+          "correct": true,
+          "feedback": "Correct: neighbor-group scope applies the rewrite only to that client set."
+        },
+        {
+          "letter": "D",
+          "text": "On the route-target import rule.",
+          "correct": false,
+          "feedback": "Route-targets decide route membership, not NEXT_HOP rewriting."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "question": "The BGP session is Established and the VPN route is present, but forwarding fails. What evidence best separates receipt from usability?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Inspect the installed gateway and recursive resolution.",
+          "correct": true,
+          "feedback": "Correct: the routing table and recursive lookup show whether the next hop can forward."
+        },
+        {
+          "letter": "B",
+          "text": "Check only neighbor uptime.",
+          "correct": false,
+          "feedback": "Uptime proves session stability, not a usable FIB entry."
+        },
+        {
+          "letter": "C",
+          "text": "Confirm the route-target is configured.",
+          "correct": false,
+          "feedback": "RT configuration matters if the route is absent; the route is already present."
+        },
+        {
+          "letter": "D",
+          "text": "Review administrator login history.",
+          "correct": false,
+          "feedback": "Administrator history does not explain next-hop resolution."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "question": "After enabling VPNv4 next-hop-self, the route is still absent from the VPN table. What should be checked first?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "AP MLO link count.",
+          "correct": false,
+          "feedback": "Wireless link state is unrelated to VPN route distribution."
+        },
+        {
+          "letter": "B",
+          "text": "FortiManager SASE key.",
+          "correct": false,
+          "feedback": "The SASE key controls management registration."
+        },
+        {
+          "letter": "C",
+          "text": "SAML digest settings.",
+          "correct": false,
+          "feedback": "SAML digest controls admin login."
+        },
+        {
+          "letter": "D",
+          "text": "RT import/export and address-family activation.",
+          "correct": true,
+          "feedback": "Correct: absent VPN NLRI points to RT policy or address-family activation before next-hop troubleshooting."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "question": "FMG and SASE use different FortiCare accounts but valid parent/child OU placement. What is needed?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A FortiGate admin password.",
+          "correct": false,
+          "feedback": "A FortiGate password does not authorize SASE registration."
+        },
+        {
+          "letter": "B",
+          "text": "A FortiManager Key from SASE Central Management Settings.",
+          "correct": true,
+          "feedback": "Correct: generate and provide the tenant FortiManager Key when accounts differ."
+        },
+        {
+          "letter": "C",
+          "text": "A Global Database ADOM.",
+          "correct": false,
+          "feedback": "The Global Database ADOM is not a supported destination."
+        },
+        {
+          "letter": "D",
+          "text": "A separate FortiAnalyzer license.",
+          "correct": false,
+          "feedback": "FortiAnalyzer licensing is unrelated to the connector key."
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "question": "Adding SASE fails because the selected ADOM is in Backup mode. What is the correction?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Select a supported non-Backup ADOM.",
+          "correct": true,
+          "feedback": "Correct: FortiSASE cannot be added to a Backup-mode ADOM."
+        },
+        {
+          "letter": "B",
+          "text": "Revoke every SASE key.",
+          "correct": false,
+          "feedback": "Revoking keys removes authorization rather than fixing ADOM mode."
+        },
+        {
+          "letter": "C",
+          "text": "Use the Global Database ADOM.",
+          "correct": false,
+          "feedback": "Global Database is also unsupported."
+        },
+        {
+          "letter": "D",
+          "text": "Rename the FortiGate root VDOM.",
+          "correct": false,
+          "feedback": "The VDOM name does not change ADOM eligibility."
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "question": "A synchronized object was deleted from FMG and the SASE tenant now conflicts. Which rule was ignored?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "SAML endpoints must share a digest.",
+          "correct": false,
+          "feedback": "SAML settings do not govern configuration synchronization."
+        },
+        {
+          "letter": "B",
+          "text": "MLO needs three radios.",
+          "correct": false,
+          "feedback": "MLO is a wireless capability."
+        },
+        {
+          "letter": "C",
+          "text": "Central sync is one-way from FMG to SASE.",
+          "correct": true,
+          "feedback": "Correct: FortiManager is the source of truth for synchronized objects."
+        },
+        {
+          "letter": "D",
+          "text": "SASE keys expire hourly.",
+          "correct": false,
+          "feedback": "The documented key remains valid until revoked."
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "question": "Central sync works, but endpoint posture tags are absent. Which relationship is separate?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Switch local-AS.",
+          "correct": false,
+          "feedback": "Local-AS is a BGP neighbor identity."
+        },
+        {
+          "letter": "B",
+          "text": "PAM process matcher.",
+          "correct": false,
+          "feedback": "The matcher is a privileged app feature."
+        },
+        {
+          "letter": "C",
+          "text": "Analyzer ACS URL.",
+          "correct": false,
+          "feedback": "ACS affects SAML redirects."
+        },
+        {
+          "letter": "D",
+          "text": "ZTNA telemetry and tag mapping.",
+          "correct": true,
+          "feedback": "Correct: ZTNA telemetry is distinct from central configuration management."
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "question": "FortiAnalyzer 8.0 rejects SAML because the IdP still signs with SHA-1. What is supported?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Keep SHA-1 and disable validation.",
+          "correct": false,
+          "feedback": "SHA-1 support has been removed; disabling validation weakens trust."
+        },
+        {
+          "letter": "B",
+          "text": "Use RSA-SHA256/512 with SHA256/512 digest.",
+          "correct": true,
+          "feedback": "Correct: choose supported SHA-256 or SHA-512 algorithms."
+        },
+        {
+          "letter": "C",
+          "text": "Replace SAML with RADIUS accounting.",
+          "correct": false,
+          "feedback": "RADIUS accounting does not replace SAML admin login."
+        },
+        {
+          "letter": "D",
+          "text": "Use the BGP router ID as entity ID.",
+          "correct": false,
+          "feedback": "A BGP router ID is not a SAML entity identifier."
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "question": "The IdP uses SHA-256 and the FortiAnalyzer SP uses SHA-512. Is that automatically invalid?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Yes; algorithms must match exactly.",
+          "correct": false,
+          "feedback": "The guide allows different supported algorithms at the two ends."
+        },
+        {
+          "letter": "B",
+          "text": "Yes; only SHA-1 works.",
+          "correct": false,
+          "feedback": "SHA-1 has been removed, not required."
+        },
+        {
+          "letter": "C",
+          "text": "No; supported IdP/SP algorithm choices may differ.",
+          "correct": true,
+          "feedback": "Correct: asymmetric SAML trust permits different supported settings."
+        },
+        {
+          "letter": "D",
+          "text": "No; signatures are ignored.",
+          "correct": false,
+          "feedback": "Signature validation remains part of the trust decision."
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "question": "A SAML trace shows a valid signature but a wrong ACS URL and missing RelayState. What should be fixed?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "BGP route reflector.",
+          "correct": false,
+          "feedback": "BGP attributes do not affect SAML browser flow."
+        },
+        {
+          "letter": "B",
+          "text": "PAM regex.",
+          "correct": false,
+          "feedback": "The launcher regex is unrelated."
+        },
+        {
+          "letter": "C",
+          "text": "Switch local-AS.",
+          "correct": false,
+          "feedback": "Local-AS is a routing attribute."
+        },
+        {
+          "letter": "D",
+          "text": "IdP Reply URL and RelayState.",
+          "correct": true,
+          "feedback": "Correct: the trace points to the IdP return URL/RelayState, not signature validation."
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "question": "The SAML assertion validates, but the administrator gets the wrong ADOM. What should be inspected?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Username/profile/ADOM attribute mapping and local objects.",
+          "correct": true,
+          "feedback": "Correct: authentication can succeed while authorization maps the wrong profile or ADOM."
+        },
+        {
+          "letter": "B",
+          "text": "SD-WAN duplication maximum.",
+          "correct": false,
+          "feedback": "Duplication controls packet copies."
+        },
+        {
+          "letter": "C",
+          "text": "AP radio band list.",
+          "correct": false,
+          "feedback": "Radio bands do not set SAML scope."
+        },
+        {
+          "letter": "D",
+          "text": "RADIUS client subnet.",
+          "correct": false,
+          "feedback": "RADIUS client matching is a separate service."
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "question": "A FortiSwitch must show a temporary AS to one peer while retaining its global ASN. Which feature fits?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create another management VDOM.",
+          "correct": false,
+          "feedback": "A VDOM does not provide per-neighbor BGP identity."
+        },
+        {
+          "letter": "B",
+          "text": "Use neighbor-scoped local-AS.",
+          "correct": true,
+          "feedback": "Correct: local-AS is a neighbor-specific presentation; global AS remains required."
+        },
+        {
+          "letter": "C",
+          "text": "Change the router ID to the peer ASN.",
+          "correct": false,
+          "feedback": "Router ID is not an AS number."
+        },
+        {
+          "letter": "D",
+          "text": "Redistribute all connected routes into OSPF.",
+          "correct": false,
+          "feedback": "OSPF redistribution does not solve BGP peer identity."
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "question": "The BGP process will not start after local-AS is configured on a neighbor. What is still required?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A SASE management key.",
+          "correct": false,
+          "feedback": "SASE registration is unrelated."
+        },
+        {
+          "letter": "B",
+          "text": "An MLO SSID.",
+          "correct": false,
+          "feedback": "MLO is wireless configuration."
+        },
+        {
+          "letter": "C",
+          "text": "Global BGP ASN and router ID.",
+          "correct": true,
+          "feedback": "Correct: the global BGP process still needs its ASN and router ID."
+        },
+        {
+          "letter": "D",
+          "text": "A NAC tenant VLAN.",
+          "correct": false,
+          "feedback": "NAC VLANs do not initialize BGP."
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "question": "A peer establishes the session but rejects routes as loops. Which evidence matters?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "SAML digest.",
+          "correct": false,
+          "feedback": "SAML does not influence BGP route acceptance."
+        },
+        {
+          "letter": "B",
+          "text": "Full-screen recording.",
+          "correct": false,
+          "feedback": "Recording does not change AS_PATH."
+        },
+        {
+          "letter": "C",
+          "text": "MLD link count.",
+          "correct": false,
+          "feedback": "MLD is a wireless metric."
+        },
+        {
+          "letter": "D",
+          "text": "Advertised AS_PATH and local-AS prepend/replace behavior.",
+          "correct": true,
+          "feedback": "Correct: the peer may see its own AS or an unexpected AS sequence."
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "question": "No eBGP prefixes are learned on a FortiSwitchOS 7.2.2+ switch. Which default deserves review?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "ebgp-requires-policy is enabled by default.",
+          "correct": true,
+          "feedback": "Correct: explicit policy may be required to learn or advertise eBGP routes."
+        },
+        {
+          "letter": "B",
+          "text": "MLO is disabled by default.",
+          "correct": false,
+          "feedback": "MLO does not affect BGP."
+        },
+        {
+          "letter": "C",
+          "text": "SAML SHA-1 is disabled.",
+          "correct": false,
+          "feedback": "SAML has no routing role."
+        },
+        {
+          "letter": "D",
+          "text": "RADIUS groups are empty.",
+          "correct": false,
+          "feedback": "RADIUS groups do not affect the switch BGP process."
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "question": "A FAP-241K MLO SSID has one active link. What should be checked first?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "NAC allowed serials.",
+          "correct": false,
+          "feedback": "NAC serials do not control wireless association."
+        },
+        {
+          "letter": "B",
+          "text": "Firmware, radio profile, WPA3/H2E and client capability.",
+          "correct": true,
+          "feedback": "Correct: MLO requires supported firmware/radios, security and a capable client."
+        },
+        {
+          "letter": "C",
+          "text": "FMG Backup ADOM.",
+          "correct": false,
+          "feedback": "Backup ADOM blocks SASE registration."
+        },
+        {
+          "letter": "D",
+          "text": "SD-WAN duplication.",
+          "correct": false,
+          "feedback": "SD-WAN duplication does not create Wi-Fi links."
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "question": "What is true about MLO on FAP-441K?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "All three bands support MLO.",
+          "correct": false,
+          "feedback": "The 2.4-GHz radio on this model is not MLO capable."
+        },
+        {
+          "letter": "B",
+          "text": "Only 2.4 GHz supports MLO.",
+          "correct": false,
+          "feedback": "The supported MLO radios are 5 and 6 GHz."
+        },
+        {
+          "letter": "C",
+          "text": "The 2.4-GHz radio is not Wi-Fi 7 MLO capable.",
+          "correct": true,
+          "feedback": "Correct: FAP-441K/443K 2.4 GHz does not support Wi-Fi 7 MLO."
+        },
+        {
+          "letter": "D",
+          "text": "The 6-GHz radio must be disabled.",
+          "correct": false,
+          "feedback": "Disabling 6 GHz removes a supported link."
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "question": "A K-series AP must keep MLO service through controller loss. Which VAP settings are required?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Local standalone only.",
+          "correct": false,
+          "feedback": "Standalone operation also requires local bridge and authentication."
+        },
+        {
+          "letter": "B",
+          "text": "Local bridging only.",
+          "correct": false,
+          "feedback": "Local bridging alone does not authenticate clients."
+        },
+        {
+          "letter": "C",
+          "text": "Open authentication.",
+          "correct": false,
+          "feedback": "Open auth is not a documented MLO prerequisite."
+        },
+        {
+          "letter": "D",
+          "text": "Local standalone, local bridging and local authentication.",
+          "correct": true,
+          "feedback": "Correct: the three controls let the AP bridge/authenticate locally."
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "question": "Which output most directly shows multiple MLD links?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "diagnose wpa wpad mld with num_links and link IDs.",
+          "correct": true,
+          "feedback": "Correct: the MLD diagnostic reports link count and IDs."
+        },
+        {
+          "letter": "B",
+          "text": "get router info bgp summary.",
+          "correct": false,
+          "feedback": "BGP peers do not show Wi-Fi association."
+        },
+        {
+          "letter": "C",
+          "text": "globaloptiontool serial list.",
+          "correct": false,
+          "feedback": "NAC serial lists are unrelated."
+        },
+        {
+          "letter": "D",
+          "text": "diagnose system admin-session list.",
+          "correct": false,
+          "feedback": "Admin sessions do not expose wireless links."
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "question": "A managed FortiNAC server is reachable but cannot sync after upgrade. What two gates matter?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only its default gateway.",
+          "correct": false,
+          "feedback": "Reachability is already known and does not prove authorization."
+        },
+        {
+          "letter": "B",
+          "text": "Certificate trust and allowed serial list.",
+          "correct": true,
+          "feedback": "Correct: both certificate and serial admission must pass."
+        },
+        {
+          "letter": "C",
+          "text": "Only RADIUS shared secret.",
+          "correct": false,
+          "feedback": "RADIUS credentials do not authorize server-to-server trust."
+        },
+        {
+          "letter": "D",
+          "text": "AP radio profile and MLO flag.",
+          "correct": false,
+          "feedback": "Wireless settings do not control NAC synchronization."
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "question": "Which serials should the FortiNAC Manager allow?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only its own serial.",
+          "correct": false,
+          "feedback": "The Manager must authorize the managed appliances."
+        },
+        {
+          "letter": "B",
+          "text": "Only the HA primary.",
+          "correct": false,
+          "feedback": "The primary serial alone omits managed servers."
+        },
+        {
+          "letter": "C",
+          "text": "All managed server serials.",
+          "correct": true,
+          "feedback": "Correct: the Manager list includes all managed server serials."
+        },
+        {
+          "letter": "D",
+          "text": "Only FortiGate serials.",
+          "correct": false,
+          "feedback": "FortiGate serials are not the managed-server peer list."
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "question": "An HA secondary has a stale allowlist after a change. Where should the admin normally change it?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "On every switch port.",
+          "correct": false,
+          "feedback": "Switch-port configuration does not control NAC HA state."
+        },
+        {
+          "letter": "B",
+          "text": "On the secondary only.",
+          "correct": false,
+          "feedback": "The secondary receives the primary configuration."
+        },
+        {
+          "letter": "C",
+          "text": "On the RADIUS server.",
+          "correct": false,
+          "feedback": "RADIUS is not the HA configuration authority."
+        },
+        {
+          "letter": "D",
+          "text": "On the primary, then verify replication.",
+          "correct": true,
+          "feedback": "Correct: make the HA change on the primary and verify the secondary."
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "question": "A recent case shows FortiNAC-OS servers missing from a CentOS Manager. Which field is high value?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "security.allowedserialnumbers on each peer.",
+          "correct": true,
+          "feedback": "Correct: incomplete role-specific allowed serials can block add/sync."
+        },
+        {
+          "letter": "B",
+          "text": "SD-WAN ToS value.",
+          "correct": false,
+          "feedback": "ToS duplication is packet forwarding."
+        },
+        {
+          "letter": "C",
+          "text": "SAML digest.",
+          "correct": false,
+          "feedback": "SAML is administrator authentication."
+        },
+        {
+          "letter": "D",
+          "text": "PAM process pattern.",
+          "correct": false,
+          "feedback": "PAM regex does not affect NAC server inventory."
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "question": "A FortiSwitch port is visible in root but not in the tenant VDOM. What is missing?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A second FAZ ADOM.",
+          "correct": false,
+          "feedback": "An ADOM is not a FortiGate port ownership control."
+        },
+        {
+          "letter": "B",
+          "text": "The port export-to assignment.",
+          "correct": true,
+          "feedback": "Correct: export the managed port into the tenant VDOM."
+        },
+        {
+          "letter": "C",
+          "text": "A RADIUS user group.",
+          "correct": false,
+          "feedback": "RADIUS groups do not transfer port ownership."
+        },
+        {
+          "letter": "D",
+          "text": "An MLO-capable client.",
+          "correct": false,
+          "feedback": "MLO capability does not affect port export."
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "question": "NAC discovers both VDOMs but assigns the wrong registration VLAN. What should be checked?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "SAML IdP certificate.",
+          "correct": false,
+          "feedback": "The IdP certificate affects SSO."
+        },
+        {
+          "letter": "B",
+          "text": "BGP local-AS.",
+          "correct": false,
+          "feedback": "Local-AS controls BGP identity."
+        },
+        {
+          "letter": "C",
+          "text": "Tenant Model Configuration logical-network-to-VLAN mapping.",
+          "correct": true,
+          "feedback": "Correct: the tenant virtual-device mapping selects the VLAN."
+        },
+        {
+          "letter": "D",
+          "text": "PAM window-title regex.",
+          "correct": false,
+          "feedback": "PAM matching does not influence NAC placement."
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "question": "DHCP fails for a tenant endpoint. Which path should be traced?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only NAC GUI login.",
+          "correct": false,
+          "feedback": "GUI login does not prove DHCP reachability."
+        },
+        {
+          "letter": "B",
+          "text": "Only root default route.",
+          "correct": false,
+          "feedback": "The root default route is only one part of the path."
+        },
+        {
+          "letter": "C",
+          "text": "Only switch router ID.",
+          "correct": false,
+          "feedback": "Router ID does not explain DHCP relay."
+        },
+        {
+          "letter": "D",
+          "text": "Tenant VLAN, relay, VDOM link, routes and both policies.",
+          "correct": true,
+          "feedback": "Correct: verify the complete tenant-to-root DHCP path."
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "question": "What does the FortiNAC-F Virtualized Devices view provide?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Root and tenant VDOM objects for logical-network mapping.",
+          "correct": true,
+          "feedback": "Correct: tenant VDOMs are modeled and their logical networks map to tenant VLANs."
+        },
+        {
+          "letter": "B",
+          "text": "FAC EAP curve selection.",
+          "correct": false,
+          "feedback": "EAP curves belong to FAC."
+        },
+        {
+          "letter": "C",
+          "text": "FortiManager key generation.",
+          "correct": false,
+          "feedback": "The key is generated in FortiSASE."
+        },
+        {
+          "letter": "D",
+          "text": "Wi-Fi link utilization.",
+          "correct": false,
+          "feedback": "MLO metrics are unrelated."
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "question": "An AP subnet has many NAS devices that should share one policy. Which object helps?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A NAC virtual device.",
+          "correct": false,
+          "feedback": "A NAC virtual device maps endpoint networks."
+        },
+        {
+          "letter": "B",
+          "text": "A RADIUS client group.",
+          "correct": true,
+          "feedback": "Correct: a client group lets the policy reference multiple NAS clients."
+        },
+        {
+          "letter": "C",
+          "text": "A PAM launcher matcher.",
+          "correct": false,
+          "feedback": "A launcher matcher identifies processes."
+        },
+        {
+          "letter": "D",
+          "text": "A FortiAnalyzer ADOM.",
+          "correct": false,
+          "feedback": "An ADOM is not a RADIUS client group."
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "question": "Two RADIUS policies match the same request. Which one wins?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The longest description.",
+          "correct": false,
+          "feedback": "Description length has no effect."
+        },
+        {
+          "letter": "B",
+          "text": "The newest policy.",
+          "correct": false,
+          "feedback": "Creation time is not the tie-breaker."
+        },
+        {
+          "letter": "C",
+          "text": "The highest policy in the list.",
+          "correct": true,
+          "feedback": "Correct: the topmost eligible policy is selected."
+        },
+        {
+          "letter": "D",
+          "text": "The lowest source IP.",
+          "correct": false,
+          "feedback": "IP ordering is not policy priority."
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "question": "Two client ranges overlap. Which client definition is chosen?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The oldest secret.",
+          "correct": false,
+          "feedback": "Secret age does not decide matching."
+        },
+        {
+          "letter": "B",
+          "text": "The broadest subnet.",
+          "correct": false,
+          "feedback": "The broadest range is not preferred."
+        },
+        {
+          "letter": "C",
+          "text": "Alphabetically first.",
+          "correct": false,
+          "feedback": "Alphabetical order is not the rule."
+        },
+        {
+          "letter": "D",
+          "text": "The narrowest matching range.",
+          "correct": true,
+          "feedback": "Correct: the most specific client range wins."
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "question": "Logs show a RADIUS daemon restart after client/policy edits. What does it indicate?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The service applied the configuration change.",
+          "correct": true,
+          "feedback": "Correct: client/policy changes are applied with a RADIUS service restart."
+        },
+        {
+          "letter": "B",
+          "text": "An endpoint passed EAP-TLS.",
+          "correct": false,
+          "feedback": "A restart does not prove endpoint success."
+        },
+        {
+          "letter": "C",
+          "text": "A client group was deleted.",
+          "correct": false,
+          "feedback": "The log does not imply deletion."
+        },
+        {
+          "letter": "D",
+          "text": "BGP was reset.",
+          "correct": false,
+          "feedback": "RADIUS changes do not reset BGP."
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "question": "A Java app is identified by its command arguments, not its executable. Which matcher fits?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Default executable.",
+          "correct": false,
+          "feedback": "Default may miss the Java child process."
+        },
+        {
+          "letter": "B",
+          "text": "Command Line regex.",
+          "correct": true,
+          "feedback": "Correct: command-line matching can distinguish the Java application."
+        },
+        {
+          "letter": "C",
+          "text": "SAML username claim.",
+          "correct": false,
+          "feedback": "SAML claims map identity."
+        },
+        {
+          "letter": "D",
+          "text": "RADIUS group.",
+          "correct": false,
+          "feedback": "RADIUS groups classify NAS clients."
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "question": "A custom FortiPAM matcher is selected. Which controls are forced on?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "RADIUS accounting and SAML signing.",
+          "correct": false,
+          "feedback": "Those are unrelated authentication settings."
+        },
+        {
+          "letter": "B",
+          "text": "MLO and local standalone.",
+          "correct": false,
+          "feedback": "Those are wireless settings."
+        },
+        {
+          "letter": "C",
+          "text": "Multi-process monitoring and full-screen recording.",
+          "correct": true,
+          "feedback": "Correct: custom matching requires process-tree monitoring and full-screen audit capture."
+        },
+        {
+          "letter": "D",
+          "text": "BGP restart and dampening.",
+          "correct": false,
+          "feedback": "BGP controls do not govern launcher recording."
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "question": "A window-title regex catches unrelated applications. What is the best correction?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use a broader wildcard.",
+          "correct": false,
+          "feedback": "A broad wildcard increases false matches."
+        },
+        {
+          "letter": "B",
+          "text": "Disable full-screen recording.",
+          "correct": false,
+          "feedback": "Disabling recording weakens the audit trail."
+        },
+        {
+          "letter": "C",
+          "text": "Switch all apps to Default.",
+          "correct": false,
+          "feedback": "Default may not identify child/Java processes."
+        },
+        {
+          "letter": "D",
+          "text": "Use a narrow anchored pattern.",
+          "correct": true,
+          "feedback": "Correct: an anchored, stable pattern reduces unintended matches."
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "question": "The Java child window is absent from the recording. What should be checked?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Full-screen recording and multi-process mode.",
+          "correct": true,
+          "feedback": "Correct: both are forced for custom process matching and protect the audit trail."
+        },
+        {
+          "letter": "B",
+          "text": "FortiSASE OU hierarchy.",
+          "correct": false,
+          "feedback": "OU hierarchy controls SASE registration."
+        },
+        {
+          "letter": "C",
+          "text": "FortiSwitch local-AS.",
+          "correct": false,
+          "feedback": "Local-AS is BGP identity."
+        },
+        {
+          "letter": "D",
+          "text": "SAML digest.",
+          "correct": false,
+          "feedback": "SAML digest does not affect recording."
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "question": "A full feed snapshot is imported, but old indicators remain. Which mode likely caused it?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Full replacement.",
+          "correct": false,
+          "feedback": "Full is appropriate for a complete snapshot."
+        },
+        {
+          "letter": "B",
+          "text": "Incremental addition.",
+          "correct": true,
+          "feedback": "Correct: Incremental appends and can retain stale records."
+        },
+        {
+          "letter": "C",
+          "text": "SSL verification.",
+          "correct": false,
+          "feedback": "TLS verification does not control replacement."
+        },
+        {
+          "letter": "D",
+          "text": "Python plugin type.",
+          "correct": false,
+          "feedback": "Python is the integration type."
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "question": "A feed fetch succeeds but the IOC group is empty. What boundary is next?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "AP MLO link count.",
+          "correct": false,
+          "feedback": "Wireless state is unrelated."
+        },
+        {
+          "letter": "B",
+          "text": "NAC serial list.",
+          "correct": false,
+          "feedback": "NAC trust does not affect SIEM parsing."
+        },
+        {
+          "letter": "C",
+          "text": "Normalized CSV output and AppServer parsing.",
+          "correct": true,
+          "feedback": "Correct: HTTP success does not prove valid CSV or AppServer ingestion."
+        },
+        {
+          "letter": "D",
+          "text": "VPNv6 next hop.",
+          "correct": false,
+          "feedback": "VPN routing does not affect the parser."
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "question": "The feed uses a valid public certificate. What should SSL Verify do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Be disabled permanently.",
+          "correct": false,
+          "feedback": "Disabling validation hides certificate problems."
+        },
+        {
+          "letter": "B",
+          "text": "Be randomized.",
+          "correct": false,
+          "feedback": "Randomized verification is not meaningful."
+        },
+        {
+          "letter": "C",
+          "text": "Use an empty trust store.",
+          "correct": false,
+          "feedback": "An empty store prevents trust validation."
+        },
+        {
+          "letter": "D",
+          "text": "Remain enabled; repair trust if it fails.",
+          "correct": true,
+          "feedback": "Correct: keep TLS verification and fix the chain/hostname."
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "question": "A script emits empty CSV after timeout and Full mode clears the IOC group. What is the design flaw?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A retrieval failure looks like a valid empty snapshot.",
+          "correct": true,
+          "feedback": "Correct: fail explicitly on fetch errors so a failed run cannot replace a good snapshot."
+        },
+        {
+          "letter": "B",
+          "text": "The group name is short.",
+          "correct": false,
+          "feedback": "Group-name length is not the cause."
+        },
+        {
+          "letter": "C",
+          "text": "The SIEM clock is UTC.",
+          "correct": false,
+          "feedback": "Timezone does not make a timeout valid data."
+        },
+        {
+          "letter": "D",
+          "text": "The endpoint popup is off.",
+          "correct": false,
+          "feedback": "Popup settings belong to endpoint protection."
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "question": "A PUA is detected between weekly scans. Which trigger should run a scan?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only the weekly schedule.",
+          "correct": false,
+          "feedback": "The schedule leaves a gap after the software change."
+        },
+        {
+          "letter": "B",
+          "text": "Software-change vulnerability trigger.",
+          "correct": true,
+          "feedback": "Correct: PUA detection is a software-change trigger event."
+        },
+        {
+          "letter": "C",
+          "text": "SAML logout signing.",
+          "correct": false,
+          "feedback": "Logout signing affects SSO."
+        },
+        {
+          "letter": "D",
+          "text": "FortiManager Key.",
+          "correct": false,
+          "feedback": "The key registers SASE with FMG."
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "question": "Endpoint connects and its OS updates. Which trigger covers those events?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only software-change trigger.",
+          "correct": false,
+          "feedback": "Software-change is for application install/update and PUA detection."
+        },
+        {
+          "letter": "B",
+          "text": "BGP next-hop-self.",
+          "correct": false,
+          "feedback": "BGP is unrelated."
+        },
+        {
+          "letter": "C",
+          "text": "Event-based scanning.",
+          "correct": true,
+          "feedback": "Correct: event-based scanning covers connection, OS update and signature update events."
+        },
+        {
+          "letter": "D",
+          "text": "PAM process matcher.",
+          "correct": false,
+          "feedback": "The matcher is for privileged app tracking."
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "question": "A scan finds CVEs but the endpoint remains vulnerable. What distinction matters?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A scan always patches.",
+          "correct": false,
+          "feedback": "Scanning does not install patches by itself."
+        },
+        {
+          "letter": "B",
+          "text": "The scan result proves remediation.",
+          "correct": false,
+          "feedback": "A finding does not prove remediation."
+        },
+        {
+          "letter": "C",
+          "text": "A popup changes software.",
+          "correct": false,
+          "feedback": "A popup only notifies the user."
+        },
+        {
+          "letter": "D",
+          "text": "Scanning and automatic patching are separate actions.",
+          "correct": true,
+          "feedback": "Correct: verify the separate patch workflow and result."
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "question": "The software-change trigger is enabled but no scan follows an app update. What should be checked first?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Assigned endpoint profile and agent inventory event.",
+          "correct": true,
+          "feedback": "Correct: the endpoint must receive the profile and report the change event."
+        },
+        {
+          "letter": "B",
+          "text": "Switch peer ASN.",
+          "correct": false,
+          "feedback": "BGP ASN does not trigger endpoint scans."
+        },
+        {
+          "letter": "C",
+          "text": "NAC secondary serial.",
+          "correct": false,
+          "feedback": "NAC serials do not govern SASE profiles."
+        },
+        {
+          "letter": "D",
+          "text": "SAML digest.",
+          "correct": false,
+          "feedback": "SAML digest does not trigger vulnerability scans."
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "question": "A duplication rule uses ToS 0x77 and mask 0xff. Which packet matches?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "ToS 0x00.",
+          "correct": false,
+          "feedback": "0x00 does not match the configured byte."
+        },
+        {
+          "letter": "B",
+          "text": "Full 8-bit ToS equals 0x77.",
+          "correct": true,
+          "feedback": "Correct: mask 0xff compares all eight bits with 0x77."
+        },
+        {
+          "letter": "C",
+          "text": "Any IPv6 packet.",
+          "correct": false,
+          "feedback": "Address family does not bypass ToS matching."
+        },
+        {
+          "letter": "D",
+          "text": "Any packet on the fastest link.",
+          "correct": false,
+          "feedback": "Link speed is not the match condition."
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "question": "The sender duplicates packets, but the server receives multiple copies. What is missing?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "FortiManager key.",
+          "correct": false,
+          "feedback": "The key is for SASE management."
+        },
+        {
+          "letter": "B",
+          "text": "RADIUS client group.",
+          "correct": false,
+          "feedback": "RADIUS groups classify NAS clients."
+        },
+        {
+          "letter": "C",
+          "text": "Receiver-side de-duplication rule.",
+          "correct": true,
+          "feedback": "Correct: the receiver needs a matching rule with packet-de-duplication enabled."
+        },
+        {
+          "letter": "D",
+          "text": "MLO link.",
+          "correct": false,
+          "feedback": "MLO is unrelated to WAN copies."
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "question": "A zone has four members and duplication-max-num is 3. What does the limit mean?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Three extra copies plus the original.",
+          "correct": false,
+          "feedback": "The maximum counts member paths, not only extra copies."
+        },
+        {
+          "letter": "B",
+          "text": "Three BGP peers.",
+          "correct": false,
+          "feedback": "BGP peer count is unrelated."
+        },
+        {
+          "letter": "C",
+          "text": "Three milliseconds of discrepancy.",
+          "correct": false,
+          "feedback": "Discrepancy is a separate latency setting."
+        },
+        {
+          "letter": "D",
+          "text": "At most three member paths, original plus two copies.",
+          "correct": true,
+          "feedback": "Correct: a maximum of three means original plus two copies."
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "question": "A ToS 0x00 ping succeeds under a 0x77/0xff rule. What does it prove?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Connectivity works; the ping should not match the duplication rule.",
+          "correct": true,
+          "feedback": "Correct: a non-matching ping is a negative test; success proves connectivity only."
+        },
+        {
+          "letter": "B",
+          "text": "The duplication rule must duplicate every ping.",
+          "correct": false,
+          "feedback": "The rule is intentionally selective."
+        },
+        {
+          "letter": "C",
+          "text": "The receiver de-duplicated four copies.",
+          "correct": false,
+          "feedback": "No multiple-copy evidence exists."
+        },
+        {
+          "letter": "D",
+          "text": "The sender rewrote ToS to 0x77.",
+          "correct": false,
+          "feedback": "A rewrite must not be assumed without a marking policy."
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "question": "Which statement separates Wi-Fi MLO from SD-WAN duplication?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Both use BGP local-AS.",
+          "correct": false,
+          "feedback": "Local-AS is a routing identity feature."
+        },
+        {
+          "letter": "B",
+          "text": "MLO uses multiple wireless links in one association; duplication copies IP packets across WAN members.",
+          "correct": true,
+          "feedback": "Correct: MLO is a wireless multi-link association; SD-WAN duplicates packets across paths."
+        },
+        {
+          "letter": "C",
+          "text": "Both are enabled with a ToS mask.",
+          "correct": false,
+          "feedback": "ToS masks select duplicated IP traffic only."
+        },
+        {
+          "letter": "D",
+          "text": "Both require NAC serial allowlists.",
+          "correct": false,
+          "feedback": "NAC serials authorize FortiNAC peers only."
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "question": "A tenant host has the right VLAN but cannot reach FortiNAC. Which path is most relevant?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "SAML IdP-to-SP flow.",
+          "correct": false,
+          "feedback": "SAML admin login is unrelated to host reachability."
+        },
+        {
+          "letter": "B",
+          "text": "PAM process tree.",
+          "correct": false,
+          "feedback": "Process tracking is a PAM audit feature."
+        },
+        {
+          "letter": "C",
+          "text": "Tenant-to-root VDOM link, routes, policies and DHCP relay.",
+          "correct": true,
+          "feedback": "Correct: tenant traffic to FortiNAC traverses the VDOM link and root-side policy/routing path."
+        },
+        {
+          "letter": "D",
+          "text": "FortiSwitch local-AS advertisement.",
+          "correct": false,
+          "feedback": "Local-AS is not the primary NAC tenant path check."
+        }
+      ]
+    }
+  ]
+}
