@@ -1,0 +1,1464 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-23T08:00:08-08:00",
+  "question_count": 50,
+  "choice_count": 200,
+  "answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "question": "A preferred /32 route stays active after its fixed next-hop stops forwarding, while a backup route exists. Which change makes route installation depend on peer liveness?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Increase the backup route administrative distance",
+          "feedback": "Distance only ranks routes; it does not detect a failed next-hop.",
+          "correct": false
+        },
+        {
+          "text": "Enable interface ping monitoring only",
+          "feedback": "Ping monitoring may alert, but it does not bind withdrawal to this route.",
+          "correct": false
+        },
+        {
+          "text": "Enable BFD on the primary static route",
+          "feedback": "The route itself must be BFD-enabled so a Down session withdraws it.",
+          "correct": true
+        },
+        {
+          "text": "Redistribute the route into OSPF",
+          "feedback": "Redistribution advertises routes; it does not supply static-route liveness.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "question": "BFD reports the preferred neighbor Up, but the expected destination is absent from the routing table. What should be checked next?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "Inspect the static route destination, gateway and distance",
+          "feedback": "A live BFD session does not prove the destination prefix is installed or preferred.",
+          "correct": true
+        },
+        {
+          "text": "Lower the BFD detection multiplier again",
+          "feedback": "Timer tuning does not explain a missing route when the session is already Up.",
+          "correct": false
+        },
+        {
+          "text": "Enable BFD echo mode on both peers",
+          "feedback": "FortiGate does not support BFD echo mode.",
+          "correct": false
+        },
+        {
+          "text": "Change the backup route to equal distance",
+          "feedback": "Equal distance changes path selection but does not correct a missing prefix.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "question": "A default route exits through an SD-WAN zone with dynamic member selection. Which health mechanism fits this design?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Create a fixed neighbor under router BFD",
+          "feedback": "A neighbor entry alone does not bind health to dynamic zone members.",
+          "correct": false
+        },
+        {
+          "text": "Use an SD-WAN Performance SLA for member health",
+          "feedback": "Performance SLAs evaluate individual SD-WAN members and remove unhealthy members from selection.",
+          "correct": false
+        },
+        {
+          "text": "Raise the static route distance on every member",
+          "feedback": "Distance changes do not measure path quality or member liveness.",
+          "correct": false
+        },
+        {
+          "text": "Bind BFD to the SD-WAN zone default route",
+          "feedback": "A zone does not provide one fixed next-hop for route-bound BFD.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "question": "BFD changes to Down and the backup route becomes active, but users still cannot reach the application. What does the next test target?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "The backup gateway, route and downstream service path",
+          "feedback": "The BFD state transition is already evidenced by the route withdrawal.",
+          "correct": false
+        },
+        {
+          "text": "The BFD session timer negotiation only",
+          "feedback": "The route already changed; the backup path must now be validated end to end.",
+          "correct": true
+        },
+        {
+          "text": "The primary route's interface administrative state",
+          "feedback": "Interface state alone does not prove the backup route forwards correctly.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate device-wide BFD setting only",
+          "feedback": "Global BFD settings do not establish application reachability through the backup.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "product": "FortiManager",
+      "question": "A first policy-package install removes local FortiGate address objects that are not currently referenced. What import control best prevents this?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "Create a new policy package with no install targets",
+          "feedback": "A package without targets cannot reconcile the device configuration.",
+          "correct": false
+        },
+        {
+          "text": "Enable Add ALL Objects when importing the configuration",
+          "feedback": "Add ALL Objects preserves the broader object inventory in Policy & Objects.",
+          "correct": true
+        },
+        {
+          "text": "Disable default object mapping for the ADOM",
+          "feedback": "Missing mappings cause install failures; they do not preserve local objects.",
+          "correct": false
+        },
+        {
+          "text": "Convert the device to a model device first",
+          "feedback": "Model-device conversion is unrelated to importing unreferenced objects.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "question": "The Install Wizard fails because an address object has no target-specific value. Which dependency should be corrected?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "The package installation preview theme",
+          "feedback": "Preview appearance does not determine object value resolution.",
+          "correct": false
+        },
+        {
+          "text": "The ADOM administrator's dashboard layout",
+          "feedback": "Dashboard layout has no effect on installation mapping.",
+          "correct": false
+        },
+        {
+          "text": "Default or per-device object mapping",
+          "feedback": "FortiManager requires default or per-device mapping for mapped objects.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate's local DNS resolver",
+          "feedback": "DNS resolution is not the missing object-mapping dependency.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "question": "Before the first managed install, an engineer wants to review the exact proposed delta without changing the FortiGate. What should be used?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "The Install Wizard installation preview",
+          "feedback": "The preview exposes proposed changes and can be cancelled before modification.",
+          "correct": true
+        },
+        {
+          "text": "A direct CLI script on the FortiGate",
+          "feedback": "Direct CLI execution changes the device outside the package preview workflow.",
+          "correct": false
+        },
+        {
+          "text": "A policy package export after installation",
+          "feedback": "An export after installation is too late to review the proposed delta.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate event log after reboot",
+          "feedback": "A post-reboot log cannot replace a pre-install preview.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "question": "A change should install only the interface policy, not the broader device settings. Which Install Wizard choice matches that scope?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Install interface policy only",
+          "feedback": "The interface-policy-only option is the narrower documented install scope.",
+          "correct": false
+        },
+        {
+          "text": "Install the entire ADOM database",
+          "feedback": "An ADOM database is not a device installation target.",
+          "correct": false
+        },
+        {
+          "text": "Install policy package and device settings",
+          "feedback": "The broader operation includes ADOM/policy-layer and device-layer settings.",
+          "correct": true
+        },
+        {
+          "text": "Run a remote CLI script instead",
+          "feedback": "A direct script is a separate execution path, not the interface-policy install option.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "product": "FortiAnalyzer",
+      "question": "An analyst needs combined Log View and reports from FortiGate and FortiSandbox in one analysis context. What ADOM type is required?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "A per-device private ADOM",
+          "feedback": "Separate private ADOMs keep the devices in different analysis contexts.",
+          "correct": false
+        },
+        {
+          "text": "A Security Fabric ADOM",
+          "feedback": "Fabric ADOMs combine supported Security Fabric devices across analysis panes.",
+          "correct": false
+        },
+        {
+          "text": "A FortiManager global database ADOM",
+          "feedback": "FortiManager's global database is not a FortiAnalyzer ADOM type.",
+          "correct": false
+        },
+        {
+          "text": "A backup-mode ADOM",
+          "feedback": "Backup mode is not the cross-product analysis boundary.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "product": "FortiAnalyzer",
+      "question": "Converting an existing non-Fabric ADOM with the documented migration command has which operational consequence?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "It only refreshes the Log View browser tab",
+          "feedback": "A browser refresh does not perform ADOM type migration.",
+          "correct": false
+        },
+        {
+          "text": "It restarts the FortiAnalyzer system",
+          "feedback": "The documented migration displays affected ADOMs and reboots the system.",
+          "correct": true
+        },
+        {
+          "text": "It moves devices without affecting service state",
+          "feedback": "The migration is a system operation with a reboot, not a live cosmetic move.",
+          "correct": false
+        },
+        {
+          "text": "It changes the FortiGate firmware automatically",
+          "feedback": "FortiAnalyzer ADOM migration does not upgrade FortiGate firmware.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "question": "The Log Parser pane is missing even though logs arrive. Which prerequisite set should be checked?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Fabric ADOM, SIEM module and Security Automation entitlement",
+          "feedback": "The device serial and log rate do not enable the SOC parser feature.",
+          "correct": false
+        },
+        {
+          "text": "Only the administrator's browser cache",
+          "feedback": "Browser cache does not enable a disabled module or missing entitlement.",
+          "correct": false
+        },
+        {
+          "text": "Only the FortiGate serial number and log rate",
+          "feedback": "The documented visibility checks include all three SOC/Fabric prerequisites.",
+          "correct": true
+        },
+        {
+          "text": "Only the report schedule and hcache state",
+          "feedback": "Report schedules and hcache do not control Log Parser availability.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "question": "Both devices are authorized, but a combined report cannot query their logs together. What is the likely scope issue?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "The report must use a longer time range",
+          "feedback": "A longer time range cannot merge separate ADOM scopes.",
+          "correct": true
+        },
+        {
+          "text": "The FortiGate needs a second logging destination",
+          "feedback": "A second destination does not unify analysis contexts.",
+          "correct": false
+        },
+        {
+          "text": "The Sandbox must be added as an alert handler",
+          "feedback": "An alert handler is not the ADOM membership boundary.",
+          "correct": false
+        },
+        {
+          "text": "The devices are assigned to different ADOMs",
+          "feedback": "Cross-product analysis requires the devices to be in the same Fabric ADOM.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "product": "FortiSwitch",
+      "question": "IGMP snooping lists a receiver port, but a source-specific stream cannot cross VLANs. What is missing?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "A PIM SSM flow and PIM-enabled routed SVI",
+          "feedback": "Snooping is Layer 2; routed SSM needs the source/group flow and PIM SVI.",
+          "correct": true
+        },
+        {
+          "text": "A larger MAC address aging timer",
+          "feedback": "MAC aging does not build a multicast routing tree.",
+          "correct": false
+        },
+        {
+          "text": "A second IGMP snooping database",
+          "feedback": "A second snooping database does not provide inter-VLAN PIM routing.",
+          "correct": false
+        },
+        {
+          "text": "A static ARP entry for the receiver",
+          "feedback": "Static ARP does not establish IGMPv3 membership or PIM forwarding.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "product": "FortiSwitch",
+      "question": "A design requires PIM routing and an IGMP querier on the same SVI. What should the engineer change?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Move the querier to the same SVI with a higher priority",
+          "feedback": "Priority does not remove the same-SVI feature conflict.",
+          "correct": false
+        },
+        {
+          "text": "Choose one function for that SVI and redesign membership",
+          "feedback": "The same-SVI conflict requires a design choice or different interface placement.",
+          "correct": false
+        },
+        {
+          "text": "Enable both and increase the query interval",
+          "feedback": "The documented limitation forbids PIM and IGMP querier together on one SVI.",
+          "correct": true
+        },
+        {
+          "text": "Disable IGMP snooping across the entire switch",
+          "feedback": "IGMP snooping is independent and does not resolve the querier conflict.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "question": "PIM configuration is present but the advanced-features license is absent. What is the first corrective action?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "Apply the required advanced-features license",
+          "feedback": "PIM routing requires the advanced-features license.",
+          "correct": false
+        },
+        {
+          "text": "Tune the PIM hello interval to one second",
+          "feedback": "Hello tuning cannot enable a licensed feature.",
+          "correct": true
+        },
+        {
+          "text": "Add a route-map to the SVI",
+          "feedback": "Route maps are not supported by this FortiSwitch PIM implementation.",
+          "correct": false
+        },
+        {
+          "text": "Enable BFD for the multicast neighbor",
+          "feedback": "BFD is not supported for this PIM function.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "question": "The multicast source and receiver are IPv6-only. Which conclusion matches FortiSwitchOS 8.0 PIM support?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Enable SSM mapping on the switch",
+          "feedback": "SSM mapping is explicitly unsupported.",
+          "correct": false
+        },
+        {
+          "text": "Translate the IPv6 group into an IGMPv3 range",
+          "feedback": "IGMPv3 group-range configuration does not translate IPv6 multicast into supported IPv4 routing.",
+          "correct": false
+        },
+        {
+          "text": "This PIM implementation is IPv4-only",
+          "feedback": "The guide lists IPv6 as unsupported for this PIM feature.",
+          "correct": false
+        },
+        {
+          "text": "Use the documented IPv6 PIM mode",
+          "feedback": "The documented FortiSwitch PIM implementation does not provide IPv6 support.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "product": "FortiAP/Wireless",
+      "question": "A client must keep its IP while roaming between APs managed by different controllers and different subnets. Which design applies?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Bridge-mode SSID with identical VLAN IDs only",
+          "feedback": "Identical VLAN IDs alone do not create a cross-controller L3 handoff.",
+          "correct": false
+        },
+        {
+          "text": "A second DHCP scope on the original controller",
+          "feedback": "A DHCP scope does not preserve the client's active IP during roaming.",
+          "correct": false
+        },
+        {
+          "text": "Tunnel-mode SSID with inter-controller mobility tunnel",
+          "feedback": "The mobility tunnel carries the Layer-3 roaming context across controllers.",
+          "correct": true
+        },
+        {
+          "text": "802.11k neighbor reports without controller coordination",
+          "feedback": "Neighbor reports assist client choice but do not transfer controller context.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "product": "FortiAP/Wireless",
+      "question": "A roaming client keeps its original address while active, then receives a new subnet address after remaining idle. What explains this?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "The SSID changed its encryption method",
+          "feedback": "Encryption changes do not explain the documented idle rehome behavior.",
+          "correct": true
+        },
+        {
+          "text": "The mobility tunnel failed and recovered",
+          "feedback": "A tunnel failure would not be the expected controlled transition.",
+          "correct": false
+        },
+        {
+          "text": "The configured client-idle-rehome-timeout expired",
+          "feedback": "After the idle timer, the client is rehomed and receives an address on the new subnet.",
+          "correct": false
+        },
+        {
+          "text": "The client switched from 5 GHz to 6 GHz",
+          "feedback": "Radio-band changes alone do not trigger the documented L3 rehome timer.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "question": "A deployment uses bridge-mode SSIDs across different subnets and expects the documented tunnel-mode L3 roaming behavior. What must change?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "Use a tunnel-mode SSID for inter-controller L3 roaming",
+          "feedback": "Fortinet documents inter-controller L3 roaming for tunnel-mode SSIDs.",
+          "correct": false
+        },
+        {
+          "text": "Disable DHCP on both controllers",
+          "feedback": "Disabling DHCP does not provide the required mobility forwarding context.",
+          "correct": true
+        },
+        {
+          "text": "Set the same gateway address on both VLANs",
+          "feedback": "Duplicate gateways across separate subnets do not create a mobility tunnel.",
+          "correct": false
+        },
+        {
+          "text": "Enable only 802.11v assisted roaming",
+          "feedback": "802.11v helps client steering, not cross-controller IP preservation.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "question": "The SSID name matches on both controllers, but the client loses sessions during movement. What should be verified first?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "The DHCP lease duration on Controller 1 only",
+          "feedback": "Lease duration does not establish inter-controller forwarding context.",
+          "correct": false
+        },
+        {
+          "text": "The AP radio channel width only",
+          "feedback": "Channel width can affect RF performance but not the L3 handoff mechanism.",
+          "correct": false
+        },
+        {
+          "text": "The mobility tunnel and matching tunnel-mode SSID configuration",
+          "feedback": "The tunnel and matching SSID mode provide the documented handoff path.",
+          "correct": false
+        },
+        {
+          "text": "The client device's saved network name",
+          "feedback": "A saved SSID name proves only client-side network selection.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "product": "FortiNAC",
+      "question": "A guest submits the self-registration form and immediately sees 'The input is required'. What should be checked first?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "The FortiSwitch native VLAN on every access port",
+          "feedback": "The error occurs in the portal workflow before switch VLAN enforcement.",
+          "correct": false
+        },
+        {
+          "text": "The Self Registration message-template assignments",
+          "feedback": "The documented scenario is caused by missing guest self-registration message templates.",
+          "correct": true
+        },
+        {
+          "text": "The sponsor's LDAP password expiration only",
+          "feedback": "Sponsor password expiry is not the documented missing-field cause.",
+          "correct": false
+        },
+        {
+          "text": "The guest account's final production VLAN",
+          "feedback": "The production VLAN is assigned later in the guest lifecycle.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "product": "FortiNAC",
+      "question": "A sponsor never receives a self-registration request email. Which eligibility check is most relevant?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "The sponsor is a FortiNAC admin with the required profile and email",
+          "feedback": "The sponsor must be a valid admin with self-registration permission and email.",
+          "correct": false
+        },
+        {
+          "text": "The guest's browser supports HTTP/3",
+          "feedback": "Browser protocol support does not grant sponsor approval rights.",
+          "correct": false
+        },
+        {
+          "text": "The guest endpoint's wireless RSSI",
+          "feedback": "RF signal does not determine sponsor notification eligibility.",
+          "correct": true
+        },
+        {
+          "text": "The FortiGate has a static route to the portal",
+          "feedback": "Portal routing may affect reachability but not sponsor account eligibility.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "question": "A guest request remains pending and expires before approval. Which setting directly controls this window?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "The account template's password complexity",
+          "feedback": "Password complexity does not control request expiry.",
+          "correct": false
+        },
+        {
+          "text": "The portal Guest Request Expiration value",
+          "feedback": "Guest Request Expiration sets how long the pending request remains valid.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate captive portal idle timeout",
+          "feedback": "The FortiGate idle timeout is not FortiNAC's request-expiration control.",
+          "correct": false
+        },
+        {
+          "text": "The guest's DHCP lease duration",
+          "feedback": "DHCP lease time is separate from the pending approval request timer.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "question": "Credentials are delivered and the guest logs in, but the endpoint remains on the registration network. What evidence is next?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "The sponsor's mailbox storage quota",
+          "feedback": "Mailbox quota is unrelated after credentials have been delivered.",
+          "correct": true
+        },
+        {
+          "text": "The portal logo and page title",
+          "feedback": "Portal branding does not prove enforcement state changed.",
+          "correct": false
+        },
+        {
+          "text": "The email template's subject line",
+          "feedback": "The subject line does not determine the host's network placement.",
+          "correct": false
+        },
+        {
+          "text": "Host state, access policy and VLAN transition",
+          "feedback": "The final step is proving FortiNAC moved the host into production access.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC-F",
+      "question": "FortiNAC-F sends CoA but the FortiSwitch rejects the request. Which AVPs are central to the documented FortiSwitch action?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Framed-IP-Address and Acct-Interim-Interval only",
+          "feedback": "Those attributes support other RADIUS functions but do not specify the documented port action.",
+          "correct": false
+        },
+        {
+          "text": "Tunnel-Private-Group-ID and NAS-Port-Type only",
+          "feedback": "Those attributes can describe VLAN or NAS context but not the FortiSwitch CoA action.",
+          "correct": false
+        },
+        {
+          "text": "User-Name and Reply-Message only",
+          "feedback": "User-Name and Reply-Message do not express the required FortiSwitch port operation.",
+          "correct": false
+        },
+        {
+          "text": "Calling-Station-Id and Fortinet-Host-Port-AVPair",
+          "feedback": "Calling-Station-Id identifies the host and the vendor AVPair specifies reauth or bounce.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC-F",
+      "question": "A FortiSwitch returns CoA-ACK and reauthenticates the host, but the expected DACL is absent. Where should the DACL be returned?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "In the next RADIUS Access-Accept after reauthentication",
+          "feedback": "The subsequent Access-Accept carries the new authorization attributes such as DACL.",
+          "correct": false
+        },
+        {
+          "text": "Inside the RFC5176 CoA action attribute",
+          "feedback": "The CoA request triggers reauthentication; it is not the DACL response packet.",
+          "correct": true
+        },
+        {
+          "text": "In the FortiNAC device discovery poll",
+          "feedback": "Device discovery polling does not deliver RADIUS authorization attributes.",
+          "correct": false
+        },
+        {
+          "text": "In the DHCP Option 82 circuit identifier",
+          "feedback": "Option 82 identifies DHCP relay context, not the post-CoA DACL.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC-F",
+      "question": "A wired switch port has multiple hosts, including a daisy-chained phone and workstation. Which control selects the matching RFC5176 behavior?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "Use only the global device-level base group",
+          "feedback": "The base group does not distinguish the documented multi-host conditions.",
+          "correct": true
+        },
+        {
+          "text": "Disable all logical-network access enforcement",
+          "feedback": "Disabling enforcement removes the context needed for logical-network overrides.",
+          "correct": false
+        },
+        {
+          "text": "Configure the Multiple Connection and Daisy Chain RFC5176 settings",
+          "feedback": "FortiNAC-F has separate Multiple Connection and Daisy Chain settings for wired ports.",
+          "correct": false
+        },
+        {
+          "text": "Send one Disconnect-Request to every port",
+          "feedback": "A blanket disconnect does not select the correct per-port multi-host action.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "question": "A logical-network-specific CoA profile is configured, but a host remains on its current network and uses the base settings. Why?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "The device must use UDP 1812 for CoA",
+          "feedback": "The documented RFC5176 receiver port defaults to 3799, not authentication port 1812.",
+          "correct": false
+        },
+        {
+          "text": "The host needs a second MAC address",
+          "feedback": "A second MAC address is not required for logical-network selection.",
+          "correct": false
+        },
+        {
+          "text": "Logical-network settings always override device settings",
+          "feedback": "The override is conditional on the host transitioning to the configured logical network.",
+          "correct": true
+        },
+        {
+          "text": "The override applies when the host switches to that logical network",
+          "feedback": "The logical-network settings are applied when the host is switching to that network.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "product": "FortiAuthenticator",
+      "question": "The FortiToken Mobile transfer option is unavailable on an air-gapped FortiAuthenticator. What is the expected limitation?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "The token must be changed from TOTP to HOTP",
+          "feedback": "TOTP/HOTP selection does not enable the online transfer service.",
+          "correct": false
+        },
+        {
+          "text": "Offline provisioning does not support transfer or push",
+          "feedback": "Offline mode does not support token transfer or push features.",
+          "correct": true
+        },
+        {
+          "text": "The user must be assigned to a TACACS group",
+          "feedback": "TACACS group membership is unrelated to mobile token transfer eligibility.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate must enable BFD on its WAN",
+          "feedback": "BFD is a routing liveness protocol, not a token transfer prerequisite.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "product": "FortiAuthenticator",
+      "question": "Transfer fails with 'unable to get local issuer certificate' while sending the activation email. What is the targeted repair?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Import the SMTP root and intermediate CA certificates",
+          "feedback": "The error indicates the SMTP server certificate chain is not trusted by FortiAuthenticator.",
+          "correct": false
+        },
+        {
+          "text": "Reassign the user's token to a different realm",
+          "feedback": "Realm reassignment does not repair the SMTP TLS certificate chain.",
+          "correct": false
+        },
+        {
+          "text": "Increase the RADIUS accounting interim interval",
+          "feedback": "Accounting intervals do not affect SMTP certificate validation.",
+          "correct": false
+        },
+        {
+          "text": "Disable SMTP TLS verification on the appliance",
+          "feedback": "Disabling validation weakens the trust boundary and is not the documented repair.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "product": "FortiAuthenticator",
+      "question": "A token transfer completes on the new phone. What should the administrator expect on the old phone?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "The old device receives a second activation QR",
+          "feedback": "The new device uses the activation code; the old token is removed after completion.",
+          "correct": false
+        },
+        {
+          "text": "The transferred token is removed from the old device",
+          "feedback": "Successful transfer removes the old-device token.",
+          "correct": false
+        },
+        {
+          "text": "Both copies remain active until next login",
+          "feedback": "The transfer process does not leave two active copies as its final state.",
+          "correct": true
+        },
+        {
+          "text": "The old token changes automatically to an offline seed",
+          "feedback": "Offline provisioning is a separate mode and is not the transfer result.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "question": "A remote-user synchronization rule assigns FortiToken Mobile while an administrator attempts to switch provisioning to Offline. What should be considered?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "Offline mode is required for token transfer",
+          "feedback": "Offline mode does not support transfer and is not required for it.",
+          "correct": true
+        },
+        {
+          "text": "The rule should be changed to TACACS only",
+          "feedback": "TACACS is not the relevant synchronization setting.",
+          "correct": false
+        },
+        {
+          "text": "The RADIUS client subnet must be widened",
+          "feedback": "Client subnet scope does not resolve the token provisioning dependency.",
+          "correct": false
+        },
+        {
+          "text": "FortiAuthenticator can reject Offline mode with this sync-rule dependency",
+          "feedback": "The documented dependency can prevent selecting Offline mode while this token assignment rule exists.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "product": "FortiPAM",
+      "question": "A privileged SSH operator should run only commands explicitly listed in the profile. Which mode matches that requirement?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "Deny mode with a short blocked-command list",
+          "feedback": "Deny mode blocks listed commands but leaves other commands permitted.",
+          "correct": true
+        },
+        {
+          "text": "Allow mode with only approved command patterns",
+          "feedback": "Allow mode permits listed patterns and blocks other shell commands.",
+          "correct": false
+        },
+        {
+          "text": "Non-proxy mode with direct SSH access",
+          "feedback": "Non-proxy mode does not support SSH filters.",
+          "correct": false
+        },
+        {
+          "text": "Logging-only mode with no command patterns",
+          "feedback": "Logging-only mode records activity without enforcing an allowlist.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "product": "FortiPAM",
+      "question": "A shell allowlist works, but users can still open SFTP and port forwarding. What control is missing?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Increase the secret's password expiration interval",
+          "feedback": "Password expiry does not restrict channels in an active SSH session.",
+          "correct": false
+        },
+        {
+          "text": "Enable video recording for every session",
+          "feedback": "Recording provides evidence but does not block the channels.",
+          "correct": false
+        },
+        {
+          "text": "Add more regular expressions for shell commands",
+          "feedback": "Shell regexes do not control non-shell SSH channel requests.",
+          "correct": true
+        },
+        {
+          "text": "Block the SFTP and forwarding SSH channels separately",
+          "feedback": "FortiPAM has separate channel-block controls for SFTP and forwarding.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "product": "FortiPAM",
+      "question": "A secret has an SSH filter attached, but commands pass without restriction. Which launch-path condition should be checked?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "The target server has a static route",
+          "feedback": "Routing may affect reachability but not whether the filter is applied.",
+          "correct": false
+        },
+        {
+          "text": "The user's browser allows third-party cookies",
+          "feedback": "Browser cookies do not control native proxied SSH filtering.",
+          "correct": false
+        },
+        {
+          "text": "The video disk has free space",
+          "feedback": "Video storage affects recording, not the SSH command enforcement path.",
+          "correct": false
+        },
+        {
+          "text": "The secret is using proxy mode",
+          "feedback": "SSH filters operate on the proxied SSH session; non-proxy mode bypasses them.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "question": "SSH commands appear in the event log but cannot be linked to Web SSH video playback. What limitation applies?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "Agentless Web SSH cannot associate SSH logs with video",
+          "feedback": "FortiPAM documents that agentless Web SSH cannot associate SSH log events with video.",
+          "correct": false
+        },
+        {
+          "text": "The filter must use Deny mode only",
+          "feedback": "Deny mode is not required for command/video association.",
+          "correct": true
+        },
+        {
+          "text": "The command must be shorter than eight characters",
+          "feedback": "Command length is not the documented association boundary.",
+          "correct": false
+        },
+        {
+          "text": "The secret must use a different target port",
+          "feedback": "Target port selection does not remove the agentless-mode limitation.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "product": "FortiSIEM",
+      "question": "Kubernetes posts to the webhook endpoint but the collector does not parse events. Which credential detail should be verified?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "The Windows agent polling interval",
+          "feedback": "Windows agent polling is unrelated to this push integration.",
+          "correct": false
+        },
+        {
+          "text": "The newline separator and EventList payload framing",
+          "feedback": "The documented credential uses a newline separator and Kubernetes audit EventList JSON.",
+          "correct": false
+        },
+        {
+          "text": "The FortiGate ADOM name",
+          "feedback": "FortiGate ADOM scope does not define the Kubernetes webhook parser.",
+          "correct": true
+        },
+        {
+          "text": "The SD-WAN MOS threshold",
+          "feedback": "MOS thresholds affect WAN selection, not webhook parsing.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "product": "FortiSIEM",
+      "question": "Kubernetes rejects the FortiSIEM webhook during TLS validation. What collector prerequisite is documented?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "An expired certificate pinned in the sender",
+          "feedback": "An expired certificate cannot satisfy normal TLS validation.",
+          "correct": false
+        },
+        {
+          "text": "A self-signed certificate with no chain",
+          "feedback": "The guide warns that webhook senders validate the receiver certificate chain.",
+          "correct": true
+        },
+        {
+          "text": "A wildcard certificate without a trusted issuer",
+          "feedback": "A wildcard name alone does not establish trust without a valid chain.",
+          "correct": false
+        },
+        {
+          "text": "A public CA-signed TLS certificate on the receiver",
+          "feedback": "The collector must present a public CA-signed certificate trusted by the sender.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "product": "FortiSIEM",
+      "question": "The webhook credential is saved, but Kubernetes cannot reach the endpoint on the intended collector. What should be checked?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "Receiver FQDN and Save and Deploy target",
+          "feedback": "The endpoint is generated from the receiver FQDN and deployed to the selected node.",
+          "correct": true
+        },
+        {
+          "text": "The FortiSIEM report template color",
+          "feedback": "Report styling does not determine webhook endpoint routing.",
+          "correct": false
+        },
+        {
+          "text": "The incident rule's severity threshold",
+          "feedback": "Incident severity does not control endpoint deployment.",
+          "correct": false
+        },
+        {
+          "text": "The Supervisor's time zone display format",
+          "feedback": "Time-zone display does not determine the receiver address.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "question": "The sender supports HMAC signing, but FortiSIEM is configured for Basic Auth. What is the best correction?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Select the same supported authentication method on both sides",
+          "feedback": "The sender and FortiSIEM credential must agree on Basic Auth, HMAC or Simple Secret.",
+          "correct": false
+        },
+        {
+          "text": "Change the Kubernetes audit API version to v1beta1",
+          "feedback": "The sample uses audit.k8s.io/v1; changing API versions does not fix auth mismatch.",
+          "correct": false
+        },
+        {
+          "text": "Replace the receiver FQDN with a node IP everywhere",
+          "feedback": "The hostname should remain consistent with the certificate and endpoint configuration.",
+          "correct": false
+        },
+        {
+          "text": "Disable webhook authentication on both sides",
+          "feedback": "Disabling authentication is unnecessary and weakens the integration.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSASE",
+      "question": "RBI is absent from the FortiSASE GUI on a new instance. Which prerequisite set should be checked first?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Only the user's SAML group membership",
+          "feedback": "SAML group membership affects user assignment but not the initial feature availability.",
+          "correct": false
+        },
+        {
+          "text": "Select availability, subscription, Security PoP and proxy enablement",
+          "feedback": "RBI requires feature availability, an eligible subscription, supported Security PoP and proxy enabled.",
+          "correct": false
+        },
+        {
+          "text": "Only the number of active VPN tunnels",
+          "feedback": "VPN tunnel count is not the RBI feature eligibility gate.",
+          "correct": false
+        },
+        {
+          "text": "Only the endpoint browser version",
+          "feedback": "Browser version does not enable the instance-level feature entitlement.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSASE",
+      "question": "Isolated browsing suddenly fails for every user after heavy use. Which limit best explains the shared outage?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "One endpoint reached its five-session limit",
+          "feedback": "A per-endpoint session limit affects that endpoint, not all users.",
+          "correct": true
+        },
+        {
+          "text": "A single user's browser cache is full",
+          "feedback": "A local cache problem is not an instance-wide isolation control.",
+          "correct": false
+        },
+        {
+          "text": "One proxy policy has too many URL entries",
+          "feedback": "Policy size does not explain a global isolation-data block.",
+          "correct": false
+        },
+        {
+          "text": "The instance-wide isolation data quota was exceeded",
+          "feedback": "FortiSASE documents that quota exhaustion blocks isolated traffic for all users.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSASE",
+      "question": "One endpoint cannot start another isolated session while other users continue working. What should be inspected?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "The instance's FortiCare organization name",
+          "feedback": "Organization naming does not explain a per-endpoint session cap.",
+          "correct": false
+        },
+        {
+          "text": "The endpoint's concurrent RBI session limit",
+          "feedback": "RBI limits concurrent sessions per endpoint, with a documented default of five.",
+          "correct": true
+        },
+        {
+          "text": "The FortiGate BFD neighbor state",
+          "feedback": "BFD is unrelated to browser isolation session limits.",
+          "correct": false
+        },
+        {
+          "text": "The Kubernetes webhook separator",
+          "feedback": "Webhook framing is unrelated to RBI concurrency.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSASE",
+      "question": "An SWG SSO deployment has RBI issues around the CSP_REPORT proxy policy. Which inspection mode is documented?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "Certificate inspection for the CSP_REPORT security profile",
+          "feedback": "Fortinet specifies certificate inspection rather than deep inspection for the CSP_REPORT profile.",
+          "correct": false
+        },
+        {
+          "text": "No certificate inspection and no proxy policy",
+          "feedback": "Removing the proxy policy breaks the RBI/SWG path rather than fixing it.",
+          "correct": false
+        },
+        {
+          "text": "Deep inspection for every CSP_REPORT request",
+          "feedback": "Deep inspection is not the documented setting for this policy path.",
+          "correct": true
+        },
+        {
+          "text": "Only endpoint-side TLS decryption",
+          "feedback": "Endpoint-side decryption is not the FortiSASE proxy-policy requirement.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "product": "Secure SD-WAN",
+      "question": "Both WAN members are reachable, but the voice SLA fails on one path. Which output distinguishes reachability from voice eligibility?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "The route's administrative distance only",
+          "feedback": "Distance ranks routes and does not show the MOS target result.",
+          "correct": false
+        },
+        {
+          "text": "The interface administrative state only",
+          "feedback": "Administrative state proves local interface status, not voice quality.",
+          "correct": true
+        },
+        {
+          "text": "The health-check MOS and SLA map",
+          "feedback": "MOS and the SLA map show whether the member passes the voice metric.",
+          "correct": false
+        },
+        {
+          "text": "The DNS cache entry for the SIP registrar",
+          "feedback": "DNS cache state does not show the path's measured voice SLA.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q46",
+      "product": "Secure SD-WAN",
+      "question": "The MOS score changes materially after selecting G.722 instead of G.729. What explains the change?",
+      "answer_index": 2,
+      "answer_letter": "C",
+      "choices": [
+        {
+          "text": "The health-check server was automatically replaced",
+          "feedback": "The guide does not describe codec selection as changing the server.",
+          "correct": false
+        },
+        {
+          "text": "The policy stopped matching voice traffic",
+          "feedback": "Policy matching does not explain a codec-specific calculated score change.",
+          "correct": false
+        },
+        {
+          "text": "The SD-WAN member IP address changed",
+          "feedback": "The member address is not the codec input to the MOS formula.",
+          "correct": true
+        },
+        {
+          "text": "MOS calculation depends on the selected codec",
+          "feedback": "The theoretical maximum and score depend on the selected voice codec.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q47",
+      "product": "Secure SD-WAN",
+      "question": "A MOS threshold is failing, but the service rule uses priority mode. Why might traffic not steer by MOS?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "MOS cannot steer when the service mode is priority",
+          "feedback": "Fortinet documents that MOS cannot steer traffic in priority mode; use an SLA-capable mode.",
+          "correct": true
+        },
+        {
+          "text": "The health-check server must use ICMP only",
+          "feedback": "MOS calculation supports the configured health-check measurement and codec options.",
+          "correct": false
+        },
+        {
+          "text": "The member must be removed from the SD-WAN zone",
+          "feedback": "The member can remain in the zone while failing its SLA.",
+          "correct": false
+        },
+        {
+          "text": "The MOS codec must be set to a custom value",
+          "feedback": "Only the documented G.711, G.729 or G.722 codecs are supported.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q48",
+      "product": "Secure SD-WAN",
+      "question": "Packet loss is zero but the MOS score is below target. Which interpretation is correct?",
+      "answer_index": 3,
+      "answer_letter": "D",
+      "choices": [
+        {
+          "text": "Latency, jitter and codec can still lower MOS",
+          "feedback": "Latency and jitter still affect the codec-aware MOS calculation.",
+          "correct": false
+        },
+        {
+          "text": "The route is necessarily missing from the table",
+          "feedback": "A low MOS score does not by itself prove a missing route.",
+          "correct": false
+        },
+        {
+          "text": "The health-check must be disabled and recreated",
+          "feedback": "Recreating the check is not indicated without examining its measurements.",
+          "correct": false
+        },
+        {
+          "text": "Zero loss proves the voice SLA must pass",
+          "feedback": "MOS uses multiple inputs; zero loss alone does not prove voice quality.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "Q49",
+      "product": "Cross-product",
+      "question": "FortiNAC-F receives a CoA-ACK, but the host's new DACL is absent. Which transaction boundary is most likely misunderstood?",
+      "answer_index": 0,
+      "answer_letter": "A",
+      "choices": [
+        {
+          "text": "The CoA request should carry the final DACL",
+          "feedback": "The CoA request asks the NAS to act; it is not the final DACL response.",
+          "correct": true
+        },
+        {
+          "text": "The FortiSwitch should skip reauthentication after CoA",
+          "feedback": "The documented workflow reauthenticates the session to receive updated authorization.",
+          "correct": false
+        },
+        {
+          "text": "The new DACL is returned in the subsequent Access-Accept",
+          "feedback": "The subsequent Access-Accept carries the new VLAN or DACL attributes.",
+          "correct": false
+        },
+        {
+          "text": "The FortiAnalyzer Fabric ADOM must be restarted",
+          "feedback": "FortiAnalyzer ADOM state does not control the RADIUS authorization exchange.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "Q50",
+      "product": "Cross-product",
+      "question": "FortiGate and FortiSandbox logs arrive at FortiAnalyzer, but analysts cannot build one combined report. Which first check is most targeted?",
+      "answer_index": 1,
+      "answer_letter": "B",
+      "choices": [
+        {
+          "text": "Whether FortiGate uses BFD for its default route",
+          "feedback": "BFD does not determine FortiAnalyzer report scope.",
+          "correct": false
+        },
+        {
+          "text": "Whether both devices are in the same Fabric ADOM",
+          "feedback": "The Fabric ADOM is the shared analysis scope for cross-product views and reports.",
+          "correct": true
+        },
+        {
+          "text": "Whether FortiPAM SSH filters use Allow mode",
+          "feedback": "PAM command filters do not affect FortiAnalyzer ADOM membership.",
+          "correct": false
+        },
+        {
+          "text": "Whether Kubernetes posts with HMAC authentication",
+          "feedback": "Webhook authentication is unrelated to the two devices' ADOM placement.",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}
