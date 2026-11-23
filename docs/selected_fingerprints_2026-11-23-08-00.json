@@ -144,7 +144,7 @@
     {
       "product": "FortiAuthenticator",
       "lesson_subject": "FortiToken Mobile device-to-device token transfer and trust dependencies",
-      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/911252/tokens",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/911252/tokens",
       "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-fortitoken-mobile-transfer-error-due-to-smtp-certificate-issue-230378",
       "feature_mechanism_fingerprint": "Online FortiToken Mobile provisioning can enable secure token transfer between end-user devices; the token seed is protected using a device-specific identity, FortiCare holds the transfer payload and issues an activation code, FortiAuthenticator retrieves the code and delivers it by email/SMS/QR, and successful transfer removes the token from the old device. Offline provisioning does not support token transfer or push.",
       "workflow_transaction_fingerprint": "Old device initiates transfer -> FortiToken Mobile requests transfer service from FortiCare -> FortiCare stores token data and creates activation code -> FortiAuthenticator retrieves code -> SMTP/SMS delivery sends activation code/QR -> new device completes transfer -> token data installs -> old-device token is removed.",
@@ -201,9 +201,9 @@
     {
       "product": "FortiSASE",
       "lesson_subject": "Remote Browser Isolation licensing, policy selection and instance-wide quota behavior",
-      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/84033/rbi",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/374370/rbi",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiSASE RBI isolates selected proxy-user web sessions in a remote container and streams rendered output; it is select-availability, disabled by default, requires Advanced/Comprehensive remote-user subscription, Fortinet Security PoP and proxy enabled. Concurrent sessions are capped per endpoint and isolation data quota is enforced at instance level; exhaustion blocks isolated traffic for all users.",
+      "feature_mechanism_fingerprint": "FortiSASE RBI isolates selected proxy-user web sessions in a remote container and streams rendered output; it is select-availability, disabled by default, requires Advanced/Comprehensive remote-user subscription, Fortinet Security PoP and proxy enabled. Concurrent sessions are capped per endpoint and isolation data quota is enforced at instance level; exhaustion blocks isolated traffic for all users. The 26.1 release notes describe 1.2 GB per licensed user per year as an instance-level aggregate; quota exhaustion blocks isolation for every user.",
       "workflow_transaction_fingerprint": "User traffic enters FortiSASE proxy -> proxy policy matches source/destination/category -> RBI-enabled scope launches remote browser container -> remote container fetches/renders site -> rendered stream returns to endpoint -> session/authentication/quota accounting applies -> instance quota exhaustion blocks future isolated traffic.",
       "failure_class": "RBI menu/session unavailable or all users suddenly blocked because feature entitlement/PoP/proxy prerequisites are missing, CSP_REPORT policy uses deep inspection instead of certificate inspection, per-endpoint session limit is hit, or instance-wide isolation quota is exhausted.",
       "evidence_pattern": "Select-availability entitlement and PoP/proxy state prove feature eligibility; proxy policy hit proves scope; active-session count proves endpoint concurrency; isolation data usage/quota proves instance-level cap; certificate-inspection profile confirms CSP_REPORT exception. A proxy policy hit alone does not prove a remote isolation session started.",
