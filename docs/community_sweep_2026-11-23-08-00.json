@@ -40,8 +40,37 @@
       "url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-log-parser-tab-not-seen-on-fortianalyzer-207938",
       "title": "Troubleshooting Tip: Log Parser TAB not seen on FortiAnalyzer",
       "published": "2025 (approximately 1.4 years before this run)",
-      "status": "Older adjacent prerequisite scenario.",
-      "use": "Scenario-only: demonstrates Fabric ADOM and SIEM module/license visibility boundary; not a current feature announcement."
+      "status": "Recent related scenarios verified within the strict 30-day window; no article exactly duplicates the Fabric ADOM mechanism.",
+      "use": "Scenario-only: recent Archive-versus-Analytics visibility, Collector OFTP identity and ClickHouse migration cases; primary feature mechanics remain from the FortiAnalyzer Administration Guide.",
+      "related_recent_scenarios": [
+        {
+          "url": "https://community.fortinet.com/fortianalyzer-6/no-allowed-logs-in-fortianalyzer-230967",
+          "title": "No allowed logs in FortiAnalyzer",
+          "published": "2026-10-29",
+          "status": "Verified within strict 30-day window; scenario-only.",
+          "failure_class": "Source logging absent versus Archive-to-Analytics presentation gap",
+          "evidence_pattern": "Archive contains no allowed traffic logs => FortiGate did not generate them; if Archive has records but Analytics does not, fazsvcd debug while querying.",
+          "use": "Scenario-only diagnostic boundary; not a primary lesson source."
+        },
+        {
+          "url": "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
+          "title": "FortiAnalyzer log forwarding stops working after upgrade to 7.6",
+          "published": "2026-11-13",
+          "status": "Verified within strict 30-day window; scenario-only.",
+          "failure_class": "Collector OFTP identity / certificate CN mismatch after upgrade",
+          "evidence_pattern": "logfwd state Disconnected, server-auth-state Query, zero logs sent; OFTP CertCN must match FortiAnalyzer serial number.",
+          "use": "Scenario-only transport and identity boundary; not a primary lesson source."
+        },
+        {
+          "url": "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259",
+          "title": "Analytics database size or range reduced after upgrading FortiAnalyzer to version 7.6 (ClickHouse migration)",
+          "published": "2026-11-13",
+          "status": "Verified within strict 30-day window; scenario-only.",
+          "failure_class": "Analytics migration completeness versus storage compression",
+          "evidence_pattern": "Validate oldest Analytics date and daily log counts; lower disk usage alone is not proof of missing data.",
+          "use": "Scenario-only retention and migration boundary; not a primary lesson source."
+        }
+      ]
     },
     {
       "product": "FortiSwitch",
@@ -116,5 +145,5 @@
       "use": "No community scenario attached; primary lesson uses FortiOS 8.0 Administration Guide."
     }
   ],
-  "strict_30_day_findings": "No exact-match scenario published between 2026-10-24 and 2026-11-23 was verified for the selected mechanisms. The report labels older scenarios by date and does not present them as recent."
+  "strict_30_day_findings": "No exact selected-mechanism scenario was found for most targets. Three recent related FortiAnalyzer scenarios were verified (2026-10-29 and 2026-11-13) and used only as diagnostic scenario material; no troubleshooting article was promoted to a primary lesson source."
 }
