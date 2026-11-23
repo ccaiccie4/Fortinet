@@ -15,13 +15,14 @@
   },
   "lessons": {
     "count": 12,
-    "total_words": 7388,
+    "total_words": 7617,
     "min_words": 562,
-    "max_words": 687,
+    "max_words": 810,
     "all_at_least_500": true,
     "all_have_primary_sources": true,
     "minimum_words": 562,
-    "maximum_words": 687
+    "maximum_words": 810,
+    "fortianalyzer_words": 810
   },
   "exam": {
     "questions": 50,
@@ -34,15 +35,30 @@
       "C": 12,
       "D": 12
     },
-    "all_four_choices": true
+    "all_four_choices": true,
+    "answer_key_feedback_consistency": true,
+    "answer_key_consistency_audit": {
+      "exactly_one_correct_choice_per_question": true,
+      "answer_index_matches_correct_flag": true,
+      "all_50_stems_unique": true,
+      "per_choice_feedback": 200,
+      "choice_position_distribution": {
+        "A": 13,
+        "B": 13,
+        "C": 12,
+        "D": 12
+      },
+      "correct_longest_or_tied_questions": 27,
+      "max_choice_word_range": 3
+    }
   },
   "diagrams": {
     "svg": 12,
     "drawio": 12
   },
   "limitations": [
-    "Direct docs.fortinet.com page opens returned HTTP 403; indexed official Fortinet documentation results were used and the limitation is disclosed.",
-    "All 12 Community product areas were searched; no exact selected-mechanism scenario published in the strict prior-30-day window was verified. Older scenarios are explicitly dated and labelled.",
+    "Direct docs.fortinet.com page opens returned HTTP 403; indexed official Fortinet documentation was used and the limitation is disclosed.",
+    "All 12 Community product areas were searched. Three recent related FortiAnalyzer scenarios (2026-10-29 and 2026-11-13) were used as scenario-only evidence; no exact selected-mechanism scenario was verified for the other 11 products.",
     "Public GitHub Pages report and index URLs returned Internal Error to the verifier; repository publication/read-back is confirmed, but public Pages reachability remains unconfirmed."
   ],
   "publication": {
@@ -54,13 +70,23 @@
     "email": "disabled_not_attempted",
     "scheduler": "unchanged",
     "assets": "PASS — all 24 files individually fetched; all 12 SVGs and 12 draw.io XML files structurally valid and their SHAs match the manifest.",
-    "verified_at_local": "2026-11-23T08:27:30-08:00"
+    "verified_at_local": "2026-11-23T08:27:30-08:00",
+    "question_bank_readback": "PASS",
+    "quiz_html_sync": "PASS — 50 fieldsets, 50 answer attributes, 200 feedback blocks; HTML keys match the corrected question bank."
   },
   "research": {
     "community_products_searched": 12,
     "strict_30_day_exact_mechanism_scenarios_verified": 0,
     "older_scenarios_labeled": true,
     "primary_documentation_products": 12,
-    "primary_sources_are_fortinet_admin_or_configuration_docs": true
+    "primary_sources_are_fortinet_admin_or_configuration_docs": true,
+    "recent_related_scenarios_verified": 3,
+    "recent_scenario_dates": [
+      "2026-10-29",
+      "2026-11-13",
+      "2026-11-13"
+    ],
+    "strict_30_day_exact_selected_mechanism_scenarios_verified": 0,
+    "scenario_sources_are_scenario_only": true
   }
 }
