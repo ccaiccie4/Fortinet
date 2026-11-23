@@ -1,0 +1,240 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-23T08:00:08-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-23-08-00.json",
+  "inventory_sha": "0d901cf033cf36225058c1e3565e7d2ded048506",
+  "topic_selection_after_inventory_readback": true,
+  "selected_topic_count": 12,
+  "comparison_record_count": 414,
+  "method": "Per-product comparison of subject and mechanism fingerprints against all 414 prior records, plus manual comparison of transaction, failure, evidence, remediation, question and diagram fingerprints. Candidate selection was driven by the current Fortinet administration/configuration/new-feature documentation corpus; URLs alone were not treated as uniqueness.",
+  "candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "BFD-controlled static-route withdrawal and restoration",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/771813/bfd",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-bidirectional-forwarding-detection-bfd-with-static-routes-220516",
+      "feature_mechanism_fingerprint": "FortiOS BFD control packets establish a negotiated liveness session with a fixed next-hop peer; a static route explicitly marked BFD-enabled is removed from the routing table when that session goes down and reinstated when it returns. BFD is hierarchical (device, VDOM, interface, protocol/route overrides); FortiGate does not support BFD echo mode or authentication.",
+      "workflow_transaction_fingerprint": "Enable BFD on the participating interface -> establish/learn BFD neighbor -> bind BFD to primary static route -> receive periodic control packets -> BFD state transition UP/DOWN -> route is installed/withdrawn -> higher-distance backup becomes active -> primary returns after session recovery.",
+      "failure_class": "Stale preferred static route blackholes traffic because BFD is not enabled on the right interface/route, peer addressing is wrong, or an operator attempts to use fixed-next-hop BFD on an SD-WAN-zone default route.",
+      "evidence_pattern": "`get router info bfd neighbor` shows UP/DOWN and peer/interface; `get router info routing-table all` shows preferred/backup route selection; UDP/3784 capture proves control traffic; BFD debug identifies session establishment failure. BFD UP alone does not prove the destination prefix is routed correctly.",
+      "remediation_path": "Enable BFD at the correct interface/route scope, verify the fixed gateway and return path, optionally define the neighbor, set the backup route to a higher distance, and use SD-WAN Performance SLA rather than BFD on a default route whose egress is an SD-WAN zone.",
+      "question_fingerprint": "A preferred /32 route remains active through an unreachable fixed gateway while a higher-distance backup exists; identify BFD state as the route withdrawal signal and distinguish it from interface link state or SD-WAN member SLA.",
+      "diagram_topology_layout_fingerprint": "FortiGate-A with primary BFD-tracked next-hop and secondary static next-hop converging on a remote destination; BFD control arrow and active/withdrawn route states shown separately.",
+      "nearest_prior": {
+        "score": 0.125,
+        "subject": "VPNv4/VPNv6 route-reflector next-hop-self",
+        "date": "2026-11-22"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "First policy-package installation as object reconciliation and pruning",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/92081/install-a-policy-package",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager installs objects referenced by policy plus certain implicit dependencies (FSSO polling objects, address/profile groups, CA certificates), while FortiGate objects not represented in the managed policy package can be removed. First install after device onboarding is especially consequential; Add ALL Objects during import preserves objects intended for future use.",
+      "workflow_transaction_fingerprint": "Import FortiGate configuration -> choose object-import scope -> create/assign ADOM policy package and targets -> resolve default/per-device mappings -> install preview calculates policy/device-layer delta -> Install Wizard pushes package/device settings or interface policy -> FortiGate converges to the managed object set.",
+      "failure_class": "First install unexpectedly deletes locally configured but unreferenced objects, or installation fails because default/per-device mappings are missing; operator mistakes reconciliation for a FortiManager transport failure.",
+      "evidence_pattern": "Install preview shows the proposed object delta; FortiManager package object inventory and device mapping explain desired state; FortiGate `show` output before/after confirms object removal or retention; task log identifies mapping/install failure. Successful FGFM connectivity alone does not prove object preservation.",
+      "remediation_path": "Before the first install, import all objects needed for future policy use with Add ALL Objects or explicitly create them in Policy & Objects; validate default/per-device mappings and installation targets; review the preview; separate package/device-settings install from interface-policy-only install when appropriate.",
+      "question_fingerprint": "A FortiGate has unused address objects and CA certificates absent from the imported FortiManager package; predict first-install pruning and choose the import/preview control that preserves objects.",
+      "diagram_topology_layout_fingerprint": "FortiGate local object inventory flows into FortiManager ADOM import; package references and implicit dependencies form desired state; install preview compares desired/current objects; push and prune arrows target FortiGate.",
+      "nearest_prior": {
+        "score": 0.11764705882352941,
+        "subject": "FortiGuard package version pinning versus immediate downgrade for managed FortiGates",
+        "date": "2026-11-18"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Security Fabric ADOM as a cross-product log-correlation and reporting boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/448471/security-fabric-adoms",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-log-parser-tab-not-seen-on-fortianalyzer-207938",
+      "feature_mechanism_fingerprint": "A Fabric ADOM groups Fortinet Security Fabric devices into one analysis context so Device Manager, Log View, FortiView, Incidents & Alerts and Reports can combine supported device data; converting an existing non-Fabric ADOM uses `execute migrate fabric <name>` and causes a system reboot.",
+      "workflow_transaction_fingerprint": "Create Fabric ADOM or migrate an existing ADOM -> add/authorize all Fabric devices into the same ADOM -> ingest each device's logs -> cross-device filters and event handlers correlate records -> shared FortiView widgets/reports consume combined datasets.",
+      "failure_class": "Cross-product logs or SOC features appear missing because devices are split across ADOMs, the ADOM type is not Fabric, or the SIEM/SOC module/license prerequisite is absent; migration causes planned reboot impact.",
+      "evidence_pattern": "ADOM type and membership show the analysis boundary; Device Manager lists fabric members; Log View/FortiView filters show cross-device data; Incidents & Alerts and reports expose supported device types. A device being authorized alone does not prove it is in the correct Fabric ADOM.",
+      "remediation_path": "Inventory all fabric devices and ADOM membership, create or migrate to a Fabric ADOM in a controlled maintenance window, authorize all devices in the same ADOM, verify licenses/modules for SOC-specific features, and retest cross-device views.",
+      "question_fingerprint": "FortiAnalyzer receives logs from FortiGate and FortiSandbox but the cross-product Log Parser pane is absent; distinguish Fabric ADOM type, SIEM module and Security Automation Service entitlement.",
+      "diagram_topology_layout_fingerprint": "Multiple Security Fabric devices converge into one Fabric ADOM; parallel log streams feed Log View/FortiView/Incidents/Reports; migration path is marked as rebooting.",
+      "nearest_prior": {
+        "score": 0.10606060606060606,
+        "subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
+        "date": "2026-11-17"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "PIM-SSM and IGMPv3 multicast routing on FortiSwitch SVIs",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/55467/multicast",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitchOS 8.0 can act as a PIM version-2 router supporting source-specific multicast and IGMPv3 on SVIs. A configured multicast-flow binds an IPv4 group/source (or non-overlapping group range) to PIM-enabled interfaces; PIM state and IGMP listener state are distinct from L2 IGMP snooping.",
+      "workflow_transaction_fingerprint": "Enable global multicast routing -> define multicast-flow group/source mapping -> enable PIM SSM on participating SVI and set hello/DR parameters -> IGMPv3 receiver signals source/group membership -> PIM routers exchange control state -> multicast packets follow the selected source-specific tree.",
+      "failure_class": "Multicast receiver sees no stream because SVI/PIM mode, source/group flow, license, neighbor state or receiver membership is wrong; unsupported features are assumed to exist (IPv6, BFD, ACLs, route maps, MRIB, explicit membership tracking, SSM mapping).",
+      "evidence_pattern": "CLI configuration shows multicast-routing, PIM SSM interface and flow source/group; IGMPv3 reports and PIM neighbor/control traffic confirm membership/control plane; packet capture confirms data forwarding. IGMP snooping membership alone proves L2 listener learning, not routed PIM tree establishment.",
+      "remediation_path": "Confirm advanced-features license and supported FortiSwitch model/release, use SVIs/RVIs only, create non-overlapping IPv4 group/source flows, enable PIM on all participating routers, avoid simultaneous PIM and IGMP querier on one SVI, and verify receiver membership separately from snooping.",
+      "question_fingerprint": "An IPv4 source-specific stream is not routed between VLANs even though IGMP snooping lists a listener; identify the missing PIM SSM flow/SVI state and the documented unsupported feature boundary.",
+      "diagram_topology_layout_fingerprint": "Multicast source SVI -> FortiSwitch PIM SSM router -> routed SVI path -> receiver VLAN with IGMPv3 listener; separate L2 snooping plane and explicit source/group flow label.",
+      "nearest_prior": {
+        "score": 0.1111111111111111,
+        "subject": "FortiSwitch VXLAN interfaces: VNI-to-VLAN mapping, VTEP reachability and underlay limits",
+        "date": "2026-11-22"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Inter-controller Layer-3 roaming with mobility-tunnel IP preservation",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/461028/configuring-layer-3-roaming",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A wireless client can roam between FortiAPs managed by different FortiGate wireless controllers while retaining its original IP across different VLANs/subnets; a controller-to-controller mobility tunnel carries the L3 handoff. After `client-idle-rehome-timeout`, the client is rehomed and receives an address from the new subnet. The documented inter-controller L3 roaming mode is tunnel-mode SSID.",
+      "workflow_transaction_fingerprint": "Client associates to SSID on Controller-1/AP-1 -> controller maintains MAC/IP/security/VLAN context -> client roams to same SSID on Controller-2/AP-2 -> mobility tunnel transports handoff/context -> client keeps original IP and sessions -> idle timer expires -> rehome/DHCP on new subnet.",
+      "failure_class": "Client disconnects or loses sessions while moving between controller domains because SSID mode, mobility tunnel reachability, matching SSID/security context, or controller relationship is wrong; operator expects bridge-mode behavior from tunnel-mode-only L3 roaming.",
+      "evidence_pattern": "Wireless client table on each controller shows client/AP and retained IP; mobility tunnel status and controller logs show handoff; DHCP capture shows no new lease during active roam and a new lease after idle rehome. Same SSID name alone does not prove mobility context transfer.",
+      "remediation_path": "Use a tunnel-mode SSID on both controllers, validate inter-controller mobility tunnel reachability and matching security settings, set an appropriate idle-rehome timeout, test active roam and post-idle rehome separately, and distinguish L2 intra-controller behavior from L3 inter-controller handoff.",
+      "question_fingerprint": "A VoIP client crosses a routed floor boundary and keeps its IP while active, then receives a new subnet address after idling; identify mobility-tunnel L3 roaming and its rehome timer.",
+      "diagram_topology_layout_fingerprint": "Two FortiGate wireless controllers on distinct VLAN/subnets, each with one FortiAP and identical tunnel SSID; client moves AP1 to AP2 through inter-controller mobility tunnel, then DHCP rehome is shown as a delayed branch.",
+      "nearest_prior": {
+        "score": 0.12307692307692308,
+        "subject": "Dynamic captive-portal redirect URLs from RADIUS Access-Accept",
+        "date": "2026-11-21"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Guest self-registration request, sponsor approval and temporary-account lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/687558/guest-self-registration",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-guest-self-registration-displaying-error-the-input-is-required-135057",
+      "feature_mechanism_fingerprint": "FortiNAC captive-portal self-registration creates a pending guest-access request; approval may be assigned to a sponsor/request pool or allowed domain/group/admin policy; approved request creates a temporary guest account from a selected template with time-bounded validity and optional email/SMS/browser delivery.",
+      "workflow_transaction_fingerprint": "Guest connects to isolation network -> portal redirect -> request form submission -> pending request timer -> sponsor/admin approval or denial -> guest account created from template -> credentials delivered -> guest logs in -> NAC moves host from registration/isolation to production access -> account expires.",
+      "failure_class": "Guest request submits but no credentials/account are produced because message templates, sponsor eligibility/permissions, approval rules, request expiry, or portal-generated URLs are misconfigured.",
+      "evidence_pattern": "Registration Requests view shows pending/expired/approved request; sponsor/admin profile and email address prove eligibility; template assignments and email/SMS event logs prove delivery; host state and VLAN prove enforcement transition. A successful request submission does not prove approval or production access.",
+      "remediation_path": "Configure a guest self-registration profile and account template, assign sponsors an appropriate self-registration profile/permissions and email, select required message templates, set approval/expiry rules, verify generated HTTPS/FQDN/port links (especially L3 HA), and test the full registration-to-production transition.",
+      "question_fingerprint": "The guest submits the form but receives 'The input is required' and no sponsor message; identify missing Self Registration message templates rather than changing the VLAN or sponsor directory search.",
+      "diagram_topology_layout_fingerprint": "Guest endpoint on registration VLAN -> captive portal -> FortiNAC pending request queue -> sponsor/admin approval -> temporary account/template -> credential delivery -> production VLAN; expiry/deny branches.",
+      "nearest_prior": {
+        "score": 0.1111111111111111,
+        "subject": "FortiNAC 9.4 API/HTTPS SMS Gateway: connector-driven notifications and sponsor LDAP group mapping",
+        "date": "2026-11-08"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "RFC 5176 CoA/Disconnect message construction and logical-network overrides",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/rfc5176-coa-disconnect-message/562583/overview",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/technical-tip-coa-support-in-fortinac-7-4-and-applying-dacls-in-fortiswitch-fortilink-scenario-173151",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.4+ supports RFC5176 CoA in addition to Disconnect-Request; custom device-level and logical-network settings select message type, NAS port (default 3799) and RADIUS attribute group. Logical-network settings override device-level settings only when the host transitions to that logical network. `%AUTH%`, `%ACCT%`, `%ACCESS_VALUE%`, and `%System%` resolve dynamic AVPs.",
+      "workflow_transaction_fingerprint": "Host posture/role changes -> NAC re-evaluates access policy -> logical network selected -> RFC5176 message type/attribute group resolved -> CoA or Disconnect sent to NAS -> NAS ACK/NAK -> port reauth/bounce or session termination -> new Access-Request/Access-Accept carries VLAN/DACL attributes.",
+      "failure_class": "CoA NAK/no packet/incorrect VLAN because Calling-Station-Id is missing, NAS uses a different UDP port, vendor action AVPair is absent/invalid, logical-network override is not active, or DACL is incorrectly placed in the CoA instead of the subsequent Access-Accept.",
+      "evidence_pattern": "FortiNAC RadiusManager debug shows sendDisconnect/CoA target and port; packet capture shows RFC5176 request/ACK/NAK; FortiSwitch port shows bounce/reauth; new Access-Accept contains VLAN/DACL. A CoA-ACK proves NAS accepted the request, not that the final policy/VLAN is correct.",
+      "remediation_path": "Use port 3799 unless the NAS is configured otherwise, include Calling-Station-Id copied from `%AUTH%`, add Fortinet-Host-Port-AVPair `action=reauth-port` or `action=bounce-port`, enable the global CoA option where required, scope overrides to the destination logical network, and return DACL in the reauthentication Access-Accept.",
+      "question_fingerprint": "A host's role changes and FortiNAC sends CoA, but the switch rejects it or no DACL is applied; distinguish the RFC5176 action AVP from the post-reauthentication Access-Accept authorization attributes.",
+      "diagram_topology_layout_fingerprint": "FortiNAC-F policy engine -> RFC5176 CoA/Disconnect UDP 3799 -> FortiSwitch NAS -> ACK/NAK and port reauth/bounce -> RADIUS Access-Request/Accept with VLAN/DACL; logical-network override branch.",
+      "nearest_prior": {
+        "score": 0.16417910447761194,
+        "subject": "RADIUS-only device support in 7.6.7: reusable configuration objects, selectors and state-based access control",
+        "date": "2026-11-20"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiToken Mobile device-to-device token transfer and trust dependencies",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/911252/tokens",
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-fortitoken-mobile-transfer-error-due-to-smtp-certificate-issue-230378",
+      "feature_mechanism_fingerprint": "Online FortiToken Mobile provisioning can enable secure token transfer between end-user devices; the token seed is protected using a device-specific identity, FortiCare holds the transfer payload and issues an activation code, FortiAuthenticator retrieves the code and delivers it by email/SMS/QR, and successful transfer removes the token from the old device. Offline provisioning does not support token transfer or push.",
+      "workflow_transaction_fingerprint": "Old device initiates transfer -> FortiToken Mobile requests transfer service from FortiCare -> FortiCare stores token data and creates activation code -> FortiAuthenticator retrieves code -> SMTP/SMS delivery sends activation code/QR -> new device completes transfer -> token data installs -> old-device token is removed.",
+      "failure_class": "Transfer option unavailable or transfer fails because online mode/transfer toggle/API service is disabled, public FQDN/port forwarding is wrong, SMTP CA chain is untrusted, remote-user synchronization conflicts with offline provisioning, or token was issued by an unsupported issuer.",
+      "evidence_pattern": "Provisioning mode and Enable token transfer toggle prove feature eligibility; interface allowaccess/API service and public FQDN prove reachability; event 10110 and `unable to get local issuer certificate` identify transfer/SMTP trust failure; new-device token activation and old-device removal prove completion.",
+      "remediation_path": "Use online provisioning, enable token transfer, enable FortiToken Mobile API on the public-facing interface, configure correct public IP/FQDN and forwarding, import SMTP root/intermediate CA certificates, verify token issuer/license transfer policy, and re-provision if device-management license migration rules require it.",
+      "question_fingerprint": "The old phone initiates transfer but FortiAuthenticator reports 'unable to get local issuer certificate'; choose SMTP root/intermediate trust-chain repair rather than changing token seed or disabling TLS validation.",
+      "diagram_topology_layout_fingerprint": "Old mobile -> FortiCare transfer service -> FortiAuthenticator token API -> SMTP/SMS activation delivery -> new mobile; separate TLS trust chain and old-token revocation/removal path.",
+      "nearest_prior": {
+        "score": 0.08823529411764706,
+        "subject": "FortiAuthenticator 8.0.2 TACACS+ client groups: reusable device cohorts and policy binding",
+        "date": "2026-11-21"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "SSH command allow/deny filters and non-shell channel control",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/900399/creating-an-ssh-filter",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM SSH filter profiles evaluate shell-command patterns in Deny mode (matched commands blocked) or Allow mode (only matched commands permitted); separate controls block/log SSH channels such as X11, SSH execution, port/tunnel forwarding, SFTP, SCP and unknown channels. Pattern type may be exact, starts-with or regex; logging/alerts are independently selectable.",
+      "workflow_transaction_fingerprint": "User requests secret launch -> secret policy and proxy mode determine whether SSH inspection is active -> SSH launcher opens proxied session -> shell commands and channel requests are evaluated against filter profile -> allowed actions pass, blocked actions denied, configured events logged -> session recording/audit links provide evidence.",
+      "failure_class": "Privileged session bypasses command/channel controls because secret uses non-proxy mode, filter profile is not attached, allow/deny semantics are misunderstood, custom launcher is required for non-shell channels, or legacy upgraded rules do not behave as new Allow mode.",
+      "evidence_pattern": "Secret references the SSH filter profile; profile shows mode/pattern/channel/log flags; SSH Event log shows command, channel, severity and alert; video correlation is available only for logged commands with session recording enabled and is not available for agentless Web SSH.",
+      "remediation_path": "Use proxy mode for inspected sessions, attach a tested SSH filter profile to the secret, use narrow exact/regex allowlists for privileged operators, explicitly block unnecessary forwarding/SFTP/SCP channels, enable logging on patterns to correlate with recording, and review legacy profile migration semantics.",
+      "question_fingerprint": "A DBA can run approved SQL commands but can still open SFTP or port forwarding; choose separate channel blocking and shell allowlist controls rather than adding more command regexes.",
+      "diagram_topology_layout_fingerprint": "User -> FortiPAM secret policy -> proxied SSH launcher -> shell-pattern allow/deny engine plus parallel SSH channel-control engine -> target host; event log and recording sidecars.",
+      "nearest_prior": {
+        "score": 0.1111111111111111,
+        "subject": "Native RDP TCP forwarding mode: transport fallback and lost native RDP security controls",
+        "date": "2026-11-13"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Kubernetes audit-log webhook ingestion and collector TLS/authentication contract",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/external-systems-configuration-guide/891071/kubernetes",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM 7.5.0+ ingests Kubernetes audit logs through a webhook credential with Device Type Kubernetes Audit, Access Protocol Webhook, newline separator, Receiver FQDN, Reporting Host Name, and Basic Auth/HMAC/Simple Secret; FortiSIEM generates `/webhook/<credential-name>` endpoint and deploys it to the selected node.",
+      "workflow_transaction_fingerprint": "Create webhook credential -> select receiver node/FQDN and auth method -> Save and Deploy creates endpoint -> Kubernetes audit webhook posts EventList JSON over TLS -> collector authenticates and parses newline-delimited payload -> FortiSIEM normalizes source metadata and stores audit events.",
+      "failure_class": "Kubernetes audit events are absent because receiver endpoint is wrong, collector certificate is not publicly trusted, webhook auth secret/HMAC is mismatched, JSON framing/separator is wrong, or endpoint is saved but not deployed to the receiving node.",
+      "evidence_pattern": "Credential details show receiver FQDN, endpoint and auth type; deployment state confirms endpoint pushed; TLS handshake and HTTP status prove transport/authentication; sample normalized event contains `reptVendor=Kubernetes`, `reptModel=Audit` and `audit.k8s.io/v1` fields. HTTP 2xx does not prove every event is parsed or mapped.",
+      "remediation_path": "Use a public CA-signed TLS certificate on the receiving collector, select the actual receiver FQDN, use the generated HTTPS webhook URL and matching auth scheme, keep the documented newline separator, deploy the credential, and verify normalized sample events and timestamps.",
+      "question_fingerprint": "Kubernetes webhook posts successfully but no audit records appear; determine whether TLS trust, endpoint deployment, auth scheme, or newline framing is failing before changing FortiSIEM event rules.",
+      "diagram_topology_layout_fingerprint": "Kubernetes API audit webhook -> HTTPS collector endpoint `/webhook/name` -> TLS certificate/authentication boundary -> FortiSIEM collector parser -> normalized Kubernetes Audit event store.",
+      "nearest_prior": {
+        "score": 0.10714285714285714,
+        "subject": "Headless Windows Agent 7.5: local configuration and direct Collector ingestion without Supervisor registration",
+        "date": "2026-11-12"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Remote Browser Isolation licensing, policy selection and instance-wide quota behavior",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/84033/rbi",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE RBI isolates selected proxy-user web sessions in a remote container and streams rendered output; it is select-availability, disabled by default, requires Advanced/Comprehensive remote-user subscription, Fortinet Security PoP and proxy enabled. Concurrent sessions are capped per endpoint and isolation data quota is enforced at instance level; exhaustion blocks isolated traffic for all users.",
+      "workflow_transaction_fingerprint": "User traffic enters FortiSASE proxy -> proxy policy matches source/destination/category -> RBI-enabled scope launches remote browser container -> remote container fetches/renders site -> rendered stream returns to endpoint -> session/authentication/quota accounting applies -> instance quota exhaustion blocks future isolated traffic.",
+      "failure_class": "RBI menu/session unavailable or all users suddenly blocked because feature entitlement/PoP/proxy prerequisites are missing, CSP_REPORT policy uses deep inspection instead of certificate inspection, per-endpoint session limit is hit, or instance-wide isolation quota is exhausted.",
+      "evidence_pattern": "Select-availability entitlement and PoP/proxy state prove feature eligibility; proxy policy hit proves scope; active-session count proves endpoint concurrency; isolation data usage/quota proves instance-level cap; certificate-inspection profile confirms CSP_REPORT exception. A proxy policy hit alone does not prove a remote isolation session started.",
+      "remediation_path": "Confirm FortiCare feature enablement and Advanced/Comprehensive license, use a supported Security PoP with proxy enabled, configure narrow proxy-policy scope, use certificate inspection for CSP_REPORT with SWG SSO, size session limits, monitor instance quota, and communicate that quota exhaustion is global to the instance.",
+      "question_fingerprint": "One user's isolated browsing works until the monthly isolation-data cap is exceeded, after which all users are blocked; identify the instance-wide quota boundary rather than a per-user web filter failure.",
+      "diagram_topology_layout_fingerprint": "Remote endpoint -> FortiSASE proxy policy -> remote browser container -> rendered stream back to endpoint; per-user concurrent-session gate and instance-wide quota gate shown as separate controls.",
+      "nearest_prior": {
+        "score": 0.11764705882352941,
+        "subject": "Source IP anchoring for user/group- and country-specific egress NAT",
+        "date": "2026-11-21"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Codec-aware Mean Opinion Score (MOS) as an SD-WAN voice SLA metric",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/998548/mean-opinion-score-calculation-and-logging-in-performance-sla-health-checks",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS performance SLA can calculate an estimated MOS from latency, jitter, packet loss and selected G.711/G.729/G.722 codec; `mos-threshold` determines SLA pass and `link-cost-factor mos` selects MOS as link metric. MOS is codec-dependent and cannot steer when SD-WAN service mode is `priority`.",
+      "workflow_transaction_fingerprint": "Health check measures path latency/jitter/loss -> codec-specific MOS calculation -> SLA target compares score with threshold -> SLA state changes per member -> SD-WAN service in SLA mode selects eligible member -> SLA event log records metric and steering eligibility.",
+      "failure_class": "Voice traffic remains on a degraded path or fails to move because wrong codec/threshold is selected, MOS is not the cost factor, service rule is in priority mode, or operator mistakes a live path state for an in-SLA result.",
+      "evidence_pattern": "`diagnose sys sdwan health-check` reports per-member MOS and SLA map; `diagnose sys sdwan sla-log <name> <id>` shows MOS/threshold transitions; event log includes metric=mos and slamap. `state(alive)` proves reachability, not that MOS threshold passed.",
+      "remediation_path": "Select the codec used by the voice workload, set `link-cost-factor mos` and a realistic MOS threshold, use an SLA-capable service mode rather than priority mode, validate each member's MOS and SLA map, and tune the threshold against expected voice quality rather than raw reachability.",
+      "question_fingerprint": "Both WAN links are alive with low packet loss, but one produces MOS below the voice target; select codec-aware MOS SLA steering and distinguish `alive` from `in-SLA`.",
+      "diagram_topology_layout_fingerprint": "Two WAN members feed one voice-specific performance SLA; latency/jitter/loss plus codec enter MOS estimator; SLA pass/fail gates an SLA-mode SD-WAN rule and voice traffic path.",
+      "nearest_prior": {
+        "score": 0.15384615384615385,
+        "subject": "TWAMP Performance SLA probes: active measurement protocol selection, participants, timeout and link-state decisions",
+        "date": "2026-11-17"
+      },
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+    }
+  ]
+}
