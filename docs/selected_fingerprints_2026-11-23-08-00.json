@@ -50,20 +50,25 @@
       "product": "FortiAnalyzer",
       "lesson_subject": "Security Fabric ADOM as a cross-product log-correlation and reporting boundary",
       "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/448471/security-fabric-adoms",
-      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/troubleshooting-tip-log-parser-tab-not-seen-on-fortianalyzer-207938",
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/no-allowed-logs-in-fortianalyzer-230967",
       "feature_mechanism_fingerprint": "A Fabric ADOM groups Fortinet Security Fabric devices into one analysis context so Device Manager, Log View, FortiView, Incidents & Alerts and Reports can combine supported device data; converting an existing non-Fabric ADOM uses `execute migrate fabric <name>` and causes a system reboot.",
       "workflow_transaction_fingerprint": "Create Fabric ADOM or migrate an existing ADOM -> add/authorize all Fabric devices into the same ADOM -> ingest each device's logs -> cross-device filters and event handlers correlate records -> shared FortiView widgets/reports consume combined datasets.",
       "failure_class": "Cross-product logs or SOC features appear missing because devices are split across ADOMs, the ADOM type is not Fabric, or the SIEM/SOC module/license prerequisite is absent; migration causes planned reboot impact.",
-      "evidence_pattern": "ADOM type and membership show the analysis boundary; Device Manager lists fabric members; Log View/FortiView filters show cross-device data; Incidents & Alerts and reports expose supported device types. A device being authorized alone does not prove it is in the correct Fabric ADOM.",
-      "remediation_path": "Inventory all fabric devices and ADOM membership, create or migrate to a Fabric ADOM in a controlled maintenance window, authorize all devices in the same ADOM, verify licenses/modules for SOC-specific features, and retest cross-device views.",
-      "question_fingerprint": "FortiAnalyzer receives logs from FortiGate and FortiSandbox but the cross-product Log Parser pane is absent; distinguish Fabric ADOM type, SIEM module and Security Automation Service entitlement.",
+      "evidence_pattern": "Archive empty => FortiGate did not generate/forward the records; Archive populated but Analytics missing => fazsvcd debug boundary; Collector logfwd disconnected with server-auth-state Query plus OFTP CertCN mismatch => Collector identity/forwarding path; ClickHouse migration completeness is proven by oldest date and per-day counts, not disk size.",
+      "remediation_path": "Verify source log generation; compare Archive and Analytics; run fazsvcd debug when Archive has records but Analytics does not; inspect logfwd and OFTP certificate CN after Collector upgrade; validate ClickHouse date range and daily counts; rebuild all ADOMs from retained Archive only in a planned reboot window if data is genuinely incomplete.",
+      "question_fingerprint": "scenario:FortiAnalyzer missing allowed logs, Collector OFTP CertCN mismatch after 7.6 upgrade, and ClickHouse migration retention validation; distinguish source/transport/archive/analytics/ADOM boundaries.",
       "diagram_topology_layout_fingerprint": "Multiple Security Fabric devices converge into one Fabric ADOM; parallel log streams feed Log View/FortiView/Incidents/Reports; migration path is marked as rebooting.",
       "nearest_prior": {
         "score": 0.10606060606060606,
         "subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
         "date": "2026-11-17"
       },
-      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence."
+      "semantic_uniqueness": "PASS: mechanism/workflow is distinct from same-product historical lessons; manual review found no substantial equivalence.",
+      "scenario_community_urls": [
+        "https://community.fortinet.com/fortianalyzer-6/no-allowed-logs-in-fortianalyzer-230967",
+        "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
+        "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259"
+      ]
     },
     {
       "product": "FortiSwitch",
