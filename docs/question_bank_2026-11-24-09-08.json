@@ -442,12 +442,12 @@
           "isCorrect": false
         },
         {
-          "text": "Only after an administrator manually clears the ARP table.",
+          "text": "Only after an administrator manually clears the switch ARP table.",
           "feedback": "Manual ARP clearing is not the trigger for the active GARP probe.",
           "isCorrect": false
         },
         {
-          "text": "Whenever a remote switch sends an LLDP neighbor advertisement.",
+          "text": "Whenever a remote switch sends an LLDP neighbor advertisement on the uplink.",
           "feedback": "LLDP advertisements do not trigger the documented IP-conflict probe.",
           "isCorrect": false
         },
@@ -801,22 +801,22 @@
       "question": "A customer selects the AD primary group Domain Computers but no machine group is created. What is the correct explanation?",
       "options": [
         {
-          "text": "Primary AD groups are not supported for this mapping; use a normal LDAP security group.",
+          "text": "Primary AD groups are not supported for this mapping; use an ordinary LDAP security group instead.",
           "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
           "isCorrect": true
         },
         {
-          "text": "FortiNAC-F imports only distribution lists and rejects every security group.",
+          "text": "FortiNAC-F imports only distribution lists and rejects all ordinary security groups.",
           "feedback": "The documented limitation is specifically about primary groups, not all security groups.",
           "isCorrect": false
         },
         {
-          "text": "The computer account must be added to the Domain Admins group before synchronization.",
+          "text": "The computer account must be added to Domain Admins before directory synchronization can proceed.",
           "feedback": "Adding endpoints to Domain Admins is not a supported or safe requirement.",
           "isCorrect": false
         },
         {
-          "text": "The RADIUS server must be changed from MSCHAPv2 to PAP before group creation.",
+          "text": "The RADIUS server must change from MSCHAPv2 to PAP before any host group is created.",
           "feedback": "Changing RADIUS authentication protocol does not make a primary AD group importable.",
           "isCorrect": false
         }
@@ -974,17 +974,17 @@
           "isCorrect": true
         },
         {
-          "text": "The service provider has already authorized every resource in its application.",
+          "text": "The service provider has already authorized every requested resource in its application.",
           "feedback": "Resource authorization is an SP decision that occurs after assertion delivery.",
           "isCorrect": false
         },
         {
-          "text": "The browser has verified the SP's audience and ACS URL before the assertion exists.",
+          "text": "The browser verified the SP audience and ACS URL before the IdP created its assertion.",
           "feedback": "The SP validates its assertion conditions after the IdP sends the response.",
           "isCorrect": false
         },
         {
-          "text": "The FortiAuthenticator has bypassed signature validation at the service provider.",
+          "text": "FortiAuthenticator bypassed signature validation that the service provider normally performs.",
           "feedback": "FIDO does not remove the SP's signature and assertion validation requirements.",
           "isCorrect": false
         }
@@ -1282,17 +1282,17 @@
           "isCorrect": false
         },
         {
-          "text": "Only traffic from FortiGate SPA hubs, excluding all remote agents and Edge devices.",
+          "text": "Only traffic from FortiGate SPA hubs, excluding remote agents and authorized Edge devices.",
           "feedback": "The feature applies to agent and edge devices, not only SPA hub traffic.",
           "isCorrect": false
         },
         {
-          "text": "Only DNS and RADIUS control traffic, excluding user web browsing sessions.",
+          "text": "Only DNS and RADIUS control traffic, excluding ordinary user web browsing sessions.",
           "feedback": "DNS and RADIUS are separate control-plane services, not the HTTP/3 web-traffic scope.",
           "isCorrect": false
         },
         {
-          "text": "Agent and authorized Edge-device traffic, not proxy-policy traffic.",
+          "text": "Managed agent and authorized Edge-device traffic, excluding proxy-policy user traffic.",
           "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
           "isCorrect": true
         }
