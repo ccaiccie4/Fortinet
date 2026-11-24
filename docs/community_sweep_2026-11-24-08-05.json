@@ -1,0 +1,171 @@
+{
+  "schema_version": "3.0",
+  "generated_at_local": "2026-11-24T08:05:55-08:00",
+  "window_start": "2026-10-25",
+  "window_end": "2026-11-23",
+  "method": "Broad indexed sweep across all 12 mandatory Fortinet Community product areas using product-specific Technical Tip/Troubleshooting Tip searches. Community material is scenario-only and is never used as the primary lesson source.",
+  "product_areas": [
+    {
+      "product": "FortiGate",
+      "search_status": "Recent scenario found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-14",
+          "title": "VXLAN traffic does not follow SD-WAN rules over IPsec VPN tunnels",
+          "url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-vxlan-traffic-does-not-follow-sd-wan-rules-over-ipsec-vpn-tunnels-230540",
+          "finding": "Manual SD-WAN strategy changed preferred tunnel but some VXLAN sessions continued on the old tunnel; FortiOS 8.0.1 resolves route validation/session handling."
+        }
+      ],
+      "selected_lesson_fit": "No direct Multus CNI scenario; VXLAN case retained as SD-WAN path-selection scenario only."
+    },
+    {
+      "product": "FortiManager",
+      "search_status": "Recent scenario found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-06",
+          "title": "Import configuration caused a security profile configuration conflict with another FortiGate",
+          "url": "https://community.fortinet.com/fortimanager-27/troubleshooting-tip-import-configuration-caused-a-security-profile-configuration-conflict-with-another-fortigate-230403",
+          "finding": "Same-named Web Filter profile is shared in the ADOM database; importing either device can overwrite the shared object used by the other."
+        }
+      ],
+      "selected_lesson_fit": "Scenario-only question about ADOM object sharing; not used as the primary source for the bandwidth graph lesson."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "search_status": "Multiple recent scenarios found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-29",
+          "title": "No allowed logs in FortiAnalyzer",
+          "url": "https://community.fortinet.com/fortianalyzer-6/no-allowed-logs-in-fortianalyzer-230967",
+          "finding": "Separate device-side log generation, archive presence, Analytics insertion and GUI display; FortiAnalyzer cannot create logs not sent by the device."
+        },
+        {
+          "date": "2026-11-13",
+          "title": "FortiAnalyzer log forwarding stops working after upgrade to 7.6",
+          "url": "https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
+          "finding": "Collector OFTP certificate CN mismatch and server-auth-state Query after upgrade; reload Collector license was the documented resolution for that case."
+        },
+        {
+          "date": "2026-11-13",
+          "title": "Analytics database size or range reduced after upgrading FortiAnalyzer to version 7.6 (ClickHouse migration)",
+          "url": "https://community.fortinet.com/fortianalyzer-6/analytics-database-size-or-range-reduced-after-upgrading-fortianalyzer-to-version-7-6-clickhouse-migration-231259",
+          "finding": "ClickHouse compression and regenerated hcache make disk usage comparisons misleading; validate date range and daily log counts before rebuild."
+        }
+      ],
+      "selected_lesson_fit": "Used as scenario-only diagnostic boundaries between content-pack availability and independent log-ingestion/analytics issues."
+    },
+    {
+      "product": "FortiSwitch",
+      "search_status": "No directly matched recent MRP scenario surfaced",
+      "recent_scenarios": [],
+      "older_or_unrelated": "Older SNMP-index, NTP-after-upgrade and wireless/LLDP results were not promoted as recent MRP scenarios.",
+      "selected_lesson_fit": "No direct MRP Community scenario verified."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "search_status": "No directly matched recent remote-WLAN split-tunnel scenario surfaced",
+      "recent_scenarios": [],
+      "older_or_unrelated": "Older LLDP, roaming and client connectivity results were outside the requested 30-day window or unrelated.",
+      "selected_lesson_fit": "No direct remote WLAN split-tunnel Community scenario verified."
+    },
+    {
+      "product": "FortiNAC",
+      "search_status": "No directly matched recent Host Inventory scenario surfaced",
+      "recent_scenarios": [],
+      "older_or_unrelated": "FortiNAC-F synchronization/HA items were kept under the separate FortiNAC-F product area.",
+      "selected_lesson_fit": "No direct Host Inventory Community scenario verified."
+    },
+    {
+      "product": "FortiNAC-F",
+      "search_status": "Recent scenarios found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-06",
+          "title": "FortiNAC-F HA node not in control does not respond to RADIUS or Persistent Agent traffic",
+          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-f-ha-node-not-in-control-does-not-respond-to-radius-or-persistent-agent-traffic-230415",
+          "finding": "A secondary node that is not in control should not be assumed to own active RADIUS/Persistent Agent listeners."
+        },
+        {
+          "date": "2026-10-12",
+          "title": "FortiNAC Manager synchronization fails with adjustRanks() failed - Role",
+          "url": "https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-manager-synchronization-fails-with-adjustranks-failed-role-230508",
+          "finding": "Global Role ranks may differ locally; a stale extra Role/GUID can break synchronization. Direct DB correction is case-specific and should be under support/backup controls."
+        }
+      ],
+      "selected_lesson_fit": "Scenario-only product troubleshooting examples; Docking Station Management remains the primary documentation topic."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "search_status": "Recent scenario found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-15",
+          "title": "FSSO group lookup fails because LDAP search times out in 5 seconds despite timeout settings",
+          "url": "https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-fsso-group-lookup-fails-because-of-ldap-search-timed-out-in-5-seconds-ignoring-timeout-settings-230479",
+          "finding": "Configured 30-second response timeout did not prevent an LDAP abandonRequest at about five seconds; missing FSSO users were a directory-search failure, not a firewall policy issue."
+        }
+      ],
+      "selected_lesson_fit": "Scenario-only directory lookup diagnostic boundary; primary lesson is SAML multi-value attribute construction."
+    },
+    {
+      "product": "FortiPAM",
+      "search_status": "Recent scenarios found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-17",
+          "title": "How to reset FortiPAM admin password",
+          "url": "https://community.fortinet.com/fortipam-52/how-to-reset-fortipam-admin-password-230620",
+          "finding": "If all superadmin access is lost, the article describes a new-VM plus configuration-restore recovery path; MFA break-glass design is important."
+        },
+        {
+          "date": "2026-11-06",
+          "title": "Push notification issue after upgrading to firmware version 7.0.0",
+          "url": "https://community.fortinet.com/fortipam-52/push-notification-issue-after-upgrading-to-firmware-version-7-0-0-231125",
+          "finding": "Push notification appeared only after clicking Continue after upgrade; a version-specific MFA UX defect was under investigation."
+        }
+      ],
+      "selected_lesson_fit": "Scenario-only authentication/upgrade cases; primary lesson is the 1.9 login-page template migration."
+    },
+    {
+      "product": "FortiSIEM",
+      "search_status": "No directly matched recent incident-lifecycle scenario surfaced",
+      "recent_scenarios": [],
+      "older_or_unrelated": "September Windows-agent restart and older 504/query issues were outside the 30-day window or unrelated.",
+      "selected_lesson_fit": "No direct incident-status/resolution Community scenario verified."
+    },
+    {
+      "product": "FortiSASE",
+      "search_status": "No directly matched recent endpoint-script scenario surfaced",
+      "recent_scenarios": [],
+      "older_or_unrelated": "Older PoP migration, service-connection and IPAM issues were outside the 30-day window or unrelated.",
+      "selected_lesson_fit": "No direct on-connect/on-disconnect script Community scenario verified."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "search_status": "Recent related scenario found",
+      "recent_scenarios": [
+        {
+          "date": "2026-10-14",
+          "title": "VXLAN traffic does not follow SD-WAN rules over IPsec VPN tunnels",
+          "url": "https://community.fortinet.com/fortigate-3/troubleshooting-tip-vxlan-traffic-does-not-follow-sd-wan-rules-over-ipsec-vpn-tunnels-230540",
+          "finding": "VXLAN traffic continued on an old tunnel after manual-priority/SLA changes; this is a path/session behavior case, not a multicast PIM configuration issue."
+        }
+      ],
+      "selected_lesson_fit": "Scenario-only SD-WAN path-selection boundary; primary lesson is PIM multicast steering."
+    }
+  ],
+  "search_coverage": {
+    "products_searched": 12,
+    "products_with_recent_scenarios": 7,
+    "products_without_direct_recent_match": 5,
+    "community_sources_used_as_primary_lesson_sources": 0,
+    "older_results_promoted_as_recent": 0
+  },
+  "rejected_or_not_promoted": [
+    "FortiNAC-F local/global object conflict article was not made the lesson topic because the same GUID/global-object mechanism appeared in the 2026-11-01 published report.",
+    "FortiAuthenticator FSSO computer-account exclusion was not selected because it was already taught on 2026-11-13.",
+    "FortiPAM TSO/GSO was not selected because it was already taught on 2026-11-11."
+  ]
+}
