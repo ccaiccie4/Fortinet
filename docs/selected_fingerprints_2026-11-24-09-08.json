@@ -2,7 +2,7 @@
   "schema_version": "2.0",
   "generated_at_local": "2026-11-24T09:08:41-08:00",
   "inventory_path": "docs/exclusion_inventory_2026-11-24-09-08.json",
-  "inventory_sha": "6fd974b6739f421fb295e8679dc57b060405065b",
+  "inventory_sha": "1ea0209f868a2b585f65376311679373f97924d5",
   "inventory_record_count": 369,
   "selection_started_after_inventory_readback": true,
   "window_start": "2026-10-25",
@@ -138,12 +138,12 @@
       ],
       "scenario_community_url": null,
       "scenario_status": "No directly matched recent FortiNAC-F Community scenario was verified in the strict 30-day window.",
-      "feature_mechanism_fingerprint": "FortiNAC-F 7.6 machine authentication uses AD computer credentials or EAP-TLS certificates; directory sync creates separate `<group>_host` and `<group>_user` RBAC groups so registered machine identities and user identities can be authorized independently; primary AD groups are not imported as these mappings.",
-      "workflow_transaction_fingerprint": "Domain-joined endpoint initiates machine 802.1X -> RADIUS Local Server validates MSCHAPv2 computer account or EAP-TLS certificate -> FortiNAC retrieves AD attributes/group membership -> `_host` membership assigned to host record -> network access/compliance policy evaluates machine group.",
-      "failure_class": "Computer account not domain joined, machine group missing due to primary-group limitation, certificate identity/hostname mapping mismatch, or RADIUS TLS trust failure.",
-      "evidence_pattern": "Directory synchronization task; Groups view showing `_host` and `_user`; FortiNAC Inventory host identity; RADIUS session/EAP result; certificate CN/SAN and trusted root; Winbind domain status.",
-      "remediation_path": "Join endpoint to AD; use an ordinary LDAP security group instead of primary Domain Computers; synchronize directory; configure local RADIUS EAP type and certificate trust; ensure client cert hostname attribute and group mapping align.",
-      "question_fingerprint": "Distinguish computer from user group; explain why primary Domain Computers is not mapped; choose EAP-TLS certificate evidence; diagnose a valid user login that does not prove machine authorization.",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6 machine authentication uses AD computer credentials or EAP-TLS certificates; directory sync creates a `<group>_host` group mapping so a host identity can be assigned to a synchronized LDAP compute group; primary AD groups such as Domain Computers are not supported for this mapping.",
+      "workflow_transaction_fingerprint": "Domain-joined endpoint initiates machine 802.1X -> RADIUS Local Server validates MSCHAPv2 computer account or EAP-TLS certificate -> FortiNAC-F retrieves AD attributes/group membership -> host group is renamed `<group>_host` and selected as group attribute -> host record receives compute-group RBAC membership -> network access/compliance policy evaluates machine identity.",
+      "failure_class": "Computer account not domain joined, primary group not importable, certificate identity/hostname mismatch, or RADIUS TLS trust failure.",
+      "evidence_pattern": "Directory synchronization task; Groups view showing `<group>_host`; FortiNAC-F Inventory host identity; RADIUS session/EAP result; certificate CN/SAN/UPN and trusted root; Winbind domain status.",
+      "remediation_path": "Join endpoint to AD; use an ordinary LDAP security group instead of primary Domain Computers; synchronize directory; configure local RADIUS EAP type and certificate trust; on 7.6.3+ use Client Certificate Attribute only when hostname must be extracted from CN/DNS/UPN.",
+      "question_fingerprint": "Explain why primary Domain Computers is not mapped; identify host-group suffix; choose EAP-TLS certificate evidence; diagnose a valid user login that does not prove machine authorization.",
       "diagram_topology_layout_fingerprint": "Domain-joined endpoint -> switch/AP 802.1X -> FortiNAC local RADIUS/EAP -> AD computer account and group sync -> separate host/user RBAC branches."
     },
     {
@@ -184,21 +184,21 @@
     },
     {
       "product": "FortiSIEM",
-      "lesson_subject": "FortiSIEM 7.5 cross-data-center Supervisor HA: 30 ms latency envelope, replicated state stores, and upgrade constraints",
+      "lesson_subject": "FortiSIEM 7.5 Federated Search: provider credentials, external datastores, observable-column mappings, and ClickHouse result reuse",
       "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/199672/whats-new-in-7-5-0",
       "additional_primary_urls": [
-        "https://docs.fortinet.com/document/fortisiem/7.5.1/high-availability-and-disaster-recovery-procedures-eventdb/903189/overview",
-        "https://docs.fortinet.com/document/fortisiem/7.5.1/release-notes/385743/whats-new-in-7-5-1"
+        "https://docs.fortinet.com/document/fortisiem/7.5.0/user-guide/199672/whats-new-in-7-5-0",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/199672"
       ],
       "scenario_community_url": null,
       "scenario_status": "No directly matched recent FortiSIEM Community scenario was verified within the strict 30-day window.",
-      "feature_mechanism_fingerprint": "FortiSIEM 7.5 extends Supervisor HA across data centers with an inter-DC latency threshold below 30 ms, no VIP/DNS requirement, and shared HA model across on-prem/cloud; PostgreSQL CMDB replication, SQLite device/profile replication and EventDB rsync have distinct leaders/state stores; Automation Service is incompatible and DR mode is discontinued in 7.5.0.",
-      "workflow_transaction_fingerprint": "Primary/secondary Supervisors exchange HA state -> DB Leader replicates PostgreSQL CMDB -> Replication Leader distributes device configuration/profile files -> EventDB local-disk data replicated via rsync -> failure/upgrade triggers promotion and continuity subject to latency and version constraints.",
-      "failure_class": "Inter-DC latency outside supported envelope, split state-store assumptions, unsupported Automation Service combination, or legacy DR/manual-HA upgrade path.",
-      "evidence_pattern": "Inter-DC RTT measurement; Supervisor HA status; DB Leader/Replication Leader roles; PostgreSQL/SQLite/EventDB replication state; release version and Automation Service status.",
-      "remediation_path": "Measure and sustain <30 ms inter-DC latency for 7.5.0 behavior; plan HA topology before enabling; disable/avoid Automation Service in this mode; migrate pre-7.3 manual HA by deleting/redeploying Followers; remove discontinued DR configuration and follow release-specific upgrade notes.",
-      "question_fingerprint": "Differentiate 7.4.1 50 ms and 7.5.0 30 ms thresholds; identify state-store replication leaders; explain no VIP/DNS requirement; detect Automation Service incompatibility.",
-      "diagram_topology_layout_fingerprint": "Supervisor A in DC1 and Supervisor B in DC2 linked by low-latency HA channel, with separate PostgreSQL CMDB, SQLite configuration/profile, and EventDB replication lanes."
+      "feature_mechanism_fingerprint": "FortiSIEM 7.5 Federated Search is available for ClickHouse deployments and queries external data stores (AWS Security Lake, AWS S3, FortiEDR, PostgreSQL, MySQL, Snowflake); requires provider credentials, datastore/table definitions, and mappings from FortiSIEM observables to external columns; search results are persisted in ClickHouse for Advanced Search and can be pivoted from Incidents/Analytics.",
+      "workflow_transaction_fingerprint": "Define provider credentials -> add provider datastore/table -> map FortiSIEM observable to external column -> launch Federated Search or pivot from Incident/Analytics -> connector queries external data -> result set stored in ClickHouse -> Advanced Search, PDF/email or Case attachment.",
+      "failure_class": "Provider authentication/scope failure, missing or incorrect observable mapping, unsupported deployment type, or external datastore schema drift.",
+      "evidence_pattern": "Deployment type (ClickHouse); provider connectivity/credentials; datastore/table definition; attribute mapping; query result set; ClickHouse stored result visible to Advanced Search; export/case attachment.",
+      "remediation_path": "Confirm ClickHouse deployment; validate provider access and least-privilege credentials; verify table/schema and column mapping for each observable; test a known indicator; compare external source result to persisted ClickHouse result; revise mapping after schema changes.",
+      "question_fingerprint": "Identify why Federated Search is unavailable on non-ClickHouse; order provider/datastore/mapping prerequisites; distinguish a source-query miss from an attribute-mapping miss; explain why result is available to Advanced Search after execution.",
+      "diagram_topology_layout_fingerprint": "FortiSIEM Incident/Analytics -> Federated Search -> provider credentials -> external datastore/table -> observable-column mapping -> ClickHouse result store -> Advanced Search/PDF/Case."
     },
     {
       "product": "FortiSASE",
@@ -261,11 +261,12 @@
   ],
   "semantic_uniqueness_audit": {
     "compared_against_actual_published_records": 369,
-    "direct_or_close_subject_matches_for_final_selection": 0,
+    "direct_or_close_subject_matches_for_final_selection": "pending recheck",
     "cross_product_duplicate_mechanisms": 0,
     "url_novelty_not_used_as_uniqueness_criterion": true,
-    "note": "FortiGate multicast policy NAT is separated from prior multicast TTL forwarding and FortiSwitch multicast session identity by policy-object matching, translation, and VDOM loop-prevention mechanics. Secure SD-WAN dual-target fallback is separated from prior TWAMP, MOS, passive SLA, and SLA probe class lessons by sequential probe-target failover semantics."
+    "note": "FortiGate multicast policy NAT is separated from prior multicast TTL forwarding and FortiSwitch multicast session identity by policy-object matching, translation, and VDOM loop-prevention mechanics. Secure SD-WAN dual-target fallback is separated from prior TWAMP, MOS, passive SLA, and SLA probe class lessons by sequential probe-target failover semantics.",
+    "product_label_corrections_applied": 14
   },
-  "inventory_readback_sha": "6fd974b6739f421fb295e8679dc57b060405065b",
+  "inventory_readback_sha": "1ea0209f868a2b585f65376311679373f97924d5",
   "inventory_readback_verified": true
 }
