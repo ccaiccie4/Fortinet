@@ -1,0 +1,224 @@
+{
+  "schema_version": "3.0",
+  "generated_at_local": "2026-11-24T08:05:55-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-24-08-05.json",
+  "historical_records_compared": 369,
+  "selected_topic_count": 12,
+  "selection_rule": "Primary topics are taken from authoritative feature/architecture/configuration/admin documentation. A new URL is not sufficient: feature, workflow, evidence, failure and question fingerprints are compared against actual reports from 2026-10-25 through 2026-11-23.",
+  "candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Multus CNI pod-interface annotations and dynamic firewall address objects",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/345168/multus-cni-for-kubernetes-connectors",
+      "scenario_community_url": "No directly matched 30-day Community scenario for Multus CNI was verified.",
+      "feature_mechanism_fingerprint": "Kubernetes Multus CNI exposes a pod's default and additional network interfaces through network-status and network-extra-info annotations; FortiGate Kubernetes SDN connector resolves all annotated IPv4/IPv6 addresses into dynamic firewall address objects filtered by pod name.",
+      "workflow_transaction_fingerprint": "Multus attaches multiple pod networks -> Kubernetes publishes default and additional interface annotations -> FortiGate SDN connector authenticates to API server -> dynamic address filter resolves pod addresses -> firewall policy references the dynamic object; IPv6 dynamic objects are created through CLI.",
+      "failure_class": "Connector/API authentication or reachability failure; missing or malformed Multus annotations; pod-name filter mismatch; IPv6 object omitted because only GUI workflow was used.",
+      "evidence_pattern": "diagnose sys sdn status reports Up; show firewall address and show firewall address6 expose resolved list entries; View Matched Addresses shows collected IPs. Up proves connector reachability, not annotation completeness or correct pod filter.",
+      "remediation_path": "Validate Kubernetes API endpoint/port/token and certificate trust; inspect both Multus annotations on the pod; align K8S_PodName filter; create IPv6 dynamic object in CLI; compare resolved address list to pod interfaces.",
+      "question_fingerprint": "A multi-homed pod is reachable on eth0 but secondary CNI networks are absent from a FortiGate policy object; determine which annotation and object-family checks isolate the missing address.",
+      "diagram_topology_layout_fingerprint": "Kubernetes pod with eth0 plus two Multus interfaces -> API annotations -> FortiGate SDN connector -> paired IPv4/IPv6 dynamic address objects -> policy."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Interface-based Traffic Shaping bandwidth graph: averaged telemetry versus instantaneous rate",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/427904/interface-based-bandwidth-graph-uses-average-bandwidth-logic",
+      "scenario_community_url": "No directly matched 30-day Community scenario for the bandwidth-graph averaging change was verified; adjacent import-conflict scenario reviewed separately: https://community.fortinet.com/fortimanager-27/troubleshooting-tip-import-configuration-caused-a-security-profile-configuration-conflict-with-another-fortigate-230403",
+      "feature_mechanism_fingerprint": "FortiManager 8.0 changes the Traffic Shaping (interface-based) widget from current bandwidth to averaged bandwidth using the same averaging method as the Interface Bandwidth widget; this is a visualization/telemetry semantic change, not a FortiGate shaping-policy change.",
+      "workflow_transaction_fingerprint": "Managed-interface counters are collected -> FortiManager applies the Interface Bandwidth widget's averaging method -> Traffic Shaping widget plots the averaged series -> operator compares trend to policy and live device counters.",
+      "failure_class": "Misinterpretation of averaged telemetry as instantaneous throughput; comparing different time windows/interfaces; attributing a display change to a shaping-policy or forwarding change.",
+      "evidence_pattern": "The widget displays smoothed/averaged values; corroborating live interface counters or an external counter poll can show short peaks not visible in the averaged graph. The graph alone does not prove a shaper is enforcing a rate.",
+      "remediation_path": "Use identical interface and time range; compare the Interface Bandwidth widget and device-side live counters; inspect actual traffic-shaping configuration and policy counters before changing limits; document that the graph is averaged.",
+      "question_fingerprint": "An operator sees a lower, smoother bandwidth trace after upgrading FortiManager but no change in the FortiGate shaper; identify the changed measurement semantic and the independent evidence needed.",
+      "diagram_topology_layout_fingerprint": "FortiGate interface counters -> FortiManager telemetry collection -> averaging stage -> Traffic Shaping graph, with separate live-counter validation path."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "SOC Automation Service content-pack licensing, delivery and object lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/72177",
+      "scenario_community_url": "Adjacent recent log-ingestion scenarios reviewed but not used as primary feature sources: https://community.fortinet.com/fortianalyzer-6/no-allowed-logs-in-fortianalyzer-230967 ; https://community.fortinet.com/fortianalyzer-6/fortianalyzer-log-forwarding-stops-working-after-upgrade-to-7-6-231232",
+      "feature_mechanism_fingerprint": "Security Automation Service license entitles FortiAnalyzer to monthly FortiGuard content packs containing premium reports, alert handlers, advanced correlation rules, third-party parsers and connectors; FDS availability triggers automatic application, with FortiCare Elite/Premium registration prerequisites on specified 7.4/7.6 releases.",
+      "workflow_transaction_fingerprint": "Valid service license and qualifying FortiCare contract -> FortiCloud registration and FDS reachability -> monthly pack available -> FortiAnalyzer applies objects -> SOC Automation table records pack version, object type, status, release date, vendor and minimum FAZ version -> administrator locates object by config type for review/edit.",
+      "failure_class": "Entitlement/contract mismatch; FortiCloud registration missing; FDS reachability issue; minimum-version incompatibility; mistaken assumption that the SOC Automation listing itself is the object editor.",
+      "evidence_pattern": "License Information widget shows service entitlement; Incidents & Alerts > FortiGuard Services > SOC Automation shows pack/object version, New/Modified status, release date, vendor and Min Version. Table presence proves catalog/application visibility, not that downstream logs or alert handlers are producing events.",
+      "remediation_path": "Validate Security Automation Service license, qualifying FortiCare contract and FortiCloud registration, FDS access and minimum version; locate object through the GUI for its Config Type rather than editing the listing table; validate its own inputs and event/log pipeline.",
+      "question_fingerprint": "A valid SOC Automation license exists but the expected monthly object pack is absent; distinguish service entitlement, FortiCare contract, FDS delivery and minimum-version prerequisites.",
+      "diagram_topology_layout_fingerprint": "FortiGuard content-pack release -> FDS -> licensed FortiAnalyzer -> versioned object catalog -> report/parser/alert-handler/connector consumers."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Media Redundancy Protocol ring manager/client election and two-ring configuration",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/222614/media-redundancy-protocol",
+      "scenario_community_url": "No directly matched 30-day Community MRP-ring troubleshooting scenario was verified.",
+      "feature_mechanism_fingerprint": "MRP creates a deterministic Ethernet ring with one automanager and client nodes; MRP_Test detects link failure/recovery, MRP_LinkChange reports it, and MRP_TopologyChange signals topology change. FortiSwitchOS 7.6+ supports two rings with unique domain IDs and ring-port pairs.",
+      "workflow_transaction_fingerprint": "Configure MRP VLAN on both ring ports -> choose default 500ms or custom profile -> configure one automanager and clients with matching domain ID/VLAN -> ring protocol monitors both directions -> link failure triggers topology change and alternate ring forwarding.",
+      "failure_class": "MRP VLAN absent from allowed/native VLAN; mismatched domain ID or profile; conflicting manual manager and automanager; ring ports also participating in STP; overly aggressive custom timers causing flapping.",
+      "evidence_pattern": "get switch mrp settings shows configuration; diagnose switch mrp status {1|2} shows ring state; diagnose switch mrp stats {1|2} exposes manager counters. A configured ring alone does not prove both physical links and VLAN carriage are correct.",
+      "remediation_path": "Verify ring ports are physical ports or a single static trunk; align domain-id and vlan-id on all nodes; ensure MRP VLAN is allowed/native on both ring ports; use one automanager model; return to 500ms profile before tuning timers.",
+      "question_fingerprint": "A ring reports disabled after a VLAN change even though both links are up; identify the MRP VLAN mismatch and the two-port correction required before re-enabling.",
+      "diagram_topology_layout_fingerprint": "Four-node industrial Ethernet ring, one automanager, three clients, two ring ports per node, MRP VLAN, alternate forwarding path after link failure."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "Remote WLAN split-tunnel path selection across FortiAP profile and SSID",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/238787/remote-wlan-fortiaps",
+      "scenario_community_url": "No directly matched 30-day Community scenario for remote WLAN split tunneling was verified.",
+      "feature_mechanism_fingerprint": "Remote WLAN FortiAPs establish secure controller communication over the Internet; by default all client traffic is sent to FortiGate. Split tunneling combines global GUI visibility, SSID enablement, AP-profile subnet lists and split-tunneling-acl-path tunnel/local behavior.",
+      "workflow_transaction_fingerprint": "Enable gui-fortiap-split-tunneling -> configure profile include-local-subnet and split-tunneling-acl entries -> choose tunnel or local ACL path -> enable split-tunneling on SSID -> AP downloads profile -> destination subnet is tunneled to controller or locally broken out.",
+      "failure_class": "Only one of global/profile/SSID/CLI layers configured; incorrect tunnel-versus-local path mode; AP override differs from profile; expected local subnet accidentally tunneled or corporate subnet bypasses controller.",
+      "evidence_pattern": "Managed AP profile and SSID settings show feature enabled; client route and packet capture show whether destination traffic traverses CAPWAP/controller or exits locally. Controller connectivity alone does not prove split-tunnel ACL behavior.",
+      "remediation_path": "Verify all four configuration layers; inspect split-tunneling-acl-path; check profile ACL entries and per-AP overrides; test one destination in each class and capture on AP uplink and FortiGate.",
+      "question_fingerprint": "A remote user reaches corporate resources but cannot reach the local home subnet directly; identify whether Include Local Subnet and tunnel/local ACL behavior are aligned.",
+      "diagram_topology_layout_fingerprint": "Remote client -> FortiAP -> Internet -> FortiGate controller; corporate prefixes traverse CAPWAP, excluded/local prefixes exit remote gateway."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Host Inventory alternate-success portal for user-managed registered endpoints",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/297569/host-inventory",
+      "scenario_community_url": "No directly matched 30-day Community scenario for the Host Inventory success-page workflow was verified.",
+      "feature_mechanism_fingerprint": "Host Inventory is an alternate registration/VPN success page shown only after an already-registered endpoint authenticates successfully without remediation; it lets the user register or delete additional hosts subject to host-online, vendor OUI and endpoint-agent/compliance constraints.",
+      "workflow_transaction_fingerprint": "Existing registered host authenticates -> portal evaluates remediation/compliance state -> success-page selector routes user to DeviceInventory.jsp -> user manages owned host records -> registration checks online state and endpoint compliance requirements before adding a host.",
+      "failure_class": "Host never reaches alternate success page because not registered or remediation is pending; attempted registration fails because new host is offline or requires an agent; OUI control blocks address; portal capability disabled.",
+      "evidence_pattern": "Portal Configuration > Global > Settings selects Host Inventory; Content Editor controls Register Host/Delete Host/Require Valid Vendor OUI/Show Registration Counts; /registration/DeviceInventory.jsp loads for an eligible authenticated host. Page reachability alone does not prove the candidate host passes agent/compliance checks.",
+      "remediation_path": "Confirm current host is registered and authenticated with no remediation; verify success-page type and capabilities; bring candidate host online; inspect endpoint compliance and agent requirements; review OUI restrictions and host role.",
+      "question_fingerprint": "An authenticated employee can open the Host Inventory page but cannot add an online laptop because the OS is agent-supported; distinguish the agent requirement from a registration-count limit.",
+      "diagram_topology_layout_fingerprint": "Registered compliant endpoint -> authentication portal -> alternate Host Inventory success page -> add/delete owned host records -> compliance/agent/OUI gates."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Docking-station MAC masking, device authorization and authentication-VLAN isolation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/736104/docking-station-management",
+      "scenario_community_url": "Related recent FortiNAC-F scenario reviewed for the product sweep, not the primary docking-station mechanism: https://community.fortinet.com/fortinac-f-57/troubleshooting-tip-fortinac-manager-synchronization-fails-with-adjustranks-failed-role-230508",
+      "feature_mechanism_fingerprint": "Docking stations and Ethernet dongles can mask the endpoint MAC with the dock MAC. FortiNAC-F maintains an authorized connected-device MAC list and applies an authentication policy that deauthenticates the host and moves it to an authentication VLAN when an unrecognized device is detected.",
+      "workflow_transaction_fingerprint": "Endpoint connects through dock -> network reports dock/adapter identity -> Docking Station Management list is checked -> registered MAC bypasses reauthentication; unknown MAC is deauthenticated and moved to authentication VLAN -> portal Request New Credentials/self-registration authenticates the endpoint -> device MAC can be added/imported/exported.",
+      "failure_class": "Dock MAC masks multiple endpoints; stale/absent endpoint MAC entry; authentication policy does not match dock-connected state; portal lacks self-registration action; MAC pass-through behavior differs by endpoint BIOS.",
+      "evidence_pattern": "Docking Station Management list contains approved device MAC; authentication policy hit and VLAN assignment show isolation; portal request flow shows registration. Seeing the dock MAC alone does not prove the downstream endpoint is authorized.",
+      "remediation_path": "Use the Docking Station Management list and policy condition; add/import only validated endpoint MACs; confirm authentication VLAN and portal configuration; where supported, enable BIOS MAC Address Pass Through to expose the actual device MAC.",
+      "question_fingerprint": "Two laptops behind one USB-C dock present the same MAC; determine why authorizing the dock itself would create an endpoint-identity bypass and how the authentication VLAN closes it.",
+      "diagram_topology_layout_fingerprint": "Laptop A and laptop B -> shared dock MAC -> access switch -> FortiNAC-F policy/list lookup -> trusted path or authentication VLAN -> self-registration portal."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "Custom multi-value SAML assertion attributes from FortiAuthenticator user groups",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/563028/fortiauthenticator-8-0-0",
+      "scenario_community_url": "Related recent directory-lookup diagnostic boundary, not a SAML attribute scenario: https://community.fortinet.com/fortiauthenticator-8/troubleshooting-tip-fsso-group-lookup-fails-because-of-ldap-search-timed-out-in-5-seconds-ignoring-timeout-settings-230479",
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0 adds a SAML Assertion Attributes pane to user-group configuration so the IdP can emit custom multi-value attributes in SAML responses; the group-derived values can map users to multiple ADOMs/admin profiles on FortiManager and FortiAnalyzer.",
+      "workflow_transaction_fingerprint": "User authenticates to FAC IdP -> user/group membership and SP-specific authorization filters are evaluated -> group SAML Assertion Attributes are assembled -> signed SAML response carries multi-valued claims -> SP maps claims to ADOM and admin-profile authorization.",
+      "failure_class": "User is not in the expected FAC group; group attribute values are missing or single-valued; SP-specific group filter denies the SP; SP attribute mapping or admin-profile/ADOM mapping does not match the assertion.",
+      "evidence_pattern": "FAC system logs show add/edit/delete of custom SAML assertion attributes; GUI debug logs show user groups used to build the attribute list; SAML response inspection shows emitted multi-value claims; successful SAML login alone does not prove least-privilege SP mapping.",
+      "remediation_path": "Define attributes on the correct FAC user group; validate local or LDAP membership; inspect SP-specific group filters; capture and inspect the SAML assertion; align FortiManager/FortiAnalyzer attribute mapping and admin profiles. Feature is not available in FortiAuthenticator Cloud per the standalone example.",
+      "question_fingerprint": "A user can authenticate to both management SPs but receives only one ADOM on FortiManager; identify whether the FAC group emitted the complete multi-value claim or the SP mapping discarded it.",
+      "diagram_topology_layout_fingerprint": "FAC IdP with user groups and multi-value attributes -> signed SAML assertion -> FortiManager and FortiAnalyzer SPs -> ADOM/admin-profile scopes."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 login-page and login-token-page template migration",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
+      "scenario_community_url": "Recent authentication-path scenario reviewed for the product sweep: https://community.fortinet.com/fortipam-52/push-notification-issue-after-upgrading-to-firmware-version-7-0-0-231125",
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 introduces a new login page supporting clear-password viewing during entry; existing custom login-page and login-token-page modifications are not automatically carried forward and must be backed up, the new default template loaded, and customizations reapplied.",
+      "workflow_transaction_fingerprint": "Before upgrade, export/copy customized login and token page templates -> upgrade FortiPAM -> load new default template -> reapply only reviewed customizations -> test username/password and token/MFA paths -> validate UI behavior and authentication logs.",
+      "failure_class": "Custom page overwritten or incompatible after upgrade; password-visibility control unintentionally changed; token page customization omitted; testing covers password login but not MFA/token login.",
+      "evidence_pattern": "Template version and custom content compare against backed-up copy; login page supports clear-password visibility; login and token authentication tests plus Config & Login Logs confirm actual flow. A rendered page does not prove SAML/MFA or backend authentication succeeded.",
+      "remediation_path": "Back up both page types before upgrade; load the new default template; reapply reviewed customizations; test password, token/push and SAML paths; restrict clear-password visibility to an explicit operational need and verify the resulting UX.",
+      "question_fingerprint": "After FortiPAM 1.9 upgrade, the login page works but the custom token page is missing; identify the two-template backup/reload/reapply sequence rather than restoring the entire old page blindly.",
+      "diagram_topology_layout_fingerprint": "Pre-upgrade customized login/token templates -> backup -> FortiPAM 1.9 default templates -> controlled customization merge -> password and MFA/token test paths."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM incident status versus resolution and automated resolution recommendations",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/586518/automated-incident-resolution-recommendation",
+      "scenario_community_url": "No directly matched 30-day Community scenario for the incident-status/resolution recommendation mechanism was verified.",
+      "feature_mechanism_fingerprint": "FortiSIEM separates Incident Status (Active, System Cleared, Manually Cleared) from Incident Resolution (None, True Positive, False Positive). Rule clearing conditions can system-clear an incident; a background classifier learns user resolutions from the prior two days and recommends a resolution for new incidents, setting confidence and a comment without changing status.",
+      "workflow_transaction_fingerprint": "Rule triggers incident -> status Active/resolution None -> rule clearing condition or analyst action clears it -> status records clear path -> analyst resolution is learned -> daily midnight model trains on prior two days -> new incident receives TP/FP recommendation, confidence 0-100 and machine-learning comment.",
+      "failure_class": "Analyst mistakes status for truth classification; auto-clear is treated as false positive; ML recommendation is treated as incident closure; clearing condition does not match the actual recurrence lifecycle.",
+      "evidence_pattern": "Incident list exposes Incident Status, Incident Resolution, Confidence and Comment; rule summary shows clearing condition; ML comment and confidence indicate recommendation. Confidence does not alter Active/Manually Cleared/System Cleared status.",
+      "remediation_path": "Inspect both status and resolution fields; review rule clearing condition; preserve analyst reasoning in comments; treat ML output as recommendation, not closure; correct training labels and re-evaluate new incidents after the next daily learning cycle.",
+      "question_fingerprint": "An incident receives a high-confidence False Positive recommendation but remains Active; explain why the model changed resolution metadata without closing the incident.",
+      "diagram_topology_layout_fingerprint": "Event/rule -> Active incident -> rule or analyst clear path -> status/resolution pair -> two-day training window -> recommendation/confidence on new incident."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Endpoint on-connect/on-disconnect scripts across SIA, IPsec and SSL tunnel lifecycle",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/administration-guide/929831/advanced-settings",
+      "scenario_community_url": "No directly matched 30-day Community scenario for endpoint lifecycle scripts was verified.",
+      "feature_mechanism_fingerprint": "FortiSASE Advanced Settings and custom tunnels accept Windows batch and macOS shell scripts for on-connect/on-disconnect actions associated with SIA, IPsec and SSL tunnel connections; scripts are user-defined and are not triaged by FortiSASE.",
+      "workflow_transaction_fingerprint": "Administrator enters scripts in Endpoint Management configuration/advanced tunnel settings -> FortiClient endpoint receives tunnel profile -> tunnel connects or disconnects -> corresponding local script executes -> endpoint-side effect is verified independently of tunnel state.",
+      "failure_class": "Wrong script platform/syntax; action bound to wrong tunnel type; script assumes elevated context or unavailable network; unsafe/unreviewed script damages endpoint; connect event works but disconnect cleanup is omitted.",
+      "evidence_pattern": "Profile shows script fields populated; controlled connect/disconnect test creates expected endpoint-side marker or action; tunnel status confirms event timing but not script success. OS-side logs/output are required to prove script execution.",
+      "remediation_path": "Use Windows batch or macOS shell for the correct endpoint OS; test with harmless marker actions first; validate paths, permissions and idempotency; include cleanup on disconnect; review every script because FortiSASE does not triage its contents.",
+      "question_fingerprint": "A Windows endpoint connects successfully but its route cleanup never runs on disconnect; distinguish tunnel status from execution of the configured disconnect script and verify endpoint-side output.",
+      "diagram_topology_layout_fingerprint": "FortiSASE profile -> FortiClient endpoint -> SIA/IPsec/SSL connect event -> Windows/macOS script -> endpoint state; disconnect event -> cleanup script."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "PIM multicast traffic steering across SD-WAN members with SLA failover",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/243964/use-sd-wan-rules-to-steer-multicast-traffic",
+      "scenario_community_url": "Related recent SD-WAN path-selection scenario, not a multicast case: https://community.fortinet.com/fortigate-3/troubleshooting-tip-vxlan-traffic-does-not-follow-sd-wan-rules-over-ipsec-vpn-tunnels-230540",
+      "feature_mechanism_fingerprint": "FortiOS 8.0 supports IPv4/IPv6 multicast steering through SD-WAN rules; pim-use-sdwan controls SD-WAN use for PIM RP-neighbor checks and packet sending. PIM-SM source/RP/receiver topology uses overlay members and SLA health to fail over multicast when a member leaves SLA; ADVPN shortcuts are unsupported for multicast steering.",
+      "workflow_transaction_fingerprint": "Enable multicast routing and PIM-SM on hub/spoke interfaces -> configure RP -> add overlay tunnels as SD-WAN members -> configure health checks and PIM service rule -> set pim-use-sdwan on spoke -> receiver joins group -> source forwards via RP -> SLA failure selects alternate member -> recovery returns traffic according to rule.",
+      "failure_class": "PIM not enabled on relevant interfaces; pim-use-sdwan disabled; RP reachability or multicast route missing; service rule does not match PIM; ADVPN shortcut remains enabled; SLA probe path is not representative.",
+      "evidence_pattern": "PIM neighbor and multicast route state show control-plane membership; SD-WAN health-check status shows member SLA; packet capture on each tunnel shows selected data path. A healthy SLA alone does not prove PIM joins, RP state or multicast policy are correct.",
+      "remediation_path": "Verify RP and PIM-SM on all source/RP/receiver interfaces; enable pim-use-sdwan on the spoke; match PIM protocol in SD-WAN service; disable shortcut for the service; validate health-check reachability and observe multicast on both tunnels during failover.",
+      "question_fingerprint": "Multicast receivers lose streams when one overlay fails SLA even though unicast SD-WAN rules fail over; identify the PIM-specific SD-WAN setting and unsupported ADVPN shortcut interaction.",
+      "diagram_topology_layout_fingerprint": "Multicast source behind hub/RP -> two PIM-enabled overlay tunnels as SD-WAN members -> remote spoke receiver; SLA state selects tunnel1 or tunnel2."
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "product": "FortiNAC-F",
+      "candidate": "Manager global-object synchronization GUID versus local IDs",
+      "decision": "REJECT",
+      "reason": "Exact same feature/mechanism fingerprint was published 2026-11-01."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "candidate": "Exclude Windows AD computer accounts from FSSO",
+      "decision": "REJECT",
+      "reason": "Exact same feature/mechanism was published 2026-11-13."
+    },
+    {
+      "product": "FortiPAM",
+      "candidate": "TSO/GSO interface offload",
+      "decision": "REJECT",
+      "reason": "Exact same feature/mechanism was published 2026-11-11."
+    },
+    {
+      "product": "FortiNAC",
+      "candidate": "User Organizational Unit LDAP mapping",
+      "decision": "REJECT",
+      "reason": "Same feature was published 2026-11-13."
+    },
+    {
+      "product": "FortiSwitch",
+      "candidate": "Layer-3 PTP on SVIs/RVIs",
+      "decision": "REJECT",
+      "reason": "PTP clock-source behavior was taught 2026-11-15; same protocol mechanism considered too close."
+    },
+    {
+      "product": "FortiManager",
+      "candidate": "Workspace Mode lockless onboarding",
+      "decision": "REJECT",
+      "reason": "Workspace locking semantics were taught 2026-11-08; new-device exception is too close to that mechanism."
+    },
+    {
+      "product": "FortiSIEM",
+      "candidate": "FortiGate Security Fabric discovery",
+      "decision": "REJECT",
+      "reason": "Discovery orchestration and endpoint discovery were covered 2026-11-13 and 2026-11-15; selected incident-lifecycle topic instead."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "candidate": "Passive application-specific WAN health measurement",
+      "decision": "REJECT",
+      "reason": "Same passive measurement mechanism was taught 2026-11-13."
+    }
+  ],
+  "audit": {
+    "all_12_products_covered": true,
+    "all_primary_urls_authoritative_fortinet_docs": true,
+    "all_candidate_fingerprints_populated": true,
+    "manual_semantic_review": true,
+    "topic_generation_started": false
+  }
+}
