@@ -1,0 +1,457 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-24T09:08:41-08:00",
+  "diagram_count": 12,
+  "asset_count": 24,
+  "diagrams": [
+    {
+      "id": "01",
+      "title": "FortiGate multicast policy and translation path",
+      "topology_fingerprint": "Policy scope is separate from multicast routing; all-to-all virtual-link policy can loop.",
+      "svg_path": "docs/diagrams/2026-11-24/01-fortigate-multicast-policy.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/01-fortigate-multicast-policy.drawio",
+      "nodes": [
+        "Multicast source",
+        "Forwarding gate",
+        "Policy match",
+        "NAT stage",
+        "Receiver segment",
+        "NPU vlink loop risk"
+      ],
+      "edges": [
+        {
+          "from": "Multicast source",
+          "to": "Forwarding gate",
+          "label": "ingress"
+        },
+        {
+          "from": "Forwarding gate",
+          "to": "Policy match",
+          "label": "eligible"
+        },
+        {
+          "from": "Policy match",
+          "to": "NAT stage",
+          "label": "match"
+        },
+        {
+          "from": "NAT stage",
+          "to": "Receiver segment",
+          "label": "egress"
+        },
+        {
+          "from": "Policy match",
+          "to": "NPU vlink loop risk",
+          "label": "broad any/any"
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "FortiManager HA replication and failover",
+      "topology_fingerprint": "Heartbeat and module synchronization are distinct; peer-local settings are not replicated.",
+      "svg_path": "docs/diagrams/2026-11-24/02-fortimanager-ha.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/02-fortimanager-ha.drawio",
+      "nodes": [
+        "Administrator",
+        "Primary FMG",
+        "Secondary FMG",
+        "VRRP VIP",
+        "Managed FortiGates"
+      ],
+      "edges": [
+        {
+          "from": "Administrator",
+          "to": "Primary FMG",
+          "label": "change"
+        },
+        {
+          "from": "Primary FMG",
+          "to": "Secondary FMG",
+          "label": "heartbeat + sync"
+        },
+        {
+          "from": "Secondary FMG",
+          "to": "VRRP VIP",
+          "label": "promotion"
+        },
+        {
+          "from": "VRRP VIP",
+          "to": "Managed FortiGates",
+          "label": "new primary path"
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "FortiAnalyzer privacy masking and unmask path",
+      "topology_fingerprint": "Log downloads omit masked values; time-frame masking does not apply to real-time logs.",
+      "svg_path": "docs/diagrams/2026-11-24/03-fortianalyzer-privacy-masking.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/03-fortianalyzer-privacy-masking.drawio",
+      "nodes": [
+        "Log records",
+        "Admin profile",
+        "Masked view",
+        "Data Mask Key",
+        "Selective reveal"
+      ],
+      "edges": [
+        {
+          "from": "Log records",
+          "to": "Admin profile",
+          "label": "profile applied"
+        },
+        {
+          "from": "Admin profile",
+          "to": "Masked view",
+          "label": "mask"
+        },
+        {
+          "from": "Masked view",
+          "to": "Selective reveal",
+          "label": "See Original Data"
+        },
+        {
+          "from": "Data Mask Key",
+          "to": "Selective reveal",
+          "label": "key validation"
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "FortiSwitch passive ARP and active GARP detection",
+      "topology_fingerprint": "Passive ARP observation and active GARP probing have different triggers and notification evidence.",
+      "svg_path": "docs/diagrams/2026-11-24/04-fortiswitch-ip-conflict.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/04-fortiswitch-ip-conflict.drawio",
+      "nodes": [
+        "Remote ARP claim",
+        "Passive listener",
+        "Local lifecycle event",
+        "Active GARP probe",
+        "Conflict evidence"
+      ],
+      "edges": [
+        {
+          "from": "Remote ARP claim",
+          "to": "Passive listener",
+          "label": "observed"
+        },
+        {
+          "from": "Local lifecycle event",
+          "to": "Active GARP probe",
+          "label": "trigger"
+        },
+        {
+          "from": "Passive listener",
+          "to": "Conflict evidence",
+          "label": "passive match"
+        },
+        {
+          "from": "Active GARP probe",
+          "to": "Conflict evidence",
+          "label": "duplicate reply"
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "FortiAP WPA3 Beacon Protection configuration and capture",
+      "topology_fingerprint": "A controller setting is intent; vcfg and the over-the-air MIC prove runtime activation.",
+      "svg_path": "docs/diagrams/2026-11-24/05-fortiap-beacon-protection.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/05-fortiap-beacon-protection.drawio",
+      "nodes": [
+        "WPA3 VAP",
+        "WTP profile",
+        "FortiAP radio",
+        "Beacon frame",
+        "Capture proof"
+      ],
+      "edges": [
+        {
+          "from": "WPA3 VAP",
+          "to": "WTP profile",
+          "label": "profile config"
+        },
+        {
+          "from": "WTP profile",
+          "to": "FortiAP radio",
+          "label": "radio assignment"
+        },
+        {
+          "from": "FortiAP radio",
+          "to": "Beacon frame",
+          "label": "transmit"
+        },
+        {
+          "from": "Beacon frame",
+          "to": "Capture proof",
+          "label": "air capture"
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "FortiNAC Access Point Management DHCP and DNS state paths",
+      "topology_fingerprint": "Host state is enforced through DHCP pool and DNS behavior, not per-host VLAN switching.",
+      "svg_path": "docs/diagrams/2026-11-24/06-fortinac-ap-management.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/06-fortinac-ap-management.drawio",
+      "nodes": [
+        "Host behind AP",
+        "DHCP relay",
+        "FortiNAC state",
+        "Authorized path",
+        "Restricted path"
+      ],
+      "edges": [
+        {
+          "from": "Host behind AP",
+          "to": "DHCP relay",
+          "label": "DHCP"
+        },
+        {
+          "from": "DHCP relay",
+          "to": "FortiNAC state",
+          "label": "lease lookup"
+        },
+        {
+          "from": "FortiNAC state",
+          "to": "Authorized path",
+          "label": "authorized"
+        },
+        {
+          "from": "FortiNAC state",
+          "to": "Restricted path",
+          "label": "unauthorized"
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "FortiNAC-F machine authentication and host-group RBAC",
+      "topology_fingerprint": "Machine authorization is separate from interactive user login; primary AD groups are not supported.",
+      "svg_path": "docs/diagrams/2026-11-24/07-fortinac-f-machine-auth.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/07-fortinac-f-machine-auth.drawio",
+      "nodes": [
+        "Domain endpoint",
+        "Switch / AP",
+        "FortiNAC-F RADIUS",
+        "AD compute group",
+        "Host RBAC"
+      ],
+      "edges": [
+        {
+          "from": "Domain endpoint",
+          "to": "Switch / AP",
+          "label": "machine identity"
+        },
+        {
+          "from": "Switch / AP",
+          "to": "FortiNAC-F RADIUS",
+          "label": "Access-Request"
+        },
+        {
+          "from": "FortiNAC-F RADIUS",
+          "to": "AD compute group",
+          "label": "directory lookup"
+        },
+        {
+          "from": "AD compute group",
+          "to": "Host RBAC",
+          "label": "host group mapping"
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "FortiAuthenticator FIDO IdP-initiated SAML flow",
+      "topology_fingerprint": "FIDO success proves IdP authentication; SP visibility and assertion acceptance are separate.",
+      "svg_path": "docs/diagrams/2026-11-24/08-fortiauthenticator-fido-saml.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/08-fortiauthenticator-fido-saml.drawio",
+      "nodes": [
+        "Browser",
+        "FIDO gate",
+        "SP selector",
+        "SAML assertion",
+        "Service provider"
+      ],
+      "edges": [
+        {
+          "from": "Browser",
+          "to": "FIDO gate",
+          "label": "identify"
+        },
+        {
+          "from": "FIDO gate",
+          "to": "SP selector",
+          "label": "IdP auth"
+        },
+        {
+          "from": "SP selector",
+          "to": "SAML assertion",
+          "label": "select SP"
+        },
+        {
+          "from": "SAML assertion",
+          "to": "Service provider",
+          "label": "assertion"
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "FortiPAM native RDP Kerberos NLA transaction",
+      "topology_fingerprint": "Kerberos is supported for native RDP NLA only; the KDC Address is optional.",
+      "svg_path": "docs/diagrams/2026-11-24/09-fortipam-rdp-kerberos.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/09-fortipam-rdp-kerberos.drawio",
+      "nodes": [
+        "Secret / target",
+        "Realm derivation",
+        "KDC discovery",
+        "Kerberos ticket",
+        "Native RDP NLA"
+      ],
+      "edges": [
+        {
+          "from": "Secret / target",
+          "to": "Realm derivation",
+          "label": "secret domain"
+        },
+        {
+          "from": "Realm derivation",
+          "to": "KDC discovery",
+          "label": "realm"
+        },
+        {
+          "from": "KDC discovery",
+          "to": "Kerberos ticket",
+          "label": "KDC"
+        },
+        {
+          "from": "Kerberos ticket",
+          "to": "Native RDP NLA",
+          "label": "ticket"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "FortiSIEM Federated Search provider and observable mapping",
+      "topology_fingerprint": "Provider reachability is not enough; dataset definition and observable mapping determine result correctness.",
+      "svg_path": "docs/diagrams/2026-11-24/10-fortisiem-federated-search.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/10-fortisiem-federated-search.drawio",
+      "nodes": [
+        "Incident / Analytics",
+        "Observable mapping",
+        "Provider + dataset",
+        "External store",
+        "ClickHouse results"
+      ],
+      "edges": [
+        {
+          "from": "Incident / Analytics",
+          "to": "Observable mapping",
+          "label": "observable filter"
+        },
+        {
+          "from": "Observable mapping",
+          "to": "Provider + dataset",
+          "label": "mapped query"
+        },
+        {
+          "from": "Provider + dataset",
+          "to": "External store",
+          "label": "federated request"
+        },
+        {
+          "from": "External store",
+          "to": "ClickHouse results",
+          "label": "result set"
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "FortiSASE HTTP/3 QUIC inspection decision paths",
+      "topology_fingerprint": "The HTTP/3 action applies to agent and Edge-device traffic, not proxy-policy traffic.",
+      "svg_path": "docs/diagrams/2026-11-24/11-fortisase-http3-quic.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/11-fortisase-http3-quic.drawio",
+      "nodes": [
+        "Agent / Edge",
+        "Security profile",
+        "Inspect",
+        "Bypass",
+        "Block / fallback",
+        "Proxy user"
+      ],
+      "edges": [
+        {
+          "from": "Agent / Edge",
+          "to": "Security profile",
+          "label": "eligible traffic"
+        },
+        {
+          "from": "Security profile",
+          "to": "Inspect",
+          "label": "Inspect"
+        },
+        {
+          "from": "Security profile",
+          "to": "Bypass",
+          "label": "Bypass"
+        },
+        {
+          "from": "Security profile",
+          "to": "Block / fallback",
+          "label": "Block"
+        },
+        {
+          "from": "Block / fallback",
+          "to": "Proxy user",
+          "label": "proxy scope differs"
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "SD-WAN dual-server Performance SLA fallback",
+      "topology_fingerprint": "One failed target is not a failed link when the secondary target remains available.",
+      "svg_path": "docs/diagrams/2026-11-24/12-sdwan-dual-sla.svg",
+      "drawio_path": "docs/diagrams/2026-11-24/12-sdwan-dual-sla.drawio",
+      "nodes": [
+        "SD-WAN member",
+        "Primary server",
+        "Secondary server",
+        "Health state",
+        "Route eligibility"
+      ],
+      "edges": [
+        {
+          "from": "SD-WAN member",
+          "to": "Primary server",
+          "label": "probe first"
+        },
+        {
+          "from": "Primary server",
+          "to": "Health state",
+          "label": "primary responds"
+        },
+        {
+          "from": "SD-WAN member",
+          "to": "Secondary server",
+          "label": "fallback if primary fails"
+        },
+        {
+          "from": "Secondary server",
+          "to": "Health state",
+          "label": "secondary responds"
+        },
+        {
+          "from": "Health state",
+          "to": "Route eligibility",
+          "label": "fail/recovery thresholds"
+        }
+      ]
+    }
+  ]
+}
