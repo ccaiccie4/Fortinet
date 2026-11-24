@@ -1,0 +1,1440 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-24T09:08:41-08:00",
+  "total_questions": 51,
+  "choices_per_question": 4,
+  "correct_position_counts": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "grading": "One point per question; exactly one correct choice; each option includes substantive feedback.",
+  "questions": [
+    {
+      "id": "Q01",
+      "product": "FortiGate",
+      "question": "Which control must be enabled before NAT-mode multicast policies can pass multicast packets?",
+      "options": [
+        {
+          "text": "Enable PIM on the ingress interface before applying any multicast policy.",
+          "feedback": "PIM is a multicast-routing mechanism, not the NAT-mode forwarding gate described here.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable IGMP snooping on every VLAN before policy evaluation begins.",
+          "feedback": "IGMP snooping manages receiver membership at Layer 2; it does not enable FortiGate multicast forwarding.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable multicast forwarding in the system settings before evaluating policy matches.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Enable multicast routing on the VDOM before creating address objects.",
+          "feedback": "Multicast routing and policy forwarding are separate paths; routing is not the prerequisite here.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q02",
+      "product": "FortiGate",
+      "question": "An administrator uses `dstaddr all` in a multicast policy. Which destination space does that object represent?",
+      "options": [
+        {
+          "text": "The IPv4 multicast block from 224.0.0.0 through 239.255.255.255.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "All IPv4 destinations, including unicast and broadcast addresses.",
+          "feedback": "The `all` multicast address object is not a universal IPv4 destination object.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only administratively scoped groups from 239.0.0.0 through 239.255.255.255.",
+          "feedback": "The administratively scoped subset is narrower than the documented full multicast block.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only the link-local control groups from 224.0.0.0 through 224.0.0.255.",
+          "feedback": "The link-local subset is only a small portion of the multicast address space.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q03",
+      "product": "FortiGate",
+      "question": "A stream reaches the correct egress interface, but receivers see the encoder's private source address. Which policy action changes that source?",
+      "options": [
+        {
+          "text": "Enable multicast DNAT and replace the destination group with a public address.",
+          "feedback": "DNAT changes the destination group; it does not rewrite the packet's source address.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable multicast forwarding and rely on TTL decrement to rewrite the source.",
+          "feedback": "TTL decrement changes hop lifetime, not source addressing or packet identity.",
+          "isCorrect": false
+        },
+        {
+          "text": "Create a static route for the encoder and change its interface address.",
+          "feedback": "A route selects a path; it does not perform multicast source translation.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable multicast SNAT and set the translated source address for the egress path.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q04",
+      "product": "FortiGate",
+      "question": "After enabling multicast forwarding, a multi-VDOM design begins looping traffic between NPU virtual links. What is the likely policy defect?",
+      "options": [
+        {
+          "text": "A narrowly scoped policy permits one source group on one downstream interface.",
+          "feedback": "Narrow interface and group scope is the safer design; it does not create the all-to-all loop.",
+          "isCorrect": false
+        },
+        {
+          "text": "An all-to-all multicast policy includes both NPU virtual-link interfaces in the same VDOM.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The multicast policy uses a UDP destination port instead of all protocols.",
+          "feedback": "A protocol or port match does not by itself create a virtual-link forwarding loop.",
+          "isCorrect": false
+        },
+        {
+          "text": "The forwarding gate decrements TTL before sending a packet to the receiver.",
+          "feedback": "TTL handling is not the loop cause identified in the multi-VDOM warning.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q05",
+      "product": "FortiGate",
+      "question": "The FortiGate is configured as a multicast router using PIM. Which design choice avoids enabling the separate flood-forwarding path?",
+      "options": [
+        {
+          "text": "Enable multicast forwarding and add a deny policy for the router's interfaces.",
+          "feedback": "A deny rule does not change the documented recommendation to keep the forwarding feature disabled.",
+          "isCorrect": false
+        },
+        {
+          "text": "Keep multicast forwarding disabled and use the multicast-routing configuration.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Enable multicast forwarding only on the ingress VLAN and keep PIM active.",
+          "feedback": "Enabling the forwarding feature remains the wrong path when FortiGate is acting as a multicast router.",
+          "isCorrect": false
+        },
+        {
+          "text": "Replace PIM with an any-to-any multicast policy across all VDOM interfaces.",
+          "feedback": "An any-to-any policy increases risk and does not replace multicast routing.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q06",
+      "product": "FortiManager",
+      "question": "A secondary FortiManager is not receiving heartbeat updates. Which transport should the engineer test first?",
+      "options": [
+        {
+          "text": "Test FGFM management connectivity on TCP port 541 between the FortiGates and manager.",
+          "feedback": "FGFM is the managed-device channel, not the FortiManager HA heartbeat/synchronization port.",
+          "isCorrect": false
+        },
+        {
+          "text": "Test FortiGuard update access on TCP port 443 from the primary unit only.",
+          "feedback": "FortiGuard reachability is separate from the peer heartbeat and database synchronization path.",
+          "isCorrect": false
+        },
+        {
+          "text": "Test the GUI HTTPS listener on TCP port 10443 between the peer units.",
+          "feedback": "The GUI listener does not carry the documented HA peer heartbeat traffic.",
+          "isCorrect": false
+        },
+        {
+          "text": "Test the HA peer connection on TCP port 5199 between the FortiManager units.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q07",
+      "product": "FortiManager",
+      "question": "Which configuration should be planned separately because it is not synchronized as ordinary FortiManager cluster data?",
+      "options": [
+        {
+          "text": "Peer-specific network, NTP, local certificates, and remote LDAP settings.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Shared ADOM database changes and policy-package revisions from the primary.",
+          "feedback": "ADOM and policy database changes are part of the synchronized configuration state.",
+          "isCorrect": false
+        },
+        {
+          "text": "Managed-device database changes committed on the primary FortiManager.",
+          "feedback": "Managed-device database changes are among the data replicated from the primary.",
+          "isCorrect": false
+        },
+        {
+          "text": "The synchronized module data and configured deployment-version metadata.",
+          "feedback": "Module data synchronization is a core HA function, not an excluded local setting.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q08",
+      "product": "FortiManager",
+      "question": "A site requires automatic promotion when the primary's monitored interface fails. Which HA mode fits that requirement?",
+      "options": [
+        {
+          "text": "Use manual mode and wait for an administrator to promote the secondary.",
+          "feedback": "Manual mode requires operator intervention; it does not meet automatic promotion.",
+          "isCorrect": false
+        },
+        {
+          "text": "Use database synchronization mode without configuring any failover role.",
+          "feedback": "Synchronization alone does not define automatic role election or a shared address.",
+          "isCorrect": false
+        },
+        {
+          "text": "Use VRRP mode with a shared virtual IP and monitored interface.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Use a FortiGate HA pair to elect the FortiManager primary automatically.",
+          "feedback": "FortiGate HA elects firewall peers, not FortiManager cluster roles.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q09",
+      "product": "FortiManager",
+      "question": "The heartbeat interval is 10 seconds and the failover threshold is 30 missed heartbeats. What is the nominal detection window?",
+      "options": [
+        {
+          "text": "Approximately 30 seconds because the threshold is counted in seconds.",
+          "feedback": "The threshold counts missed heartbeat intervals, so thirty intervals at ten seconds equal five minutes.",
+          "isCorrect": false
+        },
+        {
+          "text": "Approximately 40 seconds because interval and threshold are added together.",
+          "feedback": "Adding the values ignores that the threshold is a count of intervals.",
+          "isCorrect": false
+        },
+        {
+          "text": "Approximately 3,000 seconds because each missed heartbeat is multiplied twice.",
+          "feedback": "The interval is multiplied once by the miss count, not twice.",
+          "isCorrect": false
+        },
+        {
+          "text": "Approximately 300 seconds before the threshold is reached.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q10",
+      "product": "FortiManager",
+      "question": "The HA dashboard shows module data synchronized, but the secondary still has different NTP and network settings. What does that indicate?",
+      "options": [
+        {
+          "text": "The heartbeat is broken and the secondary is running an old database copy.",
+          "feedback": "This is the expected boundary between replicated module data and excluded local settings.",
+          "isCorrect": false
+        },
+        {
+          "text": "The module database is synchronized while peer-local system settings remain independent.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The managed FortiGates have not completed their FGFM registration process.",
+          "feedback": "FGFM registration is separate from FortiManager peer-local NTP and network settings.",
+          "isCorrect": false
+        },
+        {
+          "text": "The cluster has automatically switched to VRRP mode without a virtual IP.",
+          "feedback": "VRRP mode is not inferred from a difference in local settings.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q11",
+      "product": "FortiAnalyzer",
+      "question": "Where is privacy masking enabled for an administrator who should see anonymized log fields?",
+      "options": [
+        {
+          "text": "Enable it globally in Log View and apply a filter to each saved search.",
+          "feedback": "Log View filters do not establish the profile-level privacy control described by FortiAnalyzer.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable it in each ADOM and assign the ADOM to the administrator account.",
+          "feedback": "ADOM assignment controls administrative scope, not the privacy-masking setting itself.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable it in the administrator profile and assign that profile to the account.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Enable it in the report template and use that template for all dashboards.",
+          "feedback": "A report template cannot apply privacy masking across all modules and views.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q12",
+      "product": "FortiAnalyzer",
+      "question": "An administrator's profile sets Data Unmasked Time to seven days. What happens to a search spanning thirty days?",
+      "options": [
+        {
+          "text": "Historical data outside the seven-day window remains masked for that profile.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Every record is unmasked because the profile contains a valid data-mask key.",
+          "feedback": "The key permits selective unmasking; it does not override the configured time-window boundary.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only the first seven rows are unmasked and the remaining rows are omitted.",
+          "feedback": "The setting is a time range, not a row-count limit or pagination rule.",
+          "isCorrect": false
+        },
+        {
+          "text": "The search is rejected because the time window exceeds the profile value.",
+          "feedback": "The documentation describes masking behavior, not rejection of the search.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q13",
+      "product": "FortiAnalyzer",
+      "question": "A user can see an original value in the GUI but cannot find it in a downloaded log file. Why?",
+      "options": [
+        {
+          "text": "FortiAnalyzer excludes masked fields from Log View downloads even for masked-profile users.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The download process always converts all source addresses into destination addresses.",
+          "feedback": "Address translation is unrelated to the privacy-masking export behavior.",
+          "isCorrect": false
+        },
+        {
+          "text": "The report engine strips every field that has an associated administrator profile.",
+          "feedback": "The rule applies to masked data in Log View downloads, not every field in all reports.",
+          "isCorrect": false
+        },
+        {
+          "text": "The log database deletes original values after the user opens the unmask dialog.",
+          "feedback": "The source states that masked values are excluded from output, not deleted from storage.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q14",
+      "product": "FortiAnalyzer",
+      "question": "Which view is exempt from the Data Unmasked Time window while custom-view and drill-down data are subject to it?",
+      "options": [
+        {
+          "text": "The archived log download view is exempt from every masking rule.",
+          "feedback": "Log downloads still exclude masked values; they are not globally exempt.",
+          "isCorrect": false
+        },
+        {
+          "text": "The report schedule view is exempt because it uses cached datasets.",
+          "feedback": "Report output is included among modules where selected fields are masked.",
+          "isCorrect": false
+        },
+        {
+          "text": "The real-time log view remains outside the time-frame masking rule.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The incident timeline view is exempt whenever the administrator has read-only access.",
+          "feedback": "Read-only permission does not remove the time-frame masking boundary.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q15",
+      "product": "FortiSwitch",
+      "question": "A remote device broadcasts an ARP claim whose sender IP equals the switch management IP. Which detection method is this?",
+      "options": [
+        {
+          "text": "Active conflict detection sending a gratuitous ARP after the switch boots.",
+          "feedback": "Active detection originates from local switch lifecycle events, not a remote ARP claim.",
+          "isCorrect": false
+        },
+        {
+          "text": "Passive conflict detection comparing a remote ARP sender address with switch interface addresses.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "DHCP snooping rejecting a lease that duplicates a client address.",
+          "feedback": "The described mechanism compares management-interface addresses; it is not DHCP lease enforcement.",
+          "isCorrect": false
+        },
+        {
+          "text": "Dynamic ARP inspection validating the switch's upstream gateway MAC.",
+          "feedback": "DAI validates ARP bindings and is not the FortiSwitch conflict-detection method described.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q16",
+      "product": "FortiSwitch",
+      "question": "When does FortiSwitch actively probe for an IP conflict using gratuitous ARP?",
+      "options": [
+        {
+          "text": "Only when a DHCP server renews a lease for a connected endpoint.",
+          "feedback": "The documented active probe is tied to local system-interface lifecycle changes.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only after an administrator manually clears the ARP table.",
+          "feedback": "Manual ARP clearing is not the trigger for the active GARP probe.",
+          "isCorrect": false
+        },
+        {
+          "text": "Whenever a remote switch sends an LLDP neighbor advertisement.",
+          "feedback": "LLDP advertisements do not trigger the documented IP-conflict probe.",
+          "isCorrect": false
+        },
+        {
+          "text": "At boot, when an interface comes up, and after a local IP address change.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q17",
+      "product": "FortiSwitch",
+      "question": "An active GARP probe receives a reply from another owner of the address. What evidence is explicitly documented?",
+      "options": [
+        {
+          "text": "A passive-method SNMP trap is guaranteed for every active probe response.",
+          "feedback": "The documentation explicitly identifies a log for active detection; the trap is described for passive detection.",
+          "isCorrect": false
+        },
+        {
+          "text": "A system log records the detected conflict on the local system interface.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The switch automatically changes its management IP to an unused address.",
+          "feedback": "Automatic address reassignment is not the documented response.",
+          "isCorrect": false
+        },
+        {
+          "text": "The switch disables the interface and moves all connected hosts to quarantine.",
+          "feedback": "Port quarantine and interface shutdown are not the described detection action.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q18",
+      "product": "FortiSwitch",
+      "question": "What should an engineer not infer from FortiSwitch IP conflict detection being enabled?",
+      "options": [
+        {
+          "text": "That the switch continuously scans every endpoint address in every VLAN.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "That local system-interface addresses are checked for duplicate ownership.",
+          "feedback": "The feature checks conflicts against system-interface IPs; it is not a subnet-wide endpoint scanner.",
+          "isCorrect": false
+        },
+        {
+          "text": "That passive ARP claims can produce a conflict log and SNMP trap.",
+          "feedback": "Passive ARP observation is a documented detection path.",
+          "isCorrect": false
+        },
+        {
+          "text": "That active GARP probes run after relevant local interface events.",
+          "feedback": "Active GARP probing is a documented detection path.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q19",
+      "product": "FortiAP/Wireless",
+      "question": "Which VAP settings are required in the documented WPA3 Beacon Protection example?",
+      "options": [
+        {
+          "text": "Enable WPA2 mixed mode and disable protected management frames on the VAP.",
+          "feedback": "Beacon Protection is a WPA3 feature and the example enables PMF rather than disabling it.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable only the WTP profile radio and leave the VAP beacon setting disabled.",
+          "feedback": "The VAP property must be enabled; radio assignment alone is insufficient.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable IGMP snooping and DHCP option 82 on the wireless controller interface.",
+          "feedback": "IGMP snooping and DHCP option insertion are unrelated to beacon integrity.",
+          "isCorrect": false
+        },
+        {
+          "text": "Enable PMF and set beacon-protection to enable on the WPA3 VAP.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q20",
+      "product": "FortiAP/Wireless",
+      "question": "The FortiGate VAP configuration is correct, but the AP does not transmit protected beacons. What should be checked next?",
+      "options": [
+        {
+          "text": "Confirm the DHCP server has a reservation for the AP management address.",
+          "feedback": "A valid DHCP lease does not prove that the VAP was assigned to the radio.",
+          "isCorrect": false
+        },
+        {
+          "text": "Confirm the FortiGate has a multicast policy for the wireless VLAN.",
+          "feedback": "Multicast policy configuration is unrelated to Beacon Protection activation.",
+          "isCorrect": false
+        },
+        {
+          "text": "Confirm the VAP is assigned to the active radio in the AP's WTP profile.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Confirm the SSID is present in the FortiAnalyzer report schedule.",
+          "feedback": "Report scheduling does not control FortiAP radio/VAP runtime assignment.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q21",
+      "product": "FortiAP/Wireless",
+      "question": "Which over-the-air evidence proves the beacon contains the documented integrity element?",
+      "options": [
+        {
+          "text": "An RSN element with a WPA3 cipher suite and no management MIC element.",
+          "feedback": "An RSN element proves security negotiation data, not the Beacon Protection MIC itself.",
+          "isCorrect": false
+        },
+        {
+          "text": "A DHCP option 82 value that identifies the access point's switch port.",
+          "feedback": "DHCP option 82 is unrelated to beacon-frame integrity.",
+          "isCorrect": false
+        },
+        {
+          "text": "A Management MIC element with tag 76 plus the Beacon Protection capability flag.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "A RADIUS Access-Accept response that contains the wireless user's group.",
+          "feedback": "RADIUS acceptance proves user authentication, not the beacon's transmitted MIC.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q22",
+      "product": "FortiAP/Wireless",
+      "question": "Which hardware and software boundary applies to Beacon Protection in the current guide?",
+      "options": [
+        {
+          "text": "All FortiAP models running any FortiOS version that supports WPA3.",
+          "feedback": "WPA3 support alone does not remove the documented model and firmware requirement.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only Wi-Fi 5 access points running FAP 7.4.0 with PMF disabled.",
+          "feedback": "Wi-Fi 5 and disabled PMF do not satisfy the documented support conditions.",
+          "isCorrect": false
+        },
+        {
+          "text": "Any FortiAP model if the controller has a current FortiGuard subscription.",
+          "feedback": "FortiGuard subscription does not substitute for supported AP hardware and firmware.",
+          "isCorrect": false
+        },
+        {
+          "text": "FortiAP Wi-Fi 6E or Wi-Fi 7 models running FAP 7.6.1 or later.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q23",
+      "product": "FortiNAC",
+      "question": "An authorized host is behind a bridging AP that cannot assign VLANs per client. What does Access Point Management use instead?",
+      "options": [
+        {
+          "text": "Different DHCP pools and DNS behavior to place hosts into state-based access paths.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "A unique 802.1Q VLAN on the AP for every connected client MAC address.",
+          "feedback": "The feature exists for APs/hubs where per-host VLAN switching is unavailable.",
+          "isCorrect": false
+        },
+        {
+          "text": "A per-host switch ACL installed through 802.1X dynamic authorization.",
+          "feedback": "Per-client VLAN assignment is the mechanism this feature avoids requiring.",
+          "isCorrect": false
+        },
+        {
+          "text": "A static route from each endpoint to its assigned registration portal.",
+          "feedback": "Static routes do not classify host state or deliver the documented DNS redirection.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q24",
+      "product": "FortiNAC",
+      "question": "A host is absent from the DHCP lease file and uses a static address. Which event can identify this condition?",
+      "options": [
+        {
+          "text": "The HostRegistered event automatically moves the endpoint into production.",
+          "feedback": "HostRegistered indicates registration state, not a static-IP lease mismatch.",
+          "isCorrect": false
+        },
+        {
+          "text": "The StaticIPAddress event can be mapped to an alarm and action.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The PortDown event identifies a static address without inspecting host state.",
+          "feedback": "PortDown reports link state, not the absence of a DHCP lease for a host.",
+          "isCorrect": false
+        },
+        {
+          "text": "The RogueAP event identifies any endpoint that does not request DHCP.",
+          "feedback": "RogueAP detection is not the documented static-IP host event.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q25",
+      "product": "FortiNAC",
+      "question": "A host fails a rescan while still using a production DHCP lease. Why might it remain on production access?",
+      "options": [
+        {
+          "text": "FortiNAC immediately rewrites the host's static address without a DHCP exchange.",
+          "feedback": "The documented limitation is tied to the existing DHCP lease and reconnect/expiry behavior.",
+          "isCorrect": false
+        },
+        {
+          "text": "The AP management feature converts every failed rescan into a VLAN change.",
+          "feedback": "The feature uses DHCP/DNS state control, not automatic static-address rewriting or VLAN changes.",
+          "isCorrect": false
+        },
+        {
+          "text": "The host's RADIUS session must expire before any DHCP or DNS decision can change.",
+          "feedback": "RADIUS session expiration is not the stated prerequisite for the DHCP lease transition.",
+          "isCorrect": false
+        },
+        {
+          "text": "The existing lease may persist until expiry or disconnect before the isolation DNS path applies.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q26",
+      "product": "FortiNAC",
+      "question": "Which port and device-group treatment is required for the AP-management topology?",
+      "options": [
+        {
+          "text": "Place the AP uplink in Access Point Management and remove the AP from Bridging Devices.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Place the AP uplink in the Registration VLAN group and keep the AP in Bridging Devices.",
+          "feedback": "The registration group is not the documented AP-management port group.",
+          "isCorrect": false
+        },
+        {
+          "text": "Place the AP uplink in the FortiLink group and classify the AP as a managed switch.",
+          "feedback": "FortiLink management is a different topology and does not define this AP feature.",
+          "isCorrect": false
+        },
+        {
+          "text": "Place the AP uplink in the Isolation group and add the AP as an authorized host.",
+          "feedback": "The AP is infrastructure, not a host that should be placed in the isolation group.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q27",
+      "product": "FortiNAC",
+      "question": "What does the unauthorized DHCP/DNS path accomplish for a host behind an AP?",
+      "options": [
+        {
+          "text": "It assigns a production address and bypasses registration to avoid portal delays.",
+          "feedback": "The unauthorized path is designed to restrict and redirect, not grant production access.",
+          "isCorrect": false
+        },
+        {
+          "text": "It forces a Layer 2 VLAN change on the AP without changing the DHCP lease.",
+          "feedback": "Access Point Management uses DHCP/DNS rather than per-host VLAN changes.",
+          "isCorrect": false
+        },
+        {
+          "text": "It gives the host restricted addressing and DNS that redirects it to a state-specific portal.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "It creates a RADIUS machine account and installs a certificate on the endpoint.",
+          "feedback": "Certificate provisioning and machine authentication are separate FortiNAC functions.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q28",
+      "product": "FortiNAC-F",
+      "question": "After directory synchronization, a machine group appears with a `_host` suffix. What does that mapping represent?",
+      "options": [
+        {
+          "text": "The user group used only after an interactive password login completes.",
+          "feedback": "The suffix identifies the host-group mapping, not an interactive user group.",
+          "isCorrect": false
+        },
+        {
+          "text": "The synchronized LDAP compute group used to assign membership to the host identity.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The RADIUS client name generated for the switch port during authentication.",
+          "feedback": "RADIUS client identity is separate from directory host-group membership.",
+          "isCorrect": false
+        },
+        {
+          "text": "The device-profile group used for FortiGate configuration template assignment.",
+          "feedback": "FortiGate template assignment is unrelated to FortiNAC-F machine RBAC.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q29",
+      "product": "FortiNAC-F",
+      "question": "A customer selects the AD primary group Domain Computers but no machine group is created. What is the correct explanation?",
+      "options": [
+        {
+          "text": "Primary AD groups are not supported for this mapping; use a normal LDAP security group.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "FortiNAC-F imports only distribution lists and rejects every security group.",
+          "feedback": "The documented limitation is specifically about primary groups, not all security groups.",
+          "isCorrect": false
+        },
+        {
+          "text": "The computer account must be added to the Domain Admins group before synchronization.",
+          "feedback": "Adding endpoints to Domain Admins is not a supported or safe requirement.",
+          "isCorrect": false
+        },
+        {
+          "text": "The RADIUS server must be changed from MSCHAPv2 to PAP before group creation.",
+          "feedback": "Changing RADIUS authentication protocol does not make a primary AD group importable.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q30",
+      "product": "FortiNAC-F",
+      "question": "Which EAP-TLS evidence is most useful when machine authentication fails after certificate replacement?",
+      "options": [
+        {
+          "text": "The DHCP lease duration, gateway ARP cache, and endpoint DNS search suffix.",
+          "feedback": "DHCP and ARP evidence do not validate the EAP-TLS client certificate chain.",
+          "isCorrect": false
+        },
+        {
+          "text": "The presented client certificate, trusted root chain, and hostname attribute mapping.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The FortiGate policy hit count, NAT session table, and IPsec tunnel status.",
+          "feedback": "Firewall and VPN state are not the certificate validation path at the NAC RADIUS server.",
+          "isCorrect": false
+        },
+        {
+          "text": "The FortiAnalyzer report schedule, archive retention, and administrator profile.",
+          "feedback": "FortiAnalyzer reporting settings do not validate machine EAP-TLS credentials.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q31",
+      "product": "FortiNAC-F",
+      "question": "When is the Client Certificate Attribute enhancement available for machine authentication?",
+      "options": [
+        {
+          "text": "It is available in every FortiNAC-F release before 7.6.0 by default.",
+          "feedback": "The release note identifies the enhancement as 7.6.3 and later.",
+          "isCorrect": false
+        },
+        {
+          "text": "It is available only when the endpoint uses a static IPv4 address.",
+          "feedback": "Static addressing is unrelated to certificate subject attribute extraction.",
+          "isCorrect": false
+        },
+        {
+          "text": "It is available only for PEAP-MSCHAPv2 and never for EAP-TLS.",
+          "feedback": "The setting is associated with EAP-TLS certificate identity, not PEAP-only authentication.",
+          "isCorrect": false
+        },
+        {
+          "text": "Starting in FortiNAC-F 7.6.3, when the certificate subject needs hostname extraction.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q32",
+      "product": "FortiAuthenticator",
+      "question": "Which release introduced FIDO authentication for IdP-initiated SAML login?",
+      "options": [
+        {
+          "text": "FortiAuthenticator 7.4.0 introduced FIDO for every SP-initiated SAML flow.",
+          "feedback": "The feature is documented in the 8.0.2 release notes, not 7.4.0.",
+          "isCorrect": false
+        },
+        {
+          "text": "FortiAuthenticator 8.0.0 replaced SAML assertions with direct RADIUS tokens.",
+          "feedback": "SAML assertions remain part of the IdP-to-SP transaction.",
+          "isCorrect": false
+        },
+        {
+          "text": "FortiAuthenticator 8.0.2 introduced the IdP-initiated FIDO authentication option.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "FortiAuthenticator 8.0.3 removed FIDO and requires password-only IdP login.",
+          "feedback": "The current 8.0.3 SAML IdP guide retains the FIDO flow.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q33",
+      "product": "FortiAuthenticator",
+      "question": "A FIDO-required IdP login begins with a username-only page. What is the purpose of that first step?",
+      "options": [
+        {
+          "text": "It creates the SAML assertion before the user completes authentication.",
+          "feedback": "The assertion is generated after successful IdP authentication and SP selection.",
+          "isCorrect": false
+        },
+        {
+          "text": "It bypasses the FIDO authenticator and forwards credentials directly to the SP.",
+          "feedback": "The page is the beginning of the configured factor flow, not a bypass.",
+          "isCorrect": false
+        },
+        {
+          "text": "It identifies the user so FortiAuthenticator can apply the configured FIDO/password method.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "It discovers the SP's ACS URL by querying the user's DNS resolver.",
+          "feedback": "ACS metadata is part of SP configuration, not discovered through user DNS.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q34",
+      "product": "FortiAuthenticator",
+      "question": "A user authenticates successfully with FIDO but does not see a required SP in the portal. What should be checked?",
+      "options": [
+        {
+          "text": "The FortiGate multicast policy and the user's source NAT address.",
+          "feedback": "FIDO proves the IdP factor; SP visibility still depends on SP configuration and authorization.",
+          "isCorrect": false
+        },
+        {
+          "text": "The SP's IdP-initiated assertion-response setting and user authorization filters.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The FortiPAM RDP security level and target KDC address.",
+          "feedback": "Multicast policy and NAT do not control SAML service-provider visibility.",
+          "isCorrect": false
+        },
+        {
+          "text": "The FortiSwitch IP conflict trap and the AP Beacon Protection flag.",
+          "feedback": "RDP Kerberos settings do not control FortiAuthenticator SP selection.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q35",
+      "product": "FortiAuthenticator",
+      "question": "What does a successful FIDO challenge establish in an IdP-initiated SAML flow?",
+      "options": [
+        {
+          "text": "The user passed the configured IdP authentication step, not that the SP accepted the assertion.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The service provider has already authorized every resource in its application.",
+          "feedback": "Resource authorization is an SP decision that occurs after assertion delivery.",
+          "isCorrect": false
+        },
+        {
+          "text": "The browser has verified the SP's audience and ACS URL before the assertion exists.",
+          "feedback": "The SP validates its assertion conditions after the IdP sends the response.",
+          "isCorrect": false
+        },
+        {
+          "text": "The FortiAuthenticator has bypassed signature validation at the service provider.",
+          "feedback": "FIDO does not remove the SP's signature and assertion validation requirements.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q36",
+      "product": "FortiPAM",
+      "question": "Which RDP security level must be selected before FortiPAM's Kerberos option takes effect?",
+      "options": [
+        {
+          "text": "Select TLS so the browser-based Web RDP launcher uses certificate authentication.",
+          "feedback": "The Kerberos option is explicitly tied to NLA, not the Web RDP TLS mode.",
+          "isCorrect": false
+        },
+        {
+          "text": "Select Best Effort so the target can choose NTLM or Kerberos without configuration.",
+          "feedback": "Best Effort does not explicitly force the Kerberos NLA path.",
+          "isCorrect": false
+        },
+        {
+          "text": "Select RDP so the connection skips NLA and requests a Kerberos ticket later.",
+          "feedback": "The RDP security level bypasses NLA, so the Kerberos NLA option cannot apply.",
+          "isCorrect": false
+        },
+        {
+          "text": "Select Network Level Authentication so the native launcher uses CredSSP.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q37",
+      "product": "FortiPAM",
+      "question": "The KDC Address field is empty. How does FortiPAM locate the Key Distribution Center?",
+      "options": [
+        {
+          "text": "It queries the target's default gateway for an active Kerberos server.",
+          "feedback": "The gateway is not a Kerberos service-discovery mechanism.",
+          "isCorrect": false
+        },
+        {
+          "text": "It discovers the KDC through DNS SRV records for the Kerberos realm.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "It uses the first DNS A record returned for the RDP target hostname.",
+          "feedback": "A target A record resolves the host, not necessarily the realm's KDC.",
+          "isCorrect": false
+        },
+        {
+          "text": "It broadcasts a UDP probe on port 88 across the target subnet.",
+          "feedback": "Kerberos KDC discovery uses DNS SRV, not a subnet-wide broadcast scan.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q38",
+      "product": "FortiPAM",
+      "question": "A team wants Kerberos for browser-based Web RDP sessions. What is the documented limitation?",
+      "options": [
+        {
+          "text": "Kerberos support applies only to Web RDP when TCP forwarding is enabled.",
+          "feedback": "The documentation explicitly limits Kerberos to native RDP, not Web RDP.",
+          "isCorrect": false
+        },
+        {
+          "text": "Kerberos support applies to every launcher if the secret uses an AD template.",
+          "feedback": "An AD template does not remove the native-launcher limitation.",
+          "isCorrect": false
+        },
+        {
+          "text": "Kerberos support applies only to the native RDP launcher.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Kerberos support applies only to VNC and SSH sessions through the proxy.",
+          "feedback": "VNC and SSH do not use the RDP NLA Kerberos flow.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q39",
+      "product": "FortiPAM",
+      "question": "What changes when TCP Forwarding is enabled for a native RDP secret?",
+      "options": [
+        {
+          "text": "The session forces Kerberos and disables the need for a target domain.",
+          "feedback": "TCP forwarding does not force Kerberos or remove the realm dependency.",
+          "isCorrect": false
+        },
+        {
+          "text": "The session changes the target's KDC port from 88 to 443 automatically.",
+          "feedback": "The KDC port is not changed by TCP forwarding.",
+          "isCorrect": false
+        },
+        {
+          "text": "The session switches from NLA to Web RDP while retaining clipboard controls.",
+          "feedback": "The documented TCP-forwarding path removes several RDP controls rather than retaining them.",
+          "isCorrect": false
+        },
+        {
+          "text": "The session follows the generic TCP-forwarding path and RDP security controls are unavailable.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q40",
+      "product": "FortiSIEM",
+      "question": "An administrator cannot find Federated Search in a non-ClickHouse deployment. What is the likely reason?",
+      "options": [
+        {
+          "text": "Federated Search is supported for ClickHouse deployments, not the non-ClickHouse topology.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Federated Search requires a PostgreSQL-only deployment with no ClickHouse nodes.",
+          "feedback": "The feature is documented as ClickHouse-only, not PostgreSQL-only.",
+          "isCorrect": false
+        },
+        {
+          "text": "Federated Search is enabled only when every Collector runs Windows agents.",
+          "feedback": "Collector operating systems do not define the Federated Search deployment requirement.",
+          "isCorrect": false
+        },
+        {
+          "text": "Federated Search is hidden until the FortiSIEM Supervisor has two HA peers.",
+          "feedback": "HA peer count is not the documented enablement condition.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q41",
+      "product": "FortiSIEM",
+      "question": "A Federated Search dataset exists but the query returns no rows for a known source IP. Which configuration is the first mapping check?",
+      "options": [
+        {
+          "text": "Confirm the FortiSIEM incident ID maps to the external table's timestamp column.",
+          "feedback": "Incident ID and timestamp are different observable types and do not validate Source IP mapping.",
+          "isCorrect": false
+        },
+        {
+          "text": "Confirm the external table's password maps to the ClickHouse result schema.",
+          "feedback": "Credentials are configured on the provider, not mapped as a result-column observable.",
+          "isCorrect": false
+        },
+        {
+          "text": "Confirm the Collector hostname maps to the browser's source MAC address.",
+          "feedback": "Collector hostname and browser MAC are unrelated to the Source IP observable mapping.",
+          "isCorrect": false
+        },
+        {
+          "text": "Confirm the FortiSIEM Source IP observable maps to the external table's IP column.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q42",
+      "product": "FortiSIEM",
+      "question": "What is the correct setup order for a new external data source?",
+      "options": [
+        {
+          "text": "Create the search, export a case, then add provider credentials and table mappings.",
+          "feedback": "A search cannot query a provider dataset that has not been configured.",
+          "isCorrect": false
+        },
+        {
+          "text": "Map observables first, deploy an empty provider, then create the external datastore.",
+          "feedback": "Mappings require a defined external dataset and its columns.",
+          "isCorrect": false
+        },
+        {
+          "text": "Configure provider credentials, define datastore/table, map observables, then execute a search.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Create a ClickHouse table manually, disable the provider, then add the data source.",
+          "feedback": "Manual ClickHouse tables and disabled providers are not the documented setup workflow.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q43",
+      "product": "FortiSIEM",
+      "question": "Why can a Federated Search result later be queried from Advanced Search?",
+      "options": [
+        {
+          "text": "The result is written back into the external source table as a permanent record.",
+          "feedback": "Federated Search reads external sources; it does not write results back into them.",
+          "isCorrect": false
+        },
+        {
+          "text": "The executed federated result is stored in ClickHouse for reuse by Advanced Search.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The browser caches the JSON response and Advanced Search reads the browser cache.",
+          "feedback": "Browser cache is not the FortiSIEM result persistence mechanism.",
+          "isCorrect": false
+        },
+        {
+          "text": "The result is converted into a FortiGate traffic log and forwarded to the Supervisor.",
+          "feedback": "FortiGate traffic logging is unrelated to Federated Search result storage.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q44",
+      "product": "FortiSIEM",
+      "question": "The provider connection test succeeds, but searches return wrong values for Destination IP. What is the most likely defect?",
+      "options": [
+        {
+          "text": "The Destination IP observable is mapped to the wrong external column or data type.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "The provider password is invalid even though its connection test succeeds.",
+          "feedback": "A successful provider test makes invalid credentials less likely than a mapping defect.",
+          "isCorrect": false
+        },
+        {
+          "text": "The ClickHouse cluster has no Supervisor heartbeat on TCP port 5199.",
+          "feedback": "TCP 5199 is FortiManager HA heartbeat, not FortiSIEM federated search.",
+          "isCorrect": false
+        },
+        {
+          "text": "The incident's source IP was translated by a FortiGate multicast policy.",
+          "feedback": "Multicast NAT does not change how an external column is mapped to an observable.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q45",
+      "product": "FortiSIEM",
+      "question": "A provider definition was edited, but one ClickHouse data node still cannot query it. What deployment step should be verified?",
+      "options": [
+        {
+          "text": "Apply or deploy the provider and dataset configuration to the ClickHouse data nodes.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Restart every Collector and wait for its Windows machine account to synchronize.",
+          "feedback": "Provider deployment is the step that distributes the configuration to data nodes.",
+          "isCorrect": false
+        },
+        {
+          "text": "Recreate the incident and change the source IP observable to a user field.",
+          "feedback": "Changing an incident field does not deploy provider credentials or dataset mappings.",
+          "isCorrect": false
+        },
+        {
+          "text": "Disable Advanced Search so the new provider becomes the default query engine.",
+          "feedback": "Advanced Search is a consumer of results, not the provider configuration deployment control.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q46",
+      "product": "FortiSASE",
+      "question": "Which traffic is covered by the HTTP/3 QUIC inspection action described in the FortiSASE guide?",
+      "options": [
+        {
+          "text": "All proxy users and agentless browser sessions, but not managed FortiClient endpoints.",
+          "feedback": "The guide explicitly excludes proxy-policy traffic and includes agent/edge traffic.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only traffic from FortiGate SPA hubs, excluding all remote agents and Edge devices.",
+          "feedback": "The feature applies to agent and edge devices, not only SPA hub traffic.",
+          "isCorrect": false
+        },
+        {
+          "text": "Only DNS and RADIUS control traffic, excluding user web browsing sessions.",
+          "feedback": "DNS and RADIUS are separate control-plane services, not the HTTP/3 web-traffic scope.",
+          "isCorrect": false
+        },
+        {
+          "text": "Agent and authorized Edge-device traffic, not proxy-policy traffic.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        }
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "Q47",
+      "product": "FortiSASE",
+      "question": "A browser uses QUIC but the administrator wants inspection through the HTTP/2 path. Which action is appropriate?",
+      "options": [
+        {
+          "text": "Bypass HTTP/3 so the browser is forced to reconnect through HTTP/2 inspection.",
+          "feedback": "Bypass allows HTTP/3 without inspection; it does not force an HTTP/2 fallback.",
+          "isCorrect": false
+        },
+        {
+          "text": "Block HTTP/3 QUIC so most clients fall back to HTTP/2 over TLS.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Inspect HTTP/3 but disable the browser's TCP stack to force TLS over UDP.",
+          "feedback": "Disabling TCP would break the fallback transport rather than force it.",
+          "isCorrect": false
+        },
+        {
+          "text": "Allow QUIC and remove the SSL inspection profile from the security profile group.",
+          "feedback": "Removing SSL inspection removes the inspection path instead of enforcing a controlled fallback.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q48",
+      "product": "FortiSASE",
+      "question": "The administrator sees UDP/443 sessions but cannot prove the browser negotiated HTTP/3. What is the strongest client-side check?",
+      "options": [
+        {
+          "text": "Check only the endpoint's default gateway and assume every UDP/443 session is QUIC.",
+          "feedback": "UDP/443 can carry other traffic; the negotiated HTTP protocol must be verified.",
+          "isCorrect": false
+        },
+        {
+          "text": "Check the FortiSASE DNS rule and infer HTTP/3 from a successful hostname lookup.",
+          "feedback": "DNS resolution does not identify the HTTP application protocol.",
+          "isCorrect": false
+        },
+        {
+          "text": "Inspect the browser's network protocol column for `h3` rather than assuming UDP/443 is sufficient.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Check the proxy user's email domain and infer HTTP/3 from its authentication result.",
+          "feedback": "User identity does not prove the browser's negotiated transport protocol.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "Q49",
+      "product": "Secure SD-WAN",
+      "question": "The first Performance SLA server becomes unreachable, but the second remains healthy. What should the link monitor do?",
+      "options": [
+        {
+          "text": "Mark the member failed immediately and withdraw its routes after one missed probe.",
+          "feedback": "The dual-server design prevents one target outage from declaring the link down.",
+          "isCorrect": false
+        },
+        {
+          "text": "Switch the probe target to the second server and keep the member usable.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "Continue probing only the first server until the recovery timer expires.",
+          "feedback": "The monitor uses the secondary target when the first is unavailable.",
+          "isCorrect": false
+        },
+        {
+          "text": "Create a second independent SLA automatically and load balance between both servers.",
+          "feedback": "A second configured server is a fallback target, not an automatically created SLA.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "Q50",
+      "product": "Secure SD-WAN",
+      "question": "When does a single dual-server Performance SLA declare its health check failed?",
+      "options": [
+        {
+          "text": "When both configured probe servers are unavailable for that health check.",
+          "feedback": "Correct. This matches the documented feature mechanics and its operational boundary.",
+          "isCorrect": true
+        },
+        {
+          "text": "When the first server is unavailable, even if the secondary server responds.",
+          "feedback": "The secondary target exists to avoid false link-down from a single server failure.",
+          "isCorrect": false
+        },
+        {
+          "text": "When latency exceeds the target on either server for one measurement interval.",
+          "feedback": "SLA target thresholds are separate from server reachability and failure confirmation.",
+          "isCorrect": false
+        },
+        {
+          "text": "When the second server has a different IP address from the first server.",
+          "feedback": "Different server addresses are expected for redundant probe targets.",
+          "isCorrect": false
+        }
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "Q51",
+      "product": "Secure SD-WAN",
+      "question": "The GUI shows a green server-response arrow, but the SLA target is not met. What does the arrow prove?",
+      "options": [
+        {
+          "text": "The member meets every SLA threshold and all associated routes are installed.",
+          "feedback": "A response indicator is not a substitute for the measured quality values and SLA thresholds.",
+          "isCorrect": false
+        },
+        {
+          "text": "The first server is active and the second server is unreachable.",
+          "feedback": "The arrow does not identify that the secondary target is unreachable.",
+          "isCorrect": false
+        },
+        {
+          "text": "The route has been withdrawn and the member is no longer in load balancing.",
+          "feedback": "A responding server does not mean the member route has been withdrawn.",
+          "isCorrect": false
+        },
+        {
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}
