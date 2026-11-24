@@ -1,0 +1,269 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-24T09:08:41-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-24-09-08.json",
+  "inventory_sha": "<preselection inventory was read back successfully before this selection>",
+  "inventory_record_count": 369,
+  "selection_started_after_inventory_readback": true,
+  "window_start": "2026-10-25",
+  "window_end": "2026-11-23",
+  "selected_count": 12,
+  "required_products": [
+    "FortiGate",
+    "FortiManager",
+    "FortiAnalyzer",
+    "FortiSwitch",
+    "FortiAP/Wireless",
+    "FortiNAC",
+    "FortiNAC-F",
+    "FortiAuthenticator",
+    "FortiPAM",
+    "FortiSIEM",
+    "FortiSASE",
+    "Secure SD-WAN"
+  ],
+  "selected": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Multicast policy NAT and VDOM loop prevention: interface scope, source/destination translation, and all-to-all hazards",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/968606/configuring-multicast-forwarding",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/258529109/config-firewall-multicast-policy",
+        "https://docs.fortinet.com/document/fortigate/7.6.0/administration-guide/968606"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched Community scenario published within 2026-10-25 through 2026-11-24 was verified.",
+      "feature_mechanism_fingerprint": "NAT-mode multicast forwarding is a separate packet-forwarding gate; multicast-policy objects match ingress/egress interfaces, source address, multicast group, protocol and port, and can apply multicast SNAT/DNAT; all-to-all policies can create a loop across same-VDOM NPU virtual links in multi-VDOM mode.",
+      "workflow_transaction_fingerprint": "Multicast packet enters interface -> multicast-forward gate permits forwarding domain -> multicast-policy match evaluates source/destination interface and address/group -> optional source/destination translation -> packet exits selected interface; TTL and multicast-router function remain distinct from policy NAT.",
+      "failure_class": "Unintended multicast flood or loop; policy match miss; translated source/group not as expected.",
+      "evidence_pattern": "show system settings multicast-forward; show firewall multicast-policy; policy hit/log evidence; packet capture before/after translation; VDOM/interface inventory for npu0_vlink0/npu0_vlink1.",
+      "remediation_path": "Replace any-to-any policy with explicit interface and multicast-group scope; define source/group objects; use SNAT/DNAT only where receiver/source design requires it; remove same-VDOM all-to-all loop path before enabling multi-VDOM; do not enable multicast forwarding if FortiGate is acting as multicast router.",
+      "question_fingerprint": "Differentiate forwarding gate from multicast routing; identify the policy object that performs SNAT; detect NPU virtual-link multicast loop; infer what a TTL decrement proves.",
+      "diagram_topology_layout_fingerprint": "Multicast source -> FortiGate forwarding gate -> policy match -> optional NAT -> receiver segment, with separate loop-back path between same-VDOM NPU virtual links."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager HA state replication and failover: heartbeat, synchronized databases, excluded local settings, and VRRP",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/248695/synchronizing-the-fortimanager-configuration-and-ha-heartbeat",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/800686/configuring-ha-options",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/best-practices/56100/high-availability-ha"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortimanager-27/fortimanager-fds-connectivity-checking-when-error-message-is-http-1-0-503-service-unavailable-or-http-1-0-504-gateway-timeout-and-why-the-web-proxy-must-be-in-tunnel-mode-for-fortimanager-7-4-and-above-231252",
+      "scenario_status": "Recent Community scenario published 2026-11-13; used only to illustrate why FDS health should be checked independently on both HA peers, not as the primary HA feature source.",
+      "feature_mechanism_fingerprint": "FortiManager primary stores database changes and synchronizes module data/configuration to one or more secondary peers; TCP/5199 heartbeat and sync links maintain cluster state; VRRP mode uses shared VIP and monitored interface, while manual mode requires explicit role promotion; multiple system-local settings and downloaded FortiGuard data are excluded from sync.",
+      "workflow_transaction_fingerprint": "Admin change on primary -> database commit -> module/configuration synchronization to peers -> heartbeat exchange -> monitored-interface failure detection -> VRRP secondary becomes primary and owns VIP/FGFM path, or operator promotes peer in manual mode.",
+      "failure_class": "Split expectations after failover: unsynchronized local settings, heartbeat loss, VIP/interface failure, or managed devices still targeting old primary.",
+      "evidence_pattern": "System Settings > HA cluster status; Module Data Synchronized/Pending Module Data; HA debug log; TCP/5199 reachability; per-peer FortiGuard update status; managed-device FGFM registration.",
+      "remediation_path": "Use identical model/firmware and cluster ID/group password; define peer IP/SN on both sides; isolate HA/sync interface; choose manual or VRRP intentionally; configure managed FortiGates with all peer addresses; separately replicate excluded local services/settings and validate both peers.",
+      "question_fingerprint": "Identify which FortiManager data is not synchronized; distinguish heartbeat from module replication; select correct failover mode; explain why FDS success on primary does not prove peer readiness.",
+      "diagram_topology_layout_fingerprint": "Administrator -> primary FortiManager -> secondary peers over TCP/5199 sync/heartbeat; separate managed FortiGate FGFM path and VRRP shared VIP with monitored interface."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Privacy masking in administrator profiles: field anonymization, key-based unmasking, and time-window boundaries",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/347502/privacy-masking",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/675151/creating-administrator-profiles"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched Community scenario published within the strict 30-day window was verified.",
+      "feature_mechanism_fingerprint": "Privacy masking is attached to an administrator profile, masks selected identity/host/message fields across modules and reports, produces per-administrator anonymization that changes at login, and permits selective key-authorized unmasking subject to a 0-365-day time window.",
+      "workflow_transaction_fingerprint": "Admin profile selects fields + data mask key + unmasked time -> profile assigned to admin -> queries/reports render masked values -> user invokes Screen Picker or Manual Input -> key validates and selected field is revealed within time policy.",
+      "failure_class": "Sensitive data exposed to overprivileged operator, expected field appears unmasked, unmask denied, or downloaded log lacks original values.",
+      "evidence_pattern": "Admin profile settings; same event viewed under masked and unmasked profiles; See Original Data dialog; log download; real-time versus historical/custom-view/drill-down comparison.",
+      "remediation_path": "Create least-privilege profile, mask required fields, securely distribute data-mask key, set shortest viable unmask window, test real-time and historical views separately, and use a separate controlled export path when original values are required.",
+      "question_fingerprint": "Explain per-login anonymization; identify why downloaded logs omit masked values; distinguish real-time log behavior from time-window masking; choose safe unmask workflow.",
+      "diagram_topology_layout_fingerprint": "Log source -> FortiAnalyzer view/report -> administrator-profile masking layer -> anonymized output, with a separate key-authorized unmask path."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch IP conflict detection: passive ARP ownership claims and active gratuitous-ARP probes",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163701/ip-conflict-detection",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-cli-reference/500379/config-system"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent Community scenario was verified; older switch onboarding/PoE articles were rejected as unrelated.",
+      "feature_mechanism_fingerprint": "Global FortiSwitch management-interface conflict detection combines passive observation of remote broadcast ARP source addresses with active gratuitous-ARP probes at boot, interface down-to-up and local IP change; a duplicate response generates a system log and SNMP trap.",
+      "workflow_transaction_fingerprint": "Remote ARP claim arrives -> compare sender IP with local system-interface IPs -> log/trap; separately, local event triggers GARP broadcast -> duplicate owner replies -> log conflict.",
+      "failure_class": "Duplicate management IP, wrong ARP ownership, or monitoring gap when trap delivery is not configured.",
+      "evidence_pattern": "System log 'IP Conflict: conflict detected on system interface ...'; SNMP ip-conflict trap; `show system global` and `set detect-ip-conflict`; packet capture of ARP/GARP.",
+      "remediation_path": "Identify both MAC/IP owners from ARP capture and switch CAM table; correct static/DHCP reservation or interface address; keep global detection enabled; configure SNMP trap recipients and verify both log and trap.",
+      "question_fingerprint": "Differentiate passive claim detection from active GARP; determine what a GARP reply proves; interpret trap versus log; avoid claiming this scans every endpoint in the subnet.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch management SVI with passive ARP listener and active GARP probe branches converging on conflict log/SNMP trap."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "WPA3 Beacon Protection: beacon MIC generation, VAP/profile assignment, and packet-level verification",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/463484/enabling-beacon-protection",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/7.6.3/fortiwifi-and-fortiap-configuration-guide/603700"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiAP Community scenario was verified within the strict 30-day window.",
+      "feature_mechanism_fingerprint": "WPA3 Beacon Protection adds a Management MIC element to beacon frames and advertises the Beacon Protection capability; configuration is a VAP property, requires supported Wi-Fi 6E/Wi-Fi 7 AP hardware and FAP 7.6.1+, then must be assigned through the AP WTP profile.",
+      "workflow_transaction_fingerprint": "WPA3 VAP with PMF -> beacon-protection enabled -> VAP attached to WTP radio profile -> AP instantiates BSSID -> transmitted beacon includes Management MIC and Extended Capabilities beacon-protection flag.",
+      "failure_class": "Feature configured on an unsupported AP/firmware, not assigned to the active radio profile, or assumed enabled because WPA3/PMF alone is enabled.",
+      "evidence_pattern": "VAP CLI config; WTP profile radio VAP list; FortiAP `vcfg` output `beacon_prot=enabled`; wireless capture showing Management MIC element (tag 76), KeyID/IPN/MIC and Extended Capabilities flag.",
+      "remediation_path": "Confirm model and FAP release support; enable PMF and Beacon Protection on the WPA3 VAP; assign the VAP to the intended WTP profile/radio; verify AP runtime config and beacon capture from the air.",
+      "question_fingerprint": "Distinguish PMF from beacon integrity; identify the runtime output proving VAP assignment; interpret Management MIC in capture; identify unsupported model/firmware boundary.",
+      "diagram_topology_layout_fingerprint": "FortiGate wireless controller -> WPA3 VAP/PMF/Beacon Protection -> WTP profile/radio -> FortiAP beacon transmitter -> over-the-air MIC/capability capture."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Access Point Management: DHCP/DNS-based host state enforcement behind non-VLAN-aware APs and hubs",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/518065/access-point-management",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/latest/administration-guide/280568/control"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortinac-28/technical-tip-configuring-access-point-management-133623",
+      "scenario_status": "Historical Community technical tip published 2023-04-25; used only as a scenario illustration, not presented as recent.",
+      "feature_mechanism_fingerprint": "When VLAN switching per endpoint is unavailable behind a bridging AP/hub, FortiNAC enforces host state through separate authorized/unauthorized DHCP pools and DNS behavior on a shared VLAN; DHCP lease membership is the authorization signal and unknown/static-IP hosts raise StaticIPAddress events.",
+      "workflow_transaction_fingerprint": "Host behind AP sends DHCP -> FortiNAC checks MAC in normal-host list/lease configuration -> authorized host receives production pool and production DNS; unauthorized host receives restricted pool and FortiNAC wildcard DNS -> Application Server redirects to state-specific portal; static address absent from lease triggers event/alarm mapping.",
+      "failure_class": "Unauthorized host obtains production DNS, authorized host receives isolation DNS, static IP bypasses DHCP state, or host remains on production network after a failed rescan until lease expiry/disconnect.",
+      "evidence_pattern": "AP port membership in Access-Point-Management group; AP removed from Bridging Devices group; DHCP relay points to FortiNAC; DHCP lease file; DNS answer; StaticIPAddress event and alarm action.",
+      "remediation_path": "Verify Configuration Wizard VLAN/IP pools; assign correct AP uplink port; remove bridging classification and user-defined uplink; point relay to FortiNAC; map StaticIPAddress event; account for lease expiry and feature removal in FortiNAC-F 7.6.",
+      "question_fingerprint": "Infer host state from DHCP pool and DNS; identify why VLAN switching is not required; interpret missing lease as static-IP event; identify rescan limitation.",
+      "diagram_topology_layout_fingerprint": "Shared VLAN with non-managed AP/hub -> DHCP relay to FortiNAC -> authorized and unauthorized pools/DNS branches -> production or captive/isolation portal."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Machine authentication with Active Directory compute-group RBAC: distinct host/user group mapping and EAP credential paths",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/machine-authentication/478932/overview",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/fortinac-manager/403885/whats-new-in-fortinac-f-7-6-0",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/machine-authentication/356829/configuration-on-fortinac",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/machine-authentication/936417/configuration-on-windows-client"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiNAC-F Community scenario was verified in the strict 30-day window.",
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6 machine authentication uses AD computer credentials or EAP-TLS certificates; directory sync creates separate `<group>_host` and `<group>_user` RBAC groups so registered machine identities and user identities can be authorized independently; primary AD groups are not imported as these mappings.",
+      "workflow_transaction_fingerprint": "Domain-joined endpoint initiates machine 802.1X -> RADIUS Local Server validates MSCHAPv2 computer account or EAP-TLS certificate -> FortiNAC retrieves AD attributes/group membership -> `_host` membership assigned to host record -> network access/compliance policy evaluates machine group.",
+      "failure_class": "Computer account not domain joined, machine group missing due to primary-group limitation, certificate identity/hostname mapping mismatch, or RADIUS TLS trust failure.",
+      "evidence_pattern": "Directory synchronization task; Groups view showing `_host` and `_user`; FortiNAC Inventory host identity; RADIUS session/EAP result; certificate CN/SAN and trusted root; Winbind domain status.",
+      "remediation_path": "Join endpoint to AD; use an ordinary LDAP security group instead of primary Domain Computers; synchronize directory; configure local RADIUS EAP type and certificate trust; ensure client cert hostname attribute and group mapping align.",
+      "question_fingerprint": "Distinguish computer from user group; explain why primary Domain Computers is not mapped; choose EAP-TLS certificate evidence; diagnose a valid user login that does not prove machine authorization.",
+      "diagram_topology_layout_fingerprint": "Domain-joined endpoint -> switch/AP 802.1X -> FortiNAC local RADIUS/EAP -> AD computer account and group sync -> separate host/user RBAC branches."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FIDO authentication for IdP-initiated SAML: username-only start, factor enforcement, and SP assertion delivery",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/817031/saml-idp",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.0/administration-guide/563028/fortiauthenticator-8-0-0",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/19212/service-providers"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiAuthenticator Community scenario was verified within the strict 30-day window.",
+      "feature_mechanism_fingerprint": "FortiAuthenticator SAML IdP can require FIDO authentication for IdP-initiated logins; user begins on a username-only Login Fido Page, completes configured FIDO/password validation, selects an authorized SP from the IdP portal, and FAC sends the SAML assertion response.",
+      "workflow_transaction_fingerprint": "Browser -> FAC IdP login portal -> username-only identification -> configured FIDO/password factors -> SP list filtered by user authorization -> user selects SP -> FAC creates signed assertion -> browser posts assertion to SP -> SP validates and authorizes.",
+      "failure_class": "IdP-initiated login unexpectedly offers wrong factor, user is not authorized for SP, FIDO registration/credential fails, or SP rejects assertion despite successful IdP authentication.",
+      "evidence_pattern": "SAML IdP General > IdP Initiated Login settings; replacement message page; user FIDO registration; SP authorization/group filter; SAML IdP event logs and SP assertion validation result.",
+      "remediation_path": "Set required IdP-initiated authentication method; ensure users are enrolled for FIDO and permitted fallback factors; verify SP user-source/group authorization; validate SP certificate, ACS/recipient and assertion acceptance separately.",
+      "question_fingerprint": "Distinguish IdP authentication from SP authorization; explain username-only FIDO start; infer why SP can reject after successful FIDO; identify the assertion delivery sequence.",
+      "diagram_topology_layout_fingerprint": "Browser -> FAC IdP portal -> FIDO/password factor gate -> authorized SP selector -> SAML assertion POST -> SP validation/resource."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Kerberos authentication for native RDP NLA: secret-derived realm, KDC discovery, and launcher boundary",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/574014/kerberos-authentication-for-rdp-sessions",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiPAM Community troubleshooting scenario was verified within the strict 30-day window.",
+      "feature_mechanism_fingerprint": "FortiPAM native RDP launcher can use Kerberos instead of default NTLM for NLA/CredSSP; realm derives from domain configured on secret/target; KDC can be discovered through DNS SRV or overridden by explicit FQDN/IP and optional port (default 88).",
+      "workflow_transaction_fingerprint": "Secret enables RDP service + NLA + Use Kerberos -> target domain determines realm -> FortiPAM locates KDC via SRV or configured address -> requests Kerberos ticket using secret credentials -> native RDP NLA/CredSSP authenticates target.",
+      "failure_class": "Kerberos realm/KDC discovery mismatch, DNS/SPN/time/credential issue, wrong target FQDN, or feature expected to work in Web RDP/TCP-forwarding mode.",
+      "evidence_pattern": "Secret RDP Service settings; target Advanced Domain Settings KDC Address; DNS SRV resolution; KDC TCP/UDP 88 reachability; native launcher result; Windows Security log and Kerberos ticket state.",
+      "remediation_path": "Use target FQDN and Windows Domain Account secret; set NLA and Use Kerberos for NLA; confirm domain/realm, DNS SRV and time synchronization; specify KDC Address only when auto-discovery is unsuitable; use native RDP launcher.",
+      "question_fingerprint": "Identify why IP-only target breaks realm/SPN assumptions; distinguish native launcher from Web RDP; determine when explicit KDC is needed; explain NLA versus standard RDP TLS.",
+      "diagram_topology_layout_fingerprint": "FortiPAM secret/target -> realm derivation -> DNS SRV or explicit KDC:88 -> Kerberos ticket -> native RDP NLA/CredSSP -> Windows target."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM 7.5 cross-data-center Supervisor HA: 30 ms latency envelope, replicated state stores, and upgrade constraints",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/199672/whats-new-in-7-5-0",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/high-availability-and-disaster-recovery-procedures-eventdb/903189/overview",
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/release-notes/385743/whats-new-in-7-5-1"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiSIEM Community scenario was verified within the strict 30-day window.",
+      "feature_mechanism_fingerprint": "FortiSIEM 7.5 extends Supervisor HA across data centers with an inter-DC latency threshold below 30 ms, no VIP/DNS requirement, and shared HA model across on-prem/cloud; PostgreSQL CMDB replication, SQLite device/profile replication and EventDB rsync have distinct leaders/state stores; Automation Service is incompatible and DR mode is discontinued in 7.5.0.",
+      "workflow_transaction_fingerprint": "Primary/secondary Supervisors exchange HA state -> DB Leader replicates PostgreSQL CMDB -> Replication Leader distributes device configuration/profile files -> EventDB local-disk data replicated via rsync -> failure/upgrade triggers promotion and continuity subject to latency and version constraints.",
+      "failure_class": "Inter-DC latency outside supported envelope, split state-store assumptions, unsupported Automation Service combination, or legacy DR/manual-HA upgrade path.",
+      "evidence_pattern": "Inter-DC RTT measurement; Supervisor HA status; DB Leader/Replication Leader roles; PostgreSQL/SQLite/EventDB replication state; release version and Automation Service status.",
+      "remediation_path": "Measure and sustain <30 ms inter-DC latency for 7.5.0 behavior; plan HA topology before enabling; disable/avoid Automation Service in this mode; migrate pre-7.3 manual HA by deleting/redeploying Followers; remove discontinued DR configuration and follow release-specific upgrade notes.",
+      "question_fingerprint": "Differentiate 7.4.1 50 ms and 7.5.0 30 ms thresholds; identify state-store replication leaders; explain no VIP/DNS requirement; detect Automation Service incompatibility.",
+      "diagram_topology_layout_fingerprint": "Supervisor A in DC1 and Supervisor B in DC2 linked by low-latency HA channel, with separate PostgreSQL CMDB, SQLite configuration/profile, and EventDB replication lanes."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "HTTP/3 QUIC inspection: security-profile action, traffic-scope boundary, and proxy-user fallback",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/219936/configuring-an-action-for-http-3-quic-traffic",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/915608/ssl-inspection",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/13465/new-features"
+      ],
+      "scenario_community_url": null,
+      "scenario_status": "No directly matched recent FortiSASE Community scenario was verified; older FortiGate QUIC articles were not promoted to FortiSASE scenario evidence.",
+      "feature_mechanism_fingerprint": "FortiSASE adds an HTTP/3 QUIC inspection action within security profile groups; Inspect allows HTTP/3 and exposes it to applicable security features, Bypass allows without inspection, Block rejects QUIC so clients generally fall back to HTTP/2; setting applies to agent and edge-device traffic but not proxy-policy traffic.",
+      "workflow_transaction_fingerprint": "Agent/edge endpoint sends UDP/443 QUIC -> security profile group SSL inspection action evaluates Inspect/Bypass/Block -> Inspect permits security engines to process HTTP/3; Block forces client fallback to HTTP/2 in most cases; proxy-user path requires endpoint/browser QUIC disablement if deep inspection is required.",
+      "failure_class": "Security profile action mismatch, proxy traffic incorrectly assumed to inherit agent/edge QUIC inspection, or browser silently falls back to HTTP/2 after QUIC block.",
+      "evidence_pattern": "Feature-version entitlement; security profile group SSL inspection action; endpoint/edge versus proxy-user traffic classification; browser DevTools protocol column (`h3` versus `h2`); UDP/443 session logs.",
+      "remediation_path": "Confirm Feature-version capability and traffic type; set Inspect/Bypass/Block deliberately in security profile group; for proxy users disable browser QUIC where inspection is required; verify protocol negotiation and logs instead of assuming UDP/443 proves HTTP/3 inspection.",
+      "question_fingerprint": "Distinguish agent/edge traffic from proxy policy; infer effect of Block versus Bypass; interpret h3/h2 browser evidence; identify why profile action is unavailable without certificate/deep inspection.",
+      "diagram_topology_layout_fingerprint": "Agent/edge QUIC UDP/443 path through security profile action with Inspect/Bypass/Block branches; separate proxy-user path with browser QUIC disable/fallback."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Dual-server Performance SLA target selection: sequential probe-target fallback and link-failure confirmation",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/580649/link-health-monitor",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/867342/performance-sla-overview",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/cli-reference/838040159/config-system-sdwan"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/support-forum-92/sdwan-sla-225399",
+      "scenario_status": "Historical Community discussion dated 2026-03-13; used only to contrast one SLA with two probe targets versus two independent SLAs. Official guide controls the exact sequential target-selection mechanics.",
+      "feature_mechanism_fingerprint": "A single SD-WAN Performance SLA can configure up to two servers; FortiGate probes the first, switches to the second if the first is unavailable, remains on the second until it fails, then returns to the first; SLA fails only when both servers are unavailable. This protects against false link-down caused by one target outage.",
+      "workflow_transaction_fingerprint": "Health-check participant sends protocol-specific probe to primary target -> target availability determines active probe destination -> if primary unavailable, probe target switches to secondary -> if both unavailable, member health-check fails -> route/member eligibility is withdrawn subject to fail/recovery thresholds.",
+      "failure_class": "False-positive link-down from a single probe target outage; false confidence from a probe target that does not represent the service path; confusing one health-check with multiple independent SLAs.",
+      "evidence_pattern": "`diagnose sys sdwan health-check`; Performance SLA server list and current server; member state/packet loss/latency/jitter; route removal/recovery; probe packet capture.",
+      "remediation_path": "Choose two independent and representative targets reachable over every participant; configure protocol and check interval/fail/recovery thresholds; test loss of each target separately; distinguish server fallback from link-quality SLA thresholds and from multiple independent health checks.",
+      "question_fingerprint": "Predict behavior when first target alone fails; explain why second target avoids false link-down; distinguish sequential dual-server fallback from two separate SLAs; interpret health-check fail only after both targets fail.",
+      "diagram_topology_layout_fingerprint": "SD-WAN member -> primary probe server with fallback to secondary probe server -> health-check state machine -> SLA/member route eligibility."
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "product": "FortiSASE",
+      "subject": "IPsec agent-tunnel DPD customization",
+      "reason": "Rejected: same mechanism already taught 2026-11-15."
+    },
+    {
+      "product": "FortiSASE",
+      "subject": "Custom invitation codes for non-AD endpoints",
+      "reason": "Rejected: invitation-code rotation and managed endpoint migration taught 2026-11-20."
+    },
+    {
+      "product": "FortiPAM",
+      "subject": "Multiple target address allowlist",
+      "reason": "Rejected: same target-host mechanism taught 2026-11-12."
+    },
+    {
+      "product": "FortiManager",
+      "subject": "Local FDS licensing/proxy operation",
+      "reason": "Rejected as primary topic: same Local FDS package-distribution area substantially overlaps 2026-11-18 FortiGuard package version pinning; recent Community FDS proxy article retained as an adjacent scenario only."
+    }
+  ],
+  "semantic_uniqueness_audit": {
+    "compared_against_actual_published_records": 369,
+    "direct_or_close_subject_matches_for_final_selection": 0,
+    "cross_product_duplicate_mechanisms": 0,
+    "url_novelty_not_used_as_uniqueness_criterion": true,
+    "note": "FortiGate multicast policy NAT is separated from prior multicast TTL forwarding and FortiSwitch multicast session identity by policy-object matching, translation, and VDOM loop-prevention mechanics. Secure SD-WAN dual-target fallback is separated from prior TWAMP, MOS, passive SLA, and SLA probe class lessons by sequential probe-target failover semantics."
+  }
+}
