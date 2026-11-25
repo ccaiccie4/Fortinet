@@ -1,7 +1,7 @@
 {
   "generated_at_local": "2026-11-25T08:29:31-08:00",
   "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-25-08-29.json",
-  "exclusion_inventory_sha": "51128e16a74d837a18ef5a05c49c315bad7e9a26",
+  "exclusion_inventory_sha": "2369e1ae6405f25000b5fa751b1b30b32c9dd053",
   "strict_window": "2026-10-26 through 2026-11-24 inclusive",
   "topic_selection_started_after_inventory_readback": true,
   "selected_count": 12,
@@ -58,7 +58,7 @@
       "scenario_community_url": null,
       "feature_mechanism_fingerprint": "FortiManager 8.0.0 imports objects containing password-type attributes from FortiGates with private data encryption enabled; the Import Wizard requires an administrator-supplied password for new password-bearing objects and offers a preserve-current-password path for objects already present in the ADOM.",
       "workflow_transaction_fingerprint": "Managed FortiGate object database -> import wizard reads object metadata and encrypted password attributes -> administrator supplies password for new objects or chooses blank to retain the existing FortiGate password -> imported object becomes ADOM-managed -> subsequent installation resolves device mappings and deploys references.",
-      "failure_class": "Import fails or creates unusable credentials when PDE password material is not supplied or mismatched; inadvertent credential replacement when existing object password is re-entered incorrectly; confusion between object import and policy installation.",
+      "failure_class": "Import fails or creates unusable credentials when password material is not supplied or mismatched; inadvertent credential replacement when an existing object password is re-entered incorrectly; confusion between object import and policy installation.",
       "evidence_pattern": "Import Wizard explicitly lists password-bearing objects and prompts for secret material; successful object appears in ADOM object database; installation preview and device-side object validation show whether the object is deployable; import success alone does not prove downstream authentication works.",
       "remediation_path": "Confirm FortiManager 8.0 compatibility and PDE state; import in a controlled ADOM; use the correct password for new objects; leave the field blank only when intentionally preserving the password already held by the FortiGate; validate object mapping and a controlled install, then test the dependent service.",
       "question_fingerprint": "Choose the correct wizard action for a new password-bearing object versus an existing ADOM object; distinguish import-time secret handling from later installation mapping.",
@@ -71,7 +71,7 @@
       "product": "FortiAnalyzer",
       "lesson_subject": "FortiAnalyzer 8.0 playbook editor: node-level debugging, replay, partial runs, and Jinja control flow",
       "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/664591/playbook-editor-improvements",
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-troubleshooting-of-playbooks-207349",
       "feature_mechanism_fingerprint": "FortiAnalyzer 8.0 playbook editor adds step-by-step execution that can run, pause, and inspect each task node; replay with alternate inputs; partial execution from a selected node; Branch/Wait/Compare/Switch control operators; and Jinja expressions for conditions and loops.",
       "workflow_transaction_fingerprint": "Trigger/input -> connector task -> node input/output context -> execute prior task to seed current task -> inspect task output -> pause/stop/delete/skip -> replay workflow with test data or restart from selected node -> full workflow execution after validation.",
       "failure_class": "Playbook branch or connector failure hidden by whole-workflow execution; stale input or inactive connector mistaken for logic defect; rerunning all side effects during testing; Jinja condition/loop mis-evaluation.",
@@ -80,6 +80,8 @@
       "question_fingerprint": "Differentiate node-level debugging, replay, and partial run; infer what each execution mode does and does not validate.",
       "diagram_topology_layout_fingerprint": "Playbook graph with trigger, connector nodes, Branch/Wait/Compare/Switch branches, node-level input/output inspection, replay loop, and partial-run entry point.",
       "candidate_only_history": false,
+      "scenario_date": "2025-05-??",
+      "scenario_recency": "outside_window",
       "record_type": "selected_topic",
       "counted_as_taught_today": true
     },
@@ -87,7 +89,7 @@
       "product": "FortiSwitch",
       "lesson_subject": "Media Redundancy Protocol ring manager/client election, ring-check frames, and two-ring constraints",
       "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/222614/media-redundancy-protocol",
-      "scenario_community_url": null,
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/technical-tip-proxy-arp-is-not-working-across-fortiswitch-mrp-ring-in-fortilink-226483",
       "feature_mechanism_fingerprint": "FortiSwitch MRP forms an Ethernet ring with one manager/automanager and client nodes; ring ports are physical or one static trunk and are excluded from STP; manager election uses numerically lower priority then lowest MAC; MRP_Test, MRP_LinkChange, and MRP_TopologyChange frames drive failure/recovery state; 7.6+ supports two rings and ring-check mode but not MIM/MIC.",
       "workflow_transaction_fingerprint": "Configure identical MRP domain/VLAN/profile on all nodes -> manager/client roles and ring ports established -> manager monitors MRP_Test frames -> link failure produces LinkChange/TopologyChange -> manager opens the ring path -> link recovery re-evaluates ring closure; two-ring deployments require unique domain/port identifiers per ring.",
       "failure_class": "Ring remains disabled due to MRP VLAN not allowed/native on both ring ports; inconsistent domain ID or profile; manager conflict; ring ports also participating in STP; unsupported MIM/MIC topology.",
@@ -97,62 +99,64 @@
       "diagram_topology_layout_fingerprint": "Physical Ethernet ring with one manager, multiple clients, two ring ports per node, blocked STP participation, MRP control frames, and a second-ring inset showing unique domain/port IDs.",
       "candidate_only_history": true,
       "candidate_only_source": "docs/selected_fingerprints_2026-11-24-08-05.json",
+      "scenario_date": "2026-04-01",
+      "scenario_recency": "outside_window",
       "record_type": "selected_topic",
       "counted_as_taught_today": true
     },
     {
       "product": "FortiAP/Wireless",
-      "lesson_subject": "WPA3 Beacon Protection: beacon-frame integrity, PMF dependency, and VAP-level enablement",
-      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/463484",
+      "lesson_subject": "Automated FortiAP location positioning: Static LoWi, GNSS priority, and 802.11mc RTT trilateration",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/444765",
       "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "Beacon Protection adds integrity protection to beacon management frames on WPA3 SSIDs; it is configured per VAP, disabled by default, and supported on FortiAP Wi-Fi 6E/7 models running FAP 7.6.1 or later; Protected Management Frames must be enabled.",
-      "workflow_transaction_fingerprint": "Client scans -> AP advertises WPA3 SSID and beacon-protection capability -> AP emits integrity-protected beacon -> compatible client validates beacon integrity before trusting discovery/association information -> client proceeds with WPA3/PMF association.",
-      "failure_class": "Feature configured on unsupported AP/firmware; beacon protection enabled without PMF/WPA3 prerequisites; legacy client cannot join or ignores protected beacon behavior; VAP profile not actually bound to serving radio.",
-      "evidence_pattern": "VAP configuration shows WPA3 security, PMF enabled, and beacon-protection enabled; AP profile/radio binding proves the setting is applied to the intended SSID; over-the-air capture shows protected beacon integrity fields; successful association alone does not prove every nearby client validates the protected beacon.",
-      "remediation_path": "Confirm Wi-Fi 6E/7 model and FAP 7.6.1+; configure WPA3 and PMF on the VAP before enabling beacon protection; bind the VAP to the correct AP profile/radio; validate with a compatible client and packet capture; retain a separate legacy SSID if older clients cannot support WPA3/PMF.",
-      "question_fingerprint": "Select the correct prerequisites and distinguish beacon-frame integrity protection from data-frame encryption, PMF generally, or MLO.",
-      "diagram_topology_layout_fingerprint": "VAP-to-radio binding diagram plus 802.11 discovery sequence: beacon capability advertisement, integrity-protected beacon, client validation, WPA3/PMF association.",
-      "candidate_only_history": true,
-      "candidate_only_source": "docs/selected_fingerprints_2026-11-24-09-08.json",
-      "record_type": "selected_topic",
-      "counted_as_taught_today": true
-    },
-    {
-      "product": "FortiNAC",
-      "lesson_subject": "Access Point Management: DHCP lease validation and StaticIPAddress enforcement for clients behind non-VLAN-aware APs",
-      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/518065/access-point-management",
-      "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiNAC Access Point Management controls hosts behind access points/hubs that cannot enforce per-client VLANs by validating each host MAC against FortiNAC-maintained DHCP lease state; absent MAC/IP lease creates a StaticIPAddress event that can map to an alarm and action.",
-      "workflow_transaction_fingerprint": "AP/hub forwards client traffic on shared network -> FortiNAC DHCP view allocates/records authorized lease and DNS behavior -> host connects -> FortiNAC checks host MAC in DHCP lease file -> valid lease permits production access; missing lease emits StaticIPAddress event -> alarm mapping triggers configured host action.",
-      "failure_class": "Static-IP endpoint bypasses DHCP lease evidence; DHCP relay/scope or lease file is missing; alarm event is generated but not mapped to an action; non-VLAN-aware AP cannot isolate a single client with VLAN assignment.",
-      "evidence_pattern": "DHCP lease file contains MAC/IP/VLAN mapping; StaticIPAddress event proves the host MAC was absent from that lease view; alarm mapping/action log proves enforcement was invoked; event absence does not prove the host is authorized if DHCP visibility is incomplete.",
-      "remediation_path": "Configure Access Point Management view, VLAN and IP ranges in Configuration Wizard; validate DHCP scope/relay and lease-file updates; map StaticIPAddress to an alarm/action; test both authorized DHCP and static-IP endpoints; use a VLAN-aware enforcement design when per-client isolation is required.",
-      "question_fingerprint": "Distinguish DHCP lease evidence from a VLAN enforcement mechanism; choose the correct interpretation of StaticIPAddress event and alarm mapping.",
-      "diagram_topology_layout_fingerprint": "Non-VLAN-aware AP/hub with multiple clients on shared VLAN; DHCP lease-file validation branch; authorized lease versus missing lease event -> alarm/action.",
-      "candidate_only_history": true,
-      "candidate_only_source": "docs/selected_fingerprints_2026-11-24-09-08.json",
-      "record_type": "selected_topic",
-      "counted_as_taught_today": true
-    },
-    {
-      "product": "FortiNAC-F",
-      "lesson_subject": "Check Point VPN Integration in central mode: syslog session discovery, agent posture, and Smart-1 Cloud network-group enforcement",
-      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/check-point-vpn-integration-central-mode/965307",
-      "scenario_community_url": null,
-      "feature_mechanism_fingerprint": "FortiNAC-F central-mode integration receives Check Point VPN login/logout syslog containing user ID, office-mode client IP, and group; initially places the client IP in a restricted network object group; agent posture scan determines compliance; Smart-1 Cloud REST API moves the IP to the unrestricted group on pass and returns it to restricted on logout.",
-      "workflow_transaction_fingerprint": "VPN client authenticates -> Check Point gateway creates office-mode session and sends syslog -> restricted object group keeps traffic isolated -> FortiNAC agent communicates over bidirectional TCP/4568 and reports posture -> FortiNAC updates Smart-1 Cloud groups through API -> user gets production access; logout syslog re-adds IP to restricted group.",
-      "failure_class": "Missing or stale Smart-1 Cloud API key; syslog source/port/format mismatch; office-mode IP pool or restricted/unrestricted group policy incorrect; agent TCP/4568 blocked; unsupported OS/iOS endpoint cannot run agent and remains isolated.",
-      "evidence_pattern": "Syslog event proves session discovery and supplies identity/IP/group; Smart-1 Cloud group membership proves enforcement state; agent scan result proves posture decision; successful VPN authentication alone does not prove production access was granted.",
-      "remediation_path": "Meet Check Point R81.10.10+ and FortiNAC-F 7.6.0+ requirements; configure remote-access VPN community, Smart-1 Cloud API key and URL, SNMP read/write access, syslog UDP/514 to primary and HA secondary, restricted/unrestricted groups and matching policy; allow bidirectional TCP/4568; validate login, posture pass, group move, and logout reversal.",
-      "question_fingerprint": "Trace the syslog -> restricted group -> agent posture -> Smart-1 Cloud group transition and identify which missing dependency leaves a VPN-authenticated user isolated.",
-      "diagram_topology_layout_fingerprint": "Remote VPN endpoint -> Check Point gateway -> syslog to FortiNAC -> agent TCP/4568 posture -> Smart-1 Cloud API -> restricted/unrestricted network groups -> Check Point policy.",
+      "feature_mechanism_fingerprint": "FortiAP determines geographic location in priority order: controller-supplied Static LoWi, built-in GNSS, then LoWi calculation using IEEE 802.11mc Wi-Fi RTT; a full LoWi calculation needs at least four known-position responder APs and one initiator AP and uses 3D trilateration.",
+      "workflow_transaction_fingerprint": "Controller assigns WTP profiles -> responder APs with known coordinates enable 802.11mc on 5GHz -> initiator AP sends RTT measurements -> responders answer -> initiator computes distance and 3D position -> controller reports lowi-pos-type, coordinates and error bounds; static/GNSS position takes precedence over calculated LoWi.",
+      "failure_class": "Insufficient responder geometry; 802.11mc disabled or configured on unsupported band; responder APs lack known coordinates; stale static coordinates override GPS/LoWi; position is mistaken for survey-grade accuracy despite reported uncertainty.",
+      "evidence_pattern": "`diagnose wireless-controller wlac -c wtp <serial>` reports lowi-pos-type, coordinates and +/- error; FortiAP `rcfg` shows configured/operational 802.11mc role; these prove mode and computed estimate, not physical accuracy beyond the reported error bounds.",
+      "remediation_path": "Set reliable Static LoWi or verify GNSS first; for LoWi use four accurately located responders plus one initiator; enable 802.11mc on the 5GHz radio only; assign responder/initiator profiles; compare error bounds to regulatory/AFC requirements and do not treat a calculated coordinate as survey truth.",
+      "question_fingerprint": "Trace the location-source priority and determine the minimum AP geometry for LoWi; interpret lowi-pos-type and coordinate uncertainty.",
+      "diagram_topology_layout_fingerprint": "Five-AP positioning diagram: four fixed responders around one initiator, 802.11mc RTT ranging edges, 3D trilateration, and a source-priority stack Static LoWi > GNSS > LoWi.",
       "candidate_only_history": false,
       "record_type": "selected_topic",
       "counted_as_taught_today": true
     },
     {
+      "product": "FortiNAC",
+      "lesson_subject": "Rogue DHCP server detection: scheduled VLAN sweeps, dedicated interface, authorized-server inventory, and IP-helper handling",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/687820/rogue-dhcp-server-detection",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC uses a dedicated interface and scheduled task to move a System DHCP Port through configured VLANs, discover active DHCP responders, compare them with the Authorized DHCP Servers group, and raise Rogue Host DHCP Server or Rogue Device DHCP Server events when a responder is not authorized.",
+      "workflow_transaction_fingerprint": "Schedule runs -> FortiNAC port admin-downs, changes VLAN, and brings port up -> DHCP discovery observes server responses -> responder IP/MAC is compared to authorized inventory -> mismatch emits event -> event-to-alarm mapping notifies operators; IP Helper requires Pingable models for helper IP/MAC pairs.",
+      "failure_class": "Dedicated interface is missing or overlaps management/captive-portal; VLAN omitted from scan list; DHCP server not in authorized group; IP Helper address lacks matching Pingable IP/MAC object; HA secondary interface/port group differs and scan stops after failover.",
+      "evidence_pattern": "Task history and VLAN scan list prove scope; Rogue Host/Device DHCP Server event proves a DHCP response was seen from an unapproved responder; alarm panel proves event mapping; no event does not prove absence on VLANs not scanned or where helper responses are not modeled.",
+      "remediation_path": "Provision an unused dedicated interface/subnet; add its switch port to System DHCP Ports; populate Authorized DHCP Servers; configure every VLAN to scan and schedule the task; for IP Helper create Pingable inventory objects with both IP and MAC; mirror interface and port-group settings on HA peers.",
+      "question_fingerprint": "Differentiate active scheduled VLAN scanning from switch DHCP snooping; identify why an IP-helper address without a Pingable MAC object is not recognized as authorized.",
+      "diagram_topology_layout_fingerprint": "FortiNAC dedicated scan NIC traverses configured VLANs on a schedule; DHCP responders feed an authorized-server comparison; mismatch branches to Rogue Host/Device events and alarm mapping; HA peer mirror inset.",
+      "candidate_only_history": false,
+      "record_type": "selected_topic",
+      "counted_as_taught_today": true
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Wireless Access Point Network Access Policy evaluation: WAP-Uplink classification, MAB VLAN attributes, and port-group prerequisites",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/945771/network-device",
+      "scenario_community_url": "https://community.fortinet.com/fortinac-f-57/fortinac-f-does-not-assign-a-vlan-via-mab-to-fortiaps-managed-by-a-fortigate-230755",
+      "feature_mechanism_fingerprint": "FortiNAC-F models FortiGate-managed FortiAPs as network devices, not hosts; the switch port becomes WAP Uplink. By default, Network Access Policies are not evaluated for Wireless Access Points. Enabling the global setting allows policy evaluation, but the AP port must belong to Role-Based Access; optional enforcement group is populated on connect and is not automatically cleaned up.",
+      "workflow_transaction_fingerprint": "FortiAP connects to managed switch -> FortiNAC inventory classifies it as WAP -> port becomes WAP Uplink -> MAB Access-Request arrives -> if wireless-AP policy evaluation disabled, Access-Accept has no RFC VLAN attributes -> enable policy evaluation and ensure Role-Based Access -> reconnect/bounce port -> new MAB request matches policy -> Access-Accept carries Tunnel-Type/Medium/Private-Group-ID -> switch changes VLAN.",
+      "failure_class": "MAB Access-Accept lacks VLAN attributes because AP is a network device rather than host; port is not in Role-Based Access; AP is in Authorized Access Points group; Reset Forced Default causes VLAN cycling; bridge-mode SSID causes client MACs to appear on AP uplink.",
+      "evidence_pattern": "RADIUS Access-Accept must include Tunnel-Type=VLAN, Tunnel-Medium-Type=IEEE-802, and Tunnel-Private-Group-ID; switch port VLAN and Port Changes prove enforcement; REST HTTP 200 alone proves API request success, not VLAN attributes or switch application.",
+      "remediation_path": "Enable System > Settings > Network Device > Enable Network Access Policy for Wireless Access Points; place the AP switch port in Role-Based Access; ensure RADIUS/VLAN switching and RFC VLAN attribute group are enabled; remove Authorized Access Points membership; align Reset Forced Default VLAN; reconnect AP or bounce port to force fresh MAB.",
+      "question_fingerprint": "Diagnose why a RADIUS Access-Accept has no VLAN attributes when the FortiAP is modeled as a WAP network device; select the exact global setting and port-group prerequisites.",
+      "diagram_topology_layout_fingerprint": "FortiGate-managed FortiAP -> third-party access switch -> FortiNAC inventory/WAP-Uplink classification -> MAB request -> policy-evaluation gate -> VLAN RADIUS attributes -> switch port VLAN; blocked branch shows no attributes.",
+      "candidate_only_history": false,
+      "scenario_date": "2026-10-22",
+      "scenario_recency": "within_30_day_window",
+      "record_type": "selected_topic",
+      "counted_as_taught_today": true
+    },
+    {
       "product": "FortiAuthenticator",
-      "lesson_subject": "LDAP Service authentication-method selection: password-only versus all configured password and OTP factors",
+      "lesson_subject": "LDAP Service bind authentication-method selection: password-only versus all configured password and OTP factors",
       "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/494213/general",
       "scenario_community_url": null,
       "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.2+ LDAP Service General setting selects whether an LDAP bind verifies password only or all configured password and OTP factors; this is a server-side bind policy, distinct from RADIUS challenge handling and remote LDAP proxy behavior.",
@@ -238,267 +242,63 @@
   "semantic_comparison": [
     {
       "product": "FortiGate",
-      "top_historical_matches": [
-        {
-          "date": "2026-10-27",
-          "subject": "FortiGate — Multicast forwarding when packets arrive with TTL=1",
-          "jaccard": 0
-        },
-        {
-          "date": "2026-10-28",
-          "subject": "Local-in policy boundaries and per-policy logging",
-          "jaccard": 0
-        },
-        {
-          "date": "2026-10-28",
-          "subject": "FSSO filters: ingestion boundary versus per-FortiGate forwarding",
-          "jaccard": 0
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "FortiGate onboarding through Security Fabric authorization (2026-11-05)",
+      "distinction": "FortiCare registration timer and offline hardware registration are not Security Fabric authorization or ZTP workflow."
     },
     {
       "product": "FortiManager",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-20",
-          "subject": "FortiManager 8.0 management of multiple FortiSASE instances as managed devices",
-          "jaccard": 0.07692307692307693
-        },
-        {
-          "date": "2026-11-23",
-          "subject": "First policy-package installation as object reconciliation and pruning",
-          "jaccard": 0.07142857142857142
-        },
-        {
-          "date": "2026-11-18",
-          "subject": "FortiGuard package version pinning versus immediate downgrade for managed FortiGates",
-          "jaccard": 0.0625
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "Local certificate lifecycle management (2026-11-11)",
+      "distinction": "Password-type object import and PDE secret handling are not certificate issuance, renewal, or expiry alerts."
     },
     {
       "product": "FortiAnalyzer",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-09",
-          "subject": "FortiAnalyzer — FortiAnalyzer 8.0 FortiMQ connector and Cloud Fabric Feed enforcement",
-          "jaccard": 0.07407407407407407
-        },
-        {
-          "date": "2026-11-15",
-          "subject": "FortiAnalyzer 8.0 AI Access Visibility dashboard data lineage and evidence boundaries",
-          "jaccard": 0.06451612903225806
-        },
-        {
-          "date": "2026-11-18",
-          "subject": "SNMPv3 monitoring and event traps for FortiAnalyzer system health",
-          "jaccard": 0.05405405405405406
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "Alert-handler automation stitches (2026-11-04)",
+      "distinction": "Node-level playbook debugging/replay/partial execution is an editor execution-control feature, not alert-handler trigger/action design."
     },
     {
       "product": "FortiSwitch",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-13",
-          "subject": "OSPF on routed VLAN interfaces: reference bandwidth, cost consistency and network-type election",
-          "jaccard": 0.043478260869565216
-        },
-        {
-          "date": "2026-11-03",
-          "subject": "MAB Access-Request integrity: Message-Authenticator, call-check semantics, and RADIUS server compatibility",
-          "jaccard": 0.04
-        },
-        {
-          "date": "2026-11-14",
-          "subject": "FortiSwitchOS 8.0 DNS-over-TLS and explicit resolver CA validation",
-          "jaccard": 0.04
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": true
+      "nearest_historical": "MSTP topology protection (2026-11-17)",
+      "distinction": "MRP is an IEC ring protocol with manager/client roles and MRP frames; it is not spanning-tree BPDU protection or MCLAG."
     },
     {
       "product": "FortiAP/Wireless",
-      "top_historical_matches": [
-        {
-          "date": "2026-10-29",
-          "subject": "RadSec for WPA2/WPA3-Enterprise: RADIUS-over-TLS transport and certificate trust",
-          "jaccard": 0.0625
-        },
-        {
-          "date": "2026-11-08",
-          "subject": "Wi-Fi 7 Multi-Link Operation: MLD link association, WPA3 prerequisites, radio-profile binding, and standalone behavior",
-          "jaccard": 0.05263157894736842
-        },
-        {
-          "date": "2026-11-15",
-          "subject": "FortiOS 8.0 FortiAP radio VAP-broadcast disable without deleting SSID configuration",
-          "jaccard": 0.034482758620689655
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": true
+      "nearest_historical": "Wi-Fi 7 MLO and radio capability (2026-11-08)",
+      "distinction": "802.11mc RTT trilateration estimates AP geographic coordinates; it is not multi-link operation, roaming, or radio optimization."
     },
     {
       "product": "FortiNAC",
-      "top_historical_matches": [
-        {
-          "date": "2026-10-28",
-          "subject": "FortiLink CoA disconnect failures: accounting access and return path",
-          "jaccard": 0.05555555555555555
-        },
-        {
-          "date": "2026-10-30",
-          "subject": "Registered-host Network Access Policy first-match evaluation and catch-all ordering",
-          "jaccard": 0.047619047619047616
-        },
-        {
-          "date": "2026-10-29",
-          "subject": "IPv6 endpoint access versus IPv4-only infrastructure discovery: the FortiNAC capability boundary",
-          "jaccard": 0.045454545454545456
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": true
+      "nearest_historical": "Guest self-registration and host registration (2026-11-23)",
+      "distinction": "Rogue DHCP detection actively scans VLANs from a dedicated NAC interface and compares DHCP responders; it is not guest portal registration or passive switch snooping."
     },
     {
       "product": "FortiNAC-F",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-09",
-          "subject": "FortiNAC-F — FortiNAC-F 7.6.3 vulnerability-scanner integration: scan thresholds to network enforcement",
-          "jaccard": 0.10714285714285714
-        },
-        {
-          "date": "2026-11-08",
-          "subject": "FortiLink integration credential planes: REST API token, SSH/CLI, SNMPv3, and separate RADIUS enforcement",
-          "jaccard": 0.08695652173913043
-        },
-        {
-          "date": "2026-11-15",
-          "subject": "Network-device discovery with SNMP and recursive CDP expansion",
-          "jaccard": 0.08333333333333333
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "RADIUS CoA and dynamic host policy (2026-11-23)",
+      "distinction": "Wireless AP policy evaluation classifies a FortiGate-managed AP as a WAP network device and controls MAB VLAN attributes; it is not endpoint host CoA."
     },
     {
       "product": "FortiAuthenticator",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-13",
-          "subject": "Self-service password recovery with SMS or FortiToken verification and rate-limited portal workflow",
-          "jaccard": 0.13793103448275862
-        },
-        {
-          "date": "2026-10-30",
-          "subject": "RADIUS policy selection: request attributes, top-down precedence, and local EAP versus proxy",
-          "jaccard": 0.1111111111111111
-        },
-        {
-          "date": "2026-11-10",
-          "subject": "8. FortiAuthenticator — SAML IdP per-service-provider authorization using LDAP group filters",
-          "jaccard": 0.1111111111111111
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "LDAP authentication cache (2026-11-03)",
+      "distinction": "LDAP Service bind factor selection is an inbound LDAP server authentication policy; it is not remote LDAP proxy caching."
     },
     {
       "product": "FortiPAM",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-20",
-          "subject": "Access Authentication: policy-level step-up gate for secret viewing and launch",
-          "jaccard": 0.09375
-        },
-        {
-          "date": "2026-11-03",
-          "subject": "Over-the-shoulder live recording: secret-level recording, global live stream, SSH event/video correlation, and replay lifecycle",
-          "jaccard": 0.07692307692307693
-        },
-        {
-          "date": "2026-11-13",
-          "subject": "Native RDP TCP forwarding mode: transport fallback and lost native RDP security controls",
-          "jaccard": 0.07407407407407407
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": true
+      "nearest_historical": "Native RDP TCP forwarding mode (2026-11-13)",
+      "distinction": "Kerberos NLA is pre-desktop authentication using a domain realm/KDC; it is not RDP transport forwarding."
     },
     {
       "product": "FortiSIEM",
-      "top_historical_matches": [
-        {
-          "date": "2026-10-28",
-          "subject": "Windows WMI/OMI monitoring: WinRM transport and event evidence",
-          "jaccard": 0.07142857142857142
-        },
-        {
-          "date": "2026-10-27",
-          "subject": "FortiSIEM — Custom parser precedence, event recognizers, and attribute testing",
-          "jaccard": 0.0625
-        },
-        {
-          "date": "2026-11-13",
-          "subject": "Windows Agent native XML transfer: Collector parsing and custom-parser migration",
-          "jaccard": 0.045454545454545456
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "Windows headless agent and discovery (2026-11-12)",
+      "distinction": "Raw-event GB/day licensing and rolling violation enforcement are metering/entitlement behavior, not agent deployment or event collection."
     },
     {
       "product": "FortiSASE",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-08",
-          "subject": "Inline-CASB application detection and SaaS tenant restriction: deep inspection, HTTP header insertion, and per-application overrides",
-          "jaccard": 0.09523809523809523
-        },
-        {
-          "date": "2026-11-12",
-          "subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
-          "jaccard": 0.07142857142857142
-        },
-        {
-          "date": "2026-11-15",
-          "subject": "IPsec agent-tunnel dead peer detection: idle probes, on-demand probes, and change impact",
-          "jaccard": 0.06896551724137931
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": true
+      "nearest_historical": "Secure Browser extension (2026-11-11)",
+      "distinction": "HTTP/3 inspection controls QUIC traffic in agent/edge security-profile groups; it is not browser extension policy or RBI."
     },
     {
       "product": "Secure SD-WAN",
-      "top_historical_matches": [
-        {
-          "date": "2026-11-13",
-          "subject": "Underlay-bandwidth steering: inbandwidth, outbandwidth and bibandwidth load balancing",
-          "jaccard": 0.18181818181818182
-        },
-        {
-          "date": "2026-11-12",
-          "subject": "Per-packet distribution across aggregate static IPsec tunnels in SD-WAN",
-          "jaccard": 0.08333333333333333
-        },
-        {
-          "date": "2026-11-22",
-          "subject": "ToS-mask matching for selective SD-WAN packet duplication and de-duplication",
-          "jaccard": 0.0625
-        }
-      ],
-      "manual_semantic_review": "No substantially equivalent mechanism found in published reports in the strict 2026-10-26..2026-11-24 window. Distinction documented in topic-specific mechanism and workflow fingerprints.",
-      "candidate_only_history": false
+      "nearest_historical": "ToS-based packet duplication matching (2026-11-22)",
+      "distinction": "Bandwidth-threshold shedding suppresses duplicate copies based on measured overlay/underlay utilization; it is not ToS classification or FEC."
     }
   ],
   "rejected_candidates": [
@@ -535,16 +335,27 @@
     {
       "product": "FortiAnalyzer",
       "subject": "SOC Automation Service content-pack licensing",
-      "reason": "Present only as an unpublished 2026-11-24 candidate; not counted as taught. A distinct 8.0 playbook-editor execution/debugging feature was selected instead."
+      "reason": "Present only as an unpublished 2026-11-24 candidate; selected a distinct playbook-editor execution/debugging feature instead."
+    },
+    {
+      "product": "FortiNAC",
+      "subject": "Access Point Management DHCP lease validation",
+      "reason": "Present only as an unpublished 2026-11-24 candidate; selected a different active rogue-DHCP discovery mechanism."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "subject": "WPA3 Beacon Protection",
+      "reason": "Present only as an unpublished 2026-11-24 candidate; selected automated location positioning based on Static LoWi/GNSS/802.11mc."
     }
   ],
-  "candidate_only_reuse_disclosure": "Five selected topics also appeared in 2026-11-24 unpublished candidate-only records (FortiSwitch MRP, FortiAP Beacon Protection, FortiNAC Access Point Management, FortiPAM Kerberos RDP NLA, FortiSASE HTTP/3 inspection). Those records are not published lessons and are not counted in the 30-day exclusion set. They were reselected only after the actual published-report audit confirmed no substantially equivalent published mechanism; each selected topic is documented with a distinct mechanism/workflow fingerprint. If avoiding unpublished candidates is desired in a future run, select alternatives even though they were never published.",
+  "candidate_only_reuse_disclosure": "Three selected topics also appeared in 2026-11-24 unpublished candidate-only records (FortiSwitch MRP, FortiPAM Kerberos RDP NLA, FortiSASE HTTP/3 inspection). Those records are not published lessons and are not counted in the 30-day exclusion set. They were reselected only after the actual published-report audit confirmed no substantially equivalent published mechanism; each is distinct from all published lessons in the strict window. Five other 2026-11-24 candidate-only topics were rejected or replaced.",
   "audit": {
     "all_12_products_covered": true,
     "all_required_fields_present": true,
     "actual_published_report_comparison_complete": true,
     "manual_semantic_review_complete": true,
     "lexical_overlap_is_only_a_screen_not_the_semantic_decision": true,
-    "selected_topics_semantically_unique_vs_published_window": true
+    "selected_topics_semantically_unique_vs_published_window": true,
+    "candidate_only_reuse_count": 3
   }
 }
