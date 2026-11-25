@@ -1,0 +1,283 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-25T08:03:20-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-25-08-02.json",
+  "inventory_sha": "cbbcf33cb7b11914516e3f785f973fe2dbea1776",
+  "topic_selection_after_inventory_readback": true,
+  "comparison_record_count": 357,
+  "selected_topic_count": 12,
+  "method": "Per-product comparison of lesson subject, mechanism, transaction, failure, evidence, remediation, question and diagram topology against 357 actual published lesson fingerprints. Candidate-only anti-repeat records were also reviewed separately. Each selection includes an explicit closest-prior comparison and a manual mechanism distinction.",
+  "candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Explicit web proxy isolation: PAC delivery, proxy-policy matching, and FortiIsolator handoff",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/300428/explicit-web-proxy",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/706786/isolator-servers-in-proxy-policies"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-deleting-vdoms-with-a-similar-name-such-as-ro-roo-removes-pac-file-data-under-root-vdom-227803",
+      "feature_mechanism_fingerprint": "Explicit proxy listener accepts browser-directed HTTP/HTTPS or PAC-selected traffic; proxy policy action isolate forwards selected sessions to a configured FortiIsolator server and logs isolate separately from accept; PAC file is served by FortiGate and must retain its custom certificate trust chain for HTTPS download.",
+      "workflow_transaction_fingerprint": "Browser retrieves PAC -> FindProxyForURL selects PROXY or DIRECT -> client connects to explicit proxy listener -> proxy policy matches identity/destination/service -> accept policy forwards normally or isolate action hands request to isolator server -> FortiGate logs policy action; PAC delivery and proxy session are separate transactions.",
+      "failure_class": "PAC content lost or unreachable after VDOM lifecycle operation; PAC download fails 404; browser bypasses proxy or reaches proxy but policy does not isolate; HTTPS PAC fetch rejected due to untrusted server certificate.",
+      "evidence_pattern": "`get web-proxy explicit` and `show web-proxy explicit` prove PAC server/data state; HTTPS GET and certificate chain prove PAC delivery; proxy-policy logs with action=isolate prove isolator selection, not that the remote rendering container is healthy; session/traffic logs prove the proxy data path.",
+      "remediation_path": "Validate the PAC URI, PAC content and VDOM context; after VDOM deletion verify root VDOM PAC content; restore empty PAC data; use a trusted custom server certificate for HTTPS PAC; verify proxy feature visibility/listener and explicit/transparent proxy policy order; validate isolator FQDN/IP, port and server reachability.",
+      "question_fingerprint": "Browser can fetch PAC but suspicious browsing is not isolated; distinguish PAC selection, proxy listener, policy action, and isolator server reachability.",
+      "diagram_topology_layout_fingerprint": "Client browser -> HTTPS PAC service -> proxy listener -> ordered proxy-policy decision -> normal egress or FortiIsolator branch; side annotation for per-VDOM PAC storage and certificate trust.",
+      "nearest_prior": {
+        "score": 0.09090909090909091,
+        "subject": "Proxy ARP on VLAN interfaces: turn intra-VLAN isolation into policy-controlled reachability",
+        "date": "2026-11-19"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiManager 8.0 workflow sessions: concurrent change sets, selective approval, and conflict merge",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/512907/new-workflow-mode-design-to-control-individual-admin-sessions-with-selective-approvals",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/424502/workflow-mode",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/167136/starting-a-workflow-session"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager 8.0 workflow mode attaches independent working sessions to administrators inside one ADOM; ADOM-wide lock is no longer required; submitted sessions can be approved in any order; the approval engine detects stale-object conflicts and exposes mergeable versus conflicting changes.",
+      "workflow_transaction_fingerprint": "Admin opens session -> modifies ADOM policy/object working copy -> saves/submits -> approval group reviews diff -> any session can be approved first -> accepted delta is committed to ADOM -> later overlapping session is compared against current ADOM state -> conflict view marks changed/deleted objects -> merge nonconflicting delta or repair/resubmit.",
+      "failure_class": "Concurrent policy changes conflict because one session edits an object another deletes/changes; user assumes submission order equals approval order or believes workflow sessions permit device install before approval.",
+      "evidence_pattern": "Session list status Waiting Approval proves submitted workflow state; View Diff proves a session's proposed delta; conflict view red/green markings prove object-level conflict classification; ADOM state after approval proves committed change; it does not prove installation to managed FortiGates, because approval updates ADOM and installation is a separate action.",
+      "remediation_path": "Use one named session per logical change; review diffs before submission; inspect conflict markers; merge only nonconflicting changes; rebase/repair the session against current ADOM state and resubmit; schedule device installation separately after approval.",
+      "question_fingerprint": "Two admins submit independent sessions; the later-approved session deletes a policy the earlier session edited; choose conflict-resolution semantics and distinguish ADOM approval from device installation.",
+      "diagram_topology_layout_fingerprint": "Two admin swimlanes with Session A and Session B converging on approval queue; Session B commit precedes A, conflict detector branches into merge-safe green and conflicting red deltas, then repair/resubmit.",
+      "nearest_prior": {
+        "score": 0.09615384615384616,
+        "subject": "Workflow mode as an ADOM change transaction: session isolation, ordered approval, rejection cascades, and separate device installation",
+        "date": "2026-11-03"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAnalyzer 8.0 playbook execution: connector tasks, dry-run replay, node debugging, and partial reruns",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/664591/playbook-editor-improvements",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/28682",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/592522/playbook-triggers-and-tasks",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/768287/connector-actions"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortianalyzer-6/technical-tip-fortianalyzer-shows-devices-as-down-and-a-stale-last-log-time-for-10-15-minutes-after-a-reboot-230376",
+      "feature_mechanism_fingerprint": "A playbook consists of a trigger plus linked connector tasks whose dependencies determine execution order; 8.0 editor adds step debugging, replay with alternate input, partial restart from a selected task, Branch/Wait/Compare/Switch control and Jinja conditions/loops.",
+      "workflow_transaction_fingerprint": "Trigger fires (incident, schedule, or on-demand) -> task receives trigger/prior-task JSON inputs -> connector action runs -> output becomes downstream input -> branch/control/loop evaluates -> job status and task outputs/errors persist; dry run uses mock data which is cleared when saving/leaving editor.",
+      "failure_class": "Playbook stops or produces incorrect downstream action because connector is inactive, task input schema is wrong, prior task output differs from assumed JSON, or branch/loop condition routes incorrectly.",
+      "evidence_pattern": "Playbook Tasks dialog exposes job ID, trigger, timestamps and status; per-node input/output and step-debug result localize the failing contract; inactive connector appears grayed; dry-run output validates mapping but does not prove production connector credentials/permissions or external API availability.",
+      "remediation_path": "Validate connector activation and credentials; replay with representative mock data; inspect each node's JSON input/output; test the failing task alone; use partial rerun from the corrected node; add explicit branch/compare/wait conditions and verify downstream tasks against the actual output schema.",
+      "question_fingerprint": "An incident playbook fails only at the third connector task after a schema change; identify which editor feature proves the prior task output and safely reruns from the failed node.",
+      "diagram_topology_layout_fingerprint": "Trigger -> Task 1 -> Branch/Compare -> Task 2 -> Wait -> Task 3; side loop for dry-run input/output inspection and partial restart at Task 3.",
+      "nearest_prior": {
+        "score": 0.0392156862745098,
+        "subject": "FortiAI alert triage agent: evidence enrichment before analyst action",
+        "date": "2026-11-07"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "LLDP-MED network-policy advertisement for voice VLAN, L2 priority, DSCP and endpoint power",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/585556/lldp-med",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/585561/configuration-deployment-example"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch LLDP-MED extends LLDP with network-policy, location, inventory and PoE power TLVs; an LLDP profile controls TLVs and MED network-policy entries per port; VLAN-bound policy values are advertised only when that VLAN is assigned to the interface.",
+      "workflow_transaction_fingerprint": "Enable global LLDP -> create LLDP profile and MED network-policy TLVs -> assign profile to edge port -> ensure voice VLAN is allowed/native as required -> switch multicasts LLDP frames -> phone learns VLAN, L2 priority and DSCP -> phone tags voice frames accordingly.",
+      "failure_class": "Phone remains in data VLAN or marks voice traffic incorrectly because LLDP profile is absent, LLDP disabled, VLAN not assigned to port, or MED TLV is not enabled; operator expects LLDP to configure a switch port's VLAN without the VLAN actually existing.",
+      "evidence_pattern": "`show switch lldp profile` proves profile TLV content; `get switch lldp neighbors-detail`/LLDP details prove peer received/sent TLVs; port VLAN membership proves local forwarding domain; phone VLAN and packet capture prove endpoint behavior; LLDP neighbor presence alone does not prove a MED network-policy TLV was advertised.",
+      "remediation_path": "Create profile with med-network-policy and inventory-management TLVs; assign profile to the intended physical port; configure voice VLAN and ensure VLAN membership; enable LLDP; validate the received policy on the phone and tagged frames; check PoE budget separately from MED power TLV.",
+      "question_fingerprint": "IP phone discovers the switch but remains untagged on data VLAN; identify the missing MED network-policy/VLAN membership relationship rather than assuming basic LLDP neighbor discovery is sufficient.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch edge port with LLDP-MED profile advertises VLAN 400/priority 5/DSCP 46 and PoE TLVs to IP phone; phone sends tagged voice traffic while attached PC uses data VLAN.",
+      "nearest_prior": {
+        "score": 0.2727272727272727,
+        "subject": "LLDP-MED network policy for voice endpoints: VLAN advertisement, QoS TLVs, and port prerequisites",
+        "date": "2026-10-30"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "RADIUS VLAN name tags and round-robin VLAN pools on a single enterprise SSID",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/458849/vlan-assignment-by-name-tag",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/7.6.5/fortiwifi-and-fortiap-configuration-guide/685372/vlan-assignment-by-radius"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A WPA2/WPA3-Enterprise RADIUS Access-Accept can return Tunnel-Type=VLAN, Tunnel-Medium-Type=IEEE-802 and Tunnel-Private-Group-ID; the last attribute may identify a VLAN ID, interface name, or a configured vlan-name key. A vlan-name key can map to up to eight VLAN IDs selected round-robin.",
+      "workflow_transaction_fingerprint": "Client associates to one bridge-mode SSID -> EAP/RADIUS authentication -> Access-Accept returns VLAN name tag -> FortiGate wireless controller resolves the tag through the VAP vlan-name table -> selects one mapped VLAN ID -> client traffic is bridged/tagged into that VLAN -> DHCP and firewall policy apply to the selected VLAN interface.",
+      "failure_class": "Authentication succeeds but client lands on default or wrong VLAN because Tunnel-Private-Group-ID does not exactly match a VLAN ID/interface name/name-tag key, the dynamic-vlan setting is off, or selected VLAN is absent from the bridge path.",
+      "evidence_pattern": "RADIUS Access-Accept attributes prove the server returned the expected tag; VAP `show` proves dynamic-vlan and vlan-name mappings; wireless client table proves assigned VLAN; DHCP lease and switch trunk capture prove end-to-end VLAN reachability; successful EAP alone does not prove VLAN assignment.",
+      "remediation_path": "Align RADIUS attribute values and case-sensitive name-tag keys; enable dynamic-vlan on the VAP; define VLAN ID pool (maximum eight per name); ensure switch trunks and FortiGate VLAN interfaces/DHCP/policies exist; verify round-robin distribution across new authentications.",
+      "question_fingerprint": "Users authenticate on one SSID but only some receive the intended subnet; identify the name-tag pool mapping and distinguish authentication success from VLAN resolution and DHCP reachability.",
+      "diagram_topology_layout_fingerprint": "Single bridge-mode SSID -> RADIUS Access-Accept with `data` name tag -> VAP vlan-name table -> round-robin VLAN100/200/300 pool -> DHCP/policy paths.",
+      "nearest_prior": {
+        "score": 0.13725490196078433,
+        "subject": "Dynamic captive-portal URL from Cisco ISE: Fortinet-Captive-Portal-URL in RADIUS Access-Accept",
+        "date": "2026-11-21"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "FortiNAC Local RADIUS Server as the 802.1X EAP termination point",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/366458/configure-local-radius-server-settings",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/518370/trusted-certificates",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/214558/radius"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC Local RADIUS Server terminates 802.1X EAP locally instead of proxying EAP to an external RADIUS server; supports selected EAP methods, TLS/cipher profile, endpoint trust certificates, OCSP for EAP-TLS, Winbind for MSCHAPv2 and RADIUS attribute groups; accounting is not provided by Local RADIUS.",
+      "workflow_transaction_fingerprint": "Supplicant sends EAPOL -> switch/AP relays RADIUS Access-Request to FortiNAC local RADIUS port -> EAP method negotiates with FortiNAC -> FortiNAC validates certificate/OCSP or directory/local user -> Access-Accept with attribute group drives VLAN/role -> accounting, if required, is separately proxied to external RADIUS.",
+      "failure_class": "EAP-TLS fails due to missing/untrusted root CA or absent OCSP URL; MSCHAPv2 fails because Winbind/domain membership is wrong; Local and Proxy services collide on authentication port; operator expects Local RADIUS to provide accounting.",
+      "evidence_pattern": "Local RADIUS service log shows EAP negotiation and request/response attributes; server log/system journal shows service state; certificate chain/OCSP response prove trust and revocation status; Access-Accept attributes prove policy response; successful Access-Accept does not prove accounting was forwarded.",
+      "remediation_path": "Install server certificate and Endpoint Trust CA; configure supported EAP types and matching TLS protocols/ciphers; configure Winbind for AD MSCHAPv2; enable OCSP only when client certificates contain responder URL; use a distinct authentication port from proxy service; configure external accounting proxy if accounting is needed.",
+      "question_fingerprint": "802.1X EAP-TLS succeeds on external RADIUS but fails after moving termination to FortiNAC; diagnose Endpoint Trust/OCSP and account for the separate accounting limitation.",
+      "diagram_topology_layout_fingerprint": "Supplicant -> access switch/AP -> FortiNAC Local RADIUS EAP state machine -> certificate/OCSP or Winbind/local identity -> Access-Accept attributes -> VLAN/role; separate accounting proxy path.",
+      "nearest_prior": {
+        "score": 0.11627906976744186,
+        "subject": "Local RADIUS authentication versus proxy mode: EAP methods, MAC auth and accounting boundary",
+        "date": "2026-11-13"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "TEAP chained user-and-machine authentication with Microsoft Entra ID in FortiNAC-F 7.6.3",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.3/authenticate-devices-using-teap/205043/configuration",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/release-notes/590876/whats-new-in-fortinac-f-7-6-3",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.3/authenticate-devices-using-teap/500480/configuration"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "TEAP establishes a protected EAP tunnel and carries inner authentication methods; FortiNAC-F 7.6.3 supports multiple inner methods, including user and computer authentication, and can use an Entra ID service connector/domain mapping as the authentication source for RADIUS virtual servers.",
+      "workflow_transaction_fingerprint": "Windows supplicant starts EAP-TEAP -> FortiNAC-F RADIUS virtual server negotiates outer TLS tunnel -> TEAP inner method authenticates user and/or computer in configured order -> Entra ID service connector resolves identity -> policy/group mapping returns authorization -> switch port applies 802.1X result; HA requires consistent connector and virtual-server configuration.",
+      "failure_class": "TEAP tunnel establishes but inner identity fails because primary/secondary auth type differs from Windows profile, Entra connector/domain mapping is missing, or TLS trust/certificate is incomplete; computer authentication is omitted and device posture/authorization differs from expectation.",
+      "evidence_pattern": "RADIUS virtual-server supported EAP list proves TEAP enabled; TEAP negotiation log shows outer tunnel and inner method stage; Entra connector test proves API/credential path; Windows EAP event log identifies client-side method mismatch; Access-Accept proves final authorization but not that both user and machine identities were checked unless both inner stages appear.",
+      "remediation_path": "Create Entra service connector and domain mapping; attach it to the RADIUS virtual server; enable TLS and TEAP; set primary/secondary inner auth types to match the intended user/computer sequence; configure Windows EAP-TEAP; validate CA trust, connector credentials, and policy mapping.",
+      "question_fingerprint": "Windows clients complete outer TEAP TLS but receive Access-Reject after machine authentication; identify the mismatch between FortiNAC-F TEAP inner-method order and the Windows supplicant profile.",
+      "diagram_topology_layout_fingerprint": "Windows supplicant -> EAP-TEAP outer TLS tunnel -> FortiNAC-F virtual server -> inner user auth + inner computer auth -> Entra ID service connector -> policy mapping -> switch port authorization.",
+      "nearest_prior": {
+        "score": 0.24444444444444444,
+        "subject": "FortiNAC-F 802.1X with Microsoft Entra ID using EAP-TTLS/PAP and the Local RADIUS TLS service",
+        "date": "2026-11-21"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FortiAuthenticator RADIUS proxy transparency and Message-Authenticator enforcement",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.6/administration-guide/647/radius",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.6/release-notes/859240/upgrade-instructions"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Remote RADIUS server profile can use Proxy as preferred authentication method to preserve the authentication method/credential exchange unchanged; realm preservation can retain the qualified username; when FAC is the RADIUS client it sends Message-Authenticator, and an optional response requirement rejects upstream responses that omit it.",
+      "workflow_transaction_fingerprint": "NAS sends Access-Request to FAC -> FAC selects remote RADIUS profile and forwards original auth method/attributes -> upstream RADIUS validates and returns Access-Accept/Reject -> FAC validates response integrity attribute if required -> FAC returns result to NAS; optional secondary server is used for redundancy.",
+      "failure_class": "Proxy authentication fails because remote server does not support the original EAP/auth method, realm is stripped or rewritten, response lacks required Message-Authenticator, or timeout is too long and stalls request throughput.",
+      "evidence_pattern": "Remote RADIUS server profile shows Preferred auth method=Proxy, timeout, realm option and secondary server; packet capture shows request/response attributes and Message-Authenticator; FAC RADIUS debug identifies upstream timeout/reject; an Access-Accept without integrity validation does not prove response policy is enforced.",
+      "remediation_path": "Choose Proxy only when upstream supports the original method; preserve realm when hierarchical proxy routing needs it; enable response Message-Authenticator requirement only after confirming upstream compatibility; configure realistic timeout and secondary server; verify request/response packet attributes on both legs.",
+      "question_fingerprint": "FAC relays Access-Requests but upstream accepts only some clients after security hardening; distinguish method transparency, realm preservation and Message-Authenticator response enforcement.",
+      "diagram_topology_layout_fingerprint": "NAS -> FortiAuthenticator RADIUS proxy -> primary/secondary upstream RADIUS; show original auth method and realm passing through, with Message-Authenticator validation at FAC response boundary.",
+      "nearest_prior": {
+        "score": 0.12244897959183673,
+        "subject": "RADIUS client groups and authentication-profile separation in policy selection",
+        "date": "2026-11-22"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "FortiPAM 1.9 approved-secret request revocation and immediate session termination",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/570749/fortipam-1-9-0",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/230854/create-an-approval-profile",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/685876/approving-a-request"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortipam-52/technical-tip-the-fortipam-revoke-button-is-greyed-out-200048",
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 adds Revoke Approval for already-approved secret access requests; revocation is permitted regardless of approval tier and even after launch; if a session is active it is terminated immediately and the request resets to require approval/denial again. This differs from legacy per-tier Revoke button availability.",
+      "workflow_transaction_fingerprint": "Requester submits secret access request -> approval profile routes through one or more tiers -> approval is granted -> requester launches secret -> approver selects Revoke Approval on approved request -> FortiPAM invalidates authorization and terminates active session -> request returns to pending decision state.",
+      "failure_class": "Approver cannot revoke after request is fully approved or session has launched because operator uses old tier-specific Revoke semantics or has insufficient visibility; access remains active when approval revocation is not invoked.",
+      "evidence_pattern": "Secrets > Approvals shows request state and Revoke Approval action; Active Sessions shows launched session and termination; request status reset proves reapproval required; browser/session termination proves active access ended, not that target credentials were rotated.",
+      "remediation_path": "Upgrade/use FortiPAM 1.9+; configure approval profile and approver permissions; use Revoke Approval on the approved request; verify active session termination and request reset; rotate target credential separately if compromise is suspected.",
+      "question_fingerprint": "A vendor has already launched a secret session after multi-tier approval; select the 1.9 action that immediately terminates the active session and resets approval.",
+      "diagram_topology_layout_fingerprint": "Requester -> approval tiers -> approved request -> launched secret session; approver revocation branch invalidates request, sends terminate to active session, and returns request to Waiting Approval.",
+      "nearest_prior": {
+        "score": 0.1590909090909091,
+        "subject": "9. FortiPAM — Secret approval profiles, tiered review, time-bounded launch and revocation",
+        "date": "2026-11-10"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM Business Services: CMDB membership, incident impact tagging, and service-centric triage",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/870556/key-concepts",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.4.1/user-guide/386311/creating-business-services"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A Business Service is a logical collection of devices and applications representing a business function; membership can be manual or generated by Dynamic CMDB Groups; FortiSIEM tags incidents with impacted Business Services and presents incident-centric dashboards and drilldowns.",
+      "workflow_transaction_fingerprint": "Discover/normalize devices and applications into CMDB -> create Business Service with explicit members or dynamic filter -> event correlation creates incident against CMDB entities -> FortiSIEM resolves entity membership to Business Service -> incident/dashboard shows service impact -> analyst drills into device/application performance, availability and related incidents.",
+      "failure_class": "Incident is present but business-service dashboard does not show impact because affected CMDB entity is missing, duplicated, stale, or excluded by service filter; overly broad membership causes unrelated incidents to appear critical.",
+      "evidence_pattern": "CMDB entity identity and Business Service membership prove relationship; incident detail's impacted-service tag proves correlation; service dashboard drilldown shows availability/performance/incident status; service membership alone does not prove the application dependency is current or causal.",
+      "remediation_path": "Normalize entity identifiers and discovery credentials; verify device and application objects in CMDB; inspect Business Service member/filter selections; use Dynamic CMDB Group criteria carefully; validate incident impact tagging against a known test incident and review stale/duplicate entities.",
+      "question_fingerprint": "A database outage triggers a host incident but the payments Business Service dashboard remains green; identify the missing CMDB application/device membership or dynamic group filter.",
+      "diagram_topology_layout_fingerprint": "CMDB device/application entities -> manual or dynamic Business Service membership -> event correlation incident -> impacted-service tag -> service dashboard and drilldown.",
+      "nearest_prior": {
+        "score": 0.08823529411764706,
+        "subject": "CMDB business-service records: service inventory context versus live health evidence",
+        "date": "2026-10-29"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Agentless ZTNA for HTTPS private applications: proxy SSO, SPA service connection, and browser identity",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/latest/feature-administration-guide/856362/prerequisites-and-considerations",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/latest/architecture-guide/472920/secure-private-access-using-ztna"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Agentless ZTNA exposes HTTPS private web apps through FortiSASE proxy and SSO with a Secure Private Access service connection; no endpoint FortiClient agent or endpoint ZTNA certificate is required, but the application must sit behind a FortiGate SPA hub and subscription/features must be licensed/configured.",
+      "workflow_transaction_fingerprint": "Browser user authenticates to FortiSASE proxy SSO -> agentless ZTNA policy maps user to private HTTPS application -> FortiSASE traverses SPA/BGP overlay to FortiGate hub -> FortiGate access proxy forwards to private web app -> per-session user authentication/authorization is enforced -> response returns through proxy.",
+      "failure_class": "User authenticates to proxy but private app is unreachable because SPA overlay/BGP, hub proxy, HTTPS app certificate, policy, subscription, or proxy SSO prerequisite is missing; operator mistakenly expects agentless mode to provide endpoint posture attributes.",
+      "evidence_pattern": "Feature entitlement and Proxy/Proxy SSO/SPA configuration prove prerequisites; SPA BGP/overlay route proves private path; FortiGate ZTNA access-proxy logs prove hub policy decision; proxy SSO logs prove user identity; successful portal login alone does not prove app path or application authorization.",
+      "remediation_path": "Confirm Advanced/Comprehensive remote-user subscription; enable Proxy and Proxy SSO; establish SPA BGP overlay to FortiGate hub; configure HTTPS private app and FortiGate ZTNA access proxy; map user/group policy; validate TLS chain and route; do not rely on endpoint posture tags in agentless mode.",
+      "question_fingerprint": "A contractor without FortiClient can authenticate to FortiSASE but cannot reach an internal HTTPS app; identify missing SPA/FortiGate access-proxy path rather than endpoint certificate enrollment.",
+      "diagram_topology_layout_fingerprint": "Browser-only user -> FortiSASE proxy SSO -> agentless ZTNA app policy -> SPA/BGP overlay -> FortiGate ZTNA access proxy -> private HTTPS app; no FortiClient endpoint agent.",
+      "nearest_prior": {
+        "score": 0.3170731707317073,
+        "subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
+        "date": "2026-11-12"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "BGP community-to-route-tag translation for dynamic SD-WAN destination matching",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/672387/using-bgp-tags-with-sd-wan-rules",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/370974/fields-for-identifying-traffic",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/387821/search"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortigate-3/technical-tip-how-to-use-bgp-and-sd-wan-for-advertising-routes-and-path-selection-in-fortigate-92773",
+      "feature_mechanism_fingerprint": "An inbound BGP route-map matches a received standard community and sets a local route-tag on the learned prefix; a route-tag firewall address object and SD-WAN service rule then match the dynamic route set without hard-coding remote prefixes. The route-tag is local metadata, not a BGP path attribute.",
+      "workflow_transaction_fingerprint": "Neighbor advertises prefix with BGP community -> inbound route-map matches community -> FortiGate attaches local route-tag -> route-tag address object matches installed route -> firewall policy permits traffic to SD-WAN zone -> SD-WAN service rule selects member based on tag and strategy/SLA.",
+      "failure_class": "BGP route is learned but traffic matches default SD-WAN rule because route-map is attached outbound instead of inbound, community-list does not match, route-tag object is missing, or operator expects the local route-tag to be advertised to peers.",
+      "evidence_pattern": "`get router info bgp network` shows received community and RouteTag; route table confirms prefix installation; route-tag address object and SD-WAN rule show tag binding; debug flow/session proves rule match; BGP community alone does not prove local route-tag was set or that the selected member is healthy.",
+      "remediation_path": "Match community with inbound route-map; set-route-tag on inbound route-map; verify learned route tag; create address object of type route-tag; reference it in firewall and SD-WAN service rules; validate policy, default route, SLA and member state; never rely on route-tag in route-map-out for peer advertisement.",
+      "question_fingerprint": "A branch advertises dynamic data-center prefixes with a BGP community, but SD-WAN uses the default WAN; identify inbound community-to-local-route-tag mapping and the route-tag address object.",
+      "diagram_topology_layout_fingerprint": "Remote BGP neighbor community -> FortiGate inbound community-list/route-map -> local route tag -> route-tag address object -> SD-WAN service rule -> selected WAN member.",
+      "nearest_prior": {
+        "score": 0.16279069767441862,
+        "subject": "12. Secure SD-WAN — BGP community-to-route-tag translation for dynamic SD-WAN destinations",
+        "date": "2026-11-10"
+      },
+      "semantic_uniqueness": "PASS — manual mechanism/workflow comparison against the complete same-product 30-day inventory; selected mechanism is not substantially equivalent to nearest prior lesson."
+    }
+  ]
+}
