@@ -1,0 +1,604 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-26T08:28:20-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "source_exclusion_inventory": "docs/exclusion_inventory_2026-11-26-08-28.json",
+  "source_exclusion_inventory_sha": "1eb896d71d15cad821ae24fd7708948e5a447128",
+  "historical_record_count": 369,
+  "selected_topic_count": 12,
+  "selected_topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Proxy-mode WebSocket UTM inspection for chatbot messages and file transfers",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/245440/enhanced-utm-protection-with-websocket-traffic-inspection",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "WebSocket protocol parser in proxy inspection exposes message frames and file transfers to DLP, antivirus, IPS, and file-filter engines; protocol options govern oversize and nested-compression scanning; proxy mode is mandatory.",
+      "workflow_transaction_fingerprint": "Firewall policy -> proxy-mode WebSocket upgrade/parser -> UTM engines inspect message/file payload -> allow, block, and log.",
+      "failure_class": "WebSocket payload inspection blind spot caused by flow mode, missing protocol options, or mismatched UTM feature set.",
+      "evidence_pattern": "Proxy inspection mode; WebSocket protocol option; DLP/AV/file-filter profiles; controlled WebSocket payload test and UTM logs.",
+      "remediation_path": "Enable WebSocket protocol options; use proxy mode; attach compatible UTM profiles; verify SSL inspection, oversize limits, and test payloads.",
+      "question_fingerprint": "WebSocket chatbot upload bypasses DLP because the proxy policy does not parse WebSocket frames.",
+      "diagram_topology_layout_fingerprint": "Client -> TLS/WebSocket proxy parser -> DLP/AV/IPS/FileFilter engines -> application server; block/log branch.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/43632/post-quantum-cryptography-for-agentless-vpn"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from prior FortiGate DLP exact-data-matching: this lesson is the WebSocket protocol parsing/inspection path, not DLP pattern matching."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiAI task-scoped MCP agents and permission-bound management actions",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/496777/fortiai-agents",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Task-scoped FortiAI agents expose FortiManager context and administrative functions through Model Context Protocol; agent selection controls task/tool scope while local administrator enablement, licensing, and RBAC constrain actions.",
+      "workflow_transaction_fingerprint": "Admin selects task agent -> prompt/context interpreted -> MCP function callback requested -> FortiManager RBAC gate -> authorized operation -> callback result displayed.",
+      "failure_class": "Agent or action unavailable because license, token budget, local-admin enablement, direct service reachability, or RBAC is missing.",
+      "evidence_pattern": "FortiAI license, `set fortiai enable`, selected agent, monthly token usage, callback result, admin profile and direct access to fai.fortinet.net.",
+      "remediation_path": "Validate license/tokens; enable only approved local admins (maximum three); allow direct egress to fai.fortinet.net (proxy unsupported); scope RBAC; independently verify each resulting configuration change.",
+      "question_fingerprint": "FortiAI answers questions but cannot perform an authorized policy task; distinguish agent selection, license, local-admin enablement, and RBAC.",
+      "diagram_topology_layout_fingerprint": "Admin -> FortiManager FortiAI pane -> task-scoped agent -> MCP callback -> RBAC gate -> FortiManager object/action -> callback result.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/541468/using-fortiai",
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/314909/fortiai"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different product and workflow from prior FortiAnalyzer FortiAI alert triage; this is FortiManager management-action delegation and MCP/RBAC."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAI data privacy: session-scoped masking and local function-callback execution",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/13605/fortiai-data-privacy",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAnalyzer masks IPs, MACs, and usernames before prompts pass through FortiAI proxy to hosted LLM; per-session cookie-derived mappings differ per session; callbacks return locally for unmasking and local analytics DB query; administrator-profile privacy masking is separate.",
+      "workflow_transaction_fingerprint": "Admin prompt -> local sensitive-field masking -> FortiAI proxy/RAG -> hosted LLM callback -> local unmask and database query -> response with original identifiers.",
+      "failure_class": "Privacy boundary misunderstood, or administrators assume all content including uploaded images is masked; confusion between prompt masking and administrator-profile privacy masking.",
+      "evidence_pattern": "FortiAI Masked Data view, original/masked text, function callback results, session context, and separate admin privacy-mask profile; does not prove image content is masked.",
+      "remediation_path": "Inspect Masked Data and callback results; avoid sensitive topology-image uploads; use separate administrator privacy masking when required; maintain direct fai.fortinet.net access; validate local query results.",
+      "question_fingerprint": "Original IP appears in returned answer; determine whether it was restored locally after a session-scoped masked prompt rather than sent to the LLM.",
+      "diagram_topology_layout_fingerprint": "Admin -> local FortiAnalyzer mask map -> FortiAI proxy/RAG -> hosted LLM -> callback -> local unmask + analytics DB -> admin.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/439379/fortiai",
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/499584/index"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from 2026-11-07 FortiAI alert triage: this lesson is the privacy/masking and local execution trust boundary, not triage or evidence enrichment."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch link monitor multi-server probes and conditional static-route withdrawal",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/163702/link-monitor",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSwitch link monitor sends IPv4/IPv6 ARP or ping probes from a source interface to one or more servers; interval, timeout, failtime, recoverytime and update-static-route govern state; static-route changes require `set device`; supported only in default VRF.",
+      "workflow_transaction_fingerprint": "Periodic probe -> per-server reachability evaluation -> failure/recovery counters -> server down/up state -> eligible static route withdrawn/restored.",
+      "failure_class": "False or absent route failover due to wrong probe path, missing static-route device binding, wrong VRF, or aggressive thresholds.",
+      "evidence_pattern": "`get system link-monitor`; `diagnose sys link-monitor status all`; static route device binding; per-server status and route table before/after.",
+      "remediation_path": "Set address mode, srcintf, server list, gateway/source IP, timers and retry thresholds; confirm default VRF; bind route to device; test each probe target.",
+      "question_fingerprint": "Probe detects failed upstream server but static route remains installed because route lacks device binding.",
+      "diagram_topology_layout_fingerprint": "FortiSwitch probe source -> multiple servers -> fail/recovery threshold state machine -> static-route device binding -> route install/withdraw.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/latest/administration-guide/163702/link-monitor"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from FortiGate BFD route withdrawal and Secure SD-WAN TWAMP SLA; this is FortiSwitch link-monitor probe state plus static-route binding."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "WPA3-SAE transition AKM selection and Wi-Fi 7 6-GHz H2E profile design",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "VAP security advertises WPA3-SAE or WPA3-SAE-Transition AKMs; `additional-akms akm24` permits SAE_EXT for capable clients while legacy clients use PSK_SHA256; 6-GHz WPA3 uses PMF, beacon protection, SAE H2E and optional AKM24-only for Wi-Fi 7 clients.",
+      "workflow_transaction_fingerprint": "VAP security and WTP radio profile provisioned -> AP advertises per-band RSN/AKM capabilities -> station selects mutually supported AKM -> SAE/H2E authentication and PMF association.",
+      "failure_class": "Association failure or unintended compatibility loss caused by AKM mismatch, H2E/PMF requirements, or AKM24-only on non-Wi-Fi-7 clients.",
+      "evidence_pattern": "VAP `security`, `additional-akms`, `sae-h2e-only`, `akm24-only`, `pmf`, beacon-protection; radio-to-VAP mapping; client RSN/association logs.",
+      "remediation_path": "Use WPA3-SAE with H2E/PMF on 6 GHz; use transition mode only where legacy compatibility is required; enable AKM24-only only for verified Wi-Fi 7 populations; map VAP to intended radio.",
+      "question_fingerprint": "Wi-Fi 7 clients work on 6 GHz but legacy 5-GHz clients fail after AKM24-only is enabled; choose band-specific VAP/AKM design.",
+      "diagram_topology_layout_fingerprint": "Controller -> FortiAP 5-GHz transition VAP and 6-GHz WPA3 VAP -> RSN/AKM negotiation -> SAE/H2E association.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from 2026-11-22 Wi-Fi 7 MLO and 2026-11-10 802.11k/v roaming; this is RSN AKM selection and SAE/H2E security negotiation."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Allowed-host quota accounting, per-user overrides, and adapter sibling semantics",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/552799/allowed-hosts",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Global default maximum registered hosts per user can be overridden per user; scanned hosts or manually associated sibling adapters count as one host (up to five adapters), while unassociated adapters can count separately.",
+      "workflow_transaction_fingerprint": "User authenticates/registers endpoint -> host/adapter relationships resolved -> effective user quota selected -> count evaluated -> registration allowed or Over Registered Limit/Registration Failed.",
+      "failure_class": "Quota appears exhausted because adapters are separate host records, user override supersedes global default, or administrator incremented limit.",
+      "evidence_pattern": "System > Settings > User/Host Management > Allowed Hosts; user properties Allowed Hosts and Registered Hosts; adapter sibling associations; registration result.",
+      "remediation_path": "Review per-user override first; reconcile adapter siblings; confirm agent scan; set justified global/per-user quota; retest known adapter set.",
+      "question_fingerprint": "Laptop with dock and Wi-Fi consumes multiple allowed-host slots; determine whether adapters are associated as siblings or counted independently.",
+      "diagram_topology_layout_fingerprint": "User -> registered host -> sibling adapters -> quota counter -> allow/deny; global default and per-user override.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/465615/user-host-management",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/798031/manage-hosts-and-ports"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from FortiNAC-F maximum concurrent sessions and endpoint adapter identity; this is FortiNAC per-user registration quota accounting."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Persistent Agent VLAN-switch acknowledgment when leaving remediation",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.5/release-notes/629218/whats-new-in-fortinac-f-7-6-5",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "7.6.5 Persistent Agent acknowledgment appears only when switching out of remediation; cancel or timeout blocks VLAN switch; `User Canceled VLAN Switch` event-to-alarm mapping ensures next attempt prompts again.",
+      "workflow_transaction_fingerprint": "Endpoint in remediation VLAN -> compliance clears -> agent prompts before transition -> accept allows switch; cancel/timeout blocks transition and emits alarm mapping -> next exit attempt prompts again.",
+      "failure_class": "Endpoint moved without explicit acknowledgment or canceled/timed-out prompt is not repeated due to missing event-to-alarm mapping.",
+      "evidence_pattern": "Persistent Agent Properties VLAN Switch Acknowledgment; `User Canceled VLAN Switch` event/alarm mapping; endpoint VLAN before/after; agent prompt and alarm timestamps.",
+      "remediation_path": "Enable acknowledgment; verify event mapping; test accept/cancel/timeout; confirm remediation-exit event and switch-side VLAN transition; retest re-prompt.",
+      "question_fingerprint": "User cancels VLAN switch prompt once and is not prompted on next remediation exit; identify the new event-to-alarm mapping.",
+      "diagram_topology_layout_fingerprint": "Remediation VLAN -> compliance transition -> acknowledgment decision -> VLAN switch allow/block -> event mapping -> re-prompt.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/223660/properties"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from prior Persistent Agent certificate, registry scan, and adapter identity lessons; this is a remediation-exit consent state transition."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FSSO manual Active Directory server discovery for deterministic group lookups",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.10/administration-guide/429138",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FSSO user-group membership discovery can query the global catalog automatically or be disabled in favor of explicit manual AD server list; automatic mode can restrict discovered DCs to configured Windows event log sources and remote LDAP servers.",
+      "workflow_transaction_fingerprint": "FSSO group lookup -> discovery mode selects domain controllers -> LDAP/GC lookup contacts selected DC -> membership result maps to FSSO user group.",
+      "failure_class": "Missing/inconsistent group membership because auto-discovery selects unreachable/unapproved DCs or manual list is incomplete.",
+      "evidence_pattern": "Fortinet SSO > Settings > User Group Membership; Automatic/Manual mode; configured AD servers; event log sources and remote LDAP servers; FSSO and LDAP logs.",
+      "remediation_path": "Use Manual mode in segmented domains and list reachable DCs; or keep Automatic and restrict discovered DCs to configured event-log/LDAP sources; validate DNS, LDAP ports, bind credentials and nested groups.",
+      "question_fingerprint": "FSSO logons arrive but group membership is missing because global-catalog discovery selects an unreachable DC; select manual discovery or restrict auto-discovered servers.",
+      "diagram_topology_layout_fingerprint": "FortiAuthenticator FSSO -> global catalog automatic discovery or manual DC list -> LDAP group lookup -> user-group mapping.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.6/administration-guide/768522/user-group-membership"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from 2026-11-04 remote LDAP group filter inclusion; this controls DC discovery and lookup target selection, not group filter semantics."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "RADIUS Message-Authenticator request and response validation in FortiPAM 1.9",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/790096/creating-a-user",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 adds Message-Authenticator to RADIUS requests and `require-message-authenticator` on remote RADIUS server objects; default enabled requires validation of response attribute.",
+      "workflow_transaction_fingerprint": "FortiPAM remote authentication -> Access-Request with Message-Authenticator -> RADIUS response -> response attribute validated with shared secret -> accept/reject.",
+      "failure_class": "Legacy RADIUS server omits Message-Authenticator and FortiPAM rejects response after 1.9 default enforcement.",
+      "evidence_pattern": "`config user radius` server object and `require-message-authenticator`; packet capture attribute 80 in request/response; server logs.",
+      "remediation_path": "Configure RADIUS server to return valid Message-Authenticator; verify shared secret and packet integrity; disable only as temporary compatibility exception after risk review.",
+      "question_fingerprint": "FortiPAM remote RADIUS logins fail after 1.9 because server omits Message-Authenticator; identify integrity attribute compatibility rather than user credentials.",
+      "diagram_topology_layout_fingerprint": "FortiPAM RADIUS client -> authenticated Access-Request -> remote RADIUS server -> response attribute validation -> accept/reject.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/release-notes/359701/whats-new",
+        "https://www.rfc-editor.org/rfc/rfc2869"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different product and transaction from FortiAuthenticator RADIUS proxy; this is FortiPAM remote-auth response integrity enforcement."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Policy-based and CSV file-based Event Tagging in the event pipeline",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/490633/event-tagging",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Collector enriches parsed events with custom attributes through ordered policy-based rules and CSV file-based lookups; policy tags execute first, file tags second; later matches can overwrite earlier values; each rule set has separate Apply action.",
+      "workflow_transaction_fingerprint": "Collector parses event -> ordered policy tag rules -> ordered CSV lookups -> enriched event -> rules/reports/playbooks consume attributes.",
+      "failure_class": "Incorrect/missing enrichment due rule order, later overwrite, malformed CSV mapping, organization scope, or saved-but-not-applied configuration.",
+      "evidence_pattern": "Event Pipeline > Event Tagging rule order and enabled state; separate Apply indicators; Collector receives fresh events; event search shows tag.",
+      "remediation_path": "Define stable CSV headers; scope organization; order rules intentionally; check overwrite precedence; Apply both rule sets separately; validate with new events.",
+      "question_fingerprint": "Department tag is overwritten by later CSV mapping; identify policy-before-file execution order and Apply boundary.",
+      "diagram_topology_layout_fingerprint": "Event source -> Collector parser -> policy tags -> CSV file lookup -> enriched event -> analytics/rules/reports.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/199672/whats-new-in-7-5-0"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from endpoint tagging and dynamic watchlists; this is Collector parse-time custom event-attribute enrichment."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "SPA server-to-client policy: initiating traffic from hub networks toward remote VPN users",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/494628/configuring-a-private-access-policy-for-server-to-client-traffic",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "SPA server-to-client communication permits traffic initiated from SPA hubs or networks behind hubs toward remote users; current scope is VPN/agent users and requires Remote VPN plus edge-device user identification and additional FortiGate hub configuration.",
+      "workflow_transaction_fingerprint": "Remote VPN user establishes agent tunnel/identity -> hub-side server initiates flow -> FortiSASE From hubs SPA policy matches scope/user/destination -> FortiGate hub route/firewall permits return path -> remote user receives session.",
+      "failure_class": "Hub-initiated session fails because Remote VPN/user-identification prerequisites, From hubs policy, hub route, or firewall return path is missing.",
+      "evidence_pattern": "Remote VPN and edge-device user identification enablement; From hubs SPA policy; hub routes/firewall; endpoint identity; packet capture at hub/PoP; client-to-server success does not prove server-to-client initiation.",
+      "remediation_path": "Enable required Remote VPN and user-identification feature; create From hubs policy; add hub-side routes/policies; verify return path and user binding; test hub-initiated TCP.",
+      "question_fingerprint": "Remote users can reach internal servers but an internal monitoring server cannot initiate a session back; identify separate From hubs policy and Remote VPN prerequisites.",
+      "diagram_topology_layout_fingerprint": "Internal server behind FortiGate SPA hub -> BGP/SPA overlay -> FortiSASE From hubs policy -> remote VPN agent endpoint -> return path.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/mature-administration-guide/494628/configuring-a-private-access-policy-for-server-to-client-traffic"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from 2026-11-26 endpoint-to-endpoint and 2026-11-12 client-to-server; traffic initiation direction and identity prerequisites differ."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "SM3/SM4 IKE and ESP proposals for regulatory IPsec SD-WAN overlays",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/252759/support-sm3-sm4-cryptographic-algorithms-for-ikev1-ikev2",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiOS 8.0 adds ShangMi SM4 encryption and SM3 PRF/integrity for IKEv1/v2 site-to-site VPN proposals; Phase 1 IKE and Phase 2 ESP must match; SM4-SM3 uses SM4-CBC and HMAC-SM3.",
+      "workflow_transaction_fingerprint": "Peers exchange IKE proposals -> common SM4-SM3 transform selected -> Phase 1 IKE SA established -> Phase 2 ESP SA negotiated -> route-based overlay carries traffic; unsupported hardware/kernel prevents use or offload.",
+      "failure_class": "Tunnel negotiation failure or unexpected performance because peer proposals mismatch, platform unsupported, or hardware acceleration assumed.",
+      "evidence_pattern": "Phase1/Phase2 `proposal sm4-sm3`; `diagnose vpn ike gateway list name <tunnel>` shows sm4_128-sm3 and established SAs; platform/CPU support; SA state does not prove offload.",
+      "remediation_path": "Expose IKE proposal options if needed; configure matching SM4-SM3 on both peers for Phase1 and Phase2; verify x86_64 supported platform and no hardware acceleration; test throughput after establishment.",
+      "question_fingerprint": "An SD-WAN IPsec overlay fails after SM4-SM3 is selected on one peer only; identify matching Phase1/Phase2 proposals and platform support.",
+      "diagram_topology_layout_fingerprint": "SD-WAN hub <-> IKE Phase1 SM4/HMAC-SM3 <-> Phase2 ESP SM4/HMAC-SM3 <-> overlay; platform/offload boundary.",
+      "supporting_source_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/252759/sm3-sm4-cryptographic-algorithms-for-ikev1-ikev2"
+      ],
+      "semantic_uniqueness": "PASS",
+      "semantic_review": "Different from prior IPsec aggregation, ADVPN, FEC, and SD-WAN SLA topics; this is cryptographic proposal negotiation."
+    }
+  ],
+  "comparison_method": "Product-specific and cross-product lexical fingerprint comparison plus manual mechanism/workflow review. Similarity is a triage signal, not a semantic proof; all 12 selections were manually reviewed against the closest prior lessons.",
+  "comparisons": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Proxy-mode WebSocket UTM inspection for chatbot messages and file transfers",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "Exact Data Matching (EDM) for DLP: external data feeds, column-to-type mapping and conjunctive/disjunctive match logic",
+          "score": 0.0968
+        },
+        {
+          "report_date": "2026-11-19",
+          "lesson_subject": "Proxy ARP on VLAN interfaces: turn intra-VLAN isolation into policy-controlled reachability",
+          "score": 0.05
+        },
+        {
+          "report_date": "2026-11-26",
+          "lesson_subject": "Dynamic BGP learning of FortiGuard ISDB botnet and spam reputation IPs",
+          "score": 0.0455
+        },
+        {
+          "report_date": "2026-11-13",
+          "lesson_subject": "Software-switch 802.1X, MAB, dynamic VLANs and RADIUS group-address objects",
+          "score": 0.0435
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from prior FortiGate DLP exact-data-matching: this lesson is the WebSocket protocol parsing/inspection path, not DLP pattern matching."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "FortiAI task-scoped MCP agents and permission-bound management actions",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-14",
+          "lesson_subject": "FortiManager 8.0 local-user per-device mapping for branch-specific credentials and FortiToken bindings",
+          "score": 0.0519
+        },
+        {
+          "report_date": "2026-11-07",
+          "lesson_subject": "Multi-device install preview through the FortiManager JSON-RPC API",
+          "score": 0.0515
+        },
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "Remote GUI access to a managed FortiGate: role-gated proxy path over TCP/8082",
+          "score": 0.0515
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "FortiManager 8.0 time-based retention for Task Monitor and Event Log: log-max-days versus disk-quota retention",
+          "score": 0.0421
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different product and workflow from prior FortiAnalyzer FortiAI alert triage; this is FortiManager management-action delegation and MCP/RBAC."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "FortiAI data privacy: session-scoped masking and local function-callback execution",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-17",
+          "lesson_subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
+          "score": 0.0619
+        },
+        {
+          "report_date": "2026-10-30",
+          "lesson_subject": "Log Fetching between analyzers: approval, ADOM synchronization, transfer, and database rebuild",
+          "score": 0.0471
+        },
+        {
+          "report_date": "2026-11-22",
+          "lesson_subject": "SAML administrator SSO signature and digest algorithm migration to SHA-256/SHA-512",
+          "score": 0.0396
+        },
+        {
+          "report_date": "2026-11-14",
+          "lesson_subject": "PostgreSQL-to-ClickHouse analytics migration, migration-state validation and archive-backed rebuild boundary",
+          "score": 0.0366
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from 2026-11-07 FortiAI alert triage: this lesson is the privacy/masking and local execution trust boundary, not triage or evidence enrichment."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "FortiSwitch link monitor multi-server probes and conditional static-route withdrawal",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-22",
+          "lesson_subject": "FortiSwitch VXLAN interfaces: VNI-to-VLAN mapping, VTEP reachability and underlay limits",
+          "score": 0.0583
+        },
+        {
+          "report_date": "2026-11-23",
+          "lesson_subject": "PIM-SSM and IGMPv3 multicast routing on FortiSwitch SVIs",
+          "score": 0.0526
+        },
+        {
+          "report_date": "2026-11-11",
+          "lesson_subject": "OpenSSL security levels per application and tunnel-mode overrides",
+          "score": 0.0446
+        },
+        {
+          "report_date": "2026-11-05",
+          "lesson_subject": "Normalized interfaces with per-device and per-platform mapping",
+          "score": 0.0412
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from FortiGate BFD route withdrawal and Secure SD-WAN TWAMP SLA; this is FortiSwitch link-monitor probe state plus static-route binding."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "WPA3-SAE transition AKM selection and Wi-Fi 7 6-GHz H2E profile design",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-22",
+          "lesson_subject": "Wi-Fi 7 Multi-Link Operation on FortiAP K-series, including local standalone operation",
+          "score": 0.1485
+        },
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "FortiAP LoRaWAN gateway profiles: Basics Station versus UDP Packet Forwarder, CUPS provisioning and TC/LNS traffic",
+          "score": 0.086
+        },
+        {
+          "report_date": "2026-11-15",
+          "lesson_subject": "FortiOS 8.0 FortiAP radio VAP-broadcast disable without deleting SSID configuration",
+          "score": 0.0645
+        },
+        {
+          "report_date": "2026-11-08",
+          "lesson_subject": "Wi-Fi 7 Multi-Link Operation: MLD link association, WPA3 prerequisites, radio-profile binding, and standalone behavior",
+          "score": 0.061
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from 2026-11-22 Wi-Fi 7 MLO and 2026-11-10 802.11k/v roaming; this is RSN AKM selection and SAE/H2E security negotiation."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Allowed-host quota accounting, per-user overrides, and adapter sibling semantics",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-26",
+          "lesson_subject": "Audit-only compliance scans versus Forced Remediation Exceptions",
+          "score": 0.0851
+        },
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "Role assignment precedence and inheritance: users, hosts, groups, captive portal and device profiler",
+          "score": 0.0745
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "FortiNAC authentication-policy timers: production grace, offline authentication retention, and forced reauthentication",
+          "score": 0.0693
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "RADIUS identity normalization and LDAP domain matching for user-to-policy resolution",
+          "score": 0.06
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from FortiNAC-F maximum concurrent sessions and endpoint adapter identity; this is FortiNAC per-user registration quota accounting."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Persistent Agent VLAN-switch acknowledgment when leaving remediation",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-14",
+          "lesson_subject": "Persistent Agent certificate check: client proof, CA trust, CRL reachability and clock tolerance",
+          "score": 0.0556
+        },
+        {
+          "report_date": "2026-11-22",
+          "lesson_subject": "FortiNAC-F managed VDOM multi-tenancy with shared FortiLink infrastructure and tenant VLAN enforcement",
+          "score": 0.0549
+        },
+        {
+          "report_date": "2026-11-17",
+          "lesson_subject": "Dynamic Address Tags: REST API logon/logoff synchronization into FortiGate policy objects",
+          "score": 0.0505
+        },
+        {
+          "report_date": "2026-11-02",
+          "lesson_subject": "Persistent Agent registry-key scans: hive selection, execution identity, severity, and remediation workflow",
+          "score": 0.05
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from prior Persistent Agent certificate, registry scan, and adapter identity lessons; this is a remediation-exit consent state transition."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FSSO manual Active Directory server discovery for deterministic group lookups",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-04",
+          "lesson_subject": "FortiAuthenticator — Including remote LDAP groups in Fortinet Single Sign-On filters",
+          "score": 0.0842
+        },
+        {
+          "report_date": "2026-11-18",
+          "lesson_subject": "FortiAuthenticator SAML IdP proxy architecture for Azure Government upstream identity providers",
+          "score": 0.0753
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "TACACS+ client groups as reusable policy targets and REST-managed objects",
+          "score": 0.0652
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "FortiAuthenticator 8.0.2 TACACS+ client groups: reusable device cohorts and policy binding",
+          "score": 0.0612
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from 2026-11-04 remote LDAP group filter inclusion; this controls DC discovery and lookup target selection, not group filter semantics."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "RADIUS Message-Authenticator request and response validation in FortiPAM 1.9",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-15",
+          "lesson_subject": "Remote user groups: LDAP, RADIUS, and SAML membership projection",
+          "score": 0.0833
+        },
+        {
+          "report_date": "2026-11-20",
+          "lesson_subject": "Access Authentication: policy-level step-up gate for secret viewing and launch",
+          "score": 0.0676
+        },
+        {
+          "report_date": "2026-11-13",
+          "lesson_subject": "Native RDP TCP forwarding mode: transport fallback and lost native RDP security controls",
+          "score": 0.0448
+        },
+        {
+          "report_date": "2026-11-20",
+          "lesson_subject": "FortiPAM Web-API password changer: CSRF token extraction, nested JSON parsing, response expectations, and branchable changer sequences",
+          "score": 0.044
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different product and transaction from FortiAuthenticator RADIUS proxy; this is FortiPAM remote-auth response integrity enforcement."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Policy-based and CSV file-based Event Tagging in the event pipeline",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "Dynamic IP watchlists populated by username-to-IP lookup",
+          "score": 0.087
+        },
+        {
+          "report_date": "2026-11-15",
+          "lesson_subject": "FortiEMS discovery and endpoint tagging as a ZTNA remediation loop",
+          "score": 0.0864
+        },
+        {
+          "report_date": "2026-11-13",
+          "lesson_subject": "Windows Agent native XML transfer: Collector parsing and custom-parser migration",
+          "score": 0.0789
+        },
+        {
+          "report_date": "2026-11-10",
+          "lesson_subject": "10. FortiSIEM — Event aggregation, Group By attributes and threshold-based incident rules",
+          "score": 0.0652
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from endpoint tagging and dynamic watchlists; this is Collector parse-time custom event-attribute enrichment."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "SPA server-to-client policy: initiating traffic from hub networks toward remote VPN users",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-26",
+          "lesson_subject": "Endpoint-to-endpoint communication through Secure Private Access hubs",
+          "score": 0.1687
+        },
+        {
+          "report_date": "2026-11-14",
+          "lesson_subject": "EAP-TTLS LDAP authentication for IKEv2 IPsec agent tunnels",
+          "score": 0.1268
+        },
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
+          "score": 0.1084
+        },
+        {
+          "report_date": "2026-11-23",
+          "lesson_subject": "Remote Browser Isolation licensing, policy selection and instance-wide quota behavior",
+          "score": 0.1074
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from 2026-11-26 endpoint-to-endpoint and 2026-11-12 client-to-server; traffic initiation direction and identity prerequisites differ."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "SM3/SM4 IKE and ESP proposals for regulatory IPsec SD-WAN overlays",
+      "nearest_prior_same_product": [
+        {
+          "report_date": "2026-11-12",
+          "lesson_subject": "Per-packet distribution across aggregate static IPsec tunnels in SD-WAN",
+          "score": 0.087
+        },
+        {
+          "report_date": "2026-11-21",
+          "lesson_subject": "SD-WAN member priority to BGP MED mapping: spoke overlay SLA state, hub route advertisement, and external path choice",
+          "score": 0.0826
+        },
+        {
+          "report_date": "2026-11-14",
+          "lesson_subject": "FortiOS 8.0 SD-WAN ISDB destination identity matching",
+          "score": 0.0741
+        },
+        {
+          "report_date": "2026-11-20",
+          "lesson_subject": "IPv6 segmentation over a shared SD-WAN/ADVPN overlay using VPN-ID/IPIP and per-VRF route separation",
+          "score": 0.07
+        }
+      ],
+      "semantic_uniqueness": "PASS",
+      "manual_review": "Different from prior IPsec aggregation, ADVPN, FEC, and SD-WAN SLA topics; this is cryptographic proposal negotiation."
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "NTPv4 SHA-256 authenticated time synchronization",
+      "reason": "Rejected: exact mechanism and workflow duplicate of 2026-11-21 FortiAnalyzer authenticated NTPv4 SHA-256/Chrony key-ID lesson."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Custom session labels in FortiAnalyzer event logs",
+      "reason": "Rejected: exact mechanism and audit workflow duplicate of 2026-11-13 FortiAnalyzer custom administrator session labels."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Network restrictions removed for private DNS/RADIUS/LDAP behind SPA hubs",
+      "reason": "Rejected: private DNS/SPA/BGP access path materially overlaps 2026-11-17 Split DNS and DNS redirection through SPA with Public/Private access type."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Speed-test-derived interface QoS for individual dial-up IPsec child tunnels",
+      "reason": "Rejected: same speed-test/measured-bandwidth/shaping mechanism as 2026-11-15 scheduled SD-WAN interface speed tests and measured-bandwidth shaping integration."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "Captive portal over NATted infrastructure",
+      "reason": "Rejected: same captive-portal transaction family as 2026-11-03 VPN captive portal state machine, 2026-11-04 external portal flow, and 2026-11-05 guest self-registration."
+    }
+  ],
+  "result": {
+    "semantic_uniqueness": "PASS",
+    "selected_count": 12,
+    "products_covered": 12,
+    "overlap_rejections": 5,
+    "lesson_generation_started": false
+  }
+}
