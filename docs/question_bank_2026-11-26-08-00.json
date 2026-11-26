@@ -248,7 +248,7 @@
         {
           "key": "B",
           "text": "Duplicate the administrator account for each child group",
-          "feedback": "Duplicate accounts are unnecessary and complicate auditability."
+          "feedback": "Creating duplicate administrator accounts fragments audit trails and creates unnecessary credential lifecycle work; a parent group is the intended scope composition."
         },
         {
           "key": "C",
@@ -271,7 +271,7 @@
         {
           "key": "A",
           "text": "Device Manager > Add Device",
-          "feedback": "Device Manager manages devices, not nested Fabric Group membership."
+          "feedback": "Device Manager is for inventory and device operations; Fabric Group membership is configured under System Settings and Fabric Management."
         },
         {
           "key": "B",
@@ -286,7 +286,7 @@
         {
           "key": "D",
           "text": "Log View > Advanced Search",
-          "feedback": "Log View search filters do not create Fabric Groups."
+          "feedback": "Log View filters affect a query result only; they do not define administrator resource visibility or group membership."
         }
       ],
       "correct_answer": "B"
@@ -327,12 +327,12 @@
         {
           "key": "A",
           "text": "The parent group's name length",
-          "feedback": "The group name does not grant edit permission."
+          "feedback": "Group naming is descriptive metadata; edit authority comes from the administrator profile's permitted operations."
         },
         {
           "key": "B",
           "text": "The Fabric supervisor's NTP source",
-          "feedback": "NTP is unrelated to an edit authorization denial."
+          "feedback": "NTP affects time synchronization, not authorization; an edit denial on a visible device points to privilege scope."
         },
         {
           "key": "C",
@@ -342,7 +342,7 @@
         {
           "key": "D",
           "text": "The FortiView time range",
-          "feedback": "FortiView time range only changes analytics presentation."
+          "feedback": "FortiView time ranges only select analytics time windows; they do not grant configuration write permissions."
         }
       ],
       "correct_answer": "C"
@@ -355,7 +355,7 @@
         {
           "key": "A",
           "text": "No dynamic MAC learning is allowed",
-          "feedback": "Disabling learning is a separate l2-learning control."
+          "feedback": "Turning off learning is a separate l2-learning setting; a zero learning limit simply leaves dynamic learning unlimited."
         },
         {
           "key": "B",
@@ -370,7 +370,7 @@
         {
           "key": "D",
           "text": "MAC aging is disabled",
-          "feedback": "Aging is controlled by mac-aging-interval, not the learning-limit value."
+          "feedback": "MAC aging uses mac-aging-interval and governs stale FDB entries; learning-limit controls the number of learned addresses."
         }
       ],
       "correct_answer": "B"
@@ -416,12 +416,12 @@
         {
           "key": "B",
           "text": "Static MAC entries only",
-          "feedback": "Static entries are excluded from the dynamic learning limit."
+          "feedback": "Static entries are configured or installed separately and are explicitly excluded from the dynamic MAC learning threshold."
         },
         {
           "key": "C",
           "text": "All static and dynamic MAC entries equally",
-          "feedback": "The two entry types are not counted equally."
+          "feedback": "The switch evaluates dynamic entries against the configured limit; static MACs are not added to that count."
         },
         {
           "key": "D",
@@ -439,7 +439,7 @@
         {
           "key": "A",
           "text": "Enabling DHCP snooping",
-          "feedback": "DHCP snooping is unrelated to sticky-MAC persistence."
+          "feedback": "DHCP snooping validates DHCP exchanges; it does not preserve learned MAC entries across a switch reboot."
         },
         {
           "key": "B",
@@ -467,7 +467,7 @@
         {
           "key": "A",
           "text": "802.11r changes the VLAN; 802.11k/v changes the SSID",
-          "feedback": "802.11r does not define VLAN reassignment or SSID renaming."
+          "feedback": "VLAN assignment and SSID naming are unrelated to FT; 802.11r changes the authentication key-transition procedure."
         },
         {
           "key": "B",
@@ -495,17 +495,17 @@
         {
           "key": "A",
           "text": "The RADIUS server realm",
-          "feedback": "The mobility-domain value is not a RADIUS server realm."
+          "feedback": "The mobility-domain identifier groups APs for FT context sharing; it is not the Active Directory or RADIUS realm."
         },
         {
           "key": "B",
           "text": "The AP management VLAN",
-          "feedback": "It does not select the AP management VLAN."
+          "feedback": "AP management VLAN selection is a separate network setting; ft-mobility-domain defines the FT roaming group."
         },
         {
           "key": "C",
           "text": "The client DHCP scope",
-          "feedback": "It does not select a DHCP scope."
+          "feedback": "DHCP scope selection occurs after network attachment; it does not identify which APs share FT key context."
         },
         {
           "key": "D",
@@ -528,7 +528,7 @@
         {
           "key": "B",
           "text": "It disables 802.11r and enables 802.11v",
-          "feedback": "The setting does not disable FT or enable 802.11v."
+          "feedback": "Disabling ft-over-ds selects over-the-air FT; it does not disable 802.11r or turn on 802.11v."
         },
         {
           "key": "C",
@@ -538,7 +538,7 @@
         {
           "key": "D",
           "text": "It enables Layer-3 roaming between controllers",
-          "feedback": "Layer-3 roaming is a separate feature and configuration boundary."
+          "feedback": "Layer-3 roaming preserves or moves IP reachability across subnets; ft-over-ds only selects the FT exchange path."
         }
       ],
       "correct_answer": "A"
@@ -607,7 +607,7 @@
         {
           "key": "A",
           "text": "No scan result is stored",
-          "feedback": "The scan still runs and its result is stored."
+          "feedback": "Audit Only does not skip the scan; it stores the failed result while suppressing that scan's at-risk transition."
         },
         {
           "key": "B",
@@ -635,7 +635,7 @@
         {
           "key": "A",
           "text": "It disables all endpoint scan definitions",
-          "feedback": "The setting does not delete scan definitions."
+          "feedback": "Global quarantine switching controls network enforcement for all hosts; it does not remove or disable scan definitions."
         },
         {
           "key": "B",
@@ -663,7 +663,7 @@
         {
           "key": "A",
           "text": "Disable quarantine switching globally",
-          "feedback": "Global disable would affect the administrator group too."
+          "feedback": "Disabling quarantine globally suppresses enforcement for every host population, including administrators who must remain protected."
         },
         {
           "key": "B",
@@ -696,7 +696,7 @@
         {
           "key": "B",
           "text": "The dock always disables 802.1X on the switch",
-          "feedback": "The dock does not universally disable 802.1X."
+          "feedback": "802.1X behavior depends on switch policy and supplicant; a dock does not inherently disable port authentication."
         },
         {
           "key": "C",
@@ -706,7 +706,7 @@
         {
           "key": "D",
           "text": "The dock encrypts the RADIUS Access-Request",
-          "feedback": "RADIUS encryption is unrelated to the MAC masking problem."
+          "feedback": "RADIUS packet protection is independent of endpoint identity; the issue is that multiple hosts can share one source MAC."
         }
       ],
       "correct_answer": "A"
@@ -813,7 +813,7 @@
         {
           "key": "C",
           "text": "Service account only",
-          "feedback": "A service account type is not the documented selection."
+          "feedback": "FortiAuthenticator's documented PKCE grant is configured on a Public relying-party client, not a service-account client."
         },
         {
           "key": "D",
@@ -892,7 +892,7 @@
         {
           "key": "B",
           "text": "The request is accepted if the user logged in",
-          "feedback": "Successful user authentication does not override PKCE verifier validation."
+          "feedback": "User login proves authentication at the authorization endpoint; the token endpoint still validates the client's original verifier."
         },
         {
           "key": "C",
@@ -915,7 +915,7 @@
         {
           "key": "A",
           "text": "Web RDP launcher",
-          "feedback": "The feature is not supported by Web RDP."
+          "feedback": "Fortinet limits Kerberos NLA to the native RDP launcher; Web RDP does not consume this option."
         },
         {
           "key": "B",
@@ -930,7 +930,7 @@
         {
           "key": "D",
           "text": "SSH launcher with port forwarding",
-          "feedback": "SSH port forwarding is unrelated to RDP NLA Kerberos."
+          "feedback": "SSH forwarding carries TCP streams for SSH use cases; it does not perform RDP CredSSP Kerberos negotiation."
         }
       ],
       "correct_answer": "B"
@@ -953,7 +953,7 @@
         {
           "key": "C",
           "text": "By reading the RDP clipboard",
-          "feedback": "Clipboard contents are unrelated to KDC discovery."
+          "feedback": "The clipboard is part of an established RDP session; KDC discovery occurs earlier through DNS SRV or configured address."
         },
         {
           "key": "D",
@@ -976,17 +976,17 @@
         {
           "key": "B",
           "text": "From the target's current DHCP lease duration",
-          "feedback": "DHCP lease duration does not define the Kerberos realm."
+          "feedback": "DHCP lease duration controls address lifetime; the Kerberos realm is derived from the target or secret's domain."
         },
         {
           "key": "C",
           "text": "From the FortiPAM administrator's email address",
-          "feedback": "The administrator's email is not the target domain identity."
+          "feedback": "The administrator's email is an identity attribute, not the Windows domain used to construct the Kerberos realm."
         },
         {
           "key": "D",
           "text": "From the RDP display resolution",
-          "feedback": "Display resolution is unrelated to Kerberos realm construction."
+          "feedback": "Display resolution affects the RDP desktop presentation; it cannot identify the Active Directory realm or KDC."
         }
       ],
       "correct_answer": "A"
@@ -1027,7 +1027,7 @@
         {
           "key": "A",
           "text": "Imports a device inventory from an external CMDB",
-          "feedback": "CMDB inbound imports inventory; it is not incident outbound."
+          "feedback": "CMDB inbound reads external inventory into FortiSIEM; it does not create a ticket from an incident."
         },
         {
           "key": "B",
@@ -1042,7 +1042,7 @@
         {
           "key": "D",
           "text": "Changes the FortiSIEM incident rule threshold",
-          "feedback": "Ticketing integration does not change the detection rule threshold."
+          "feedback": "Ticket integration consumes incidents and external ticket states; it does not change the detection rule threshold."
         }
       ],
       "correct_answer": "C"
@@ -1065,12 +1065,12 @@
         {
           "key": "C",
           "text": "CMDB Outbound",
-          "feedback": "CMDB Outbound synchronizes device inventory to the external system."
+          "feedback": "CMDB Outbound sends FortiSIEM device records to the external CMDB; Incident Inbound handles ticket closure."
         },
         {
           "key": "D",
           "text": "CMDB Inbound",
-          "feedback": "CMDB Inbound synchronizes external device inventory into FortiSIEM."
+          "feedback": "CMDB Inbound imports external device records into FortiSIEM; it is not the outbound inventory direction."
         }
       ],
       "correct_answer": "A"
@@ -1111,17 +1111,17 @@
         {
           "key": "A",
           "text": "Incident Inbound",
-          "feedback": "Incident Inbound synchronizes ticket state, not device inventory."
+          "feedback": "Incident Inbound reconciles external ticket state with FortiSIEM; CMDB Inbound is for external device inventory."
         },
         {
           "key": "B",
           "text": "Incident Outbound",
-          "feedback": "Incident Outbound creates external incident tickets."
+          "feedback": "Incident Outbound pushes FortiSIEM incident data to the ticket system; it does not clear the incident on closure."
         },
         {
           "key": "C",
           "text": "CMDB Inbound",
-          "feedback": "CMDB Inbound imports external inventory into FortiSIEM."
+          "feedback": "CMDB Inbound imports external devices into FortiSIEM; it does not create incident tickets from detections."
         },
         {
           "key": "D",
@@ -1149,12 +1149,12 @@
         {
           "key": "C",
           "text": "A FortiNAC-F docking-station entry",
-          "feedback": "Docking-station management is a FortiNAC-F feature."
+          "feedback": "Docking-station management is a FortiNAC-F endpoint-identity workflow, not a prerequisite for FortiSASE SPA hubs."
         },
         {
           "key": "D",
           "text": "A separate FortiAnalyzer Fabric supervisor",
-          "feedback": "FortiAnalyzer Fabric supervisor is unrelated to SPA routing."
+          "feedback": "FortiAnalyzer Fabric supervision governs log and device visibility; it does not provide the SPA routing hub."
         }
       ],
       "correct_answer": "A"
@@ -1167,7 +1167,7 @@
         {
           "key": "A",
           "text": "Only a DNS redirection rule",
-          "feedback": "DNS redirection does not authorize peer traffic."
+          "feedback": "DNS redirection can alter name resolution but does not authorize a peer session through Secure Private Access."
         },
         {
           "key": "B",
@@ -1223,7 +1223,7 @@
         {
           "key": "A",
           "text": "Disable BGP on every Security PoP",
-          "feedback": "BGP is part of the required route-distribution path."
+          "feedback": "BGP distributes the endpoint prefixes, but the hub must re-announce the Security PoP routes for peer reachability."
         },
         {
           "key": "B",
@@ -1261,12 +1261,12 @@
         {
           "key": "C",
           "text": "Through the endpoint's RADIUS accounting session",
-          "feedback": "RADIUS accounting is unrelated to OaaS orchestration."
+          "feedback": "RADIUS accounting records authentication/session activity; OaaS configuration tasks use the FGFM management channel."
         },
         {
           "key": "D",
           "text": "Through a FortiAnalyzer log-forwarding connection",
-          "feedback": "FortiAnalyzer log forwarding is not the OaaS control channel."
+          "feedback": "FortiAnalyzer log forwarding exports telemetry; it is not the authenticated management transport for the OaaS agent."
         }
       ],
       "correct_answer": "A"
@@ -1289,12 +1289,12 @@
         {
           "key": "C",
           "text": "Disable the FortiGate's local administrator account",
-          "feedback": "The feature does not disable local administrator accounts."
+          "feedback": "The rollback applies to OaaS-orchestrated configuration changes; it does not disable local administrator accounts."
         },
         {
           "key": "D",
           "text": "Delete the site's license entitlement",
-          "feedback": "A failed transaction does not delete the license entitlement."
+          "feedback": "A failed configuration transaction triggers rollback of managed changes; licensing remains a separate entitlement state."
         }
       ],
       "correct_answer": "B"
@@ -1312,12 +1312,12 @@
         {
           "key": "B",
           "text": "get router info bgp summary",
-          "feedback": "This displays BGP neighbor information, not OaaS account/task state."
+          "feedback": "The BGP summary command shows peer state and routes; it does not return OaaS task or sync metadata."
         },
         {
           "key": "C",
           "text": "execute vpn ike gateway list",
-          "feedback": "This is not the documented OaaS status command."
+          "feedback": "The IKE gateway command lists VPN state; OaaS status is exposed by the dedicated get oaas status command."
         },
         {
           "key": "D",
@@ -1335,7 +1335,7 @@
         {
           "key": "A",
           "text": "Nothing; sync success proves every application flow",
-          "feedback": "A control-plane transaction success does not prove data-plane forwarding."
+          "feedback": "OaaS sync success confirms the controller transaction; it does not prove tunnels, routes, SLA or application forwarding."
         },
         {
           "key": "B",
@@ -1368,7 +1368,7 @@
         {
           "key": "B",
           "text": "A successful GUI login plus a device hostname",
-          "feedback": "A GUI login and hostname prove management access only."
+          "feedback": "A successful GUI login confirms management authentication only; it does not prove route propagation or policy acceptance."
         },
         {
           "key": "C",
@@ -1401,15 +1401,16 @@
         {
           "key": "C",
           "text": "Both controls operate on BGP route advertisements",
-          "feedback": "Neither feature uses BGP route advertisements."
+          "feedback": "NAC scan enforcement and FortiSwitch MAC learning operate in different control planes; neither is a BGP feature."
         },
         {
           "key": "D",
           "text": "Audit Only changes MAC aging, while sticky MAC changes scan results",
-          "feedback": "The two mechanisms do not alter each other's state."
+          "feedback": "These mechanisms have independent state machines: NAC controls endpoint remediation while sticky MAC controls FDB entry persistence."
         }
       ],
       "correct_answer": "B"
     }
-  ]
+  ],
+  "minimum_feedback_words": 10
 }
