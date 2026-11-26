@@ -1,6 +1,6 @@
 {
   "date": "2026-11-26",
-  "status": "PASS_WITH_LIMITATIONS",
+  "status": "PARTIAL",
   "checks": {
     "mandatory_products": true,
     "unique_products": true,
@@ -17,10 +17,16 @@
       "D": 12
     },
     "diagram_asset_count": 24,
-    "exclusion_inventory_before_selection": true
+    "exclusion_inventory_before_selection": true,
+    "report_readback": true,
+    "index_readback": true,
+    "question_bank_readback": true,
+    "diagram_assets_readback": "24/24 fetched and structurally checked",
+    "pages_verification": "UNCONFIRMED: public report and index returned Internal Error"
   },
   "limitations": [
     "Direct Fortinet Document Library opens returned HTTP 403 for 11 of 12 primary guides; official indexed guide content used.",
-    "Public GitHub Pages verification pending after publication."
+    "Public GitHub Pages report and index URLs returned Internal Error; repository read-back passed, but public reachability is unconfirmed.",
+    "Email disabled; no delivery attempt."
   ]
 }

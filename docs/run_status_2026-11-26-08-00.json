@@ -29,20 +29,23 @@
     "svg": 12,
     "drawio": 12,
     "write_method": "Direct multi-file GitHub tree commit; no archive/staging transport.",
-    "readback": "PENDING"
+    "readback": "PASS: 24/24 assets fetched from GitHub; all SVG and draw.io files passed structural presence checks."
   },
   "publication": {
-    "report": "PENDING",
-    "index": "PENDING",
-    "github_readback": "PENDING",
-    "pages": "PENDING"
+    "report": "PASS: report fetched from GitHub after write.",
+    "index": "PASS: index fetched after update and includes November 26 latest entry.",
+    "question_bank": "PASS: 50 questions and 200 choice explanations read back.",
+    "status": "PASS: status JSON/HTML read back.",
+    "github_readback": "PASS",
+    "pages": "UNCONFIRMED/FAILED VERIFICATION: report and index URLs returned Internal Error in public verifier; GitHub repository files are present.",
+    "remediation": "Retry Pages verification after deployment/verifier access recovers; repository read-back is confirmed."
   },
   "delivery": {
-    "email": "NOT_ATTEMPTED: disabled"
+    "email": "NOT_ATTEMPTED: email is disabled."
   },
   "remediation": [
-    "Retry direct Fortinet Document Library page access from a browser-capable session.",
-    "Verify all 24 diagram assets and report/index from GitHub.",
-    "Retry GitHub Pages report and index URLs after publication."
+    "Retry direct Fortinet Document Library access from a browser-capable session; 11/12 direct page opens returned HTTP 403.",
+    "Retry public GitHub Pages report and index URLs after deployment/verifier access recovers.",
+    "Email remains disabled; no delivery attempt was made."
   ]
 }
