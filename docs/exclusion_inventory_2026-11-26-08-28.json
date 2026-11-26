@@ -11,7 +11,7 @@
   },
   "discovery_before_topic_selection": true,
   "inventory_exists_before_topic_selection": true,
-  "topic_selection_started": false,
+  "topic_selection_started": true,
   "generation_started": false,
   "provenance": {
     "base_inventory_path": "docs/exclusion_inventory_2026-11-26-08-00.json",
@@ -6456,10 +6456,13 @@
     },
     "directly_inspected_html_artifacts": 34,
     "in_window_html_artifacts": 33,
-    "selected_topic_comparison_pending": true,
+    "selected_topic_comparison_pending": false,
     "selected_topic_comparison_records": 369,
     "candidate_only_records_retained_separately": 18,
-    "nonlesson_sections_excluded": 3
+    "nonlesson_sections_excluded": 3,
+    "selected_topic_count": 12,
+    "semantic_uniqueness_pass_count": 12,
+    "rejected_candidate_count": 5
   },
   "audit": {
     "all_required_fields_present": true,
@@ -6469,7 +6472,11 @@
     "published_lesson_records": 369,
     "candidate_only_records_not_used_as_exclusions": true,
     "semantic_topic_selection_not_started": true,
-    "lesson_generation_not_started": true
+    "lesson_generation_not_started": true,
+    "semantic_topic_selection_completed": true,
+    "semantic_uniqueness_pass_count": 12,
+    "rejected_candidate_count": 5,
+    "lesson_generation_started": false
   },
   "candidate_only_records": [
     {
@@ -6834,5 +6841,53 @@
   ],
   "actual_lesson_record_count": 369,
   "candidate_only_record_count": 18,
-  "nonlesson_record_count": 3
+  "nonlesson_record_count": 3,
+  "selection_audit": {
+    "selected_fingerprints_path": "docs/selected_fingerprints_2026-11-26-08-28.json",
+    "selected_topic_count": 12,
+    "selected_products": [
+      "FortiGate",
+      "FortiManager",
+      "FortiAnalyzer",
+      "FortiSwitch",
+      "FortiAP/Wireless",
+      "FortiNAC",
+      "FortiNAC-F",
+      "FortiAuthenticator",
+      "FortiPAM",
+      "FortiSIEM",
+      "FortiSASE",
+      "Secure SD-WAN"
+    ],
+    "semantic_uniqueness": "PASS",
+    "rejected_candidates": [
+      {
+        "product": "FortiAnalyzer",
+        "lesson_subject": "NTPv4 SHA-256 authenticated time synchronization",
+        "reason": "Rejected: exact mechanism and workflow duplicate of 2026-11-21 FortiAnalyzer authenticated NTPv4 SHA-256/Chrony key-ID lesson."
+      },
+      {
+        "product": "FortiAnalyzer",
+        "lesson_subject": "Custom session labels in FortiAnalyzer event logs",
+        "reason": "Rejected: exact mechanism and audit workflow duplicate of 2026-11-13 FortiAnalyzer custom administrator session labels."
+      },
+      {
+        "product": "FortiSASE",
+        "lesson_subject": "Network restrictions removed for private DNS/RADIUS/LDAP behind SPA hubs",
+        "reason": "Rejected: private DNS/SPA/BGP access path materially overlaps 2026-11-17 Split DNS and DNS redirection through SPA with Public/Private access type."
+      },
+      {
+        "product": "Secure SD-WAN",
+        "lesson_subject": "Speed-test-derived interface QoS for individual dial-up IPsec child tunnels",
+        "reason": "Rejected: same speed-test/measured-bandwidth/shaping mechanism as 2026-11-15 scheduled SD-WAN interface speed tests and measured-bandwidth shaping integration."
+      },
+      {
+        "product": "FortiNAC-F",
+        "lesson_subject": "Captive portal over NATted infrastructure",
+        "reason": "Rejected: same captive-portal transaction family as 2026-11-03 VPN captive portal state machine, 2026-11-04 external portal flow, and 2026-11-05 guest self-registration."
+      }
+    ],
+    "comparison_method": "Product-specific and cross-product lexical fingerprint comparison plus manual mechanism/workflow review. Similarity is a triage signal, not a semantic proof; all 12 selections were manually reviewed against the closest prior lessons.",
+    "selected_at_local": "2026-11-26T08:28:20-08:00"
+  }
 }
