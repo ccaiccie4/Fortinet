@@ -1,0 +1,1415 @@
+{
+  "schema_version": "2.0",
+  "date": "2026-11-26",
+  "total_questions": 50,
+  "graded": true,
+  "choice_feedback_count": 200,
+  "answer_position_counts": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": 1,
+      "product": "FortiGate",
+      "question": "Which BGP configuration element makes FortiGate originate the current Botnet-C&C.Server ISDB reputation members?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "A static prefix list under router prefix-list",
+          "feedback": "A prefix list filters routes; it does not dynamically source the ISDB category membership."
+        },
+        {
+          "key": "B",
+          "text": "An internet-service-name on a BGP network entry",
+          "feedback": "Correct. The BGP network entry references the ISDB category through internet-service-name, so current category members can be advertised."
+        },
+        {
+          "key": "C",
+          "text": "A firewall policy with an ISDB destination",
+          "feedback": "A firewall policy can inspect or deny traffic locally but does not originate BGP NLRI."
+        },
+        {
+          "key": "D",
+          "text": "A redistribution rule for connected routes",
+          "feedback": "Connected-route redistribution exports connected networks, not the ISDB reputation category."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 2,
+      "product": "FortiGate",
+      "question": "A peer shows multiple /32 BGP routes after the ISDB network statement is added. What does that prove?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The peer has blocked every matching session",
+          "feedback": "A route does not prove that the peer's firewall has blocked sessions; enforcement depends on the route action and policy."
+        },
+        {
+          "key": "B",
+          "text": "The FortiGate has installed local deny policies",
+          "feedback": "A BGP RIB entry does not create a FortiGate firewall policy."
+        },
+        {
+          "key": "C",
+          "text": "The ISDB feed is being enforced in the data plane",
+          "feedback": "The routes prove control-plane distribution, not local or downstream enforcement."
+        },
+        {
+          "key": "D",
+          "text": "The peer received and installed the advertised host routes",
+          "feedback": "Correct. The peer RIB demonstrates that BGP UPDATEs were accepted and installed; forwarding action still needs separate verification."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 3,
+      "product": "FortiGate",
+      "question": "Why should reputation routes be constrained with an outbound route-map?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "To limit which peers receive sensitive threat prefixes",
+          "feedback": "Correct. Route filtering/tagging limits the propagation domain and can prevent accidental route leaks."
+        },
+        {
+          "key": "B",
+          "text": "To force every peer to use the same local preference",
+          "feedback": "Local preference is normally an inbound attribute and does not replace export scope control."
+        },
+        {
+          "key": "C",
+          "text": "To convert the ISDB entries into firewall address groups",
+          "feedback": "A BGP route-map does not convert routes into firewall address objects."
+        },
+        {
+          "key": "D",
+          "text": "To disable the peer's normal best-path calculation",
+          "feedback": "A route-map does not disable the peer's BGP best-path process."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 4,
+      "product": "FortiGate",
+      "question": "The BGP session is Established, but the peer receives no ISDB host routes. What is the best first isolation sequence?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Restart the peer and clear all BGP sessions",
+          "feedback": "A session reset is disruptive and does not identify whether the source category or export policy is wrong."
+        },
+        {
+          "key": "B",
+          "text": "Disable all inbound filtering on the peer",
+          "feedback": "Disabling all inbound filtering is too broad and may create a route leak."
+        },
+        {
+          "key": "C",
+          "text": "Check ISDB category membership, network entry, and outbound policy",
+          "feedback": "Correct. Verify the category is populated, the BGP network item references it, and the export map permits the prefixes."
+        },
+        {
+          "key": "D",
+          "text": "Replace the ISDB category with a default route",
+          "feedback": "A default route is not a substitute for the category-derived host routes."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 5,
+      "product": "FortiManager",
+      "question": "During FortiManager 8.0 import from a PDE-enabled FortiGate, a new object contains a password-type attribute. What should the operator expect?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The object is silently skipped",
+          "feedback": "FortiManager 8.0 supports this import path; silently skipping the object is not the intended behavior."
+        },
+        {
+          "key": "B",
+          "text": "The Import Wizard requests the password for that object",
+          "feedback": "Correct. The Import Wizard prompts the administrator to supply the password for each new password-type object."
+        },
+        {
+          "key": "C",
+          "text": "The FortiGate PDE key is imported into the ADOM",
+          "feedback": "The device's private PDE key is not imported into the ADOM as an object password."
+        },
+        {
+          "key": "D",
+          "text": "The object is converted into a certificate object",
+          "feedback": "A password-type object is not converted into a certificate object."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 6,
+      "product": "FortiManager",
+      "question": "An existing ADOM object is shown during PDE import. Leaving its password field blank means:",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Keep the current FortiGate password",
+          "feedback": "Correct. Blank is the documented choice to keep the current FortiGate password for an existing object."
+        },
+        {
+          "key": "B",
+          "text": "Clear the password on the FortiGate",
+          "feedback": "Blank does not mean clear; that would be a destructive interpretation."
+        },
+        {
+          "key": "C",
+          "text": "Replace it with a generated random password",
+          "feedback": "A new random password is not generated by leaving the field blank."
+        },
+        {
+          "key": "D",
+          "text": "Abort the entire device retrieve",
+          "feedback": "The wizard allows the existing object to remain with its current password."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 7,
+      "product": "FortiManager",
+      "question": "A PDE-enabled FortiGate needs a new transparent VDOM. Where should the administrator configure it?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Only in the FortiManager Global ADOM",
+          "feedback": "The Global ADOM does not remove the PDE VDOM limitation."
+        },
+        {
+          "key": "B",
+          "text": "In a policy package install preview",
+          "feedback": "Install preview is for reviewing install changes, not creating unsupported VDOM types."
+        },
+        {
+          "key": "C",
+          "text": "In the FortiManager device blueprint",
+          "feedback": "A device blueprint does not bypass the documented PDE exception."
+        },
+        {
+          "key": "D",
+          "text": "Directly on FortiGate, then retrieve the configuration",
+          "feedback": "Correct. NAT and transparent VDOM configuration is done on the FortiGate and then retrieved into FortiManager."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 8,
+      "product": "FortiManager",
+      "question": "Does FortiManager 8.0 need to verify the FortiGate PDE private key merely to add the device?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, every add operation requires the 32-digit key",
+          "feedback": "FortiManager 8.0 does not require private-key verification when adding the device."
+        },
+        {
+          "key": "B",
+          "text": "Yes, but only when FortiOS 7.6.1 generated it",
+          "feedback": "The behavior applies to manually configured and randomly generated keys; the import prompt is separate."
+        },
+        {
+          "key": "C",
+          "text": "No; the password prompts occur when importing password-type objects",
+          "feedback": "Correct. The device can be added without key verification; password-type objects prompt during configuration import."
+        },
+        {
+          "key": "D",
+          "text": "Only if the FortiGate is in transparent mode",
+          "feedback": "Transparent VDOMs are a separate configuration exception, not a key-verification trigger."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 9,
+      "product": "FortiAnalyzer",
+      "question": "One administrator needs visibility into two disjoint Fabric Groups. What is the supported 8.0 design?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Create a parent Fabric Group containing both child groups",
+          "feedback": "Correct. Nested Fabric Groups let a parent aggregate Group_1 and Group_2 and be assigned to one admin."
+        },
+        {
+          "key": "B",
+          "text": "Duplicate the administrator account for each child group",
+          "feedback": "Duplicate accounts are unnecessary and complicate auditability."
+        },
+        {
+          "key": "C",
+          "text": "Move all devices into one shared ADOM",
+          "feedback": "Moving devices into one ADOM changes data organization and is not the RBAC feature."
+        },
+        {
+          "key": "D",
+          "text": "Disable Fabric Group scoping for that administrator",
+          "feedback": "Disabling scope broadens visibility rather than aggregating only the intended groups."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 10,
+      "product": "FortiAnalyzer",
+      "question": "Where is the parent Fabric Group created?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Device Manager > Add Device",
+          "feedback": "Device Manager manages devices, not nested Fabric Group membership."
+        },
+        {
+          "key": "B",
+          "text": "System Settings > Fabric Management > Fabric Groups",
+          "feedback": "Correct. Create the parent under System Settings > Fabric Management > Fabric Groups."
+        },
+        {
+          "key": "C",
+          "text": "FortiView > Settings > Data Sources",
+          "feedback": "FortiView is an analytics view and does not define RBAC group membership."
+        },
+        {
+          "key": "D",
+          "text": "Log View > Advanced Search",
+          "feedback": "Log View search filters do not create Fabric Groups."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 11,
+      "product": "FortiAnalyzer",
+      "question": "What does assigning a Fabric Group to an administrator primarily control?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The administrator's password policy",
+          "feedback": "Password policy is not the function of Fabric Group membership."
+        },
+        {
+          "key": "B",
+          "text": "The administrator's FortiOS firmware upgrade permissions",
+          "feedback": "Firmware upgrade authority is controlled elsewhere by privileges and device permissions."
+        },
+        {
+          "key": "C",
+          "text": "The administrator's MFA enrollment method",
+          "feedback": "MFA enrollment is an authentication control, not a Fabric Group scope."
+        },
+        {
+          "key": "D",
+          "text": "Which Fabric members and ADOMs are visible in scope",
+          "feedback": "Correct. Fabric Group membership defines resource visibility; the admin profile still controls allowed actions."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 12,
+      "product": "FortiAnalyzer",
+      "question": "An admin can see a device but cannot edit its configuration. Which boundary should be checked first?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The parent group's name length",
+          "feedback": "The group name does not grant edit permission."
+        },
+        {
+          "key": "B",
+          "text": "The Fabric supervisor's NTP source",
+          "feedback": "NTP is unrelated to an edit authorization denial."
+        },
+        {
+          "key": "C",
+          "text": "The admin profile's action privileges",
+          "feedback": "Correct. Fabric Group scope makes the device visible; admin profile permissions determine allowed actions."
+        },
+        {
+          "key": "D",
+          "text": "The FortiView time range",
+          "feedback": "FortiView time range only changes analytics presentation."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 13,
+      "product": "FortiSwitch",
+      "question": "What does a learning-limit value of zero mean on a FortiSwitch port?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "No dynamic MAC learning is allowed",
+          "feedback": "Disabling learning is a separate l2-learning control."
+        },
+        {
+          "key": "B",
+          "text": "No learning limit is enforced",
+          "feedback": "Correct. Zero is the default and means no limit on the number of dynamically learned MAC addresses."
+        },
+        {
+          "key": "C",
+          "text": "Only one static MAC is permitted",
+          "feedback": "Static MAC handling is separate from the dynamic learning limit."
+        },
+        {
+          "key": "D",
+          "text": "MAC aging is disabled",
+          "feedback": "Aging is controlled by mac-aging-interval, not the learning-limit value."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 14,
+      "product": "FortiSwitch",
+      "question": "A port has learning-limit-action shutdown configured, but it remains active and no violation is logged. Which pair is the key prerequisite to inspect?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "STP edge-port and native VLAN",
+          "feedback": "STP and native VLAN do not control learning-limit violation shutdown."
+        },
+        {
+          "key": "B",
+          "text": "LLDP profile and PoE priority",
+          "feedback": "LLDP and PoE do not enable the MAC-limit violation log or timer."
+        },
+        {
+          "key": "C",
+          "text": "MAC aging interval and sticky-MAC save",
+          "feedback": "Aging and sticky persistence govern entry lifetime, not the violation shutdown timer/logging prerequisite."
+        },
+        {
+          "key": "D",
+          "text": "Global violation timer and violation logging enable",
+          "feedback": "Correct. A zero mac-violation-timer disables the timer and violation logging is disabled by default; the recent Community tip highlights this boundary."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 15,
+      "product": "FortiSwitch",
+      "question": "Which MAC addresses are counted against the dynamic learning limit?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Dynamically learned MAC entries only",
+          "feedback": "Correct. The limit applies to learned dynamic MACs; static entries are not counted."
+        },
+        {
+          "key": "B",
+          "text": "Static MAC entries only",
+          "feedback": "Static entries are excluded from the dynamic learning limit."
+        },
+        {
+          "key": "C",
+          "text": "All static and dynamic MAC entries equally",
+          "feedback": "The two entry types are not counted equally."
+        },
+        {
+          "key": "D",
+          "text": "Only MACs learned on trunks",
+          "feedback": "The limit can apply to an interface or VLAN; it is not restricted to trunks."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 16,
+      "product": "FortiSwitch",
+      "question": "A sticky MAC survives a port link flap but disappears after a switch reboot. What was likely omitted?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Enabling DHCP snooping",
+          "feedback": "DHCP snooping is unrelated to sticky-MAC persistence."
+        },
+        {
+          "key": "B",
+          "text": "Increasing the VLAN learning limit",
+          "feedback": "The learning limit controls the number of learned addresses, not reboot persistence."
+        },
+        {
+          "key": "C",
+          "text": "Saving the sticky MAC entries to the configuration",
+          "feedback": "Correct. Sticky entries persist across link changes, but must be saved to the configuration to be loaded after reboot."
+        },
+        {
+          "key": "D",
+          "text": "Disabling MAC aging globally",
+          "feedback": "Disabling aging does not save sticky entries to the configuration file."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 17,
+      "product": "FortiAP/Wireless",
+      "question": "Which statement best distinguishes 802.11r from 802.11k/v?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "802.11r changes the VLAN; 802.11k/v changes the SSID",
+          "feedback": "802.11r does not define VLAN reassignment or SSID renaming."
+        },
+        {
+          "key": "B",
+          "text": "802.11r provides Fast BSS Transition key context; 802.11k/v assist discovery and steering",
+          "feedback": "Correct. FT changes the authentication/key-transition exchange; 802.11k/v provide neighbor information and BSS transition assistance."
+        },
+        {
+          "key": "C",
+          "text": "802.11r preserves an IP address across Layer-3 roaming",
+          "feedback": "IP preservation across Layer-3 roaming is a separate network mobility function."
+        },
+        {
+          "key": "D",
+          "text": "802.11r is the same feature as opportunistic key caching",
+          "feedback": "OKC and 802.11r are distinct mechanisms even though both can reduce roaming authentication work."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 18,
+      "product": "FortiAP/Wireless",
+      "question": "What does ft-mobility-domain identify?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The RADIUS server realm",
+          "feedback": "The mobility-domain value is not a RADIUS server realm."
+        },
+        {
+          "key": "B",
+          "text": "The AP management VLAN",
+          "feedback": "It does not select the AP management VLAN."
+        },
+        {
+          "key": "C",
+          "text": "The client DHCP scope",
+          "feedback": "It does not select a DHCP scope."
+        },
+        {
+          "key": "D",
+          "text": "The group of APs participating in the same FT mobility domain",
+          "feedback": "Correct. APs that share FT context must use a consistent mobility-domain identifier."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 19,
+      "product": "FortiAP/Wireless",
+      "question": "What does enabling ft-over-ds change?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "It selects FT exchange through the distribution system rather than over the air",
+          "feedback": "Correct. The setting selects FT over the distribution system; disabling it uses the over-the-air method."
+        },
+        {
+          "key": "B",
+          "text": "It disables 802.11r and enables 802.11v",
+          "feedback": "The setting does not disable FT or enable 802.11v."
+        },
+        {
+          "key": "C",
+          "text": "It forces all clients to use WPA3 Enterprise",
+          "feedback": "It does not change the SSID security mode to WPA3 Enterprise."
+        },
+        {
+          "key": "D",
+          "text": "It enables Layer-3 roaming between controllers",
+          "feedback": "Layer-3 roaming is a separate feature and configuration boundary."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 20,
+      "product": "FortiAP/Wireless",
+      "question": "The VAP shows fast-bss-transition enabled, but a client still performs full authentication on every roam. What should be verified?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Only the DHCP lease time",
+          "feedback": "DHCP lease time does not determine whether FT was negotiated."
+        },
+        {
+          "key": "B",
+          "text": "Only the AP's transmit power",
+          "feedback": "Transmit power may affect roaming decisions but not the FT key-context negotiation itself."
+        },
+        {
+          "key": "C",
+          "text": "Client FT capability and consistent mobility-domain/security settings",
+          "feedback": "Correct. The VAP setting alone does not prove client negotiation; verify client support, mobility-domain alignment, and compatible security settings."
+        },
+        {
+          "key": "D",
+          "text": "The FortiGate's WAN default route",
+          "feedback": "The WAN default route is not the first diagnostic boundary for an FT exchange."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 21,
+      "product": "FortiNAC",
+      "question": "A host fails an Audit Only scan. What should happen to its compliance state?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The result is stored, but that scan does not mark the host at risk",
+          "feedback": "Correct. Audit Only stores the scan result but does not mark failed hosts at risk or force remediation for that scan."
+        },
+        {
+          "key": "B",
+          "text": "The result is discarded and the host is marked compliant",
+          "feedback": "The result is not discarded and the host is not automatically declared compliant."
+        },
+        {
+          "key": "C",
+          "text": "The host is automatically placed in the Remediation VLAN",
+          "feedback": "Audit Only is specifically designed to avoid forcing failed hosts into Remediation."
+        },
+        {
+          "key": "D",
+          "text": "All other scans assigned to the host are disabled",
+          "feedback": "The setting does not disable other scans; another enforcing scan can still act."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 22,
+      "product": "FortiNAC",
+      "question": "A host in Forced Remediation Exceptions fails a scan. Which state is expected?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "No scan result is stored",
+          "feedback": "The scan still runs and its result is stored."
+        },
+        {
+          "key": "B",
+          "text": "The host is marked at risk but is not forced into Remediation",
+          "feedback": "Correct. The group suppresses forced remediation regardless of scan, but the host can still be marked at risk."
+        },
+        {
+          "key": "C",
+          "text": "The host is marked compliant automatically",
+          "feedback": "The group does not turn a failed scan into a pass."
+        },
+        {
+          "key": "D",
+          "text": "The host is removed from its assigned policy",
+          "feedback": "Group membership does not remove the host from policy assignment."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 23,
+      "product": "FortiNAC",
+      "question": "Why is disabling global Quarantine VLAN switching a poor substitute for an Audit Only pilot?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "It disables all endpoint scan definitions",
+          "feedback": "The setting does not delete scan definitions."
+        },
+        {
+          "key": "B",
+          "text": "It changes only the current scan",
+          "feedback": "Audit Only is the scan-scoped control; global quarantine switching is broader."
+        },
+        {
+          "key": "C",
+          "text": "It prevents results from being stored",
+          "feedback": "Scan results can still be stored when quarantine switching is disabled."
+        },
+        {
+          "key": "D",
+          "text": "It affects enforcement for all hosts rather than one scan's population",
+          "feedback": "Correct. Global quarantine switching changes the enforcement behavior for all hosts, while Audit Only is scoped to a particular scan."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 24,
+      "product": "FortiNAC",
+      "question": "You need executives monitored without enforcement, while administrators remain enforced. Which design best matches the requirement?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Disable quarantine switching globally",
+          "feedback": "Global disable would affect the administrator group too."
+        },
+        {
+          "key": "B",
+          "text": "Put all hosts in the exception group",
+          "feedback": "The exception group suppresses enforcement for all scans for those hosts, which is broader than the scan-specific executive pilot."
+        },
+        {
+          "key": "C",
+          "text": "Use an Audit Only executive scan and a separate enforcing administrator scan",
+          "feedback": "Correct. Audit Only is scan-scoped, allowing one population to be measured while another scan continues enforcing."
+        },
+        {
+          "key": "D",
+          "text": "Stop scheduling scans for both groups",
+          "feedback": "Stopping scans removes the compliance measurement rather than separating measurement from enforcement."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 25,
+      "product": "FortiNAC-F",
+      "question": "Why can a shared USB-C dock create a NAC identity problem?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The dock can present one shared MAC that masks the attached endpoint's MAC",
+          "feedback": "Correct. The shared adapter MAC can make multiple endpoints appear to be the same network identity."
+        },
+        {
+          "key": "B",
+          "text": "The dock always disables 802.1X on the switch",
+          "feedback": "The dock does not universally disable 802.1X."
+        },
+        {
+          "key": "C",
+          "text": "The dock changes the endpoint's IP address to the gateway IP",
+          "feedback": "A dock does not normally rewrite the endpoint's IP to the gateway."
+        },
+        {
+          "key": "D",
+          "text": "The dock encrypts the RADIUS Access-Request",
+          "feedback": "RADIUS encryption is unrelated to the MAC masking problem."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 26,
+      "product": "FortiNAC-F",
+      "question": "What is the key 7.6.5 enhancement for external Ethernet adapters?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Automatically trust every USB-C dock",
+          "feedback": "The enhancement improves identification and authentication; it does not automatically trust every dock."
+        },
+        {
+          "key": "B",
+          "text": "Authenticate users connecting to shared adapters before granting access",
+          "feedback": "Correct. FortiNAC-F can identify shared adapters, authenticate the user, and provision access based on the adapter connection."
+        },
+        {
+          "key": "C",
+          "text": "Replace all endpoint MAC addresses with the dock MAC",
+          "feedback": "The dock may already mask endpoint MACs; the feature does not intentionally replace every MAC."
+        },
+        {
+          "key": "D",
+          "text": "Disable portal self-registration for dock users",
+          "feedback": "The documented workflow can use Request New Credentials and self-registration."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 27,
+      "product": "FortiNAC-F",
+      "question": "An unknown endpoint connects through a registered dock. Which workflow is expected when the docking-station policy matches?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "It inherits the first registered host's authorization",
+          "feedback": "The shared dock must not make a second endpoint inherit the first endpoint's identity."
+        },
+        {
+          "key": "B",
+          "text": "It is permanently blocked without a portal",
+          "feedback": "The documented flow uses an authentication VLAN and portal rather than an unconditional permanent block."
+        },
+        {
+          "key": "C",
+          "text": "It is moved to the authentication VLAN and can use Request New Credentials",
+          "feedback": "Correct. The policy deauthenticates the host, moves it to the authentication VLAN, and the portal supports self-registration."
+        },
+        {
+          "key": "D",
+          "text": "It bypasses FortiNAC-F because the adapter is registered",
+          "feedback": "A registered adapter is not a blanket authorization for every endpoint behind it."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 28,
+      "product": "FortiNAC-F",
+      "question": "What does MAC Address Pass Through change when supported by the endpoint BIOS?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The switch ignores the endpoint's source MAC",
+          "feedback": "The switch still learns the source MAC presented by the endpoint."
+        },
+        {
+          "key": "B",
+          "text": "The dock uses a new random MAC for every session",
+          "feedback": "The pass-through feature does not randomize the dock MAC per session."
+        },
+        {
+          "key": "C",
+          "text": "The endpoint is forced into the guest VLAN",
+          "feedback": "VLAN assignment is controlled by NAC policy, not by the BIOS pass-through setting."
+        },
+        {
+          "key": "D",
+          "text": "The endpoint presents its own unique MAC instead of the dock's shared MAC",
+          "feedback": "Correct. MAC Address Pass Through makes the endpoint's actual MAC visible to NAC, reducing shared-dock identity ambiguity."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 29,
+      "product": "FortiAuthenticator",
+      "question": "Which OAuth client type can use Authorization Code with PKCE in FortiAuthenticator?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Public",
+          "feedback": "Correct. FortiAuthenticator exposes Authorization code with PKCE when the client type is Public."
+        },
+        {
+          "key": "B",
+          "text": "Confidential only",
+          "feedback": "The standard Authorization Code grant is the confidential-client option; PKCE is documented for Public clients."
+        },
+        {
+          "key": "C",
+          "text": "Service account only",
+          "feedback": "A service account type is not the documented selection."
+        },
+        {
+          "key": "D",
+          "text": "Any type without a relying-party object",
+          "feedback": "A relying-party object is required to define client type, grant, policy and redirect URI."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 30,
+      "product": "FortiAuthenticator",
+      "question": "Which parameters are required on the PKCE authorize request?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "client_secret and code_verifier",
+          "feedback": "The client_secret is ignored at the authorize endpoint for this grant, and code_verifier is sent at token exchange."
+        },
+        {
+          "key": "B",
+          "text": "code_challenge_method=S256 and code_challenge",
+          "feedback": "Correct. The authorize request includes the S256 challenge method and the derived code_challenge."
+        },
+        {
+          "key": "C",
+          "text": "refresh_token and access_token",
+          "feedback": "Tokens are not the authorize request parameters for this code flow."
+        },
+        {
+          "key": "D",
+          "text": "KDC address and realm",
+          "feedback": "KDC and realm are Kerberos concepts, not OAuth PKCE fields."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 31,
+      "product": "FortiAuthenticator",
+      "question": "What must the public client send to /oauth/token/ to redeem the authorization code?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Only the user's password",
+          "feedback": "The token endpoint needs the code and verifier, not the user's password."
+        },
+        {
+          "key": "B",
+          "text": "The original code_challenge_method",
+          "feedback": "The method is part of the authorize request; the token exchange requires the verifier."
+        },
+        {
+          "key": "C",
+          "text": "The client secret from the confidential-client profile",
+          "feedback": "Public-client PKCE does not rely on a client secret at the authorize endpoint."
+        },
+        {
+          "key": "D",
+          "text": "The code_verifier used to derive the challenge",
+          "feedback": "Correct. FortiAuthenticator hashes the code_verifier and compares it with the stored S256 challenge."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 32,
+      "product": "FortiAuthenticator",
+      "question": "What happens when the SHA-256 digest of code_verifier does not match the issued code_challenge?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "FortiAuthenticator issues a token with reduced scope",
+          "feedback": "A mismatch is not handled by silently reducing token scope."
+        },
+        {
+          "key": "B",
+          "text": "The request is accepted if the user logged in",
+          "feedback": "Successful user authentication does not override PKCE verifier validation."
+        },
+        {
+          "key": "C",
+          "text": "FortiAuthenticator rejects the token request",
+          "feedback": "Correct. The token endpoint rejects the exchange when the verifier digest does not match the challenge."
+        },
+        {
+          "key": "D",
+          "text": "The client is converted to Confidential",
+          "feedback": "Client type is configured on the relying party; a mismatch does not convert it."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 33,
+      "product": "FortiPAM",
+      "question": "Which FortiPAM RDP path supports Kerberos for NLA?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Web RDP launcher",
+          "feedback": "The feature is not supported by Web RDP."
+        },
+        {
+          "key": "B",
+          "text": "Native RDP launcher",
+          "feedback": "Correct. Fortinet documents Kerberos for NLA only with the native RDP launcher."
+        },
+        {
+          "key": "C",
+          "text": "Any browser-based HTML5 session",
+          "feedback": "An HTML5 browser session is not the supported launcher for this option."
+        },
+        {
+          "key": "D",
+          "text": "SSH launcher with port forwarding",
+          "feedback": "SSH port forwarding is unrelated to RDP NLA Kerberos."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 34,
+      "product": "FortiPAM",
+      "question": "If KDC Address is not configured on the target, how does FortiPAM locate the KDC?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "By sending a broadcast to every domain controller",
+          "feedback": "Kerberos KDC discovery is not a broadcast scan of all controllers."
+        },
+        {
+          "key": "B",
+          "text": "By querying the FortiGate routing table",
+          "feedback": "The FortiGate routing table does not identify the target domain's KDC."
+        },
+        {
+          "key": "C",
+          "text": "By reading the RDP clipboard",
+          "feedback": "Clipboard contents are unrelated to KDC discovery."
+        },
+        {
+          "key": "D",
+          "text": "By using DNS SRV records for the Kerberos realm",
+          "feedback": "Correct. FortiPAM automatically discovers the KDC through DNS SRV records when no explicit address is set."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 35,
+      "product": "FortiPAM",
+      "question": "Where does FortiPAM derive the Kerberos realm for the RDP session?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "From the domain associated with the secret or target",
+          "feedback": "Correct. FortiPAM uses the configured domain associated with the secret or target to construct the realm."
+        },
+        {
+          "key": "B",
+          "text": "From the target's current DHCP lease duration",
+          "feedback": "DHCP lease duration does not define the Kerberos realm."
+        },
+        {
+          "key": "C",
+          "text": "From the FortiPAM administrator's email address",
+          "feedback": "The administrator's email is not the target domain identity."
+        },
+        {
+          "key": "D",
+          "text": "From the RDP display resolution",
+          "feedback": "Display resolution is unrelated to Kerberos realm construction."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 36,
+      "product": "FortiPAM",
+      "question": "Which secret/target pattern aligns with Fortinet's Kerberos NLA best practice?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "A Web RDP secret with only an IP address",
+          "feedback": "Web RDP is not supported for the Kerberos NLA option."
+        },
+        {
+          "key": "B",
+          "text": "An SSH secret with a Windows password field",
+          "feedback": "An SSH secret does not provide the native RDP NLA flow."
+        },
+        {
+          "key": "C",
+          "text": "A Target Only secret with target FQDN associated to a Windows Domain Account secret",
+          "feedback": "Correct. The documented pattern uses a Target Only secret with FQDN and associates the Windows Domain Account secret."
+        },
+        {
+          "key": "D",
+          "text": "A local-only secret with no target context",
+          "feedback": "Kerberos requires target/domain context and credentials; a local-only secret is insufficient."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 37,
+      "product": "FortiSIEM",
+      "question": "What does an Incident Outbound integration do?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Imports a device inventory from an external CMDB",
+          "feedback": "CMDB inbound imports inventory; it is not incident outbound."
+        },
+        {
+          "key": "B",
+          "text": "Clears FortiSIEM incidents when an external ticket closes",
+          "feedback": "Incident inbound is the direction that synchronizes an external closed ticket to FortiSIEM."
+        },
+        {
+          "key": "C",
+          "text": "Creates an external ticket when a FortiSIEM incident triggers",
+          "feedback": "Correct. Incident outbound creates a ticket from a FortiSIEM incident, typically through an automation policy."
+        },
+        {
+          "key": "D",
+          "text": "Changes the FortiSIEM incident rule threshold",
+          "feedback": "Ticketing integration does not change the detection rule threshold."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 38,
+      "product": "FortiSIEM",
+      "question": "A ServiceNow ticket is closed. Which integration direction synchronizes that state back to FortiSIEM?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Incident Inbound",
+          "feedback": "Correct. Incident Inbound reads the external ticket state and can clear the linked FortiSIEM incident."
+        },
+        {
+          "key": "B",
+          "text": "Incident Outbound",
+          "feedback": "Incident Outbound creates or updates the external ticket from FortiSIEM."
+        },
+        {
+          "key": "C",
+          "text": "CMDB Outbound",
+          "feedback": "CMDB Outbound synchronizes device inventory to the external system."
+        },
+        {
+          "key": "D",
+          "text": "CMDB Inbound",
+          "feedback": "CMDB Inbound synchronizes external device inventory into FortiSIEM."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 39,
+      "product": "FortiSIEM",
+      "question": "For a custom inbound incident integration, which mapping is essential for the close action?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "A FortiSIEM device serial number only",
+          "feedback": "A device serial number does not identify the external incident ticket lifecycle."
+        },
+        {
+          "key": "B",
+          "text": "External Ticket Id plus an inbound state mapped to Closed and cleared time",
+          "feedback": "Correct. The external ticket identifier links the record; Closed value mapping and external cleared time support the inbound clear operation."
+        },
+        {
+          "key": "C",
+          "text": "Only the ServiceNow short_description field",
+          "feedback": "short_description is useful outbound content but does not provide the required inbound close mapping."
+        },
+        {
+          "key": "D",
+          "text": "A CMDB organization name with no incident identifier",
+          "feedback": "An organization mapping alone cannot identify and close a linked incident."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 40,
+      "product": "FortiSIEM",
+      "question": "Which integration type pushes a newly discovered FortiSIEM device into an external CMDB?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Incident Inbound",
+          "feedback": "Incident Inbound synchronizes ticket state, not device inventory."
+        },
+        {
+          "key": "B",
+          "text": "Incident Outbound",
+          "feedback": "Incident Outbound creates external incident tickets."
+        },
+        {
+          "key": "C",
+          "text": "CMDB Inbound",
+          "feedback": "CMDB Inbound imports external inventory into FortiSIEM."
+        },
+        {
+          "key": "D",
+          "text": "CMDB Outbound",
+          "feedback": "Correct. CMDB Outbound can run after discovery to create/update external device records."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 41,
+      "product": "FortiSASE",
+      "question": "What must exist before endpoint-to-endpoint communication can be configured in FortiSASE?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "At least one Secure Private Access Hub",
+          "feedback": "Correct. The feature becomes available after at least one SPA Hub is configured."
+        },
+        {
+          "key": "B",
+          "text": "A dedicated FortiManager ADOM",
+          "feedback": "FortiManager ADOMs are not a prerequisite for FortiSASE endpoint peer traffic."
+        },
+        {
+          "key": "C",
+          "text": "A FortiNAC-F docking-station entry",
+          "feedback": "Docking-station management is a FortiNAC-F feature."
+        },
+        {
+          "key": "D",
+          "text": "A separate FortiAnalyzer Fabric supervisor",
+          "feedback": "FortiAnalyzer Fabric supervisor is unrelated to SPA routing."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 42,
+      "product": "FortiSASE",
+      "question": "Two endpoints are connected to the same Security PoP. Which policy set is required for their peer traffic?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Only a DNS redirection rule",
+          "feedback": "DNS redirection does not authorize peer traffic."
+        },
+        {
+          "key": "B",
+          "text": "Only a To Hubs policy",
+          "feedback": "To Hubs alone is incomplete; the documented policy model requires To and From Hub policies and a same-PoP endpoint policy."
+        },
+        {
+          "key": "C",
+          "text": "To Hubs and From Hubs plus an Endpoint-to-endpoint policy",
+          "feedback": "Correct. Same-PoP endpoints also require an Endpoint-to-endpoint policy in addition to To/From Hub policies."
+        },
+        {
+          "key": "D",
+          "text": "Only a BGP neighbor password",
+          "feedback": "A BGP neighbor password authenticates routing peers but does not authorize the application service."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 43,
+      "product": "FortiSASE",
+      "question": "For endpoints on different Security PoPs, which policy pair does Fortinet specify?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Endpoint-to-endpoint only",
+          "feedback": "The dedicated Endpoint-to-endpoint policy is specifically called out for same-PoP endpoints."
+        },
+        {
+          "key": "B",
+          "text": "To Hubs and From Hubs",
+          "feedback": "Correct. Cross-PoP traffic uses the To Hubs and From Hubs policy path."
+        },
+        {
+          "key": "C",
+          "text": "A local LAN policy on each endpoint",
+          "feedback": "Local endpoint LAN policies do not replace FortiSASE SPA policy."
+        },
+        {
+          "key": "D",
+          "text": "A FortiGate central NAT policy only",
+          "feedback": "A FortiGate central NAT policy is not the documented FortiSASE policy pair."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 44,
+      "product": "FortiSASE",
+      "question": "After enabling Endpoint-to-endpoint Traffic under Network > BGP, what must be done on SPA Hubs?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Disable BGP on every Security PoP",
+          "feedback": "BGP is part of the required route-distribution path."
+        },
+        {
+          "key": "B",
+          "text": "Remove all endpoint prefixes from the hub",
+          "feedback": "Removing endpoint prefixes would remove the reachability needed for peer traffic."
+        },
+        {
+          "key": "C",
+          "text": "Create a static default route to each endpoint",
+          "feedback": "A default route does not replace the required specific endpoint prefix re-advertisement."
+        },
+        {
+          "key": "D",
+          "text": "Re-announce BGP prefixes learned from FortiSASE Security PoPs",
+          "feedback": "Correct. SPA Hubs must re-announce the Security PoP prefixes to provide the route path between endpoints."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 45,
+      "product": "Secure SD-WAN",
+      "question": "How does the FortiGate OaaS agent communicate securely with the FortiCloud controller?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Over the FGFM management tunnel",
+          "feedback": "Correct. The OaaS agent/controller channel uses the FGFM management tunnel."
+        },
+        {
+          "key": "B",
+          "text": "Over an unencrypted data-plane IPsec shortcut",
+          "feedback": "The agent/controller channel is a management transaction, not an ADVPN data-plane shortcut."
+        },
+        {
+          "key": "C",
+          "text": "Through the endpoint's RADIUS accounting session",
+          "feedback": "RADIUS accounting is unrelated to OaaS orchestration."
+        },
+        {
+          "key": "D",
+          "text": "Through a FortiAnalyzer log-forwarding connection",
+          "feedback": "FortiAnalyzer log forwarding is not the OaaS control channel."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 46,
+      "product": "Secure SD-WAN",
+      "question": "An OaaS-orchestrated configuration change fails during application. What is the documented agent behavior?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Leave the successfully applied half of the configuration in place",
+          "feedback": "The design is intended to avoid a partially applied orchestrated configuration."
+        },
+        {
+          "key": "B",
+          "text": "Rollback the OaaS-orchestrated configuration changes",
+          "feedback": "Correct. If an orchestrated change fails, the OaaS agent rolls back the changes that were orchestrated."
+        },
+        {
+          "key": "C",
+          "text": "Disable the FortiGate's local administrator account",
+          "feedback": "The feature does not disable local administrator accounts."
+        },
+        {
+          "key": "D",
+          "text": "Delete the site's license entitlement",
+          "feedback": "A failed transaction does not delete the license entitlement."
+        }
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "id": 47,
+      "product": "Secure SD-WAN",
+      "question": "Which command displays the OaaS account, site, configuration version, sync state, target version and task ID?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "diagnose sys sdwan health-check",
+          "feedback": "This command checks SD-WAN health-check status, not the OaaS controller transaction."
+        },
+        {
+          "key": "B",
+          "text": "get router info bgp summary",
+          "feedback": "This displays BGP neighbor information, not OaaS account/task state."
+        },
+        {
+          "key": "C",
+          "text": "execute vpn ike gateway list",
+          "feedback": "This is not the documented OaaS status command."
+        },
+        {
+          "key": "D",
+          "text": "get oaas status",
+          "feedback": "Correct. get oaas status exposes the OaaS agent/controller sync details and error field."
+        }
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "id": 48,
+      "product": "Secure SD-WAN",
+      "question": "OaaS reports Configuration sync status SUCCESS. What is still required before declaring the branch service healthy?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Nothing; sync success proves every application flow",
+          "feedback": "A control-plane transaction success does not prove data-plane forwarding."
+        },
+        {
+          "key": "B",
+          "text": "Delete the OaaS default rule",
+          "feedback": "The OaaS default rule is part of the generated SD-WAN service and should not be deleted casually."
+        },
+        {
+          "key": "C",
+          "text": "Verify IPsec tunnels, BGP routes, SLA state and representative traffic",
+          "feedback": "Correct. Verify the resulting overlay, routes, performance SLA and end-to-end traffic separately."
+        },
+        {
+          "key": "D",
+          "text": "Disable all local firewall policies",
+          "feedback": "Disabling firewall policies would reduce security and is not a validation step."
+        }
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "id": 49,
+      "product": "Cross-product",
+      "question": "Which evidence pair best separates a control-plane success from actual service forwarding?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "FortiSASE BGP prefix presence plus SPA policy log, or OaaS sync status plus tunnel/SLA/traffic tests",
+          "feedback": "Correct. Route/policy evidence and OaaS sync/tunnel/SLA/traffic evidence distinguish configuration state from forwarding behavior."
+        },
+        {
+          "key": "B",
+          "text": "A successful GUI login plus a device hostname",
+          "feedback": "A GUI login and hostname prove management access only."
+        },
+        {
+          "key": "C",
+          "text": "An admin profile name plus a report title",
+          "feedback": "Profile names and report titles do not prove packet or transaction flow."
+        },
+        {
+          "key": "D",
+          "text": "A license page screenshot plus an empty event log",
+          "feedback": "A license screenshot and empty log do not prove data-plane service."
+        }
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "id": 50,
+      "product": "Cross-product",
+      "question": "Which statement correctly distinguishes FortiNAC Audit Only from FortiSwitch learning-limit shutdown?",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Both controls only collect logs and never affect access",
+          "feedback": "Audit Only changes remediation behavior, and learning-limit shutdown can disable a physical port."
+        },
+        {
+          "key": "B",
+          "text": "Audit Only is scan-scoped non-enforcement; learning-limit shutdown is a physical-port action gated by violation controls",
+          "feedback": "Correct. They act in different planes: NAC scan enforcement versus L2 MAC learning admission and port action."
+        },
+        {
+          "key": "C",
+          "text": "Both controls operate on BGP route advertisements",
+          "feedback": "Neither feature uses BGP route advertisements."
+        },
+        {
+          "key": "D",
+          "text": "Audit Only changes MAC aging, while sticky MAC changes scan results",
+          "feedback": "The two mechanisms do not alter each other's state."
+        }
+      ],
+      "correct_answer": "B"
+    }
+  ]
+}
