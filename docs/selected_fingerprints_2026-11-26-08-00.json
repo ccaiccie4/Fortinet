@@ -1,0 +1,520 @@
+{
+  "schema_version": "3.0",
+  "generated_at_local": "2026-11-26T08:00:40-08:00",
+  "repository": "ccaiccie4/Fortinet",
+  "exclusion_inventory_path": "docs/exclusion_inventory_2026-11-26-08-00.json",
+  "exclusion_inventory_sha": "c8099907d25ea2caf9fc48a68649217255d27aee",
+  "historical_records_compared": 357,
+  "selected_topic_count": 12,
+  "candidate_rejections": [
+    {
+      "product": "FortiGate",
+      "candidate": "Firewall address IPAM pools and per-device allocation",
+      "reason": "Rejected because the 30-day inventory already contains FortiGate IPAM allocation through Fabric Overlay Orchestrator (2026-11-07), making the core IPAM allocation mechanism too close. Replaced with ISDB-reputation-driven BGP origination."
+    },
+    {
+      "product": "FortiPAM",
+      "candidate": "Single secret to multiple approved target hosts",
+      "reason": "Rejected because the exact Multiple Target Address feature was already taught on 2026-11-12. Replaced with Kerberos authentication for native RDP NLA."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "candidate": "Graceful BGP shutdown for planned maintenance",
+      "reason": "Rejected because the exact RFC 8326 feature was already taught on 2026-11-11. Replaced with FortiCloud Overlay-as-a-Service transactional provisioning and rollback."
+    }
+  ],
+  "candidates": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Dynamic BGP learning of FortiGuard ISDB botnet and spam reputation IPs",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/65346/dynamic-bgp-learning-of-isdb-reputation-ips-new",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/new-features/65346/dynamic-bgp-learning-of-isdb-reputation-ips",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/750736"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "BGP network statements reference FortiGuard Internet Service Database reputation categories Botnet-C&C.Server and Spam-Spamming.Server; FortiGate dynamically learns and advertises reputation IP prefixes through BGP rather than relying only on static prefix lists.",
+      "workflow_transaction_fingerprint": "ISDB reputation feed -> FortiGate BGP network item using internet-service-name -> BGP UPDATE to authorized peers -> downstream route policy/sinkhole/blackhole decision; route advertisement is separate from local firewall blocking.",
+      "failure_class": "Threat-intelligence route export missing, stale, overbroad, or rejected by BGP policy.",
+      "evidence_pattern": "Peer BGP RIB shows dynamic /32 routes; local ISDB query shows category membership; received/advertised route and route-map counters prove propagation, not that data-plane traffic is blocked.",
+      "remediation_path": "Verify FortiGuard/ISDB entitlement and category name, BGP network statement, peer activation and outbound route-map, prefix acceptance, next-hop reachability, and downstream discard/sinkhole policy.",
+      "question_fingerprint": "Distinguish ISDB-driven BGP prefix origination from static networks, redistribution, and local firewall deny.",
+      "diagram_topology_layout_fingerprint": "Threat-feed-to-FortiGate-ISDB-to-BGP-originator-to-two-peers topology with a separate downstream enforcement branch.",
+      "uniqueness_rationale": "No in-window FortiGate lesson covers dynamic BGP origination from ISDB reputation categories. Prior BGP lessons concern route maps, transport, route leaking, TCP-AO, conditional advertisement, and route-reflector next-hop; prior SD-WAN IPAM/route-tag items use different mechanisms.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.0975609756097561,
+        "closest_historical": [
+          {
+            "date": "2026-11-22",
+            "subject": "Preferred outbound BGP route-map selection for SLA-preferred SD-WAN peers",
+            "score": 0.0975609756097561
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "BGP route leaking between VRFs through virtual inter-VDOM links: prefix control, symmetric return paths, and policy isolation",
+            "score": 0.06944444444444445
+          },
+          {
+            "date": "2026-11-13",
+            "subject": "Central SNAT map selection with dynamic external IP-feed source objects",
+            "score": 0.06578947368421052
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Importing password-type objects from PDE-enabled FortiGates in FortiManager 8.0",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/30332/managing-fortigates-with-private-data-encryption",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/13068/fortimanager-supports-importing-password-type-objects-from-fortigate-devices-with-private-data-encryption"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager 8.0 imports objects containing password-type attributes from managed FortiGates with Private Data Encryption enabled; import wizard requires explicit password handling for new and pre-existing ADOM objects.",
+      "workflow_transaction_fingerprint": "TPM/PDE-enabled FortiGate config retrieve/import -> object parsing -> per-object password prompt -> create/update ADOM object -> later install/retrieve; existing object allows new password or blank to preserve device password.",
+      "failure_class": "Configuration import incomplete or secret state ambiguous because PDE-protected password fields cannot be silently reconstructed.",
+      "evidence_pattern": "Import Wizard prompt and ADOM object state; retrieve/import result; target FortiGate object behavior; NAT/transparent VDOM settings remain unsupported in FortiManager for PDE devices and must be configured on device then retrieved.",
+      "remediation_path": "Confirm FortiManager 8.0 and supported FortiOS/PDE combination; supply passwords per object or deliberately leave existing password unchanged; configure NAT/transparent VDOM directly on FortiGate and retrieve; validate post-upgrade import behavior.",
+      "question_fingerprint": "Choose the correct import action for new versus existing PDE password-type objects and identify the NAT/transparent VDOM exception.",
+      "diagram_topology_layout_fingerprint": "FortiGate TPM/PDE device -> FortiManager import wizard -> ADOM object database, with password prompt and separate direct-device NAT/transparent VDOM path.",
+      "uniqueness_rationale": "No historical lesson addresses PDE-protected password-type object import. Prior FortiManager lessons cover policy packages, workflow, revisions, templates, scripts, API, and certificates; this is a distinct secret-handling boundary.",
+      "semantic_comparison": {
+        "historical_records_compared": 28,
+        "highest_similarity": 0.12790697674418605,
+        "closest_historical": [
+          {
+            "date": "2026-11-23",
+            "subject": "First policy-package installation as object reconciliation and pruning",
+            "score": 0.12790697674418605
+          },
+          {
+            "date": "2026-11-14",
+            "subject": "FortiManager 8.0 local-user per-device mapping for branch-specific credentials and FortiToken bindings",
+            "score": 0.10344827586206896
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "Global policy package assignment: header/footer policy insertion and ADOM synchronization",
+            "score": 0.1
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "Nested FortiAnalyzer Fabric Groups for multi-group administrator RBAC",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/fortianalyzer-fabric-deployment-guide/397229/fabric-groups",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/new-features/738069/assign-access-to-multiple-fabric-groups-for-a-single-admin"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Fabric Groups can contain Fabric members, selected ADOMs, and other Fabric Groups; a parent group aggregates child groups and is assigned as the administrator's visibility scope.",
+      "workflow_transaction_fingerprint": "Create leaf groups -> select Fabric members/ADOMs -> create parent group containing child groups -> assign parent to admin -> Device Manager/FortiView/Log View/Reports apply group-scoped visibility.",
+      "failure_class": "Over-broad or incomplete cross-Fabric visibility caused by incorrect group membership or assignment.",
+      "evidence_pattern": "Admin's Fabric Group assignment and resulting visible members/ADOMs in Device Manager, FortiView, Log View and Reports; proves visibility scope, not every independent admin-profile permission.",
+      "remediation_path": "Inspect nested membership, include only intended ADOMs, assign the parent group at the Fabric supervisor, test with a least-privilege admin, and verify all four UI surfaces.",
+      "question_fingerprint": "Select the supported way to grant one admin two disjoint Fabric Groups without manually assigning multiple top-level scopes.",
+      "diagram_topology_layout_fingerprint": "Nested RBAC graph: leaf groups each contain member/ADOM nodes, parent group references both, admin points to parent, analytics views downstream.",
+      "uniqueness_rationale": "The Nov 23 Security Fabric ADOM lesson addresses log-correlation boundaries, not nested Fabric Group RBAC or administrator visibility aggregation.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.1232876712328767,
+        "closest_historical": [
+          {
+            "date": "2026-11-23",
+            "subject": "Security Fabric ADOM as a cross-product log-correlation and reporting boundary",
+            "score": 0.1232876712328767
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "Alert Explorer evidence chain: quick filters, related alerts, triggering logs and rule provenance",
+            "score": 0.07462686567164178
+          },
+          {
+            "date": "2026-11-17",
+            "subject": "Analytics versus Archive log pipeline: local indexing, HA database-range divergence, and archive-backed rebuild",
+            "score": 0.06756756756756757
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Dynamic MAC learning limits, violation shutdown, aging and sticky MAC persistence",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/287002",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortilink-guide/801180/dynamic-mac-address-learning"
+      ],
+      "scenario_community_url": "https://community.fortinet.com/fortiswitch-36/fortiswitch-port-remains-active-and-does-not-generate-logs-when-learning-limit-action-shutdown-is-set-230941",
+      "feature_mechanism_fingerprint": "Per-port or per-VLAN dynamic source-MAC learning can be limited; learned entries age out; sticky MAC preserves learned identities across port link transitions and can be saved for reboot; violation logging and timed shutdown are separate controls.",
+      "workflow_transaction_fingerprint": "Frame source MAC arrives -> switch learns dynamic FDB entry if learning enabled -> limit evaluated -> violation action/log controlled globally and per interface -> aging or sticky persistence determines entry lifetime.",
+      "failure_class": "MAC learning limit exceeded without shutdown or event evidence because violation timer/logging are disabled, or stale sticky entries block legitimate endpoint moves.",
+      "evidence_pattern": "MAC limit violation table, physical port state, system log, MAC event log, FDB entry and sticky-save state; static MACs are not counted in dynamic limit.",
+      "remediation_path": "Set a non-zero mac-violation-timer, enable log-mac-limit-violations, configure per-port learning-limit/action, verify port state and violation table, reset violation state after remediation, and persist sticky entries only when required.",
+      "question_fingerprint": "Diagnose why learning-limit-action shutdown did not shut a port and distinguish the global timer/logging prerequisites from the per-port threshold.",
+      "diagram_topology_layout_fingerprint": "Access switch port with endpoint MACs feeding dynamic FDB and limit counter, with separate violation-log/timer/shutdown branch and sticky-MAC persistence store.",
+      "uniqueness_rationale": "No prior lesson covers dynamic MAC FDB admission, learning-limit violation lifecycle, or sticky MAC persistence. Prior switch lessons cover IP source guard, DHCP snooping, MAB, MACsec, LACP, STP, VXLAN and port policies.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.09090909090909091,
+        "closest_historical": [
+          {
+            "date": "2026-11-22",
+            "subject": "FortiSwitch VXLAN interfaces: VNI-to-VLAN mapping, VTEP reachability and underlay limits",
+            "score": 0.09090909090909091
+          },
+          {
+            "date": "2026-10-27",
+            "subject": "FortiSwitch — IP source guard and DHCP snooping: bindings and spoofing enforcement",
+            "score": 0.08196721311475409
+          },
+          {
+            "date": "2026-11-13",
+            "subject": "LACP trunk formation and member-selection behavior: aggregator mode, fallback and hash fields",
+            "score": 0.06578947368421052
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "802.11r Fast BSS Transition key context and FT-over-DS versus FT-over-the-air",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/651750/advanced-ssid-options",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/461028/configuring-layer-2-and-layer-3-roaming",
+        "https://docs.fortinet.com/document/fortigate/7.4.1/cli-reference/154620/config-wireless-controller-vap"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "802.11r Fast BSS Transition enables a client to establish a target-AP security context with reduced full-authentication delay; FortiOS exposes fast-bss-transition, ft-mobility-domain, ft-r0-key-lifetime and ft-over-ds controls.",
+      "workflow_transaction_fingerprint": "Client authenticates on an SSID -> mobility-domain/key context is established -> target AP uses FT over the distribution system or over-the-air exchange -> reassociation completes with reduced authentication latency; separate from 802.11k neighbor reports and 802.11v steering.",
+      "failure_class": "Roam stalls or fails because client FT capability, SSID security settings, mobility-domain alignment, or FT transport mode is incompatible.",
+      "evidence_pattern": "VAP configuration, client association/authentication logs, FT mobility-domain and mode, and roam latency; fast-bss-transition enabled alone does not prove the client negotiated FT.",
+      "remediation_path": "Validate client 802.11r support, consistent SSID/security/mobility-domain across APs, choose FT-over-DS or over-air based on client compatibility, and test representative clients before broad enablement.",
+      "question_fingerprint": "Differentiate 802.11r key-transition behavior from 802.11k neighbor reporting and 802.11v BSS steering.",
+      "diagram_topology_layout_fingerprint": "Two APs in one mobility domain, client roaming from AP-A to AP-B, with FT key-context exchange shown via DS and over-air alternatives.",
+      "uniqueness_rationale": "The prior 802.11k/v lesson covers assisted discovery/steering, while the Nov 23 inter-controller L3 roaming lesson covers IP preservation/tunnel behavior; neither covers 802.11r FT key-context exchange.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.08695652173913043,
+        "closest_historical": [
+          {
+            "date": "2026-11-10",
+            "subject": "5. FortiAP/Wireless — 802.11k and 802.11v assisted roaming: neighbor knowledge, steering and capacity trade-offs",
+            "score": 0.08695652173913043
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "Wi-Fi 7 Multi-Link Operation on FortiAP K-series, including local standalone operation",
+            "score": 0.0759493670886076
+          },
+          {
+            "date": "2026-11-23",
+            "subject": "Inter-controller Layer-3 roaming with mobility-tunnel IP preservation",
+            "score": 0.060240963855421686
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "Audit-only compliance scans versus Forced Remediation Exceptions",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/386498/scan-hosts-without-enforcing-remediation",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC separates compliance evaluation from enforcement using scan-level Audit Only and host-group-level Forced Remediation Exceptions; Audit Only prevents failed hosts from being marked at-risk, while exception-group members may be marked at-risk but are never forced into Remediation.",
+      "workflow_transaction_fingerprint": "Policy assignment selects scan -> scan evaluates host and stores result -> Audit Only or exception-group membership determines remediation transition -> quarantine/remediation switching is bypassed for selected scope.",
+      "failure_class": "A compliance test unexpectedly interrupts users, or a noncompliant endpoint remains connected because enforcement suppression scope was misunderstood.",
+      "evidence_pattern": "Scan definition Audit Only flag, host group membership, stored scan result, host at-risk state and remediation state; result storage does not imply enforcement.",
+      "remediation_path": "Choose scan-level Audit Only for one scan's evaluated population or exception-group membership for hosts across scans; preserve other enforcing scans; validate with test hosts and inspect both result and remediation state.",
+      "question_fingerprint": "Identify the difference between scan-scoped non-enforcement and host-group-scoped remediation exception semantics.",
+      "diagram_topology_layout_fingerprint": "Host enters assigned scan; result branch marks compliant/noncompliant; separate Audit Only and exception-group gates converge on remain-connected versus remediation VLAN.",
+      "uniqueness_rationale": "Historical FortiNAC lessons cover scans, profiling, policy assignment, host timers, and authentication, but none covers decoupling scan result storage from remediation enforcement.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.09302325581395349,
+        "closest_historical": [
+          {
+            "date": "2026-11-18",
+            "subject": "Nested group hierarchy as a directed acyclic graph: detect and remove reciprocal membership cycles",
+            "score": 0.09302325581395349
+          },
+          {
+            "date": "2026-11-12",
+            "subject": "Role assignment precedence and inheritance: users, hosts, groups, captive portal and device profiler",
+            "score": 0.08108108108108109
+          },
+          {
+            "date": "2026-11-13",
+            "subject": "FortiNAC 9.4 User Organizational Unit LDAP mapping into User/Host Profiles and FSSO context",
+            "score": 0.07692307692307693
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F 7.6.5 shared docking-station and external Ethernet adapter authentication",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.5/release-notes/629218/whats-new-in-fortinac-f-7-6-5",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/736104/docking-station-management",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/docking-station-management/179554/best-solution-docking-station-management-solution"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Docking stations and Ethernet dongles can mask attached endpoint identity behind a shared adapter MAC; FortiNAC-F maintains an adapter/host trust list and 7.6.5 improves shared-adapter identification, user authentication before access, and provisioning based on adapter connection.",
+      "workflow_transaction_fingerprint": "Endpoint connects through dock -> NAC detects registered/unregistered adapter context -> authentication policy deauthenticates or places host in authentication VLAN -> self-registration portal issues/validates user credentials -> host/network access is provisioned based on adapter and user context.",
+      "failure_class": "Untrusted endpoint inherits network access because the dock's shared MAC masks the endpoint, or a legitimate device is repeatedly forced to self-register.",
+      "evidence_pattern": "Docking Station Management list, Adapter View's Docking Station Connected state, authentication policy match, authentication VLAN, portal Request New Credentials transaction and host registration.",
+      "remediation_path": "Register/import authorized adapter and endpoint MACs, validate user/host profile and authentication portal template, confirm Request New Credentials, test one registered and one unregistered endpoint, and consider MAC Address Pass Through where supported.",
+      "question_fingerprint": "Trace how NAC distinguishes an endpoint behind a shared dock from the dock's own MAC and chooses registered bypass versus self-registration.",
+      "diagram_topology_layout_fingerprint": "Two endpoints share one dock MAC; NAC adapter registry and authentication policy branch registered endpoint to access and unknown endpoint to authentication VLAN/portal.",
+      "uniqueness_rationale": "Prior FortiNAC-F lessons cover device profiling, MDM ownership, 802.1X, RADIUS, and host identity, but not shared docking-station MAC masking and 7.6.5 adapter-aware authentication.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.14102564102564102,
+        "closest_historical": [
+          {
+            "date": "2026-11-13",
+            "subject": "IP phone voice VLAN provisioning: Local RADIUS attributes and MAC-notification-driven refresh",
+            "score": 0.14102564102564102
+          },
+          {
+            "date": "2026-11-04",
+            "subject": "FortiNAC-F — User SAML SSO for captive portal with attribute-based group assignment",
+            "score": 0.13157894736842105
+          },
+          {
+            "date": "2026-11-21",
+            "subject": "FortiNAC-F 802.1X with Microsoft Entra ID using EAP-TTLS/PAP and the Local RADIUS TLS service",
+            "score": 0.11904761904761904
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "OAuth authorization-code flow with PKCE for public relying parties",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/6.6.3/administration-guide/760429/fortiauthenticator-6-6-0",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.0/administration-guide/796040/relying-party",
+        "https://docs.fortinet.com/document/fortiauthenticator/6.6.1/rest-api-solution-guide/316401/oidc-authorization-oauth-authorize"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Public OAuth relying parties use Authorization Code with PKCE; client_secret is ignored at authorize, S256 code_challenge/code_challenge_method are required, and token exchange requires code_verifier matching the issued challenge.",
+      "workflow_transaction_fingerprint": "Public client generates verifier -> derives S256 challenge -> /oauth/authorize redirects user to FortiAuthenticator portal and issues code -> client sends code plus verifier to /oauth/token -> FAC validates SHA256 relationship before issuing token.",
+      "failure_class": "Authorization-code interception or token exchange failure from missing/mismatched PKCE parameters, wrong redirect URI, or using confidential-client assumptions with a public client.",
+      "evidence_pattern": "Relying-party client type/grant type, authorize request parameters, token request code_verifier, redirect URI and FAC OAuth error/response; a successful login alone does not prove correct token binding.",
+      "remediation_path": "Set client type Public and grant Authorization code with PKCE, use S256 only, preserve verifier securely for the exchange, register exact HTTPS redirect URI, and verify token request challenge match.",
+      "question_fingerprint": "Identify which PKCE fields belong in authorize versus token exchange and what happens to client_secret for a public client.",
+      "diagram_topology_layout_fingerprint": "Public app with verifier/challenge branch, browser redirect to FAC login, authorization code return, token endpoint verifier validation, access-token output.",
+      "uniqueness_rationale": "Prior FortiAuthenticator lessons cover SAML, RADIUS, TACACS+, LDAP and certificate revocation; no prior lesson covers OAuth PKCE or the public-client verifier binding.",
+      "semantic_comparison": {
+        "historical_records_compared": 29,
+        "highest_similarity": 0.09615384615384616,
+        "closest_historical": [
+          {
+            "date": "2026-11-01",
+            "subject": "TACACS+ client-policy binding and the authentication-before-authorization boundary",
+            "score": 0.09615384615384616
+          },
+          {
+            "date": "2026-11-15",
+            "subject": "FortiAuthenticator 6.6.7 SHA-1 cryptographic operation removal and certificate migration",
+            "score": 0.09230769230769231
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "RADSec RADIUS accounting: TLS client trust and accounting-session transport",
+            "score": 0.08
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Kerberos authentication for native RDP Network Level Authentication",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/574014/kerberos-authentication-for-rdp-sessions",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/549807/creating-a-secret",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/677870/creating-a-target"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM 1.9 native RDP launcher can use Kerberos for NLA/CredSSP; realm derives from secret/target domain, KDC is selected by explicit KDC Address or DNS SRV discovery, and feature is limited to native RDP launcher.",
+      "workflow_transaction_fingerprint": "Secret enables RDP service and NLA -> Use Kerberos for NLA -> FortiPAM derives realm from target/domain -> resolve KDC via configured address or DNS SRV -> obtain Kerberos ticket -> authenticate RDP NLA to target.",
+      "failure_class": "RDP NLA falls back to NTLM or fails Kerberos due missing FQDN/domain association, KDC discovery, SPN, DNS or time prerequisites.",
+      "evidence_pattern": "Secret RDP Security Level=NLA and Use Kerberos for NLA, target domain/FQDN/KDC Address, DNS SRV resolution and native launcher behavior; Web RDP is not supported for this option.",
+      "remediation_path": "Use native RDP, configure NLA and Kerberos, associate a Windows Domain Account secret with Target Only FQDN secret or enter target FQDN, verify realm/KDC discovery, and use explicit KDC Address only when needed.",
+      "question_fingerprint": "Select the valid FortiPAM RDP Kerberos path and distinguish it from TCP forwarding, Web RDP and NTLM NLA.",
+      "diagram_topology_layout_fingerprint": "FortiPAM secret and target feed realm/FQDN, KDC discovery (DNS SRV or explicit address), Kerberos ticket, then native RDP NLA session.",
+      "uniqueness_rationale": "No prior FortiPAM lesson covers Kerberos ticket acquisition for native RDP NLA. Prior RDP lessons cover TCP forwarding, launchers, clipboard/security controls, but not Kerberos realm/KDC selection.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.09523809523809523,
+        "closest_historical": [
+          {
+            "date": "2026-11-13",
+            "subject": "Native RDP TCP forwarding mode: transport fallback and lost native RDP security controls",
+            "score": 0.09523809523809523
+          },
+          {
+            "date": "2026-11-21",
+            "subject": "FortiPAM approval email via Microsoft Graph: OAuth application, mailbox permission, and approval notification path",
+            "score": 0.0821917808219178
+          },
+          {
+            "date": "2026-10-29",
+            "subject": "Secret checkout lock lifecycle: why an active launcher can block forced checkout",
+            "score": 0.08163265306122448
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "Two-way incident and CMDB ticketing integrations with external ITSM systems",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/247569",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortisiem/7.1.4/user-guide/265878"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM supports incident outbound, incident inbound, CMDB outbound and CMDB inbound integrations; integrations are attached to Incident Automation Policies or run on schedules, enabling external ticket creation/state synchronization and CMDB synchronization.",
+      "workflow_transaction_fingerprint": "Create integration -> map FortiSIEM incident/CMDB fields to external ticket/CMDB -> bind incident integration to automation policy or schedule CMDB job -> outbound create/update or inbound state reconciliation -> closed external ticket clears FortiSIEM incident.",
+      "failure_class": "Duplicate/orphan tickets, incident status divergence, field mapping errors, or CMDB drift between FortiSIEM and ITSM.",
+      "evidence_pattern": "Integration direction/type, policy invocation, external ticket ID/state, mapped fields and corresponding FortiSIEM incident status; external ticket closure should clear the linked incident.",
+      "remediation_path": "Separate incident and CMDB integrations, validate field mappings and credentials, attach outbound integration to the intended automation policy, configure inbound sync, test create/update/close lifecycle, and use API for unsupported systems.",
+      "question_fingerprint": "Distinguish incident outbound from incident inbound and determine which integration clears the FortiSIEM incident when the external ticket closes.",
+      "diagram_topology_layout_fingerprint": "Four-quadrant integration matrix (incident outbound/inbound, CMDB outbound/inbound) between FortiSIEM and ITSM/CMDB, with automation-policy and scheduled-job triggers.",
+      "uniqueness_rationale": "Historical FortiSIEM lesson on Automation Policies covers internal notification/remediation/case creation; this topic is external two-way ticket-state and CMDB synchronization, a separate API transaction and lifecycle.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.08974358974358974,
+        "closest_historical": [
+          {
+            "date": "2026-11-13",
+            "subject": "FortiSIEM discovery orchestration: Range Scan, Smart Scan, cloud scans and Collector/Worker job placement",
+            "score": 0.08974358974358974
+          },
+          {
+            "date": "2026-11-04",
+            "subject": "FortiSIEM — Automation Policies for incident notification, remediation and case creation",
+            "score": 0.08955223880597014
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "Python-based custom external threat-feed ingestion and Full versus Incremental update semantics",
+            "score": 0.0821917808219178
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Endpoint-to-endpoint communication through Secure Private Access hubs",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/983665/enabling-endpoint-to-endpoint-communication",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/519208"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSASE allows remote endpoints on Cloud Security tunnels to communicate through an SPA Hub; BGP endpoint-to-endpoint traffic is enabled, hub re-announces Security PoP prefixes, and policy requirements differ for same versus different Security PoPs.",
+      "workflow_transaction_fingerprint": "Endpoint establishes SIA tunnel to Security PoP -> BGP advertises endpoint prefixes to SPA Hub -> hub routes peer traffic -> same-PoP path requires endpoint-to-endpoint policy; cross-PoP path requires To Hubs and From Hubs policies -> service/user/posture/action evaluated.",
+      "failure_class": "Peer traffic fails due missing BGP prefix re-advertisement, missing endpoint-to-endpoint policy, or incorrect same-PoP versus cross-PoP policy topology.",
+      "evidence_pattern": "Network > BGP endpoint-to-endpoint toggle, hub BGP route table, To/From Hub and endpoint-to-endpoint policies, policy logs and violation traffic; tunnel up alone does not prove peer route/policy reachability.",
+      "remediation_path": "Configure at least one SPA Hub, enable Endpoint-to-endpoint Traffic, re-announce Security PoP prefixes on hubs, add same-PoP endpoint-to-endpoint policies or cross-PoP To/From Hub policies, and log denied traffic.",
+      "question_fingerprint": "Choose the required policy and BGP action for same-PoP versus cross-PoP endpoint communication.",
+      "diagram_topology_layout_fingerprint": "Two remote endpoints behind separate Security PoPs connected through SPA Hub, BGP prefix exchange, with same-PoP endpoint policy and cross-PoP To/From Hub policy branches.",
+      "uniqueness_rationale": "Prior FortiSASE lessons cover client-to-server private access, agentless ZTNA, split DNS and posture tags; none covers peer-to-peer endpoint traffic through SPA Hub.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.14492753623188406,
+        "closest_historical": [
+          {
+            "date": "2026-11-12",
+            "subject": "Agentless ZTNA: bookmark portal, proxy SSO and SPA-backed HTTPS private application access",
+            "score": 0.14492753623188406
+          },
+          {
+            "date": "2026-11-03",
+            "subject": "Security posture tags for Secure Private Access: endpoint checks, dynamic policy source tags, and default allow-all restriction",
+            "score": 0.14285714285714285
+          },
+          {
+            "date": "2026-11-17",
+            "subject": "Split DNS and DNS redirection: domain-selective internal resolution through SPA with Public/Private access type",
+            "score": 0.13513513513513514
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "FortiCloud Overlay-as-a-Service control plane, transactional provisioning and rollback",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/879228/sd-wan-overlay-as-a-service",
+      "supporting_primary_urls": [
+        "https://docs.fortinet.com/document/overlay-as-a-service/latest/deployment-guide/658086/introduction",
+        "https://docs.fortinet.com/document/overlay-as-a-service/24.4.0/deployment-guide/626374"
+      ],
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiCloud OaaS is a subscription-based cloud orchestration service for regional SD-WAN overlays with geo-redundant dual hubs; FortiGate OaaS agent communicates with controller over FGFM, validates and compares configuration, applies it transactionally, and rolls back orchestrated changes on failure.",
+      "workflow_transaction_fingerprint": "OaaS portal change -> cloud controller task -> FGFM management tunnel -> FortiGate OaaS agent validates/compares target config -> transactional apply -> commit or rollback -> status exposes account/site/config version/task/error; ADVPN shortcuts provide spoke-to-spoke data-plane paths.",
+      "failure_class": "Cloud task fails or partially applied configuration causes SD-WAN zone/service mismatch, tunnel disruption, or version divergence.",
+      "evidence_pattern": "OaaS SWOS entitlement, `get oaas status` account/site/config version/sync state/target version/task ID/error, FortiGate SD-WAN zone/service state, IPsec/BGP state; portal task status alone does not prove spoke forwarding.",
+      "remediation_path": "Verify per-device OaaS license and FortiOS compatibility, inspect OaaS task/status and local SD-WAN config, resolve conflicting manually configured zone/service IDs, retry after correcting conflict, and confirm rollback/target version plus tunnels/routes.",
+      "question_fingerprint": "Trace the OaaS agent's transactional config and identify the correct status command and rollback boundary after an orchestration error.",
+      "diagram_topology_layout_fingerprint": "FortiCloud OaaS controller -> FGFM tunnel -> FortiGate OaaS agent -> transactional config/rollback; dual cloud hubs and branch spokes form a separate ADVPN data-plane overlay.",
+      "uniqueness_rationale": "Prior SD-WAN lessons cover manual/templated overlay construction, Fabric Overlay Orchestrator IPAM and ADVPN path selection. OaaS is distinct cloud controller/agent transaction and rollback, but the lesson will explicitly separate this control plane from the already-covered ADVPN data plane.",
+      "semantic_comparison": {
+        "historical_records_compared": 30,
+        "highest_similarity": 0.06172839506172839,
+        "closest_historical": [
+          {
+            "date": "2026-11-02",
+            "subject": "Remote-health-check BGP route suppression when every hub-to-spoke overlay is dead: MED failover across dual hubs",
+            "score": 0.06172839506172839
+          },
+          {
+            "date": "2026-11-22",
+            "subject": "ADVPN 2.0 Dynamic BGP over loopback: direct spoke route exchange and shortcut behavior",
+            "score": 0.05555555555555555
+          },
+          {
+            "date": "2026-11-21",
+            "subject": "SD-WAN member priority to BGP MED mapping: spoke overlay SLA state, hub route advertisement, and external path choice",
+            "score": 0.052083333333333336
+          }
+        ],
+        "manual_mechanism_review": "Reviewed against all in-window lessons for this product; candidate accepted only where transaction/mechanism differs materially, not merely because URL differs.",
+        "result": "PASS"
+      }
+    }
+  ],
+  "comparison_summary": {
+    "result": "PASS",
+    "accepted": 12,
+    "duplicates": 0,
+    "method": "Product-scoped semantic comparison over subject, feature/mechanism, and workflow/transaction fingerprints, followed by manual cross-reference review of related cross-product mechanisms. New URLs alone were not accepted as evidence of uniqueness."
+  }
+}
