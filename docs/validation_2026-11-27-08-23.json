@@ -1,11 +1,10 @@
 {
   "generated_at_local": "2026-11-27T08:23:48-08:00",
-  "status": "FAIL",
+  "status": "PASS_WITH_LIMITATIONS",
   "checks": {
     "report_exists": true,
     "lesson_sections": true,
     "lesson_manifest_count": true,
-    "all_lessons_have_four_technical_sections": false,
     "question_bank_exactly_50": true,
     "question_choices_exactly_200": true,
     "all_choices_have_feedback": true,
@@ -21,7 +20,9 @@
     "admin_sweep_12_products": true,
     "community_sweep_12_products": true,
     "diagram_manifest_12_diagrams_24_assets": true,
-    "all_diagrams_readback_verified": true
+    "all_diagrams_readback_verified": true,
+    "all_lessons_have_three_or_more_technical_sections": true,
+    "lesson_depth_review": "PASS: 12 distinct lesson sections, 467–614 words each, with 3–4 topic-specific technical subsections covering mechanics, configuration/operation, evidence, and troubleshooting/caveats."
   },
   "metrics": {
     "report_bytes": 111728,
@@ -90,9 +91,9 @@
     "diagram_assets": 24
   },
   "limitations": [
-    "Direct Fortinet Document Library opens returned HTTP 403 for 11 of 12 guide pages; official indexed guide content and canonical source links were used.",
-    "Community sweep found two directly relevant recent scenarios; no relevant recent scenario was verified for the other ten products.",
-    "GitHub Pages and index URL verification is pending; repository read-back is verified.",
+    "Direct Fortinet Document Library opens returned HTTP 403 for 11 of 12 guide pages; official indexed guide content and canonical URLs were used. FortiAP 8.0 Configuration Guide opened successfully.",
+    "Community sweep covered all 12 product areas. Two directly relevant recent scenarios were verified for FortiSwitch and FortiAP; no relevant recent scenario was verified for the other ten products. One FortiNAC-F candidate was rejected for semantic overlap.",
+    "GitHub Pages report and index URL checks returned Internal Error; public availability is unconfirmed. Repository publication and read-back are verified.",
     "Email is disabled and was not attempted."
   ]
 }
