@@ -145,7 +145,7 @@
           "explanation": "A route does not update the firewall address object or follow pod rescheduling."
         },
         {
-          "text": "A VIP that translates the old address to the new pod address.",
+          "text": "A VIP maps the old pod address to the new one.",
           "correct": false,
           "explanation": "A VIP is a NAT object and is not the documented Multus address-discovery mechanism."
         }
@@ -173,7 +173,7 @@
           "explanation": "Local-in scope is based on traffic terminating on the FortiGate, not only VPN traffic."
         },
         {
-          "text": "Traffic destined to the FortiGate interface or local control plane.",
+          "text": "Traffic addressed to a FortiGate interface or control plane.",
           "correct": true,
           "explanation": "Local-in policy protects services terminating on the FortiGate rather than ordinary forwarded traffic."
         }
@@ -186,7 +186,7 @@
       "question": "A global local-in policy block exists but one ADOM's FortiGate has no change. What step is most likely missing?",
       "choices": [
         {
-          "text": "Append the block to a global package, assign it, and install.",
+          "text": "Append the block, assign its package, then install.",
           "correct": true,
           "explanation": "A block must be appended to a package, assigned to the target ADOM, and installed."
         },
@@ -616,12 +616,12 @@
           "explanation": "Only the temporary configuration SSID is open in NAT mode."
         },
         {
-          "text": "They are suppressed while the temporary FAP-config SSID is broadcast.",
+          "text": "They are suppressed while the temporary FAP-config SSID broadcasts.",
           "correct": true,
           "explanation": "Configuration mode replaces the normal SSID set with a temporary serial-derived SSID."
         },
         {
-          "text": "They continue broadcasting on 6 GHz only.",
+          "text": "They continue broadcasting only on the 6 GHz radio.",
           "correct": false,
           "explanation": "The mode suppresses controller-configured SSIDs rather than selectively moving them to a radio."
         }
@@ -723,7 +723,7 @@
           "explanation": "The feature is specifically for models using a VIP whose owner can change."
         },
         {
-          "text": "Skip the MultiKnownHostEntries VIP procedure.",
+          "text": "Skip the MultiKnownHostEntries procedure for this device.",
           "correct": true,
           "explanation": "Fortinet explicitly says to skip the procedure when the controller is not configured with a VIP."
         },
@@ -868,12 +868,12 @@
           "explanation": "IdP-initiated users authenticate at the IdP portal, then choose an SP."
         },
         {
-          "text": "At the FortiGate firewall policy lookup page.",
+          "text": "At the FortiGate's firewall policy and session page.",
           "correct": false,
           "explanation": "The SAML flow starts at the IdP portal, not a firewall policy interface."
         },
         {
-          "text": "At the RADIUS server's accounting listener.",
+          "text": "At the RADIUS accounting listener for the user.",
           "correct": false,
           "explanation": "RADIUS accounting is separate from browser-based SAML IdP initiation."
         }
@@ -924,7 +924,7 @@
           "explanation": "The fallback is conditional on all FIDO keys being revoked, not username recovery."
         },
         {
-          "text": "Whenever the SP returns an unsigned SAML assertion.",
+          "text": "Whenever the SP returns an unsigned SAML assertion response.",
           "correct": false,
           "explanation": "SP assertion signing is a separate trust issue from FIDO key availability."
         },
@@ -985,7 +985,7 @@
           "explanation": "Fortinet warns the generated API token is displayed once and cannot be retrieved later."
         },
         {
-          "text": "It is stored only in the secret object and cannot be copied.",
+          "text": "It stays in the secret object and cannot be copied.",
           "correct": false,
           "explanation": "The token is shown at generation and must be captured by the administrator."
         }
@@ -1064,12 +1064,12 @@
           "explanation": "The guide limits the provider's resource management scope to folders and secrets."
         },
         {
-          "text": "Only API users and administrator profiles.",
+          "text": "Only API users and administrator access-control profiles for FortiPAM.",
           "correct": false,
           "explanation": "API users authenticate the provider; they are not the documented primary resources."
         },
         {
-          "text": "Only target servers and password-rotation schedules.",
+          "text": "Only target servers and password-rotation schedules managed by PAM.",
           "correct": false,
           "explanation": "The provider documentation describes folder and secret resources, not complete target lifecycle management."
         }
@@ -1204,7 +1204,7 @@
           "explanation": "The feature records an administrator event; it does not create external ITSM tickets."
         },
         {
-          "text": "A change summary is required before an administrator commits configuration.",
+          "text": "A summary is required before an admin commits configuration.",
           "correct": true,
           "explanation": "The change summary is a required part of the configuration submission transaction."
         },
@@ -1232,7 +1232,7 @@
           "explanation": "The guide notes that new logs may appear after some delay."
         },
         {
-          "text": "Increase the FortiSASE endpoint tunnel idle timer.",
+          "text": "Increase the FortiSASE endpoint tunnel idle timer setting.",
           "correct": false,
           "explanation": "Tunnel timers do not control administrator event indexing."
         },
@@ -1288,7 +1288,7 @@
           "explanation": "The guide states existing change summaries are retained for 30 days."
         },
         {
-          "text": "The summaries become permanent and cannot expire.",
+          "text": "The summaries become permanent and never expire later.",
           "correct": false,
           "explanation": "The documented retention is 30 days, not indefinite storage."
         },
@@ -1420,9 +1420,9 @@
       1,
       1,
       2,
-      3,
-      3,
-      3,
+      2,
+      2,
+      1,
       2,
       2,
       1,
@@ -1437,39 +1437,45 @@
       2,
       2,
       2,
-      3,
-      1,
       2,
       1,
-      3,
       2,
-      2,
-      2,
-      2,
-      3,
-      2,
-      3,
       1,
-      4,
+      1,
+      2,
+      2,
+      2,
+      2,
+      1,
+      2,
+      2,
+      1,
+      2,
       0,
       1,
-      3,
-      2,
-      2,
-      2,
-      2,
-      3,
-      3,
       1,
-      3,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      2,
       2,
       1,
       1,
       2
     ],
-    "max_spread": 4,
-    "questions_with_spread_le_2": 38,
+    "max_spread": 2,
+    "questions_with_spread_le_2": 50,
     "correct_feedback_present": true,
-    "all_choice_feedback_present": true
+    "all_choice_feedback_present": true,
+    "correct_answer_distribution": {
+      "A": 13,
+      "B": 13,
+      "C": 12,
+      "D": 12
+    }
   }
 }
