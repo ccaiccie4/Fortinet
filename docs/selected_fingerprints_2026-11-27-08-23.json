@@ -71,7 +71,7 @@
     {
       "product": "FortiAP/Wireless",
       "lesson_subject": "6 GHz Standard Power operation: AFC location eligibility, country code, and channel grant lifecycle",
-      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799/creating-a-fortiap-profile",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/7.6.3/fortiap-release-notes/277928/new-features-or-enhancements",
       "scenario_community_url": "https://community.fortinet.com/fortiap-5/troubleshooting-tip-6-ghz-channel-detection-on-fortiap-g-and-k-series-228402",
       "feature_mechanism_fingerprint": "AFC is a regulatory coordination service: a capable FortiAP supplies its physical location and receives an available-channel response before Standard Power 6 GHz operation; model and regulatory domain determine whether LPI fallback is possible.",
       "workflow_transaction_fingerprint": "FortiGate country/region and AP model profile -> AP location source (GPS or configured static position) -> AFC request with location -> AFC available-channel response -> radio channel/power operation.",
@@ -80,7 +80,11 @@
       "remediation_path": "Set the correct country/region and indoor/outdoor designation; verify model-specific antenna/GNSS capability; confirm GPS/static position and AFC status/response; use LPI only on models/regulatory domains that permit it; avoid treating 6 GHz absence as generic RF interference.",
       "question_fingerprint": "A FAP443K in a US outdoor deployment has no 6 GHz channel; distinguish missing AFC location/grant from the FAP441K LPI fallback that is not available to FAP443K.",
       "diagram_topology_layout_fingerprint": "FortiGate country/profile and FortiAP location source feed AFC request/response service, which gates the 6 GHz radio's channel and power mode.",
-      "semantic_overlap_decision": "PASS with narrow scope: historical LoWi lesson covered how coordinates are calculated; today's lesson covers regulatory AFC channel authorization and Standard Power eligibility, using LoWi/GPS only as a prerequisite, not reteaching location trilateration."
+      "semantic_overlap_decision": "PASS with narrow scope: historical LoWi lesson covered how coordinates are calculated; today's lesson covers regulatory AFC channel authorization and Standard Power eligibility, using LoWi/GPS only as a prerequisite, not reteaching location trilateration.",
+      "additional_primary_urls": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/140799/creating-a-fortiap-profile",
+        "https://docs.fortinet.com/document/fortiap/7.6.3/fortiap-release-notes/277928/new-features-or-enhancements"
+      ]
     },
     {
       "product": "FortiNAC",
