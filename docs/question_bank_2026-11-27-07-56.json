@@ -1,0 +1,1475 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-27T07:58:00-08:00",
+  "count": 50,
+  "choice_count": 4,
+  "graded": true,
+  "feedback_count": 200,
+  "correct_answer_distribution": {
+    "A": 13,
+    "B": 13,
+    "C": 12,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": 1,
+      "topic": "FortiGate Multus CNI",
+      "question": "A pod has eth0 plus two Multus interfaces. Which metadata exposes the additional attachments to FortiGate?",
+      "choices": [
+        {
+          "text": "network-status lists every interface from all attachments.",
+          "correct": false,
+          "explanation": "The guide uses network-status for the default interface; it does not replace the extra-info annotation."
+        },
+        {
+          "text": "The pod's service-account token contains secondary interface addresses.",
+          "correct": false,
+          "explanation": "The token authenticates API access; it is not the source of pod network attachment metadata."
+        },
+        {
+          "text": "network-extra-info lists the additional Multus network attachments.",
+          "correct": true,
+          "explanation": "FortiOS reads network-extra-info for secondary Multus networks and network-status for the default network."
+        },
+        {
+          "text": "The firewall policy stores the pod's secondary interface addresses.",
+          "correct": false,
+          "explanation": "Policy objects reference resolved dynamic addresses; they do not read Kubernetes annotations directly."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 2,
+      "topic": "FortiGate Multus CNI",
+      "question": "The Kubernetes connector is Up, but a pod's secondary IPv6 address is absent. What should be checked first?",
+      "choices": [
+        {
+          "text": "Inspect network-extra-info, the pod filter, and CLI address6 object.",
+          "correct": true,
+          "explanation": "The secondary address must be present in Multus metadata and the IPv6 dynamic object is configured in CLI."
+        },
+        {
+          "text": "Increase the firewall policy session TTL and retry.",
+          "correct": false,
+          "explanation": "Session timers do not control the connector's Kubernetes annotation parsing or address collection."
+        },
+        {
+          "text": "Change the SD-WAN rule to use an IPv6 zone.",
+          "correct": false,
+          "explanation": "SD-WAN selection cannot populate an address object whose secondary IPv6 value was never discovered."
+        },
+        {
+          "text": "Recreate the pod's primary IPv4 firewall address object.",
+          "correct": false,
+          "explanation": "The missing value is IPv6 secondary metadata; recreate the address object only after validating its source."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 3,
+      "topic": "FortiGate Multus CNI",
+      "question": "Which CLI object type is used for a Multus-derived IPv6 dynamic firewall address?",
+      "choices": [
+        {
+          "text": "config firewall address with subnet mask and static IP.",
+          "correct": false,
+          "explanation": "That creates an IPv4 address object and does not express the IPv6 dynamic connector relationship."
+        },
+        {
+          "text": "config system interface with a secondary IPv6 address.",
+          "correct": false,
+          "explanation": "That configures an interface address, not a Kubernetes-derived dynamic policy object."
+        },
+        {
+          "text": "config router prefix-list with the pod's IPv6 prefix.",
+          "correct": false,
+          "explanation": "A prefix-list affects routing policy; it does not create a dynamic firewall address object."
+        },
+        {
+          "text": "config firewall address6 with type dynamic and SDN connector.",
+          "correct": true,
+          "explanation": "Fortinet documents IPv6 dynamic addresses under firewall address6, referencing the Kubernetes SDN connector."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 4,
+      "topic": "FortiGate Multus CNI",
+      "question": "What does diagnose sys sdn status showing Up establish?",
+      "choices": [
+        {
+          "text": "Every pod attachment has been resolved into an address object.",
+          "correct": false,
+          "explanation": "Connector health does not prove the annotation filter matched or that all secondary IPs were collected."
+        },
+        {
+          "text": "The connector control-plane connection to Kubernetes is healthy.",
+          "correct": true,
+          "explanation": "Up is a connector-health signal; inspect matched addresses separately to prove object population."
+        },
+        {
+          "text": "A firewall policy using the object has matched traffic.",
+          "correct": false,
+          "explanation": "The command reports connector state, not policy lookup, session creation, or traffic counters."
+        },
+        {
+          "text": "The Kubernetes CNI has assigned all requested IP addresses.",
+          "correct": false,
+          "explanation": "The connector cannot prove CNI assignment merely from its own API connection state."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 5,
+      "topic": "FortiGate Multus CNI",
+      "question": "A pod is rescheduled and receives a new secondary address. What should the policy reference?",
+      "choices": [
+        {
+          "text": "A static address object copied from the original pod manifest.",
+          "correct": false,
+          "explanation": "A static object retains the old value and does not follow runtime address changes."
+        },
+        {
+          "text": "A dynamic address object populated from the Kubernetes connector.",
+          "correct": true,
+          "explanation": "The connector refreshes dynamic address membership from current Kubernetes pod metadata."
+        },
+        {
+          "text": "A host route installed manually for the previous pod IP.",
+          "correct": false,
+          "explanation": "A route does not update the firewall address object or follow pod rescheduling."
+        },
+        {
+          "text": "A VIP that translates the old address to the new pod address.",
+          "correct": false,
+          "explanation": "A VIP is a NAT object and is not the documented Multus address-discovery mechanism."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 6,
+      "topic": "FortiManager Global local-in",
+      "question": "What traffic is governed by a FortiGate local-in policy?",
+      "choices": [
+        {
+          "text": "Transit traffic forwarded between client and server VLANs.",
+          "correct": false,
+          "explanation": "Transit sessions are governed by forward firewall policies, not local-in policies."
+        },
+        {
+          "text": "Only packets sourced from a FortiGate management VLAN.",
+          "correct": false,
+          "explanation": "Local-in rules match interface, source, destination, service and schedule; they are not limited to one VLAN."
+        },
+        {
+          "text": "Only encrypted VPN packets after tunnel decapsulation.",
+          "correct": false,
+          "explanation": "Local-in scope is based on traffic terminating on the FortiGate, not only VPN traffic."
+        },
+        {
+          "text": "Traffic destined to the FortiGate interface or local control plane.",
+          "correct": true,
+          "explanation": "Local-in policy protects services terminating on the FortiGate rather than ordinary forwarded traffic."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 7,
+      "topic": "FortiManager Global local-in",
+      "question": "A global local-in policy block exists but one ADOM's FortiGate has no change. What step is most likely missing?",
+      "choices": [
+        {
+          "text": "Append the block to a global package, assign it, and install.",
+          "correct": true,
+          "explanation": "A block must be appended to a package, assigned to the target ADOM, and installed."
+        },
+        {
+          "text": "Enable Application Control on the FortiGate firewall policy.",
+          "correct": false,
+          "explanation": "Application Control does not distribute FortiManager local-in policy blocks."
+        },
+        {
+          "text": "Convert the ADOM to Workflow Mode and reboot devices.",
+          "correct": false,
+          "explanation": "Workflow Mode is not the required package-assignment transaction for global local-in policy deployment."
+        },
+        {
+          "text": "Create a separate static route for the management subnet.",
+          "correct": false,
+          "explanation": "A route does not assign or install a global local-in policy package."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 8,
+      "topic": "FortiManager Global local-in",
+      "question": "Why should IPv6 management exposure be checked separately after installing global local-in policies?",
+      "choices": [
+        {
+          "text": "The IPv6 policy is inherited automatically from the IPv4 header.",
+          "correct": false,
+          "explanation": "Fortinet exposes distinct IPv4 and IPv6 local-in header/footer policy types."
+        },
+        {
+          "text": "IPv6 management packets bypass all FortiGate local-in processing.",
+          "correct": false,
+          "explanation": "IPv6 traffic can be controlled by the IPv6 local-in policy table."
+        },
+        {
+          "text": "IPv4 and IPv6 local-in policies are separate policy types.",
+          "correct": true,
+          "explanation": "Separate IPv4 and IPv6 policy types must be created, packaged, and verified."
+        },
+        {
+          "text": "Global policy blocks cannot contain IPv6 local-in rules.",
+          "correct": false,
+          "explanation": "The documented global model supports both IPv4 and IPv6 local-in policy types."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 9,
+      "topic": "FortiManager Global local-in",
+      "question": "The Local In Policy menu is missing in Policy & Objects. What should be verified first?",
+      "choices": [
+        {
+          "text": "Rebuild the Global Database ADOM from a backup.",
+          "correct": false,
+          "explanation": "The guide requires feature visibility before the local-in policy editor appears."
+        },
+        {
+          "text": "Change the FortiGate to transparent mode.",
+          "correct": false,
+          "explanation": "Operating mode does not expose the FortiManager feature-visibility control."
+        },
+        {
+          "text": "Delete and recreate every local policy package.",
+          "correct": false,
+          "explanation": "Package recreation is unnecessary when the feature is simply hidden in Feature Visibility."
+        },
+        {
+          "text": "Enable Local In Policies in Feature Visibility.",
+          "correct": true,
+          "explanation": "FortiManager requires the Local In Policies feature to be visible before creating the objects."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 10,
+      "topic": "FortiAnalyzer SOC Automation",
+      "question": "The License Information widget shows a valid Security Automation Service license, but no new pack appears. What next?",
+      "choices": [
+        {
+          "text": "Check FDS reachability, support entitlement, and minimum version.",
+          "correct": true,
+          "explanation": "Entitlement alone does not prove FDS delivery; support and version gates also apply."
+        },
+        {
+          "text": "Reinstall every SIEM parser from the local GUI.",
+          "correct": false,
+          "explanation": "A missing pack is first an entitlement or distribution issue, not a parser-selection issue."
+        },
+        {
+          "text": "Increase the log retention period for the ADOM.",
+          "correct": false,
+          "explanation": "Retention does not control FortiGuard content-pack delivery."
+        },
+        {
+          "text": "Disable the FortiAnalyzer event handlers and reboot.",
+          "correct": false,
+          "explanation": "Disabling event handlers does not repair FDS connectivity or license delivery."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 11,
+      "topic": "FortiAnalyzer SOC Automation",
+      "question": "What does Origin = FortiGuard on a report or parser establish?",
+      "choices": [
+        {
+          "text": "The parser is currently matching incoming vendor logs.",
+          "correct": false,
+          "explanation": "Origin proves provenance, not parser execution or field extraction."
+        },
+        {
+          "text": "The object was delivered as FortiGuard-origin content.",
+          "correct": true,
+          "explanation": "Origin identifies source/provenance; operational readiness requires separate validation."
+        },
+        {
+          "text": "The connector has valid credentials to the external vendor.",
+          "correct": false,
+          "explanation": "Connector authentication is a separate environment-specific configuration step."
+        },
+        {
+          "text": "The object is supported on every FortiAnalyzer release.",
+          "correct": false,
+          "explanation": "Minimum Version is a separate compatibility field in the content-pack inventory."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 12,
+      "topic": "FortiAnalyzer SOC Automation",
+      "question": "A connector object is visible in the SOC Automation content pack. What is still required?",
+      "choices": [
+        {
+          "text": "Clone the global report folder into every ADOM.",
+          "correct": false,
+          "explanation": "Report folder placement does not configure a connector's remote endpoint or authentication."
+        },
+        {
+          "text": "Enable all SIEM parsers and disable the event handlers.",
+          "correct": false,
+          "explanation": "Connector setup is independent of unrelated parser and alert-handler objects."
+        },
+        {
+          "text": "Configure its endpoint-specific credentials and test the connection.",
+          "correct": true,
+          "explanation": "Delivered connector templates still need environment-specific configuration and validation."
+        },
+        {
+          "text": "Reinstall the FortiGuard package after every device reboot.",
+          "correct": false,
+          "explanation": "The pack is automatically applied when available; connector configuration is a separate step."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 13,
+      "topic": "FortiAnalyzer SOC Automation",
+      "question": "Which column tells whether an object can run on the installed FortiAnalyzer version?",
+      "choices": [
+        {
+          "text": "Min Version shows the minimum supported FortiAnalyzer release.",
+          "correct": true,
+          "explanation": "The Min Version column is the compatibility boundary for an individual content-pack object."
+        },
+        {
+          "text": "Release Date shows the minimum supported FortiAnalyzer release.",
+          "correct": false,
+          "explanation": "Release Date records when the object was released or modified, not compatibility."
+        },
+        {
+          "text": "Vendor identifies the minimum supported FortiAnalyzer release.",
+          "correct": false,
+          "explanation": "Vendor describes the integration vendor or object type, not software compatibility."
+        },
+        {
+          "text": "Status identifies the minimum supported FortiAnalyzer release.",
+          "correct": false,
+          "explanation": "Status indicates whether the object is New or Modified in the pack."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 14,
+      "topic": "FortiSwitch MCLAG L3",
+      "question": "Why does the MCLAG design require vrrp-virtual-mac on both peers?",
+      "choices": [
+        {
+          "text": "It forces every packet to cross the ICL before routing.",
+          "correct": false,
+          "explanation": "The design aims to avoid unnecessary ICL data-plane transit when local routes exist."
+        },
+        {
+          "text": "It replaces the need for iBGP route exchange between peers.",
+          "correct": false,
+          "explanation": "VRRP virtual MAC does not distribute routing information; iBGP supplies routes to both peers."
+        },
+        {
+          "text": "It enables local Layer-3 lookup for the VRRP virtual MAC on backup.",
+          "correct": true,
+          "explanation": "The backup peer can perform Layer-3 lookup for the virtual MAC when routes are installed."
+        },
+        {
+          "text": "It converts the MCLAG trunk into a routed physical interface.",
+          "correct": false,
+          "explanation": "The virtual MAC supports VRRP forwarding identity; it does not change the trunk type."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 15,
+      "topic": "FortiSwitch MCLAG L3",
+      "question": "Which BGP relationship is used between the MCLAG peers in the documented one-tier design?",
+      "choices": [
+        {
+          "text": "eBGP runs between the peers using their VRRP VIP.",
+          "correct": false,
+          "explanation": "The documented design uses iBGP between peers and eBGP to northbound/southbound routers."
+        },
+        {
+          "text": "iBGP runs across the ICL to share externally learned routes.",
+          "correct": true,
+          "explanation": "iBGP over the ICL distributes eBGP-learned routes to the backup peer."
+        },
+        {
+          "text": "A static default route replaces all peer route exchange.",
+          "correct": false,
+          "explanation": "Static routing is an alternative for some designs, but the BGP example uses iBGP."
+        },
+        {
+          "text": "OSPF is mandatory and BGP cannot be used within MCLAG.",
+          "correct": false,
+          "explanation": "Fortinet documents both BGP and OSPF options for the Layer-3 MCLAG topology."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 16,
+      "topic": "FortiSwitch MCLAG L3",
+      "question": "A frame arrives on Core2, the VRRP backup. Why can it be routed without crossing the ICL?",
+      "choices": [
+        {
+          "text": "Core1 tunnels the entire packet to the northbound router.",
+          "correct": false,
+          "explanation": "The active-active design relies on local routing when the backup has the route."
+        },
+        {
+          "text": "VRRP disables the ICL and changes the frame to multicast.",
+          "correct": false,
+          "explanation": "VRRP does not disable the ICL or convert routed traffic into multicast."
+        },
+        {
+          "text": "The backup floods the frame to every MCLAG member port.",
+          "correct": false,
+          "explanation": "The backup uses its routing table and hardware lookup, not uncontrolled Layer-2 flooding."
+        },
+        {
+          "text": "Core2 has the route locally and performs virtual-MAC Layer-3 lookup.",
+          "correct": true,
+          "explanation": "MCLAG hashing plus VRRP virtual-MAC lookup lets the backup forward locally when route state exists."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 17,
+      "topic": "FortiSwitch MCLAG L3",
+      "question": "Which statement matches the FortiSwitchOS 8.0 MCLAG Layer-3 limits?",
+      "choices": [
+        {
+          "text": "IPv6 is unsupported; 500 SVIs are supported; PIM is enabled.",
+          "correct": false,
+          "explanation": "FortiSwitchOS 8.0 adds IPv6 and documents a 250-SVI limit with PIM unsupported."
+        },
+        {
+          "text": "Only IPv4 is supported; 250 SVIs are supported; RIP is required.",
+          "correct": false,
+          "explanation": "IPv4-only applied before 8.0; RIP is explicitly unsupported in this topology."
+        },
+        {
+          "text": "IPv6 is supported; 250 SVIs are supported; PIM and PBR are not.",
+          "correct": true,
+          "explanation": "The guide specifies IPv4/IPv6 from 8.0, 250 SVIs, and unsupported PIM/PBR/IS-IS/RIP."
+        },
+        {
+          "text": "IPv6 is supported; unlimited SVIs are supported; IS-IS is preferred.",
+          "correct": false,
+          "explanation": "The guide caps the design at 250 SVIs and lists IS-IS as unsupported."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 18,
+      "topic": "FortiSwitch MCLAG L3",
+      "question": "What eBGP setting is required when routers peer to the MCLAG VRRP address?",
+      "choices": [
+        {
+          "text": "Disable eBGP multihop and set the TTL to one.",
+          "correct": false,
+          "explanation": "The documented VRRP VIP adjacency requires multihop with TTL 3."
+        },
+        {
+          "text": "Enable eBGP multihop and set the TTL to three.",
+          "correct": true,
+          "explanation": "The VRRP VIP neighbor requires eBGP multihop and a multihop TTL of 3."
+        },
+        {
+          "text": "Enable BGP graceful restart and set hold time to zero.",
+          "correct": false,
+          "explanation": "Those settings do not replace the documented multihop requirement for the VIP neighbor."
+        },
+        {
+          "text": "Use an IPv6 link-local neighbor and set TTL to 255.",
+          "correct": false,
+          "explanation": "The example peers to the VRRP address and explicitly sets multihop TTL 3."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 19,
+      "topic": "FortiAP Configuration mode",
+      "question": "A technician wants temporary local setup, not factory reset. How long should reset be held?",
+      "choices": [
+        {
+          "text": "Hold less than five seconds after disconnecting power.",
+          "correct": false,
+          "explanation": "Less than five seconds reboots the unit; the AP must be booted for Configuration mode."
+        },
+        {
+          "text": "Hold more than ten seconds after the AP restarts.",
+          "correct": false,
+          "explanation": "More than ten seconds triggers factory reset, not temporary Configuration mode."
+        },
+        {
+          "text": "Hold exactly thirty seconds while the AP broadcasts its SSID.",
+          "correct": false,
+          "explanation": "Thirty minutes is the mode timeout; the reset gesture is five to ten seconds."
+        },
+        {
+          "text": "Hold five to ten seconds while the AP is booted.",
+          "correct": true,
+          "explanation": "The reset timing bands distinguish reboot, Configuration mode, and factory reset."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 20,
+      "topic": "FortiAP Configuration mode",
+      "question": "Why must the service laptop be close to the AP and be the only Wi-Fi client?",
+      "choices": [
+        {
+          "text": "The temporary SSID uses 1 dBm power and permits one client.",
+          "correct": true,
+          "explanation": "The low transmit power makes the temporary SSID short-range, and only one client may connect."
+        },
+        {
+          "text": "The AP requires two clients to complete a mesh handshake.",
+          "correct": false,
+          "explanation": "Configuration mode is a local setup path and limits association to one Wi-Fi client."
+        },
+        {
+          "text": "The AP blocks NAT until a second client joins.",
+          "correct": false,
+          "explanation": "The temporary SSID is open in NAT mode; it does not require a second client."
+        },
+        {
+          "text": "The controller allocates one DHCP lease per AP radio.",
+          "correct": false,
+          "explanation": "The guide describes a single Wi-Fi client limit and low transmit power, not a controller lease limit."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 21,
+      "topic": "FortiAP Configuration mode",
+      "question": "After changing local AP settings in the GUI, when do the changes take effect?",
+      "choices": [
+        {
+          "text": "Immediately after opening the Local Configuration page.",
+          "correct": false,
+          "explanation": "Opening the page does not save changes or apply them to the running AP."
+        },
+        {
+          "text": "After saving the changes and rebooting the FortiAP.",
+          "correct": true,
+          "explanation": "The guide requires saving with OK and rebooting; CLI uses cfg -c then reboot."
+        },
+        {
+          "text": "When the AP's controller next refreshes the CAPWAP profile.",
+          "correct": false,
+          "explanation": "Configuration mode is local and the guide says changes take effect after reboot."
+        },
+        {
+          "text": "After the thirty-minute mode timeout expires without reboot.",
+          "correct": false,
+          "explanation": "The timeout exits the mode; it is not the documented commit mechanism."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 22,
+      "topic": "FortiAP Configuration mode",
+      "question": "What happens to controller-configured SSIDs while Configuration mode is active?",
+      "choices": [
+        {
+          "text": "They remain visible but are moved to a hidden VLAN.",
+          "correct": false,
+          "explanation": "The guide states controller-configured SSIDs are not broadcast in this mode."
+        },
+        {
+          "text": "They are converted to open NAT SSIDs automatically.",
+          "correct": false,
+          "explanation": "Only the temporary configuration SSID is open in NAT mode."
+        },
+        {
+          "text": "They are suppressed while the temporary FAP-config SSID is broadcast.",
+          "correct": true,
+          "explanation": "Configuration mode replaces the normal SSID set with a temporary serial-derived SSID."
+        },
+        {
+          "text": "They continue broadcasting on 6 GHz only.",
+          "correct": false,
+          "explanation": "The mode suppresses controller-configured SSIDs rather than selectively moving them to a radio."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 23,
+      "topic": "FortiNAC VIP SSH keys",
+      "question": "What does MultiKnownHostEntries change for a modeled VIP?",
+      "choices": [
+        {
+          "text": "It checks multiple cached host-key matches for that device model.",
+          "correct": true,
+          "explanation": "The attribute enables per-model lookup across all potential known_hosts matches for the VIP."
+        },
+        {
+          "text": "It disables SSH host-key verification for every network device.",
+          "correct": false,
+          "explanation": "The feature retains host-key checking and accepts only preloaded candidate keys."
+        },
+        {
+          "text": "It copies the active controller password to the standby.",
+          "correct": false,
+          "explanation": "The setting concerns known_hosts key selection, not password synchronization."
+        },
+        {
+          "text": "It changes the VIP into a physical device address.",
+          "correct": false,
+          "explanation": "The modeled address remains the VIP; the feature handles multiple legitimate SSH keys."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 24,
+      "topic": "FortiNAC VIP SSH keys",
+      "question": "A VIP can move between two controllers. What must be prepared before failover?",
+      "choices": [
+        {
+          "text": "Trust only the currently active controller's key and disable strict checks.",
+          "correct": false,
+          "explanation": "The standby may become active with a different key; disabling verification weakens trust."
+        },
+        {
+          "text": "Store both controller passwords in the device's SNMP community.",
+          "correct": false,
+          "explanation": "SSH host keys and SNMP communities are separate authentication mechanisms."
+        },
+        {
+          "text": "Create a new FortiNAC model for each physical interface.",
+          "correct": false,
+          "explanation": "The design models the VIP and allows multiple known-host entries for that model."
+        },
+        {
+          "text": "Preload both controllers' distinct SSH keys under the shared VIP.",
+          "correct": true,
+          "explanation": "Every possible VIP owner must have its host key associated with the VIP before failover."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 25,
+      "topic": "FortiNAC VIP SSH keys",
+      "question": "Two distinct VIP entries appear in /bsc/.ssh/known_hosts. What does that prove?",
+      "choices": [
+        {
+          "text": "FortiNAC has confirmed both controllers can execute every CLI command.",
+          "correct": false,
+          "explanation": "Known-host entries prove identity candidates, not credentials or command privileges."
+        },
+        {
+          "text": "The active controller has already taken ownership of the VIP.",
+          "correct": false,
+          "explanation": "The file contains trusted keys; it does not reveal the current VIP owner."
+        },
+        {
+          "text": "The device model has been assigned to the correct ADOM.",
+          "correct": false,
+          "explanation": "Known-host cache contents are unrelated to ADOM assignment."
+        },
+        {
+          "text": "The candidate host keys are present for the VIP.",
+          "correct": true,
+          "explanation": "Multiple entries prove the key candidates are stored; successful polling is a separate test."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 26,
+      "topic": "FortiNAC VIP SSH keys",
+      "question": "A network device is polled directly at a fixed address and has no VIP. What is required?",
+      "choices": [
+        {
+          "text": "Enable the attribute globally for every device model.",
+          "correct": false,
+          "explanation": "The feature is specifically for models using a VIP whose owner can change."
+        },
+        {
+          "text": "Skip the MultiKnownHostEntries VIP procedure.",
+          "correct": true,
+          "explanation": "Fortinet explicitly says to skip the procedure when the controller is not configured with a VIP."
+        },
+        {
+          "text": "Create duplicate host-key entries for every switch port.",
+          "correct": false,
+          "explanation": "The procedure is unnecessary when the SSH destination identity does not move."
+        },
+        {
+          "text": "Disable SSH host-key checking on the FortiNAC server.",
+          "correct": false,
+          "explanation": "There is no VIP transition to accommodate; preserve normal host-key validation."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 27,
+      "topic": "FortiNAC-F LAG",
+      "question": "Which interface type uses all negotiated member links for bandwidth?",
+      "choices": [
+        {
+          "text": "A redundant interface group using one active member.",
+          "correct": false,
+          "explanation": "The redundant group uses one link at a time and provides failover, not combined bandwidth."
+        },
+        {
+          "text": "A VLAN subinterface with a secondary IP address.",
+          "correct": false,
+          "explanation": "A VLAN subinterface does not aggregate multiple physical ports."
+        },
+        {
+          "text": "An aggregate interface using 802.3ad LACP.",
+          "correct": true,
+          "explanation": "An aggregate LAG combines member links; redundant groups forward over one link at a time."
+        },
+        {
+          "text": "A loopback interface bound to two physical ports.",
+          "correct": false,
+          "explanation": "A loopback has no physical member links and does not use LACP."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 28,
+      "topic": "FortiNAC-F LAG",
+      "question": "What peer-side behavior is needed for a FortiNAC-F LACP-active LAG?",
+      "choices": [
+        {
+          "text": "Configure a compatible LACP port-channel on the switch.",
+          "correct": true,
+          "explanation": "The FortiNAC-F LAG and switch port-channel must agree on LACP membership and mode."
+        },
+        {
+          "text": "Configure independent access ports with unrelated VLANs.",
+          "correct": false,
+          "explanation": "The peer must negotiate the same logical aggregation group for LACP to form."
+        },
+        {
+          "text": "Disable LACP and configure VRRP on each member.",
+          "correct": false,
+          "explanation": "VRRP is a Layer-3 gateway redundancy protocol, not LAG negotiation."
+        },
+        {
+          "text": "Use passive LACP on both ends without an initiator.",
+          "correct": false,
+          "explanation": "Two passive peers may not initiate negotiation; at least one side should be active."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 29,
+      "topic": "FortiNAC-F LAG",
+      "question": "One physical member fails in a correctly formed LACP LAG. What should happen?",
+      "choices": [
+        {
+          "text": "The logical interface must lose its IP address and shut down.",
+          "correct": false,
+          "explanation": "LAG is designed to retain service when one member fails, subject to remaining links."
+        },
+        {
+          "text": "All surviving members move into a redundant standby group.",
+          "correct": false,
+          "explanation": "The aggregate continues to use the surviving negotiated members."
+        },
+        {
+          "text": "Traffic continues on remaining active members with reduced bandwidth.",
+          "correct": true,
+          "explanation": "The aggregate remains available while capacity falls by the failed member's share."
+        },
+        {
+          "text": "The appliance changes its MAC address and rebuilds every route.",
+          "correct": false,
+          "explanation": "A member failure does not require changing the logical interface identity."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 30,
+      "topic": "FortiNAC-F LAG",
+      "question": "The FortiNAC-F management IP responds to ping. What still needs checking?",
+      "choices": [
+        {
+          "text": "Only the default gateway ARP entry and DNS suffix.",
+          "correct": false,
+          "explanation": "Reachability proves one path, not that all members joined the aggregate."
+        },
+        {
+          "text": "The FortiNAC host-role policy and endpoint posture.",
+          "correct": false,
+          "explanation": "Host roles do not prove physical LAG member negotiation."
+        },
+        {
+          "text": "The FortiNAC-F HA certificate and N+1 health check.",
+          "correct": false,
+          "explanation": "Those are separate control-plane features from interface aggregation."
+        },
+        {
+          "text": "LACP partner state and counters for every intended member.",
+          "correct": true,
+          "explanation": "Ping can succeed over one member while the second member remains unbundled."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 31,
+      "topic": "FortiAuthenticator FIDO SAML",
+      "question": "In IdP-initiated SAML, where does the user's browser start?",
+      "choices": [
+        {
+          "text": "At the service provider, which redirects to the IdP.",
+          "correct": false,
+          "explanation": "That is the SP-initiated sequence, not IdP-initiated login."
+        },
+        {
+          "text": "At the FortiAuthenticator IdP portal before selecting an SP.",
+          "correct": true,
+          "explanation": "IdP-initiated users authenticate at the IdP portal, then choose an SP."
+        },
+        {
+          "text": "At the FortiGate firewall policy lookup page.",
+          "correct": false,
+          "explanation": "The SAML flow starts at the IdP portal, not a firewall policy interface."
+        },
+        {
+          "text": "At the RADIUS server's accounting listener.",
+          "correct": false,
+          "explanation": "RADIUS accounting is separate from browser-based SAML IdP initiation."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 32,
+      "topic": "FortiAuthenticator FIDO SAML",
+      "question": "What is the difference between FIDO-only and Password and FIDO?",
+      "choices": [
+        {
+          "text": "FIDO-only uses the key alone; Password and FIDO requires both.",
+          "correct": true,
+          "explanation": "FortiAuthenticator exposes FIDO-only and password-plus-FIDO as separate IdP login choices."
+        },
+        {
+          "text": "FIDO-only requires password plus OTP; Password and FIDO uses only a key.",
+          "correct": false,
+          "explanation": "The documented modes distinguish key-only from password combined with FIDO."
+        },
+        {
+          "text": "FIDO-only signs the SAML assertion; Password and FIDO encrypts it.",
+          "correct": false,
+          "explanation": "FIDO is an authentication factor, not the SAML assertion signing algorithm."
+        },
+        {
+          "text": "FIDO-only applies to SP-initiated only; Password and FIDO applies to RADIUS.",
+          "correct": false,
+          "explanation": "The setting governs the IdP-initiated login authentication method."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 33,
+      "topic": "FortiAuthenticator FIDO SAML",
+      "question": "When can the configured password-plus-OTP fallback be allowed?",
+      "choices": [
+        {
+          "text": "When every FIDO key registered to that user is revoked.",
+          "correct": true,
+          "explanation": "The guide ties this recovery option to all FIDO keys being revoked for the account."
+        },
+        {
+          "text": "Whenever the user forgets the username but still has a password.",
+          "correct": false,
+          "explanation": "The fallback is conditional on all FIDO keys being revoked, not username recovery."
+        },
+        {
+          "text": "Whenever the SP returns an unsigned SAML assertion.",
+          "correct": false,
+          "explanation": "SP assertion signing is a separate trust issue from FIDO key availability."
+        },
+        {
+          "text": "Whenever the user's LDAP group filter returns no members.",
+          "correct": false,
+          "explanation": "Group authorization does not trigger the FIDO-revocation fallback."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 34,
+      "topic": "FortiAuthenticator FIDO SAML",
+      "question": "An SP is missing from the IdP portal for one user. What should be checked?",
+      "choices": [
+        {
+          "text": "The FortiAuthenticator RADIUS accounting interval and CoA port.",
+          "correct": false,
+          "explanation": "Those settings do not control which SAML SPs appear in the IdP portal."
+        },
+        {
+          "text": "The user's FortiToken push delivery and SMS gateway.",
+          "correct": false,
+          "explanation": "The issue may be SP authorization, not token delivery."
+        },
+        {
+          "text": "The FortiGate SD-WAN rule priority and interface cost.",
+          "correct": false,
+          "explanation": "SD-WAN routing does not control SAML portal SP visibility."
+        },
+        {
+          "text": "SP IdP-initiated support and the user's group authorization filters.",
+          "correct": true,
+          "explanation": "The SP must allow IdP-initiated assertions and the user must pass its group filter."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 35,
+      "topic": "FortiPAM Terraform",
+      "question": "What is the most important operational property of the FortiPAM API token?",
+      "choices": [
+        {
+          "text": "It is regenerated automatically whenever terraform plan runs.",
+          "correct": false,
+          "explanation": "The token is generated for the API user and is not recreated by plan."
+        },
+        {
+          "text": "It is the same value as the user's GUI password.",
+          "correct": false,
+          "explanation": "FortiPAM uses an API user token for provider authentication."
+        },
+        {
+          "text": "It is displayed once and must be stored securely.",
+          "correct": true,
+          "explanation": "Fortinet warns the generated API token is displayed once and cannot be retrieved later."
+        },
+        {
+          "text": "It is stored only in the secret object and cannot be copied.",
+          "correct": false,
+          "explanation": "The token is shown at generation and must be captured by the administrator."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 36,
+      "topic": "FortiPAM Terraform",
+      "question": "Which Terraform command shows the intended changes before modifying FortiPAM?",
+      "choices": [
+        {
+          "text": "terraform apply immediately creates and updates the resources.",
+          "correct": false,
+          "explanation": "Apply executes the planned changes; plan is the review stage."
+        },
+        {
+          "text": "terraform plan compares declared resources with remote state.",
+          "correct": true,
+          "explanation": "Plan shows additions, updates, and deletes before apply performs them."
+        },
+        {
+          "text": "terraform init imports every existing FortiPAM secret automatically.",
+          "correct": false,
+          "explanation": "Init installs the provider and initializes the working directory."
+        },
+        {
+          "text": "terraform destroy displays a read-only preview of changes.",
+          "correct": false,
+          "explanation": "Destroy removes resources; it is not the normal review command."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 37,
+      "topic": "FortiPAM Terraform",
+      "question": "Why is an imported FortiPAM secret's Terraform state file sensitive?",
+      "choices": [
+        {
+          "text": "The state file stores only folder names and no credential data.",
+          "correct": false,
+          "explanation": "Fortinet's example warns imported secret field values can appear in plain text."
+        },
+        {
+          "text": "The import workflow can write secret field values as plaintext.",
+          "correct": true,
+          "explanation": "Treat state as a secret store: encrypt it, restrict access, and never commit it."
+        },
+        {
+          "text": "The provider stores the API token in the FortiPAM device log.",
+          "correct": false,
+          "explanation": "The documented risk is local/remote Terraform state exposure, not device logging."
+        },
+        {
+          "text": "The state file automatically encrypts secrets using the template name.",
+          "correct": false,
+          "explanation": "A secret template does not encrypt the Terraform state backend."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 38,
+      "topic": "FortiPAM Terraform",
+      "question": "Which resource types are documented as supported by the FortiPAM Terraform provider?",
+      "choices": [
+        {
+          "text": "Folders and secrets on a FortiPAM appliance or VM.",
+          "correct": true,
+          "explanation": "The provider supports folder and secret resource management with CRUD/import operations."
+        },
+        {
+          "text": "Every FortiPAM policy, session recording, and HA object.",
+          "correct": false,
+          "explanation": "The guide limits the provider's resource management scope to folders and secrets."
+        },
+        {
+          "text": "Only API users and administrator profiles.",
+          "correct": false,
+          "explanation": "API users authenticate the provider; they are not the documented primary resources."
+        },
+        {
+          "text": "Only target servers and password-rotation schedules.",
+          "correct": false,
+          "explanation": "The provider documentation describes folder and secret resources, not complete target lifecycle management."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 39,
+      "topic": "FortiSIEM Case API",
+      "question": "What does a successful POST to FortiSIEM's Case API create?",
+      "choices": [
+        {
+          "text": "A Jira issue and an automatically closed SIEM incident.",
+          "correct": false,
+          "explanation": "The Case API creates a FortiSIEM case; external ticket synchronization is separate."
+        },
+        {
+          "text": "A new event parser and a correlation rule.",
+          "correct": false,
+          "explanation": "Those are different FortiSIEM configuration objects."
+        },
+        {
+          "text": "A firewall policy and a FortiGate change request.",
+          "correct": false,
+          "explanation": "The Case API is an incident-investigation workflow, not a network configuration API."
+        },
+        {
+          "text": "A native FortiSIEM case object, not an external ITSM ticket.",
+          "correct": true,
+          "explanation": "The Case API manages native FortiSIEM case objects and their evidence."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 40,
+      "topic": "FortiSIEM Case API",
+      "question": "Why can attaching an incident ID to a case fail?",
+      "choices": [
+        {
+          "text": "FortiSIEM incidents can never be associated with cases.",
+          "correct": false,
+          "explanation": "The API supports incident association, but an incident can be assigned to only one case."
+        },
+        {
+          "text": "The incident's raw log is larger than the retention partition.",
+          "correct": false,
+          "explanation": "The documented constraint is case association uniqueness, not raw-log size."
+        },
+        {
+          "text": "The incident may already belong to another case.",
+          "correct": true,
+          "explanation": "An incident ID can be assigned to only one case at a time."
+        },
+        {
+          "text": "The case severity is lower than the incident severity.",
+          "correct": false,
+          "explanation": "Severity values do not replace the one-case-per-incident association rule."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 41,
+      "topic": "FortiSIEM Case API",
+      "question": "What is mandatory for analyst lookup in Service Provider mode?",
+      "choices": [
+        {
+          "text": "The organization context must be supplied in the request.",
+          "correct": true,
+          "explanation": "The organization parameter is mandatory in Service Provider deployments."
+        },
+        {
+          "text": "The global administrator's email address and phone number.",
+          "correct": false,
+          "explanation": "The API requires organization context in SP mode, not contact details."
+        },
+        {
+          "text": "A FortiAnalyzer ADOM name and log-forwarding profile.",
+          "correct": false,
+          "explanation": "ADOMs belong to FortiAnalyzer/FortiManager and are unrelated to FortiSIEM organization scope."
+        },
+        {
+          "text": "The case attachment path under the Supervisor's /tmp directory.",
+          "correct": false,
+          "explanation": "Attachment paths apply to uploads, not analyst lookup scope."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 42,
+      "topic": "FortiSIEM Case API",
+      "question": "Which attachment sources are documented for a case upload?",
+      "choices": [
+        {
+          "text": "Only an HTTPS URL hosted by an external ticketing system.",
+          "correct": false,
+          "explanation": "The documented connector accepts an IRI or a local path under /tmp."
+        },
+        {
+          "text": "A valid attachment IRI or a file path under /tmp.",
+          "correct": true,
+          "explanation": "The upload action supports an IRI or a path under the /tmp directory."
+        },
+        {
+          "text": "Only a raw event ID from the incident database.",
+          "correct": false,
+          "explanation": "An event ID is not an attachment source for the Case API."
+        },
+        {
+          "text": "Only a FortiAnalyzer archive partition and ADOM name.",
+          "correct": false,
+          "explanation": "FortiAnalyzer archive references are not the documented Case API upload inputs."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 43,
+      "topic": "FortiSASE audit comments",
+      "question": "What happens when Require comments for configuration audit is enabled?",
+      "choices": [
+        {
+          "text": "A second administrator must approve every policy change.",
+          "correct": false,
+          "explanation": "The feature requires a summary, not a dual-control approval workflow."
+        },
+        {
+          "text": "FortiSASE automatically creates an external change ticket.",
+          "correct": false,
+          "explanation": "The feature records an administrator event; it does not create external ITSM tickets."
+        },
+        {
+          "text": "A change summary is required before an administrator commits configuration.",
+          "correct": true,
+          "explanation": "The change summary is a required part of the configuration submission transaction."
+        },
+        {
+          "text": "The configuration is saved first and annotated afterward.",
+          "correct": false,
+          "explanation": "The change-summary pane is presented before the action is completed."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 44,
+      "topic": "FortiSASE audit comments",
+      "question": "A new change summary is not visible immediately in Administrator Events. What is a reasonable next step?",
+      "choices": [
+        {
+          "text": "Disable the audit requirement and repeat the policy change.",
+          "correct": false,
+          "explanation": "Disabling the feature does not accelerate event propagation and removes future prompts."
+        },
+        {
+          "text": "Assume the configuration did not commit and delete the object.",
+          "correct": false,
+          "explanation": "The guide notes that new logs may appear after some delay."
+        },
+        {
+          "text": "Increase the FortiSASE endpoint tunnel idle timer.",
+          "correct": false,
+          "explanation": "Tunnel timers do not control administrator event indexing."
+        },
+        {
+          "text": "Allow for log propagation delay, then refresh Administrator Events.",
+          "correct": true,
+          "explanation": "The event log can lag the configuration commit; verify after the documented delay."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 45,
+      "topic": "FortiSASE audit comments",
+      "question": "What does an audit change summary prove—and what does it not prove?",
+      "choices": [
+        {
+          "text": "It proves an independent approver signed off the change.",
+          "correct": false,
+          "explanation": "The feature captures a summary; it is not an approval workflow."
+        },
+        {
+          "text": "It records actor, object and description, not external approval.",
+          "correct": true,
+          "explanation": "Audit summaries improve traceability but do not replace approvals, testing, or ticketing."
+        },
+        {
+          "text": "It proves the new policy passed traffic testing.",
+          "correct": false,
+          "explanation": "The audit record does not validate packet forwarding or application behavior."
+        },
+        {
+          "text": "It proves an external ticket was closed successfully.",
+          "correct": false,
+          "explanation": "The feature does not create or synchronize external change tickets."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 46,
+      "topic": "FortiSASE audit comments",
+      "question": "What happens to existing change summaries when the requirement is disabled?",
+      "choices": [
+        {
+          "text": "Existing summaries remain for their 30-day retention period.",
+          "correct": true,
+          "explanation": "Disabling the setting stops new prompts but does not erase retained summaries."
+        },
+        {
+          "text": "All existing summaries are immediately deleted from the event log.",
+          "correct": false,
+          "explanation": "The guide states existing change summaries are retained for 30 days."
+        },
+        {
+          "text": "The summaries become permanent and cannot expire.",
+          "correct": false,
+          "explanation": "The documented retention is 30 days, not indefinite storage."
+        },
+        {
+          "text": "Every existing summary is converted into an approval record.",
+          "correct": false,
+          "explanation": "Disabling the prompt does not change the record's meaning or approval status."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": 47,
+      "topic": "Secure SD-WAN application steering",
+      "question": "Why might the first session to a new application not match its app-based SD-WAN rule?",
+      "choices": [
+        {
+          "text": "The SD-WAN rule is evaluated only after BGP converges.",
+          "correct": false,
+          "explanation": "The documented delay is application signature recognition, not BGP convergence."
+        },
+        {
+          "text": "The firewall policy is skipped until the second DNS response.",
+          "correct": false,
+          "explanation": "Application detection depends on the IPS/application-control inspection process."
+        },
+        {
+          "text": "The first session is automatically pinned to the MPLS member.",
+          "correct": false,
+          "explanation": "The guide says the first session does not match application-based rules before recognition."
+        },
+        {
+          "text": "The IPS engine has not yet recognized and cached the application.",
+          "correct": true,
+          "explanation": "The IPS engine first identifies the application and records its destination 3-tuple for future matching."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": 48,
+      "topic": "Secure SD-WAN application steering",
+      "question": "What is stored in the application-control Internet Service ID list after recognition?",
+      "choices": [
+        {
+          "text": "The source MAC address, VLAN ID and switch port number.",
+          "correct": false,
+          "explanation": "The guide describes a destination IP/protocol/port mapping, not Layer-2 endpoint identity."
+        },
+        {
+          "text": "The full TLS session key and the user's password.",
+          "correct": false,
+          "explanation": "Application recognition does not store user credentials or TLS secrets in this list."
+        },
+        {
+          "text": "The destination IP, protocol and port 3-tuple for the app.",
+          "correct": true,
+          "explanation": "The recognized app's destination 3-tuple is used for subsequent SD-WAN application matches."
+        },
+        {
+          "text": "The BGP next hop, local preference and AS path.",
+          "correct": false,
+          "explanation": "Those are routing attributes, not application-control recognition cache fields."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": 49,
+      "topic": "Secure SD-WAN application steering",
+      "question": "How does Lowest Cost (SLA) choose among DIA1, DIA2 and MPLS?",
+      "choices": [
+        {
+          "text": "It always selects the lowest latency link regardless of cost.",
+          "correct": false,
+          "explanation": "That describes quality-driven selection more than the Lowest Cost SLA strategy."
+        },
+        {
+          "text": "It filters by required SLA, then compares cost and preference.",
+          "correct": true,
+          "explanation": "Required SLA qualification precedes cost; interface preference resolves equal-cost members."
+        },
+        {
+          "text": "It load-balances all three links equally whenever they are alive.",
+          "correct": false,
+          "explanation": "The strategy uses SLA qualification, member cost, and interface preference."
+        },
+        {
+          "text": "It selects MPLS first and uses DIA only after packet loss.",
+          "correct": false,
+          "explanation": "The documented example assigns MPLS a higher cost as a backup."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": 50,
+      "topic": "Secure SD-WAN application steering",
+      "question": "What does the documented 10% preferred-link advantage affect in Best Quality mode?",
+      "choices": [
+        {
+          "text": "It adjusts the preferred link's calculated quality metric.",
+          "correct": true,
+          "explanation": "Fortinet describes a 10% advantage in the calculated quality metric for a preferred link."
+        },
+        {
+          "text": "It reserves ten percent of bandwidth for the preferred link.",
+          "correct": false,
+          "explanation": "The adjustment is a comparison advantage, not bandwidth reservation."
+        },
+        {
+          "text": "It raises the preferred link's SLA threshold by ten percent.",
+          "correct": false,
+          "explanation": "Best Quality uses a preference advantage in quality comparison; it does not rewrite the SLA threshold."
+        },
+        {
+          "text": "It forces the preferred link to win even when down.",
+          "correct": false,
+          "explanation": "A down member cannot be selected merely because it is preferred."
+        }
+      ],
+      "correct_index": 0
+    }
+  ],
+  "validation": {
+    "duplicate_stems": 0,
+    "choice_length_spreads": [
+      2,
+      1,
+      1,
+      2,
+      3,
+      3,
+      3,
+      2,
+      2,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      2,
+      2,
+      2,
+      3,
+      1,
+      2,
+      1,
+      3,
+      2,
+      2,
+      2,
+      2,
+      3,
+      2,
+      3,
+      1,
+      4,
+      0,
+      1,
+      3,
+      2,
+      2,
+      2,
+      2,
+      3,
+      3,
+      1,
+      3,
+      2,
+      1,
+      1,
+      2
+    ],
+    "max_spread": 4,
+    "questions_with_spread_le_2": 38,
+    "correct_feedback_present": true,
+    "all_choice_feedback_present": true
+  }
+}
