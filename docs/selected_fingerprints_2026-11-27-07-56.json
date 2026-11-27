@@ -1,0 +1,235 @@
+{
+  "schema_version": "2.0",
+  "generated_at_local": "2026-11-27T07:56:30-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-27-07-56.json",
+  "inventory_sha": "read-back verified before selection",
+  "selection_started_after_inventory": true,
+  "window": "2026-10-28 through 2026-11-26 inclusive",
+  "selected_count": 12,
+  "topics": [
+    {
+      "product": "FortiGate",
+      "lesson_subject": "Multus CNI multi-network pod IP discovery in Kubernetes SDN connectors",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/345168/multus-cni-for-kubernetes-connectors",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Kubernetes SDN connector parses network-status and network-extra-info pod annotations to discover primary and secondary Multus IPv4/IPv6 addresses and populate dynamic firewall address objects.",
+      "workflow_transaction_fingerprint": "FortiGate API connector token -> Kubernetes API on configured server/port -> pod annotation read -> connector filter evaluation -> dynamic firewall address/address6 list refresh -> firewall policy object reference.",
+      "failure_class": "Incomplete dynamic address inventory when secondary attachment metadata, filter, address family, connector credentials, or API reachability is wrong.",
+      "evidence_pattern": "diagnose sys sdn status proves connector health; View Matched Addresses and show firewall address/address6 prove resolved IP members; neither alone proves the consuming policy matched a session.",
+      "remediation_path": "Validate Kubernetes API endpoint/token/certificate, both Multus annotations, pod-name filter, private/public collection scope, and configure IPv6 dynamic addresses in CLI.",
+      "question_fingerprint": "Differentiate connector-up from complete secondary-network address discovery and identify why a Multus pod's second IPv6 address is absent.",
+      "diagram_topology_layout_fingerprint": "FortiGate SDN connector to Kubernetes API, one pod with eth0 plus two Multus attachments, annotation plane feeding separate IPv4 and IPv6 dynamic address objects."
+    },
+    {
+      "product": "FortiManager",
+      "lesson_subject": "Global ADOM and policy-block distribution of IPv4/IPv6 local-in policies",
+      "primary_url": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/300336",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiManager 8.0 allows local-in header/footer policies in Global Database ADOM and global/local policy blocks, then assigns the resulting policy package across multiple ADOMs.",
+      "workflow_transaction_fingerprint": "Enable Feature Visibility -> create IPv4/IPv6 local-in header/footer policy in Global Database ADOM -> append reusable policy block or global package -> assign to ADOMs -> install to managed FortiGates -> verify target local-in table.",
+      "failure_class": "Central policy absent or incorrectly ordered because feature visibility, policy-block append, global package assignment, ADOM scope, or install step is missing.",
+      "evidence_pattern": "Global flag and policy-block membership prove central object composition; install preview/read-back and target FortiGate local-in policy list prove delivery; a saved FortiManager object alone does not prove installation.",
+      "remediation_path": "Enable Local In Policies in Feature Visibility, confirm Global Database ADOM, append correct header/footer block, assign package to intended ADOMs, review install preview, and install.",
+      "question_fingerprint": "Distinguish a global local-in policy object from a transit firewall policy and determine which packaging/assignment step makes it effective across ADOMs.",
+      "diagram_topology_layout_fingerprint": "Global Database ADOM with reusable policy block feeding two global policy packages, assigned to separate local ADOMs and installed to FortiGate A/B."
+    },
+    {
+      "product": "FortiAnalyzer",
+      "lesson_subject": "SOC Automation Service content-pack entitlement, FDS delivery and object provenance",
+      "primary_url": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/72177/soc-automation",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Licensed Security Automation Service receives monthly RHSP/FortiGuard content packs containing premium reports, advanced correlation rules, alert handlers, SIEM parsers and connectors; eligible packs auto-apply from FDS.",
+      "workflow_transaction_fingerprint": "License validation and FortiCare entitlement -> FDS availability -> automatic pack application -> SOC Automation inventory -> object lookup by config type -> environment-specific connector configuration.",
+      "failure_class": "Expected pack or object missing because license, FDS reachability, FortiCare contract, minimum FortiAnalyzer version, or object-specific configuration is incomplete.",
+      "evidence_pattern": "License Information widget proves entitlement; SOC Automation table version/release/status proves pack inventory; Origin=FortiGuard proves provenance; none proves a connector is configured or parser is matching logs.",
+      "remediation_path": "Verify license and support entitlement, FDS connectivity, pack minimum version, SOC Automation inventory, then locate object in Reports/Alert Handlers/Log Parsers/Active Connectors and configure connector credentials.",
+      "question_fingerprint": "Identify why a FortiGuard parser is visible in a content pack but external logs remain unparsed, and distinguish entitlement from connector activation.",
+      "diagram_topology_layout_fingerprint": "FortiGuard Distribution Server monthly content pack flows into licensed FortiAnalyzer; pack branches to global reports, alert handlers, parsers and connectors with provenance labels."
+    },
+    {
+      "product": "FortiSwitch",
+      "lesson_subject": "Active-active layer-3 routing within MCLAG using VRRP and BGP/OSPF",
+      "primary_url": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/811127/using-layer-3-routing-within-an-mclag",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "VRRP virtual IP/virtual MAC on both MCLAG peers combines with eBGP north/south and iBGP across the ICL so both peers hold routes and route ingress locally; FortiSwitchOS 8.0 adds IPv6 support.",
+      "workflow_transaction_fingerprint": "Configure MCLAG/ICL trunks -> build north/south SVIs on both peers -> enable VRRP virtual MAC and peer-specific priorities -> eBGP to routers via VRRP VIP with multihop TTL 3 -> iBGP across ICL -> install routes on both peers.",
+      "failure_class": "ICL hairpinning, asymmetric route availability, VRRP virtual-MAC lookup failure, or no eBGP adjacency due to VIP/multihop/peer configuration mismatch.",
+      "evidence_pattern": "VRRP master/backup state, eBGP and iBGP neighbor state, route table on both peers, and traffic/ICL counters together prove active-active routing; one established neighbor does not prove both peers have forwarding state.",
+      "remediation_path": "Configure both MCLAG peers, enable vrrp-virtual-mac, use correct VRRP VIP and multihop TTL 3, establish iBGP across ICL, verify routes on both, and observe ICL transit.",
+      "question_fingerprint": "Explain why a VRRP backup can route locally without sending traffic over the ICL and identify the required virtual-MAC/iBGP dependency.",
+      "diagram_topology_layout_fingerprint": "Northbound router and southbound router connected through Core1/Core2 MCLAG pair; peer ICL carries iBGP control routes while both cores perform local data-plane forwarding."
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "lesson_subject": "FortiAP isolated Configuration mode for initial deployment and recovery",
+      "primary_url": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/306409/fortiap-configuration-mode",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "A 5-10 second reset-button press while booted enters temporary local configuration mode with serial-derived open SSID, NAT internet access, one Wi-Fi client, 1 dBm transmit power, no controller SSIDs, and 30-minute/reboot exit.",
+      "workflow_transaction_fingerprint": "Booted AP -> timed reset-button gesture -> AP reboot into isolated config mode -> one client joins FAP-config-serial -> HTTPS GUI at 192.168.100.1 or CLI -> save -> reboot -> settings take effect.",
+      "failure_class": "AP unreachable for local setup because reset duration is wrong, AP is not booted, wrong SSID/client count, low transmit power, or configuration not committed/rebooted.",
+      "evidence_pattern": "FAP-config SSID and CONFIG MODE banner prove local mode; saved configuration and post-reboot behavior prove application; Wi-Fi association alone does not prove settings were committed.",
+      "remediation_path": "Use exact 5-10 second timing, connect one nearby client, access 192.168.100.1, save with OK or cfg -c, reboot, and avoid >10 seconds which factory-resets.",
+      "question_fingerprint": "Distinguish reboot, configuration mode and factory reset by reset-button timing and predict why a second client cannot join.",
+      "diagram_topology_layout_fingerprint": "AP transitions from managed state into isolated temporary open NAT SSID, one local client configures it, then reboot returns AP to managed/controller discovery."
+    },
+    {
+      "product": "FortiNAC",
+      "lesson_subject": "MultiKnownHostEntries for SSH polling through device VIP failover",
+      "primary_url": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/151724/model-configuration",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC 9.4.3+ per-device-model MultiKnownHostEntries allows multiple SSH host keys for the same modeled VIP and checks all matching known_hosts entries after VIP ownership changes.",
+      "workflow_transaction_fingerprint": "Learn SSH keys from each possible VIP owner -> duplicate/associate each owner key to VIP -> verify multiple VIP entries in /bsc/.ssh/known_hosts -> enable MultiKnownHostEntries on modeled VIP -> subsequent SSH polls select matching key.",
+      "failure_class": "SSH CLI polling fails after VIP failover because the new active device presents a different host key than the single cached VIP key.",
+      "evidence_pattern": "Two known_hosts entries for the VIP prove candidate keys are installed; enabled attribute proves multi-entry lookup is enabled; successful CLI poll after failover proves correct key selection, not credential privilege.",
+      "remediation_path": "Preload key from every possible VIP owner, associate each to VIP, verify two or more distinct entries, enable the attribute for the device model, and retest failover.",
+      "question_fingerprint": "Diagnose a FortiNAC SSH poll failure that begins only after a VIP owner changes and choose a host-key trust fix rather than weakening SSH verification.",
+      "diagram_topology_layout_fingerprint": "Two controller devices with distinct SSH host keys share one VIP; FortiNAC device model points to VIP and known_hosts stores both key candidates."
+    },
+    {
+      "product": "FortiNAC-F",
+      "lesson_subject": "FortiNAC-F appliance 802.3ad LAG versus active/standby redundant interface groups",
+      "primary_url": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cli-reference-manual/543130/aggregation-and-redundancy",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiNAC-F 7.6.3 adds appliance LAG support; aggregate interface uses IEEE 802.3ad/802.1ax and LACP active/passive for multiple active links, while redundant interface groups use one link at a time.",
+      "workflow_transaction_fingerprint": "Select unused physical ports -> configure aggregate or redundant logical interface -> set LACP mode and member ports -> configure allowaccess/IP as needed -> match switch-side LACP trunk -> verify member negotiation and failover.",
+      "failure_class": "LAG remains down or degrades to a single member because member ports are in use, peer switch LACP is mismatched, or redundant mode is mistaken for bandwidth aggregation.",
+      "evidence_pattern": "Logical interface configuration proves intended membership; LACP actor/partner state and per-member counters prove negotiation and forwarding; one reachable IP does not prove all links are active.",
+      "remediation_path": "Remove ports from existing use, configure matching LACP active/passive settings on peer, verify member state, and use redundant mode only when one-active-link behavior is intended.",
+      "question_fingerprint": "Choose between aggregate and redundant interface types for a FortiNAC appliance requiring both increased bandwidth and link-level failover.",
+      "diagram_topology_layout_fingerprint": "FortiNAC appliance lag0 with port2/port3 active LACP members connected to a switch port-channel, contrasted with a separate one-active-link redundant group."
+    },
+    {
+      "product": "FortiAuthenticator",
+      "lesson_subject": "FIDO authentication requirements for IdP-initiated SAML portal logins",
+      "primary_url": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/864572",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiAuthenticator 8.0.0+ SAML IdP general settings can require FIDO for IdP-initiated login, choosing FIDO-only or password+FIDO and optionally allowing password+OTP only when all user FIDO keys are revoked.",
+      "workflow_transaction_fingerprint": "User opens FAC IdP portal -> username-only page -> FIDO/password+FIDO validation -> authorized SP list filtered by SP group rules -> user selects SP -> FAC issues signed SAML assertion -> SP validates ACS response.",
+      "failure_class": "IdP portal login blocked or SP absent because no registered FIDO key, FIDO disabled/revoked, SP lacks IdP-initiated support, or user fails SP group authorization.",
+      "evidence_pattern": "FIDO authentication logs prove factor validation; SP portal visibility proves group-filter authorization; successful SAML ACS response proves assertion delivery, not downstream application authorization beyond SP.",
+      "remediation_path": "Register and enable FIDO keys, select correct FIDO mode/fallback, enable IdP-initiated assertion response on SP, verify group filters and signing certificate.",
+      "question_fingerprint": "Distinguish FIDO factor failure from an SP hidden by group authorization and select the proper IdP-initiated SAML remediation.",
+      "diagram_topology_layout_fingerprint": "Browser to FortiAuthenticator username-only portal and FIDO challenge, then filtered SP catalog, signed SAML assertion to SP ACS."
+    },
+    {
+      "product": "FortiPAM",
+      "lesson_subject": "Terraform provider lifecycle for FortiPAM folders and secrets",
+      "primary_url": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/852615/terraform-fortipam-as-a-provider",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiPAM Terraform provider manages folder and secret resources with CRUD/import using a REST API user token and typed secret-template fields.",
+      "workflow_transaction_fingerprint": "Create Standard API user -> generate one-time API token -> configure provider base_url/access_token/TLS verification -> terraform init -> plan -> apply folder/secret -> update/import/destroy with state tracking.",
+      "failure_class": "Provider authentication or resource drift because API user privilege/token is wrong, TLS validation disabled, template fields mismatch, or state/import exposes sensitive secret values.",
+      "evidence_pattern": "Terraform plan shows intended resource diff; apply output and FortiPAM object readback prove provisioning; state file contains plaintext imported secret fields and must be treated as sensitive.",
+      "remediation_path": "Use least-privilege API user, protect one-time token, enable TLS verification, pin provider version, review plan, encrypt/restrict state backend, and rotate exposed credentials.",
+      "question_fingerprint": "Identify why a Terraform import is a secret-exposure event and distinguish provider resource CRUD from general FortiPAM session management.",
+      "diagram_topology_layout_fingerprint": "Terraform configuration and protected state connect through REST API token to FortiPAM; folder and secret resources are created/updated/imported/destroyed."
+    },
+    {
+      "product": "FortiSIEM",
+      "lesson_subject": "FortiSIEM internal Case API for analyst lookup, case lifecycle and evidence attachment",
+      "primary_url": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/46107/whats-new-in-7-4-0",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "FortiSIEM 7.4+ public REST Case API exposes analyst lookup, create, update and attachment endpoints for native case-management objects, separate from external ITSM ticket synchronization.",
+      "workflow_transaction_fingerprint": "Authenticate to Supervisor API -> GET analysts in organization/time scope -> POST case with summary/severity/assignee/incident IDs -> PUT updates and append notes/incidents -> POST attachment from IRI or /tmp path -> query case list/readback.",
+      "failure_class": "Case creation or evidence association fails due missing analyst, missing SP organization context, duplicate incident-to-case association, invalid attachment source, or mistaken expectation of external ticket sync.",
+      "evidence_pattern": "Create response caseId proves object creation; case list and incident association prove case linkage; attachment status proves upload; none proves external ITSM ticket was created.",
+      "remediation_path": "Define analysts, pass organization in SP mode, ensure incidents are not already attached elsewhere, use valid IRI or /tmp file path, and read back case and attachment.",
+      "question_fingerprint": "Differentiate native FortiSIEM case creation from ticketing integration and diagnose a rejected incident association or attachment.",
+      "diagram_topology_layout_fingerprint": "SOAR/SOC automation client calls analyst lookup, case create/update and attachment endpoints on Supervisor; case links incidents and stores evidence."
+    },
+    {
+      "product": "FortiSASE",
+      "lesson_subject": "Mandatory change summaries for FortiSASE configuration audit logs",
+      "primary_url": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/519208/administration",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "System Administration Require comments for configuration audit forces administrators to submit a change summary for configuration changes across objects, endpoint profiles and analytics/reporting.",
+      "workflow_transaction_fingerprint": "Enable audit-comment requirement -> admin submits configuration change -> change-summary pane blocks commit until text is entered -> administrator event log records object/admin/description -> summary retained 30 days.",
+      "failure_class": "Change traceability gap because requirement disabled, operator omits summary, event-log indexing delay is mistaken for loss, or retention window expires.",
+      "evidence_pattern": "Administrator Events details show actor/object/summary; absence immediately after change may be indexing delay; audit summary does not prove approval or external change-ticket authorization.",
+      "remediation_path": "Enable Require comments, submit non-empty change summary, allow log propagation delay, review Administrator Events and export records within 30-day retention.",
+      "question_fingerprint": "Determine whether a missing administrator-event record means configuration failed, audit prompt disabled, or event indexing delay.",
+      "diagram_topology_layout_fingerprint": "Admin submits config object change, mandatory summary gate precedes commit, then event pipeline records actor/object/summary into Administrator Events for 30-day review."
+    },
+    {
+      "product": "Secure SD-WAN",
+      "lesson_subject": "Application-signature learning and dynamic Lowest Cost SLA versus Best Quality steering",
+      "primary_url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/80739/dynamic-application-steering-with-lowest-cost-and-best-quality-strategies",
+      "scenario_community_url": null,
+      "feature_mechanism_fingerprint": "Application Control/IPS recognizes application signatures and stores a destination IP/protocol/port 3-tuple in the application-control Internet Service ID list; subsequent sessions can match application-based SD-WAN rules using Lowest Cost SLA or Best Quality strategy.",
+      "workflow_transaction_fingerprint": "Enable Application Detection Based SD-WAN and policy Application Control -> first session inspected/classified -> 3-tuple cached -> SD-WAN app rule matches later sessions -> health-check metrics/cost/preference select member.",
+      "failure_class": "First session follows another rule or expected app rule misses because app not yet recognized, destination IP is not in cache, application control disabled, SLA fails, or member costs/preference misconfigured.",
+      "evidence_pattern": "application-control list proves recognized 3-tuple and cache freshness; health-check proves SLA measurements; service diagnostic proves selected members; none alone proves application signature for every destination IP.",
+      "remediation_path": "Enable feature visibility and Application Control, inspect app-control list, add relevant destinations/signatures, verify SLA participants/thresholds and member cost/preference, then retest subsequent sessions.",
+      "question_fingerprint": "Explain first-session classification delay and choose Lowest Cost SLA versus Best Quality for business-critical versus noncritical applications.",
+      "diagram_topology_layout_fingerprint": "Client traffic enters FortiGate IPS/application classifier, application 3-tuple cache feeds SD-WAN service rule, SLA/cost ranking selects DIA1/DIA2/MPLS."
+    }
+  ],
+  "semantic_uniqueness_audit": {
+    "method": "Compared feature/mechanism, transaction, failure, evidence, remediation, question and topology fingerprints against 369 historical lesson records from 33 published HTML artifacts.",
+    "result": "12/12 selected topics judged semantically distinct.",
+    "closest_comparisons": [
+      {
+        "product": "FortiGate",
+        "current": "Multus CNI pod attachment address discovery",
+        "historical": "FortiGuard ISDB BGP learning",
+        "distinction": "Kubernetes API annotation-to-dynamic-address population versus route advertisement and ISDB updates."
+      },
+      {
+        "product": "FortiManager",
+        "current": "Global ADOM local-in policy packaging",
+        "historical": "FortiGate local-in policy packet filtering",
+        "distinction": "Central policy-block/ADOM distribution transaction versus firewall packet matching; the local-in object is the payload, not the lesson mechanism."
+      },
+      {
+        "product": "FortiSwitch",
+        "current": "VRRP/BGP active-active L3 routing within MCLAG",
+        "historical": "MCLAG ICL failure/split-brain prevention",
+        "distinction": "VRRP virtual-MAC route lookup and BGP route distribution versus L2 peer-link failure control."
+      },
+      {
+        "product": "FortiNAC-F",
+        "current": "Appliance 802.3ad LAG",
+        "historical": "FortiSwitch MCLAG routing",
+        "distinction": "Single appliance LACP member negotiation versus two-switch multichassis routing/control plane."
+      },
+      {
+        "product": "FortiSIEM",
+        "current": "Native Case API",
+        "historical": "Two-way external ticketing integration",
+        "distinction": "FortiSIEM internal case object CRUD/evidence association versus external ITSM synchronization."
+      },
+      {
+        "product": "FortiPAM",
+        "current": "Terraform folder/secret resources",
+        "historical": "REST API key revocation/password changer",
+        "distinction": "Declarative IaC resource lifecycle and state handling versus token revocation or password rotation."
+      }
+    ]
+  },
+  "rejected_candidates": [
+    {
+      "candidate": "FortiAP RADIUS authentication survivability",
+      "reason": "Existing 30-day inventory already contains FortiAP RADIUS authentication survivability; rejected as direct mechanism duplicate."
+    },
+    {
+      "candidate": "FortiNAC SMS Gateway API/HTTPS",
+      "reason": "Existing inventory already contains the FortiNAC SMS gateway integration; rejected."
+    },
+    {
+      "candidate": "FortiPAM HA cluster failover",
+      "reason": "Existing inventory already covers FortiPAM HA; rejected."
+    },
+    {
+      "candidate": "FortiNAC-F Armis service connector",
+      "reason": "Rejected in favor of a more distinct appliance networking feature because service-connector host ingestion overlaps prior Mist/MDM/vulnerability-scanner connector workflows."
+    },
+    {
+      "candidate": "FortiGate FIPS-CC frontier-AI firmware update",
+      "reason": "Community item dated 2026-10-27, one day before the strict window start, and semantically adjacent to prior FortiGate FIPS-CC branch/boot coverage."
+    },
+    {
+      "candidate": "FortiSwitch RVI OSPF reference bandwidth/network type",
+      "reason": "Existing inventory already covers OSPF on RVIs; rejected."
+    }
+  ]
+}
