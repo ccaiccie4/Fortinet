@@ -1,0 +1,293 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-27T07:57:30-08:00",
+  "lessons": [
+    {
+      "id": "fortinac-vip-hostkeys",
+      "product": "FortiNAC",
+      "title": "MultiKnownHostEntries: preserve SSH trust across VIP owner changes",
+      "source": "https://docs.fortinet.com/document/fortinac/9.4.0/administration-guide/151724/model-configuration",
+      "source_label": "FortiNAC 9.4 Administration Guide — Model configuration",
+      "word_count_target": 550,
+      "content_html": "\n<p><strong>Problem being solved.</strong> FortiNAC often models a network device through a virtual IP address rather than through the physical address of each controller or firewall in a high-availability pair. When the VIP moves, the device answering SSH may change. If the two possible owners have different SSH host keys, FortiNAC's cached key for the VIP no longer matches the active owner. SSH correctly rejects the connection, so CLI polling or configuration actions fail even though the VIP responds to ping. FortiNAC 9.4.3 adds the per-device-model <code>MultiKnownHostEntries</code> attribute to handle multiple legitimate keys for the same VIP.</p>\n<h3>Trust model and object scope</h3>\n<p>The setting is disabled by default and is applied to the modeled device, not globally to every SSH target. When enabled, FortiNAC checks all potential matches in its <code>known_hosts</code> cache for the VIP and selects the matching entry. This is not a recommendation to disable host-key checking. It is a way to pre-authorize the keys of the devices that are legitimately allowed to own the VIP. Each possible VIP owner must be represented before failover testing; otherwise the new owner can still present an unknown key.</p>\n<h3>Prepare every candidate key</h3>\n<p>For the legacy FortiNAC procedure, log in to the FortiNAC CLI as root. Open an SSH connection to each physical IP address that can own the VIP and accept its host key. The key is written to <code>/root/.ssh/known_hosts</code>. Copy the key into <code>/bsc/.ssh/known_hosts</code>, replace the physical address with the shared VIP, and keep a separate line for each possible owner. Repeat for every device that may become active. Fortinet's guide says the VIP should then have two entries with different keys: one for the full device model and one for the pingable model. The key list is therefore a controlled set of trust candidates, not a wildcard trust rule.</p>\n<pre><code>ssh root@&lt;PHYSICAL_IP&gt;\ncat /root/.ssh/known_hosts | grep &lt;PHYSICAL_IP&gt;\n# Copy the key into /bsc/.ssh/known_hosts and change its host to &lt;VIP&gt;\n\ncat /bsc/.ssh/known_hosts | grep &lt;VIP&gt;\n\ndevice -ip &lt;VIP&gt; -setAttr -name MultiKnownHostEntries -value true</code></pre>\n<p>Enable the attribute only after the candidate keys are present. The setting applies to FortiNAC versions 9.4.3 and later. If the network device does not use a VIP, the procedure is unnecessary.</p>\n<h3>Evidence and diagnostic boundaries</h3>\n<p><code>cat /bsc/.ssh/known_hosts | grep &lt;VIP&gt;</code> should show multiple distinct key entries. That proves the cache contains candidate identities. The device model attribute proves multi-entry matching is enabled. A successful SSH poll after a controlled VIP failover proves the active owner presented a key that FortiNAC already trusts. None of these checks proves the SSH username has the correct privilege level, that the password or key authentication is correct, or that the device CLI output is parseable by the selected model.</p>\n<h3>Failure isolation</h3>\n<p>If polling still fails after failover, compare the active device's presented host key with the keys copied into the VIP entries. Check for a missed standby owner, a key copied under the wrong VIP, an incomplete write to <code>/bsc/.ssh/known_hosts</code>, or an attribute enabled on the wrong modeled device. If the key is accepted but polling fails later, move to credentials, privilege, prompt format, and model-specific command parsing; do not keep modifying the known-hosts cache. A host-key mismatch is a trust failure, not a RADIUS or SNMP failure.</p>\n<h3>Operational application and caveats</h3>\n<p>A pair of wireless controllers may share a management VIP. FortiNAC polls the VIP every cycle. After a failover, the new active controller presents its own host key and the poll fails until that key is trusted. Preloading both keys prevents the maintenance event from looking like a device outage. Perform this setup before the change window, test failover, and preserve the strict host-key checks. The feature is deliberately scoped to VIP models; it should not be used to normalize arbitrary host-key changes across unrelated devices.</p>",
+      "nodes": [
+        "Controller A key",
+        "Controller B key",
+        "FortiNAC known_hosts VIP entries",
+        "MultiKnownHostEntries",
+        "VIP SSH poll"
+      ],
+      "edges": [
+        [
+          0,
+          2,
+          "candidate key A"
+        ],
+        [
+          1,
+          2,
+          "candidate key B"
+        ],
+        [
+          2,
+          3,
+          "per-model lookup"
+        ],
+        [
+          3,
+          4,
+          "select matching key"
+        ]
+      ]
+    },
+    {
+      "id": "fortinac-f-lag",
+      "product": "FortiNAC-F",
+      "title": "FortiNAC-F appliance LAG: active LACP aggregation versus redundant links",
+      "source": "https://docs.fortinet.com/document/fortinac-f/7.6.0/cli-reference-manual/543130/aggregation-and-redundancy",
+      "source_label": "FortiNAC-F CLI Reference — Aggregation and Redundancy",
+      "word_count_target": 550,
+      "content_html": "\n<p><strong>Purpose.</strong> FortiNAC-F 7.6.3 adds link aggregation support on the appliance. A LAG combines multiple physical ports into one logical interface so the appliance can use multiple links and tolerate an individual member failure. This is not the same as a redundant interface group. An aggregate interface can use all negotiated members for bandwidth and resilience; a redundant group forwards over one member at a time and primarily provides failover. Choosing the wrong type can leave an appliance with less throughput than expected even though the IP address remains reachable.</p>\n<h3>Interface model and negotiation</h3>\n<p>The FortiNAC-F CLI reference describes IEEE 802.3ad/802.1ax aggregation and LACP active/passive modes. The logical interface owns the IP and management access configuration; physical member ports are bound to that interface and should not be configured separately for competing Layer-3 purposes. LACP exchanges control frames with the peer switch to negotiate which physical links belong to the same aggregator. If one member fails, traffic can continue on the remaining active member(s), reducing available bandwidth but preserving connectivity. Both ends must agree on the channel and member configuration.</p>\n<p>Fortinet's example creates <code>lag0</code> from unused <code>port2</code> and <code>port3</code> with <code>lag-mode lacp-active</code>. The redundant example creates <code>redundant0</code> from <code>port3</code> and <code>port4</code>; only one link is used at a time. Do not place a physical port into an aggregate while it is still assigned to another interface or switch construct.</p>\n<pre><code>config system interface\n    edit \"lag0\"\n        set type aggregate\n        set lag-mode lacp-active\n        set allowaccess ping ssh http https\n        set member port2 port3\n    next\n    edit \"redundant0\"\n        set type redundant\n        set allowaccess ping ssh http https\n        set member port4 port5\n    next\nend</code></pre>\n<h3>Operational transaction</h3>\n<p>Plan the switch-side port-channel first. Confirm the selected appliance ports are unused, configure the FortiNAC-F aggregate interface, add the physical members, and apply the intended addressing and allowed management services to the logical interface. Configure the peer switch with matching LACP settings and the same physical member set. LACP active mode initiates negotiation; passive mode responds. If both ends are passive, the bundle may not form. If one side is a static channel and the other expects LACP, the link may appear physically up without forming the intended aggregate.</p>\n<h3>Verification: do not stop at ping</h3>\n<p>Confirm that the logical interface exists with the intended member list, then inspect the LACP actor/partner state and per-member counters on both the appliance and switch. A ping to the management address proves that at least one path is forwarding; it does not prove both members are active or that traffic is distributed. Disconnect one member in a controlled test: the logical interface should remain up and traffic should continue on the surviving member, with reduced capacity. For a redundant group, expect one active path rather than simultaneous use of all links.</p>\n<h3>Failure isolation and caveats</h3>\n<p>If the LAG does not form, check that the member ports are unused, the switch ports belong to the correct port-channel, the LACP mode is compatible, and speed/duplex and VLAN treatment match. If the interface is reachable but one member carries no traffic, inspect aggregator state and member counters before assuming a cabling fault; LACP may have selected only one compatible aggregator. If the requirement is simply to keep management reachable over one alternate link, a redundant group may be the more appropriate design. The 7.6.3 release note introduces the capability; use the CLI reference for exact syntax and confirm model-specific port availability before change.</p>\n<h3>Operational application</h3>\n<p>For a FortiNAC-F appliance connected to a redundant core pair, use a supported switch-side multi-chassis LAG design and verify that the switch presents one consistent LACP partner identity. The FortiNAC-F logical interface then survives one cable or switch-port failure without changing its management address. Avoid assuming that two cables automatically double throughput: member negotiation, hashing, and traffic distribution determine actual utilization.</p>",
+      "nodes": [
+        "FortiNAC-F lag0",
+        "Port2",
+        "Port3",
+        "Switch LACP port-channel",
+        "Surviving member"
+      ],
+      "edges": [
+        [
+          1,
+          0,
+          "member"
+        ],
+        [
+          2,
+          0,
+          "member"
+        ],
+        [
+          0,
+          3,
+          "LACP negotiation"
+        ],
+        [
+          1,
+          4,
+          "member failover"
+        ],
+        [
+          2,
+          4,
+          "member failover"
+        ]
+      ]
+    },
+    {
+      "id": "fortiauth-fido-saml",
+      "product": "FortiAuthenticator",
+      "title": "FIDO for IdP-initiated SAML: authenticate first, then release the SP assertion",
+      "source": "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/864572",
+      "source_label": "FortiAuthenticator 8.0.3 Administration Guide — General SAML IdP settings",
+      "word_count_target": 600,
+      "content_html": "\n<p><strong>Security objective.</strong> IdP-initiated SAML starts at the identity provider's portal rather than at the service provider. FortiAuthenticator 8.0.0 adds a control to require FIDO authentication for this login path. The administrator can require FIDO alone or password plus FIDO, and can optionally allow password plus OTP only when every FIDO key registered for a user has been revoked. This makes the IdP portal's authentication strength explicit before it issues an assertion to a participating service provider.</p>\n<h3>Components and trust boundaries</h3>\n<p>FortiAuthenticator acts as the SAML Identity Provider (IdP). Each service provider (SP) is configured with its entity ID, ACS URL, certificate, and the setting that allows IdP-initiated assertion responses. Users authenticate to the FortiAuthenticator portal, and group filters determine which SP entries they are allowed to see. A registered FIDO key is a user authentication factor; the signed SAML assertion is a separate trust artifact consumed by the SP. FIDO validates the user to the IdP; SAML conveys the resulting identity and attributes to the SP.</p>\n<h3>IdP-initiated transaction</h3>\n<p>The user opens the FortiAuthenticator IdP portal. If the browser is not already authenticated, the IdP presents a username-only page and follows the configured FIDO/password flow. With FIDO-only, the user authenticates using the registered FIDO authenticator without a password. With Password and FIDO, both factors are required. If the optional recovery setting is enabled, password plus OTP can be allowed when all FIDO keys for the account have been revoked. After successful authentication, the portal presents only SPs for which the user passes the configured group authorization. The user selects an SP, FortiAuthenticator generates the SAML assertion, and the browser posts it to the SP. The SP validates the assertion and decides whether to grant the application resource.</p>\n<h3>Configuration sequence</h3>\n<p>In <em>Authentication &gt; SAML IdP &gt; General</em>, enable the SAML Identity Provider portal, set the device FQDN and server address, and configure the IdP Initiated Login authentication method. Choose FIDO-only or Password and FIDO according to the assurance requirement. If using the recovery path, enable the documented fallback only when all FIDO keys have been revoked. In each SP configuration, enable support for IdP-initiated assertion responses so the SP appears in the portal. Configure group filters and ensure users have FIDO enabled with at least one registered key. The default IdP certificate and signing algorithm remain responsible for the assertion signature; FIDO does not replace SAML signing.</p>\n<h3>Evidence and failure boundaries</h3>\n<p>FortiAuthenticator authentication logs should show the selected factor outcome. The SP list in the portal is evidence of group-filter authorization, not proof that the SP will accept the assertion. A successful SAML response at the SP ACS proves assertion delivery and signature/trust processing; application authorization is still controlled by the SP. If the SP is absent, inspect its IdP-initiated support setting and group filters before changing FIDO. If FIDO is unavailable, check whether FIDO is enabled, a key is registered, and at least one key remains active. If all keys were revoked, the configured fallback determines whether password plus OTP can be used.</p>\n<h3>Operational caveats</h3>\n<p>IdP-initiated and SP-initiated SAML are different browser flows. In SP-initiated mode, the SP sends the authentication request first; in IdP-initiated mode, the user selects an SP after authenticating at the IdP. Do not assume a working SP-initiated integration proves the IdP portal is configured correctly. Also keep certificate rotation, ACS URL, entity ID, and group mapping in the change plan. FIDO protects the IdP login step; it does not fix a stale SP certificate, incorrect NameID, or an SP that rejects the assertion audience.</p>",
+      "nodes": [
+        "User browser",
+        "FortiAuthenticator FIDO login",
+        "Group-filtered SP portal",
+        "Signed SAML assertion",
+        "SP ACS"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "username + FIDO"
+        ],
+        [
+          1,
+          2,
+          "authenticated identity"
+        ],
+        [
+          2,
+          3,
+          "SP selection"
+        ],
+        [
+          3,
+          4,
+          "assertion POST"
+        ]
+      ]
+    },
+    {
+      "id": "fortipam-terraform",
+      "product": "FortiPAM",
+      "title": "Terraform provider: declarative folders and secrets with a sensitive state file",
+      "source": "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/852615/terraform-fortipam-as-a-provider",
+      "source_label": "FortiPAM Administration Guide — Terraform as a provider",
+      "word_count_target": 650,
+      "content_html": "\n<p><strong>What the provider manages.</strong> FortiPAM's Terraform provider automates resource management for folders and secrets on a physical appliance or VM. It gives infrastructure teams a repeatable way to create, update, import, and delete privileged credentials as code rather than repeatedly entering them in the GUI. It is not a full Terraform representation of every FortiPAM feature: the documented provider focuses on folder and secret resources. A secret resource includes a template, a folder path, and named fields such as Host, Username, and Password.</p>\n<h3>Authentication and object model</h3>\n<p>The provider authenticates to FortiPAM through a REST API user and API token. The documented workflow creates a Standard User with User Type API User. A Super Administrator can create it in the GUI or with the CLI. The example CLI uses <code>config system api-user</code> and <code>execute api-user generate-key &lt;API_USER_NAME&gt;</code>. The token is displayed once and cannot be retrieved later; if it is lost, generate a new key and update the automation secret store. Use the least privilege required for the folder and secret operations, and protect the token as a credential.</p>\n<p>The provider configuration identifies the FortiPAM base URL, access token, and TLS verification behavior. The guide's sample uses <code>verify_ssl = false</code> for demonstration; production automation should validate the appliance certificate and use a trusted CA chain rather than disabling verification. Pin the provider version and Terraform version used in the tested pipeline. Fortinet's example requirements are FortiPAM 1.5.0 or later, provider 1.0.0, and Terraform 1.9.6.</p>\n<h3>Declarative resource workflow</h3>\n<p>A folder resource establishes the organizational path. A secret resource references the folder, selects a FortiPAM secret template, and populates its fields. Dynamic blocks can iterate over a local list of field names and values. <code>terraform init</code> downloads and initializes the provider; <code>terraform plan</code> compares the declared state with the remote object and shows additions or in-place updates; <code>terraform apply</code> performs the change. The guide shows a Host field changing from one address to another as an in-place update. Import uses the secret ID from the target appliance so an existing secret can be brought under Terraform management.</p>\n<pre><code>provider \"fortipam\" {\n  base_url     = var.fortipam_url\n  access_token = var.fortipam_api_token\n  verify_ssl   = true\n}\n\nresource \"fortipam_resource_folder\" \"network\" {\n  parent = \"Production\"\n  name   = \"Network Devices\"\n}\n\nresource \"fortipam_resource_secret\" \"edge_router\" {\n  name     = \"edge-router-01\"\n  path     = \"Production/Network Devices\"\n  template = \"Unix Account (SSH Password)\"\n  dynamic \"fields\" {\n    for_each = local.secret_fields\n    content {\n      name  = fields.value.name\n      value = fields.value.value\n    }\n  }\n}</code></pre>\n<h3>Critical state-file security</h3>\n<p>The Fortinet example explicitly warns that importing a secret can output secret field values into <code>terraform.tfstate</code> as plain text. This is the most important operational caveat. A protected FortiPAM vault does not automatically protect a Terraform state file. Use an encrypted remote backend, strict backend ACLs, state locking, audit logging, and limited state readers. Do not commit state or plan files to Git. Mark sensitive variables and outputs, but remember that Terraform's sensitive display controls do not remove values from state. If a state file is exposed, rotate the affected credential and the provider API token.</p>\n<h3>Verification and failure isolation</h3>\n<p>The plan is the first evidence of intended change: verify resource address, secret name, folder path, template, and field diff before applying. The apply result proves the provider completed its API operation; read the secret back in FortiPAM to verify the actual object. A plan that proposes replacement rather than in-place update deserves investigation before apply. Authentication failures point to the API user/token or URL; TLS failures point to certificate trust; schema errors point to the secret template or field names. Import conflicts require checking whether the remote secret ID is already bound to another Terraform resource address.</p>\n<h3>Operational application</h3>\n<p>Use Terraform for controlled creation and rotation of non-human service credentials, while keeping the actual secret values in a secure variable source and the state backend in a protected store. Separate workspaces or state files by environment, review plans before production apply, and keep the provider/API token out of source control. This makes secret provisioning reproducible without confusing infrastructure-as-code state with the vault's own access controls.</p>",
+      "nodes": [
+        "Terraform HCL",
+        "Encrypted state backend",
+        "REST API token",
+        "FortiPAM folder",
+        "FortiPAM secret"
+      ],
+      "edges": [
+        [
+          0,
+          2,
+          "provider config"
+        ],
+        [
+          0,
+          1,
+          "state + plan"
+        ],
+        [
+          2,
+          3,
+          "folder CRUD"
+        ],
+        [
+          2,
+          4,
+          "secret CRUD"
+        ],
+        [
+          4,
+          1,
+          "sensitive state values"
+        ]
+      ]
+    },
+    {
+      "id": "fortisiem-case-api",
+      "product": "FortiSIEM",
+      "title": "Native Case API: create investigations, attach incidents and preserve evidence",
+      "source": "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/46107/whats-new-in-7-4-0",
+      "source_label": "FortiSIEM 7.5.1 User Guide — What's New in 7.4.0, REST API enhancements",
+      "word_count_target": 600,
+      "content_html": "\n<p><strong>Purpose and boundary.</strong> FortiSIEM's Case API provides a native case-management object that can be created and updated through REST calls. It is distinct from a two-way integration with an external ticketing system. The API allows a SOC workflow to discover analysts, create a case, associate incident IDs, update case state, add notes, and upload attachments. It does not by itself create a ServiceNow or Jira ticket, nor does creating a case automatically close or suppress the underlying incident.</p>\n<h3>Endpoints and lifecycle</h3>\n<p>The documented API includes <code>GET /pub/case/analysts</code>, <code>POST /pub/case</code>, <code>PUT /pub/case/{caseId}</code>, and <code>POST /pub/case/{caseId}/attachment</code>. A caller first retrieves the analyst list and selects a valid assignee. In Service Provider deployments, the organization parameter is mandatory; in Enterprise mode it is optional. The analyst lookup supports a time window of up to 90 days, defaults to 30 days when no range is supplied, and supports offset/limit pagination. The returned analyst record includes user ID, username, overdue count, and assigned count.</p>\n<p>Case creation accepts organization, assignee, summary, severity, and optional status, stage, incident IDs, note, policy name, and due date. The API returns a case ID. The case stage can represent Analysis, Containment, Detection, Eradication, Lessons Learned, or Recovery. An incident ID can be assigned to only one case at a time. When updating a case, incident IDs are appended rather than replacing existing IDs, and notes are also append operations. An attachment can be uploaded from an IRI or from a file path under <code>/tmp</code>. These append semantics matter when automation retries a request: a retry should not assume it is replacing an existing list or overwriting a note.</p>\n<h3>Example request sequence</h3>\n<pre><code># 1. Discover eligible analysts\nGET /phoenix/rest/pub/case/analysts?organization=Acme&amp;offset=0&amp;limit=100\n\n# 2. Create a native case\nPOST /phoenix/rest/pub/case\n{\n  \"organization\": \"Acme\",\n  \"assignee\": \"soc.analyst\",\n  \"summary\": \"Credential abuse across VPN gateways\",\n  \"severity\": \"High\",\n  \"stage\": \"Analysis\",\n  \"incidentIds\": \"INC-12345,INC-12346\",\n  \"note\": \"Correlated incidents opened for investigation\"\n}\n\n# 3. Update the case\nPUT /phoenix/rest/pub/case/{caseId}\n\n# 4. Upload evidence\nPOST /phoenix/rest/pub/case/{caseId}/attachment</code></pre>\n<p>Use the exact payload field schema for the installed release and organization mode. The FortiSIEM release notes define the endpoints; the FortiSOAR integration reference provides additional field behavior and is useful as an integration example, not as a replacement for the FortiSIEM API contract.</p>\n<h3>Evidence and troubleshooting</h3>\n<p>The create response's <code>caseId</code> proves a case object was created. Read the case back through the case list/API and verify its assignee, severity, stage, and incident associations. The attachment endpoint's status/message proves the upload operation completed; verify the attachment appears in the case before treating evidence collection as complete. If the analyst list is empty, define at least one FortiSIEM user as an analyst in the UI. If the call fails in Service Provider mode, check the organization context. If an incident cannot be attached, verify it is not already assigned to another case. If an attachment fails, confirm the IRI is valid or the file is present under the supported <code>/tmp</code> path.</p>\n<h3>Operational caveats</h3>\n<p>Case creation, incident association, and external ticket synchronization are different transactions. A successful POST to the Case API proves only the native FortiSIEM case exists. It does not prove that a downstream ITSM ticket was created, that a notification was sent, or that the incident was closed. Design automation to read back the case ID, record it in the orchestration context, and make update calls idempotent where possible. Preserve notes and attachment status so that a retry does not create duplicate evidence or misleading case history.</p>\n<h3>Operational application</h3>\n<p>When several correlated alerts are promoted to one investigation, automation can look up the on-call analyst, create a case, associate the incident IDs, and attach a packet capture or forensic timeline. The case becomes the native investigation record; external ticketing can be layered on separately. This separation prevents a SOC from mistaking an internal case record for a fully synchronized service-management workflow.</p>",
+      "nodes": [
+        "SOAR/SOC client",
+        "Analyst lookup API",
+        "Case create/update API",
+        "FortiSIEM case",
+        "Incident IDs + evidence"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "GET analysts"
+        ],
+        [
+          1,
+          2,
+          "assignee"
+        ],
+        [
+          0,
+          2,
+          "POST/PUT"
+        ],
+        [
+          2,
+          3,
+          "caseId"
+        ],
+        [
+          3,
+          4,
+          "incident links + attachments"
+        ]
+      ]
+    },
+    {
+      "id": "fortisase-config-audit",
+      "product": "FortiSASE",
+      "title": "Require comments for configuration audit: commit gate and 30-day evidence",
+      "source": "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/519208/administration",
+      "source_label": "FortiSASE 26.1.107 Feature Administration Guide — Administration",
+      "word_count_target": 500,
+      "content_html": "\n<p><strong>Purpose.</strong> FortiSASE can require an administrator to enter a change summary before a configuration change is committed. The control is intended to improve traceability across a cloud-managed security service where many administrators can change traffic objects, endpoint profiles, analytics, and reporting settings. It turns the change description into part of the configuration transaction rather than relying on an operator to remember to add a comment later.</p>\n<h3>Commit workflow</h3>\n<p>Enable <em>System &gt; Administration &gt; Require comments for configuration audit log</em>. When an administrator submits a configuration change, FortiSASE displays a Configuration audit log pane and requires a change summary before completing the action. The summary records the object being changed, the administrator who made the change, and a short description. Fortinet's example uses creation of a traffic policy: the administrator configures the policy, clicks OK, enters the summary in the audit pane, and then confirms the change. The audit gate applies broadly to configuration changes, including objects, endpoint profiles, and analytics/reporting configurations.</p>\n<p>Review records under <em>Operations &gt; Logs &gt; Events &gt; Administrator Events</em>. New logs may appear after a delay, so a missing row immediately after a commit is not proof that the change failed or that the summary was discarded. Existing change summaries are retained for 30 days. If the Require comments option is disabled later, the prompt no longer appears for new changes, but existing summaries remain available within their retention period.</p>\n<h3>Evidence and limitations</h3>\n<p>The Administrator Events record and its Details view provide evidence of the actor, object, and submitted change summary. That proves the platform recorded the administrative change context. It does not prove the change was approved by a separate change board, linked to an external ticket, tested successfully, or reviewed by a second administrator. A required summary is not an approval workflow. Organizations that require segregation of duties should pair it with role-based access and their external change-management process.</p>\n<h3>Failure isolation</h3>\n<p>If the summary pane does not appear, check whether the requirement is enabled in System &gt; Administration and whether the administrator is performing a configuration change rather than a read-only action. If the configuration is saved but the event is not immediately visible, allow for log propagation delay and refresh Administrator Events. If the summary is absent after the retention window, the 30-day retention boundary may explain it. Disabling the feature stops future prompts; it does not retroactively erase existing summaries before their retention expires.</p>\n<h3>Operational application</h3>\n<p>During an emergency traffic-policy change, the operator must state the operational reason before the commit completes. A useful summary names the affected object, the service or user population, the intended effect, and the change reference. Keep summaries factual and concise because they become searchable operational evidence. Export or retain records within the 30-day window if longer-term audit requirements apply. Do not treat the prompt as a substitute for pre-change review, post-change validation, or external approval controls.</p>",
+      "nodes": [
+        "Administrator",
+        "Configuration change",
+        "Required summary gate",
+        "FortiSASE commit",
+        "Administrator Events"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "submit"
+        ],
+        [
+          1,
+          2,
+          "prompt"
+        ],
+        [
+          2,
+          3,
+          "summary required"
+        ],
+        [
+          3,
+          4,
+          "event record"
+        ]
+      ]
+    },
+    {
+      "id": "sdwan-app-steering",
+      "product": "Secure SD-WAN",
+      "title": "Dynamic application steering: classification cache, SLA cost and best-quality selection",
+      "source": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/80739/dynamic-application-steering-with-lowest-cost-and-best-quality-strategies",
+      "source_label": "FortiOS 8.0 Administration Guide — Dynamic application steering",
+      "word_count_target": 700,
+      "content_html": "\n<p><strong>Purpose.</strong> Application-based SD-WAN rules let the FortiGate choose a WAN path according to the application actually carried by a session, rather than only destination subnet or port. FortiOS uses Application Control signatures to identify the application. The selected strategy can then optimize for cost subject to an SLA, or choose the best measured link quality. This allows business-critical collaboration traffic to use preferred low-cost DIA circuits while less critical traffic chooses the best-performing available path.</p>\n<h3>Application recognition precedes rule matching</h3>\n<p>Enable Application Detection Based SD-WAN in Feature Visibility (or set <code>gui-app-detection-sdwan enable</code> in the CLI). Application Control must also be enabled in the firewall policy. On the first session, the IPS engine inspects application-layer traffic to match a signature. The first session does not match an application-based SD-WAN rule because the application has not yet been recognized. After identification, FortiGate records the destination IP, protocol, and port (the 3-tuple) in the application-control Internet Service ID list. Future sessions to that recognized 3-tuple can match the application-based SD-WAN rule. Entries with no hits for eight hours are removed.</p>\n<p>This learning behavior explains a common troubleshooting symptom: the first connection to an application may use a different rule, while later sessions match the expected application rule. Applications with multiple destination IPs can also miss the expected rule if a new IP has not yet been recognized. The application ID alone is not a universal mapping to every IP used by a cloud service.</p>\n<h3>Lowest Cost (SLA) strategy</h3>\n<p>Lowest Cost (SLA) evaluates the required SLA first, then uses member cost and interface preference to select among qualifying links. In Fortinet's example, two DIA links have cost 0 and an MPLS backup has cost 20. Business applications such as Office 365, Google Docs, Dropbox, and SIP use a Required SLA target; if a DIA link passes, it is preferred because its cost is lower. When costs tie, Interface Preference breaks the tie. MPLS is selected only when the lower-cost members are not available according to the rule's SLA logic. If no member meets the SLA target but health checks remain alive, the selection proceeds to the next cost-selection step rather than assuming all paths are physically down.</p>\n<h3>Best Quality strategy</h3>\n<p>Best Quality selects based on configured quality criteria such as latency or available bandwidth, using the Measured SLA. It does not require an SLA target to be met in the same way as Lowest Cost (SLA). Fortinet documents a default 10% preference advantage for a more-preferred interface; for latency, the preferred link's calculated latency is adjusted by that factor. The advantage can be customized with <code>link-cost-threshold</code> for priority/auto modes. This means interface preference can intentionally influence the quality ranking, so it is not merely a cosmetic ordering.</p>\n<h3>Configuration and observability</h3>\n<pre><code>config system global\n    set gui-app-detection-sdwan enable\nend\n\nconfig system sdwan\n    config health-check\n        edit \"BusinessCriticalApps_HC\"\n            set server \"office.com\" \"google.com\"\n            set members 1 2 3\n            config sla\n                edit 1\n                    set link-cost-factor packet-loss\n                    set packetloss-threshold 1\n                next\n            end\n        next\n    end\n    config service\n        edit 1\n            set name \"BusinessCriticalApps\"\n            set mode sla\n            set internet-service enable\n            set internet-service-app-ctrl 17459 16541\n            set health-check \"BusinessCriticalApps_HC\"\n            set priority-members 1 2 3\n        next\n    end\nend</code></pre>\n<p>Use <code>diagnose sys sdwan internet-service-app-ctrl-list [app ID]</code> to inspect recognized application and 3-tuple entries. Use <code>diagnose sys sdwan health-check &lt;name&gt;</code> to inspect loss, latency, jitter, and SLA state. Use <code>diagnose sys sdwan service &lt;id&gt;</code> to see the rule's selected members. The application list proves recognition/cache state; the health-check output proves probe measurement; the service output proves member selection. None alone proves that every destination IP used by the application is recognized or that the firewall policy permits the session.</p>\n<h3>Failure isolation and caveats</h3>\n<p>If the rule never matches, verify Application Control is attached to the policy and inspect the application-control list before changing costs. If the application is recognized but traffic still uses the wrong link, inspect the destination IP, rule order, SLA participants, thresholds, member costs, and tie preference. A cloud service that changes destination IPs may require new classification entries. Do not interpret an SLA target failure as a physical link-down state; a link can be alive while failing a quality threshold. Use Lowest Cost (SLA) when cost is primary but quality must be acceptable; use Best Quality when the goal is to choose the best measured path without a hard pass/fail target.</p>\n<h3>Operational application</h3>\n<p>For a branch with two DIA links and an MPLS backup, create a business-critical application rule with Lowest Cost (SLA), packet-loss threshold, and preference order DIA1, DIA2, MPLS. Create a separate Best Quality rule for noncritical video/social traffic using only the DIA links. Test first-session behavior and repeat-session behavior separately, then verify the cache, SLA measurements, and selected members. This gives the operator a clear explanation for why an application uses a path, rather than relying on destination IP assumptions alone.</p>",
+      "nodes": [
+        "Client session",
+        "IPS/Application Control",
+        "3-tuple cache",
+        "SD-WAN service rule",
+        "SLA measurements",
+        "DIA1/DIA2/MPLS"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "first session inspected"
+        ],
+        [
+          1,
+          2,
+          "recognized app + 3-tuple"
+        ],
+        [
+          2,
+          3,
+          "subsequent match"
+        ],
+        [
+          4,
+          3,
+          "quality input"
+        ],
+        [
+          3,
+          5,
+          "strategy selects member"
+        ]
+      ]
+    }
+  ]
+}
