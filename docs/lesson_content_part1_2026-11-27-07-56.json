@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0",
+  "generated_at_local": "2026-11-27T07:57:00-08:00",
+  "lessons": [
+    {
+      "id": "fortigate-multus-cni",
+      "product": "FortiGate",
+      "title": "Multus CNI: discover every pod interface, not just the default network",
+      "source": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/345168/multus-cni-for-kubernetes-connectors",
+      "source_label": "FortiOS 8.0 Administration Guide — Multus CNI for Kubernetes connectors",
+      "word_count_target": 600,
+      "content_html": "\n<p><strong>Why this matters.</strong> A Kubernetes pod normally has a primary network interface, but Multus CNI lets the pod attach to additional networks at runtime. A firewall policy that relies on a Kubernetes SDN connector can therefore be incomplete if the connector only learns the pod's default interface. FortiOS 8.0 adds Multus-aware discovery so the connector can populate dynamic firewall address objects with all relevant pod addresses, including secondary IPv4 and IPv6 addresses. This is particularly useful for virtual network functions, telecom workloads, VM-backed pods, and workloads that separate management, storage, and service traffic across multiple network attachments.</p>\n<h3>Objects and data path</h3>\n<p>The control-plane objects are the Kubernetes SDN connector, the pod annotations written by the CNI chain, and a FortiGate dynamic firewall address. The connector talks to the Kubernetes API server using its configured address, port and secret token. Multus exposes the default interface in <code>k8s.v1.cni.cncf.io/network-status</code> and additional attachment details in <code>k8s.v1.cni.cncf.io/network-extra-info</code>. FortiGate consumes these annotations, evaluates the connector filter (for example <code>K8S_PodName=virt-launcher-testvm3-7q5gl</code>), and builds the resolved address list for the matching dynamic object. The firewall policy references the object, not a static IP copied from a deployment manifest.</p>\n<p>That distinction matters when a pod is rescheduled or an attachment receives a different address. The Kubernetes API remains the source of truth; the dynamic address object is a derived policy object. It can contain the primary pod address plus addresses from multiple Multus networks. IPv6 dynamic address objects are configured in the CLI even though IPv4 dynamic objects can be created in the GUI.</p>\n<h3>Configuration pattern</h3>\n<pre><code>config system sdn-connector\n    edit \"kuber_multus_cni\"\n        set type kubernetes\n        set server \"172.19.137.22\"\n        set server-port 6443\n        set secret-token &lt;KUBERNETES_API_TOKEN&gt;\n    next\nend\n\nconfig firewall address\n    edit \"kuber_multus_cni_address\"\n        set type dynamic\n        set sdn \"kuber_multus_cni\"\n        set filter \"K8S_PodName=virt-launcher-testvm3-7q5gl\"\n    next\nend\n\nconfig firewall address6\n    edit \"kuber_multus_cni_address6\"\n        set type dynamic\n        set sdn \"kuber_multus_cni\"\n        set filter \"K8S_PodName=virt-launcher-testvm3-7q5gl\"\n    next\nend</code></pre>\n<p>The Fortinet example includes a connector certificate-verification setting; do not copy a disabled-verification example into production without evaluating the cluster API certificate and the trust chain. Use the supported certificate-validation configuration for the deployed release. Keep the connector token scoped to the minimum Kubernetes read permissions needed for the connector.</p>\n<h3>Verification: what each signal proves</h3>\n<p><code>diagnose sys sdn status \"kuber_multus_cni\"</code> should show the connector as <code>Up</code>. This proves the connector's control-plane session is healthy; it does not prove that a particular pod matched the filter or that secondary addresses were returned. In the GUI, use <em>View Matched Addresses</em> on the dynamic address. In the CLI, <code>show firewall address</code> and <code>show firewall address6</code> should show the resolved list. The list is the evidence that the object contains the expected primary and secondary IPs. It still does not prove that the intended firewall policy is the first matching policy for a packet.</p>\n<h3>Failure isolation</h3>\n<p>If the connector is Up but a secondary address is missing, inspect the pod itself before changing the FortiGate policy. Confirm that Multus attached the secondary network and that <code>network-extra-info</code> contains the attachment name and address. Then check the exact filter string, the connector's collection scope (Private versus Public), and whether the missing address is IPv6. A filter that matches the pod name but an annotation that contains only the default network will produce a healthy connector and an incomplete address object. If the pod is recreated, verify that the connector has refreshed the new runtime address rather than assuming the previous IP remains valid.</p>\n<h3>Operational application and caveats</h3>\n<p>Consider a virtual router pod with <code>eth0</code> on the cluster overlay, a second interface on a service VLAN, and a third interface on a storage network. A policy that protects the service VLAN must reference the dynamic object that includes the second attachment; using only the default pod IP silently protects the wrong interface. Treat each attachment as a distinct policy identity where segmentation requires it. Validate both address families and the object-to-policy reference after a deployment rollout. The feature improves discovery; it does not decide which pod networks should be trusted, nor does it replace Kubernetes network policy or the need to design FortiGate policy boundaries.</p>",
+      "nodes": [
+        "Kubernetes API",
+        "Pod annotations",
+        "Multus attachments",
+        "FortiGate SDN connector",
+        "Dynamic address objects",
+        "Firewall policy"
+      ],
+      "edges": [
+        [
+          0,
+          3,
+          "API/token"
+        ],
+        [
+          1,
+          3,
+          "network-status + extra-info"
+        ],
+        [
+          2,
+          1,
+          "runtime IPs"
+        ],
+        [
+          3,
+          4,
+          "resolve"
+        ],
+        [
+          4,
+          5,
+          "policy reference"
+        ]
+      ]
+    },
+    {
+      "id": "fortimanager-global-localin",
+      "product": "FortiManager",
+      "title": "Global ADOM local-in policy blocks: centralize management-plane protection",
+      "source": "https://docs.fortinet.com/document/fortimanager/8.0.0/new-features/300336",
+      "source_label": "FortiManager 8.0 New Features — Local In policies in Global ADOM and policy blocks",
+      "word_count_target": 600,
+      "content_html": "\n<p><strong>Why this matters.</strong> A local-in policy controls traffic destined to the FortiGate itself—administrative HTTPS/SSH, routing/control-plane services, and other traffic terminating on an interface. It is not an ordinary forward firewall policy for traffic crossing the FortiGate. In a large estate, repeating the same management-plane allow/deny boundary in every local ADOM creates drift: one site may allow a jump-host subnet while another leaves a broad management service exposed. FortiManager 8.0 extends local-in policy packaging so common IPv4 and IPv6 controls can be authored in the Global Database ADOM and reused across multiple policy packages and ADOMs.</p>\n<h3>Objects and relationships</h3>\n<p>The feature uses four distinct layers. First, Feature Visibility must expose Local In Policies in Policy &amp; Objects. Second, the Global Database ADOM contains global policy packages and global policy blocks. Third, a local-in policy can be created as a header or footer policy in the global package, or inside a global policy block that can be appended to packages. Fourth, the global package is assigned to target ADOMs and installed to managed FortiGates. Local ADOMs can still own their local policy content; the global portion provides common controls without requiring each ADOM administrator to recreate the same objects.</p>\n<p>Header and footer placement is important. It lets a central team place shared policy boundaries around the local package's own local-in rules. A global policy block is reusable content, while package assignment is the step that scopes that content to an ADOM. Creating a block does not automatically make it effective on every device. The package must include it, be assigned to the ADOM, and be installed to the intended FortiGate targets.</p>\n<h3>Build and deploy workflow</h3>\n<p>Enable the Local In Policies feature in <em>Policy &amp; Objects &gt; Tools &gt; Feature Visibility</em>. Enter the Global Database ADOM, select a global policy package, and create the required IPv4 or IPv6 Local In Header/Footer Policy. Alternatively, create a global policy block, add the local-in header/footer policies to that block, then append the block to each required global package. Use <em>Action &gt; Assign</em> on the global package to assign it to the target ADOMs. In each local ADOM, the global flag indicates that global policy content is assigned. Review the package and install preview before pushing the result to FortiGate.</p>\n<p>FortiManager's local-in policy editor exposes interface, source address, destination address, service, schedule, action, and—in IPv4 policies—an HA Management Interface Only option. A change note is required. IPv4 and IPv6 local-in policies are separate policy types; do not assume that an IPv4 header policy automatically protects IPv6 management traffic.</p>\n<h3>Verification and diagnostic boundaries</h3>\n<p>At the FortiManager layer, confirm that the policy is visible in the Global Database ADOM, that the policy block is appended to the intended package, and that the package is assigned to the correct ADOM. The global flag in a local package is evidence of assignment, not proof of installation. The install preview and task result prove what FortiManager attempted to send. Read the resulting local-in policy table on the FortiGate to prove the device received the expected rules. A saved object in the Global ADOM is not runtime enforcement evidence.</p>\n<h3>Common failure modes</h3>\n<p>If the local-in policy selector is missing, first check Feature Visibility rather than assuming the ADOM is corrupt. If one ADOM is protected and another is not, compare global package assignment and installation history before editing the local policy itself. If a block exists but has no effect, verify it was appended to the package and that the package was installed to the device. For IPv6 management exposure, inspect the IPv6 local-in policy list independently. The feature centralizes distribution; it does not remove the need to validate interface scope, source ranges, service ports, schedules, and rule ordering for each device.</p>\n<h3>Operational application and caveats</h3>\n<p>A central operations team can publish a shared jump-host allowlist and deny all other inbound management services, while regional teams retain local exceptions where approved. The same block can be appended to several global packages and assigned to separate ADOMs. Keep a documented exception process and test management access from the out-of-band path before installing a restrictive change. A local-in policy can lock out the administrator if the source address or interface is wrong. The design is therefore a policy-distribution improvement, not a substitute for staged deployment, install preview, and recovery access.</p>",
+      "nodes": [
+        "Global Database ADOM",
+        "Global policy block",
+        "Global packages",
+        "Local ADOM A/B",
+        "FortiGate targets"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "author"
+        ],
+        [
+          1,
+          2,
+          "append"
+        ],
+        [
+          2,
+          3,
+          "assign"
+        ],
+        [
+          3,
+          4,
+          "install"
+        ]
+      ]
+    },
+    {
+      "id": "fortianalyzer-soc-automation",
+      "product": "FortiAnalyzer",
+      "title": "SOC Automation content packs: entitlement, FDS delivery and object provenance",
+      "source": "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/72177/soc-automation",
+      "source_label": "FortiAnalyzer 8.0 Administration Guide — SOC Automation",
+      "word_count_target": 600,
+      "content_html": "\n<p><strong>Why this matters.</strong> FortiAnalyzer's Security Automation Service is not simply a downloadable parser bundle. It is a licensed FortiGuard content-delivery service that distributes curated content packs, including premium reports, advanced correlation rules, alert handlers, third-party SIEM parsers, and connectors. The content is designed to extend detection and response as vendors and threat patterns change. Administrators need to distinguish four separate states: entitlement, delivery, object installation, and operational configuration. Confusing these states is a common reason teams assume a parser or connector is active when only the package inventory is visible.</p>\n<h3>Delivery and object lifecycle</h3>\n<p>A valid Security Automation Service license allows FortiAnalyzer to receive content packs from the FortiGuard Distribution Server (FDS). When a pack is available, FortiAnalyzer applies it automatically. The inventory is visible at <em>Incidents &amp; Alerts &gt; FortiGuard Services &gt; SOC Automation</em>. The table organizes objects by content pack and exposes Content Pack Version, object Name, Config Type, Description, Status (New or Modified), Release Date, Vendor, and Min Version. The Config Type determines where the object is used: reports appear under Report Definitions, alert handlers under Alert Handlers, SIEM parsers under Log Parsers, and connectors under Active Connectors.</p>\n<p>Fortinet's SOC Automation Objects guide explains the provenance boundary. RHSP package reports are stored at the global level and display <code>Origin = FortiGuard</code>; FortiGuard-delivered alert handlers and parsers also expose their origin. The inventory pane is primarily a review surface. To inspect or customize the object's configuration, navigate to the corresponding feature pane. A connector object may be delivered by the pack but still require the administrator to configure endpoint URL, credentials, tenant identifiers, scopes, or other environment-specific values before it can exchange data.</p>\n<h3>Entitlement and version dependencies</h3>\n<p>Start with the License Information widget to confirm the Security Automation Service license. The device must also be able to reach FDS. Fortinet's SOC Automation Objects introduction notes that beginning in FortiAnalyzer 7.4.9 and 7.6.5, FortiAnalyzer requires a valid FortiCare Elite or FortiCare Premium support contract registered in FortiCloud to receive object updates. Check the deployed release and contract status rather than assuming a license from another Fortinet service covers this content. Each object also has a minimum supported FortiAnalyzer version; a pack may be present while an individual object is not usable on an older build.</p>\n<h3>Verification: separate the states</h3>\n<p>The License Information widget proves the appliance sees entitlement. The SOC Automation table proves the content pack and its objects are inventoried, including version, release date, and new/modified status. <code>Origin = FortiGuard</code> proves provenance. Finding a parser under Log Parsers proves the parser object is available, but it does not prove the source device is forwarding logs or that the parser matches the raw message. Finding a connector under Active Connectors does not prove it is configured or authenticated. For a parser, validate source log arrival, parser selection, parsed fields, and event normalization. For a connector, validate the connection and successful data pull separately.</p>\n<h3>Troubleshooting sequence</h3>\n<p>If an expected pack is absent, check the Security Automation Service license, FDS reachability, the FortiCare contract requirement for the installed branch, and the content pack's minimum version. If the pack is present but an object is missing, filter by content pack and Config Type. If a parser is present but logs remain raw, inspect the incoming vendor/product identity and the parser's expected message format. If a connector is present but idle, complete its environment-specific configuration and test authentication. Do not repeatedly reinstall a pack when the failure is actually a source-device or credential problem.</p>\n<h3>Operational application and caveats</h3>\n<p>For example, a new Armis log parser may appear in a monthly pack. That update reduces the need to build a parser from scratch, but it does not create an Armis API connection or guarantee the device sends the expected syslog format. Record the pack version and release date during change review, then validate the downstream object in its own pane. Treat FortiGuard-origin objects as vendor-delivered content with explicit minimum-version and licensing dependencies. The service accelerates content maintenance; it does not remove the need to verify ingestion, field extraction, rule execution, and response workflow end to end.</p>",
+      "nodes": [
+        "FortiGuard FDS",
+        "License/contract",
+        "SOC Automation pack",
+        "Reports/handlers/parsers",
+        "Connectors",
+        "Operational logs"
+      ],
+      "edges": [
+        [
+          0,
+          2,
+          "monthly pack"
+        ],
+        [
+          1,
+          2,
+          "entitlement"
+        ],
+        [
+          2,
+          3,
+          "auto-apply"
+        ],
+        [
+          2,
+          4,
+          "auto-apply"
+        ],
+        [
+          4,
+          5,
+          "manual config + test"
+        ]
+      ]
+    },
+    {
+      "id": "fortiswitch-mclag-l3",
+      "product": "FortiSwitch",
+      "title": "Layer-3 routing within MCLAG: VRRP, BGP and local forwarding",
+      "source": "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/811127/using-layer-3-routing-within-an-mclag",
+      "source_label": "FortiSwitchOS 8.0 Administration Guide — Using layer-3 routing within an MCLAG",
+      "word_count_target": 700,
+      "content_html": "\n<p><strong>Purpose and design.</strong> A multichassis LAG gives downstream devices one logical Layer-2 attachment to two FortiSwitch peers. FortiSwitchOS also supports Layer-3 routing across that MCLAG pair so the pair can behave like a single router while forwarding traffic on both cores. VRRP provides a shared next-hop identity on each routed VLAN interface (SVI); BGP or OSPF distributes the routes that each peer needs. This is different from merely keeping the inter-chassis link (ICL) alive: the goal is to make a packet received by either peer routable locally, avoiding unnecessary ICL transit while retaining active-active forwarding.</p>\n<h3>Control-plane and data-plane mechanics</h3>\n<p>In the one-tier example, Core1 and Core2 form the MCLAG. Both peers have northbound and southbound SVIs. VRRP is configured on each SVI, and the virtual IP is used as the next hop or BGP neighbor address by the adjacent routers. Always enable <code>vrrp-virtual-mac</code>. The VRRP backup automatically performs Layer-3 lookup for the VRRP virtual MAC. MCLAG trunk hashing can deliver an ingress frame to either peer; if that peer has the route in its own routing table and hardware, it can route without sending the packet across the ICL.</p>\n<p>With BGP, the northbound and southbound routers establish eBGP sessions to the relevant VRRP VIP. Because the neighbor address is the VRRP VIP, the router peers with the current VRRP master. Fortinet specifies enabling <code>ebgp-enforce-multihop</code> and setting <code>ebgp-multihop-ttl</code> to 3. The two MCLAG cores then use iBGP across the ICL. Routes learned through eBGP are advertised to iBGP so the VRRP backup receives and installs the same forwarding information. OSPF can be used instead, or in a mixed design with BGP northbound and OSPF southbound.</p>\n<h3>Configuration sequence</h3>\n<p>Build the MCLAG trunks and ICL first, then create the northbound and southbound SVIs on both peers. Configure the same VRRP virtual IP on the corresponding SVI on each peer, but set priorities so there is a VRRP master on each MCLAG core for the appropriate north/south role. Enable the virtual MAC. Next, configure eBGP to the adjacent routers and iBGP between the cores. For eBGP peers using the VRRP VIP, enable multihop and TTL 3. Ensure the same prefixes are learned and installed on both peers before relying on local forwarding.</p>\n<pre><code>config system interface\n    edit \"nb\"\n        set ip 20.1.1.11 255.255.255.0\n        set vrrp-virtual-mac enable\n        config vrrp\n            edit 5\n                set priority 200\n                set vrip 20.1.1.1\n            next\n        end\n    next\nend\n\nconfig router bgp\n    set as &lt;CORE_AS&gt;\n    set router-id &lt;CORE_ROUTER_ID&gt;\n    config neighbor\n        edit &lt;NORTHBOUND_PEER&gt;\n            set remote-as &lt;NORTH_AS&gt;\n            set ebgp-enforce-multihop enable\n            set ebgp-multihop-ttl 3\n        next\n    end\nend</code></pre>\n<h3>Verification and evidence</h3>\n<p>Check VRRP state on both peers, eBGP state to northbound and southbound routers, and iBGP state across the ICL. Then inspect the routing table on both cores. A healthy eBGP session on Core1 alone does not prove Core2 has the routes needed to forward locally. Validate the same destination prefix and next hop on both peers. During a controlled traffic test, observe which peer receives the frame, which peer forwards it, and whether the ICL carries data-plane traffic that should have been routed locally. The objective is not zero ICL traffic—east-west traffic between separate MCLAG domains may cross it—but no unnecessary north/south transit caused by missing local routes.</p>\n<h3>Limits and failure patterns</h3>\n<p>Both peer switches must be configured. FortiSwitchOS 8.0.0 supports IPv4 and IPv6 in this topology; earlier versions supported IPv4 only. Up to 250 SVIs are supported. PIM multicast routing, policy-based routing, IS-IS, and RIP are not supported in this MCLAG Layer-3 design. If the backup receives traffic but lacks the route, it may need ICL transit or fail to forward as expected. If the eBGP neighbor is configured against a physical peer IP rather than the shared VIP, the routing behavior no longer matches the documented single-router design. If VRRP virtual MAC is disabled, the backup's local Layer-3 lookup assumption is broken.</p>\n<h3>Operational application</h3>\n<p>In a collapsed core, two FortiSwitches can serve northbound routers and southbound access blocks. Use VRRP VIPs for stable adjacency, eBGP at the boundaries, and iBGP across the peer link so both cores have the same route knowledge. Test one peer failure and one ICL failure separately; they exercise different failure domains. After the test, verify both routing tables and the VRRP role distribution. Do not infer active-active Layer-3 behavior solely from an MCLAG trunk being up.</p>",
+      "nodes": [
+        "Northbound router",
+        "Core1 MCLAG peer",
+        "ICL / iBGP",
+        "Core2 MCLAG peer",
+        "Southbound router"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "eBGP via VRRP VIP"
+        ],
+        [
+          1,
+          2,
+          "iBGP route exchange"
+        ],
+        [
+          2,
+          3,
+          "iBGP route exchange"
+        ],
+        [
+          3,
+          4,
+          "eBGP via VRRP VIP"
+        ],
+        [
+          1,
+          4,
+          "local forwarding"
+        ],
+        [
+          3,
+          0,
+          "local forwarding"
+        ]
+      ]
+    },
+    {
+      "id": "fortiap-config-mode",
+      "product": "FortiAP/Wireless",
+      "title": "FortiAP Configuration mode: isolated local setup without controller SSIDs",
+      "source": "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/306409/fortiap-configuration-mode",
+      "source_label": "FortiWiFi and FortiAP Configuration Guide 8.0 — FortiAP Configuration mode",
+      "word_count_target": 550,
+      "content_html": "\n<p><strong>Purpose.</strong> FortiAP Configuration mode is a temporary local setup and recovery environment. It is useful when an AP must be given a management address, corrected before controller discovery, or configured without relying on the normal controller-managed SSIDs. It is not a production WLAN and should not be confused with factory reset. The reset button has three distinct timing bands: less than five seconds reboots, five to ten seconds enters Configuration mode, and more than ten seconds factory-resets the unit. The difference is operationally significant: an overlong press can erase the intended configuration instead of opening the local setup path.</p>\n<h3>Mode transition and isolation</h3>\n<p>The AP must be booted before the reset button is held for five to ten seconds. After the transition and reboot, it broadcasts <code>FAP-config-&lt;serial-number&gt;</code>. The AP suppresses all SSIDs configured by its controller while this mode is active. Only one Wi-Fi client can associate to the temporary SSID. The SSID is open and operates in NAT mode to provide internet connectivity for local setup. Transmit power is reduced to 1 dBm on each radio, so the setup client must be physically nearby. The AP automatically exits Configuration mode after 30 minutes or when it is rebooted.</p>\n<p>The recommended GUI path is to connect a single laptop or service device to the temporary SSID, browse to <code>https://192.168.100.1</code>, authenticate as <code>admin</code> using the AP admin password, and confirm the red CONFIG MODE banner. Under Settings, open Local Configuration and make the required changes. Click OK to save, then use the admin menu to reboot. Configuration changes take effect after the AP restarts. The CLI path uses SSH or a console connection; after editing the local configuration, run <code>cfg -c</code> to save and <code>reboot</code> to leave the mode.</p>\n<h3>What this mode does—and does not do</h3>\n<p>The temporary SSID is a bootstrap path, not a replacement for the normal FortiGate or FortiCloud controller relationship. It provides local reachability even when the AP cannot yet discover its controller. Because the controller-configured SSIDs are not broadcast, a client that expects to join the normal corporate WLAN will not see it during this mode. The single-client limit and 1 dBm transmit power are deliberate containment controls: they make the temporary access path short-range and avoid exposing a broadly usable service SSID. NAT mode gives the connected device a way to reach the internet for initial setup, but it does not prove that the AP has a valid CAPWAP path to its controller.</p>\n<h3>Verification and troubleshooting</h3>\n<p>The appearance of <code>FAP-config-&lt;serial&gt;</code> and the CONFIG MODE banner prove the AP entered the temporary state. A successful HTTPS login proves local management access. A successful save and reboot prove that the configuration was committed; the AP's new management address and controller discovery after reboot prove the intended settings took effect. Wi-Fi association alone is not evidence of configuration persistence. If the SSID is missing, check that the AP was fully booted before the timed press and that the press lasted five to ten seconds. If the client cannot associate, verify that no other Wi-Fi client is connected and move closer because the radio is limited to 1 dBm. If the AP reappears in normal mode after 30 minutes, the timeout is expected.</p>\n<h3>Operational application and caveats</h3>\n<p>Imagine a new AP installed on a switch port in the wrong management VLAN. It cannot reach the controller, so the normal managed SSID is never provisioned. A technician can enter Configuration mode, connect locally, correct the network settings, save, reboot, and then validate controller discovery. Use the mode for controlled local repair, not for long-term administration. Protect the admin password, keep the temporary client physically close, and avoid the greater-than-ten-second reset window unless a factory reset is intended. Model support can vary; confirm the exact AP model's guide before using the button sequence.</p>",
+      "nodes": [
+        "Booted FortiAP",
+        "Timed reset gesture",
+        "Temporary FAP-config SSID",
+        "Single local client",
+        "Local GUI/CLI config",
+        "Reboot to managed state"
+      ],
+      "edges": [
+        [
+          0,
+          1,
+          "5–10 seconds"
+        ],
+        [
+          1,
+          2,
+          "reboot into config mode"
+        ],
+        [
+          2,
+          3,
+          "one client / 1 dBm"
+        ],
+        [
+          3,
+          4,
+          "192.168.100.1 or SSH"
+        ],
+        [
+          4,
+          5,
+          "save then reboot"
+        ]
+      ]
+    }
+  ]
+}
