@@ -11,27 +11,27 @@
   },
   "questions": [
     {
-      "id": "F01",
+      "id": "FGT01",
       "product": "FortiGate",
       "stem": "Which VIP condition makes upstream TLS available in this design?",
       "choices": [
         {
-          "text": "Modeled as a pingable Inventory device",
+          "text": "An HTTP server-load-balance VIP",
           "correct": true,
           "feedback": "Correct: ssl-upstream is documented for server-type http on a server-load-balance VIP."
         },
         {
-          "text": "Configured only as an LDAP user object",
+          "text": "Any TCP virtual server type",
           "correct": false,
           "feedback": "TCP virtual servers do not expose this HTTP upstream re-encryption option."
         },
         {
-          "text": "Sending traps to UDP port 162 only",
+          "text": "A static NAT VIP object",
           "correct": false,
           "feedback": "A static NAT VIP does not create the HTTP proxy transaction required here."
         },
         {
-          "text": "Absent from the FortiNAC Inventory view",
+          "text": "A transparent proxy policy",
           "correct": false,
           "feedback": "Proxy policies are not the VIP object that owns this upstream TLS setting."
         }
@@ -39,27 +39,27 @@
       "correct_index": 0
     },
     {
-      "id": "F02",
+      "id": "FGT02",
       "product": "FortiGate",
       "stem": "Which observation proves encryption on the backend leg?",
       "choices": [
         {
-          "text": "Only one trap sender's settings change",
+          "text": "A client receives HTTP 200",
           "correct": false,
           "feedback": "An HTTP response proves service reachability, not backend transport protection."
         },
         {
-          "text": "All FortiNAC polling devices must use SNMPv3",
+          "text": "A capture shows TLS records upstream",
           "correct": true,
           "feedback": "Correct: the upstream capture shows a TLS handshake and encrypted application records."
         },
         {
-          "text": "SNMPv1 traps are automatically translated",
+          "text": "The VIP appears in policy logs",
           "correct": false,
           "feedback": "Policy logs prove policy processing, not the protocol used to the real server."
         },
         {
-          "text": "The management interface port number changes",
+          "text": "The real server answers an ARP request",
           "correct": false,
           "feedback": "ARP resolution proves Layer 2 reachability, not TLS session establishment."
         }
@@ -67,7 +67,7 @@
       "correct_index": 1
     },
     {
-      "id": "F03",
+      "id": "FGT03",
       "product": "FortiGate",
       "stem": "What does ssl-http-strip-secure-cookies change in the response?",
       "choices": [
@@ -95,7 +95,7 @@
       "correct_index": 2
     },
     {
-      "id": "F04",
+      "id": "FGT04",
       "product": "FortiGate",
       "stem": "What security property remains absent with upstream TLS enabled?",
       "choices": [
@@ -123,7 +123,7 @@
       "correct_index": 3
     },
     {
-      "id": "F05",
+      "id": "FGT05",
       "product": "FortiGate",
       "stem": "Which setting is unsafe as a permanent backend-certificate workaround?",
       "choices": [
@@ -151,7 +151,7 @@
       "correct_index": 0
     },
     {
-      "id": "M01",
+      "id": "FMG01",
       "product": "FortiManager",
       "stem": "Which fields are central to disambiguating active user entries?",
       "choices": [
@@ -179,7 +179,7 @@
       "correct_index": 1
     },
     {
-      "id": "M02",
+      "id": "FMG02",
       "product": "FortiManager",
       "stem": "What does Deauthenticate do to a selected firewall user?",
       "choices": [
@@ -207,7 +207,7 @@
       "correct_index": 1
     },
     {
-      "id": "M03",
+      "id": "FMG03",
       "product": "FortiManager",
       "stem": "Two tenants use the same username on one managed firewall. What prevents confusion?",
       "choices": [
@@ -235,7 +235,7 @@
       "correct_index": 3
     },
     {
-      "id": "M04",
+      "id": "FMG04",
       "product": "FortiManager",
       "stem": "A user reappears immediately after deauthentication. What should be checked next?",
       "choices": [
@@ -263,7 +263,7 @@
       "correct_index": 0
     },
     {
-      "id": "A01",
+      "id": "FAZ01",
       "product": "FortiAnalyzer",
       "stem": "Which prerequisites enable FortiMQ indicator delivery to FortiGate?",
       "choices": [
@@ -291,7 +291,7 @@
       "correct_index": 1
     },
     {
-      "id": "A02",
+      "id": "FAZ02",
       "product": "FortiAnalyzer",
       "stem": "What limits the scope of a FortiMQ block action?",
       "choices": [
@@ -319,7 +319,7 @@
       "correct_index": 2
     },
     {
-      "id": "A03",
+      "id": "FAZ03",
       "product": "FortiAnalyzer",
       "stem": "A connector reports healthy. What has actually been proven?",
       "choices": [
@@ -347,7 +347,7 @@
       "correct_index": 3
     },
     {
-      "id": "A04",
+      "id": "FAZ04",
       "product": "FortiAnalyzer",
       "stem": "Both FortiMQ and FortiManager connectors are active. Which path has priority?",
       "choices": [
@@ -375,7 +375,7 @@
       "correct_index": 0
     },
     {
-      "id": "S01",
+      "id": "FSW01",
       "product": "FortiSwitch",
       "stem": "What does an sFlow packet sample represent?",
       "choices": [
@@ -403,7 +403,7 @@
       "correct_index": 1
     },
     {
-      "id": "S02",
+      "id": "FSW02",
       "product": "FortiSwitch",
       "stem": "What is the documented default sFlow collector UDP port?",
       "choices": [
@@ -431,7 +431,7 @@
       "correct_index": 2
     },
     {
-      "id": "S03",
+      "id": "FSW03",
       "product": "FortiSwitch",
       "stem": "Which command displays the switch's sFlow configuration?",
       "choices": [
@@ -459,27 +459,27 @@
       "correct_index": 0
     },
     {
-      "id": "S04",
+      "id": "FSW04",
       "product": "FortiSwitch",
       "stem": "A collector IP responds to ping, but no flow data appears. What does ping prove?",
       "choices": [
         {
-          "text": "It always provides lower detection latency",
+          "text": "The interface sampler is enabled",
           "correct": false,
           "feedback": "Sampler state must be inspected separately on each monitored interface."
         },
         {
-          "text": "It avoids all disk access",
+          "text": "The collector decoded sFlow version five",
           "correct": false,
           "feedback": "Collector decoding requires actual datagrams and supported format."
         },
         {
-          "text": "It guarantees every event is processed immediately",
+          "text": "The UDP collector port accepts packets",
           "correct": false,
           "feedback": "Ping does not test UDP 6343 reachability."
         },
         {
-          "text": "It supports larger windows and complex analytics",
+          "text": "Only basic IP reachability is confirmed",
           "correct": true,
           "feedback": "Correct: ping proves IP reachability only, not sFlow export or collection."
         }
@@ -487,7 +487,7 @@
       "correct_index": 3
     },
     {
-      "id": "W01",
+      "id": "AP01",
       "product": "FortiAP/Wireless",
       "stem": "What is the documented default background rogue-AP scan cadence?",
       "choices": [
@@ -515,7 +515,7 @@
       "correct_index": 1
     },
     {
-      "id": "W02",
+      "id": "AP02",
       "product": "FortiAP/Wireless",
       "stem": "What is the purpose of ap-bgscan-idle?",
       "choices": [
@@ -543,7 +543,7 @@
       "correct_index": 2
     },
     {
-      "id": "W03",
+      "id": "AP03",
       "product": "FortiAP/Wireless",
       "stem": "Where is a WIDS profile applied for radio monitoring?",
       "choices": [
@@ -571,7 +571,7 @@
       "correct_index": 0
     },
     {
-      "id": "W04",
+      "id": "AP04",
       "product": "FortiAP/Wireless",
       "stem": "No rogue AP entry appears in the dashboard. What can be concluded?",
       "choices": [
@@ -599,7 +599,7 @@
       "correct_index": 3
     },
     {
-      "id": "N01",
+      "id": "NAC01",
       "product": "FortiNAC",
       "stem": "Which interface is explicitly unavailable for rogue-DHCP scanning?",
       "choices": [
@@ -627,7 +627,7 @@
       "correct_index": 0
     },
     {
-      "id": "N02",
+      "id": "NAC02",
       "product": "FortiNAC",
       "stem": "How must an IP-helper address be represented for authorization?",
       "choices": [
@@ -655,7 +655,7 @@
       "correct_index": 1
     },
     {
-      "id": "N03",
+      "id": "NAC03",
       "product": "FortiNAC",
       "stem": "Which VLANs are included in a rogue-DHCP verification task?",
       "choices": [
@@ -683,7 +683,7 @@
       "correct_index": 2
     },
     {
-      "id": "N04",
+      "id": "NAC04",
       "product": "FortiNAC",
       "stem": "What must match across HA nodes for scanning to continue after failover?",
       "choices": [
@@ -711,27 +711,27 @@
       "correct_index": 3
     },
     {
-      "id": "F01",
+      "id": "NACF01",
       "product": "FortiNAC-F",
       "stem": "What must be true of an SNMPv3 trap sender?",
       "choices": [
         {
-          "text": "It is modeled as a pingable device",
+          "text": "Modeled as a pingable Inventory device",
           "correct": true,
           "feedback": "Correct: the trap sender must be modeled as a pingable device in Inventory."
         },
         {
-          "text": "It is configured only as an LDAP user",
+          "text": "Configured only as an LDAP user object",
           "correct": false,
           "feedback": "LDAP user records are not a substitute for sender modeling."
         },
         {
-          "text": "It sends traps to UDP 162 only",
+          "text": "Sending traps to UDP port 162 only",
           "correct": false,
           "feedback": "The guide specifies FortiNAC trap reception on port 161."
         },
         {
-          "text": "It is absent from Inventory",
+          "text": "Absent from the FortiNAC Inventory view",
           "correct": false,
           "feedback": "Unmodeled senders may not be accepted for record updates."
         }
@@ -739,27 +739,27 @@
       "correct_index": 0
     },
     {
-      "id": "F02",
+      "id": "NACF02",
       "product": "FortiNAC-F",
       "stem": "What is the effect of selecting SNMPv3 in the global SNMP settings?",
       "choices": [
         {
-          "text": "Only one trap sender changes",
+          "text": "Only one trap sender's configuration changes",
           "correct": false,
           "feedback": "The setting is global, not limited to one trap sender."
         },
         {
-          "text": "All devices querying FortiNAC must use SNMPv3",
+          "text": "All FortiNAC polling devices must use SNMPv3",
           "correct": true,
           "feedback": "Correct: other devices querying FortiNAC must also use SNMPv3."
         },
         {
-          "text": "SNMPv1 traps are automatically translated",
+          "text": "SNMPv1 traps are automatically translated globally",
           "correct": false,
           "feedback": "FortiNAC does not document automatic SNMP version translation."
         },
         {
-          "text": "The management port changes",
+          "text": "The management interface port number changes",
           "correct": false,
           "feedback": "The SNMP setting does not change the management interface."
         }
@@ -767,12 +767,12 @@
       "correct_index": 1
     },
     {
-      "id": "F03",
+      "id": "NACF03",
       "product": "FortiNAC-F",
       "stem": "A user-removal trap arrives. What happens to associated hosts?",
       "choices": [
         {
-          "text": "They are always deleted too",
+          "text": "All associated hosts are deleted",
           "correct": false,
           "feedback": "User deletion does not automatically delete associated hosts."
         },
@@ -782,7 +782,7 @@
           "feedback": "FortiNAC documents the hosts becoming registered devices."
         },
         {
-          "text": "They remain and become registered devices",
+          "text": "They remain as registered devices",
           "correct": true,
           "feedback": "Correct: associated hosts remain and become registered devices."
         },
@@ -795,7 +795,7 @@
       "correct_index": 2
     },
     {
-      "id": "F04",
+      "id": "NACF04",
       "product": "FortiNAC-F",
       "stem": "Which evidence confirms that FortiNAC processed a trap into a record change?",
       "choices": [
@@ -815,7 +815,7 @@
           "feedback": "Configured credentials do not prove a trap was accepted."
         },
         {
-          "text": "An Add/Modify/Remove event and resulting record",
+          "text": "An Add/Modify/Remove event plus record",
           "correct": true,
           "feedback": "Correct: the event plus resulting Host/User record confirms processing."
         }
@@ -823,7 +823,7 @@
       "correct_index": 3
     },
     {
-      "id": "C01",
+      "id": "FAC01",
       "product": "FortiAuthenticator",
       "stem": "What ECDH curve preference is documented as the default for EAP?",
       "choices": [
@@ -851,7 +851,7 @@
       "correct_index": 0
     },
     {
-      "id": "C02",
+      "id": "FAC02",
       "product": "FortiAuthenticator",
       "stem": "What does the EAP ECDH override change?",
       "choices": [
@@ -879,7 +879,7 @@
       "correct_index": 1
     },
     {
-      "id": "C03",
+      "id": "FAC03",
       "product": "FortiAuthenticator",
       "stem": "What distinguishes EAP-TLS from a one-way server-authenticated tunnel?",
       "choices": [
@@ -907,7 +907,7 @@
       "correct_index": 2
     },
     {
-      "id": "C04",
+      "id": "FAC04",
       "product": "FortiAuthenticator",
       "stem": "Which EAP-TTLS 2FA limitation is documented?",
       "choices": [
@@ -935,7 +935,7 @@
       "correct_index": 3
     },
     {
-      "id": "P01",
+      "id": "PAM01",
       "product": "FortiPAM",
       "stem": "What is the default state of require-message-authenticator?",
       "choices": [
@@ -963,7 +963,7 @@
       "correct_index": 0
     },
     {
-      "id": "P02",
+      "id": "PAM02",
       "product": "FortiPAM",
       "stem": "Which RADIUS attribute carries the Message-Authenticator?",
       "choices": [
@@ -991,7 +991,7 @@
       "correct_index": 1
     },
     {
-      "id": "P03",
+      "id": "PAM03",
       "product": "FortiPAM",
       "stem": "When is disabling response validation acceptable?",
       "choices": [
@@ -1019,7 +1019,7 @@
       "correct_index": 2
     },
     {
-      "id": "P04",
+      "id": "PAM04",
       "product": "FortiPAM",
       "stem": "A response has Attribute 80 but validation fails. What should be checked?",
       "choices": [
@@ -1047,7 +1047,7 @@
       "correct_index": 3
     },
     {
-      "id": "S01",
+      "id": "SIEM01",
       "product": "FortiSIEM",
       "stem": "Which evaluation mode is designed for real-time in-memory processing?",
       "choices": [
@@ -1075,7 +1075,7 @@
       "correct_index": 0
     },
     {
-      "id": "S02",
+      "id": "SIEM02",
       "product": "FortiSIEM",
       "stem": "Where is Scheduled via SQL available?",
       "choices": [
@@ -1103,7 +1103,7 @@
       "correct_index": 1
     },
     {
-      "id": "S03",
+      "id": "SIEM03",
       "product": "FortiSIEM",
       "stem": "Which limitation is specific to Scheduled via SQL?",
       "choices": [
@@ -1131,22 +1131,22 @@
       "correct_index": 2
     },
     {
-      "id": "S04",
+      "id": "SIEM04",
       "product": "FortiSIEM",
       "stem": "Why might Scheduled mode be chosen over Streaming?",
       "choices": [
         {
-          "text": "It always has lower latency",
+          "text": "It always provides lower detection latency",
           "correct": false,
           "feedback": "Streaming is designed for lower-latency event processing."
         },
         {
-          "text": "It avoids disk access",
+          "text": "It avoids all disk access",
           "correct": false,
           "feedback": "Scheduled mode requires disk access."
         },
         {
-          "text": "It guarantees every event is processed instantly",
+          "text": "It guarantees every event is processed immediately",
           "correct": false,
           "feedback": "Scheduled evaluation runs on a configured schedule, not instantly."
         },
@@ -1159,7 +1159,7 @@
       "correct_index": 3
     },
     {
-      "id": "Z01",
+      "id": "SASE01",
       "product": "FortiSASE",
       "stem": "What FortiClient baseline enables IP range/CIDR ZTNA destinations?",
       "choices": [
@@ -1187,7 +1187,7 @@
       "correct_index": 0
     },
     {
-      "id": "Z02",
+      "id": "SASE02",
       "product": "FortiSASE",
       "stem": "What activates a private application for an endpoint?",
       "choices": [
@@ -1215,7 +1215,7 @@
       "correct_index": 1
     },
     {
-      "id": "Z03",
+      "id": "SASE03",
       "product": "FortiSASE",
       "stem": "What does the ZTNA profile Encryption toggle protect?",
       "choices": [
@@ -1243,7 +1243,7 @@
       "correct_index": 2
     },
     {
-      "id": "Z04",
+      "id": "SASE04",
       "product": "FortiSASE",
       "stem": "A catalogue object exists but the endpoint cannot connect. What is the next check?",
       "choices": [
@@ -1271,7 +1271,7 @@
       "correct_index": 3
     },
     {
-      "id": "D01",
+      "id": "SDW01",
       "product": "Secure SD-WAN",
       "stem": "What is the hybrid strategy's first ranking criterion?",
       "choices": [
@@ -1299,7 +1299,7 @@
       "correct_index": 0
     },
     {
-      "id": "D02",
+      "id": "SDW02",
       "product": "Secure SD-WAN",
       "stem": "If SLA values tie, which criterion is compared next?",
       "choices": [
@@ -1327,7 +1327,7 @@
       "correct_index": 1
     },
     {
-      "id": "D03",
+      "id": "SDW03",
       "product": "Secure SD-WAN",
       "stem": "What does custom-profile-1 combine?",
       "choices": [
@@ -1355,7 +1355,7 @@
       "correct_index": 2
     },
     {
-      "id": "D04",
+      "id": "SDW04",
       "product": "Secure SD-WAN",
       "stem": "Which command output shows the service-rule member ranking and selection?",
       "choices": [
@@ -1383,7 +1383,7 @@
       "correct_index": 3
     },
     {
-      "id": "D05",
+      "id": "SDW05",
       "product": "Secure SD-WAN",
       "stem": "What does link-cost-threshold control in the hybrid rule?",
       "choices": [
@@ -1412,53 +1412,10 @@
     }
   ],
   "choice_length_audit": {
-    "correct_average_words": 5.34,
+    "correct_average_words": 5.2,
     "distractor_average_words": 4.74,
-    "questions_with_spread_over_2_words": 6,
+    "questions_with_spread_over_2_words": 3,
     "max_spread_words": 3,
-    "spread_by_question": {
-      "F01": 3,
-      "F02": 3,
-      "F03": 2,
-      "F04": 2,
-      "F05": 2,
-      "M01": 1,
-      "M02": 0,
-      "M03": 1,
-      "M04": 1,
-      "A01": 2,
-      "A02": 2,
-      "A03": 2,
-      "A04": 2,
-      "S01": 2,
-      "S02": 1,
-      "S03": 2,
-      "S04": 3,
-      "W01": 3,
-      "W02": 2,
-      "W03": 2,
-      "W04": 1,
-      "N01": 2,
-      "N02": 2,
-      "N03": 2,
-      "N04": 2,
-      "C01": 0,
-      "C02": 1,
-      "C03": 1,
-      "C04": 3,
-      "P01": 0,
-      "P02": 0,
-      "P03": 2,
-      "P04": 2,
-      "Z01": 1,
-      "Z02": 1,
-      "Z03": 2,
-      "Z04": 3,
-      "D01": 1,
-      "D02": 1,
-      "D03": 2,
-      "D04": 1,
-      "D05": 2
-    }
+    "duplicate_ids": 0
   }
 }
