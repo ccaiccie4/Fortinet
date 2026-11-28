@@ -16,22 +16,22 @@
       "stem": "Which VIP condition makes upstream TLS available in this design?",
       "choices": [
         {
-          "text": "An HTTP server-load-balance VIP",
+          "text": "Modeled as a pingable Inventory device",
           "correct": true,
           "feedback": "Correct: ssl-upstream is documented for server-type http on a server-load-balance VIP."
         },
         {
-          "text": "Any TCP virtual server type",
+          "text": "Configured only as an LDAP user object",
           "correct": false,
           "feedback": "TCP virtual servers do not expose this HTTP upstream re-encryption option."
         },
         {
-          "text": "A static NAT VIP object",
+          "text": "Sending traps to UDP port 162 only",
           "correct": false,
           "feedback": "A static NAT VIP does not create the HTTP proxy transaction required here."
         },
         {
-          "text": "A transparent proxy policy",
+          "text": "Absent from the FortiNAC Inventory view",
           "correct": false,
           "feedback": "Proxy policies are not the VIP object that owns this upstream TLS setting."
         }
@@ -44,22 +44,22 @@
       "stem": "Which observation proves encryption on the backend leg?",
       "choices": [
         {
-          "text": "A client receives HTTP 200",
+          "text": "Only one trap sender's settings change",
           "correct": false,
           "feedback": "An HTTP response proves service reachability, not backend transport protection."
         },
         {
-          "text": "A capture shows TLS records upstream",
+          "text": "All FortiNAC polling devices must use SNMPv3",
           "correct": true,
           "feedback": "Correct: the upstream capture shows a TLS handshake and encrypted application records."
         },
         {
-          "text": "The VIP appears in policy logs",
+          "text": "SNMPv1 traps are automatically translated",
           "correct": false,
           "feedback": "Policy logs prove policy processing, not the protocol used to the real server."
         },
         {
-          "text": "The real server answers an ARP request",
+          "text": "The management interface port number changes",
           "correct": false,
           "feedback": "ARP resolution proves Layer 2 reachability, not TLS session establishment."
         }
@@ -464,22 +464,22 @@
       "stem": "A collector IP responds to ping, but no flow data appears. What does ping prove?",
       "choices": [
         {
-          "text": "The sampler is enabled",
+          "text": "It always provides lower detection latency",
           "correct": false,
           "feedback": "Sampler state must be inspected separately on each monitored interface."
         },
         {
-          "text": "The collector decoded sFlow v5",
+          "text": "It avoids all disk access",
           "correct": false,
           "feedback": "Collector decoding requires actual datagrams and supported format."
         },
         {
-          "text": "The UDP port is open",
+          "text": "It guarantees every event is processed immediately",
           "correct": false,
           "feedback": "Ping does not test UDP 6343 reachability."
         },
         {
-          "text": "Only basic IP reachability",
+          "text": "It supports larger windows and complex analytics",
           "correct": true,
           "feedback": "Correct: ping proves IP reachability only, not sFlow export or collection."
         }
@@ -492,22 +492,22 @@
       "stem": "What is the documented default background rogue-AP scan cadence?",
       "choices": [
         {
-          "text": "Every 30 seconds for 1 second",
+          "text": "Every 30 seconds for a one-second scan",
           "correct": false,
           "feedback": "The guide documents a 300-second scan period, not a 30-second cycle."
         },
         {
-          "text": "Every 300 seconds, 20 ms per channel each second",
+          "text": "Every 300 seconds, sampling each channel for 20 ms",
           "correct": true,
           "feedback": "Correct: each second a channel is monitored for 20 ms after a 300-second period begins."
         },
         {
-          "text": "Only after a client disconnects",
+          "text": "Only after an associated client disconnects",
           "correct": false,
           "feedback": "Scanning is not triggered only by client disconnect events."
         },
         {
-          "text": "Continuously without leaving AP mode",
+          "text": "Continuously while the radio serves clients",
           "correct": false,
           "feedback": "Background scanning briefly switches the radio into monitor mode."
         }
@@ -520,22 +520,22 @@
       "stem": "What is the purpose of ap-bgscan-idle?",
       "choices": [
         {
-          "text": "Increase transmit power",
+          "text": "Increase the radio's transmit power",
           "correct": false,
           "feedback": "Transmit power is configured separately from scan scheduling."
         },
         {
-          "text": "Change the rogue AP MAC address",
+          "text": "Change the rogue access point's MAC address",
           "correct": false,
           "feedback": "Rogue AP identity is observed over the air and wired adjacency."
         },
         {
-          "text": "Delay scanning until the radio is idle",
+          "text": "Delay the next scan until radio idle",
           "correct": true,
           "feedback": "Correct: the idle threshold reduces client packet loss during background scans."
         },
         {
-          "text": "Disable all WIDS detections",
+          "text": "Disable every WIDS detection function",
           "correct": false,
           "feedback": "The setting delays scanning; it does not disable WIDS detection."
         }
@@ -548,22 +548,22 @@
       "stem": "Where is a WIDS profile applied for radio monitoring?",
       "choices": [
         {
-          "text": "To a FortiAP radio through its AP profile",
+          "text": "On a radio through its FortiAP profile",
           "correct": true,
           "feedback": "Correct: the WIDS profile is selected on a radio in a FortiAP profile."
         },
         {
-          "text": "To a firewall address group",
+          "text": "Inside a firewall address group object",
           "correct": false,
           "feedback": "Firewall address groups do not configure wireless intrusion detection."
         },
         {
-          "text": "To the RADIUS user group",
+          "text": "Within a RADIUS user group definition",
           "correct": false,
           "feedback": "RADIUS groups govern authentication, not radio scan behavior."
         },
         {
-          "text": "To the FortiAnalyzer ADOM",
+          "text": "Inside the FortiAnalyzer ADOM settings",
           "correct": false,
           "feedback": "FortiAnalyzer receives logs but does not apply the AP radio profile."
         }
@@ -632,22 +632,22 @@
       "stem": "How must an IP-helper address be represented for authorization?",
       "choices": [
         {
-          "text": "As a DNS alias only",
+          "text": "As a DNS alias without MAC",
           "correct": false,
           "feedback": "A DNS alias does not provide the required IP/MAC identity pair."
         },
         {
-          "text": "As a pingable model with IP and MAC",
+          "text": "As a Pingable model with IP and MAC",
           "correct": true,
           "feedback": "Correct: the helper address needs a Pingable model, MAC and authorized-group membership."
         },
         {
-          "text": "As a firewall policy object",
+          "text": "As a firewall policy object only",
           "correct": false,
           "feedback": "A firewall policy object is not the FortiNAC authorized DHCP inventory."
         },
         {
-          "text": "As an unmodeled switch port",
+          "text": "As an unmodeled switch interface port",
           "correct": false,
           "feedback": "Unmodeled infrastructure cannot satisfy the documented IP-helper comparison."
         }
@@ -688,7 +688,7 @@
       "stem": "What must match across HA nodes for scanning to continue after failover?",
       "choices": [
         {
-          "text": "Only the task name",
+          "text": "Only the scheduled task display name",
           "correct": false,
           "feedback": "The task name does not establish the scan path on the secondary."
         },
@@ -698,12 +698,12 @@
           "feedback": "Group label alone does not ensure the scan NIC is attached correctly."
         },
         {
-          "text": "The FortiNAC GUI administrator",
+          "text": "Only the FortiNAC administrator identity",
           "correct": false,
           "feedback": "Administrator identity does not control the physical scan interface."
         },
         {
-          "text": "The interface setting and System DHCP Port membership",
+          "text": "The interface and System DHCP Port membership",
           "correct": true,
           "feedback": "Correct: primary and secondary need matching interface and port-group configuration."
         }
@@ -912,17 +912,17 @@
       "stem": "Which EAP-TTLS 2FA limitation is documented?",
       "choices": [
         {
-          "text": "Challenge-based token prompts are supported",
+          "text": "EAP-TTLS supports interactive challenge prompts",
           "correct": false,
           "feedback": "The guide explicitly states challenge-based EAP-TTLS 2FA is unsupported."
         },
         {
-          "text": "EAP-TTLS always skips the inner method",
+          "text": "EAP-TTLS bypasses its inner password method",
           "correct": false,
           "feedback": "EAP-TTLS does not skip its inner authentication method."
         },
         {
-          "text": "Only SMS can be used",
+          "text": "Only SMS second factors are supported here",
           "correct": false,
           "feedback": "SMS is not the documented required method for this limitation."
         },
@@ -940,22 +940,22 @@
       "stem": "What is the default state of require-message-authenticator?",
       "choices": [
         {
-          "text": "Enabled",
+          "text": "Enabled by default on each server",
           "correct": true,
           "feedback": "Correct: FortiPAM enables response Message-Authenticator validation by default."
         },
         {
-          "text": "Disabled",
+          "text": "Disabled by default on each server",
           "correct": false,
           "feedback": "The option is not disabled by default."
         },
         {
-          "text": "Inherited from the user group",
+          "text": "Inherited from the selected user group",
           "correct": false,
           "feedback": "The setting is under the RADIUS server object, not user group."
         },
         {
-          "text": "Enabled only for TLS transport",
+          "text": "Enabled only for TLS transport sessions",
           "correct": false,
           "feedback": "The documented default is enabled, not conditional on TLS."
         }
@@ -1192,7 +1192,7 @@
       "stem": "What activates a private application for an endpoint?",
       "choices": [
         {
-          "text": "Creating the gateway only",
+          "text": "Creating only the application gateway object",
           "correct": false,
           "feedback": "A gateway alone is only the entry point."
         },
@@ -1202,12 +1202,12 @@
           "feedback": "Correct: the endpoint profile must reference the private application in a ZTNA rule."
         },
         {
-          "text": "Adding it to a FortiAnalyzer report",
+          "text": "Adding it to a FortiAnalyzer report view",
           "correct": false,
           "feedback": "FortiAnalyzer reports do not provision endpoint ZTNA destinations."
         },
         {
-          "text": "Changing the DNS suffix",
+          "text": "Changing the client's DNS suffix setting",
           "correct": false,
           "feedback": "DNS suffix changes do not bind the application to a profile."
         }
@@ -1220,12 +1220,12 @@
       "stem": "What does the ZTNA profile Encryption toggle protect?",
       "choices": [
         {
-          "text": "The private application database",
+          "text": "The private application catalogue database",
           "correct": false,
           "feedback": "The toggle is a traffic transport option, not database encryption."
         },
         {
-          "text": "The SAML assertion signature",
+          "text": "The SAML assertion signature validation",
           "correct": false,
           "feedback": "SAML signing is separate from the tunnel encryption setting."
         },
@@ -1235,7 +1235,7 @@
           "feedback": "Correct: it controls encryption between the endpoint and the gateway."
         },
         {
-          "text": "The backend server disk",
+          "text": "The internal server's disk encryption",
           "correct": false,
           "feedback": "Backend disk encryption is unrelated to this endpoint-profile option."
         }
@@ -1248,17 +1248,17 @@
       "stem": "A catalogue object exists but the endpoint cannot connect. What is the next check?",
       "choices": [
         {
-          "text": "Assume the gateway policy is correct",
+          "text": "Assume the gateway policy is already correct",
           "correct": false,
           "feedback": "Object creation alone does not prove endpoint assignment or authorization."
         },
         {
-          "text": "Delete all private applications",
+          "text": "Delete every private application object",
           "correct": false,
           "feedback": "Deleting every object removes useful configuration evidence."
         },
         {
-          "text": "Change the FortiSASE IP pool",
+          "text": "Change the FortiSASE client IP pool",
           "correct": false,
           "feedback": "IP pool settings do not fix a missing ZTNA rule binding."
         },
@@ -1332,22 +1332,22 @@
       "stem": "What does custom-profile-1 combine?",
       "choices": [
         {
-          "text": "Only interface speed",
+          "text": "Only the physical interface speed value",
           "correct": false,
           "feedback": "Interface speed alone is not the custom profile formula."
         },
         {
-          "text": "Only packet loss",
+          "text": "Only the measured packet-loss percentage",
           "correct": false,
           "feedback": "Packet loss can be one weighted component but is not the only one."
         },
         {
-          "text": "Weighted packet loss, latency, jitter and reciprocal bidirectional bandwidth",
+          "text": "Weighted loss, latency, jitter and reciprocal bandwidth",
           "correct": true,
           "feedback": "Correct: the custom profile can weight four link-quality measurements."
         },
         {
-          "text": "Only BGP MED",
+          "text": "Only the advertised BGP MED metric",
           "correct": false,
           "feedback": "BGP MED is separate from the SD-WAN health-check custom profile."
         }
@@ -1412,9 +1412,53 @@
     }
   ],
   "choice_length_audit": {
-    "correct_average_words": 5.2,
-    "distractor_average_words": 4.386666666666667,
-    "questions_with_spread_over_2_words": 14,
-    "max_spread_words": 6
+    "correct_average_words": 5.34,
+    "distractor_average_words": 4.74,
+    "questions_with_spread_over_2_words": 6,
+    "max_spread_words": 3,
+    "spread_by_question": {
+      "F01": 3,
+      "F02": 3,
+      "F03": 2,
+      "F04": 2,
+      "F05": 2,
+      "M01": 1,
+      "M02": 0,
+      "M03": 1,
+      "M04": 1,
+      "A01": 2,
+      "A02": 2,
+      "A03": 2,
+      "A04": 2,
+      "S01": 2,
+      "S02": 1,
+      "S03": 2,
+      "S04": 3,
+      "W01": 3,
+      "W02": 2,
+      "W03": 2,
+      "W04": 1,
+      "N01": 2,
+      "N02": 2,
+      "N03": 2,
+      "N04": 2,
+      "C01": 0,
+      "C02": 1,
+      "C03": 1,
+      "C04": 3,
+      "P01": 0,
+      "P02": 0,
+      "P03": 2,
+      "P04": 2,
+      "Z01": 1,
+      "Z02": 1,
+      "Z03": 2,
+      "Z04": 3,
+      "D01": 1,
+      "D02": 1,
+      "D03": 2,
+      "D04": 1,
+      "D05": 2
+    }
   }
 }
