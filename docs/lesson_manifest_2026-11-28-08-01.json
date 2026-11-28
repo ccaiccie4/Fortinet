@@ -1,0 +1,428 @@
+{
+  "generated_at_local": "2026-11-28T08:01:00-08:00",
+  "inventory_path": "docs/exclusion_inventory_2026-11-28-08-01.json",
+  "inventory_sha": "c8ac476f92b6be45faaf8b297fc3ec68f76bfaa5",
+  "inventory_record_count": 381,
+  "lesson_count": 12,
+  "total_lesson_words": 6095,
+  "lessons": [
+    {
+      "product": "FortiGate",
+      "title": "FortiOS Carrier GTP profiles and subscriber-scoped tunnel diagnostics",
+      "version": "FortiOS 8.0.0 / FortiOS Carrier",
+      "summary": "Separate GTP policy enforcement from the diagnostic filter used to inspect or flush individual subscriber tunnels.",
+      "sections": [
+        {
+          "heading": "Purpose and processing model",
+          "text": "GTP carries mobile-core control and user traffic between packet-core functions. GTP-C creates and manages tunnel state; GTP-U carries subscriber payload. FortiOS Carrier exposes a GTP profile that can apply filtering and content checks to GTPv0, GTPv1, and GTPv2 traffic. The profile is not a free-standing global switch: the traffic must traverse a firewall policy that accepts the relevant GTP service and references the GTP profile. This keeps the security decision in the policy path while allowing the operator to inspect live tunnel state independently."
+        },
+        {
+          "heading": "Policy and profile configuration",
+          "text": "Enable the GTP feature under System > Feature Visibility > Additional Features if the GTP controls are hidden. Create a profile under Security Profiles > GPRS Tunneling Protocol > Profiles, or use `config firewall gtp`. Attach that profile to the firewall policy carrying the mobile-core flow. Confirm source and destination interfaces, service, address scope, policy order, and profile reference before debugging tunnel behavior. A policy hit alone proves only that the session matched the policy; it does not prove that the intended GTP profile is attached or that a particular subscriber tunnel passed every profile check."
+        },
+        {
+          "heading": "Tunnel filters are diagnostic selectors",
+          "text": "The `diagnose firewall gtp tunnel filter` command scopes the output of `diagnose firewall gtp tunnel list` and the target set of `diagnose firewall gtp tunnel flush`. Selectors include VDOM, GTP profile, protocol version, IMSI, MSISDN, subscriber IP (`ms-addr`), and APN. For GTPv1/v2, `f-teid-c` identifies the control-plane TEID and address while `f-teid-u` identifies the user-plane TEID and address. Those two selectors are valuable when a control-plane tunnel exists but the user-plane endpoint has not converged. They are not policy match fields and do not change inspection behavior."
+        },
+        {
+          "heading": "Example and safe operator sequence",
+          "text": "A narrow investigation can start with `diagnose firewall gtp tunnel filter imsi 001010123456789`, followed by `diagnose firewall gtp tunnel list`. Add an APN or subscriber address when the IMSI is reused across test environments. If the control and user F-TEIDs are known, compare them with the tunnel record. Use `diagnose firewall gtp tunnel filter clear` to remove all active filter criteria before a new investigation. The `negate` form can invert supported selectors, but the documented negate list does not include APN or F-TEID selectors. Never assume a filter is cleared merely because a new CLI session was opened."
+        },
+        {
+          "heading": "Evidence, limits, and troubleshooting",
+          "text": "The tunnel list proves which tunnel records the FortiGate currently tracks and which selectors match; it does not prove the remote mobile core has the same state or that user payload is flowing. A filtered flush is destructive: it removes matching tunnel state and can force subscriber re-establishment. Capture the unfiltered count, use the narrowest subscriber selector, confirm the intended profile/VDOM, and coordinate with the core team before flushing. F-TEID selectors apply only to GTPv1/v2. When the list is empty, check policy/profile binding and GTP feature visibility before concluding that the subscriber is absent from the network."
+        }
+      ],
+      "config": "config firewall gtp\n    edit \"mobile-core-inspection\"\n        set <profile-specific-filter-and-content-check-options>\n    next\nend\n\nconfig firewall policy\n    edit 42\n        set srcintf \"sgw-facing\"\n        set dstintf \"pgw-facing\"\n        set action accept\n        set service \"GTP\"\n        set gtp-profile \"mobile-core-inspection\"\n    next\nend\n\ndiagnose firewall gtp tunnel filter imsi 001010123456789\ndiagnose firewall gtp tunnel list\ndiagnose firewall gtp tunnel filter clear",
+      "sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/fortios-carrier/189317/setting-up-gtp-tunnel-filters",
+        "https://docs.fortinet.com/document/fortigate/7.6.6/fortios-carrier/638010/configuring-gprs-tunneling-protocol-gtp-profiles"
+      ],
+      "scenario_url": null,
+      "word_count": 526
+    },
+    {
+      "product": "FortiManager",
+      "title": "PBKDF2 administrator password migration and downgrade compatibility policy",
+      "version": "FortiManager 8.0.0 (PBKDF2 introduced in 7.6.3)",
+      "summary": "Understand lazy migration from SHA256 to salted PBKDF2 and the security-versus-downgrade trade-off controlled by login-lockout-upon-downgrade.",
+      "sections": [
+        {
+          "heading": "Why the hash transition is staged",
+          "text": "FortiManager 7.6.3 and later stores new administrator passwords using PBKDF2 with randomized salts rather than the previous SHA256 scheme. Existing administrator records are not all rewritten at the instant of upgrade. Each legacy administrator password is converted after that administrator successfully authenticates; an account that remains dormant can therefore retain an SH2 hash long after the firmware upgrade. This is an account-lifecycle migration, not a bulk password reset. It matters because an upgrade may complete while the credential store still contains a mixed population of legacy and PBKDF2 records."
+        },
+        {
+          "heading": "How to read the evidence",
+          "text": "The CLI representation uses a PB2 prefix for PBKDF2 and SH2 for the older SHA256 hash. The `old-password` field may retain the SHA256 form when downgrade compatibility is preserved. Inspect `show system admin user` without exporting the output into an unsecured ticket: password records are sensitive even when hashed. A PB2 prefix proves the current stored hash format, not that the password is strong, that the administrator has MFA, or that the account is still required. An SH2 prefix after upgrade usually means the account has not completed the post-upgrade login migration or was reset through a path that has not yet been exercised."
+        },
+        {
+          "heading": "Downgrade policy controls credential retention",
+          "text": "`config system password-policy` exposes `login-lockout-upon-downgrade`. With the default disabled setting, FortiManager keeps the legacy SHA256 hash after a successful PBKDF2 conversion so a downgrade to a firmware version without PBKDF2 can restore a compatible hash. Enabling the setting removes the SHA256 copy after conversion. That improves protection against a weaker legacy verifier remaining in the database, but administrators will be unable to authenticate locally after a downgrade to a release that cannot read PBKDF2. The flag is therefore a planned security boundary, not a routine hardening toggle."
+        },
+        {
+          "heading": "Operational migration plan",
+          "text": "Before upgrading, inventory local administrators, service accounts, break-glass users, and accounts whose owners are no longer active. After upgrading, require each needed administrator to log in once or have an authorized super administrator reset the password. Re-check PB2/SH2 status and confirm the expected `old-password` retention policy. If the environment needs downgrade flexibility, keep the default compatibility behavior and document the retained legacy verifier. If strict removal is required, enable lockout-on-downgrade only after testing the exact supported downgrade path and ensuring out-of-band recovery."
+        },
+        {
+          "heading": "Failure isolation and caveats",
+          "text": "A successful firmware upgrade does not prove all local passwords were migrated. A successful login by one administrator proves only that account's record was converted. Remote authentication users are governed by their remote identity provider and should not be counted as local PBKDF2 migration evidence. When planning rollback, test with a non-critical local account on a clone or maintenance unit; a configuration restore to an older release can expose the same compatibility problem. Treat a warning that older firmware does not support safer passwords as a stop-and-review gate, not a harmless prompt."
+        }
+      ],
+      "config": "config system password-policy\n    set login-lockout-upon-downgrade disable\nend\n\nshow system admin user\n# PB2 = PBKDF2; SH2 = legacy SHA256.\n\nconfig system password-policy\n    set login-lockout-upon-downgrade enable\nend",
+      "sources": [
+        "https://docs.fortinet.com/document/fortimanager/8.0.0/administration-guide/616059/enhanced-administrator-password-security",
+        "https://docs.fortinet.com/document/fortimanager/7.6.5/administration-guide/616059"
+      ],
+      "scenario_url": null,
+      "word_count": 495
+    },
+    {
+      "product": "FortiAnalyzer",
+      "title": "OT View endpoint relationship graph and reusable custom topology views",
+      "version": "FortiAnalyzer 8.0.0",
+      "summary": "Use Asset Identity Center OT View to inspect endpoint relationships and preserve a repeatable, shareable analyst view without mistaking the graph for packet-level proof.",
+      "sections": [
+        {
+          "heading": "What OT View represents",
+          "text": "OT View is located at Fabric View > Asset Identity Center > Asset Identity List > OT View. It displays relationships between endpoints so an analyst can examine the structure of an OT environment. It is a relationship visualization, not a packet capture, a route lookup, or a live service test. The source prerequisite is explicit: FortiOS devices must run 7.4 or higher to send OT information to FortiAnalyzer. If the source devices do not emit the required OT information, a visually sparse graph is a telemetry or source-coverage problem before it is a layout problem."
+        },
+        {
+          "heading": "Selection and layout controls",
+          "text": "The toolbar provides Select Devices, Group By, Lock/Unlock View, Hide/Show Connection, Search, and Custom View. Select Devices constrains which endpoints participate in the current view. Group By changes the visual grouping; it does not change the underlying endpoint identity or invent a relationship. Lock/Unlock controls the layout behavior: after unlocking, endpoints can move only in parallel at their level. Hide/Show Connection changes whether relationship cables are drawn. Search locates an endpoint in the current OT view. These controls are analyst presentation and navigation tools, not network enforcement controls."
+        },
+        {
+          "heading": "Create and share a custom view",
+          "text": "To create a custom view, first use the column-settings control to choose the columns that matter to the investigation. Select Custom View, enter a name, and save. The view is stored under Fabric View > Asset Identity Center > Custom View. To share it, select the menu next to the saved view and choose Share with Others. If ADOMs are enabled, confirm that the correct ADOM is selected before changing visibility. Set Privacy to On: Public or Off: Private. A public view is shared with other authorized users; it does not make the underlying OT data public on the Internet."
+        },
+        {
+          "heading": "Verification and interpretation",
+          "text": "Start with source coverage: list the FortiOS devices expected to provide OT data and confirm they are on 7.4 or later. Then select a bounded device set and compare the graph with known endpoint relationships from the asset inventory. Save a named custom view for a repeatable investigation, and verify that it appears in the Custom View area with the intended privacy state. If an endpoint is absent, test source telemetry and ADOM scope before changing Group By or layout. If a cable is hidden, use Hide/Show Connection to distinguish a display choice from missing relationship data."
+        },
+        {
+          "heading": "Operational limits",
+          "text": "A relationship graph is useful for understanding adjacency and asset structure, but it does not prove that a specific TCP session succeeded, that a firewall policy permitted traffic, or that the observed relationship is current at packet time. Use FortiGate traffic logs, device telemetry, and packet capture for those questions. Keep custom views narrow enough that analysts can interpret them, and document the ADOM and privacy setting so a saved view is not mistaken for a global configuration object."
+        }
+      ],
+      "config": "GUI workflow:\n1. Fabric View > Asset Identity Center > Asset Identity List > OT View.\n2. Confirm source FortiOS devices are version 7.4 or later.\n3. Select Devices and Group By to scope the graph.\n4. Choose columns, then Custom View > Save as New Custom View.\n5. In Custom View, choose Share with Others and set Privacy to Public or Private.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortianalyzer/8.0.0/administration-guide/267939"
+      ],
+      "scenario_url": null,
+      "word_count": 546
+    },
+    {
+      "product": "FortiSwitch",
+      "title": "FortiSwitchOS administrator password change closes that administrator's active sessions",
+      "version": "FortiSwitchOS 8.0.0",
+      "summary": "Treat password rotation as an active session-revocation event for the affected administrator, and validate the behavior separately from account lockout and other users' sessions.",
+      "sections": [
+        {
+          "heading": "Behavior change",
+          "text": "FortiSwitchOS 8.0.0 changes the post-password-change session behavior. When an administrator's password is changed, all sessions being used by that administrator are automatically closed. Earlier FortiSwitchOS behavior allowed existing sessions to continue after the password changed. The security consequence is straightforward: changing a credential also revokes the authenticated management contexts that were established with that credential. This reduces the window in which a stolen or shared session can remain active after a password rotation."
+        },
+        {
+          "heading": "What is and is not being revoked",
+          "text": "The documented scope is the sessions used by the administrator whose password changed. Do not describe this as a switch reboot, a global logout of every administrator, or an account lockout. It is not the same as the failed-login threshold or lockout timer. It is also independent of the password hash algorithm configured for new or updated administrator passwords. The 8.0.0 Administrators section separately describes password hashing choices; changing the hash algorithm does not substitute for the session-closure behavior."
+        },
+        {
+          "heading": "Configuration and controlled verification",
+          "text": "The GUI path is the administrator menu in the page banner > Change Password. Enter and confirm the new password, then select Change. For a controlled verification, open two management sessions using the same administrator identity, one GUI and one SSH/CLI if supported by the platform. Change the password in one session. Confirm the other session is terminated, then establish a new session using the new password. Repeat with a second administrator identity to establish whether that account remains unaffected. Do not perform the test during a production change window without a separate break-glass account."
+        },
+        {
+          "heading": "Operational impact",
+          "text": "A password rotation can interrupt an automation process or long-running CLI session that reuses the affected admin account. Use dedicated least-privilege identities for automation, rotate them through a controlled process, and avoid sharing an interactive administrator identity among multiple engineers. If a managed FortiSwitch receives administrator credentials from FortiGate switch-controller configuration, distinguish the managed credential plane from a local standalone switch password change. Verify which system is authoritative before rotating credentials."
+        },
+        {
+          "heading": "Evidence and troubleshooting",
+          "text": "A disconnect of same-admin sessions immediately after a password change is expected on 8.0.0; it is not by itself evidence of a network outage. If a new login fails, verify the new password, trusted-host restrictions, account status, and authentication source. If another administrator's session is also terminated, capture the exact release and reproduce with distinct accounts before assuming the documented behavior is broader than stated. Preserve audit logs around the change so the termination can be correlated with the credential operation."
+        }
+      ],
+      "config": "GUI: Admin menu in the page banner > Change Password > enter Password and Confirm Password > Change.\n\nVerification: open GUI and SSH sessions as the same admin; change password in one; confirm the other closes; reconnect with the new password. Repeat with a second admin identity.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-administration-guide/288914",
+        "https://docs.fortinet.com/document/fortiswitch/8.0.0/fortiswitchos-release-notes/653020"
+      ],
+      "scenario_url": null,
+      "word_count": 473
+    },
+    {
+      "product": "FortiAP/Wireless",
+      "title": "FortiAP WTP-profile EST/SCEP automatic CA certificate enrollment and renewal",
+      "version": "FortiAP 8.0.0 guide; FortiAP firmware 7.6.4 or later",
+      "summary": "Provision AP-local certificates through EST or SCEP from the WTP profile, while keeping local enrollment separate from the FortiGate certificate chain used by CAPWAP DTLS.",
+      "sections": [
+        {
+          "heading": "Purpose and scope",
+          "text": "FortiAP can request CA certificates through Enrollment over Secure Transport (EST) or Simple Certificate Enrollment Protocol (SCEP) when the AP is connected over an 802.1X WAN port. The feature removes the need to manually upload a CA certificate through TFTP to every AP. It is configured in the FortiGate wireless-controller WTP profile and requires FortiAP firmware 7.6.4 or later. The profile is the management object that carries the enrollment behavior to matching APs; changing a profile does not retroactively prove that every AP has successfully enrolled."
+        },
+        {
+          "heading": "Enrollment controls",
+          "text": "The WTP profile exposes `apcfg-auto-cert` and `apcfg-auto-cert-enroll-protocol`. Enable automatic certificate configuration, then choose `est` or `scep`. For EST, the profile can specify the cryptographic algorithm, EST server URL and port, CA identifier, HTTP authentication username/password, certificate subject, optional subject alternative name, HTTPS CA certificate, and auto-regeneration lead time. The documented algorithm choices include RSA sizes and elliptic-curve curves; the default is `ec-secp256r1`. The regeneration setting is a number of days before certificate expiry; zero disables automatic regeneration and the documented default is 30 days."
+        },
+        {
+          "heading": "Configuration example",
+          "text": "A production profile should use an enrollment-specific account with only the required CA permissions. The EST server name must match the server certificate, and the HTTPS CA configured in the profile must trust the server chain. Subject and SAN values should identify the AP according to the certificate policy; avoid a broad SAN that causes multiple devices to share an identity. SCEP-specific commands become available when SCEP is selected; use the exact SCEP URL and challenge behavior required by the CA rather than copying EST-only HTTP credentials into an SCEP configuration."
+        },
+        {
+          "heading": "Verification and evidence",
+          "text": "Verify the AP is on supported firmware and uses the intended WTP profile. Confirm that it is connected through the 802.1X WAN port, that the CA request reaches the selected enrollment endpoint, and that the CA issues a certificate with the expected subject/SAN and algorithm. Check the local certificate expiry and the configured renewal lead time. A successful profile install proves configuration distribution, not CA issuance. A successful EST/SCEP transaction proves local enrollment, not that the AP trusts the FortiGate controller certificate during CAPWAP DTLS."
+        },
+        {
+          "heading": "Troubleshooting boundary",
+          "text": "A recent FortiAP-231K Community scenario describes APs cycling between SULKING and DTLS_SETUP because a self-signed CA certificate needed to validate the FortiGate device certificate is missing. That is a controller-trust failure, not necessarily an EST/SCEP enrollment failure. Diagnose the two certificate directions separately: AP-local certificate issuance and the AP's validation of the controller certificate. For EST failures, check DNS, TCP/TLS reachability, HTTPS CA trust, CA ID and HTTP credentials. For renewal, verify the lead-time setting and whether the CA policy permits re-enrollment."
+        }
+      ],
+      "config": "config wireless-controller wtp-profile\n    edit \"ap-auto-cert\"\n        set apcfg-auto-cert enable\n        set apcfg-auto-cert-enroll-protocol est\n        set apcfg-auto-cert-crypto-algo ec-secp256r1\n        set apcfg-auto-cert-est-server \"https://ca.example.net:8443\"\n        set apcfg-auto-cert-est-ca-id \"wireless-ca\"\n        set apcfg-auto-cert-est-http-username \"fortiap-enroll\"\n        set apcfg-auto-cert-est-http-password <secret>\n        set apcfg-auto-cert-est-subject \"CN=FortiAP,OU=Wireless\"\n        set apcfg-auto-cert-auto-regen-days 30\n        set apcfg-auto-cert-est-https-ca \"CA-ROOT-PEM\"\n    next\nend",
+      "sources": [
+        "https://docs.fortinet.com/document/fortiap/8.0.0/fortiwifi-and-fortiap-configuration-guide/855476/configuring-est-and-scep-servers-for-ca-requests"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortiap-5/fortiap-231k-remaining-offline-when-managed-by-a-fortigate-230498",
+      "word_count": 506
+    },
+    {
+      "product": "FortiNAC",
+      "title": "FortiNAC FortiEMS MDM connector polling, registration propagation and site-scoped identity",
+      "version": "FortiNAC 9.4.0 / FortiNAC-F EMS integration guide",
+      "summary": "Understand connector placement, polling volume and tenant identity; a successful Test Connection is not proof that all EMS endpoint records were imported.",
+      "sections": [
+        {
+          "heading": "Connector role and placement",
+          "text": "The MDM Service Connector is the API integration object between FortiNAC and an endpoint-management system such as FortiClient EMS. In a FortiNAC Manager environment, the connector can be configured on the Manager or on individual managed servers. If every managed server needs the same MDM host data, configure the connector on the Manager; after each poll, the Manager copies MDM host-record information to managed servers and reduces the number of queries made to EMS. If only selected servers need the data, configure the connector on those servers; each configured server then polls EMS independently. Proxy communication is not supported."
+        },
+        {
+          "heading": "Polling and host lifecycle",
+          "text": "Automatic Registration Polling retrieves the EMS asset list and automatically registers returned devices as MDM-managed hosts. FortiNAC updates existing host records with newly retrieved information. On-demand registration is a different transaction: when an unknown host reaches the captive portal, FortiNAC can query EMS for that endpoint and register it if a matching EMS record exists. Health-status revalidation on connect can cause an API request for every connection and is disabled by default because it can overload EMS. If EMS notifications are configured, the integration guide recommends a one-day poll interval; otherwise choose a frequency based on database size and the number of integrated PODs."
+        },
+        {
+          "heading": "Connector configuration and evidence",
+          "text": "Create a Fortinet EMS connector under Network > Service Connectors. Select On-Premise or Cloud, enter the EMS request URL, and provide the appropriate on-premises account or cloud account identity. Enable automatic registration polling only when the query volume is understood. Use Test Connection to verify the connector can reach and authenticate to EMS, then use Poll to request the asset list. Review Last Poll and Last Successful Poll, inspect the returned host records, and confirm the managed-by-EMS status. Test Connection is a transport/authentication check; it does not prove that the full poll returned every endpoint or that host records were updated."
+        },
+        {
+          "heading": "Multi-tenancy scenario",
+          "text": "A recent FortiNAC Community case showed Test Connection and Poll appearing successful while some EMS host details were not imported. The EMS debug response contained `Request from global is not allowed`. The root cause was a connector configured with a Global administrator account while EMS multi-tenancy was enabled. The integration required an administrator associated with the target site. Create a site-specific EMS admin, update the FortiNAC connector credentials, save, and poll again. This is an identity-scope failure, not an API URL typo or proof that the connector's TLS connection is broken."
+        },
+        {
+          "heading": "Scale and operational caveats",
+          "text": "An EMS poll can issue multiple API requests for the asset list and additional per-device details. A short poll interval can overload EMS, especially when multiple NAC servers independently poll the same tenant. Avoid enabling Revalidate Health Status On Connect as a substitute for a controlled daily poll unless the EMS capacity and endpoint connection rate have been tested. When using FortiNAC Manager, choose one connector placement strategy deliberately; duplicating the connector on Manager and several managed servers can multiply the API load. After changing credentials, compare actual host inventory and last-successful-poll timestamps rather than relying only on a green connection indicator."
+        }
+      ],
+      "config": "GUI workflow:\n1. Network > Service Connectors > Create New > Fortinet EMS.\n2. Select On-Premise or Cloud and enter the matching Request URL/account.\n3. Configure automatic registration polling and a capacity-appropriate interval.\n4. Save, then right-click the connector > Test Connection.\n5. Right-click > Poll; verify Last Successful Poll and host records.\n6. For EMS multi-tenancy, use a site-specific administrator rather than a Global-site account.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortinac/9.4.0/fortinac-manager/422594/mdm-services",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/forticlient-ems-integration/843114/step-3-configure-fortinac-service-connector",
+        "https://docs.fortinet.com/document/fortinac/9.4.0/forticlient-ems-device-integration"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortinac-f-57/fortinac-integration-with-forticlient-ems-does-not-polls-ems-correctly-when-multi-tenancy-is-enabled-231537",
+      "word_count": 581
+    },
+    {
+      "product": "FortiNAC-F",
+      "title": "FortiNAC-F 7.6.5 user-group Allowed Hosts registration cap",
+      "version": "FortiNAC-F 7.6.5",
+      "summary": "Use group-level host-record limits to bound device registration per user population, while distinguishing registered host records from concurrent sessions and license counters.",
+      "sections": [
+        {
+          "heading": "What the limit counts",
+          "text": "Allowed Hosts is a registration limit: it constrains how many host records a user may register in FortiNAC-F. The older global setting and per-user setting existed before 7.6.5. FortiNAC-F 7.6.5 adds the ability to control the maximum number of host records associated with a user at the user-group level. This gives administrators a way to apply a lower cap to a high-risk or contractor group without forcing the same ceiling on every user in the deployment. It is not a concurrent-session counter and is not the same as a license threshold."
+        },
+        {
+          "heading": "Registration decision",
+          "text": "When a user attempts to register another endpoint, FortiNAC-F evaluates the number of registered host records associated with that user against the applicable Allowed Hosts limit. The older Allowed Hosts documentation describes the observable outcomes as Over Registered Limit or Registration Failed when the count is exceeded. The 7.6.5 release notes extend the control to groups. Existing registered host records and new registration attempts are different states: a cap may block an additional record without immediately deleting the user's existing records. Do not treat the limit as a network-session timeout."
+        },
+        {
+          "heading": "Configuration approach",
+          "text": "In FortiNAC-F 7.6.5, open the relevant user group in the Administration UI and configure its Allowed Hosts maximum. Keep the global default documented, then decide which groups require a stricter ceiling. A per-user Allowed Hosts value existed before group-level support; where a user-specific value is configured, verify the precedence behavior in the exact deployed 7.6.5 build, particularly for users who belong to more than one group. Do not infer precedence from the global setting alone."
+        },
+        {
+          "heading": "Verification test",
+          "text": "Create a controlled test user in one target group and record the current host-record count. Register endpoints until the configured cap is reached, then attempt one more registration. Capture the exact UI result, the host record count, the group membership and any per-user Allowed Hosts override. Repeat with a user in a group that has a different cap and with a user that has a per-user override. This test distinguishes a group-policy limit from a general registration outage or an account authentication failure."
+        },
+        {
+          "heading": "Operational caveats",
+          "text": "The cap controls record creation, not whether an already registered device is currently connected. It also does not tell you whether a host is compliant, safe, or licensed for a concurrent connection. Shared service accounts, kiosks and lab users may legitimately register many endpoints, so place them in a group designed for that usage rather than raising every group's limit. If users see Over Registered Limit unexpectedly, inspect their group membership and existing host records before changing the global default. Keep a documented cleanup process for stale records so the cap reflects actual device ownership."
+        }
+      ],
+      "config": "Administration UI workflow:\n1. Open the target user group in FortiNAC-F 7.6.5.\n2. Set the group's Allowed Hosts / maximum host-record count.\n3. Review the global default and any per-user Allowed Hosts values.\n4. Test with a controlled user at the limit and one registration beyond it.\n5. Record the exact precedence behavior for users in multiple groups in the deployed build.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortinac-f/7.6.5/release-notes/629218/whats-new-in-fortinac-f-7-6-5",
+        "https://docs.fortinet.com/document/fortinac-f/7.6.0/administration-guide/552799/allowed-hosts"
+      ],
+      "scenario_url": null,
+      "word_count": 529
+    },
+    {
+      "product": "FortiAuthenticator",
+      "title": "FortiAuthenticator RADSec server certificate trust and encrypted RADIUS accounting",
+      "version": "FortiAuthenticator 8.0.3 (RADSec enhancements introduced in 8.0.0)",
+      "summary": "Separate the server certificate presented by FortiAuthenticator from the client certificate it validates, then verify RADIUS accounting after TLS succeeds.",
+      "sections": [
+        {
+          "heading": "RADSec data path",
+          "text": "RADSec transports RADIUS over TLS between a RADSec client and FortiAuthenticator. The client connects to the configured RADSec service port; the default is TCP 2083. FortiAuthenticator presents the certificate configured in the RADSEC Server Certificate field. During the TLS handshake, the client must provide a valid certificate signed by one of the Local CAs or Trusted CAs configured on FortiAuthenticator. After TLS decryption, the authentication and accounting requests are handled by the normal FortiAuthenticator RADIUS daemon like standard RADIUS requests received over UDP."
+        },
+        {
+          "heading": "Certificate roles",
+          "text": "Do not confuse the EAP Server Certificate with the RADSEC Server Certificate. The EAP certificate is used for EAP methods; the RADSEC certificate is used for TLS transport with RADSec clients. The Local CAs and Trusted CAs list is the trust set used to validate the connecting RADSec client's certificate. A server certificate that chains correctly to a client trust store does not prove that FortiAuthenticator trusts the client certificate. Likewise, a trusted client certificate does not prove the client has selected the correct server name or trust anchor for FortiAuthenticator."
+        },
+        {
+          "heading": "Configuration sequence",
+          "text": "Under Authentication > RADIUS Service > General, select the RADSEC Server Certificate and configure the Local CAs and Trusted CAs that issue client certificates. Under Authentication > RADIUS Service > Services, confirm the RADSec service port; the default is 2083 and can be changed. Install the appropriate server certificate on FortiAuthenticator and issue client certificates from a CA that is present in the client-validation trust list. Keep the certificate purpose, expiry, subject and issuing CA aligned across both sides. FortiAuthenticator documents a maximum of 500 simultaneous RADSec clients."
+        },
+        {
+          "heading": "Verification ladder",
+          "text": "First prove TCP reachability to the RADSec port. Next prove TLS negotiation and the server certificate chain from the client perspective. Then prove FortiAuthenticator accepts the client's certificate from its Local/Trusted CA set. Finally send a RADIUS Access-Request and accounting Start/Interim/Stop message and confirm the expected policy or accounting record is created. A successful TLS handshake proves only the encrypted transport; it does not prove that the RADIUS daemon accepted the request, that the client identity matched a RADIUS client object, or that accounting attributes were processed."
+        },
+        {
+          "heading": "Failure isolation and scale",
+          "text": "If TLS fails before RADIUS messages appear, inspect certificate expiry, chain completeness, CA placement, service port and client certificate presentation. If TLS is up but no accounting records appear, inspect the RADIUS client definition, source identity, accounting service configuration and actual Start/Interim/Stop traffic. Avoid changing EAP server certificate settings to fix a RADSec client-trust failure. Keep concurrent client count below the documented 500 limit and monitor reconnect storms during certificate renewal or CA rotation."
+        }
+      ],
+      "config": "GUI workflow:\n1. Authentication > RADIUS Service > General.\n2. Set RADSEC Server Certificate.\n3. Add issuing CAs under Local CAs / Trusted CAs for RADSec client certificates.\n4. Authentication > RADIUS Service > Services: confirm RADSec port (default 2083).\n5. Test TLS first, then RADIUS authentication and accounting independently.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/656833/general",
+        "https://docs.fortinet.com/document/fortiauthenticator/8.0.3/administration-guide/473473/whats-new-in-fortiauthenticator"
+      ],
+      "scenario_url": null,
+      "word_count": 489
+    },
+    {
+      "product": "FortiPAM",
+      "title": "FortiPAM FortiToken Mobile push 2FA transport and post-upgrade continuation-state behavior",
+      "version": "FortiPAM 1.9.0 guide; Community scenario on 7.0.0",
+      "summary": "Trace FortiPAM's user-login push path from token assignment through the FTM listener to mobile approval, and isolate a documented 7.0.0 continuation issue.",
+      "sections": [
+        {
+          "heading": "Authentication flow",
+          "text": "FortiPAM can assign a FortiToken to a local or remote user and require FortiToken as the second factor for the FortiPAM login. The administrator provisions the token, associates it with the user, and enables two-factor authentication. FortiToken Mobile can supply a time-based code or approve a push login request. This is FortiPAM user authentication; it is different from a target server issuing its own interactive SSH/RDP second-factor challenge after FortiPAM has already launched a privileged session."
+        },
+        {
+          "heading": "FTM push service configuration",
+          "text": "For push delivery, enable FTM administrative access on the FortiPAM interface used by the mobile application. Configure `config system ftm-push` with the server certificate, FortiPAM interface address and status. The FortiPAM 1.9.0 example uses `Fortinet_Factory` as the server certificate and the FortiPAM interface IP as the server address. Token provisioning is a separate step: the user receives an activation message, adds the token to FortiToken Mobile, and activates it with the secure provisioning service. A token listed in FortiPAM is not proof that the mobile app has completed activation."
+        },
+        {
+          "heading": "Login transaction",
+          "text": "The user submits the username and password. FortiPAM presents the token challenge. If push is enabled and the mobile token is reachable, FortiToken Mobile displays a Login Request; the user selects Approve. Alternatively, the user can enter the current token code and continue. Keep OTP as a controlled fallback when push delivery is delayed, but do not bypass the second factor merely because a push notification is late. Ensure the interface's FTM access and the configured server certificate/address match the reachable FortiPAM endpoint."
+        },
+        {
+          "heading": "Recent version-specific scenario",
+          "text": "A FortiPAM Community article dated November 6, 2026 describes push notifications not arriving immediately after a 7.0.0 upgrade. The token field appeared after credentials were submitted, but the push arrived only after the user clicked Continue. The article labels the behavior a known issue under investigation. This symptom is a continuation-state defect in the login flow; it is not evidence that the token is unprovisioned or that the FTM listener is necessarily disabled. Do not invent a configuration workaround that the article does not document."
+        },
+        {
+          "heading": "Troubleshooting and recovery",
+          "text": "Check in order: user has the intended FortiToken assigned; token activation completed; FortiPAM interface has FTM administrative access; `config system ftm-push` is enabled with a valid certificate and correct server address; the client can reach the FortiPAM interface; and the FortiPAM version is recorded. Reproduce with a controlled user and a known-good mobile token. If the delayed-Continue symptom appears only on 7.0.0, follow Fortinet's supported fixed GA or TAC hotfix guidance for the exact platform. Confirm both push and OTP paths after remediation."
+        }
+      ],
+      "config": "config system ftm-push\n    set server-cert \"Fortinet_Factory\"\n    set server 192.0.2.10  # FortiPAM interface IP\n    set status enable\nend\n\n# Also enable FTM under the interface's Administrative Access.\n# Assign FortiToken to the user and enable Two-Factor Authentication.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortipam/1.9.0/administration-guide/21920/2fa-with-fortitoken-example",
+        "https://docs.fortinet.com/document/fortipam/1.9.0/examples/460486/2fa-with-fortitoken-mobile"
+      ],
+      "scenario_url": "https://community.fortinet.com/fortipam-52/push-notification-issue-after-upgrading-to-firmware-version-7-0-0-231125",
+      "word_count": 484
+    },
+    {
+      "product": "FortiSIEM",
+      "title": "FortiSIEM policy-based and CSV file-based Event Tagging precedence",
+      "version": "FortiSIEM 7.5.1",
+      "summary": "Enrich or overwrite event attributes in the event pipeline with ordered rules and CSV lookups, while respecting the two-stage precedence and separate Apply actions.",
+      "sections": [
+        {
+          "heading": "Purpose and event-pipeline placement",
+          "text": "Event Tagging adds attributes that were not present in the parsed event or overwrites parsed attributes with a normalized value. This is useful when source devices omit business context such as department, site, owner or asset tier. FortiSIEM provides two mechanisms: Policy Based Event Tagging, where conditions are built from event attributes, and File Based Event Tagging, where a CSV file supplies key/value mappings. The tagging stage changes the event attributes consumed by downstream searches, rules and reports; it does not rewrite the original device log."
+        },
+        {
+          "heading": "Policy-based rules",
+          "text": "Create a policy-based tagging rule under Admin > Settings > Event Pipeline > Event Tagging. Give it a name, enable it, define one or more conditions, and specify the tag attributes to set. Incoming events are checked against policy rules sequentially from top to bottom. All matches are considered; a later matching rule can overwrite a value set by an earlier rule. Rule order is therefore part of the configuration semantics. Saving a rule is not enough: use the Policy Based Event Tagging Apply control to deploy the new rule set."
+        },
+        {
+          "heading": "File-based CSV enrichment",
+          "text": "A file-based tagging rule uploads a CSV file. The first row contains column headers (keys); subsequent rows contain the corresponding values. Define a condition that selects the matching column and a tag mapping that writes the desired event attribute. For example, a CSV with `IP,Department` can map `Source IP` to `IP` and set `Dept` from `Department`. Multiple file-based rules are also evaluated top to bottom, all matches are considered, and later files may overwrite earlier values. File-based tagging has its own Apply control."
+        },
+        {
+          "heading": "Exact precedence",
+          "text": "FortiSIEM applies policy-based tagging first and file-based tagging second. Within each class, rules/files are processed sequentially and later matching entries can overwrite earlier results. Therefore the final value may come from a CSV file even when a policy rule set the same attribute earlier. Apply the policy-based and file-based changes separately. A green saved state without the corresponding Apply action does not prove that new tags are active on the event pipeline."
+        },
+        {
+          "heading": "Verification and troubleshooting",
+          "text": "Choose representative events whose source attributes are known. Capture the parsed event before tagging, verify the policy condition, confirm the CSV header matches the configured column name exactly, and inspect the final tagged event after applying both stages. If a value is wrong, evaluate rule order and later overwrites before changing the parser. Confirm the selected organization scope for file-based rules. A tag on a processed event proves that the enrichment stage ran; it does not prove the source device originally emitted that attribute or that the value is authoritative without validating the mapping source."
+        }
+      ],
+      "config": "CSV example:\nIP,Department\n10.1.0.10,Engineering\n10.2.0.20,Finance\n\nAdmin > Settings > Event Pipeline > Event Tagging\n- Create Policy Based Event Tagging rules; order top-to-bottom; Apply.\n- Create File Based Event Tagging; upload CSV; define condition/tag columns; Apply separately.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortisiem/7.5.1/user-guide/490633/event-tagging"
+      ],
+      "scenario_url": null,
+      "word_count": 493
+    },
+    {
+      "product": "FortiSASE",
+      "title": "FortiSASE FortiClient endpoint sharing of resolved IP/MAC ZTNA host tags to FortiGate gateways",
+      "version": "FortiSASE 26.1.107 Feature Administration Guide",
+      "summary": "Synchronize the resolved IP and MAC addresses of tagged FortiClient endpoints to authorized FortiGate ZTNA application gateways, with explicit scope and scale choices.",
+      "sections": [
+        {
+          "heading": "Feature purpose",
+          "text": "FortiSASE can share the resolved IP and MAC addresses (host tags) of a FortiClient endpoint with a ZTNA application gateway such as FortiGate when the endpoint has a security posture tag applied. The gateway can then use the synchronized ZTNA IP or MAC tag in its own access policy. This closes the identity-to-enforcement loop: FortiSASE evaluates endpoint posture and tag rules, while the FortiGate applies the tag in the local ZTNA gateway policy. A tag existing in FortiSASE alone does not mean the FortiGate has received the endpoint address."
+        },
+        {
+          "heading": "Connector prerequisites and authorization",
+          "text": "The FortiGate must be connected to FortiClient Cloud, and FortiSASE and the FortiGate must be registered under the same FortiCloud account for FortiSASE to discover the gateway. In FortiSASE, go to Security > Traffic > ZTNA > Agent-based, select the gateway serial number on the Connectors tab, and Authorize it. Only authorized FortiGates can synchronize endpoint and tagging data for enforcement. Endpoint features do not apply to proxy-mode users."
+        },
+        {
+          "heading": "Sharing scope modes",
+          "text": "The gateway can share tags for Directly connected endpoints, All endpoints regardless of which FortiGate they connect to, or endpoints connected to selected FortiGate gateways. The selected-gateway mode can include up to four additional specified FortiGates. Fortinet recommends Directly connected endpoints for better performance. Choosing All increases the scope of endpoint address synchronization and should be justified by the gateway topology and policy design. Changing the sharing setting triggers a resynchronization; repeated changes in a short period can temporarily degrade performance."
+        },
+        {
+          "heading": "Verification at both ends",
+          "text": "Create a ZTNA security posture tag and a tagging rule in FortiSASE, then confirm the test endpoint receives the tag. On the FortiGate, open Policy & Objects > ZTNA > ZTNA Tags. Confirm the FortiSASE tag has synchronized through the FortiClient EMS Cloud connector. Hover over the ZTNA IP or MAC tag and choose View Resolved Addresses. The test endpoint's IP or MAC address appearing there proves address synchronization. It does not by itself prove the firewall policy matched or allowed the application; test the actual policy and traffic log separately."
+        },
+        {
+          "heading": "Operational boundaries",
+          "text": "If a tag is visible in FortiSASE but the FortiGate has no resolved address, check same-account registration, connector authorization, sharing mode, endpoint posture tag, and resync completion. If the tag and address are present but traffic is denied, inspect the FortiGate ZTNA policy, gateway/application binding, user/device identity and service port. Do not use All mode as a workaround for a missing connector authorization. Keep sharing scope narrow to reduce unnecessary endpoint synchronization and avoid interpreting a tag as proof of current reachability."
+        }
+      ],
+      "config": "FortiSASE: Security > Traffic > ZTNA > Agent-based > Connectors\n1. Select the FortiGate serial number and Authorize.\n2. Edit FortiClient endpoint sharing.\n3. Choose Directly connected endpoints (recommended), All, or selected FortiGate(s) (up to four additional).\n4. Configure a posture tag/rule and verify the endpoint is tagged.\nFortiGate: Policy & Objects > ZTNA > ZTNA Tags > View Resolved Addresses.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/247982",
+        "https://docs.fortinet.com/document/fortisase/26.1.107/feature-administration-guide/13465/new-features"
+      ],
+      "scenario_url": null,
+      "word_count": 486
+    },
+    {
+      "product": "Secure SD-WAN",
+      "title": "Dynamic SD-WAN link monitors for ADVPN shortcut tunnels",
+      "version": "FortiOS 8.0.0",
+      "summary": "Read the per-shortcut health-check entry correctly: the spoke creates an ICMP monitor to the shortcut gateway, and those probes do not count as user traffic keeping the tunnel alive.",
+      "sections": [
+        {
+          "heading": "Why shortcut-specific monitoring matters",
+          "text": "ADVPN shortcuts create direct spoke-to-spoke paths on demand, so the set of active overlay links changes as traffic triggers and tears down shortcuts. A static health-check configuration for the parent tunnel does not necessarily give an operator an explicit health record for each dynamic shortcut. FortiOS 8.0 can dynamically create link monitors for ADVPN shortcut links on the spoke. This makes the shortcut visible to SD-WAN health-check diagnostics while preserving the distinction between monitoring traffic and application traffic."
+        },
+        {
+          "heading": "Probe behavior",
+          "text": "The dynamic link monitor uses ICMP probes and the IP address of the shortcut gateway as the monitored server. The key operational detail is that these ICMP probes are not counted as actual user traffic that keeps the spoke-to-spoke tunnel alive. This prevents the monitoring mechanism from silently defeating an idle shortcut timeout. A probe can show that the gateway responds to ICMP over the shortcut; it does not prove that every application port is reachable or that the return path for a specific user flow is correct."
+        },
+        {
+          "heading": "Observe the monitor lifecycle",
+          "text": "Run `diagnose sys sdwan health-check` before a shortcut exists and record the participating tunnel entries. When a shortcut is established, the dynamic monitor appears as an additional sequence entry, often with a suffix such as `_0` in the interface label. The health-check output reports alive/dead state, packet loss, latency, jitter and SLA map. The extra entry is evidence that the shortcut-specific monitor was created. It is not a second configured static member and should not be mistaken for an additional physical WAN circuit."
+        },
+        {
+          "heading": "Troubleshooting sequence",
+          "text": "First confirm that the shortcut itself exists and identify the peer gateway address used by the monitor. Then inspect the health-check output for the parent overlay and shortcut entry. If the shortcut entry is absent, investigate shortcut establishment and monitor creation rather than tuning unrelated static probes. If the entry is present but dead, test ICMP reachability to the gateway over the shortcut and inspect routing and return-path behavior. If ICMP is alive but the application fails, test the application protocol and firewall policy; do not infer application health from an ICMP response."
+        },
+        {
+          "heading": "Tunnel lifetime and caveats",
+          "text": "Because the probes do not count as user traffic, an idle shortcut can still age out according to its tunnel lifetime/idle behavior. That is intentional and should not be fixed by adding synthetic application traffic unless the design requires a persistent tunnel. Compare health-check entries with user traffic counters and shortcut state when diagnosing a tunnel that tears down while the monitor remains alive. Use the SLA measurements as path-health evidence, but keep the monitoring plane, user-data plane and tunnel-lifetime accounting separate."
+        }
+      ],
+      "config": "diagnose sys sdwan health-check\n\n# Compare output before shortcut establishment and after a spoke-to-spoke\n# flow triggers a shortcut. Look for the additional shortcut monitor entry\n# and its alive/loss/latency/jitter fields.",
+      "sources": [
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/483215/sd-wan-monitor-on-advpn-shortcuts",
+        "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/985659/advpn-and-shortcut-paths"
+      ],
+      "scenario_url": null,
+      "word_count": 487
+    }
+  ]
+}
