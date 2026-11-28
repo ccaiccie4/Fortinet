@@ -1,0 +1,1414 @@
+{
+  "generated_at_local": "2026-11-28T08:28:51-08:00",
+  "question_count": 50,
+  "choices_per_question": 4,
+  "total_choice_feedback": 200,
+  "correct_answer_distribution": {
+    "A": 14,
+    "B": 13,
+    "C": 11,
+    "D": 12
+  },
+  "questions": [
+    {
+      "id": "F01",
+      "product": "FortiGate",
+      "stem": "Which VIP condition makes upstream TLS available in this design?",
+      "choices": [
+        {
+          "text": "An HTTP server-load-balance VIP",
+          "correct": true,
+          "feedback": "Correct: ssl-upstream is documented for server-type http on a server-load-balance VIP."
+        },
+        {
+          "text": "Any TCP virtual server type",
+          "correct": false,
+          "feedback": "TCP virtual servers do not expose this HTTP upstream re-encryption option."
+        },
+        {
+          "text": "A static NAT VIP object",
+          "correct": false,
+          "feedback": "A static NAT VIP does not create the HTTP proxy transaction required here."
+        },
+        {
+          "text": "A transparent proxy policy",
+          "correct": false,
+          "feedback": "Proxy policies are not the VIP object that owns this upstream TLS setting."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "F02",
+      "product": "FortiGate",
+      "stem": "Which observation proves encryption on the backend leg?",
+      "choices": [
+        {
+          "text": "A client receives HTTP 200",
+          "correct": false,
+          "feedback": "An HTTP response proves service reachability, not backend transport protection."
+        },
+        {
+          "text": "A capture shows TLS records upstream",
+          "correct": true,
+          "feedback": "Correct: the upstream capture shows a TLS handshake and encrypted application records."
+        },
+        {
+          "text": "The VIP appears in policy logs",
+          "correct": false,
+          "feedback": "Policy logs prove policy processing, not the protocol used to the real server."
+        },
+        {
+          "text": "The real server answers an ARP request",
+          "correct": false,
+          "feedback": "ARP resolution proves Layer 2 reachability, not TLS session establishment."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "F03",
+      "product": "FortiGate",
+      "stem": "What does ssl-http-strip-secure-cookies change in the response?",
+      "choices": [
+        {
+          "text": "It encrypts client-side HTTP",
+          "correct": false,
+          "feedback": "The client-facing leg remains HTTP unless a separate HTTPS listener is used."
+        },
+        {
+          "text": "It pins the backend certificate",
+          "correct": false,
+          "feedback": "Certificate trust is controlled separately through backend verification and trust configuration."
+        },
+        {
+          "text": "It strips HTTPS-only cookie attributes",
+          "correct": true,
+          "feedback": "Correct: the option removes Secure and related HTTPS-only Set-Cookie attributes for HTTP clients."
+        },
+        {
+          "text": "It disables HTTP multiplexing",
+          "correct": false,
+          "feedback": "HTTP multiplexing is a separate connection-management feature."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "F04",
+      "product": "FortiGate",
+      "stem": "What security property remains absent with upstream TLS enabled?",
+      "choices": [
+        {
+          "text": "Backend requests use TLS",
+          "correct": false,
+          "feedback": "Upstream TLS protects the FortiGate-to-realserver segment."
+        },
+        {
+          "text": "The VIP selects a real server",
+          "correct": false,
+          "feedback": "Real-server selection remains part of the load-balancing VIP function."
+        },
+        {
+          "text": "The response is decrypted at FortiGate",
+          "correct": false,
+          "feedback": "FortiGate must decrypt the backend response to proxy it to the client."
+        },
+        {
+          "text": "The client-to-VIP leg remains cleartext",
+          "correct": true,
+          "feedback": "Correct: upstream TLS does not encrypt the client-facing HTTP segment."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "F05",
+      "product": "FortiGate",
+      "stem": "Which setting is unsafe as a permanent backend-certificate workaround?",
+      "choices": [
+        {
+          "text": "Disabling certificate verification",
+          "correct": true,
+          "feedback": "Correct: disabling verification accepts untrusted or mismatched backend certificates."
+        },
+        {
+          "text": "Selecting TLS 1.2 minimum",
+          "correct": false,
+          "feedback": "A TLS minimum of 1.2 is a version-hardening control, not a trust bypass."
+        },
+        {
+          "text": "Using a trusted CA",
+          "correct": false,
+          "feedback": "A trusted CA enables proper chain validation."
+        },
+        {
+          "text": "Presenting a required client certificate",
+          "correct": false,
+          "feedback": "A client certificate is appropriate when the backend requests mutual TLS."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "M01",
+      "product": "FortiManager",
+      "stem": "Which fields are central to disambiguating active user entries?",
+      "choices": [
+        {
+          "text": "Username and source MAC only",
+          "correct": false,
+          "feedback": "Username and MAC alone do not show authentication method or virtual-domain context."
+        },
+        {
+          "text": "Method, group and VDOM",
+          "correct": true,
+          "feedback": "Correct: method, user group and VDOM are exposed by the monitor."
+        },
+        {
+          "text": "Policy ID and NAT pool",
+          "correct": false,
+          "feedback": "Policy and NAT data are not the monitor's documented identity dimensions."
+        },
+        {
+          "text": "Certificate issuer and serial",
+          "correct": false,
+          "feedback": "Certificate details are not the fields described for this monitor."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "M02",
+      "product": "FortiManager",
+      "stem": "What does Deauthenticate do to a selected firewall user?",
+      "choices": [
+        {
+          "text": "Creates a permanent account disable",
+          "correct": false,
+          "feedback": "Session removal is not an identity lifecycle or account-disable operation."
+        },
+        {
+          "text": "Removes the active user session",
+          "correct": true,
+          "feedback": "Correct: the action deauthenticates the selected active session on its device context."
+        },
+        {
+          "text": "Deletes the remote directory account",
+          "correct": false,
+          "feedback": "FortiManager does not delete the user from LDAP through this monitor."
+        },
+        {
+          "text": "Adds a deny policy automatically",
+          "correct": false,
+          "feedback": "No firewall deny policy is automatically created by deauthentication."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "M03",
+      "product": "FortiManager",
+      "stem": "Two tenants use the same username on one managed firewall. What prevents confusion?",
+      "choices": [
+        {
+          "text": "The user's display name",
+          "correct": false,
+          "feedback": "A display name may be identical across virtual domains."
+        },
+        {
+          "text": "The user-group chart alone",
+          "correct": false,
+          "feedback": "Group filtering narrows population but does not establish tenant context."
+        },
+        {
+          "text": "The policy package revision",
+          "correct": false,
+          "feedback": "Policy revision is unrelated to the active session's VDOM identity."
+        },
+        {
+          "text": "The VDOM column",
+          "correct": true,
+          "feedback": "Correct: VDOM distinguishes same-name entries in different virtual domains."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "M04",
+      "product": "FortiManager",
+      "stem": "A user reappears immediately after deauthentication. What should be checked next?",
+      "choices": [
+        {
+          "text": "Identity source and matching policy",
+          "correct": true,
+          "feedback": "Correct: successful reauthentication indicates the account still matches an authentication rule and policy."
+        },
+        {
+          "text": "The FortiManager license only",
+          "correct": false,
+          "feedback": "License state does not explain a user session that can authenticate again."
+        },
+        {
+          "text": "The switch LLDP neighbor table",
+          "correct": false,
+          "feedback": "LLDP topology does not determine firewall user authentication."
+        },
+        {
+          "text": "The FortiGate ARP timeout",
+          "correct": false,
+          "feedback": "ARP aging is unrelated to the identity reauthentication path."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "A01",
+      "product": "FortiAnalyzer",
+      "stem": "Which prerequisites enable FortiMQ indicator delivery to FortiGate?",
+      "choices": [
+        {
+          "text": "Only a FortiManager connector",
+          "correct": false,
+          "feedback": "FortiMQ is an alternative to FortiManager and does not require it."
+        },
+        {
+          "text": "Same FortiCare account and feed sync",
+          "correct": true,
+          "feedback": "Correct: same-account registration and Cloud-based Fabric Feed synchronization are required."
+        },
+        {
+          "text": "Only a local indicator object",
+          "correct": false,
+          "feedback": "A local indicator alone does not establish cloud delivery or firewall retrieval."
+        },
+        {
+          "text": "A syslog server and SNMP trap",
+          "correct": false,
+          "feedback": "Syslog and SNMP do not replace the documented FortiMQ prerequisites."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "A02",
+      "product": "FortiAnalyzer",
+      "stem": "What limits the scope of a FortiMQ block action?",
+      "choices": [
+        {
+          "text": "All FortiGate devices globally",
+          "correct": false,
+          "feedback": "FortiMQ is not documented as a global all-device distribution mechanism."
+        },
+        {
+          "text": "Every device in the FortiCare account",
+          "correct": false,
+          "feedback": "FortiCare registration enables communication but does not define the block scope."
+        },
+        {
+          "text": "FortiGate devices in the same ADOM",
+          "correct": true,
+          "feedback": "Correct: indicators are applied to FortiGate devices in the same ADOM."
+        },
+        {
+          "text": "Only the FortiAnalyzer local host",
+          "correct": false,
+          "feedback": "The connector distributes indicators to FortiGate external feeds, not only locally."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "A03",
+      "product": "FortiAnalyzer",
+      "stem": "A connector reports healthy. What has actually been proven?",
+      "choices": [
+        {
+          "text": "The deny policy matched traffic",
+          "correct": false,
+          "feedback": "Policy enforcement requires a separate matching deny-policy log."
+        },
+        {
+          "text": "Every FortiGate consumed the feed",
+          "correct": false,
+          "feedback": "Connector health does not prove downstream retrieval by every firewall."
+        },
+        {
+          "text": "The indicator is in the right ADOM",
+          "correct": false,
+          "feedback": "ADOM alignment is a separate scope check."
+        },
+        {
+          "text": "The FortiAnalyzer API connection works",
+          "correct": true,
+          "feedback": "Correct: connector status reflects API connectivity to FortiMQ."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "A04",
+      "product": "FortiAnalyzer",
+      "stem": "Both FortiMQ and FortiManager connectors are active. Which path has priority?",
+      "choices": [
+        {
+          "text": "FortiMQ, unless it is disabled",
+          "correct": true,
+          "feedback": "Correct: FortiMQ is preferred; FortiManager is used if FortiMQ is disabled."
+        },
+        {
+          "text": "FortiManager for every indicator",
+          "correct": false,
+          "feedback": "FortiManager remains supported but does not take priority in this condition."
+        },
+        {
+          "text": "The connector with oldest timestamp",
+          "correct": false,
+          "feedback": "Connector age is not the documented selection rule."
+        },
+        {
+          "text": "The connector selected per firewall policy",
+          "correct": false,
+          "feedback": "Firewall policy does not choose which connector transports indicators."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "S01",
+      "product": "FortiSwitch",
+      "stem": "What does an sFlow packet sample represent?",
+      "choices": [
+        {
+          "text": "A lossless packet capture",
+          "correct": false,
+          "feedback": "sFlow intentionally samples traffic and truncates packet information."
+        },
+        {
+          "text": "A statistical sampled packet record",
+          "correct": true,
+          "feedback": "Correct: sampled flow records are statistical and may omit individual packets."
+        },
+        {
+          "text": "A complete TCP session transcript",
+          "correct": false,
+          "feedback": "Session reconstruction is not guaranteed by sampled records."
+        },
+        {
+          "text": "A mirrored copy of every frame",
+          "correct": false,
+          "feedback": "Full-frame mirroring is a different mechanism from sFlow sampling."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "S02",
+      "product": "FortiSwitch",
+      "stem": "What is the documented default sFlow collector UDP port?",
+      "choices": [
+        {
+          "text": "161",
+          "correct": false,
+          "feedback": "UDP 161 is commonly used for SNMP, not sFlow export."
+        },
+        {
+          "text": "514",
+          "correct": false,
+          "feedback": "UDP 514 is commonly used for syslog."
+        },
+        {
+          "text": "6343",
+          "correct": true,
+          "feedback": "Correct: FortiSwitch sFlow collectors default to UDP 6343."
+        },
+        {
+          "text": "1812",
+          "correct": false,
+          "feedback": "UDP 1812 is commonly used for RADIUS authentication."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "S03",
+      "product": "FortiSwitch",
+      "stem": "Which command displays the switch's sFlow configuration?",
+      "choices": [
+        {
+          "text": "get system sflow",
+          "correct": true,
+          "feedback": "Correct: get system sflow displays the sFlow configuration."
+        },
+        {
+          "text": "diagnose switch poe status",
+          "correct": false,
+          "feedback": "PoE diagnostics show power state, not flow-export configuration."
+        },
+        {
+          "text": "get switch igmp-snooping",
+          "correct": false,
+          "feedback": "IGMP snooping output describes multicast membership, not sFlow."
+        },
+        {
+          "text": "show user radius",
+          "correct": false,
+          "feedback": "RADIUS user configuration is unrelated to flow sampling."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "S04",
+      "product": "FortiSwitch",
+      "stem": "A collector IP responds to ping, but no flow data appears. What does ping prove?",
+      "choices": [
+        {
+          "text": "The sampler is enabled",
+          "correct": false,
+          "feedback": "Sampler state must be inspected separately on each monitored interface."
+        },
+        {
+          "text": "The collector decoded sFlow v5",
+          "correct": false,
+          "feedback": "Collector decoding requires actual datagrams and supported format."
+        },
+        {
+          "text": "The UDP port is open",
+          "correct": false,
+          "feedback": "Ping does not test UDP 6343 reachability."
+        },
+        {
+          "text": "Only basic IP reachability",
+          "correct": true,
+          "feedback": "Correct: ping proves IP reachability only, not sFlow export or collection."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "W01",
+      "product": "FortiAP/Wireless",
+      "stem": "What is the documented default background rogue-AP scan cadence?",
+      "choices": [
+        {
+          "text": "Every 30 seconds for 1 second",
+          "correct": false,
+          "feedback": "The guide documents a 300-second scan period, not a 30-second cycle."
+        },
+        {
+          "text": "Every 300 seconds, 20 ms per channel each second",
+          "correct": true,
+          "feedback": "Correct: each second a channel is monitored for 20 ms after a 300-second period begins."
+        },
+        {
+          "text": "Only after a client disconnects",
+          "correct": false,
+          "feedback": "Scanning is not triggered only by client disconnect events."
+        },
+        {
+          "text": "Continuously without leaving AP mode",
+          "correct": false,
+          "feedback": "Background scanning briefly switches the radio into monitor mode."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "W02",
+      "product": "FortiAP/Wireless",
+      "stem": "What is the purpose of ap-bgscan-idle?",
+      "choices": [
+        {
+          "text": "Increase transmit power",
+          "correct": false,
+          "feedback": "Transmit power is configured separately from scan scheduling."
+        },
+        {
+          "text": "Change the rogue AP MAC address",
+          "correct": false,
+          "feedback": "Rogue AP identity is observed over the air and wired adjacency."
+        },
+        {
+          "text": "Delay scanning until the radio is idle",
+          "correct": true,
+          "feedback": "Correct: the idle threshold reduces client packet loss during background scans."
+        },
+        {
+          "text": "Disable all WIDS detections",
+          "correct": false,
+          "feedback": "The setting delays scanning; it does not disable WIDS detection."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "W03",
+      "product": "FortiAP/Wireless",
+      "stem": "Where is a WIDS profile applied for radio monitoring?",
+      "choices": [
+        {
+          "text": "To a FortiAP radio through its AP profile",
+          "correct": true,
+          "feedback": "Correct: the WIDS profile is selected on a radio in a FortiAP profile."
+        },
+        {
+          "text": "To a firewall address group",
+          "correct": false,
+          "feedback": "Firewall address groups do not configure wireless intrusion detection."
+        },
+        {
+          "text": "To the RADIUS user group",
+          "correct": false,
+          "feedback": "RADIUS groups govern authentication, not radio scan behavior."
+        },
+        {
+          "text": "To the FortiAnalyzer ADOM",
+          "correct": false,
+          "feedback": "FortiAnalyzer receives logs but does not apply the AP radio profile."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "W04",
+      "product": "FortiAP/Wireless",
+      "stem": "No rogue AP entry appears in the dashboard. What can be concluded?",
+      "choices": [
+        {
+          "text": "The building has no unauthorized APs",
+          "correct": false,
+          "feedback": "Absence of an entry is not proof that no AP exists."
+        },
+        {
+          "text": "Every channel was scanned continuously",
+          "correct": false,
+          "feedback": "Background scanning is periodic and channel-limited, not continuous."
+        },
+        {
+          "text": "The AP was automatically accepted",
+          "correct": false,
+          "feedback": "An AP is not automatically accepted merely because no entry appears."
+        },
+        {
+          "text": "Detection may be outside scan coverage",
+          "correct": true,
+          "feedback": "Correct: range, channel coverage, scan timing and radio load affect visibility."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "N01",
+      "product": "FortiNAC",
+      "stem": "Which interface is explicitly unavailable for rogue-DHCP scanning?",
+      "choices": [
+        {
+          "text": "eth0 management interface",
+          "correct": true,
+          "feedback": "Correct: eth0 is reserved for management and cannot be used for this scan."
+        },
+        {
+          "text": "A dedicated unused interface",
+          "correct": false,
+          "feedback": "A dedicated interface is a documented implementation requirement."
+        },
+        {
+          "text": "The modeled System DHCP Port",
+          "correct": false,
+          "feedback": "The System DHCP Port represents the switch port carrying the scan NIC."
+        },
+        {
+          "text": "An unused scan VLAN",
+          "correct": false,
+          "feedback": "VLANs are selected for scanning; they are not the management interface."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "N02",
+      "product": "FortiNAC",
+      "stem": "How must an IP-helper address be represented for authorization?",
+      "choices": [
+        {
+          "text": "As a DNS alias only",
+          "correct": false,
+          "feedback": "A DNS alias does not provide the required IP/MAC identity pair."
+        },
+        {
+          "text": "As a pingable model with IP and MAC",
+          "correct": true,
+          "feedback": "Correct: the helper address needs a Pingable model, MAC and authorized-group membership."
+        },
+        {
+          "text": "As a firewall policy object",
+          "correct": false,
+          "feedback": "A firewall policy object is not the FortiNAC authorized DHCP inventory."
+        },
+        {
+          "text": "As an unmodeled switch port",
+          "correct": false,
+          "feedback": "Unmodeled infrastructure cannot satisfy the documented IP-helper comparison."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "N03",
+      "product": "FortiNAC",
+      "stem": "Which VLANs are included in a rogue-DHCP verification task?",
+      "choices": [
+        {
+          "text": "Every VLAN discovered by topology",
+          "correct": false,
+          "feedback": "The task does not automatically scan every discovered VLAN."
+        },
+        {
+          "text": "Only the native VLAN",
+          "correct": false,
+          "feedback": "Native VLAN status alone does not add a VLAN to the scan list."
+        },
+        {
+          "text": "Only VLANs explicitly listed for scanning",
+          "correct": true,
+          "feedback": "Correct: omitted VLANs are not scanned by this task."
+        },
+        {
+          "text": "All VLANs on eth0",
+          "correct": false,
+          "feedback": "eth0 is the management interface and cannot be the scan interface."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "N04",
+      "product": "FortiNAC",
+      "stem": "What must match across HA nodes for scanning to continue after failover?",
+      "choices": [
+        {
+          "text": "Only the task name",
+          "correct": false,
+          "feedback": "The task name does not establish the scan path on the secondary."
+        },
+        {
+          "text": "Only the Authorized DHCP group label",
+          "correct": false,
+          "feedback": "Group label alone does not ensure the scan NIC is attached correctly."
+        },
+        {
+          "text": "The FortiNAC GUI administrator",
+          "correct": false,
+          "feedback": "Administrator identity does not control the physical scan interface."
+        },
+        {
+          "text": "The interface setting and System DHCP Port membership",
+          "correct": true,
+          "feedback": "Correct: primary and secondary need matching interface and port-group configuration."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "F01",
+      "product": "FortiNAC-F",
+      "stem": "What must be true of an SNMPv3 trap sender?",
+      "choices": [
+        {
+          "text": "It is modeled as a pingable device",
+          "correct": true,
+          "feedback": "Correct: the trap sender must be modeled as a pingable device in Inventory."
+        },
+        {
+          "text": "It is configured only as an LDAP user",
+          "correct": false,
+          "feedback": "LDAP user records are not a substitute for sender modeling."
+        },
+        {
+          "text": "It sends traps to UDP 162 only",
+          "correct": false,
+          "feedback": "The guide specifies FortiNAC trap reception on port 161."
+        },
+        {
+          "text": "It is absent from Inventory",
+          "correct": false,
+          "feedback": "Unmodeled senders may not be accepted for record updates."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "F02",
+      "product": "FortiNAC-F",
+      "stem": "What is the effect of selecting SNMPv3 in the global SNMP settings?",
+      "choices": [
+        {
+          "text": "Only one trap sender changes",
+          "correct": false,
+          "feedback": "The setting is global, not limited to one trap sender."
+        },
+        {
+          "text": "All devices querying FortiNAC must use SNMPv3",
+          "correct": true,
+          "feedback": "Correct: other devices querying FortiNAC must also use SNMPv3."
+        },
+        {
+          "text": "SNMPv1 traps are automatically translated",
+          "correct": false,
+          "feedback": "FortiNAC does not document automatic SNMP version translation."
+        },
+        {
+          "text": "The management port changes",
+          "correct": false,
+          "feedback": "The SNMP setting does not change the management interface."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "F03",
+      "product": "FortiNAC-F",
+      "stem": "A user-removal trap arrives. What happens to associated hosts?",
+      "choices": [
+        {
+          "text": "They are always deleted too",
+          "correct": false,
+          "feedback": "User deletion does not automatically delete associated hosts."
+        },
+        {
+          "text": "They become rogue records",
+          "correct": false,
+          "feedback": "FortiNAC documents the hosts becoming registered devices."
+        },
+        {
+          "text": "They remain and become registered devices",
+          "correct": true,
+          "feedback": "Correct: associated hosts remain and become registered devices."
+        },
+        {
+          "text": "They are merged by MAC automatically",
+          "correct": false,
+          "feedback": "Different adapters/MACs are treated as separate host records."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "F04",
+      "product": "FortiNAC-F",
+      "stem": "Which evidence confirms that FortiNAC processed a trap into a record change?",
+      "choices": [
+        {
+          "text": "A UDP 161 packet alone",
+          "correct": false,
+          "feedback": "Packet arrival proves transport, not parsing or database mutation."
+        },
+        {
+          "text": "A sender ping response",
+          "correct": false,
+          "feedback": "Ping proves IP reachability only."
+        },
+        {
+          "text": "A configured SNMP username",
+          "correct": false,
+          "feedback": "Configured credentials do not prove a trap was accepted."
+        },
+        {
+          "text": "An Add/Modify/Remove event and resulting record",
+          "correct": true,
+          "feedback": "Correct: the event plus resulting Host/User record confirms processing."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "C01",
+      "product": "FortiAuthenticator",
+      "stem": "What ECDH curve preference is documented as the default for EAP?",
+      "choices": [
+        {
+          "text": "secp521r1:secp384r1:prime256v1",
+          "correct": true,
+          "feedback": "Correct: FortiAuthenticator documents secp521r1, secp384r1, then prime256v1."
+        },
+        {
+          "text": "prime256v1:secp256k1:brainpoolP256",
+          "correct": false,
+          "feedback": "The listed curves and ordering are not the documented default."
+        },
+        {
+          "text": "secp192r1:secp224r1:secp256k1",
+          "correct": false,
+          "feedback": "Those lower-strength curves are not the published default list."
+        },
+        {
+          "text": "x25519:ed25519:secp256r1",
+          "correct": false,
+          "feedback": "That list is not the documented EAP ECDH preference."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "C02",
+      "product": "FortiAuthenticator",
+      "stem": "What does the EAP ECDH override change?",
+      "choices": [
+        {
+          "text": "The user's LDAP group",
+          "correct": false,
+          "feedback": "LDAP group membership is evaluated separately from TLS negotiation."
+        },
+        {
+          "text": "The ephemeral key-exchange curve preference",
+          "correct": true,
+          "feedback": "Correct: the command overrides ECDH_CURVE used for EAP TLS negotiation."
+        },
+        {
+          "text": "The client certificate's subject CN",
+          "correct": false,
+          "feedback": "Certificate subject identity is not changed by the curve preference."
+        },
+        {
+          "text": "The RADIUS shared secret",
+          "correct": false,
+          "feedback": "RADIUS shared-secret configuration is unrelated to ECDH curve selection."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "C03",
+      "product": "FortiAuthenticator",
+      "stem": "What distinguishes EAP-TLS from a one-way server-authenticated tunnel?",
+      "choices": [
+        {
+          "text": "It removes certificate validation",
+          "correct": false,
+          "feedback": "EAP-TLS relies on certificates rather than removing validation."
+        },
+        {
+          "text": "It uses no TLS handshake",
+          "correct": false,
+          "feedback": "TLS is central to EAP-TLS."
+        },
+        {
+          "text": "It provides mutual certificate authentication",
+          "correct": true,
+          "feedback": "Correct: EAP-TLS authenticates both client and server with certificates."
+        },
+        {
+          "text": "It bypasses RADIUS policy",
+          "correct": false,
+          "feedback": "RADIUS policy still controls whether the authenticated identity is authorized."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "C04",
+      "product": "FortiAuthenticator",
+      "stem": "Which EAP-TTLS 2FA limitation is documented?",
+      "choices": [
+        {
+          "text": "Challenge-based token prompts are supported",
+          "correct": false,
+          "feedback": "The guide explicitly states challenge-based EAP-TTLS 2FA is unsupported."
+        },
+        {
+          "text": "EAP-TTLS always skips the inner method",
+          "correct": false,
+          "feedback": "EAP-TTLS does not skip its inner authentication method."
+        },
+        {
+          "text": "Only SMS can be used",
+          "correct": false,
+          "feedback": "SMS is not the documented required method for this limitation."
+        },
+        {
+          "text": "Challenge-based 2FA is unsupported; concatenate password and OTP",
+          "correct": true,
+          "feedback": "Correct: use password-plus-OTP concatenation for EAP-TTLS with 2FA."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "P01",
+      "product": "FortiPAM",
+      "stem": "What is the default state of require-message-authenticator?",
+      "choices": [
+        {
+          "text": "Enabled",
+          "correct": true,
+          "feedback": "Correct: FortiPAM enables response Message-Authenticator validation by default."
+        },
+        {
+          "text": "Disabled",
+          "correct": false,
+          "feedback": "The option is not disabled by default."
+        },
+        {
+          "text": "Inherited from the user group",
+          "correct": false,
+          "feedback": "The setting is under the RADIUS server object, not user group."
+        },
+        {
+          "text": "Enabled only for TLS transport",
+          "correct": false,
+          "feedback": "The documented default is enabled, not conditional on TLS."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "P02",
+      "product": "FortiPAM",
+      "stem": "Which RADIUS attribute carries the Message-Authenticator?",
+      "choices": [
+        {
+          "text": "Attribute 26",
+          "correct": false,
+          "feedback": "Attribute 26 is Vendor-Specific, not Message-Authenticator."
+        },
+        {
+          "text": "Attribute 80",
+          "correct": true,
+          "feedback": "Correct: Message-Authenticator is RADIUS Attribute 80."
+        },
+        {
+          "text": "Attribute 44",
+          "correct": false,
+          "feedback": "Attribute 44 is Acct-Session-Id."
+        },
+        {
+          "text": "Attribute 61",
+          "correct": false,
+          "feedback": "Attribute 61 is NAS-Port-Type."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "P03",
+      "product": "FortiPAM",
+      "stem": "When is disabling response validation acceptable?",
+      "choices": [
+        {
+          "text": "Whenever a test fails once",
+          "correct": false,
+          "feedback": "A single failed test needs diagnosis, not automatic weakening."
+        },
+        {
+          "text": "For every server globally",
+          "correct": false,
+          "feedback": "Global weakening increases exposure beyond the affected server."
+        },
+        {
+          "text": "As a scoped temporary compatibility fallback",
+          "correct": true,
+          "feedback": "Correct: disable only temporarily for a server that cannot return the attribute."
+        },
+        {
+          "text": "To replace shared-secret validation",
+          "correct": false,
+          "feedback": "Message-Authenticator does not replace shared-secret correctness."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "P04",
+      "product": "FortiPAM",
+      "stem": "A response has Attribute 80 but validation fails. What should be checked?",
+      "choices": [
+        {
+          "text": "Only the PAM user role",
+          "correct": false,
+          "feedback": "User role is evaluated after successful RADIUS authentication."
+        },
+        {
+          "text": "Only the target server's DNS record",
+          "correct": false,
+          "feedback": "DNS resolution alone cannot explain an invalid response authenticator."
+        },
+        {
+          "text": "The AP radio channel",
+          "correct": false,
+          "feedback": "Wireless radio configuration is unrelated to RADIUS integrity."
+        },
+        {
+          "text": "Shared secret and response HMAC calculation",
+          "correct": true,
+          "feedback": "Correct: verify the shared secret and the server's Attribute 80 calculation."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "S01",
+      "product": "FortiSIEM",
+      "stem": "Which evaluation mode is designed for real-time in-memory processing?",
+      "choices": [
+        {
+          "text": "Streaming",
+          "correct": true,
+          "feedback": "Correct: Streaming evaluates incoming events in memory in real time."
+        },
+        {
+          "text": "Scheduled",
+          "correct": false,
+          "feedback": "Scheduled mode uses disk and configured query windows."
+        },
+        {
+          "text": "Scheduled via SQL",
+          "correct": false,
+          "feedback": "Scheduled via SQL executes scheduled SQL against ClickHouse."
+        },
+        {
+          "text": "Archive rebuild",
+          "correct": false,
+          "feedback": "Archive rebuild is not a rule evaluation mode."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "S02",
+      "product": "FortiSIEM",
+      "stem": "Where is Scheduled via SQL available?",
+      "choices": [
+        {
+          "text": "Any database in every mode",
+          "correct": false,
+          "feedback": "The guide restricts this mode to ClickHouse."
+        },
+        {
+          "text": "ClickHouse in Super/Global mode",
+          "correct": true,
+          "feedback": "Correct: Scheduled via SQL is visible only in Super/Global mode on ClickHouse."
+        },
+        {
+          "text": "Only on a collector node",
+          "correct": false,
+          "feedback": "Collector-node placement is not the documented availability condition."
+        },
+        {
+          "text": "Only in streaming rules",
+          "correct": false,
+          "feedback": "Scheduled via SQL is distinct from Streaming mode."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "S03",
+      "product": "FortiSIEM",
+      "stem": "Which limitation is specific to Scheduled via SQL?",
+      "choices": [
+        {
+          "text": "Trigger events are always attached",
+          "correct": false,
+          "feedback": "The guide states Scheduled via SQL incidents do not show trigger events."
+        },
+        {
+          "text": "It can be tested like Streaming",
+          "correct": false,
+          "feedback": "Scheduled via SQL cannot be tested like a Streaming rule."
+        },
+        {
+          "text": "No trigger events; 100 incidents per run",
+          "correct": true,
+          "feedback": "Correct: it has no trigger events and caps each run at 100 incidents."
+        },
+        {
+          "text": "Clear conditions can use any field",
+          "correct": false,
+          "feedback": "Only time is supported as a clear condition."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "S04",
+      "product": "FortiSIEM",
+      "stem": "Why might Scheduled mode be chosen over Streaming?",
+      "choices": [
+        {
+          "text": "It always has lower latency",
+          "correct": false,
+          "feedback": "Streaming is designed for lower-latency event processing."
+        },
+        {
+          "text": "It avoids disk access",
+          "correct": false,
+          "feedback": "Scheduled mode requires disk access."
+        },
+        {
+          "text": "It guarantees every event is processed instantly",
+          "correct": false,
+          "feedback": "Scheduled evaluation runs on a configured schedule, not instantly."
+        },
+        {
+          "text": "It supports larger windows and complex analytics",
+          "correct": true,
+          "feedback": "Correct: scheduled rules can use complex analytic functions over larger windows."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "Z01",
+      "product": "FortiSASE",
+      "stem": "What FortiClient baseline enables IP range/CIDR ZTNA destinations?",
+      "choices": [
+        {
+          "text": "Windows 7.2.8 or later",
+          "correct": true,
+          "feedback": "Correct: the feature is supported for FortiClient for Windows 7.2.8 or later."
+        },
+        {
+          "text": "Any macOS client version",
+          "correct": false,
+          "feedback": "The documented prerequisite is specifically Windows FortiClient 7.2.8+."
+        },
+        {
+          "text": "Windows 6.4 only",
+          "correct": false,
+          "feedback": "Version 6.4 does not meet the stated requirement."
+        },
+        {
+          "text": "FortiClient is not required",
+          "correct": false,
+          "feedback": "Agent-based ZTNA uses the FortiClient endpoint."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "Z02",
+      "product": "FortiSASE",
+      "stem": "What activates a private application for an endpoint?",
+      "choices": [
+        {
+          "text": "Creating the gateway only",
+          "correct": false,
+          "feedback": "A gateway alone is only the entry point."
+        },
+        {
+          "text": "Referencing it in an endpoint-profile connection rule",
+          "correct": true,
+          "feedback": "Correct: the endpoint profile must reference the private application in a ZTNA rule."
+        },
+        {
+          "text": "Adding it to a FortiAnalyzer report",
+          "correct": false,
+          "feedback": "FortiAnalyzer reports do not provision endpoint ZTNA destinations."
+        },
+        {
+          "text": "Changing the DNS suffix",
+          "correct": false,
+          "feedback": "DNS suffix changes do not bind the application to a profile."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "Z03",
+      "product": "FortiSASE",
+      "stem": "What does the ZTNA profile Encryption toggle protect?",
+      "choices": [
+        {
+          "text": "The private application database",
+          "correct": false,
+          "feedback": "The toggle is a traffic transport option, not database encryption."
+        },
+        {
+          "text": "The SAML assertion signature",
+          "correct": false,
+          "feedback": "SAML signing is separate from the tunnel encryption setting."
+        },
+        {
+          "text": "Traffic between FortiClient and the application gateway",
+          "correct": true,
+          "feedback": "Correct: it controls encryption between the endpoint and the gateway."
+        },
+        {
+          "text": "The backend server disk",
+          "correct": false,
+          "feedback": "Backend disk encryption is unrelated to this endpoint-profile option."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "Z04",
+      "product": "FortiSASE",
+      "stem": "A catalogue object exists but the endpoint cannot connect. What is the next check?",
+      "choices": [
+        {
+          "text": "Assume the gateway policy is correct",
+          "correct": false,
+          "feedback": "Object creation alone does not prove endpoint assignment or authorization."
+        },
+        {
+          "text": "Delete all private applications",
+          "correct": false,
+          "feedback": "Deleting every object removes useful configuration evidence."
+        },
+        {
+          "text": "Change the FortiSASE IP pool",
+          "correct": false,
+          "feedback": "IP pool settings do not fix a missing ZTNA rule binding."
+        },
+        {
+          "text": "Verify profile binding, client version and gateway reachability",
+          "correct": true,
+          "feedback": "Correct: verify client support, endpoint profile reference and gateway reachability."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "D01",
+      "product": "Secure SD-WAN",
+      "stem": "What is the hybrid strategy's first ranking criterion?",
+      "choices": [
+        {
+          "text": "Highest SLA value",
+          "correct": true,
+          "feedback": "Correct: members with the highest SLA value are selected first."
+        },
+        {
+          "text": "Lowest packet loss",
+          "correct": false,
+          "feedback": "Quality is considered only after SLA value and cost tie."
+        },
+        {
+          "text": "Lowest administrative cost",
+          "correct": false,
+          "feedback": "Cost is the first tie-breaker, not the initial ranking criterion."
+        },
+        {
+          "text": "Configuration order",
+          "correct": false,
+          "feedback": "Configuration order is the final tie-breaker."
+        }
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "D02",
+      "product": "Secure SD-WAN",
+      "stem": "If SLA values tie, which criterion is compared next?",
+      "choices": [
+        {
+          "text": "Latency only",
+          "correct": false,
+          "feedback": "Latency is considered after SLA value and cost remain tied."
+        },
+        {
+          "text": "Administrative member cost",
+          "correct": true,
+          "feedback": "Correct: administrative cost is the first tie-breaker after SLA value."
+        },
+        {
+          "text": "Interface index",
+          "correct": false,
+          "feedback": "Interface index is not the documented ranking stage."
+        },
+        {
+          "text": "BGP router ID",
+          "correct": false,
+          "feedback": "BGP router ID is not part of this service-rule algorithm."
+        }
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "D03",
+      "product": "Secure SD-WAN",
+      "stem": "What does custom-profile-1 combine?",
+      "choices": [
+        {
+          "text": "Only interface speed",
+          "correct": false,
+          "feedback": "Interface speed alone is not the custom profile formula."
+        },
+        {
+          "text": "Only packet loss",
+          "correct": false,
+          "feedback": "Packet loss can be one weighted component but is not the only one."
+        },
+        {
+          "text": "Weighted packet loss, latency, jitter and reciprocal bidirectional bandwidth",
+          "correct": true,
+          "feedback": "Correct: the custom profile can weight four link-quality measurements."
+        },
+        {
+          "text": "Only BGP MED",
+          "correct": false,
+          "feedback": "BGP MED is separate from the SD-WAN health-check custom profile."
+        }
+      ],
+      "correct_index": 2
+    },
+    {
+      "id": "D04",
+      "product": "Secure SD-WAN",
+      "stem": "Which command output shows the service-rule member ranking and selection?",
+      "choices": [
+        {
+          "text": "diagnose sys sdwan health-check only",
+          "correct": false,
+          "feedback": "Health-check output shows measurements and SLA state, not full rule ranking."
+        },
+        {
+          "text": "get router info bgp summary",
+          "correct": false,
+          "feedback": "BGP summary shows neighbor state, not SD-WAN service selection."
+        },
+        {
+          "text": "diagnose hardware deviceinfo nic",
+          "correct": false,
+          "feedback": "NIC hardware counters do not show service-rule ranking."
+        },
+        {
+          "text": "diagnose sys sdwan service4",
+          "correct": true,
+          "feedback": "Correct: service4 shows tie-break mode, member order, SLA and selected interface."
+        }
+      ],
+      "correct_index": 3
+    },
+    {
+      "id": "D05",
+      "product": "Secure SD-WAN",
+      "stem": "What does link-cost-threshold control in the hybrid rule?",
+      "choices": [
+        {
+          "text": "Percentage change that triggers route regeneration",
+          "correct": true,
+          "feedback": "Correct: link-cost-threshold controls percentage change before policy-route regeneration."
+        },
+        {
+          "text": "The custom-profile SLA pass score",
+          "correct": false,
+          "feedback": "custom-profile-threshold determines whether the custom SLA passes."
+        },
+        {
+          "text": "The number of members in a zone",
+          "correct": false,
+          "feedback": "minimum-sla-meet-members controls zone eligibility, not this threshold."
+        },
+        {
+          "text": "The number of BGP neighbors",
+          "correct": false,
+          "feedback": "BGP neighbor count is unrelated to link-cost route regeneration."
+        }
+      ],
+      "correct_index": 0
+    }
+  ]
+}
